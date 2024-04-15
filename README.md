@@ -1,2 +1,2 @@
 # .vim
-.vimrc finally 
+.vimrc finally got too big
