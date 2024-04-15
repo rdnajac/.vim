@@ -1,0 +1,4 @@
+pack/plugins/opt/
+.black/
+.undo/
+.netrwhist
