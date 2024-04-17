@@ -43,3 +43,6 @@
 [submodule "~/.vim/pack/plugins/start/vimtex"]
 	path = ~/.vim/pack/plugins/start/vimtex
 	url = https://github.com/lervag/vimtex.git
+[submodule "pack/plugins/start/csv.vim"]
+	path = pack/plugins/start/csv.vim
+	url = https://github.com/chrisbra/csv.vim.git
