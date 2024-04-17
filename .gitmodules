@@ -46,3 +46,6 @@
 [submodule "pack/plugins/start/csv.vim"]
 	path = pack/plugins/start/csv.vim
 	url = https://github.com/chrisbra/csv.vim.git
+[submodule "pack/plugins/start/vimux"]
+	path = pack/plugins/start/vimux
+	url = https://github.com/preservim/vimux.git
