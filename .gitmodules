@@ -49,3 +49,6 @@
 [submodule "pack/plugins/start/vimux"]
 	path = pack/plugins/start/vimux
 	url = https://github.com/preservim/vimux.git
+[submodule "pack/plugins/start/yowish.vim"]
+	path = pack/plugins/start/yowish.vim
+	url = https://github.com/KabbAmine/yowish.vim.git
