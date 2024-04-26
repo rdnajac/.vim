@@ -15,4 +15,5 @@ function! GetInfo()
         endtry
     endtry
 endfunction
-noremap <F1> :call GetInfo()<CR>
+nnoremap <F1> :call GetInfo()<CR>
+nnoremap ? :call GetInfo()<CR>

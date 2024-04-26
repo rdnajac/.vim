@@ -150,12 +150,12 @@ let g:vimtex_view_method='skim'
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
-let g:black_virtualenv = "~/.vim/.black"
 " }}}1
-" autocommand to reolad file if its change from outside
+
 augroup ReloadFile
   autocmd!
   autocmd FocusGained * :checktime
 augroup END
+
 runtime xvimrc.vim " load experimental settings
 
