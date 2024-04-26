@@ -9,3 +9,4 @@ function! SmartQuit()
         endif
     endif
 endfunction
+nnoremap <leader>q :call SmartQuit()<CR>

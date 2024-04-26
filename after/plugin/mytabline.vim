@@ -6,9 +6,13 @@ function! Mytabline()
         let s .= bufnr == bufnr('%') ? '%#TabLineSel#' : '%#TabLine#'
         let s .= getbufvar(bufnr, "&mod") ? '  📝' : '  💾'
         let s .= bufname(bufnr)!= '' ? fnamemodify(bufname(bufnr), ':t') : '[∅]'
+        "let s .= '%X ❌%X'
     endfor
     let s .= '%#TabLineFill#%T'
     return s
 endfunction
 set tabline=%!Mytabline()
 set showtabline=2
+
+
+

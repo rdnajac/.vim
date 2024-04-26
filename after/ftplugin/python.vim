@@ -1,5 +1,6 @@
-setlocal autoindent smartindent 
-setlocal smarttab expandtab ts=4 sw=4
-setlocal softtabstop=4
-setlocal fdm=indent foldlevel=0
+setlocal autoindent smartindent
+setlocal smarttab expandtab tabstop=4 shiftwidth=4 softtabstop=4
+setlocal foldmethod=indent foldlevel=9
 packadd black
+silent! unmap <leader>w
+nnoremap <leader>w :Black<CR>:w<CR>
