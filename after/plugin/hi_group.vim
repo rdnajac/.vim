@@ -1,4 +1,3 @@
-" function to get the highlight group of the word under the cursor
 function! HighlightGroup()
     let l:word = expand('<cword>')
     let l:highlight_group = synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')

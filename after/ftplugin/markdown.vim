@@ -9,13 +9,23 @@ let g:vim_markdown_folding_disabled = 1
 
 " DIY
 function! MarkdownLevel()
-    let line = getline(v:lnum)
-    let h = matchstr(line, '^#\+')
-    if empty(h)
-        return "="
-    else
-        return ">" . len(h)
+    if !exists('b:in_code_fence')
+        let b:in_code_fence = 0
     endif
+
+    let line = getline(v:lnum)
+    if line =~ '^```'
+        let b:in_code_fence = !b:in_code_fence
+    endif
+
+    if !b:in_code_fence
+        let h = matchstr(line, '^\#\+\s')
+        if !empty(h)
+            return ">" . (len(h) - 1)
+        endif
+    endif
+
+    return "="
 endfunction
 
 setlocal fde=MarkdownLevel() fdm=expr fdl=2

@@ -11,6 +11,9 @@ set completeopt=menuone,noselect    " show menu even if there's only one match
 set report=0                        " display how many replacements were made
 set shortmess+=A                    " avoid "hit-enter" prompts
 
+" force `:X` to behave like `:x`
+cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
+
 
 color yowish 
 hi Normal guibg=#000000
