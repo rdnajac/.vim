@@ -80,15 +80,14 @@ nnoremap ? :call GetInfo()<cr>
 
 nnoremap <leader>w :w<cr>
 nnoremap <leader>Q :qa!<cr>
-nnoremap <leader>ev :vs $MYVIMRC<cr>
-nnoremap <leader>sv :source $MYVIMRC<cr>
+" nnoremap <leader>ev :vs $MYVIMRC<cr>
+" instead, edit the experimental settings
+nnoremap <leader>ev :vs ~/.vim/xvimrc.vim<cr>
 nnoremap <leader>h :set hlsearch!<cr>
-nnoremap <leader>n :set number!<cr>
-nnoremap <leader>r :set relativenumber!<cr>
-nnoremap <leader>c :set cu sorline!<cr>
 nnoremap <leader>t :set list!<cr>
 nnoremap <leader>o i<cr><esc>
-nnoremap <space> i<space><esc>
+
+" indent/dedent visual block
 nnoremap > V`]>
 nnoremap < V`]<
 
@@ -152,10 +151,31 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " }}}1
 
-augroup ReloadFile
+augroup ReloadFil e
   autocmd!
   autocmd FocusGained * :checktime
 augroup END
 
+" function! VisualSearch()
+"   let temp = @s
+"   normal! gvy
+"   let @/ = '\V' . escape(@s, '\')
+"   let @s = temp
+"   normal! /
+" endfunction
+" vnoremap <leader>f :<c-u>call VisualSearch()<cr>
+" one-liner:
+vnoremap <leader>f :<c-u>let @/ = '\V' . escape(@s, '\')<cr>
+
+function SourceXvimrc()
+  source $HOME/.vim/xvimrc.vim
+  let l:cat = ">^.^< "
+  echo "xvimrc sourced " . l:cat
+endfunction
+nnoremap <leader>r :call SourceXvimrc()<cr>
+
+vnoremap <leader>s <plug>VSurround
+
+" map to leader f
 runtime xvimrc.vim " load experimental settings
 

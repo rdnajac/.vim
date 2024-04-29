@@ -15,6 +15,9 @@ set shortmess+=A                    " avoid "hit-enter" prompts
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 
 
-color yowish 
+color yowish
 hi Normal guibg=#000000
 hi String guifg=#39FF14
+" no fold highlighting
+hi Folded guifg=#14AFFF guibg=#000000
+

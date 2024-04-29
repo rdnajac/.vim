@@ -36,6 +36,7 @@ set completeopt-=preview
 let g:ycm_auto_hover = 0
 
 nnoremap <leader>] :YcmCompleter GoTo<CR>
+nnoremap ? <plug>(YCMHover)
 nnoremap <leader>g :YcmCompleter GoTo<CR>
 nnoremap gd :YcmCompleter GoToDefinition<CR>
 nnoremap gy :YcmCompleter GoToDeclaration<CR>
