@@ -78,11 +78,10 @@ let mapleader = "\<space>"
 
 nnoremap ? :call GetInfo()<cr>
 
+nnoremap <leader>r :source $MYVIMRC<cr> : echo ">^.^<"<cr> 
+
 nnoremap <leader>w :w<cr>
 nnoremap <leader>Q :qa!<cr>
-" nnoremap <leader>ev :vs $MYVIMRC<cr>
-" instead, edit the experimental settings
-nnoremap <leader>ev :vs ~/.vim/xvimrc.vim<cr>
 nnoremap <leader>h :set hlsearch!<cr>
 nnoremap <leader>t :set list!<cr>
 nnoremap <leader>o i<cr><esc>
@@ -167,15 +166,36 @@ augroup END
 " one-liner:
 vnoremap <leader>f :<c-u>let @/ = '\V' . escape(@s, '\')<cr>
 
-function SourceXvimrc()
-  source $HOME/.vim/xvimrc.vim
-  let l:cat = ">^.^< "
-  echo "xvimrc sourced " . l:cat
-endfunction
-nnoremap <leader>r :call SourceXvimrc()<cr>
 
 vnoremap <leader>s <plug>VSurround
 
-" map to leader f
-runtime xvimrc.vim " load experimental settings
+set foldcolumn=0
+set numberwidth=3
+set signcolumn=no
+" make the column all black
+
+
+" experimental vim settings
+set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
+set wildmenu
+set wildmode=longest:full,full
+set fo-=o
+set conceallevel=0
+set fillchars+=eob:\                " don't show end of buffer as a column of ~
+set fillchars+=stl:\                " display spaces properly in statusline
+set list listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
+set completeopt=menuone,noselect    " show menu even if there's only one match
+set report=0                        " display how many replacements were made
+set shortmess+=A                    " avoid "hit-enter" prompts
+
+" force `:X` to behave like `:x`
+cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
+
+
+color yowish
+hi Normal guibg=#000000
+hi String guifg=#39FF14
+" no fold highlighting
+hi Folded guifg=#14AFFF guibg=#000000
+hi FoldColumn guibg='#000000' guifg='#000000'
 
