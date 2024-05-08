@@ -1,4 +1,4 @@
-" vim: fdm=marker fdl=1
+" vim: fdm=marker fdl=1:
 
 " under the hood {{{2
 filetype plugin indent on
@@ -50,7 +50,7 @@ set signcolumn=yes
 set splitbelow splitright
 " }}}3
 " undofile {{{3
-set undofile noswapfile
+set undofile
 set undolevels=1000
 set undoreload=10000
 if !has('nvim')
@@ -60,6 +60,12 @@ if !has('nvim')
   let &undodir=expand("~/.vim/.undo")
 endif
 " }}}3
+" swapfile {{{3
+set swapfile
+set directory=~/.vim/.swap
+"set backupdir=~/.vim/.backup
+" }}}3
+
 " ignore these patterns {{{3
 set wildignore+=
       \*.exe,*.out,*.cm*,*.o,*.a,*.so,*.dll,*.dylib,*.lib,*.bin,*.app,*.apk,*.dmg,*.iso,*.msi,*.deb,*.rpm,*.pkg,
@@ -78,7 +84,7 @@ let mapleader = "\<space>"
 
 nnoremap ? :call GetInfo()<cr>
 
-nnoremap <leader>r :source $MYVIMRC<cr> : echo ">^.^<"<cr> 
+nnoremap <leader>r :source $MYVIMRC<cr> : echo ">^.^<"<cr>
 
 nnoremap <leader>w :w<cr>
 nnoremap <leader>Q :qa!<cr>
@@ -96,6 +102,7 @@ inoremap kj <esc>
 vnoremap jk <esc>
 
 " TODO test move text up and down
+"
 nnoremap <silent> <M-j> :m .+1<CR>==
 nnoremap <silent> <M-k> :m .-2<CR>==
 
@@ -144,41 +151,30 @@ call which_key#register('g', "g:which_key_map")
 au FileType help,man,netrw,quickfix silent! nnoremap <silent> <buffer> q :close<CR> | set nobuflisted
 "au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"zv" | endif
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | if winline() >= winheight(0) - 3 | exe "normal! zb" | endif | endif
-let g:vimtex_view_method='skim'
 
 let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 " }}}1
 
-augroup ReloadFil e
+augroup ReloadFile
   autocmd!
   autocmd FocusGained * :checktime
 augroup END
 
-" function! VisualSearch()
-"   let temp = @s
-"   normal! gvy
-"   let @/ = '\V' . escape(@s, '\')
-"   let @s = temp
-"   normal! /
-" endfunction
-" vnoremap <leader>f :<c-u>call VisualSearch()<cr>
-" one-liner:
 vnoremap <leader>f :<c-u>let @/ = '\V' . escape(@s, '\')<cr>
-
 
 vnoremap <leader>s <plug>VSurround
 
 set foldcolumn=0
 set numberwidth=3
 set signcolumn=no
-" make the column all black
 
 
 " experimental vim settings
 set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set wildmenu
-set wildmode=longest:full,full
+"set wildmode=longest:list,full
+set wildmode=longest,list
 set fo-=o
 set conceallevel=0
 set fillchars+=eob:\                " don't show end of buffer as a column of ~

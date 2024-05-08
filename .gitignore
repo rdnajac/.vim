@@ -1,4 +1,4 @@
-pack/plugins/opt/
-.black/
-.undo/
 .netrwhist
+.undo/
+pack/plugins/opt/
+spell/

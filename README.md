@@ -10,3 +10,5 @@ git clone --recursive git@github.com:rdnajac/.vim.git
 vim plugin manager that lives in `.vim/pack/plugins/start` and maintains vim plugins through git submodules (see: `.gitmodules`)
 
 
+
+I tried to use a vimball to upgrade netrw but now I have /plugin and /syntax here instead of with vim src

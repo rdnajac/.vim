@@ -16,7 +16,7 @@ function! MarkdownLevel()
     return !b:in_code_fence && matchstr(line, '^\#\+\s') != '' ? '>' . len(matchstr(line, '^\#\+\s')) : '='
 endfunction
 
-setlocal foldexpr=MarkdownLevel() foldmethod=expr foldlevel=2
+setlocal foldexpr=MarkdownLevel() foldmethod=expr foldlevel=3
 setlocal nosmartindent
 
 " hi markdowncode #39ff14 000000

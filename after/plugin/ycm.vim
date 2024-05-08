@@ -33,7 +33,7 @@ let g:ycm_show_diagnostics_ui=0
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 set completeopt-=preview
-let g:ycm_auto_hover = 0
+let g:ycm_auto_hover = ''
 
 nnoremap <leader>] :YcmCompleter GoTo<CR>
 nnoremap ? <plug>(YCMHover)
