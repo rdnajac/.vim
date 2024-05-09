@@ -195,3 +195,6 @@ hi String guifg=#39FF14
 hi Folded guifg=#14AFFF guibg=#000000
 hi FoldColumn guibg='#000000' guifg='#000000'
 
+nnoremap <leader>st i~~<Esc>A~~<Esc>
+
+
