@@ -28,3 +28,6 @@
 [submodule "vimtex"]
 	path = vimtex
 	url = https://github.com/lervag/vimtex
+[submodule "vimux"]
+	path = vimux
+	url = https://github.com/preservim/vimux
