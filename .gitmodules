@@ -1,3 +1,6 @@
 [submodule "YouCompleteMe"]
 	path = YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe
+[submodule "markdown-preview.nvim"]
+	path = markdown-preview.nvim
+	url = https://github.com/iamcco/markdown-preview.nvim
