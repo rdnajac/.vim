@@ -10,3 +10,6 @@
 [submodule "vim-commentary"]
 	path = vim-commentary
 	url = https://github.com/tpope/vim-commentary
+[submodule "vim-fugitive"]
+	path = vim-fugitive
+	url = https://github.com/tpope/vim-fugitive
