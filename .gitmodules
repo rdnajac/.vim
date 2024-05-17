@@ -25,3 +25,6 @@
 [submodule "which-key.nvim"]
 	path = which-key.nvim
 	url = https://github.com/folke/which-key.nvim
+[submodule "vimtex"]
+	path = vimtex
+	url = https://github.com/lervag/vimtex
