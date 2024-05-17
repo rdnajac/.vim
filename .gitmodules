@@ -22,3 +22,6 @@
 [submodule "vim-tmux-navigator"]
 	path = vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
+[submodule "which-key.nvim"]
+	path = which-key.nvim
+	url = https://github.com/folke/which-key.nvim
