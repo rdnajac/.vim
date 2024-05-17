@@ -4,3 +4,6 @@
 [submodule "markdown-preview.nvim"]
 	path = markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
+[submodule "tabular"]
+	path = tabular
+	url = https://github.com/godlygeek/tabular
