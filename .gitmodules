@@ -22,3 +22,6 @@
 [submodule "pack/plugins/start/bash-support"]
 	path = pack/plugins/start/bash-support
 	url = https://github.com/WolfgangMehner/bash-support
+[submodule "pack/plugins/start/vim-tmux-navigator"]
+	path = pack/plugins/start/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator
