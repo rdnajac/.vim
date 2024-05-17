@@ -53,7 +53,6 @@ endfunction
 let localleader = "\\" 
 nnoremap <localleader>p :<C-u>call VimuxPromptCommand()<CR>
 nnoremap <localleader><localleader> :<C-u>call VimuxRunLastCommand()<CR>
-nnoremap <localleader>ll :<C-u>call VmxLine()<CR>
 "nnoremap <localleader>r :<C-u>call Vmx(@")<CR> 
 "nnoremap <localleader><localleader> :<C-u>call VimuxPromptCommand()<CR>
 "vnoremap <localleader><localleader> :<C-u>call VmxVisualLine()<CR>
@@ -63,7 +62,7 @@ nnoremap <localleader>o :<C-u>call VimuxOpenRunner()<CR>
 function! VmxFile() abort
   let l:dir = expand('%:p:h')
   let l:file = expand('%:p')
-  call Vmx('cd ' . l:dir . ' && ' . l:file)
+  call Vmx('cd ' . l:dir . ' && .' . l:file)
 endfunction
 nnoremap <localleader>x :<C-u>call VmxFile()<CR>
 

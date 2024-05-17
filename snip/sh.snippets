@@ -1,0 +1,121 @@
+# Snippets for Bash/sh/BATS
+# https://github.com/bertvv/dotfiles/blob/main/vim/.vim/UltiSnips/sh.snippets
+
+snippet t "BATS test case"
+@test '${1:decription}' {
+  ${2}
+}
+endsnippet
+
+snippet fin "Cleanup on exit"
+finish() {
+  result=$?
+  ${1}
+  exit ${result}
+}
+trap finish EXIT ERR
+endsnippet
+
+snippet usage "Usage function"
+# Print usage message on stdout by parsing start of script comments
+# The comment should start with #/ followed by either a newline or a space
+usage() {
+  grep '^#/' "${script_dir}/${script_name}" | sed 's/^#\/\($\| \)//'
+}
+
+endsnippet
+
+snippet args "Function that checks command line arguments"
+# Check if command line arguments are valid
+check_cli_args() {
+  if [ "${#}" -ne "1" ]; then
+    error "Expected 1 argument, got ${#}"
+    usage
+    exit 2
+  fi
+
+  for arg in "${@}"; do
+    case "${arg}" in
+      -h|--help)
+        usage
+        exit 0
+        ;;
+      -*)
+        error "Unknown option: ${arg}"
+        usage
+        exit 2
+        ;;
+    esac
+  done
+}
+
+endsnippet
+
+snippet usage2 "Usage function"
+# Print usage message on stdout
+usage() {
+cat << _EOF_
+Usage: ${script_name} [OPTIONS]... [ARGS]...
+
+  ${1:description}
+
+OPTIONS:${2}
+
+EXAMPLES:
+_EOF_
+}
+
+endsnippet
+
+snippet logv "Variables for logging functions"
+# Debug info ('on' to enable)
+readonly debug='on'
+
+endsnippet
+
+snippet logf "Functions for log messages"
+# Usage: log [ARG]...
+#
+# Prints all arguments on the standard output stream
+log() {
+  printf '\e[0;33m>>> %s\e[0m\n' "${*}"
+}
+
+# Usage: debug [ARG]...
+#
+# Prints all arguments on the standard output stream,
+# if debug output is enabled
+debug() {
+  [ "${debug}" != 'on' ] || printf '\e[0;36m### %s\e[0m\n' "${*}"
+}
+
+# Usage: error [ARG]...
+#
+# Prints all arguments on the standard error stream
+error() {
+  printf '\e[0;31m!!! %s\e[0m\n' "${*}" 1>&2
+}
+
+endsnippet
+
+snippet die "Exit the script with an error message and exit status"
+# Usage: die MESSAGE
+# Prints the specified error message and exits with an error status
+die() {
+  error "${*}"
+  exit 1
+}
+endsnippet
+
+snippet colors "Definition of colors"
+# Color definitions
+readonly reset='\e[0m'
+readonly black='\e[0;30m'
+readonly blue='\e[0;34m'
+readonly cyan='\e[0;36m'
+readonly green='\e[0;32m'
+readonly purple='\e[0;35m'
+readonly red='\e[0;31m'
+readonly white='\e[0;37m'
+readonly yellow='\e[0;33m'
+endsnippet

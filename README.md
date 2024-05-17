@@ -11,4 +11,3 @@ vim plugin manager that lives in `.vim/pack/plugins/start` and maintains vim plu
 
 
 
-I tried to use a vimball to upgrade netrw but now I have /plugin and /syntax here instead of with vim src

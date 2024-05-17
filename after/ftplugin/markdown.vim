@@ -7,14 +7,21 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_folding_style_pythonic = 1
 
+" function! MarkdownLevel()
+"     if !exists('b:in_code_fence')
+"         let b:in_code_fence = 0
+"     endif
+"     let line = getline(v:lnum)
+"     let b:in_code_fence = line =~ '^```' ? !b:in_code_fence : b:in_code_fence
+"     return !b:in_code_fence && matchstr(line, '^\#\+\s') != '' ? '>' . len(matchstr(line, '^\#\+\s')) : '='
+" endfunction
+"
+" Markdownlevel but it just counts the number of #s ignore
 function! MarkdownLevel()
-    if !exists('b:in_code_fence')
-        let b:in_code_fence = 0
-    endif
     let line = getline(v:lnum)
-    let b:in_code_fence = line =~ '^```' ? !b:in_code_fence : b:in_code_fence
-    return !b:in_code_fence && matchstr(line, '^\#\+\s') != '' ? '>' . len(matchstr(line, '^\#\+\s')) : '='
+    return matchstr(line, '^\#\+\s') != '' ? '>' . len(matchstr(line, '^\#\+\s')) : '='
 endfunction
+
 
 setlocal foldexpr=MarkdownLevel() foldmethod=expr foldlevel=3
 setlocal nosmartindent
@@ -30,3 +37,5 @@ highlight SpellLocal guifg=red guibg=#000000
 highlight SpellRare guifg=red guibg=#000000
 " fix those
 
+# strikethrough
+nnoremap <leader>st i~~<Esc>A~~<Esc>

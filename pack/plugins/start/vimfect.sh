@@ -1,42 +1,68 @@
-#!/bin/bash
+#!/bin/sh
+#
+# A Vim plugin manager script to add and sync Git submodules for Vim plugins.
 
-plug() {
-  local repo="$1"
-  repo="${repo/git@github.com:/https://github.com/}"
-  repo="${repo%.git}.git"
-  [[ "${repo#https://github.com/}" = "$repo" ]] && repo="https://github.com/$repo"
-  
+set -eu
+
+#######################################
+# Color print functions
+# Arguments:
+#   $1: Message to print.
+#######################################
+pr_info() { printf "\033[33m%s\033[0m\n" "$1"; }
+pr_error()  { printf "\033[31m%s\033[0m\n" "$1" >&2; }
+
+#######################################
+# Add a Git repository as a submodule and commit the change.
+# Globals:
+#   None
+# Arguments:
+#   $1: Repository URL or path.
+#######################################
+vimfect_plug()
+{
+  repo=$(echo "$1" | sed 's|git@github.com:|https://github.com/|' | sed 's|\.git$|.git|')
+  case "$repo" in
+    https://github.com/*) ;;
+    *) repo="https://github.com/$repo" ;;
+  esac
 
   if git submodule add "$repo"; then
-    echo "Successfully added $repo as a submodule"
-    git commit -m "vimfect: $repo "
+    git commit -m "vimfect: $repo"
+    pr_info "added $repo"
   else
-    err "Error adding $repo"
-    return 1
+    pr_error "error adding $repo"
   fi
 }
 
-vimfect_sanitize() {
-}
-
-vimfect_sync() {
-  echo "Syncing Vim plugins..."
-  if ! git submodule sync && git submodule update --init --recursive; then
-    err "Failed to sync submodules."
-    return 1
+#######################################
+# Synchronize Git submodules.
+# Globals:
+#   None
+# Arguments:
+#   None
+#######################################
+vimfect_sync()
+{
+  pr_info "syncing Vim plugins..."
+  if ! git submodule sync || ! git submodule update --init --recursive; then
+    pr_error "failed to sync submodules."
   fi
 }
 
-
-
-vimfect() {
+#######################################
+# Main function to handle plugin management.
+# Globals:
+#   None
+# Arguments:
+#   $@: Command line arguments passed to the script.
+#######################################
+main()
+{
   cd "$(dirname "$0")" || exit 1
-  if [ $# -eq 0 ]; then
-    vimfect_sync
-  else
-    plug "$1"
-  fi
+  if [ "$#" -gt 0 ]; then vimfect_plug "$1"; fi
+  vimfect_sync
 }
 
-vimfect "$@"
+main "$@"
 
