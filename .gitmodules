@@ -37,3 +37,6 @@
 [submodule "ale"]
 	path = ale
 	url = https://github.com/dense-analysis/ale
+[submodule "vim-markdown"]
+	path = vim-markdown
+	url = https://github.com/preservim/vim-markdown
