@@ -2,4 +2,4 @@
 .*
 
 # ignore optional plugins
-pack/plugins/
+pack/plugins/opt/
