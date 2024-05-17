@@ -1,0 +1,138 @@
+#!/bin/bash
+#
+# Vimfect: Vim plugin management using Git submodules.
+
+set -eux
+
+SCRIPT_NAME=$(basename "$0")
+SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+VIM_DIR="$HOME/.vim"
+PLUG_DIR="$VIM_DIR/pack/plugins/start"
+USAGE="Usage: ${SCRIPT_NAME} [plug <repository>|sync|purge <submodule>]"
+HISTORY_FILE="$PLUG_DIR/vimfect_history.log"
+INDEX_FILE="$PLUG_DIR/vimfect_index.log"
+
+print_info() { echo -e "\033[33m$1\033[0m"; }
+# again but uuse printf
+# print_info() { printf "\033[33m$1\033[0m\n"; }
+print_error() { echo -e "\033[31m$1\033[0m" >&2; }
+bail() { print_error "$1"; exit "${2:-1}"; }
+
+#######################################
+# Save command to history log.
+# Globals:
+#   HISTORY_FILE
+# Arguments:
+#   Command details
+#######################################
+save_history() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $SCRIPT_NAME $*" >> "$HISTORY_FILE"
+}
+
+#######################################
+# Update the index file with submodule paths from .gitmodules.
+# Globals:
+#   INDEX_FILE
+#######################################
+update_index() {
+  git config --file .gitmodules --name-only --get-regexp path > "$INDEX_FILE"
+}
+
+#######################################
+# Check if a submodule exists in the index file.
+# Globals:
+#   INDEX_FILE
+# Arguments:
+#   Submodule path
+# Returns:
+#   0 if submodule exists, 1 otherwise
+#######################################
+check_index() {
+  grep -q "$1" "$INDEX_FILE"
+}
+
+#######################################
+# Add a new plugin as a Git submodule.
+# Globals:
+#   USAGE
+# Arguments:
+#   Repository URL or short name
+#######################################
+vimfect_plug() {
+  [ $# -eq 0 ] && bail "No repo. $USAGE"
+  local repo
+  repo=$(echo "$1" | sed 's|git@github.com:|https://github.com/|' | sed 's|\.git$|.git|')
+  case "$repo" in
+    https://github.com/*) ;;
+    *) repo="https://github.com/$repo" ;;
+  esac
+
+  if git submodule add "$repo"; then
+    git commit -m "vimfect: $repo"
+    print_info "Added $repo"
+    save_history "plug $repo"
+    update_index
+  else
+    bail "Add $repo failed"
+  fi
+}
+
+#######################################
+# Synchronize Git submodules.
+#######################################
+vimfect_sync() {
+  print_info "Syncing plugins..."
+  if ! git submodule sync || ! git submodule update --init --recursive; then
+    bail "Sync failed"
+  fi
+  save_history "sync"
+}
+
+#######################################
+# Remove a submodule.
+# Globals:
+#   PLUG_DIR, USAGE
+# Arguments:
+#   Submodule name
+#######################################
+vimfect_purge() {
+  [ $# -eq 0 ] && bail "No submodule. $USAGE"
+  local submodule_dir="$PLUG_DIR/$1"
+  print_info "Purging $submodule_dir..."
+
+  if check_index "$submodule_dir"; then
+    git submodule deinit -f -- "$submodule_dir" || print_error "Deinit failed: $submodule_dir"
+    rm -rf ".git/modules/$submodule_dir" || print_error "Remove .git/modules failed: $submodule_dir"
+    git rm --cached "$submodule_dir" || print_error "Remove index failed: $submodule_dir"
+    rm -rf "$submodule_dir" || print_error "Remove dir failed: $submodule_dir"
+    if ! git add . || ! git commit -m "Purged $submodule_dir"; then
+      print_error "Commit failed: $submodule_dir"
+    else
+      save_history "purge $submodule_dir"
+      update_index
+    fi
+  else
+    bail "Submodule $submodule_dir not found in index"
+  fi
+}
+
+#######################################
+# Main function to process script arguments.
+#######################################
+main() {
+  cd "$(git rev-parse --show-toplevel)" || bail "Failed to cd to repo root"
+
+  [ "$SCRIPT_DIR" != "$PLUG_DIR" ] && bail "Script must be in $PLUG_DIR"
+
+  [ $# -eq 0 ] && bail "$USAGE"
+
+  case "$1" in
+    plug) shift; vimfect_plug "$@" ;;
+    sync) vimfect_sync ;;
+    purge) shift; vimfect_purge "$@" ;;
+    *) bail "$USAGE" ;;
+  esac
+}
+
+# Run main function with arguments in a subshell.
+(main "$@" )

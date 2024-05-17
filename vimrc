@@ -171,7 +171,7 @@ set signcolumn=no
 set wildmenu
 set wildmode=longest,list
 
-color yowish
+color scheme
 hi Normal guibg=#000000
 hi String guifg=#39FF14
 hi Folded guifg=#14AFFF guibg=#000000
