@@ -34,3 +34,6 @@
 [submodule "bash-support"]
 	path = bash-support
 	url = https://github.com/WolfgangMehner/bash-support
+[submodule "ale"]
+	path = ale
+	url = https://github.com/dense-analysis/ale
