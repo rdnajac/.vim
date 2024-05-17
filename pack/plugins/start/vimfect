@@ -9,47 +9,39 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 VIM_DIR="$HOME/.vim"
 PLUG_DIR="$VIM_DIR/pack/plugins/start"
 USAGE="Usage: ${SCRIPT_NAME} [plug <repository>|sync|purge <submodule>]"
-HISTORY_FILE="$PLUG_DIR/vimfect_history.log"
-INDEX_FILE="$PLUG_DIR/vimfect_index.log"
+LOGFILE="$PLUG_DIR/vimfect_history.log"
+INDEX="$PLUG_DIR/vimfect_index.log"
 
 print_info() { echo -e "\033[33m$1\033[0m"; }
-# again but uuse printf
-# print_info() { printf "\033[33m$1\033[0m\n"; }
 print_error() { echo -e "\033[31m$1\033[0m" >&2; }
 bail() { print_error "$1"; exit "${2:-1}"; }
 
 #######################################
 # Save command to history log.
 # Globals:
-#   HISTORY_FILE
+#   LOGFILE
 # Arguments:
 #   Command details
 #######################################
-save_history() {
-  echo "$(date '+%Y-%m-%d %H:%M:%S') - $SCRIPT_NAME $*" >> "$HISTORY_FILE"
-}
+save_history() { echo "$(date '+%Y-%m-%d %H:%M:%S') - $SCRIPT_NAME $*" >> "$LOGFILE"; }
 
 #######################################
 # Update the index file with submodule paths from .gitmodules.
 # Globals:
-#   INDEX_FILE
+#   INDEX
 #######################################
-update_index() {
-  git config --file .gitmodules --name-only --get-regexp path > "$INDEX_FILE"
-}
+update_index() { git config --file .gitmodules --name-only --get-regexp path > "$INDEX"; }
 
 #######################################
 # Check if a submodule exists in the index file.
 # Globals:
-#   INDEX_FILE
+#   INDEX
 # Arguments:
 #   Submodule path
 # Returns:
 #   0 if submodule exists, 1 otherwise
 #######################################
-check_index() {
-  grep -q "$1" "$INDEX_FILE"
-}
+check_index() { grep -q "$1" "$INDEX"; }
 
 #######################################
 # Add a new plugin as a Git submodule.
@@ -67,7 +59,7 @@ vimfect_plug() {
     *) repo="https://github.com/$repo" ;;
   esac
 
-  if git submodule add "$repo"; then
+  if git submodule add "$repo" "$PLUG_DIR"; then
     git commit -m "vimfect: $repo"
     print_info "Added $repo"
     save_history "plug $repo"
