@@ -50,7 +50,7 @@ if !has('nvim') " {{{2
   endif
   let &backupdir = expand("~/.vim/.backup")
 
-  set spell
+  "set spell
   if !isdirectory(expand("~/.vim/.spell"))
     call mkdir(expand("~/.vim/.spell"), "p", 0700)
   endif
@@ -172,6 +172,7 @@ set wildmenu
 set wildmode=longest,list
 
 color scheme
+color codedark
 hi Normal guibg=#000000
 hi String guifg=#39FF14
 hi Folded guifg=#14AFFF guibg=#000000
