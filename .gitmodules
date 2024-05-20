@@ -25,3 +25,6 @@
 [submodule "pack/foo/start/markdown-preview.nvim"]
 	path = pack/foo/start/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
+[submodule "pack/foo/start/vim-commentary"]
+	path = pack/foo/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary
