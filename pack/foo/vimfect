@@ -28,12 +28,13 @@ vimfect() {
   git submodule sync
   git submodule update --init --recursive
   for repo in "$@"; do
-    repo=$(resolve_repo_url "$repo")
-    git submodule add --force "$repo" "$mode" || {
-      printf '\033[0;31m%s\033[0m\n' "Error: Failed to add $repo to $mode." >&2
+    local resolved_repo=$(resolve_repo_url "$repo")
+    local repo_name=$(basename "$repo" .git)
+    git submodule add --force "$resolved_repo" "$mode/$repo_name" || {
+      printf '\033[0;31m%s\033[0m\n' "Error: Failed to add $resolved_repo to $mode." >&2
       continue
     }
-    git commit -m "vimfect: added $repo to $mode"
+    git commit -m "vimfect: added $resolved_repo to $mode"
   done
 }
 
