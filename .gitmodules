@@ -31,3 +31,6 @@
 [submodule "pack/foo/start/vim-fugitive"]
 	path = pack/foo/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
+[submodule "pack/foo/start/vim-repeat"]
+	path = pack/foo/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat
