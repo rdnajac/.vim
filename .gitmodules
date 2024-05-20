@@ -1,3 +1,6 @@
 [submodule "pack/foo/start/copilot.vim"]
 	path = pack/foo/start/copilot.vim
 	url = https://github.com/github/copilot.vim.git
+[submodule "pack/foo/opt/tokyonight.nvim"]
+	path = pack/foo/opt/tokyonight.nvim
+	url = https://github.com/folke/tokyonight.nvim.git
