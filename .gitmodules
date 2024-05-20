@@ -19,3 +19,6 @@
 [submodule "pack/foo/start/tabular"]
 	path = pack/foo/start/tabular
 	url = https://github.com/godlygeek/tabular
+[submodule "pack/foo/start/vim-markdown"]
+	path = pack/foo/start/vim-markdown
+	url = https://github.com/preservim/vim-markdown
