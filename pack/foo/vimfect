@@ -1,48 +1,95 @@
 #!/bin/bash
-#
-# vimfect: vim plugin management using git submodules
+#######################################
+## Vim plugin management using Git submodules
+## Author:  Ryan D. Najac
+## License: Public Domain
+## URL: ...
+## Usage: vimfect <start|opt> <repository-url> [repository-url...]
+#######################################
 
-set -euxo pipefail
+# Enforce strict error checking
+set -euo pipefail
 
+# Uncomment to enable debugging
+# set -x
+
+# Constants
 readonly PACKPATH="${HOME}/.vim/pack"
-readonly SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
-readonly PARENT_DIR=$(dirname "$SCRIPT_DIR")
+readonly USAGE="Usage: $0 <start|opt> <repository-url> [repository-url...]"
 
-if [[ "$PARENT_DIR" != "$PACKPATH" ]]; then
-  printf '\033[0;31m%s\033[0m\n' "I'm not supposed to be here!" >&2
-  exit 1
-fi
-
-# Ensure start and opt directories exist
-mkdir -p "$SCRIPT_DIR/start" "$SCRIPT_DIR/opt"
-
+#######################################
+# Resolve the full repository URL.
+# Globals: None
+# Arguments: $1 - Repository name or URL
+# Outputs: Writes full repository URL to stdout
+# Returns: 0 on success
+#######################################
 resolve_repo_url() {
-  local repo=$1
-  [[ "$repo" =~ ^https:// || "$repo" =~ ^git@ ]] || repo="https://github.com/$repo.git"
-  printf '%s\n' "$repo"
+  local repo="$1"
+  if [[ "$repo" =~ ^(https://|http://|git://|git@|ssh://git@) ]]; then
+    printf '%s\n' "$repo"
+  else
+    printf 'https://github.com/%s.git\n' "$repo"
+  fi
 }
 
+#######################################
+# Manage Vim plugins using Git submodules.
+# Globals: SCRIPT_DIR
+# Arguments: $1 - Mode (start or opt)
+#            $@ - Repository URLs
+# Outputs: stdout, stderr
+# Returns: 0 on success
+#######################################
 vimfect() {
-  local mode="$1"; shift
-  cd "$SCRIPT_DIR"
+  local mode="$1"
+  shift
   git submodule sync
   git submodule update --init --recursive
   for repo in "$@"; do
-    local resolved_repo=$(resolve_repo_url "$repo")
-    local repo_name=$(basename "$repo" .git)
-    git submodule add --force "$resolved_repo" "$mode/$repo_name" || {
-      printf '\033[0;31m%s\033[0m\n' "Error: Failed to add $resolved_repo to $mode." >&2
-      continue
-    }
-    git commit -m "vimfect: added $resolved_repo to $mode"
+    local resolved_repo
+    resolved_repo=$(resolve_repo_url "$repo")
+    local repo_name
+    repo_name=$(basename "$repo" .git)
+    git submodule add --force "$resolved_repo" "$mode/$repo_name"
+    git commit -m "vimfect: $resolved_repo"
   done
 }
 
-case "${1:-}" in
-  start|opt) mode="$1"; shift ;;
-  -h|--help|help|'') printf '%s\n' "Usage: $0 <start|opt|help> <repository-url> [repository-url...]" >&2; exit 1 ;;
-  *) mode="start" ;;
-esac
+#######################################
+# Print a message and exit.
+# Arguments: $1 - Message to print
+# Outputs:   Writes message to stderr
+# Returns:   Exits with status 1
+#######################################
+bail() { printf '\033[0;31m%s\033[0m\n' "$1" >&2; exit 1; }
 
-vimfect "$mode" "$@"
+#######################################
+# Main function to run the script in a subshell
+# Globals: None
+# Arguments: None
+# Outputs: Writes various messages to stdout and stderr
+# Returns: 0 on success
+#######################################
+main() {
+  (
+    cd "$(dirname "$0")" || bail "Failed to cd to plugin directory."
+    [[ "$PWD" == "$PACKPATH" ]] || bail "I'm not supposed to be here!"
+    git rev-parse --is-inside-work-tree >/dev/null 2>&1 || bail "This script must be run from a git repository."
 
+    # Ensure required directories exist
+    mkdir -vp start opt
+
+    # Parse command-line arguments
+    case "${1:-}" in
+      start|opt) mode="$1"; shift ;;
+      -h|--help|help|'') bail "$USAGE" ;;
+      *) mode="start" ;;
+    esac
+
+    vimfect "$mode" "$@"
+  )
+}
+
+# Call the main function with all the script arguments
+main "$@"
