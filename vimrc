@@ -1,5 +1,15 @@
 " vim: fdm=marker fdl=2:
 
+if filereadable(expand("~/.vim/colors/tokyomidnight.vim"))
+  colorscheme tokyomidnight
+else
+  try
+    colorscheme retrobox
+  catch /^Vim\%((\a\+)\)\=:E185/
+    colorscheme ron
+  endtry
+endif
+
 " settings {{{1
 filetype plugin indent on
 set showcmd cmdheight=1
@@ -96,7 +106,7 @@ augroup myautocommands
   autocmd!
 
   " Source .vimrc after saving
-  autocmd BufWritePost $MYVIMRC source $MYVIMRC
+  "autocmd BufWritePost $MYVIMRC source $MYVIMRC
 
   " Change local directory to the file's directory on buffer enter
   autocmd BufEnter * :lchdir %:p:h
@@ -170,14 +180,4 @@ set shortmess+=A                    " avoid "hit-enter" prompts
 set signcolumn=no
 set wildmenu
 set wildmode=longest,list
-
-color retrobox
-hi Normal guibg=#000000
-" hi String guifg=#39FF14
-" hi Folded guifg=#14AFFF guibg=#000000
-" hi FoldColumn guibg='#000000' guifg='#000000'
-" hi clear SpellBad
-" hi clear SpellRare
-" hi SpellBad cterm=italic ctermfg=red guifg=red
-" hi SpellRare cterm=italic ctermfg=blue guifg=blue
 

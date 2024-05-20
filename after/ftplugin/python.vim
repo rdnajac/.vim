@@ -4,3 +4,5 @@ setlocal foldmethod=indent foldlevel=9 foldtext=getline(v:foldstart)
 "packadd black
 "silent! unmap <leader>w
 "nnoremap <leader>w :Black<CR>:w<CR>
+"
+" Python3 plugins installed on home machine using pip (assuming pip3)

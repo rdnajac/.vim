@@ -37,5 +37,5 @@ highlight SpellLocal guifg=red guibg=#000000
 highlight SpellRare guifg=red guibg=#000000
 " fix those
 
-# strikethrough
+" strikethrough
 nnoremap <leader>st i~~<Esc>A~~<Esc>
