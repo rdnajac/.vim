@@ -33,7 +33,7 @@
 	url = https://github.com/tpope/vim-fugitive
 [submodule "pack/foo/start/vim-repeat"]
 	path = pack/foo/start/vim-repeat
-	url = https://github.com/tpope/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
 [submodule "pack/foo/start/vim-surround"]
 	path = pack/foo/start/vim-surround
 	url = https://github.com/tpope/vim-surround
