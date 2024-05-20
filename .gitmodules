@@ -13,3 +13,6 @@
 [submodule "pack/foo/start/vimux"]
 	path = pack/foo/start/vimux
 	url = https://github.com/preservim/vimux.git
+[submodule "pack/foo/start/vim-tmux-navigator"]
+	path = pack/foo/start/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git
