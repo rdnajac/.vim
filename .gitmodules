@@ -10,3 +10,6 @@
 [submodule "pack/foo/start/vimtex"]
 	path = pack/foo/start/vimtex
 	url = https://github.com/lervag/vimtex.git
+[submodule "pack/foo/start/vimux"]
+	path = pack/foo/start/vimux
+	url = https://github.com/preservim/vimux.git
