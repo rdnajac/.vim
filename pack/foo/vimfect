@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# vimfect: vim plugin management using git submodules
+
+set -euxo pipefail
+
+readonly PACKPATH="${HOME}/.vim/pack"
+readonly SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
+readonly PARENT_DIR=$(dirname "$SCRIPT_DIR")
+
+if [[ "$PARENT_DIR" != "$PACKPATH" ]]; then
+  printf '\033[0;31m%s\033[0m\n' "I'm not supposed to be here!" >&2
+  exit 1
+fi
+
+# Ensure start and opt directories exist
+mkdir -p "$SCRIPT_DIR/start" "$SCRIPT_DIR/opt"
+
+resolve_repo_url() {
+  local repo=$1
+  [[ "$repo" =~ ^https:// || "$repo" =~ ^git@ ]] || repo="https://github.com/$repo.git"
+  printf '%s\n' "$repo"
+}
+
+vimfect() {
+  local mode="$1"; shift
+  cd "$SCRIPT_DIR"
+  git submodule sync
+  git submodule update --init --recursive
+  for repo in "$@"; do
+    repo=$(resolve_repo_url "$repo")
+    git submodule add --force "$repo" "$mode" || {
+      printf '\033[0;31m%s\033[0m\n' "Error: Failed to add $repo to $mode." >&2
+      continue
+    }
+    git commit -m "vimfect: added $repo to $mode"
+  done
+}
+
+case "${1:-}" in
+  start|opt) mode="$1"; shift ;;
+  -h|--help|help|'') printf '%s\n' "Usage: $0 <start|opt|help> <repository-url> [repository-url...]" >&2; exit 1 ;;
+  *) mode="start" ;;
+esac
+
+vimfect "$mode" "$@"
+
