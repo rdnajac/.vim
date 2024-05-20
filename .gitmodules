@@ -40,3 +40,6 @@
 [submodule "pack/foo/start/bash-support"]
 	path = pack/foo/start/bash-support
 	url = https://github.com/WolfgangMehner/bash-support.git
+[submodule "pack/foo/start/ale"]
+	path = pack/foo/start/ale
+	url = https://github.com/dense-analysis/ale.git
