@@ -16,3 +16,6 @@
 [submodule "pack/foo/start/vim-tmux-navigator"]
 	path = pack/foo/start/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule "pack/foo/start/tabular"]
+	path = pack/foo/start/tabular
+	url = https://github.com/godlygeek/tabular
