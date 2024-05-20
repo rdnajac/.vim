@@ -171,14 +171,13 @@ set signcolumn=no
 set wildmenu
 set wildmode=longest,list
 
-color scheme
-color codedark
+color retrobox
 hi Normal guibg=#000000
-hi String guifg=#39FF14
-hi Folded guifg=#14AFFF guibg=#000000
-hi FoldColumn guibg='#000000' guifg='#000000'
-hi clear SpellBad
-hi clear SpellRare
-hi SpellBad cterm=italic ctermfg=red guifg=red
-hi SpellRare cterm=italic ctermfg=blue guifg=blue
+" hi String guifg=#39FF14
+" hi Folded guifg=#14AFFF guibg=#000000
+" hi FoldColumn guibg='#000000' guifg='#000000'
+" hi clear SpellBad
+" hi clear SpellRare
+" hi SpellBad cterm=italic ctermfg=red guifg=red
+" hi SpellRare cterm=italic ctermfg=blue guifg=blue
 
