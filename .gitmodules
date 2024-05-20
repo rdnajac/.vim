@@ -43,3 +43,6 @@
 [submodule "pack/foo/start/ale"]
 	path = pack/foo/start/ale
 	url = https://github.com/dense-analysis/ale.git
+[submodule "pack/foo/start/vim-unimpaired"]
+	path = pack/foo/start/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
