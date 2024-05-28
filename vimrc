@@ -181,3 +181,5 @@ set signcolumn=no
 set wildmenu
 set wildmode=longest,list
 
+"tokyonight bg: #1f2335
+hi Normal guibg=#1f2335 guifg=#d6deeb

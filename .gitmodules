@@ -37,9 +37,6 @@
 [submodule "pack/foo/start/vim-surround"]
 	path = pack/foo/start/vim-surround
 	url = https://github.com/tpope/vim-surround
-[submodule "pack/foo/start/bash-support"]
-	path = pack/foo/start/bash-support
-	url = https://github.com/WolfgangMehner/bash-support.git
 [submodule "pack/foo/start/ale"]
 	path = pack/foo/start/ale
 	url = https://github.com/dense-analysis/ale.git
