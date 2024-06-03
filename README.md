@@ -1,5 +1,5 @@
 # .vim
-.vimrc got too big
+.vimrc too big
 
 ## installation
 
