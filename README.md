@@ -1,5 +1,11 @@
 # .vim
-.vimrc got too big
+
+my .vimrc and plugin manager for vim
+
+When in doubt:
+
+- [Google Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml)
+- [Google Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
 
 ## installation
 
@@ -17,27 +23,13 @@ git clone --recursive git@github.com:rdnajac/.vim.git
 
 vim plugin manager that lives in `.vim/pack/plugins/start` and maintains vim plugins through git submodules (see: `.gitmodules`)
 
-
-
-
 YouCompleteMe/
 markdown-preview.nvim/
-tabular/
 vim-commentary/
 vim-fugitive/
-vim-markdown/
 vim-repeat/
 vim-surround/
 vim-tmux-navigator/
 vim-which-key/
 vimtex/
 vimux/
-yowish.vim/
-vimfect.sh*
-1715969520 ~/.vim/pack/plugins/start √
-
-
-₽
-
-
-

@@ -1,17 +1,9 @@
-" vim: fdm=marker fdl=2:
+" https://github.com/rdnajac/.vim/blob/main/vimrc
+" https://vimdoc.sourceforge.net/htmldoc/options.html#:options
+filetype plugin indent on  " enable filetype-specific settings
 
-if filereadable(expand("~/.vim/colors/tokyomidnight.vim"))
-  colorscheme tokyomidnight
-else
-  try
-    colorscheme retrobox
-  catch /^Vim\%((\a\+)\)\=:E185/
-    colorscheme ron
-  endtry
-endif
+" set nocompatible         " don't set this; see :h 'nocompatible'
 
-" settings {{{1
-filetype plugin indent on
 set showcmd cmdheight=1
 set timeoutlen=300
 set updatetime=100
@@ -19,68 +11,61 @@ set lazyredraw
 set scrolloff=4 sidescrolloff=0
 set whichwrap+=<,>,[,],h,l
 set foldopen+=insert,jump
-set shiftwidth=2 tabstop=4 expandtab
+set shiftwidth=4 tabstop=4
+set expandtab
 set nowrap linebreak
 
-if !has('nvim') " {{{2
-  syntax enable                   " prefer `:syntax enable` over `:syntax on
-  set autoindent smarttab         " enable auto-indent and smart tabbing
-  set autoread autowrite          " auto read and write files when changed
-  set backspace=indent,eol,start  " backspace behavior
-  set encoding=utf-8              " nvim default is utf-8
-  set formatoptions+=j            " delete comment character when joining lines
-  set hidden                      " enable background buffers
-  set hlsearch incsearch          " highlighted, incremental search
-  set mouse=a                     " enable mouse in all modes
-  set nocompatible                " vim behaves like vim, not like vi
-  set noerrorbells novisualbell   " disable error bells and visual bells
-  " access man pages in vim {{{3
-  if exists(':Man') != 2 && !exists('g:loaded_man') && &filetype !=? 'man'
-    runtime ftplugin/man.vim
-  endif
-  " }}}3
-  " under the hood {{{3
-  set swapfile
-  if !isdirectory(expand("~/.vim/.swap"))
-    call mkdir(expand("~/.vim/.swap"), "p", 0700)
-  endif
-  let &directory = expand("~/.vim/.swap")
+" If sourcing this file from Neovim, skip setting these defaults:
+if !has('nvim') " {{{1
+    syntax enable                   " prefer over `syntax on`
+    set mouse=a                     " wait, that's illegal
+    set hidden                      " enable background buffers
+    set autoindent smarttab         " enable auto-indent and smart tabbing
+    set autoread autowrite          " automatically read/write files when changed
+    set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
+    set formatoptions+=j            " delete comment character when joining lines
+    set hlsearch incsearch          " highlighted, incremental search
+    set noerrorbells novisualbell   " disable error bells and visual bells
+    set encoding=utf-8
+    scriptencoding utf-8            " see :h :scriptencoding
+    runtime ftplugin/man.vim        " read the manual!
+    set swapfile backup undofile " {{{2
+    function s:MkdirIfNotExists(dir)
+      if !isdirectory(a:dir)
+        call mkdir(a:dir, 'p', 0700)
+      endif
+    endfunction
 
-  set undofile
-  set undolevels=1000
-  set undoreload=10000
-  if !isdirectory(expand("~/.vim/.undo"))
-    call mkdir(expand("~/.vim/.undo"), "p", 0700)
-  endif
-  let &undodir = expand("~/.vim/.undo")
+    let &directory = expand('~/.vim/.swap')
+    call s:MkdirIfNotExists(&directory)
 
-  set backup
-  if !isdirectory(expand("~/.vim/.backup"))
-    call mkdir(expand("~/.vim/.backup"), "p", 0700)
-  endif
-  let &backupdir = expand("~/.vim/.backup")
+    let &backupdir = expand('~/.vim/.backup')
+    call s:MkdirIfNotExists(&backupdir)
 
-  "set spell
-  if !isdirectory(expand("~/.vim/.spell"))
-    call mkdir(expand("~/.vim/.spell"), "p", 0700)
-  endif
-  set spellfile=~/.vim/.spell/en.utf-8.add
-  " }}}3
-  set clipboard=unnamed
+    let &undodir = expand('~/.vim/.undo')
+    call s:MkdirIfNotExists(&undodir)
+    "set undolevels=1000    " default is 1000 on Unix, ubsted on macos
+    "set undoreload=10000   " default is 10000
+    " }}}2
+    set spellfile=~/.vim/.spell/en.utf-8.add
+    set clipboard=unnamed
 else
-  set clipboard=unnamedplus
-  "set noshowmode      " disable showmode
-  "set noshowcmd       " disable showcmd
-  "set noruler         " disable ruler
+    set clipboard=unnamedplus
+    "set noshowmode      " disable showmode
+    "set noshowcmd       " disable showcmd
+    "set noruler         " disable ruler
 endif
 
-" searh and matching {{{2
-set ignorecase smartcase
-"set matchtime=2  " default is 5
-set iskeyword+=-  " treat hyphens as part of a word
-"set iskeyword+=_  " treat underscores as part of a word
+set completeopt=menuone,noselect    " show menu even if there's only one match
+set conceallevel=0
+set numberwidth=3
+set report=0                        " display how many replacements were made
+set shortmess+=A                    " avoid "hit-enter" prompts
+set signcolumn=no
+set wildmenu
+set wildmode=longest,list
 
-" display settings {{{2
+" display settings {{{1
 set background=dark termguicolors
 set cursorline
 set number numberwidth=3 relativenumber
@@ -88,37 +73,42 @@ set pumheight=10
 set showmatch
 set signcolumn=yes
 set splitbelow splitright
+" Folding {{{2
 
-" ignore these files and directories {{{2
-set wildignore+=
-      \*.exe,*.out,*.cm*,*.o,*.a,*.so,*.dll,*.dylib,*.lib,*.bin,*.app,*.apk,*.dmg,*.iso,*.msi,*.deb,*.rpm,*.pkg,
-      \*.class,*.jar,*.pyo,*.pyd,*.node,*.swp,*.swo,*.tmp,*.temp,*.DS_Store,Thumbs.db,
-      \*/.git/*,*/.hg/*,*/.svn/*,
-      \*.pdf,*.aux,*.fdb_latexmk,*.fls,
-      \*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img,
-      \*.mp3,*.mp4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav,
-      \*.zip,*.tar.gz,*.rar,*.7z,*.tar.xz,*.tgz,
-      \*/node_modules/*,*/vendor/*,*/build/*,*/dist/*,*/out/*,*/bin/*,*/.vscode/*,*/__pycache__/*,*/.cache/*
+set foldcolumn=0
+
+" Fillchars control the appearance of folds
+set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
+set fillchars+=eob:\                " don't show end of buffer as a column of ~
+set fillchars+=stl:\                " display spaces properly in statusline
 " }}}2
+
+" Listchars control the appearance of whitespace
+set list listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
+
+" }}}1
+
+" searh and matching {{{2
+set ignorecase smartcase
+set iskeyword+=-  " treat hyphens as part of a word
+set iskeyword+=_  " treat underscores as part of a word
+
 
 " autocmds {{{2
 augroup myautocommands
-  autocmd!
+    autocmd!
 
-  " Source .vimrc after saving
-  "autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    " Change local directory to the file's directory on buffer enter
+    autocmd BufEnter * :lchdir %:p:h
 
-  " Change local directory to the file's directory on buffer enter
-  autocmd BufEnter * :lchdir %:p:h
+    " Map 'q' to close the buffer for certain file types
+    autocmd FileType help,man,netrw,quickfix silent! nnoremap <silent> <buffer> q :close<CR> | set nobuflisted
 
-  " Map 'q' to close the buffer for certain file types
-  autocmd FileType help,man,netrw,quickfix silent! nnoremap <silent> <buffer> q :close<CR> | set nobuflisted
+    " Go to last cursor position when opening a file
+    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | if winline() >= winheight(0) - 3 | exe "normal! zb" | endif | endif
 
-  " Go to last cursor position when opening a file
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | if winline() >= winheight(0) - 3 | exe "normal! zb" | endif | endif
-
-  " Reload file if it has changed outside of Vim
-  autocmd FocusGained * checktime
+    " Reload file if it has changed outside of Vim
+    autocmd FocusGained * checktime
 augroup END
 
 " keymaps {{{1
@@ -156,30 +146,37 @@ nnoremap <leader>bl :ls<CR>
 " force `:X` to behave like `:x`
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 
-" which-key {{{2
-let g:which_key_map =  {}
-nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
-vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
-"call which_key#register('<Space>', "g:which_key_map")
 
-" }}}2
+" Set the default colorscheme with fallbacks
+if filereadable(expand('~/.vim/colors/tokyomidnight.vim'))
+    colorscheme tokyomidnight
+else
+    try
+        colorscheme retrobox
+    catch /^Vim\%((\a\+)\)\=:E185/
+        colorscheme ron
+    endtry
+endif
 
-" additional settings {{{1
-"set wildmode=longest:list,full
-set completeopt=menuone,noselect    " show menu even if there's only one match
-set conceallevel=0
-set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
-set fillchars+=eob:\                " don't show end of buffer as a column of ~
-set fillchars+=stl:\                " display spaces properly in statusline
-set fo-=o
-set foldcolumn=0
-set list listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
-set numberwidth=3
-set report=0                        " display how many replacements were made
-set shortmess+=A                    " avoid "hit-enter" prompts
-set signcolumn=no
-set wildmenu
-set wildmode=longest,list
+" TODO make this ft-specific
+set formatoptions-=o " don't continue comments when pressing 'o'
 
-"tokyonight bg: #1f2335
-hi Normal guibg=#1f2335 guifg=#d6deeb
+" Ignore these files and directories {{{
+set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
+set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
+set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
+set wildignore+=*.pdf,*.aux,*.fdb_latexmk,*.fls           " LaTeX files
+set wildignore+=*.zip,*.tar.gz,*.rar,*.7z,*.tar.xz,*.tgz  " Archives and compressed files
+set wildignore+=*.cmake,*.cmake.in,*.cmod,*/bin/*,*/build/* " C/C++ files and directories
+set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
+set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
+set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
+set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
+"}}}
+
+" Modelines have historically been a source of security vulnerabilities.
+" TODO disable modelines and use the securemodelines script instead:
+" http://www.vim.org/scripts/script.php?script_id=1876
+" set nomodeline
+" nevertheless...
+" vim:fdm=marker

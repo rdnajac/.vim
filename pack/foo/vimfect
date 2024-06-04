@@ -11,7 +11,7 @@
 set -euo pipefail
 
 # Uncomment to enable debugging
-set -x
+#set -x
 
 # Constants
 readonly USAGE="Usage: $0 <start|opt> <repository-url> [repository-url...]"
@@ -57,14 +57,6 @@ vimfect() {
 }
 
 #######################################
-# Print a message and exit.
-# Arguments: $1 - Message to print
-# Outputs:   Writes message to stderr
-# Returns:   Exits with status 1
-#######################################
-bail() { printf '\033[0;31m%s\033[0m\n' "$1" >&2; exit 1; }
-
-#######################################
 # Main function to run the script in a subshell
 # Globals: None
 # Arguments: None
@@ -74,7 +66,7 @@ bail() { printf '\033[0;31m%s\033[0m\n' "$1" >&2; exit 1; }
 main() {
   (
     cd "$(dirname "$0")" && git rev-parse --is-inside-work-tree >/dev/null 2>&1
-    [[ "$(dirname "$PWD")" == "$PACKPATH" ]] || bail "I'm not supposed to be here!"
+    [[ "$(dirname "$PWD")" == "$PACKPATH" ]] || { printf '\033[0;31m%s\033[0m\n' "I'm not supposed to be here!" >&2; exit 1; }
 
     # Ensure required directories exist
     mkdir -vp start opt
@@ -82,7 +74,8 @@ main() {
     # Parse command-line arguments
     case "${1:-}" in
       start|opt) mode="$1"; shift ;;
-      -h|--help|help|'') bail "$USAGE" ;;
+      p|purge) mode="purge"; shift ;;
+      -h|--help|help|'') { printf '\033[0;31m%s\033[0m\n' "$USAGE" >&2; exit 1; } ;;
       *) mode="start" ;;
     esac
 
@@ -91,5 +84,14 @@ main() {
 }
 
 # Call the main function with all the script arguments
-main "$@"
+
+# if $1 is "purge" then $2 is the folder to remove and you have to also remove the submodule from .gitmodules and deinit?
+if [[ "${1:-}" == "purge" ]]; then
+  [[ -z "${2:-}" ]] && { printf '\033[0;31m%s\033[0m\n' "$USAGE" >&2; exit 1; }
+  git submodule deinit --force $2
+  git rm -r "$2"
+  git commit -m "vimfect: removed $2"
+else
+  main "$@"
+fi
 
