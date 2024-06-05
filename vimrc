@@ -1,22 +1,21 @@
 " https://github.com/rdnajac/.vim/blob/main/vimrc
 " https://vimdoc.sourceforge.net/htmldoc/options.html#:options
-filetype plugin indent on  " enable filetype-specific settings
-
-" set nocompatible         " don't set this; see :h 'nocompatible'
-
-set showcmd cmdheight=1
+filetype plugin indent on      " enable filetype-specific settings
+" set nocompatible             " don't set this; see :h 'nocompatible'
+                               " this is automatically set when .vimrc is found
 set timeoutlen=300
 set updatetime=100
 set lazyredraw
-set scrolloff=4 sidescrolloff=0
 set whichwrap+=<,>,[,],h,l
 set foldopen+=insert,jump
 set shiftwidth=4 tabstop=4
 set expandtab
 set nowrap linebreak
+set showcmd cmdheight=1
+set scrolloff=4 sidescrolloff=0
 
 " If sourcing this file from Neovim, skip setting these defaults:
-if !has('nvim') " {{{1
+if !has('nvim')
     syntax enable                   " prefer over `syntax on`
     set mouse=a                     " wait, that's illegal
     set hidden                      " enable background buffers
@@ -26,10 +25,10 @@ if !has('nvim') " {{{1
     set formatoptions+=j            " delete comment character when joining lines
     set hlsearch incsearch          " highlighted, incremental search
     set noerrorbells novisualbell   " disable error bells and visual bells
-    set encoding=utf-8
+    set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
     scriptencoding utf-8            " see :h :scriptencoding
     runtime ftplugin/man.vim        " read the manual!
-    set swapfile backup undofile " {{{2
+    set swapfile backup undofile    " {{{
     function s:MkdirIfNotExists(dir)
       if !isdirectory(a:dir)
         call mkdir(a:dir, 'p', 0700)
@@ -46,7 +45,7 @@ if !has('nvim') " {{{1
     call s:MkdirIfNotExists(&undodir)
     "set undolevels=1000    " default is 1000 on Unix, ubsted on macos
     "set undoreload=10000   " default is 10000
-    " }}}2
+    " }}}
     set spellfile=~/.vim/.spell/en.utf-8.add
     set clipboard=unnamed
 else
@@ -65,7 +64,7 @@ set signcolumn=no
 set wildmenu
 set wildmode=longest,list
 
-" display settings {{{1
+" display settings {{{
 set background=dark termguicolors
 set cursorline
 set number numberwidth=3 relativenumber
@@ -73,7 +72,6 @@ set pumheight=10
 set showmatch
 set signcolumn=yes
 set splitbelow splitright
-" Folding {{{2
 
 set foldcolumn=0
 
@@ -81,20 +79,17 @@ set foldcolumn=0
 set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set fillchars+=eob:\                " don't show end of buffer as a column of ~
 set fillchars+=stl:\                " display spaces properly in statusline
-" }}}2
-
-" Listchars control the appearance of whitespace
 set list listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
 
-" }}}1
+" }}}
 
-" searh and matching {{{2
+" searh and matching {{{
 set ignorecase smartcase
 set iskeyword+=-  " treat hyphens as part of a word
 set iskeyword+=_  " treat underscores as part of a word
+"}}}
 
-
-" autocmds {{{2
+" autocmds {{{
 augroup myautocommands
     autocmd!
 
@@ -110,6 +105,7 @@ augroup myautocommands
     " Reload file if it has changed outside of Vim
     autocmd FocusGained * checktime
 augroup END
+"}}}
 
 " keymaps {{{1
 let mapleader = "\<space>"
@@ -134,9 +130,25 @@ vnoremap jk <esc>
 inoremap kj <esc>
 vnoremap jk <esc>
 
-" TODO test move text up and down
-nnoremap <silent> <M-j> :m .+1<CR>==
-nnoremap <silent> <M-k> :m .-2<CR>==
+" Move the current up/down
+nnoremap <silent> <C-k> :move .-2<CR>==
+
+" Move the current line down in normal mode
+nnoremap <silent> <C-j> :move .+1<CR>==
+
+" Move the selected lines up in visual mode
+xnoremap <silent> <C-k> :move '<-2<CR>gv=gv
+
+" Move the selected lines down in visual mode
+xnoremap <silent> <C-j> :move '>+1<CR>gv=gv
+
+
+" Move the current line up
+
+nnoremap <silent> <C-k> :m .-2 <CR>
+
+" Move the current line down
+nnoremap <silent> <C-j> :m .+1 <CR>
 
 " buffers and windows
 nnoremap L :bnext<CR>
@@ -145,9 +157,9 @@ nnoremap <leader>bl :ls<CR>
 
 " force `:X` to behave like `:x`
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
+" }}}1
 
-
-" Set the default colorscheme with fallbacks
+" Set the default colorscheme with fallbacks {{{
 if filereadable(expand('~/.vim/colors/tokyomidnight.vim'))
     colorscheme tokyomidnight
 else
@@ -157,6 +169,7 @@ else
         colorscheme ron
     endtry
 endif
+"}}}
 
 " TODO make this ft-specific
 set formatoptions-=o " don't continue comments when pressing 'o'

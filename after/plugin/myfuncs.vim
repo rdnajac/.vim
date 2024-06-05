@@ -44,7 +44,8 @@ function! StripTrailingWhitespace()
     call winrestview(l:save_view)
   endif
 endfunction
-nnoremap <leader>w :call StripTrailingWhitespace()<CR> :w<CR>
+"nnoremap <leader>w :call StripTrailingWhitespace()<CR> :w<CR>
+nnoremap <leader>w :w<CR>
 
 function! ReplaceSelection()
     normal! gv"xy
@@ -81,28 +82,6 @@ function! NewCHeader(filename)
     call writefile(content, headerFilename)
     echo "header file created: " . headerFilename
 endfunction
-
-function! StripTrailingWhitespace()
-  if !&binary && &filetype != 'diff'
-    let l:save_cursor = getpos(".")
-    let l:save_view = winsaveview()
-    %s/\s\+$//e
-    call setpos('.', l:save_cursor)
-    call winrestview(l:save_view)
-  endif
-endfunction
-nnoremap <leader>w :call StripTrailingWhitespace()<CR> :w<CR>
-
-function! ReplaceSelection()
-    normal! gv"xy
-    let sel = getreg('x')
-    let rep = input('Replace all instances of "' . sel . '" with: ')
-    if rep != ''
-      let cmd = ':%s/' . escape(sel, '/\') . '/' . escape(rep, '/\') . '/g'
-      exe cmd
-    endif
-endfunction
-xnoremap <leader>r :<C-u>call ReplaceSelection()<CR>
 
 function! Xexplore()
     let cmd = "Lexplore"            " set default command

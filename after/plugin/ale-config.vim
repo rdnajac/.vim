@@ -1,50 +1,45 @@
-" Enable ALE for linting
-let g:ale_enabled = 1
+" Set global ALE configuration here (including all linters and fixers) 
+" Then, set buffer-local configuration in ftplugin files.
+" https://github.com/dense-analysis/ale/blob/master/doc/ale.txt
 
-finis
-" TODO make ft-specific
-" let g:ale_fix_on_save = 1
+" turn this off in python.vim
+"let g:ale_use_global_executables = 1
 
-let g:ale_completion_enabled = 1
-" Configure linters for Python
+" https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
 let g:ale_linters = {
-\   'python': ['flake8', 'pylint', 'mypy'],
-\   'sh': ['shellcheck']
-\}
+            \'*': ['cspell'],
+            \'vim': ['vint'],
+            \'python': [],
+            \}
 
-" Configure fixers for Python
 let g:ale_fixers = {
-\   'python': ['autopep8', 'yapf', 'isort'],
-\   'sh': ['shfmt']
-\}
+            \'*': ['remove_trailing_lines', 'trim_whitespace'],
+            \'vim': ['vint'],
+            \'python': [],
+            \}
 
-" Enable fixing on save
+let g:ale_sign_error = '💩'
+let g:ale_sign_warning = '💩'
+hi clear ALEErrorSign
+hi clear ALEWarningSign
+" let g:ale_echo_msg_error_str = 'E'
+" let g:ale_echo_msg_warning_str = 'W'
+" let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+" let g:ale_floating_window_border = []
+" let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
+" let g:ale_floating_window_border = repeat([''], 8)
 
-" Python linter and fixer settings
-let g:ale_python_flake8_options = '--max-line-length=88'
-let g:ale_python_pylint_options = '--max-line-length=88'
-let g:ale_python_mypy_options = '--ignore-missing-imports'
-let g:ale_python_autopep8_options = '--max-line-length=88'
-let g:ale_python_yapf_options = '--style pep8'
-let g:ale_python_isort_options = '--profile black'
+" https://github.com/dense-analysis/ale?tab=readme-ov-file#custom-statusline
+function! LinterStatus() abort
+    let l:counts = ale#statusline#Count(bufnr(''))
+    let l:all_errors = l:counts.error + l:counts.style_error
+    let l:all_non_errors = l:counts.total - l:all_errors
 
-" Shell linter and fixer settings
-let g:ale_sh_shellcheck_options = '-e SC1117'
-let g:ale_sh_shfmt_options = '-i 4 -ci -sr'
-
-" Set ALE to use virtual text for displaying linting errors
-let g:ale_virtualtext_cursor = 'disabled'
-let g:ale_virtualtext_cursor = 'current'
-
-" Customize signs
-let g:ale_sign_error = '>>'
-let g:ale_sign_warning = '--'
-
-" Always show the sign column
-let g:ale_sign_column_always = 1
-
-" Enable linting only on save and open
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_insert_leave = 0
-let g:ale_lint_on_enter = 1
-let g:ale_lint_on_save = 1
+    return l:counts.total == 0 ? 'OK' : printf(
+    \   '%dW %dE',
+    \   all_non_errors,
+    \   all_errors
+    \)
+endfunction
+" optionally, set the statusline to use the function
+" set statusline=%{LinterStatus()}
