@@ -88,10 +88,12 @@ main() {
 # if $1 is "purge" then $2 is the folder to remove and you have to also remove the submodule from .gitmodules and deinit?
 if [[ "${1:-}" == "purge" ]]; then
   [[ -z "${2:-}" ]] && { printf '\033[0;31m%s\033[0m\n' "$USAGE" >&2; exit 1; }
-  git submodule deinit --force $2
+  git submodule deinit --force "$2"
   git rm -r "$2"
   git commit -m "vimfect: removed $2"
 else
   main "$@"
 fi
 
+# TODO: vim -u NONE -c "helptags eunuch/doc" -c q
+# 

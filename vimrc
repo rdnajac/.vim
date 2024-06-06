@@ -1,5 +1,7 @@
 " https://github.com/rdnajac/.vim/blob/main/vimrc
 " https://vimdoc.sourceforge.net/htmldoc/options.html#:options
+
+" general settings {{{
 filetype plugin indent on      " enable filetype-specific settings
 " set nocompatible             " don't set this; see :h 'nocompatible'
                                " this is automatically set when .vimrc is found
@@ -59,56 +61,66 @@ set completeopt=menuone,noselect    " show menu even if there's only one match
 set conceallevel=0
 set numberwidth=3
 set report=0                        " display how many replacements were made
-set shortmess+=A                    " avoid "hit-enter" prompts
+set shortmess+=A                    " avoid 'hit-enter' prompts
 set signcolumn=no
 set wildmenu
 set wildmode=longest,list
 
+set ignorecase smartcase
+set iskeyword+=-  " treat hyphens as part of a word
+set iskeyword+=_  " treat underscores as part of a word
+
+" TODO make this ft-specific
+set formatoptions-=o " don't continue comments when pressing 'o'
+
+" }}}
+
 " display settings {{{
 set background=dark termguicolors
+silent! colorscheme tokyomidnight
+
 set cursorline
+set foldcolumn=0
 set number numberwidth=3 relativenumber
 set pumheight=10
 set showmatch
 set signcolumn=yes
 set splitbelow splitright
 
-set foldcolumn=0
-
-" Fillchars control the appearance of folds
+" fillchars control the appearance of folds
 set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set fillchars+=eob:\                " don't show end of buffer as a column of ~
 set fillchars+=stl:\                " display spaces properly in statusline
 set list listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
-
 " }}}
 
-" searh and matching {{{
-set ignorecase smartcase
-set iskeyword+=-  " treat hyphens as part of a word
-set iskeyword+=_  " treat underscores as part of a word
-"}}}
-
 " autocmds {{{
-augroup myautocommands
-    autocmd!
+augroup vimrc
+  autocmd!
+augroup END
 
+augroup vimrc
     " Change local directory to the file's directory on buffer enter
     autocmd BufEnter * :lchdir %:p:h
 
     " Map 'q' to close the buffer for certain file types
     autocmd FileType help,man,netrw,quickfix silent! nnoremap <silent> <buffer> q :close<CR> | set nobuflisted
-
-    " Go to last cursor position when opening a file
-    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | if winline() >= winheight(0) - 3 | exe "normal! zb" | endif | endif
-
-    " Reload file if it has changed outside of Vim
-    autocmd FocusGained * checktime
 augroup END
+
+augroup RestoreCursorPosition
+    autocmd!
+    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    autocmd BufReadPost *   exe "normal! g'\""
+    autocmd BufReadPost *   if winline() >= winheight(0) - 3 | exe "normal! zb" | endif
+    autocmd BufReadPost *   exe "silent! normal! zo" 
+    autocmd BufReadPost *   exe "normal! zz"
+augroup END
+
 "}}}
 
 " keymaps {{{1
-let mapleader = "\<space>"
+" let mapleader = "\<space>"
+let g:mapleader = ' '
 
 nnoremap ?         :call GetInfo()<cr>
 nnoremap <leader>r :source $MYVIMRC<cr> : echo ">^.^<"<cr>
@@ -130,25 +142,11 @@ vnoremap jk <esc>
 inoremap kj <esc>
 vnoremap jk <esc>
 
-" Move the current up/down
+" Move the current line up/down
 nnoremap <silent> <C-k> :move .-2<CR>==
-
-" Move the current line down in normal mode
 nnoremap <silent> <C-j> :move .+1<CR>==
-
-" Move the selected lines up in visual mode
 xnoremap <silent> <C-k> :move '<-2<CR>gv=gv
-
-" Move the selected lines down in visual mode
 xnoremap <silent> <C-j> :move '>+1<CR>gv=gv
-
-
-" Move the current line up
-
-nnoremap <silent> <C-k> :m .-2 <CR>
-
-" Move the current line down
-nnoremap <silent> <C-j> :m .+1 <CR>
 
 " buffers and windows
 nnoremap L :bnext<CR>
@@ -157,24 +155,16 @@ nnoremap <leader>bl :ls<CR>
 
 " force `:X` to behave like `:x`
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
+
+" map leader c to gcc
+nnoremap <leader>c gcc 
+vnoremap <leader>c gcc 
+" nnoremap <leader>c :<c-u>call <SID>CommentToggle(0)<cr>
+" vnoremap <leader>c :<c-u>call <SID>CommentToggle(0)<cr>
+
 " }}}1
 
-" Set the default colorscheme with fallbacks {{{
-if filereadable(expand('~/.vim/colors/tokyomidnight.vim'))
-    colorscheme tokyomidnight
-else
-    try
-        colorscheme retrobox
-    catch /^Vim\%((\a\+)\)\=:E185/
-        colorscheme ron
-    endtry
-endif
-"}}}
-
-" TODO make this ft-specific
-set formatoptions-=o " don't continue comments when pressing 'o'
-
-" Ignore these files and directories {{{
+" ignore these files and directories {{{
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
 set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
 set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
