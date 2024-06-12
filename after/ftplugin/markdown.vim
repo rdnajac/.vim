@@ -3,6 +3,9 @@
 nnoremap <leader>md :MarkdownPreview<cr>
 nnoremap <leader>st i~~<Esc>A~~<Esc>
 
+" turn off status line
+set laststatus=0
+
 hi Title     guifg=#14afff guibg=#000000 gui=bold
 hi Delimiter guifg=#ff14af guibg=#000000 gui=bold
 hi Normal    guifg=#39ff14 guibg=#000000

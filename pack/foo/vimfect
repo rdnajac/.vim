@@ -97,3 +97,5 @@ fi
 
 # TODO: vim -u NONE -c "helptags eunuch/doc" -c q
 # 
+# TODO make shallow clines at depth 1
+# like: git submodule add --depth 1 --force "$resolved_repo" "$mode/$repo_name"

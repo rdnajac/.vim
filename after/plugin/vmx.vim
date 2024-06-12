@@ -41,7 +41,14 @@ endfunction
 " }}}
 
 function! VmxLine() abort
-  call Vmx(getline('.'))
+  " call Vmx(getline('.'))
+  " same as above, but check if the line is wrapped in backticks and if so
+  " ignore them
+  let l:line = s:thisline()
+  if l:line[0] == '`' && l:line[-1] == '`'
+    let l:line = l:line[1:-2]
+    endif
+    call Vmx(l:line)
 endfunction
 
 " function! VmxSh() abort
