@@ -1,3 +1,4 @@
+finish
 let g:ycm_clangd_args = [ '--header-insertion=never' ]
 
 let g:ycm_enable_semantic_highlighting=1
