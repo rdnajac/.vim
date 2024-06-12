@@ -1,10 +1,15 @@
 " https://github.com/rdnajac/.vim/blob/main/vimrc
+"
+" When in doubt:
 " https://vimdoc.sourceforge.net/htmldoc/options.html#:options
 
 " general settings {{{
-filetype plugin indent on      " enable filetype-specific settings
-" set nocompatible             " don't set this; see :h 'nocompatible'
-                               " this is automatically set when .vimrc is found
+filetype plugin indent on
+
+" this is automatically set when .vimrc is found
+" TODO figure out if this is necessary
+" set nocompatible
+
 set timeoutlen=300
 set updatetime=100
 set lazyredraw
@@ -76,7 +81,7 @@ set formatoptions-=o " don't continue comments when pressing 'o'
 " }}}
 
 " display settings {{{
-set background=dark termguicolors
+set termguicolors
 silent! colorscheme tokyomidnight
 
 set cursorline

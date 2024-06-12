@@ -25,15 +25,15 @@ let g:which_key_map = {}
 "       \ '?' : ['Windows'    , 'fzf-window']            ,
 "       \ }
 " call which_key#register('<Space>', "g:which_key_map")
-let g:which_key_map['a'] = {
-            \ 'name' : '+ALE' ,
-            \ 'l' : ['<Plug>(ale_lint)', 'lint'] ,
-            \ 'f' : ['<Plug>(ale_fix)' , 'fix'] ,
-            \ 'i' : ['<Plug>(ale_info)', 'info'] ,
-            \ 's' : [':ALEFixSuggest<CR>'  , 'suggest'] ,
-            \ 'd' : [':ALEDetail<CR>'      , 'detail'] ,
-            \ 'h' : [':ALEHover<CR>'       , 'hover'] ,
-            \}
+" let g:which_key_map['a'] = {
+"             \ 'name' : '+ALE' ,
+"             \ 'l' : ['<Plug>(ale_lint)', 'lint'] ,
+"             \ 'f' : ['<Plug>(ale_fix)' , 'fix'] ,
+"             \ 'i' : ['<Plug>(ale_info)', 'info'] ,
+"             \ 's' : [':ALEFixSuggest<CR>'  , 'suggest'] ,
+"             \ 'd' : [':ALEDetail<CR>'      , 'detail'] ,
+"             \ 'h' : [':ALEHover<CR>'       , 'hover'] ,
+"             \}
 call which_key#register('<Space>', 'g:which_key_map')
 
 
