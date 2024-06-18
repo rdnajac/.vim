@@ -37,6 +37,3 @@
 [submodule "pack/foo/start/vim-eunuch"]
 	path = pack/foo/start/vim-eunuch
 	url = https://github.com/tpope/vim-eunuch.git
-[submodule "pack/foo/start/lsp"]
-	path = pack/foo/start/lsp
-	url = https://github.com/yegappan/lsp.git
