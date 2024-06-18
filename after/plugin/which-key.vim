@@ -1,9 +1,8 @@
 " https://github.com/liuchengxu/vim-which-key?tab=readme-ov-file#usage
 
 nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
-let g:popup_menu_border = ['─', '│', '─', '│', '╭', '╮', '╯', '╰']
 
-let g:which_key_map = {}
+" let g:which_key_map = {}
 " let g:which_key_map['w'] = {
 "       \ 'name' : '+windows' ,
 "       \ 'w' : ['<C-W>w'     , 'other-window']          ,
@@ -34,6 +33,6 @@ let g:which_key_map = {}
 "             \ 'd' : [':ALEDetail<CR>'      , 'detail'] ,
 "             \ 'h' : [':ALEHover<CR>'       , 'hover'] ,
 "             \}
-call which_key#register('<Space>', 'g:which_key_map')
+" call which_key#register('<Space>', 'g:which_key_map')
 
 

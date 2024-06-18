@@ -7,7 +7,6 @@
 
 " https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
 let g:ale_linters = {
-            \'*': ['cspell'],
             \'vim': ['vint'],
             \'python': [],
             \}
