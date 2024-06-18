@@ -10,6 +10,7 @@ filetype plugin indent on
 " TODO figure out if this is necessary
 " set nocompatible
 
+
 set timeoutlen=300
 set updatetime=100
 set lazyredraw
@@ -76,7 +77,7 @@ set iskeyword+=-  " treat hyphens as part of a word
 set iskeyword+=_  " treat underscores as part of a word
 
 " TODO make this ft-specific
-set formatoptions-=o " don't continue comments when pressing 'o'
+" set formatoptions-=o " don't continue comments when pressing 'o'
 
 " }}}
 
@@ -99,12 +100,13 @@ set fillchars+=stl:\                " display spaces properly in statusline
 set list listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
 " }}}
 
-" autocmds {{{
 augroup vimrc
   autocmd!
 augroup END
 
 augroup vimrc
+    autocmd VimEnter * echom " " | echom ">^.^<" |
+
     " Change local directory to the file's directory on buffer enter
     autocmd BufEnter * :lchdir %:p:h
 
@@ -117,18 +119,16 @@ augroup RestoreCursorPosition
     autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
     autocmd BufReadPost *   exe "normal! g'\""
     autocmd BufReadPost *   if winline() >= winheight(0) - 3 | exe "normal! zb" | endif
-    autocmd BufReadPost *   exe "silent! normal! zo" 
+    autocmd BufReadPost *   exe "silent! normal! zo"
     autocmd BufReadPost *   exe "normal! zz"
 augroup END
 
-"}}}
-
-" keymaps {{{1
-" let mapleader = "\<space>"
 let g:mapleader = ' '
+let g:maplocalleader = '\'
 
 nnoremap ?         :call GetInfo()<cr>
-nnoremap <leader>r :source $MYVIMRC<cr> : echo ">^.^<"<cr>
+
+nnoremap <leader>r :source $MYVIMRC<cr>
 nnoremap <leader>w :w<cr>
 nnoremap <leader>Q :qa!<cr>
 nnoremap <leader>h :set hlsearch!<cr>
@@ -162,12 +162,10 @@ nnoremap <leader>bl :ls<CR>
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 
 " map leader c to gcc
-nnoremap <leader>c gcc 
-vnoremap <leader>c gcc 
-" nnoremap <leader>c :<c-u>call <SID>CommentToggle(0)<cr>
-" vnoremap <leader>c :<c-u>call <SID>CommentToggle(0)<cr>
+nmap <leader>c gcc
+vmap <leader>c gcc
 
-" }}}1
+" }}}1}}}
 
 " ignore these files and directories {{{
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files

@@ -2,6 +2,21 @@
 
 vimrc too big
 
+## about
+
+1. `.vimrc` --> `/.vim/vimrc`
+2. `/.vim/after/`
+    * `ftplugin/` contains filetype-specific settings and mappings
+    * `plugin/` stuff I manage
+3. `/.vim/colors/` my color schemes
+4. `/.vim/pack/vimfect/` contains plugins managed by vimfect (and git submodules)
+
+### `vimfect`
+
+vim plugin manager that lives in `.vim/pack/plugins/` and maintains
+vim plugins through git submodules (see: `.gitmodules`)
+3. 
+
 ## When in doubt:
 
 - [Google Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml)
@@ -59,11 +74,4 @@ Huge version without GUI.  Features included (+) or not (-):
 Compilation: clang -c -I. -Iproto -DHAVE_CONFIG_H -DMACOS_X -DMACOS_X_DARWIN -g -O2 -D_REENTRANT -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1
 Linking: clang -o vim -lm -lncurses -lsodium -liconv -lintl -framework AppKit -L/opt/homebrew/opt/lua/lib -llua5.4 -mmacosx-version-min=14.2 -fstack-protector-strong -L/opt/homebrew/opt/perl/lib/perl5/5.38/darwin-thread-multi-2level/CORE -lperl -L/opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12/lib/python3.12/config-3.12-darwin -lpython3.12 -framework CoreFoundation -lruby.3.3 -L/opt/homebrew/Cellar/ruby/3.3.1/lib
 ```
-
-## Plugins
-
-### `vimfect`
-
-vim plugin manager that lives in `.vim/pack/plugins/` and maintains
-vim plugins through git submodules (see: `.gitmodules`)
 
