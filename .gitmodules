@@ -33,7 +33,7 @@
 	url = https://github.com/liuchengxu/vim-which-key.git
 [submodule "pack/foo/start/ale"]
 	path = pack/foo/start/ale
-	url = https://github.com/dense-analysis/ale.git
+	url = https://github.com/dense-analysis/ale
 [submodule "pack/foo/start/vim-eunuch"]
 	path = pack/foo/start/vim-eunuch
 	url = https://github.com/tpope/vim-eunuch.git
