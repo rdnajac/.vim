@@ -9,8 +9,8 @@ hi Delimiter guifg=#ff14af guibg=#000000 gui=bold
 hi Normal    guifg=#39ff14 guibg=#000000
 hi! link Constant Underlined
 
-" ALE 
-let b:ale_linters = ['markdownlint', 'cspell', 'write-good'] 
+" ALE
+let b:ale_linters = ['markdownlint', 'cspell', 'write-good']
 let b:ale_fixers = ['prettier']
 let b:ale_fix_on_save = 1
 
