@@ -1,22 +1,34 @@
-setlocal et ts=2 sw=2 nowrap fdm=marker
+setlocal cindent shiftwidth=8 softtabstop=8 noexpandtab
 
-nnoremap <leader>bs i#!/bin/bash/<ESC>o<ESC>ofunction main(){<ESC>o<ESC>o}<ESC>ki<S-TAB>
-nnoremap <leaderex :!chmod +x % && ./%<CR>
-nnoremap <leader>sh :!chmod +x % && source %
+iabbrev !! #!/bin/bash<CR>#<CR># <ESC>kA
 
 " Format shell scripts with shfmt:
 "     Google-style indentation (two spaces)
 "     -bn, --binary-next-line  binary ops like && and | may start a line
 "     -ci, --case-indent       switch cases will be indented
-let b:ale_sh_shfmt_options = '-i 2 -bn-sr'
+"     -sr, --space-redirects   add spaces around redirects (e.g. >, >>, <, <<)
+"     -fn, --function-next-line function opening brace may start a line
+"     -kp, --keep-padding      (e.g. continued lines)
+let b:ale_sh_shfmt_options = '-bn -fn -ci'
+" If you want Google-style indentation (two spaces) add `-i 2` 
 
 " Function to run shellharden on the buffer and replace the contents
 function! Harden(buffer) abort
     let command = 'cat ' . a:buffer . " | shellharden --transform ''"
     return { 'command': command }
 endfunction
+
+" check if we have ALE before adding the fixer
 execute ale#fix#registry#Add('shellharden', 'Harden', ['sh'], 'Double quote everything!')
 
 let b:ale_fixers = ['shfmt', 'shellharden', 'remove_trailing_lines', 'trim_whitespace']
-let b:ale_linters = ['shellcheck', 'cspell']
+let b:ale_linters = ['shellcheck']
 let b:format_on_save = 1
+
+
+autocmd BufNewFile *.sh 0r ~/.vim/templates/sh.template
+" call LspAddServer([#{name: 'bashls',
+"                  \   filetype: 'sh',
+"                  \   path: '/opt/homebrew/bin/bash-language-server',
+"                  \   args: ['start']
+"                  \ }])
