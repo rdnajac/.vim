@@ -1,26 +1,39 @@
 " https://github.com/rdnajac/.vim/blob/main/vimrc
-"
-" When in doubt:
-" https://vimdoc.sourceforge.net/htmldoc/options.html#:options
 
-" general settings {{{
+" Don't let vim default to vi compatibility when using the `-u` fla
+if &compatible
+  set nocompatible 
+endif
+
 filetype plugin indent on
 
-" this is automatically set when .vimrc is found
-" TODO figure out if this is necessary
-" set nocompatible
+" interface
+set termguicolors
+set cursorline
+set foldcolumn=0
+set number numberwidth=3 relativenumber
+set pumheight=10
+set showmatch
+set signcolumn=yes
+set splitbelow splitright
+silent! colorscheme tokyomidnight
 
+" text appearance 
+set nowrap                          " don't wrap lines by default
+set linebreak                       " if we have to, don't split words
+set scrolloff=4 sidescrolloff=0     " scroll settings
 
+" maybe don't set these outside of ftplugins
+" vimscript, lua, and ocaml want 2 spaces, no tabs; and I don't want 3 extra
+" ftplugin files, so here are the "defaults" 
+set softtabstop=2 shiftwidth=2
+
+" performance
 set timeoutlen=300
 set updatetime=100
 set lazyredraw
 set whichwrap+=<,>,[,],h,l
 set foldopen+=insert,jump
-set shiftwidth=4 tabstop=4
-set expandtab
-set nowrap linebreak
-set showcmd cmdheight=1
-set scrolloff=4 sidescrolloff=0
 
 " If sourcing this file from Neovim, skip setting these defaults:
 if !has('nvim')
@@ -31,6 +44,7 @@ if !has('nvim')
     set autoread autowrite          " automatically read/write files when changed
     set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
     set formatoptions+=j            " delete comment character when joining lines
+   " set formatoptions-=o           " don't continue comments when pressing 'o'
     set hlsearch incsearch          " highlighted, incremental search
     set noerrorbells novisualbell   " disable error bells and visual bells
     set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
@@ -76,42 +90,30 @@ set ignorecase smartcase
 set iskeyword+=-  " treat hyphens as part of a word
 set iskeyword+=_  " treat underscores as part of a word
 
-" TODO make this ft-specific
-" set formatoptions-=o " don't continue comments when pressing 'o'
-
-" }}}
-
-" display settings {{{
-set termguicolors
-silent! colorscheme tokyomidnight
-
-set cursorline
-set foldcolumn=0
-set number numberwidth=3 relativenumber
-set pumheight=10
-set showmatch
-set signcolumn=yes
-set splitbelow splitright
 
 " fillchars control the appearance of folds
 set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set fillchars+=eob:\                " don't show end of buffer as a column of ~
 set fillchars+=stl:\                " display spaces properly in statusline
-set list listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
-" }}}
+
+" listchars control the appearance of whitespace
+set listchars=trail:¿,tab:→\   " show trailing whitspace and tabs
 
 augroup vimrc
   autocmd!
 augroup END
 
 augroup vimrc
-    autocmd VimEnter * echom " " | echom ">^.^<" |
-
-    " Change local directory to the file's directory on buffer enter
-    autocmd BufEnter * :lchdir %:p:h
+    " autocmd VimEnter * echom " " | echom ">^.^<"
+    " autocmd BufEnter * :lchdir %:p:h
 
     " Map 'q' to close the buffer for certain file types
-    autocmd FileType help,man,netrw,quickfix silent! nnoremap <silent> <buffer> q :close<CR> | set nobuflisted
+    autocmd FileType help,man,quickfix,ale-info silent! nnoremap <silent> <buffer> q :close<CR> | set nobuflisted
+
+    " quit the command line window immediately upon entering it
+    " this is useful when you accidentally open the command line window
+    " with `q:` and want to close it without having to press `q` twice
+    autocmd CmdwinEnter * quit
 augroup END
 
 augroup RestoreCursorPosition
@@ -127,15 +129,22 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 
 nnoremap ?         :call GetInfo()<cr>
-
 nnoremap <leader>r :source $MYVIMRC<cr>
 nnoremap <leader>w :w<cr>
+nnoremap <leader>e :e!<cr>
 nnoremap <leader>Q :qa!<cr>
-nnoremap <leader>h :set hlsearch!<cr>
-nnoremap <leader>t :set list!<cr>
-nnoremap <leader>o i<cr><esc>
 nnoremap <C-q>     :wqall<CR>
-vnoremap <leader>f :<c-u>let @/ = '\V' . escape(@s, '\')<cr>
+
+
+" toggle settings
+nnoremap <leader>sl :set list!<CR>
+nnoremap <leader>sn :set number!<CR>
+nnoremap <leader>sr :set relativenumber!<CR>
+nnoremap <leader>sw :set wrap!<CR>
+nnoremap <leader>ss :set spell!<CR>
+nnoremap <leader>scl :set cursorline!<CR>
+" nnoremap <leader>scc :set cursorcolumn!<CR>
+nnoremap <leader>sh :set hlsearch!<CR>
 
 " indent/dedent visual block
 nnoremap > V`]>
@@ -156,16 +165,9 @@ xnoremap <silent> <C-j> :move '>+1<CR>gv=gv
 " buffers and windows
 nnoremap L :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
-nnoremap <leader>bl :ls<CR>
 
 " force `:X` to behave like `:x`
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
-
-" map leader c to gcc
-nmap <leader>c gcc
-vmap <leader>c gcc
-
-" }}}1}}}
 
 " ignore these files and directories {{{
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files

@@ -1,3 +1,6 @@
+" TODO: check out https://github.com/ycm-core/YouCompleteMe/wiki/Building-Vim-from-source
+" and https://vim.fandom.com/wiki/Building_Vim
+
 VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Mar 24 2024 08:43:25)
 macOS version - arm64
 Included patches: 1-200
