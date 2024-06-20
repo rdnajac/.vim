@@ -1,3 +1,5 @@
+" This requires and extends vimux
+
 function! Vmx(cmd) abort
   call VimuxRunCommand(a:cmd)
 endfunction
@@ -30,7 +32,7 @@ endfunction
 nnoremap <localleader>x :<C-u>call VmxFile()<CR>
 
 nnoremap <C-l> :<C-u>call VmxLine()<CR>
-nnoremap <C-.> :<C-u>call VimuxRunLastCommand()<CR> 
+nnoremap <C-.> :<C-u>call VimuxRunLastCommand()<CR>
 
 nnoremap <leader>vp :<C-u>call VimuxPromptCommand<CR>
 nnoremap <leader>vr :<C-u>call VimuxRunLastCommand()<CR>
