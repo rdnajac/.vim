@@ -22,3 +22,6 @@
 [submodule "pack/vimfect/start/vim-commentary"]
 	path = pack/vimfect/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary
+[submodule "pack/vimfect/start/vim-eunuch"]
+	path = pack/vimfect/start/vim-eunuch
+	url = https://github.com/tpope/vim-eunuch
