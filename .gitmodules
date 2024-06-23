@@ -1,0 +1,3 @@
+[submodule "pack/vimfect/start/tabular"]
+	path = pack/vimfect/start/tabular
+	url = https://github.com/godlygeek/tabular

@@ -1,5 +1,5 @@
 " This file builds off of the netrw plugin that ships with vim
-" as well as tpope's vim-vinegar plugin 
+" as well as tpope's vim-vinegar plugin
 
 " netrw settings
 let g:netrw_liststyle =  3
@@ -13,5 +13,4 @@ function! Xexplore()
     endif
     execute cmd
 endfunction
-nnoremap <leader><Tab> :call Xexplore()<CR>
-
+nnoremap <leader><Tab> :silent! call Xexplore()<CR>
