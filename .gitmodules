@@ -13,3 +13,6 @@
 [submodule "pack/vimfect/start/copilot.vim"]
 	path = pack/vimfect/start/copilot.vim
 	url = https://github.com/github/copilot.vim
+[submodule "pack/vimfect/start/fzf.vim"]
+	path = pack/vimfect/start/fzf.vim
+	url = https://github.com/junegunn/fzf.vim
