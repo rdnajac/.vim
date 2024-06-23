@@ -28,3 +28,6 @@
 [submodule "pack/vimfect/start/vim-fugitive"]
 	path = pack/vimfect/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
+[submodule "pack/vimfect/start/vim-repeat"]
+	path = pack/vimfect/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat
