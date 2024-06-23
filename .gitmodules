@@ -4,3 +4,6 @@
 [submodule "pack/vimfect/opt/vimtex"]
 	path = pack/vimfect/opt/vimtex
 	url = https://github.com/lervag/vimtex
+[submodule "pack/vimfect/opt/markdown-preview.nvim"]
+	path = pack/vimfect/opt/markdown-preview.nvim
+	url = https://github.com/iamcco/markdown-preview.nvim
