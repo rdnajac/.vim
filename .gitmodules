@@ -19,3 +19,6 @@
 [submodule "pack/vimfect/opt/ultisnips"]
 	path = pack/vimfect/opt/ultisnips
 	url = https://github.com/SirVer/ultisnips
+[submodule "pack/vimfect/start/vim-commentary"]
+	path = pack/vimfect/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary
