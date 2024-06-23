@@ -40,3 +40,6 @@
 [submodule "pack/vimfect/start/vim-vinegar"]
 	path = pack/vimfect/start/vim-vinegar
 	url = https://github.com/tpope/vim-vinegar
+[submodule "pack/vimfect/start/ultisnips"]
+	path = pack/vimfect/start/ultisnips
+	url = https://github.com/SirVer/ultisnips
