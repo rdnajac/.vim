@@ -10,3 +10,6 @@
 [submodule "pack/vimfect/start/ale"]
 	path = pack/vimfect/start/ale
 	url = https://github.com/dense-analysis/ale
+[submodule "pack/vimfect/start/copilot.vim"]
+	path = pack/vimfect/start/copilot.vim
+	url = https://github.com/github/copilot.vim
