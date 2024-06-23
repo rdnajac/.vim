@@ -34,3 +34,6 @@
 [submodule "pack/vimfect/start/vim-surround"]
 	path = pack/vimfect/start/vim-surround
 	url = https://github.com/tpope/vim-surround
+[submodule "pack/vimfect/start/vim-tbone"]
+	path = pack/vimfect/start/vim-tbone
+	url = https://github.com/tpope/vim-tbone
