@@ -1,8 +1,5 @@
-" https://github.com/rdnajac/.vim/blob/main/vimrc
-
-" Don't let vim default to vi compatibility when using the `-u` fla
 if &compatible
-  set nocompatible 
+  set nocompatible
 endif
 
 filetype plugin indent on
@@ -18,14 +15,14 @@ set signcolumn=yes
 set splitbelow splitright
 silent! colorscheme tokyomidnight
 
-" text appearance 
+" text appearance
 set nowrap                          " don't wrap lines by default
 set linebreak                       " if we have to, don't split words
 set scrolloff=4 sidescrolloff=0     " scroll settings
 
 " maybe don't set these outside of ftplugins
 " vimscript, lua, and ocaml want 2 spaces, no tabs; and I don't want 3 extra
-" ftplugin files, so here are the "defaults" 
+" ftplugin files, so here are the "defaults"
 set softtabstop=2 shiftwidth=2
 
 " performance
@@ -104,15 +101,10 @@ augroup vimrc
 augroup END
 
 augroup vimrc
-    " autocmd VimEnter * echom " " | echom ">^.^<"
-    " autocmd BufEnter * :lchdir %:p:h
-
-    " Map 'q' to close the buffer for certain file types
+    " close certain windows with `q`
     autocmd FileType help,man,quickfix,ale-info silent! nnoremap <silent> <buffer> q :close<CR> | set nobuflisted
 
     " quit the command line window immediately upon entering it
-    " this is useful when you accidentally open the command line window
-    " with `q:` and want to close it without having to press `q` twice
     autocmd CmdwinEnter * quit
 augroup END
 
@@ -168,6 +160,12 @@ nnoremap <S-Tab> :bprevious<CR>
 
 " force `:X` to behave like `:x`
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
+
+command! -bang -nargs=* RG call fzf#vim#grep("rg --column --line-number --no-    heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+nnoremap <C-f> :RG<cr>
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " ignore these files and directories {{{
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
