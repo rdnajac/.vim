@@ -31,3 +31,6 @@
 [submodule "pack/vimfect/start/vim-repeat"]
 	path = pack/vimfect/start/vim-repeat
 	url = https://github.com/tpope/vim-repeat
+[submodule "pack/vimfect/start/vim-surround"]
+	path = pack/vimfect/start/vim-surround
+	url = https://github.com/tpope/vim-surround
