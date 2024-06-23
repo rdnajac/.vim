@@ -1,3 +1,6 @@
 [submodule "pack/vimfect/start/tabular"]
 	path = pack/vimfect/start/tabular
 	url = https://github.com/godlygeek/tabular
+[submodule "pack/vimfect/opt/vimtex"]
+	path = pack/vimfect/opt/vimtex
+	url = https://github.com/lervag/vimtex
