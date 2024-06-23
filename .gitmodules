@@ -37,3 +37,6 @@
 [submodule "pack/vimfect/start/vim-tbone"]
 	path = pack/vimfect/start/vim-tbone
 	url = https://github.com/tpope/vim-tbone
+[submodule "pack/vimfect/start/vim-vinegar"]
+	path = pack/vimfect/start/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar
