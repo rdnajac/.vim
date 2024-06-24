@@ -165,7 +165,7 @@ inoremap kj <esc>
 vnoremap jk <esc>
 
 " Move the current line up/down
-nnoremap <silent> <C-k> :move .-2<CR>==
+nnoremap <silent> <C-k> :move .-2<CR>=
 nnoremap <silent> <C-j> :move .+1<CR>==
 xnoremap <silent> <C-k> :move '<-2<CR>gv=gv
 xnoremap <silent> <C-j> :move '>+1<CR>gv=gv

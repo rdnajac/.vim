@@ -1,9 +1,17 @@
-" This file builds off of the netrw plugin that ships with vim
-" as well as tpope's vim-vinegar plugin
+" This file contains all settings, global variables, and key mappings for
+" plugins related to file management in Vim, including netrw and fzf.
+
+" TODO ensure installed....
 
 " netrw settings
 let g:netrw_liststyle =  3
 let g:netrw_winsize = 25
+
+
+" fzf settings
+" there are two plugins:
+"   - junegunn/fzf.vim: provides a :FZF command to open fzf in a new window
+"   - junegunn/fzf: the actual fzf command line tool
 
 " smartly open netrw using scp:// when editing remote files
 function! Xexplore()

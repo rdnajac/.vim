@@ -1,7 +1,5 @@
 setlocal cindent shiftwidth=8 softtabstop=8 noexpandtab
 
-packadd! ultisnips
-
 " turn off formatoption o
 " setlocal formatoptions-=o
 
@@ -33,3 +31,6 @@ let b:format_on_save = 1
 "                  \   path: '/opt/homebrew/bin/bash-language-server',
 "                  \   args: ['start']
 "                  \ }])
+"
+" Try out snippets
+packadd! ultisnips

@@ -82,8 +82,8 @@ ensure_github_https_url()
 # Delete and deinit a submodule
 purge()
 {
-	plugin=$1
-	# find the plugin...
+	plugin="$PACK_DIR/vimfect/start/${1}"
+
 	git submodule deinit --force "$plugin"
 	git rm -r "$plugin"
 	git commit -m "vimfect: removed $plugin"
@@ -101,6 +101,7 @@ yoink()
 	mkdir_if_not_exists "$directory"
 	curl -L "$github_url" -o "$directory/$plugin.vim"
 }
+
 # get opts and call the appropriate function
 main()
 {
@@ -135,13 +136,6 @@ main()
 
 	# helptags with vim -c 'helptags ALL'
 	vim -u NONE -c "helptags ALL" -c q
-}
-
-vimfect_curl()
-{
-	# download the plugin and add it to the pack directory
-	# curl -L "$1" | tar -xz -C "$PACK_DIR/vimfect/start"
-	curl -L "$1" | tar -xz -C "$PACK_DIR/vimfect/start"
 }
 
 # if we run ./vimfect snip
