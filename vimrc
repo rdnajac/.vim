@@ -1,3 +1,4 @@
+
 " vim:fdm=marker fdl=2
 " rdnajac's vimrc "{{{1
 if &compatible			  " technically, vim is always incompatible when a
@@ -21,7 +22,6 @@ if !has('nvim')
     set hlsearch incsearch          " highlighted, incremental search
     set noerrorbells novisualbell   " disable error bells and visual bells
     runtime ftplugin/man.vim        " read the manual!
-
     " under the hood {{{2
     set swapfile backup undofile
     function s:MkdirIfNotExists(dir)
@@ -51,7 +51,9 @@ else
 endif
 " }}}2
 " }}}1
-
+" interface
+" vim:fdm=marker fdl=2
+" help me out here
 " interface settings {{{1
 set termguicolors
 
@@ -140,6 +142,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>eft <esc>:vsplit ~/.vim/after/ftplugin/
 nnoremap <leader>eap <esc>:vsplit ~/.vim/after/plugin/
 nnoremap <leader>eau <esc>:vsplit ~/.vim/autoload/
+nnoremap <leader>esn <esc>:vsplit ~/.vim/UltiSnips/
 nnoremap <leader>Q :qa!<cr>
 nnoremap <C-q>     :wqall<CR>
 
@@ -172,18 +175,32 @@ xnoremap <silent> <C-j> :move '>+1<CR>gv=gv
 
 " buffers and windows
 nnoremap L :bnext<CR>
-nnoremap <S-Tab> :bprevious<CR>
+nnoremap H :bprevious<CR>
 
 " force `:X` to behave like `:x`
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 
-command! -bang -nargs=* RG call fzf#vim#grep("rg --column --line-number --no-    heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
-nnoremap <C-f> :RG<cr>
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" ripgrep integration
+command! -bang -nargs=* RG call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
-" ignore these files and directories {{{
+" completion {{{2
+" filename
+inoremap <silent> ,f <C-x><C-f>
+" identifier
+inoremap <silent> ,i <C-x><C-i>
+inoremap <silent> ,l <C-x><C-l>
+inoremap <silent> ,n <C-x><C-n>
+" omnifunc
+inoremap <silent> ,o <C-x><C-o>
+inoremap <silent> ,t <C-x><C-]>
+inoremap <silent> ,u <C-x><C-u>
+" }}}2
+
+
+" I don't like this here, but it's not being called from after/
+set rtp+=/opt/homebrew/opt/fzf
+
+" ignore these files and directories {{{3
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
 set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
 set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
@@ -194,11 +211,12 @@ set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
 set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
 set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
-"}}}
+"}}}3
 
-" Modelines have historically been a source of security vulnerabilities.
+" Modelines have historically been a source of security vulnerabilities. {{{
 " TODO disable modelines and use the securemodelines script instead:
 " http://www.vim.org/scripts/script.php?script_id=1876
 " set nomodeline
 " nevertheless...
+" }}}
 " vim:fdm=marker

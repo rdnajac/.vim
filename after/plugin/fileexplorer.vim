@@ -12,6 +12,15 @@ let g:netrw_winsize = 25
 " there are two plugins:
 "   - junegunn/fzf.vim: provides a :FZF command to open fzf in a new window
 "   - junegunn/fzf: the actual fzf command line tool
+"
+" Don't forget to install fzf with the following command:
+" fzf#install()
+"
+" We have fzf installed via Homebrew, so let's avoid re-installing it...
+
+" set rtp+=/opt/homebrew/opt/fzf
+" Ideally I don't want to manipulate the path, but let's see if this works...
+
 
 " smartly open netrw using scp:// when editing remote files
 function! Xexplore()

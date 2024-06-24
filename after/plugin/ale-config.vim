@@ -3,17 +3,13 @@
 " https://github.com/dense-analysis/ale/blob/master/doc/ale.txt
 
 let g:ale_linters_explicit = 1
-let g:ale_fix_on_save = 1
-" https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
 
 let g:ale_sign_error = '💩'
 let g:ale_sign_warning = '⚠️'
 hi clear ALEErrorSign
 hi clear ALEWarningSign
 
-let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
-let b:ale_linters = ['vint']
-
+let g:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
 
 " let g:ale_echo_msg_error_str = 'E'
 " let g:ale_echo_msg_warning_str = 'W'
@@ -28,11 +24,16 @@ function! LinterStatus() abort
   let l:all_errors = l:counts.error + l:counts.style_error
   let l:all_non_errors = l:counts.total - l:all_errors
 
-  return l:counts.total == 0 ? 'OK' : printf(
-	\   '%dW %dE',
-	\   all_non_errors,
-	\   all_errors
-	\)
+  return l:counts.total == 0 ? 'OK' : printf(' %dW %dE', l:all_non_errors, l:all_errors)
 endfunction
-" optionally, set the statusline to use the function
 " set statusline=%{LinterStatus()}
+
+" Add shellharden as a fixer
+function! ShellHarden(buffer) abort
+  let command = 'cat ' . a:buffer . " | shellharden --transform ''"
+  return { 'command': command }
+endfunction
+execute ale#fix#registry#Add('shellharden', 'ShellHarden', ['sh'], 'Double quote everything!')
+
+" a note on cspell
+" https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries

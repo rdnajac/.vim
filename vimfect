@@ -79,14 +79,17 @@ ensure_github_https_url()
 	fi
 }
 
-# Delete and deinit a submodule
+#\ @brief Delete and deinit a submodule
+# @param plugin The name of the plugin to remove
+#
 purge()
 {
-	plugin="$PACK_DIR/vimfect/start/${1}"
+	plugin_path=$1
+	plugin=$(basename "$plugin_path")
 
-	git submodule deinit --force "$plugin"
-	git rm -r "$plugin"
-	git commit -m "vimfect: removed $plugin"
+	git submodule deinit --force "$plugin_path"
+	git rm -r "$plugin_path"
+	git commit -m "vimfect: purged $plugin"
 }
 
 # copy a file ala
@@ -113,14 +116,10 @@ main()
 	if [ "$1" = "opt" ]; then
 		plugin_dir="opt"
 		shift
-	fi
-
-	if [ "$1" = "purge" ]; then
+	elif [ "$1" = "purge" ]; then
 		purge "$2"
 		exit 0
-	fi
-
-	if [ "$1" = "yoink" ]; then
+	elif [ "$1" = "yoink" ]; then
 		yoink "$2"
 		exit 0
 	fi
