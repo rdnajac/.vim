@@ -44,5 +44,5 @@
 	path = pack/vimfect/start/vim-which-key
 	url = https://github.com/liuchengxu/vim-which-key.git
 [submodule "pack/vimfect/opt/markdown-preview.nvim"]
-	path = pack/vimfect/opt/markdown-preview.nvim
+	path = pack/vimfect/start/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
