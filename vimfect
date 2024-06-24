@@ -105,6 +105,23 @@ yoink()
 	curl -L "$github_url" -o "$directory/$plugin.vim"
 }
 
+# moves plugin from opt to start or vice versa
+toggle()
+{
+	path_to_plugin=$1
+	plugin=$(basename "$path_to_plugin")
+	plugin_dir=$(dirname "$path_to_plugin")
+
+	if [ "$plugin_dir" = "start" ]; then
+		new_dir="opt"
+	else
+		new_dir="start"
+	fi
+
+	git mv "$path_to_plugin" "$PACK_DIR/vimfect/$new_dir"
+	git commit -m "vimfect: moved $plugin to $new_dir"
+}
+
 # get opts and call the appropriate function
 main()
 {
@@ -121,6 +138,9 @@ main()
 		exit 0
 	elif [ "$1" = "yoink" ]; then
 		yoink "$2"
+		exit 0
+	elif [ "$1" = "toggle" ]; then
+		toggle "$2"
 		exit 0
 	fi
 

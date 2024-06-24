@@ -2,6 +2,9 @@
 " Then, set buffer-local configuration in ftplugin files.
 " https://github.com/dense-analysis/ale/blob/master/doc/ale.txt
 
+" Disable lsp after setting up yegappan/lsp
+" let g:ale_disable_lsp = 1
+
 let g:ale_linters_explicit = 1
 
 let g:ale_sign_error = '💩'
@@ -37,3 +40,13 @@ execute ale#fix#registry#Add('shellharden', 'ShellHarden', ['sh'], 'Double quote
 
 " a note on cspell
 " https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
+
+" TODO: set this globally and delete references in ftplugins
+" let g:ale_fixers = {
+" \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+" \   'javascript': ['eslint'],
+" \}
+"
+" let g:ale_linters = {
+" \   'javascript': ['eslint'],
+" \}
