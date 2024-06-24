@@ -1,0 +1,120 @@
+#!/bin/sh
+#
+# Vim plugin management using Git submodules
+USAGE="Usage: $0 [uri | action uri | action mode uri]"
+
+# Enforce strict error checking
+set -eu
+
+# Explicit exit with error message
+die()
+{
+	message=$1
+	error_code=${2:-1}
+
+	printf '\033[0;31m%s\033[0m\n' "$message" >&2
+	exit "$error_code"
+}
+
+# Define directories
+VIM_DIR="$HOME/.vim"
+PACK_DIR="$VIM_DIR/pack"
+# SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPOSITORY_ROOT="$(git rev-parse --show-toplevel)"
+
+# Helpers
+mkdir_if_not_exists()
+{
+	[ -d "$1" ] || mkdir -vp "$1"
+}
+
+# Make sure we're in a git repository and die if not
+# then make sure we have .git submodules and init them if not
+validate_git_repository()
+{
+	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "This is not a Git repository!" 3
+}
+
+# init submodules if we don't have a .gitmodules file
+init_submodules()
+{
+	[ -f "$REPOSITORY_ROOT"/.gitmodules ] || git submodule init
+}
+
+create_pack_dir_and_subdirs()
+{
+	mkdir_if_not_exists "$PACK_DIR"
+	mkdir_if_not_exists "$PACK_DIR/vimfect"
+	mkdir_if_not_exists "$PACK_DIR/vimfect/start"
+	mkdir_if_not_exists "$PACK_DIR/vimfect/opt"
+}
+
+setup()
+{
+	validate_git_repository
+	create_pack_dir_and_subdirs
+	init_submodules
+}
+
+# cd to target dir and clone the repo
+vimfect()
+{
+	path=$1
+	url=$2
+
+	# in a subshell, cd to the target directory and clone the repo
+	(
+		cd "$path" \
+			&& git submodule add --depth 1 --force "$url" \
+			&& git commit -m "vimfect: $url"
+	)
+}
+
+ensure_github_https_url()
+{
+	if printf '%s\n' "$1" | grep -q '^https://github.com'; then
+		echo "$1"
+	else
+		echo "https://github.com/$1"
+	fi
+}
+
+# get opts and call the appropriate function
+main()
+{
+	[ $# -lt 1 ] && die "$USAGE" 1
+
+	# default
+	plugin_dir="start"
+
+	if [ "$1" = "opt" ]; then
+		plugin_dir="opt"
+		shift
+	fi
+
+	url=$1
+
+	# if the url is only a name and repo, trancform it into a github https url
+	url=$(ensure_github_https_url "$url")
+
+	# now $1 is the url and will be passed to the function
+	vimfect "$PACK_DIR/vimfect/$plugin_dir" "$url"
+	# use relative path?
+
+	# helptags with vim -c 'helptags ALL'
+	vim -u NONE -c "helptags ALL" -c q
+}
+
+# Delete and deinit a submodule
+purge()
+{
+	plugin=$1
+	# find the plugin...
+	git submodule deinit --force "$plugin"
+	git rm -r "$plugin"
+	git commit -m "vimfect: removed $plugin"
+}
+
+# run this to call vimfect from anywhere
+setup
+main "$@"

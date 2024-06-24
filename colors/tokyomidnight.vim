@@ -99,9 +99,9 @@ hi! link LineNrBelow NONE
 call s:Highlight('MsgArea', s:neongreen, s:eigengrau, '')
 call s:Highlight('MoreMsg', s:blue, s:bg, '')
 call s:Highlight('ModeMsg', s:yellow, s:bg, '')
-call s:Highlight('Normal', s:white, 'NONE', '')
+call s:Highlight('Normal', s:white, s:bg, '')
 call s:Highlight('Pmenu', s:fg, s:black, '')
-call s:LinkGroups('Pmenu', 'PmenuExtra', 'PmenuKind') 
+call s:LinkGroups('Pmenu', 'PmenuExtra', 'PmenuKind')
 call s:Highlight('PmenuSel', s:fg_gutter, 'NONE', '')
 call s:LinkGroups('PmenuSel', 'PmenuKindSel', 'PmenuExtraSel')
 call s:Highlight('PmenuSbar', s:yellow, s:bg, '')
@@ -143,7 +143,7 @@ call s:Highlight('Type', s:cyan, 'NONE', '')
 
 call s:LinkGroups('PreProc', 'Define', 'Include', 'Macro', 'PreCondit')
 
-call s:LinkGroups('Constant', 'Number', 'Boolean', 'Float') 
+call s:LinkGroups('Constant', 'Number', 'Boolean', 'Float')
 
 call s:LinkGroups('Identifier', 'Function')
 call s:LinkGroups('Statement', 'Conditional', 'Repeat', 'Label', 'Operator', 'Keyword', 'Exception')
@@ -189,4 +189,3 @@ let g:terminal_color_12 = s:blue
 let g:terminal_color_13 = s:magenta
 let g:terminal_color_14 = s:cyan
 let g:terminal_color_15 = s:fg
-

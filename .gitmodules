@@ -43,3 +43,6 @@
 [submodule "pack/vimfect/start/ultisnips"]
 	path = pack/vimfect/start/ultisnips
 	url = https://github.com/SirVer/ultisnips
+[submodule "pack/vimfect/start/vim-which-key"]
+	path = pack/vimfect/start/vim-which-key
+	url = https://github.com/liuchengxu/vim-which-key.git
