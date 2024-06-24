@@ -46,3 +46,6 @@
 [submodule "pack/vimfect/start/YouCompleteMe"]
 	path = pack/vimfect/start/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe
+[submodule "pack/vimfect/start/vim-instant-markdown"]
+	path = pack/vimfect/start/vim-instant-markdown
+	url = https://github.com/instant-markdown/vim-instant-markdown
