@@ -43,9 +43,6 @@
 [submodule "pack/vimfect/start/vim-which-key"]
 	path = pack/vimfect/start/vim-which-key
 	url = https://github.com/liuchengxu/vim-which-key.git
-[submodule "pack/vimfect/opt/markdown-preview.nvim"]
-	path = pack/vimfect/start/markdown-preview.nvim
-	url = https://github.com/iamcco/markdown-preview.nvim
 [submodule "pack/vimfect/start/YouCompleteMe"]
 	path = pack/vimfect/start/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe
