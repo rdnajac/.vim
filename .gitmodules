@@ -46,3 +46,6 @@
 [submodule "pack/vimfect/start/vim-which-key"]
 	path = pack/vimfect/start/vim-which-key
 	url = https://github.com/liuchengxu/vim-which-key.git
+[submodule "pack/vimfect/start/fzf"]
+	path = pack/vimfect/start/fzf
+	url = https://github.com/junegunn/fzf
