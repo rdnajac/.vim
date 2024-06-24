@@ -79,6 +79,28 @@ ensure_github_https_url()
 	fi
 }
 
+# Delete and deinit a submodule
+purge()
+{
+	plugin=$1
+	# find the plugin...
+	git submodule deinit --force "$plugin"
+	git rm -r "$plugin"
+	git commit -m "vimfect: removed $plugin"
+}
+
+# copy a file ala
+# https://github.com/tpope/vim-eunuch/raw/master/plugin/eunuch.vim
+# copies a tpope plugin to the tpope/opt directory without tracking it
+yoink()
+{
+	plugin=$1
+	github_url="https://github.com/tpope/vim-${plugin}/raw/master/plugin/${plugin}.vim"
+	directory="$PACK_DIR/tpope/opt"
+
+	mkdir_if_not_exists "$directory"
+	curl -L "$github_url" -o "$directory/$plugin.vim"
+}
 # get opts and call the appropriate function
 main()
 {
@@ -90,6 +112,16 @@ main()
 	if [ "$1" = "opt" ]; then
 		plugin_dir="opt"
 		shift
+	fi
+
+	if [ "$1" = "purge" ]; then
+		purge "$2"
+		exit 0
+	fi
+
+	if [ "$1" = "yoink" ]; then
+		yoink "$2"
+		exit 0
 	fi
 
 	url=$1
@@ -105,16 +137,15 @@ main()
 	vim -u NONE -c "helptags ALL" -c q
 }
 
-# Delete and deinit a submodule
-purge()
+vimfect_curl()
 {
-	plugin=$1
-	# find the plugin...
-	git submodule deinit --force "$plugin"
-	git rm -r "$plugin"
-	git commit -m "vimfect: removed $plugin"
+	# download the plugin and add it to the pack directory
+	# curl -L "$1" | tar -xz -C "$PACK_DIR/vimfect/start"
+	curl -L "$1" | tar -xz -C "$PACK_DIR/vimfect/start"
 }
 
+# if we run ./vimfect snip
 # run this to call vimfect from anywhere
 setup
+
 main "$@"

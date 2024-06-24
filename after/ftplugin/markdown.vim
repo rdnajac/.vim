@@ -1,5 +1,11 @@
+" vim: wrap
 " compile markdown preview
-" :call mkdp#util#install()
+packadd! markdown-preview.nvim
+" call mkdp#util#install()
+" call it conditonally...
+" otherwise just make sure you install it first
+
+
 let g:mkdp_page_title = '${name}'
 nnoremap <leader>md :MarkdownPreview<cr>
 nnoremap <leader>st i~~<Esc>A~~<Esc>
@@ -18,4 +24,3 @@ let g:vim_markdown_math = 1
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_fenced_languages = ['bash', 'python', 'php', 'html', 'c', 'cpp', 'sql', 'vim', 'plaintext', 'markdown']
-" vim: wrap

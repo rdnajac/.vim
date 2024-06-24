@@ -1,40 +1,16 @@
-if &compatible
-  set nocompatible
-endif
+" vim:fdm=marker fdl=2
+" rdnajac's vimrc "{{{1
+if &compatible			  " technically, vim is always incompatible when a
+  set nocompatible		  " vimrc is present, but let's handle the edge case
+endif			          " when vim is run with the -u flag
 
-filetype plugin indent on
-
-" interface
-set termguicolors
-set cursorline
-set foldcolumn=0
-set number numberwidth=3 relativenumber
-set pumheight=10
-set showmatch
-set signcolumn=yes
-set splitbelow splitright
-silent! colorscheme tokyomidnight
-
-" text appearance
-set nowrap                          " don't wrap lines by default
-set linebreak                       " if we have to, don't split words
-set scrolloff=4 sidescrolloff=0     " scroll settings
-
-" maybe don't set these outside of ftplugins
-" vimscript, lua, and ocaml want 2 spaces, no tabs; and I don't want 3 extra
-" ftplugin files, so here are the "defaults"
-set softtabstop=2 shiftwidth=2
-
-" performance
-set timeoutlen=300
-set updatetime=100
-set lazyredraw
-set whichwrap+=<,>,[,],h,l
-set foldopen+=insert,jump
+filetype plugin indent on	  " enable filetype detection, plugins, and indenting
 
 " If sourcing this file from Neovim, skip setting these defaults:
 if !has('nvim')
     syntax enable                   " prefer over `syntax on`
+    set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
+    scriptencoding utf-8            " see :h :scriptencoding
     set mouse=a                     " wait, that's illegal
     set hidden                      " enable background buffers
     set autoindent smarttab         " enable auto-indent and smart tabbing
@@ -44,10 +20,10 @@ if !has('nvim')
    " set formatoptions-=o           " don't continue comments when pressing 'o'
     set hlsearch incsearch          " highlighted, incremental search
     set noerrorbells novisualbell   " disable error bells and visual bells
-    set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
-    scriptencoding utf-8            " see :h :scriptencoding
     runtime ftplugin/man.vim        " read the manual!
-    set swapfile backup undofile    " {{{
+
+    " under the hood {{{2
+    set swapfile backup undofile
     function s:MkdirIfNotExists(dir)
       if !isdirectory(a:dir)
         call mkdir(a:dir, 'p', 0700)
@@ -64,8 +40,8 @@ if !has('nvim')
     call s:MkdirIfNotExists(&undodir)
     "set undolevels=1000    " default is 1000 on Unix, ubsted on macos
     "set undoreload=10000   " default is 10000
-    " }}}
     set spellfile=~/.vim/.spell/en.utf-8.add
+    set viminfo='10000,n$HOME/.vim/.viminfo
     set clipboard=unnamed
 else
     set clipboard=unnamedplus
@@ -73,6 +49,43 @@ else
     "set noshowcmd       " disable showcmd
     "set noruler         " disable ruler
 endif
+" }}}2
+" }}}1
+
+" interface settings {{{1
+set termguicolors
+
+" configure colorscheme
+try
+	silent! colorscheme tokyomidnight
+catch
+	colorscheme retrobox
+endtry
+
+set cursorline
+set foldcolumn=0
+set number numberwidth=3 relativenumber
+set pumheight=10
+set showmatch
+set signcolumn=yes
+set splitbelow splitright
+
+" text appearance
+set nowrap                          " don't wrap lines by default
+set linebreak                       " if we have to, don't split words
+set scrolloff=4 sidescrolloff=0     " scroll settings
+
+" vimscript, lua, and ocaml want 2 spaces, no tabs; and I don't want 3 extra
+" ftplugin files, so here are the "defaults"
+set softtabstop=2 shiftwidth=2
+set shiftround
+
+" performance
+set timeoutlen=300
+set updatetime=100
+set lazyredraw
+set whichwrap+=<,>,[,],h,l
+set foldopen+=insert,jump
 
 set completeopt=menuone,noselect    " show menu even if there's only one match
 set conceallevel=0
@@ -123,7 +136,10 @@ let g:maplocalleader = '\'
 nnoremap ?         :call GetInfo()<cr>
 nnoremap <leader>r :source $MYVIMRC<cr>
 nnoremap <leader>w :w<cr>
-nnoremap <leader>e :e!<cr>
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <leader>eft <esc>:vsplit ~/.vim/after/ftplugin/
+nnoremap <leader>eap <esc>:vsplit ~/.vim/after/plugin/
+nnoremap <leader>eau <esc>:vsplit ~/.vim/autoload/
 nnoremap <leader>Q :qa!<cr>
 nnoremap <C-q>     :wqall<CR>
 

@@ -1,6 +1,9 @@
 setlocal cindent shiftwidth=8 softtabstop=8 noexpandtab
 
-iabbrev !! #!/bin/bash<CR>#<CR># <ESC>kA
+packadd! ultisnips
+
+" turn off formatoption o
+" setlocal formatoptions-=o
 
 " Format shell scripts with shfmt:
 "     Google-style indentation (two spaces)
@@ -9,8 +12,8 @@ iabbrev !! #!/bin/bash<CR>#<CR># <ESC>kA
 "     -sr, --space-redirects   add spaces around redirects (e.g. >, >>, <, <<)
 "     -fn, --function-next-line function opening brace may start a line
 "     -kp, --keep-padding      (e.g. continued lines)
-let b:ale_sh_shfmt_options = '-bn -fn -ci'
-" If you want Google-style indentation (two spaces) add `-i 2` 
+let b:ale_sh_shfmt_options = '-bn -fn'
+" If you want Google-style indentation (two spaces) add `-i 2`
 
 " Function to run shellharden on the buffer and replace the contents
 function! Harden(buffer) abort
@@ -25,8 +28,6 @@ let b:ale_fixers = ['shfmt', 'shellharden', 'remove_trailing_lines', 'trim_white
 let b:ale_linters = ['shellcheck']
 let b:format_on_save = 1
 
-
-autocmd BufNewFile *.sh 0r ~/.vim/templates/sh.template
 " call LspAddServer([#{name: 'bashls',
 "                  \   filetype: 'sh',
 "                  \   path: '/opt/homebrew/bin/bash-language-server',

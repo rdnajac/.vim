@@ -34,13 +34,7 @@ let g:which_key_map['a'] = {
             \ }
 call which_key#register('<Space>', 'g:which_key_map')
 
-" let g:which_key_map['c'] = {
-"             \ 'name': '+Copilot',
-"             \ 'd': [':Copilot disable<CR>', 'disable'],
-"             \ 'e': [':Copilot enable<CR>', 'enable'],
-"             \ 's': [':Copilot status<CR>', 'status'],
-"             \ 'p': [':Copilot panel<CR>', 'panel'],
-"             \ }
+
 
 " let g:which_key_map['l'] = {
 "             \ 'name' : '+LSP' ,

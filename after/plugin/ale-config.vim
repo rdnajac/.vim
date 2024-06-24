@@ -1,4 +1,4 @@
-" Set global ALE configuration here (including all linters and fixers) 
+" Set global ALE configuration here (including all linters and fixers)
 " Then, set buffer-local configuration in ftplugin files.
 " https://github.com/dense-analysis/ale/blob/master/doc/ale.txt
 
@@ -10,6 +10,10 @@ let g:ale_sign_error = '💩'
 let g:ale_sign_warning = '⚠️'
 hi clear ALEErrorSign
 hi clear ALEWarningSign
+
+let b:ale_fixers = ['remove_trailing_lines', 'trim_whitespace']
+let b:ale_linters = ['vint']
+
 
 " let g:ale_echo_msg_error_str = 'E'
 " let g:ale_echo_msg_warning_str = 'W'
