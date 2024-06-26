@@ -43,3 +43,6 @@
 [submodule "pack/vimfect/opt/vimcomplete"]
 	path = pack/vimfect/opt/vimcomplete
 	url = https://github.com/girishji/vimcomplete
+[submodule "pack/vimfect/opt/autosuggest.vim"]
+	path = pack/vimfect/opt/autosuggest.vim
+	url = https://github.com/girishji/autosuggest.vim
