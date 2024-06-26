@@ -46,3 +46,6 @@
 [submodule "pack/vimfect/opt/autosuggest.vim"]
 	path = pack/vimfect/opt/autosuggest.vim
 	url = https://github.com/girishji/autosuggest.vim
+[submodule "pack/vimfect/opt/lsp"]
+	path = pack/vimfect/opt/lsp
+	url = https://github.com/yegappan/lsp.git
