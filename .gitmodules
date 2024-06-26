@@ -40,3 +40,6 @@
 [submodule "pack/vimfect/start/vim-which-key"]
 	path = pack/vimfect/start/vim-which-key
 	url = https://github.com/liuchengxu/vim-which-key.git
+[submodule "pack/vimfect/opt/vimcomplete"]
+	path = pack/vimfect/opt/vimcomplete
+	url = https://github.com/girishji/vimcomplete
