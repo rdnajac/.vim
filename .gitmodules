@@ -29,7 +29,7 @@
 	path = pack/vimfect/start/vim-surround
 	url = https://github.com/tpope/vim-surround
 [submodule "pack/vimfect/start/vim-tbone"]
-	path = pack/vimfect/start/vim-tbone
+	path = pack/vimfect/opt/vim-tbone
 	url = https://github.com/tpope/vim-tbone
 [submodule "pack/vimfect/start/vim-vinegar"]
 	path = pack/vimfect/start/vim-vinegar
