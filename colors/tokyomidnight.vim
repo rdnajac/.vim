@@ -102,7 +102,7 @@ call s:Highlight('ModeMsg', s:yellow, s:bg, '')
 call s:Highlight('Normal', s:white, s:bg, '')
 call s:Highlight('Pmenu', s:fg, s:black, '')
 call s:LinkGroups('Pmenu', 'PmenuExtra', 'PmenuKind')
-call s:Highlight('PmenuSel', s:fg_gutter, 'NONE', '')
+call s:Highlight('PmenuSel', s:yellow, 'NONE', '')
 call s:LinkGroups('PmenuSel', 'PmenuKindSel', 'PmenuExtraSel')
 call s:Highlight('PmenuSbar', s:yellow, s:bg, '')
 call s:Highlight('PmenuThumb', s:dark5, s:bg, '')
@@ -110,7 +110,10 @@ call s:Highlight('Question', s:green, s:bg, '')
 call s:Highlight('SignColumn', s:fg_gutter, s:bg, '')
 hi! link CursorLineSign SignColumn
 call s:Highlight('Search', s:bg, s:yellow, 'bold')
-call s:LinkGroups('Search', 'CurSearch', 'QuickFixLine', 'IncSearch', 'MatchParen')
+call s:LinkGroups('Search', 'CurSearch', 'QuickFixLine', 'IncSearch')
+
+call s:Highlight('MatchParen', s:magenta, s:neongreen, 'bold')
+
 call s:LinkGroups('NonText', 'EndOfBuffer', 'SpecialKey')
 call s:Highlight('SpellBad', s:red, 'NONE', 'undercurl')
 call s:Highlight('SpellCap', s:yellow, 'NONE', 'undercurl')
@@ -136,10 +139,9 @@ call s:Highlight('WildMenu', s:yellow, 'NONE', '')
 
 call s:Highlight('PreProc', s:blue1, 'NONE', '')
 call s:Highlight('Constant', s:orange, 'NONE', '')
-call s:Highlight('Identifier', s:red, 'NONE', '')
-call s:Highlight('Statement', s:magenta, 'NONE', '')
+call s:Highlight('Statement', s:red, 'NONE', '')
+call s:Highlight('Identifier', s:magenta, 'NONE', '')
 call s:Highlight('Type', s:cyan, 'NONE', '')
-
 
 call s:LinkGroups('PreProc', 'Define', 'Include', 'Macro', 'PreCondit')
 
@@ -155,7 +157,9 @@ call s:Highlight('String', s:neongreen, 'NONE', '')
 call s:Highlight('Character', s:red, 'NONE', '')
 
 " TODO change this to a different color
-call s:Highlight('Special', s:fg, 'NONE', '')
+call s:Highlight('Special', s:blue, 'NONE', '')
+
+
 call s:LinkGroups('Tag', 'SpecialChar', 'Delimiter', 'SpecialComment', 'Debug')
 
 call s:Highlight('NonText', s:chambray, s:bg, '')

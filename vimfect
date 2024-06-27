@@ -7,8 +7,7 @@ USAGE="Usage: $0 [uri | action uri | action mode uri]"
 set -eu
 
 # Explicit exit with error message
-die()
-{
+die() {
 	message=$1
 	error_code=${2:-1}
 
@@ -23,42 +22,36 @@ PACK_DIR="$VIM_DIR/pack"
 REPOSITORY_ROOT="$(git rev-parse --show-toplevel)"
 
 # Helpers
-mkdir_if_not_exists()
-{
+mkdir_if_not_exists() {
 	[ -d "$1" ] || mkdir -vp "$1"
 }
 
 # Make sure we're in a git repository and die if not
 # then make sure we have .git submodules and init them if not
-validate_git_repository()
-{
-	git rev-parse --is-inside-work-tree >/dev/null 2>&1 || die "This is not a Git repository!" 3
+validate_git_repository() {
+	git rev-parse --is-inside-work-tree > /dev/null 2>&1 || die "This is not a Git repository!" 3
 }
 
 # init submodules if we don't have a .gitmodules file
-init_submodules()
-{
+init_submodules() {
 	[ -f "$REPOSITORY_ROOT"/.gitmodules ] || git submodule init
 }
 
-create_pack_dir_and_subdirs()
-{
+create_pack_dir_and_subdirs() {
 	mkdir_if_not_exists "$PACK_DIR"
 	mkdir_if_not_exists "$PACK_DIR/vimfect"
 	mkdir_if_not_exists "$PACK_DIR/vimfect/start"
 	mkdir_if_not_exists "$PACK_DIR/vimfect/opt"
 }
 
-setup()
-{
+setup() {
 	validate_git_repository
 	create_pack_dir_and_subdirs
 	init_submodules
 }
 
 # cd to target dir and clone the repo
-vimfect()
-{
+vimfect() {
 	path=$1
 	url=$2
 
@@ -70,8 +63,7 @@ vimfect()
 	)
 }
 
-ensure_github_https_url()
-{
+ensure_github_https_url() {
 	if printf '%s\n' "$1" | grep -q '^https://github.com'; then
 		echo "$1"
 	else
@@ -82,8 +74,7 @@ ensure_github_https_url()
 #\ @brief Delete and deinit a submodule
 # @param plugin The name of the plugin to remove
 #
-purge()
-{
+purge() {
 	plugin_path=$1
 	plugin=$(basename "$plugin_path")
 
@@ -95,8 +86,7 @@ purge()
 # copy a file ala
 # https://github.com/tpope/vim-eunuch/raw/master/plugin/eunuch.vim
 # copies a tpope plugin to the tpope/opt directory without tracking it
-yoink()
-{
+yoink() {
 	plugin=$1
 	github_url="https://github.com/tpope/vim-${plugin}/raw/master/plugin/${plugin}.vim"
 	directory="$PACK_DIR/tpope/opt"
@@ -106,8 +96,7 @@ yoink()
 }
 
 # moves plugin from opt to start or vice versa
-toggle()
-{
+toggle() {
 	path_to_plugin=$1
 	plugin=$(basename "$path_to_plugin")
 	plugin_dir=$(dirname "$path_to_plugin")
@@ -123,8 +112,7 @@ toggle()
 }
 
 # get opts and call the appropriate function
-main()
-{
+main() {
 	[ $# -lt 1 ] && die "$USAGE" 1
 
 	# default

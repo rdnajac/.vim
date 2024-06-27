@@ -1,4 +1,4 @@
-function! hud#MyTabline()
+function! display#MyTabline()
     let s = ''
     let current_buf = bufnr('%')
     for bufnum in filter(range(1, bufnr('$')), 'buflisted(v:val)')

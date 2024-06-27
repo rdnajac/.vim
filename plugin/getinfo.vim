@@ -1,5 +1,4 @@
 " Get info on the word under the cursor
-" First, try to find a tag, then a help, finally man pages
 function! GetInfo()
     let l:word = expand('<cword>')
     try

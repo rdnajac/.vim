@@ -1,3 +1,5 @@
+" Replace all instances of the selected text with a new string
+" note: does not work with empty string replacements
 function! ReplaceSelection() abort
     normal! gv"xy
     let sel = getreg('x')

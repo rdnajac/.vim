@@ -61,7 +61,6 @@ vim plugins through git submodules (see: `.gitmodules`) 3.
 
 ## When in doubt
 
-- [Google Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml)
 - [Google Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
 
 ## Installation
