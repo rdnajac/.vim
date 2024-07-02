@@ -1,57 +1,9 @@
-[submodule "pack/vimfect/start/tabular"]
-	path = pack/vimfect/start/tabular
-	url = https://github.com/godlygeek/tabular
-[submodule "pack/vimfect/opt/vimtex"]
-	path = pack/vimfect/opt/vimtex
-	url = https://github.com/lervag/vimtex
-[submodule "pack/vimfect/start/ale"]
-	path = pack/vimfect/start/ale
-	url = https://github.com/dense-analysis/ale
-[submodule "pack/vimfect/start/copilot.vim"]
+[submodule "pack/vimfect/copilot.vim"]
 	path = pack/vimfect/start/copilot.vim
 	url = https://github.com/github/copilot.vim
-[submodule "pack/vimfect/opt/ultisnips"]
-	path = pack/vimfect/opt/ultisnips
-	url = https://github.com/SirVer/ultisnips
-[submodule "pack/vimfect/start/vim-commentary"]
-	path = pack/vimfect/start/vim-commentary
-	url = https://github.com/tpope/vim-commentary
-[submodule "pack/vimfect/start/vim-eunuch"]
-	path = pack/vimfect/start/vim-eunuch
-	url = https://github.com/tpope/vim-eunuch
-[submodule "pack/vimfect/start/vim-fugitive"]
-	path = pack/vimfect/start/vim-fugitive
-	url = https://github.com/tpope/vim-fugitive
-[submodule "pack/vimfect/start/vim-repeat"]
-	path = pack/vimfect/start/vim-repeat
-	url = https://github.com/tpope/vim-repeat
-[submodule "pack/vimfect/start/vim-surround"]
-	path = pack/vimfect/start/vim-surround
-	url = https://github.com/tpope/vim-surround
-[submodule "pack/vimfect/start/vim-tbone"]
-	path = pack/vimfect/opt/vim-tbone
-	url = https://github.com/tpope/vim-tbone
-[submodule "pack/vimfect/start/vim-vinegar"]
-	path = pack/vimfect/start/vim-vinegar
-	url = https://github.com/tpope/vim-vinegar
-[submodule "pack/vimfect/start/vim-which-key"]
+[submodule "pack/vimfect/vim-which-key"]
 	path = pack/vimfect/start/vim-which-key
-	url = https://github.com/liuchengxu/vim-which-key.git
-[submodule "pack/vimfect/opt/vimcomplete"]
-	path = pack/vimfect/opt/vimcomplete
-	url = https://github.com/girishji/vimcomplete
-[submodule "pack/vimfect/opt/autosuggest.vim"]
-	path = pack/vimfect/opt/autosuggest.vim
-	url = https://github.com/girishji/autosuggest.vim
-[submodule "pack/vimfect/opt/lsp"]
-	path = pack/vimfect/opt/lsp
-	url = https://github.com/yegappan/lsp.git
-[submodule "pack/vimfect/opt/vim-vsnip"]
-	path = pack/vimfect/opt/vim-vsnip
-	url = https://github.com/hrsh7th/vim-vsnip
-[submodule "pack/vimfect/opt/vim-lsp"]
-	path = pack/vimfect/opt/vim-lsp
-	url = https://github.com/prabirshrestha/vim-lsp.git
-[submodule "pack/vimfect/opt/vim-markdown"]
-	path = pack/vimfect/opt/vim-markdown
-	url = https://github.com/preservim/vim-markdown
+	url = git@github.com:rdnajac/vim-which-key.git
+[submodule "pack/vimfect/ale"]
+	path = pack/vimfect/start/ale
+	url = https://github.com/dense-analysis/ale
