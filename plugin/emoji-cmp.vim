@@ -25,7 +25,7 @@ endfunction
 
 let s:emojis = map(json_decode(emoji_json), 's:to_candidate(v:val)')
 
-function! emoji#complete(findstart, base)
+function! s:complete(findstart, base)
   if a:findstart
     return match(getline('.')[0:col('.') - 1], ':[^: \t]*$')
   elseif empty(a:base)
@@ -52,7 +52,7 @@ function! s:emoji_expand()
     endif
   endfor
 endfunction
-inoremap <silent><expr> <c-,> emoji#complete(1, '')
+inoremap <silent><expr> <c-,> s:complete(1, '')
 :dna
 
 augroup emoji_complete_done

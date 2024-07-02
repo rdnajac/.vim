@@ -1,4 +1,6 @@
 setlocal cindent shiftwidth=8 softtabstop=8 noexpandtab
+let &l:includeexpr = "substitute(v:fname, '$\\%(::\\)\\=env(\\([^)]*\\))', '\\=expand(\"$\".submatch(1))', 'g')"
+" set includeexpr=l:includeexpr
 
 " -i,  --indent uint       0 for tabs (default), >0 for number of spaces
 " -bn, --binary-next-line  binary ops like && and | may start a line
@@ -14,12 +16,6 @@ else
   let b:ale_fix_on_save = 1
 endif
 
-" call LspAddServer([#{name: 'bashls',
-"                  \   filetype: 'sh',
-"                  \   path: '/opt/homebrew/bin/bash-language-server',
-"                  \   args: ['start']
-"                  \ }])
-"
 compiler shellcheck
 augroup Shellcheck
   autocmd!
@@ -27,3 +23,13 @@ augroup Shellcheck
   autocmd QuickFixCmdPost [^l]* cwindow
 augroup END
 
+" Add shellharden as a fixer
+function! ShellHarden(buffer) abort
+  let command = 'cat ' . a:buffer . " | shellharden --transform ''"
+  return { 'command': command }
+endfunction
+
+" if g:loaded_ale =1 add, otherwise nah
+if exists('g:loaded_ale')
+  execute ale#fix#registry#Add('shellharden', 'ShellHarden', ['sh'], 'Double quote everything!')
+endif 

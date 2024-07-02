@@ -2,71 +2,28 @@
 
 vimrc too big
 
-## about
+- https://github.com/romainl/idiomatic-vimrc
+- https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29
+- https://github.com/preservim/vim-markdown/tree/master
 
-1. `.vimrc` --> `/.vim/vimrc`
-2. `/.vim/after/`
-   - `ftplugin/` contains filetype-specific settings and mappings
-   - `plugin/` stuff I manage
-3. `/.vim/colors/` my color schemes
-4. `/.vim/pack/vimfect/` contains plugins managed by vimfect (and git submodules)
+## YouCompleteMe
 
-### Project Structure
-
-```plaintext
-.vim/
-├── after/                      This directory is sourced last
-│   ├── ftplugin/               Filetype-specific settings
-│   │   ├── c.vim
-│   │   ├── cpp.vim
-│   │   ├── markdown.vim
-│   │   ├── make.vim
-│   │   ├── ocaml.vim
-│   │   ├── python.vim
-│   │   ├── sh.vim
-│   │   ├── tex.vim
-│   │   └── vim.vim
-│   └── plugin/                 Plugin-specific settings
-│       ├── ale-config.vim
-│       ├── fileexplorer.vim
-│       └── keymaps.vim
-│   ├── autoload/
-│   │   ├ somefile.vim
-│   │   └ anotherfile.vim
-├── colors/                     Color schemes
-│   ├── scheme.vim
-│   └── tokyomidnight.vim
-├── pack/                    Plugins (pakages) managed by vimfect
-│    └── vimfect/
-│        ├── start/
-│        └── opt/
-├── plugin/                     Plugins I manage
-│   ├── tabline.vim
-│   ├── smartquit.vim
-│   ├── statusline.vim
-│   └── striptrailingwhitespace.vim
-├── snippets/
-│   ├── c.snippets
-│   ├── sh.snippets
-│   └── vim.snippets
-├── syntax/
-│   └─── vim.vim
-└── vimrc
-```
-
-### `vimfect`
-
-vim plugin manager that lives in `.vim/pack/plugins/` and maintains
-vim plugins through git submodules (see: `.gitmodules`) 3.
-
-## When in doubt
-
-- [Google Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
-
-## Installation
+Check out the [wiki](https://github.com/ycm-core/YouCompleteMe/wiki/FAQ).
+Installation using the bundled libclang/clangd on arm64 macOS.
 
 ```sh
-₽ vim --version
+cd YouCompleteMe && git submodule update --init --recursive && ./install.py --all
+```
+
+## Extra
+
+### cspell
+
+https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
+
+## "vim --version"
+
+```plaintext
 VIM - Vi IMproved 9.1 (2024 Jan 02, compiled May 09 2024 07:15:02)
 macOS version - arm64
 Included patches: 1-400
