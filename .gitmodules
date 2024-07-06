@@ -1,11 +1,11 @@
 [submodule "pack/vimfect/copilot.vim"]
-	path = pack/vimfect/start/copilot.vim
+	path = pack/vimfect/opt/copilot.vim
 	url = https://github.com/github/copilot.vim
 [submodule "pack/vimfect/vim-which-key"]
-	path = pack/vimfect/start/vim-which-key
+	path = pack/vimfect/opt/vim-which-key
 	url = git@github.com:rdnajac/vim-which-key.git
 [submodule "pack/vimfect/ale"]
-	path = pack/vimfect/start/ale
+	path = pack/vimfect/opt/ale
 	url = https://github.com/dense-analysis/ale
 [submodule "pack/plugins/opt/vim-eunuch"]
 	path = pack/vimfect/opt/vim-eunuch

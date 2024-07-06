@@ -70,11 +70,9 @@ else
   set clipboard=unnamedplus     " neovim-specific settings can go here
 endif
 " }}}
-" display
 set termguicolors
 silent! color scheme
 
-" editor
 set autochdir                     " change directory to the file being edited
 set completeopt=menuone,noselect  " show menu even if there's only one match
 set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
@@ -142,11 +140,20 @@ augroup vimrc
 augroup END
 
 " plugins are saved in ~/.vim/pack/plugins/opt by default
-" so we have to manually add them as packadd! plugins
+" so we have to manually `packadd!` them
+
+" core plugins
+packadd! ale
+packadd! copilot.vim
+packadd! vim-which-key
 
 " tpope plugins
 packadd! vim-commentary
-
+packadd! vim-eunuch
+packadd! vim-repeat 
+packadd! vim-surround
+packadd! vim-tbone
+packadd! vim-vinegar
 
 " keymaps {{{
 let g:mapleader = ' '
@@ -269,9 +276,9 @@ inoremap <silent> <localleader>u <C-x><C-u>
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'w' : 'Q'
 
-" }}}
 " run current line
 " nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
+" }}}
 
 " romainl gists {{{
 "

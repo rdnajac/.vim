@@ -17,7 +17,7 @@ if [[ ! "$github_url" =~ ^https://github.com ]]; then
 	github_url="https://github.com/${github_url}.git"
 fi
 
-PLUGIN_DIR="${HOME}/.vim/pack/plugins/opt"
+PLUGIN_DIR="${HOME}/.vim/pack/vimfect/opt"
 mkdir -p "$PLUGIN_DIR"
 cd "$PLUGIN_DIR" || exit 1
 
