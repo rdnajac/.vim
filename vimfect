@@ -1,152 +1,24 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Vim plugin management using Git submodules
-USAGE="Usage: $0 [uri | action uri | action mode uri]"
+## Add a git submodule to the repository
+set -euo pipefail
+set -x
 
-# Enforce strict error checking
-set -eu
+# Check if the user has provided a github url
+if [ "$1" = "" ]; then
+	echo "Please provide a github url"
+	exit 1
+fi
 
-# Explicit exit with error message
-die() {
-	message=$1
-	error_code=${2:-1}
+github_url=$1
 
-	printf '\033[0;31m%s\033[0m\n' "$message" >&2
-	exit "$error_code"
-}
+# if the githuburl doesnt begin with https://github.com, then add it
+if [[ ! "$github_url" =~ ^https://github.com ]]; then
+	github_url="https://github.com/${github_url}.git"
+fi
 
-# Define directories
-VIM_DIR="$HOME/.vim"
-PACK_DIR="$VIM_DIR/pack"
-# SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-REPOSITORY_ROOT="$(git rev-parse --show-toplevel)"
+PLUGIN_DIR="${HOME}/.vim/pack/plugins/opt"
+mkdir -p "$PLUGIN_DIR"
+cd "$PLUGIN_DIR" || exit 1
 
-# Helpers
-mkdir_if_not_exists() {
-	[ -d "$1" ] || mkdir -vp "$1"
-}
-
-# Make sure we're in a git repository and die if not
-# then make sure we have .git submodules and init them if not
-validate_git_repository() {
-	git rev-parse --is-inside-work-tree > /dev/null 2>&1 || die "This is not a Git repository!" 3
-}
-
-# init submodules if we don't have a .gitmodules file
-init_submodules() {
-	[ -f "$REPOSITORY_ROOT"/.gitmodules ] || git submodule init
-}
-
-create_pack_dir_and_subdirs() {
-	mkdir_if_not_exists "$PACK_DIR"
-	mkdir_if_not_exists "$PACK_DIR/vimfect"
-	mkdir_if_not_exists "$PACK_DIR/vimfect/start"
-	mkdir_if_not_exists "$PACK_DIR/vimfect/opt"
-}
-
-setup() {
-	validate_git_repository
-	create_pack_dir_and_subdirs
-	init_submodules
-}
-
-# cd to target dir and clone the repo
-vimfect() {
-	path=$1
-	url=$2
-
-	# in a subshell, cd to the target directory and clone the repo
-	(
-		cd "$path" \
-			&& git submodule add --depth 1 --force "$url" \
-			&& git commit -m "vimfect: $url"
-	)
-}
-
-ensure_github_https_url() {
-	if printf '%s\n' "$1" | grep -q '^https://github.com'; then
-		echo "$1"
-	else
-		echo "https://github.com/$1"
-	fi
-}
-
-#\ @brief Delete and deinit a submodule
-# @param plugin The name of the plugin to remove
-#
-purge() {
-	plugin_path=$1
-	plugin=$(basename "$plugin_path")
-
-	git submodule deinit --force "$plugin_path"
-	git rm -r "$plugin_path"
-	git commit -m "vimfect: purged $plugin"
-}
-
-# copy a file ala
-# https://github.com/tpope/vim-eunuch/raw/master/plugin/eunuch.vim
-# copies a tpope plugin to the tpope/opt directory without tracking it
-yoink() {
-	plugin=$1
-	github_url="https://github.com/tpope/vim-${plugin}/raw/master/plugin/${plugin}.vim"
-	directory="$PACK_DIR/tpope/opt"
-
-	mkdir_if_not_exists "$directory"
-	curl -L "$github_url" -o "$directory/$plugin.vim"
-}
-
-# moves plugin from opt to start or vice versa
-toggle() {
-	path_to_plugin=$1
-	plugin=$(basename "$path_to_plugin")
-	plugin_dir=$(dirname "$path_to_plugin")
-
-	if [ "$plugin_dir" = "start" ]; then
-		new_dir="opt"
-	else
-		new_dir="start"
-	fi
-
-	git mv "$path_to_plugin" "$PACK_DIR/vimfect/$new_dir"
-	git commit -m "vimfect: moved $plugin to $new_dir"
-}
-
-# get opts and call the appropriate function
-main() {
-	[ $# -lt 1 ] && die "$USAGE" 1
-
-	# default
-	plugin_dir="start"
-
-	if [ "$1" = "opt" ]; then
-		plugin_dir="opt"
-		shift
-	elif [ "$1" = "purge" ]; then
-		purge "$2"
-		exit 0
-	elif [ "$1" = "yoink" ]; then
-		yoink "$2"
-		exit 0
-	elif [ "$1" = "toggle" ]; then
-		toggle "$2"
-		exit 0
-	fi
-
-	url=$1
-
-	# if the url is only a name and repo, trancform it into a github https url
-	url=$(ensure_github_https_url "$url")
-
-	# now $1 is the url and will be passed to the function
-	vimfect "$PACK_DIR/vimfect/$plugin_dir" "$url"
-	# use relative path?
-
-	# helptags with vim -c 'helptags ALL'
-	vim -u NONE -c "helptags ALL" -c q
-}
-
-# if we run ./vimfect snip
-# run this to call vimfect from anywhere
-setup
-
-main "$@"
+git submodule add --depth=1 --force "$github_url"

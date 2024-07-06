@@ -1,4 +1,4 @@
-" $HOME/.vim/after/plugin/config.vim
+" .vim/after/plugin/config.vim
 " configurations for vim packages
 " netrw {{{
 " configure the appearance of netrw so that it looks like

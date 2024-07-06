@@ -1,3 +1,4 @@
+
 " rdnajac's vimrc {{{
 if !has('nvim')
   " sensible.vim {{{
@@ -126,37 +127,26 @@ set listchars=trail:¿,tab:→\
 
 " set isfname+={,},\",\<,\>,(,),[,],\:
 
-
-augroup vimrc_quit
-  autocmd!
-  autocmd FileType help,man,qf,fugitive,ale-info silent! nnoremap <silent> <buffer> q :<C-U>close<CR> | set nobuflisted
-  autocmd CmdwinEnter * quit
-  " type visual<cr> upon entering exmode
-augroup END
-
 augroup vimrc
   autocmd!
-  " Change the current directory to the directory of the file in the current
-  " autocmd BufEnter * if expand('%:p') != '' && filereadable(expand('%:p')) | lcd %:p:h | endif
-    " When editing a file, always jump to the last known cursor position.
-    autocmd BufReadPost *
-      \ let line = line("'\"")
-      \ | if line >= 1 && line <= line("$")
-      \ |   execute "normal! g`\""
-      \ | endif
-  augroup END
-
+  " quit special buffers with 'q'
+  autocmd FileType help,man,qf,fugitive,ale-info silent! nnoremap <silent> <buffer> q :<C-U>close<CR> | set nobuflisted
+  " automatically quit cmd window
+  autocmd CmdwinEnter * quit
+  " When editing a file, always jump to the last known cursor position.
+  autocmd BufReadPost *
+        \ let line = line("'\"")
+        \ | if line >= 1 && line <= line("$")
+        \ |   execute "normal! g`\""
+        \ | endif
 augroup END
 
-" https://gist.github.com/romainl/3e0cb99343c72d04e9bc10f6d76ebbef
-" return to the mark with ` plus letter
-augroup AutomaticMarks
-    autocmd!
-    autocmd BufLeave vimrc        normal! mV
-    autocmd BufLeave *.vim        normal! mV
-    autocmd BufLeave *.md         normal! mM
-    autocmd BufLeave *.sh         normal! mS
-augroup END
+" plugins are saved in ~/.vim/pack/plugins/opt by default
+" so we have to manually add them as packadd! plugins
+
+" tpope plugins
+packadd! vim-commentary
+
 
 " keymaps {{{
 let g:mapleader = ' '
@@ -196,7 +186,7 @@ vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
 nnoremap ? :call utils#getInfo()<CR>
 nnoremap <leader>v :execute 'verbose set ' . <cword> . '?'
 nnoremap <leader>c :echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')<CR>
-  
+
 " edit vim config files {{{
 nnoremap <leader>ev :e $MYVIMRC<CR>
 nnoremap <leader>ec :find scheme.vim<CR>
@@ -280,12 +270,21 @@ cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'w' : 'Q'
 
 " }}}
-" run line
+" run current line
 " nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
 
-
-
 " romainl gists {{{
+"
+" https://gist.github.com/romainl/3e0cb99343c72d04e9bc10f6d76ebbef
+" return to the mark with ` plus letter
+augroup AutomaticMarks 
+  autocmd!
+  autocmd BufLeave vimrc        normal! mV
+  autocmd BufLeave *.vim        normal! mV
+  autocmd BufLeave *.md         normal! mM
+  autocmd BufLeave *.sh         normal! mS
+augroup END
+
 " Slightly more intuitive gt/gT (may need some unlearning to get used to)
 " https://gist.github.com/romainl/0f589e07a079ea4b7a77fd66ef16ebee
 " nnoremap <expr> gt ":tabnext +" . v:count1 . '<CR>'
@@ -341,7 +340,7 @@ let c_comment_strings=1
 " the current buffer and the file it was loaded from.
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
+        \ | wincmd p | diffthis
 endif
 " }}}
 " ignore these files and directories {{{

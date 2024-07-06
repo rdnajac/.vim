@@ -1,5 +1,2 @@
 .*
-*.log
-
-# don't track optional packages
-pack/*/opt/
+vim9/

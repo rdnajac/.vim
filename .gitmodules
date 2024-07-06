@@ -7,3 +7,24 @@
 [submodule "pack/vimfect/ale"]
 	path = pack/vimfect/start/ale
 	url = https://github.com/dense-analysis/ale
+[submodule "pack/plugins/opt/vim-eunuch"]
+	path = pack/vimfect/opt/vim-eunuch
+	url = https://github.com/tpope/vim-eunuch.git
+[submodule "pack/plugins/opt/vim-surround"]
+	path = pack/vimfect/opt/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "pack/plugins/opt/vim-commentary"]
+	path = pack/vimfect/opt/vim-commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule "pack/plugins/opt/vim-vinegar"]
+	path = pack/vimfect/opt/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar.git
+[submodule "pack/plugins/opt/vim-repeat"]
+	path = pack/vimfect/opt/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "pack/plugins/opt/vim-tbone"]
+	path = pack/vimfect/opt/vim-tbone
+	url = https://github.com/tpope/vim-tbone.git
+[submodule "pack/plugins/opt/vimtex"]
+	path = pack/vimfect/opt/vimtex
+	url = https://github.com/lervag/vimtex.git
