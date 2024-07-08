@@ -1,9 +1,15 @@
 " .vim/after/ftplugin/markdown.vim
 setlocal foldlevel=3
 setlocal conceallevel=0
+" markdown preview {{{
+" compile markdown preview
+" call mkdp#util#install()
+" let g:mkdp_page_title = '${name}'
+"nnoremap <leader>md :MarkdownPreview<cr>
+" }}}  
+nnoremap <buffer> <silent> [[ :<C-u>call markdown#JumpToNextHeading("up", v:count1)<CR>
+nnoremap <buffer> <silent> ]] :<C-u>call markdown#JumpToNextHeading("down", v:count1)<CR>
 
-" keymaps
-let b:maplocalleader = "\\"
 inoremap <buffer> \1 #<Space><Esc>o<Esc>kA
 inoremap <buffer> \2 ##<Space><Esc>o<Esc>kA
 inoremap <buffer> \3 ###<Space><Esc>o<Esc>kA
@@ -13,26 +19,13 @@ inoremap <buffer> \6 ######<Space><Esc>o<Esc>kA
 
 nnoremap <leader>st i~~<Esc>A~~<Esc>
 
-" turn selection into a hyperlink. the selection is wrapped in ( ) and we
-" append [] then move the cursor to the middle of the brackets
-
-" surround current visual selection with square brackets
-" surround: S]
+" make visual selection a hyperlink
 vmap <leader>k c[<C-r>"]()<left>
-" do it again do it doesnt interfere with the unnamed register
-v
 
-" }}}
 
 let b:ale_fix_on_save = 1
 let b:ale_markdown_markdownlint_options = '--disable MD013'
 
-" markdown preview {{{
-" compile markdown preview
-" call mkdp#util#install()
-let g:mkdp_page_title = '${name}'
-"nnoremap <leader>md :MarkdownPreview<cr>
-" }}}  
 
 
 hi Title     guifg=#14afff guibg=#000000 gui=bold
@@ -46,23 +39,6 @@ let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_fenced_languages = ['bash=sh', 'c', 'plaintext', 'python', 'vim']
 
-
-" inoremap <LocalLeader>tip [!TIP] 
-
-" https://gist.github.com/romainl/ac63e108c3d11084be62b3c04156c263
-" markdown : jump to next heading
-function! s:JumpToNextHeading(direction, count)
-    let col = col(".")
-    silent execute a:direction == "up" ? '?^#' : '/^#'
-    if a:count > 1
-        silent execute "normal! " . repeat("n", a:direction == "up" && col != 1 ? a:count : a:count - 1)
-    endif
-    silent execute "normal! " . col . "|"
-    unlet col
-endfunction
-nnoremap <buffer> <silent> ]] :<C-u>call <SID>JumpToNextHeading("down", v:count1)<CR>
-nnoremap <buffer> <silent> [[ :<C-u>call <SID>JumpToNextHeading("up", v:count1)<CR>
-finish
 
 " folding {{{
 " https://github.com/masukomi/vim-markdown-folding/blob/master/after/ftplugin/markdown/folding.vim

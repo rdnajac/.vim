@@ -1,5 +1,6 @@
 " .vim/after/ftplugin/sh.vim
 setlocal cindent shiftwidth=8 softtabstop=8 noexpandtab
+
 let &l:includeexpr = "substitute(v:fname, '$\\%(::\\)\\=env(\\([^)]*\\))', '\\=expand(\"$\".submatch(1))', 'g')"
 " set includeexpr=l:includeexpr
 

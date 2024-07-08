@@ -128,13 +128,11 @@ set listchars=trail:¿,tab:→\
 
 augroup vimrc
   autocmd!
-
   " each of the following can be a standalone file in
   " ~/.vim/after/ftplugin/{filetype}.vim
-  autocmd FileType c setlocal cindent noexpandtab
-  autocmd FileType cpp     setlocal cindent shiftwidth=4 softtabstop=4 expandtab
-  " autocmd FileType python  setlocal shiftwidth=4 softtabstop=4 expandtab
-  autocmd FileType vim     setlocal shiftwidth=2 softtabstop=2 expandtab fdm=marker
+  autocmd FileType c          setlocal cindent noexpandtab
+  autocmd FileType cpp,python setlocal cindent shiftwidth=4 softtabstop=4 expandtab
+  autocmd FileType vim        setlocal shiftwidth=2 softtabstop=2 expandtab fdm=marker
 
   " quit special buffers with 'q'
   autocmd FileType help,man,qf,fugitive,ale-info silent! nnoremap <silent> <buffer> q :<C-U>close<CR> | set nobuflisted
@@ -148,13 +146,20 @@ augroup vimrc
         \ | endif
 augroup END
 
+" automatically add shebangs to new files based on filetype
+augroup shebangs
+  autocmd!
+  autocmd BufNewFile *.sh call utils#SheBangs('')
+  autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
+  autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
+  autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
+augroup END
+
+
 " plugins are saved in ~/.vim/pack/plugins/opt by default
 " so we have to manually `packadd!` them
-
-" core plugins
 packadd! ale
 packadd! copilot.vim
-packadd! vim-which-key
 
 " tpope plugins
 packadd! vim-commentary
@@ -170,8 +175,8 @@ let g:mapleader = ' '
 let g:maplocalleader = ','
 
 " Which-key setup {{{
-nnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
-vnoremap <silent> <leader>      :<c-u>WhichKey '<Space>'<CR>
+nnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
+vnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
 " nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 " vnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
 call which_key#register('<Space>', "g:which_key_map")
@@ -284,7 +289,9 @@ inoremap <silent> <localleader>u <C-x><C-u>
 
 " no more fat fingers!
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
-cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'w' : 'Q'
+cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'wq' : 'Q'
+cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'wq' : 'q'
+" TODO ignore  when we open the command line
 
 " run current line
 " nnoremap <leader>rl ^yg_:r!<C-r>"<CR>

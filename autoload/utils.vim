@@ -41,4 +41,11 @@ function! utils#replaceSelection() abort
     endif
 endfunction
 
+function! utils#SheBangs(shebang)
+    let shebang = empty(a:shebang) ? '#!/bin/bash' : a:shebang
+    call append(0, [shebang, '#', '## '])
+    execute "normal! Xa"
+endfunction
+
+
 " vim:foldmethod=marker:foldmarker=function!,endfunction
