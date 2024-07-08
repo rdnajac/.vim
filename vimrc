@@ -57,6 +57,7 @@ if !has('nvim')
   call s:MkdirIfNotExists(&undodir)
   set spellfile=~/.vim/.spell/en.utf-8.add
   set viminfo='10000,n~/.vim/.viminfo
+  set verbosefile=~/.vim/.vimlog.txt
   set clipboard=unnamed
   " }}}
   " performance {{{
@@ -127,6 +128,14 @@ set listchars=trail:¿,tab:→\
 
 augroup vimrc
   autocmd!
+
+  " each of the following can be a standalone file in
+  " ~/.vim/after/ftplugin/{filetype}.vim
+  autocmd FileType c setlocal cindent noexpandtab
+  autocmd FileType cpp     setlocal cindent shiftwidth=4 softtabstop=4 expandtab
+  " autocmd FileType python  setlocal shiftwidth=4 softtabstop=4 expandtab
+  autocmd FileType vim     setlocal shiftwidth=2 softtabstop=2 expandtab fdm=marker
+
   " quit special buffers with 'q'
   autocmd FileType help,man,qf,fugitive,ale-info silent! nnoremap <silent> <buffer> q :<C-U>close<CR> | set nobuflisted
   " automatically quit cmd window
@@ -151,6 +160,7 @@ packadd! vim-which-key
 packadd! vim-commentary
 packadd! vim-eunuch
 packadd! vim-repeat 
+packadd! vim-scriptease
 packadd! vim-surround
 packadd! vim-tbone
 packadd! vim-vinegar

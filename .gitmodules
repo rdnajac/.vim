@@ -28,3 +28,6 @@
 [submodule "pack/plugins/opt/vimtex"]
 	path = pack/vimfect/opt/vimtex
 	url = https://github.com/lervag/vimtex.git
+[submodule "pack/vimfect/opt/vim-scriptease"]
+	path = pack/vimfect/opt/vim-scriptease
+	url = https://github.com/tpope/vim-scriptease.git
