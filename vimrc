@@ -169,6 +169,14 @@ packadd! vim-scriptease
 packadd! vim-surround
 packadd! vim-tbone
 packadd! vim-vinegar
+" packadd! vim-unimpaired
+" packadd! vim-obsession
+" packadd! vim-fugitive
+
+" wellle plugins
+" packadd! targets.vim 
+" packadd! context.vim
+" packadd! tmux-complete.vim
 
 " keymaps {{{
 let g:mapleader = ' '

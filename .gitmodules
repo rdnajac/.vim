@@ -34,3 +34,18 @@
 [submodule "pack/vimfect/opt/python-mode"]
 	path = pack/vimfect/opt/python-mode
 	url = https://github.com/python-mode/python-mode
+[submodule "pack/vimfect/opt/tmux-complete.vim"]
+	path = pack/vimfect/opt/tmux-complete.vim
+	url = https://github.com/wellle/tmux-complete.vim
+[submodule "pack/vimfect/opt/targets.vim"]
+	path = pack/vimfect/opt/targets.vim
+	url = https://github.com/wellle/targets.vim
+[submodule "pack/vimfect/opt/context.vim"]
+	path = pack/vimfect/opt/context.vim
+	url = https://github.com/wellle/context.vim
+[submodule "pack/vimfect/opt/vim-unimpaired"]
+	path = pack/vimfect/opt/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired
+[submodule "pack/vimfect/opt/vim-obsession"]
+	path = pack/vimfect/opt/vim-obsession
+	url = https://github.com/tpope/vim-obsession
