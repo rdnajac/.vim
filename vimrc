@@ -76,7 +76,7 @@ silent! color scheme
 
 set autochdir                     " change directory to the file being edited
 set completeopt=menuone,noselect  " show menu even if there's only one match
-set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
+"set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
 set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
 set iskeyword+=-                  " treat hyphens as part of a word
 set lazyredraw                    " don't redraw the screen while executing macros, etc.
@@ -132,7 +132,7 @@ augroup vimrc
   " ~/.vim/after/ftplugin/{filetype}.vim
   autocmd FileType c          setlocal cindent noexpandtab
   autocmd FileType cpp,python setlocal cindent shiftwidth=4 softtabstop=4 expandtab
-  autocmd FileType vim        setlocal shiftwidth=2 softtabstop=2 expandtab fdm=marker
+  autocmd FileType vim        setlocal softtabstop=4 fdm=marker
 
   " quit special buffers with 'q'
   autocmd FileType help,man,qf,fugitive,ale-info silent! nnoremap <silent> <buffer> q :<C-U>close<CR> | set nobuflisted
