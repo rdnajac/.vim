@@ -6,6 +6,18 @@ syntax match mdBlockQuote '^>.*' contains=ghAlert
 hi! link mdBlockQuote Comment
 hi! link ghAlert Todo
 
+" let g:markdown_syntax_conceal = 1
+
+" " [link](URL) | [link][id] | [link][] | ![image](URL)
+" "syn region mkdFootnotes matchgroup=mkdDelimiter start="\[^"    end="\]"
+" syn region mkdID matchgroup=mkdDelimiter    start="\["    end="\]" contained oneline conceal
+" syn region mkdURL matchgroup=mkdDelimiter   start="("     end=")"  contained oneline conceal
+" "syn region mkdLink matchgroup=mkdDelimiter  start="\\\@<!!\?\[\ze[^]\n]*\n\?[^]\n]*\][[(]" end="\]" contains=@mkdNonListItem,@Spell nextgroup=mkdURL,mkdID skipwhite' . concealends
+" "                         ------------ _____________________ ----------------------------- _________________________ ----------------- __
+" " Autolink with parenthesis.
+" syn region  mkdInlineURL matchgroup=mkdDelimiter start="(\(https\?:\/\/\(\w\+\(:\w\+\)\?@\)\?\([A-Za-z0-9][-_0-9A-Za-z]*\.\)\{1,}\(\w\{2,}\.\?\)\{1,}\(:[0-9]\{1,5}\)\?[^] \t]*)\)\@=" end=")"
+
+
 hi NeonGreen guifg=#39ff14 guibg=#000000
 hi Cyan guifg=#14afff guibg=#000000
 hi Magenta guifg=#da14ff guibg=#000000

@@ -1,8 +1,24 @@
 " .vim/after/ftplugin/markdown.vim
-setlocal foldlevel=3
-setlocal conceallevel=0
+" setlocal foldlevel=3
 
+" snippets {{{1
+" headers {{{2
+inoremap <buffer> `1 #<Space>
+inoremap <buffer> `2 ##<Space>
+inoremap <buffer> `3 ###<Space>
+inoremap <buffer> `4 ####<Space>
+inoremap <buffer> `5 #####<Space>
+inoremap <buffer> `6 ######<Space>
 
+" fenced code blocks {{{2
+inoremap <buffer> `` ```<CR><CR>```<Up>
+inoremap <buffer> `c ```c<CR><CR>```<Up>
+inoremap <buffer> `p ```python<CR><CR>```<Up>
+inoremap <buffer> `s ```sh<CR><CR>```<Up>
+inoremap <buffer> `t ```text<CR><CR>```<Up>
+inoremap <buffer> `v ```vim<CR><CR>```<Up>
+
+" }}}1
 function! JumpToNextHeading(direction, count) " {{{
 " https://gist.github.com/romainl/ac63e108c3d11084be62b3c04156c263
     let col = col(".")
@@ -15,13 +31,6 @@ function! JumpToNextHeading(direction, count) " {{{
 endfunction " }}}
 nnoremap <buffer> <silent> [[ :<C-u>call JumpToNextHeading("up",   v:count1)<CR>
 nnoremap <buffer> <silent> ]] :<C-u>call JumpToNextHeading("down", v:count1)<CR>
-
-inoremap <buffer> `1 #<Space><Esc>o<Esc>kA
-inoremap <buffer> `2 ##<Space><Esc>o<Esc>kA
-inoremap <buffer> `3 ###<Space><Esc>o<Esc>kA
-inoremap <buffer> `4 ####<Space><Esc>o<Esc>kA
-inoremap <buffer> `5 #####<Space><Esc>o<Esc>kA
-inoremap <buffer> `6 ######<Space><Esc>o<Esc>kA
 
 nnoremap <leader>st i~~<Esc>A~~<Esc>
 
