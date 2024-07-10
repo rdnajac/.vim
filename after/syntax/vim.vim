@@ -3,3 +3,6 @@
 " for the right way to override any highlighting without editing the colorscheme
 " highlight VeryBad ctermfg=red guifg=red ctermbg=black guibg=black
 syntax match Error '^#.*'
+
+" when joining lines, delete the / that breaks the multiline code
+" set formatoptions

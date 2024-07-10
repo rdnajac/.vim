@@ -49,3 +49,6 @@
 [submodule "pack/vimfect/opt/vim-obsession"]
 	path = pack/vimfect/opt/vim-obsession
 	url = https://github.com/tpope/vim-obsession
+[submodule "pack/vimfect/opt/vim-apathy"]
+	path = pack/vimfect/opt/vim-apathy
+	url = https://github.com/tpope/vim-apathy.git
