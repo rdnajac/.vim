@@ -52,3 +52,6 @@
 [submodule "pack/vimfect/opt/vim-apathy"]
 	path = pack/vimfect/opt/vim-apathy
 	url = https://github.com/tpope/vim-apathy.git
+[submodule "pack/vimfect/opt/vim-tmux-navigator"]
+	path = pack/vimfect/opt/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator

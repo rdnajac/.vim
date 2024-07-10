@@ -20,17 +20,18 @@ packadd vim-vinegar
 " which-key {{{
 nnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
 vnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
-" nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-" vnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
+nnoremap <silent> <localleader> :<c-u>silent WhichKey ','<CR>
+vnoremap <silent> <localleader> :<c-u>silent WhichKey ','<CR>
 call which_key#register('<Space>', "g:which_key_map")
 
 " Create menus based on existing mappings. These must be manually
 " updated, but at least we don't rely on which-key to map our keys.
-let g:which_key_map = {}
+" let g:which_key_map = {}
 
-" autocmd! FileType which_key
-" autocmd  FileType which_key set laststatus=0 noshowmode noruler
-"   \| autocmd BufLeave <buffer> set laststatus=2 showmode
+autocmd! FileType which_key
+autocmd  FileType which_key set laststatus=0 noshowmode noruler
+  \| autocmd BufLeave <buffer> set laststatus=2 showmode
+
 " }}}
 " copilot {{{
 let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]

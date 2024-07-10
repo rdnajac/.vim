@@ -1,75 +1,75 @@
 " rdnajac's vimrc {{{
 if !has('nvim')
-  " sensible.vim {{{
-  if &compatible                  " technically, vim is always incompatible when a
-    set nocompatible              " vimrc is present, but let's handle the edge case
-  endif                           " when vim is run with the -u flag
+    " sensible.vim {{{
+    if &compatible                  " technically, vim is always incompatible when a
+	set nocompatible              " vimrc is present, but let's handle the edge case
+    endif                           " when vim is run with the -u flag
 
-  if has('langmap') && exists('+langremap') && &langremap
-    set nolangremap  " Disable a legacy behavior that can break plugin maps.
-  endif
-
-  if !(exists('g:did_load_filetypes') && exists('g:did_load_ftplugin') && exists('g:did_indent_on'))
-    filetype plugin indent on
-  endif
-
-  if has('syntax') && !exists('g:syntax_on')
-    syntax enable
-  endif
-
-  " Correctly highlight $() and other modern affordances in filetype=sh.
-  " if !exists('g:is_posix') && !exists('g:is_bash') && !exists('g:is_kornshell') && !exists('g:is_dash')
-  "   let g:is_posix = 1
-  " endif
-  " Load matchit.vim, but only if the user hasn't installed a newer version.
-  if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-    runtime! macros/matchit.vim
-  endif
-  " Enable the :Man command shipped inside Vim's man filetype plugin.
-  if exists(':Man') != 2 && !exists('g:loaded_man') && &filetype !=? 'man' && !has('nvim')
-    runtime ftplugin/man.vim
-  endif
-  " }}}
-  set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
-  scriptencoding utf-8            " see `:h :scriptencoding`
-  set mouse=a                     " wait, that's illegal
-  set hidden                      " enable background buffers
-  set autoindent smarttab         " enable auto-indent and smart tabbing
-  set autoread autowrite          " automatically read/write files when changed
-  set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
-  set formatoptions+=j            " delete comment character when joining lines
-  " set formatoptions-=o          " don't continue comments when pressing 'o'
-  set hlsearch incsearch          " highlighted, incremental search
-  set swapfile backup undofile    " {{{
-  function! s:MkdirIfNotExists(dir) abort " {{{
-    if !isdirectory(a:dir)
-      call mkdir(a:dir, 'p', 0700)
+    if has('langmap') && exists('+langremap') && &langremap
+	set nolangremap  " Disable a legacy behavior that can break plugin maps.
     endif
-  endfunction " }}}
-  let &backupdir = expand('~/.vim/.backup')
-  let &directory = expand('~/.vim/.swap')
-  set undodir=~/.vim/.undo
 
-  call s:MkdirIfNotExists(&backupdir)
-  call s:MkdirIfNotExists(&directory)
-  call s:MkdirIfNotExists(&undodir)
-  set spellfile=~/.vim/.spell/en.utf-8.add
-  set viminfo='10000,n~/.vim/.viminfo
-  set verbosefile=~/.vim/.vimlog.txt
-  set clipboard=unnamed
-  " }}}
-  " performance {{{
-  set updatetime=100              " used for CursorHold autocommands
-  if &ttimeoutlen == -1
-    set ttimeout
-    set ttimeoutlen=100
-  endif
-  set timeoutlen=300		  " time for a mapped sequence to complete
+    if !(exists('g:did_load_filetypes') && exists('g:did_load_ftplugin') && exists('g:did_indent_on'))
+	filetype plugin indent on
+    endif
+
+    if has('syntax') && !exists('g:syntax_on')
+	syntax enable
+    endif
+
+    " Correctly highlight $() and other modern affordances in filetype=sh.
+    " if !exists('g:is_posix') && !exists('g:is_bash') && !exists('g:is_kornshell') && !exists('g:is_dash')
+    "   let g:is_posix = 1
+    " endif
+    " Load matchit.vim, but only if the user hasn't installed a newer version.
+    if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+	runtime! macros/matchit.vim
+    endif
+    " Enable the :Man command shipped inside Vim's man filetype plugin.
+    if exists(':Man') != 2 && !exists('g:loaded_man') && &filetype !=? 'man' && !has('nvim')
+	runtime ftplugin/man.vim
+    endif
+    " }}}
+    set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
+    scriptencoding utf-8            " see `:h :scriptencoding`
+    set mouse=a                     " wait, that's illegal
+    set hidden                      " enable background buffers
+    set autoindent smarttab         " enable auto-indent and smart tabbing
+    set autoread autowrite          " automatically read/write files when changed
+    set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
+    set formatoptions+=j            " delete comment character when joining lines
+    " set formatoptions-=o          " don't continue comments when pressing 'o'
+    set hlsearch incsearch          " highlighted, incremental search
+    set swapfile backup undofile    " {{{
+    function! s:MkdirIfNotExists(dir) abort " {{{
+	if !isdirectory(a:dir)
+	    call mkdir(a:dir, 'p', 0700)
+	endif
+    endfunction " }}}
+    let &backupdir = expand('~/.vim/.backup')
+    let &directory = expand('~/.vim/.swap')
+    set undodir=~/.vim/.undo
+
+    call s:MkdirIfNotExists(&backupdir)
+    call s:MkdirIfNotExists(&directory)
+    call s:MkdirIfNotExists(&undodir)
+    set spellfile=~/.vim/.spell/en.utf-8.add
+    set viminfo='10000,n~/.vim/.viminfo
+    set verbosefile=~/.vim/.vimlog.txt
+    set clipboard=unnamed
+    " }}}
+    " performance {{{
+    set updatetime=100              " used for CursorHold autocommands
+    if &ttimeoutlen == -1
+	set ttimeout
+	set ttimeoutlen=100
+    endif
+    set timeoutlen=300		  " time for a mapped sequence to complete
 " }}}
 else
-  " neovim-specific settings {{{
-  set clipboard=unnamedplus     
-" }}}
+    " neovim-specific settings {{{
+    set clipboard=unnamedplus     
+    " }}}
 endif
 " }}}
 " display settings {{{
@@ -113,15 +113,15 @@ set wildmenu                      " just use the default wildmode with this sett
 " set shiftround
 " set isfname+={,},\",\<,\>,(,),[,],\:
 
-let g:mapleader = ' '
-let g:maplocalleader = '\'
+let g:mapleader      = ' '
+let g:maplocalleader = ','
 
 nnoremap <tab> :bnext<CR>
 nnoremap <s-tab> :bprevious<CR>
 nnoremap <leader><tab> :b#<CR>
 nnoremap <C-q> :wqall<CR>
 nnoremap <leader>b :b <C-d>
-nnoremap <leader>c :echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')<CR>
+nnoremap <leader>c :call info#HighlightGroup()<CR>
 nnoremap <leader>e :e!<CR>
 nnoremap <leader>f :find<space>
 nnoremap <leader>h :set hlsearch!<CR>
@@ -134,20 +134,21 @@ nnoremap <leader>w :w<CR>
 nnoremap <leader>x :!./%<CR>
 vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
 
-" TODO: why not " :echo synIDattr(synID(line("."), col("."), 1), "name")
 " run current line
 " nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
 " yank selection into command line
 vnoremap <leader>c y:<C-r>"<C-b>
 
 " more keymaps {{{1
-" better escape {{{2
-inoremap jk <esc>
-inoremap kj <esc>
-vnoremap jk <esc>
-vnoremap kj <esc>
+" better escape with jk/kj {{{2
+noremap jk <esc>
+noremap kj <esc>
+" inoremap jk <esc>
+" inoremap kj <esc>
+" vnoremap jk <esc>
+" vnoremap kj <esc>
 
-" indent/dedent visual block with < and > {{{2
+" indent/dedent in normal mode with < and > {{{2
 nnoremap > V`]>
 nnoremap < V`]<
 
@@ -179,36 +180,40 @@ cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 " end keymaps }}}1
 
 augroup vimrc " {{{1
-  autocmd!
-  autocmd FileType c          setlocal cindent noexpandtab
-  autocmd FileType cpp,python setlocal cindent expandtab
-  autocmd FileType vim        setlocal fdm=marker
+    autocmd!
+    autocmd FileType c          setlocal cindent noexpandtab
+    autocmd FileType cpp,python setlocal cindent expandtab
+    autocmd FileType vim        setlocal fdm=marker
 
-  " quit special buffers with 'q'
-  autocmd FileType help,man,qf,fugitive,ale-info,netrw 
-	      \ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
-	      \ | set nobuflisted
-
-  " automatically quit cmd window
-  autocmd CmdwinEnter * quit
+    " automatically quit cmd window
+    autocmd CmdwinEnter * quit
 augroup END
 
 augroup jumpToLastPosition " {{{1
-  autocmd!
-  autocmd BufReadPost *
-        \ let line = line("'\"")
-        \ | if line >= 1 && line <= line("$")
-        \ |   execute "normal! g`\""
-        \ | endif
+    autocmd!
+    autocmd BufReadPost *
+		\ let line = line("'\"")
+		\ | if line >= 1 && line <= line("$")
+		\ |   execute "normal! g`\""
+		\ | endif
 augroup END
 
-" automatically add shebangs to new files based on filetype
+augroup specialBuffers " {{{1
+    autocmd!
+    " quit with 'q'
+    autocmd FileType help,qf,netrw,man,ale-info
+		\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
+		\ | set nobuflisted
+		\ | setlocal noruler
+		\ | setlocal laststatus=0 
+augroup END
+
 augroup shebangs " {{{1
-  autocmd!
-  " autocmd BufNewFile *.sh call utils#SheBangs('')
-  " autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
-  " autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
-  " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
+    autocmd!
+    " autocmd BufNewFile *.sh call utils#SheBangs('')
+    " autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
+    " autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
+    " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
 augroup END
 
 " plugins {{{1
@@ -236,15 +241,17 @@ set path+=~/.vim/**,~/cbmf/**
 " packadd! context.vim
 " packadd! tmux-complete.vim
 
+packadd! vim-tmux-navigator
+
 " romainl gists {{{1
 " https://gist.github.com/romainl/3e0cb99343c72d04e9bc10f6d76ebbef
 " return to the mark with ` plus letter
 augroup AutomaticMarks 
-  autocmd!
-  autocmd BufLeave vimrc        normal! mV
-  autocmd BufLeave *.vim        normal! mV
-  autocmd BufLeave *.md         normal! mM
-  autocmd BufLeave *.sh         normal! mS
+    autocmd!
+    autocmd BufLeave vimrc        normal! mV
+    autocmd BufLeave *.vim        normal! mV
+    autocmd BufLeave *.md         normal! mM
+    autocmd BufLeave *.sh         normal! mS
 augroup END
 
 " Slightly more intuitive gt/gT (may need some unlearning to get used to)
@@ -301,8 +308,8 @@ let c_comment_strings=1
 " Convenient command to see the difference between 
 " the current buffer and the file it was loaded from.
 if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-        \ | wincmd p | diffthis
+    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+		\ | wincmd p | diffthis
 endif
 
 " ignore these files and directories {{{
@@ -323,4 +330,3 @@ set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thu
 " http://www.vim.org/scripts/script.php?script_id=1876
 " }}}1
 " vim: ft=vim: fdm=marker:
-

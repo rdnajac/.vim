@@ -114,7 +114,7 @@ call s:Highlight('SpellBad', s:red, 'NONE', 'undercurl')
 call s:Highlight('SpellCap', s:yellow, 'NONE', 'undercurl')
 call s:Highlight('SpellRare', s:teal, 'NONE', 'undercurl')
 call s:Highlight('SpellLocal', s:blue2, 'NONE', 'undercurl')
-call s:Highlight('StatusLine', s:neongreen, s:black, 'bold')
+call s:Highlight('StatusLine', s:neongreen, s:black, 'reverse')
 call s:LinkGroups('StatusLine', 'StatusLineTerm', 'StatusLineNC', 'StatusLineTermNC')
 call s:Highlight('TabLine', s:fg_alt, 'NONE', '')
 call s:Highlight('TabLineSel', s:neongreen, 'NONE', 'bold')
@@ -123,6 +123,7 @@ call s:Highlight('TabLineFill', 'NONE', s:bg, '')
 call s:Highlight('Title', s:blue, s:bg, 'bold')
 call s:Highlight('ToolbarLine', s:chambray, s:bg, '')
 call s:Highlight('ToolbarButton', s:cyan, s:bg, '')
+" this is meaningless if you turn off the vert fillchar
 call s:Highlight('VertSplit', s:yellow, s:bg, '')
 call s:Highlight('Visual', s:yellow, s:tokyonight, '')
 " VisualNOS
@@ -131,10 +132,8 @@ call s:Highlight('WildMenu', s:yellow, 'NONE', '')
 
 " extra
 hi! link CursorIM Cursor
-
 " hi! link HelpCommand Statement
 " hi! link HelpExample Statement
-
 
 " =============================================================================
 " Highlighting groups for language syntaxes
