@@ -1,4 +1,3 @@
-
 " rdnajac's vimrc {{{
 if !has('nvim')
   " sensible.vim {{{
@@ -42,12 +41,11 @@ if !has('nvim')
   " set formatoptions-=o          " don't continue comments when pressing 'o'
   set hlsearch incsearch          " highlighted, incremental search
   set swapfile backup undofile    " {{{
-  function! s:MkdirIfNotExists(dir) abort
+  function! s:MkdirIfNotExists(dir) abort " {{{
     if !isdirectory(a:dir)
       call mkdir(a:dir, 'p', 0700)
     endif
-  endfunction
-
+  endfunction " }}}
   let &backupdir = expand('~/.vim/.backup')
   let &directory = expand('~/.vim/.swap')
   set undodir=~/.vim/.undo
@@ -61,84 +59,142 @@ if !has('nvim')
   set clipboard=unnamed
   " }}}
   " performance {{{
-  set updatetime=100             " used for CursorHold autocommands
+  set updatetime=100              " used for CursorHold autocommands
   if &ttimeoutlen == -1
     set ttimeout
     set ttimeoutlen=100
   endif
+  set timeoutlen=300		  " time for a mapped sequence to complete
 " }}}
 else
-  set clipboard=unnamedplus     " neovim-specific settings can go here
+  " neovim-specific settings {{{
+  set clipboard=unnamedplus     
+" }}}
 endif
 " }}}
+" display settings {{{
 set termguicolors
 silent! color scheme
 
-set autochdir                     " change directory to the file being edited
-set completeopt=menuone,noselect  " show menu even if there's only one match
-"set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
-set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
-set iskeyword+=-                  " treat hyphens as part of a word
 set lazyredraw                    " don't redraw the screen while executing macros, etc.
-set path+=~/.vim/**,~/cbmf/**     " search these directories for files
-set report=0                      " display how many replacements were made
-set shiftround
-set shortmess+=A                  " avoid 'hit-enter' prompts
-set softtabstop=2 shiftwidth=2    " don't change tabstop!
-set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
-set wildmenu                      " just use the default wildmode with this setting
 set nowrap                        " don't wrap lines by default
 set linebreak                     " if we have to wrap lines, don't split words
 set number relativenumber         " show (relative) line numbers
 set numberwidth=3                 " line number column padding
 set showmatch                     " highlight matching brackets
 set cursorline                    " highlight the current line
-" set pumheight=10
-" set signcolumn=yes
 set splitbelow splitright         " where to open new splits by default
 set scrolloff=4 sidescrolloff=0   " scroll settings
-set signcolumn=no
-set tabline=%!display#MyTabline()
 set showcmd
-" set showcmdloc=statusline   " show command in statusline 
-" set cmdheight=1              " height of the command line
-"
-" statusline configuration {{{
-set statusline=				    " Clear the status line
-set statusline+=\ %F\ %y\ %r          " File path, modified flag, file type, read-only flag
-"set statusline+=%{FugitiveStatusline()}   " Git branch
-set statusline+=%=                        " Right align the following items
-" set statusline+=ascii:\ %3b\ hex:\ 0x%02B\ " ASCII and hex value of char under cursor
-" line length: %3l, column: %2c, percentage through file: %3p, total lines: %L
-" add ling length to statusline
-set statusline+=%S
-set statusline+=strwidth=%{strwidth(getline('.'))} 
-set statusline+=\ [%2v,\%P]
+" set showcmdloc=statusline       " show command in statusline 
+" set cmdheight=1                 " height of the command line
+" set pumheight=10
+set listchars=trail:¿,tab:→\
+set fillchars=
+set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
+set fillchars+=eob:\ ,		  " don't show end of buffer as a column of ~
+set fillchars+=stl:\ ,            " display spaces properly in statusline
+" signcolumn is default is auto
+" set signcolumn=yes
+" set signcolumn=no
 " }}}
 
-" fillchars control the appearance of folds
-set fillchars=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
-set fillchars+=eob:\                " don't show end of buffer as a column of ~
-set fillchars+=stl:\                " display spaces properly in statusline
+set autochdir                     " change directory to the file being edited
+set completeopt=menuone,noselect  " show menu even if there's only one match
+set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
+set iskeyword+=-                  " treat hyphens as part of a word
+set report=0                      " display how many replacements were made
+set shortmess+=A                  " avoid 'hit-enter' prompts
+set softtabstop=4 shiftwidth=4    " don't change tabstop!
+set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
+set wildmenu                      " just use the default wildmode with this setting
 
-" listchars control the appearance of whitespace
-set listchars=trail:¿,tab:→\
-
+" set foldopen+=insert,jump        " open folds when jumping to them or entering insert mode
+" set shiftround
 " set isfname+={,},\",\<,\>,(,),[,],\:
 
-augroup vimrc
+let g:mapleader = ' '
+let g:maplocalleader = '\'
+
+nnoremap <tab> :bnext<CR>
+nnoremap <s-tab> :bprevious<CR>
+nnoremap <leader><tab> :b#<CR>
+nnoremap <C-q> :wqall<CR>
+nnoremap <leader>b :b <C-d>
+nnoremap <leader>c :echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')<CR>
+nnoremap <leader>e :e!<CR>
+nnoremap <leader>f :find<space>
+nnoremap <leader>h :set hlsearch!<CR>
+nnoremap <leader>m :make<CR>
+nnoremap <leader>q :call utils#smartQuit()<CR>
+nnoremap <leader>r :source $MYVIMRC<CR>
+nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
+nnoremap <leader>v :e $MYVIMRC<CR>
+nnoremap <leader>w :w<CR>
+nnoremap <leader>x :!./%<CR>
+vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
+
+" TODO: why not " :echo synIDattr(synID(line("."), col("."), 1), "name")
+" run current line
+" nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
+" yank selection into command line
+vnoremap <leader>c y:<C-r>"<C-b>
+
+" more keymaps {{{1
+" better escape {{{2
+inoremap jk <esc>
+inoremap kj <esc>
+vnoremap jk <esc>
+vnoremap kj <esc>
+
+" indent/dedent visual block with < and > {{{2
+nnoremap > V`]>
+nnoremap < V`]<
+
+" toggle settings {{{2
+nnoremap <leader>sh  :set hlsearch!<CR>
+nnoremap <leader>sl  :set list!<CR>
+nnoremap <leader>sn  :set number!<CR>
+nnoremap <leader>sr  :set relativenumber!<CR>
+nnoremap <leader>sw  :set wrap!<CR>
+nnoremap <leader>ss  :set spell!<CR>
+nnoremap <leader>scl :set cursorline!<CR>
+nnoremap <leader>scc :set cursorcolumn!<CR>
+nnoremap <leader>sfc :let &foldcolumn  = (&foldcolumn  == 0 ? 1 : 0)<CR>
+nnoremap <leader>st  :let &showtabline = (&showtabline == 2 ? 0 : 2)<CR>
+nnoremap <leader>ss  :let &laststatus  = (&laststatus  == 2 ? 0 : 2)<CR>
+
+" better completion {{{2
+inoremap <silent> <localleader>o <C-x><C-o>
+inoremap <silent> <localleader>f <C-x><C-f>
+inoremap <silent> <localleader>i <C-x><C-i>
+inoremap <silent> <localleader>l <C-x><C-l>
+inoremap <silent> <localleader>n <C-x><C-n>
+inoremap <silent> <localleader>t <C-x><C-]>
+inoremap <silent> <localleader>u <C-x><C-u>
+
+" no more fat fingers! {{{2
+cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
+
+" end keymaps }}}1
+
+augroup vimrc " {{{1
   autocmd!
-  " each of the following can be a standalone file in
-  " ~/.vim/after/ftplugin/{filetype}.vim
   autocmd FileType c          setlocal cindent noexpandtab
-  autocmd FileType cpp,python setlocal cindent shiftwidth=4 softtabstop=4 expandtab
-  autocmd FileType vim        setlocal softtabstop=4 fdm=marker
+  autocmd FileType cpp,python setlocal cindent expandtab
+  autocmd FileType vim        setlocal fdm=marker
 
   " quit special buffers with 'q'
-  autocmd FileType help,man,qf,fugitive,ale-info silent! nnoremap <silent> <buffer> q :<C-U>close<CR> | set nobuflisted
+  autocmd FileType help,man,qf,fugitive,ale-info,netrw 
+	      \ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
+	      \ | set nobuflisted
+
   " automatically quit cmd window
   autocmd CmdwinEnter * quit
-  " When editing a file, always jump to the last known cursor position.
+augroup END
+
+augroup jumpToLastPosition " {{{1
+  autocmd!
   autocmd BufReadPost *
         \ let line = line("'\"")
         \ | if line >= 1 && line <= line("$")
@@ -147,17 +203,16 @@ augroup vimrc
 augroup END
 
 " automatically add shebangs to new files based on filetype
-augroup shebangs
+augroup shebangs " {{{1
   autocmd!
-  autocmd BufNewFile *.sh call utils#SheBangs('')
-  autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
-  autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
-  autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
+  " autocmd BufNewFile *.sh call utils#SheBangs('')
+  " autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
+  " autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
+  " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
 augroup END
 
-
-" plugins are saved in ~/.vim/pack/plugins/opt by default
-" so we have to manually `packadd!` them
+" plugins {{{1
+" save in ~/.vim/pack/*/opt then packadd! them
 packadd! ale
 packadd! copilot.vim
 
@@ -169,6 +224,9 @@ packadd! vim-scriptease
 packadd! vim-surround
 packadd! vim-tbone
 packadd! vim-vinegar
+" packadd! vim-apathy
+" TODO delete this and figure out apathy
+set path+=~/.vim/**,~/cbmf/** 
 " packadd! vim-unimpaired
 " packadd! vim-obsession
 " packadd! vim-fugitive
@@ -178,135 +236,7 @@ packadd! vim-vinegar
 " packadd! context.vim
 " packadd! tmux-complete.vim
 
-" keymaps {{{
-let g:mapleader = ' '
-let g:maplocalleader = ','
-
-" Which-key setup {{{
-nnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
-vnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
-" nnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-" vnoremap <silent> <localleader> :<c-u>WhichKey  ','<CR>
-call which_key#register('<Space>', "g:which_key_map")
-
-" Create menus based on existing mappings. These must be manually
-" updated, but at least we don't rely on which-key to map our keys.
-let g:which_key_map = {}
-
-" autocmd! FileType which_key
-" autocmd  FileType which_key set laststatus=0 noshowmode noruler
-"   \| autocmd BufLeave <buffer> set laststatus=2 showmode
-" }}}
-
-" quick escape
-inoremap jk <esc>
-inoremap kj <esc>
-vnoremap jk <esc>
-vnoremap kj <esc>
-
-" ctrl + char
-nnoremap <C-q> :wqall<CR>
-nnoremap <leader>w :w<CR>
-nnoremap <leader>r :source $MYVIMRC<CR>
-nnoremap <leader>q :call utils#smartQuit()<CR>
-nnoremap <leader>h :set hlsearch!<CR>
-vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
-
-" info in normal mode
-nnoremap ? :call utils#getInfo()<CR>
-nnoremap <leader>v :execute 'verbose set ' . <cword> . '?'
-nnoremap <leader>c :echo synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')<CR>
-
-" edit vim config files {{{
-nnoremap <leader>ev :e $MYVIMRC<CR>
-nnoremap <leader>ec :find scheme.vim<CR>
-nnoremap <leader>ek :find _keymaps.vim<CR>
-nnoremap <leader>ep :find after/plugin/settings.vim<CR>
-nnoremap <leader>es :UltiSnipsEdit<CR>
-
-let g:which_key_map.e = { 'name' : '+edit',
-      \ 'v' : 'edit vimrc',
-      \ 'c' : 'edit colorscheme',
-      \ 'd' : 'edit display settings',
-      \ 'k' : 'edit keymaps',
-      \ 'p' : 'edit plugin settings',
-      \ 's' : 'edit snippets',
-      \ }
-"}}}
-" toggle settings {{{
-nnoremap <leader>sh :set hlsearch!<CR>
-nnoremap <leader>sl :set list!<CR>
-nnoremap <leader>sn :set number!<CR>
-nnoremap <leader>sr :set relativenumber!<CR>
-nnoremap <leader>sw :set wrap!<CR>
-nnoremap <leader>ss :set spell!<CR>
-nnoremap <leader>scl :set cursorline!<CR>
-nnoremap <leader>scc :set cursorcolumn!<CR>
-nnoremap <leader>st :let &showtabline = (&showtabline == 2 ? 0 : 2)<CR>
-nnoremap <leader>ss :let &laststatus = (&laststatus == 2 ? 0 : 2)<CR>
-
-let g:which_key_map.s = { 'name' : '+set/toggle',
-      \ 'h' : 'highlight search',
-      \ 'l' : 'list',
-      \ 'n' : 'number',
-      \ 'r' : 'relative number',
-      \ 'w' : 'wrap',
-      \ 's' : 'spell',
-      \ 'cl' : 'cursor line',
-      \ 'cc' : 'cursor column',
-      \ }
-" }}}
-
-" indent/dedent visual block
-nnoremap > V`]>
-nnoremap < V`]<
-
-" buffers and windows
-nnoremap <tab>   :bnext<CR>
-nnoremap <s-tab> :bprevious<CR>
-nnoremap <leader><tab> :b#<CR>
-
-" file operations
-nnoremap <leader>fa :argadd <c-r>=fnameescape(expand('%:p:h'))<CR>/*<C-d>
-nnoremap <leader>ff :find<space>
-nnoremap <leader>fe :e!<CR>
-nnoremap <leader>fm :make<CR>
-nnoremap <leader>fx :!./%<CR>
-nnoremap <leader>fb :b <C-d>
-nnoremap <leader>ft :TTags<space>*<space>*<space>.<CR>
-" +file/find which-key setup {{{
-let g:which_key_map.f = { 'name' : '+file/find',
-      \ 'a' : 'add arg',
-      \ 'f' : 'find file (in path)',
-      \ 'e' : 'file edit (force reload)',
-      \ 'm' : 'file make',
-      \ 'x' : 'file execute',
-      \ 'b' : 'find buffer',
-      \ 't' : 'find tag',
-      \ }
-" }}}
-
-" better completion
-inoremap <silent> <localleader>o <C-x><C-o>
-inoremap <silent> <localleader>f <C-x><C-f>
-inoremap <silent> <localleader>i <C-x><C-i>
-inoremap <silent> <localleader>l <C-x><C-l>
-inoremap <silent> <localleader>n <C-x><C-n>
-inoremap <silent> <localleader>t <C-x><C-]>
-inoremap <silent> <localleader>u <C-x><C-u>
-
-" no more fat fingers!
-cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
-cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'wq' : 'Q'
-cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'wq' : 'q'
-" TODO ignore  when we open the command line
-
-" run current line
-" nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
-" }}}
-
-" romainl gists {{{
-"
+" romainl gists {{{1
 " https://gist.github.com/romainl/3e0cb99343c72d04e9bc10f6d76ebbef
 " return to the mark with ` plus letter
 augroup AutomaticMarks 
@@ -355,7 +285,7 @@ augroup END
 " https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
 " TODO: quicklist manipulation
 " https://github.com/romainl/vim-qlist
-" }}}
+
 " defaults.vim {{{
 " Do not recognize octal numbers for Ctrl-A and Ctrl-X
 set nrformats-=octal
@@ -374,7 +304,7 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
         \ | wincmd p | diffthis
 endif
-" }}}
+
 " ignore these files and directories {{{
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
 set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
@@ -386,10 +316,11 @@ set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
 set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
 set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
-" }}}
-" set nomodeline {{{
+
+" set nomodeline {{{1
 " Modelines have historically been a source of security vulnerabilities. 
 " TODO: disable modelines and use securemodelines
 " http://www.vim.org/scripts/script.php?script_id=1876
-" }}}
+" }}}1
 " vim: ft=vim: fdm=marker:
+

@@ -1,34 +1,28 @@
+function! utils#lol() abort
+  echom ">^.^<" | redraw
+endfunction
+
 function! utils#smartQuit() abort
+    " if we have a split window, try to preserve it
     if winnr('$') > 1
-        bnext | 1wincmd w | q
+        bnext | 1wincmd w | q!
     else
         if len(filter(range(1, bufnr('$')), 'buflisted(v:val)')) > 1
             bnext | bd# | 1wincmd w
         else
-            quit
+            quit!
         endif
     endif
 endfunction
 
-function! utils#lol () abort
-  echom ">^.^<" | redraw
+" helpers for selection
+function! s:v_sel() abort
+    normal! gv"xy
+    return getreg('x')
 endfunction
 
-function! utils#getInfo()
-    let l:word = expand('<cword>')
-    try
-        execute 'ptag' l:word
-    catch
-        try
-            execute 'help' l:word
-        catch
-            try
-                execute 'Man' l:word
-            catch
-                echo "No info found for " . l:word
-            endtry
-        endtry
-    endtry
+function utils#test()
+    echom s:v_sel()
 endfunction
 
 function! utils#replaceSelection() abort
@@ -47,5 +41,18 @@ function! utils#SheBangs(shebang)
     execute "normal! Xa"
 endfunction
 
+function! utils#Hyperlink() abort
+    normal! gv"xy
+    let selection = getreg('x')
+  echom l:selection
+  " if l:selection =~ '^https\?://'  " Check if selection starts with http or https
+  "   execute "normal! c[`M](<C-r>\")mM"
+  " else
+  "   execute "normal! c[<C-r>\"]()"
+  " endif
+endfunction
+
+" Map the function to <leader>k in visual mode
+vnoremap <leader>k :<C-U>call markdown#Hyperlink()<CR>
 
 " vim:foldmethod=marker:foldmarker=function!,endfunction

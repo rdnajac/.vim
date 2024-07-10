@@ -17,8 +17,9 @@ let s:bg = s:black
 let s:bg_alt = s:eigengrau
 
 let s:fg = '#c0caf5'
-let s:fg_alt = '#3b4261'
+" let s:fg_alt = '#3b4261'
 let s:comment = '#565f89'
+let s:fg_alt = s:comment 
 let s:fg_dark = '#a9b1d6'
 
 let s:tokyonight = '#24283b'
@@ -65,6 +66,7 @@ call s:Highlight('Normal', s:white, s:bg, '')
 call s:Highlight('Comment', s:comment, 'NONE', 'italic')
 
 call s:Highlight('LineNr', s:fg_alt, s:bg, '')
+" MsgArea = the command line area
 call s:Highlight('MsgArea', s:neongreen, s:bg, '') 
 hi LineNr guifg=#3b4261 guibg=s:bg 
 
@@ -88,7 +90,6 @@ hi! link CursorLineFold FoldColumn
 hi! link LineNrAbove NONE
 hi! link LineNrBelow NONE
 
-" MsgArea = the command line area
 call s:Highlight('MoreMsg', s:blue, s:bg, '')
 call s:Highlight('ModeMsg', s:yellow, s:bg, '')
 call s:Highlight('Pmenu', s:fg, s:black, '')
@@ -115,9 +116,10 @@ call s:Highlight('SpellRare', s:teal, 'NONE', 'undercurl')
 call s:Highlight('SpellLocal', s:blue2, 'NONE', 'undercurl')
 call s:Highlight('StatusLine', s:neongreen, s:black, 'bold')
 call s:LinkGroups('StatusLine', 'StatusLineTerm', 'StatusLineNC', 'StatusLineTermNC')
-call s:Highlight('TabLine', s:fg_alt, s:black, '')
-call s:Highlight('TabLineSel', s:blue, s:bg, 'bold')
-call s:Highlight('TabLineFill', s:bg, 'NONE', '')
+call s:Highlight('TabLine', s:fg_alt, 'NONE', '')
+call s:Highlight('TabLineSel', s:neongreen, 'NONE', 'bold')
+call s:Highlight('TabLineFill', 'NONE', s:bg, '')
+
 call s:Highlight('Title', s:blue, s:bg, 'bold')
 call s:Highlight('ToolbarLine', s:chambray, s:bg, '')
 call s:Highlight('ToolbarButton', s:cyan, s:bg, '')
@@ -163,7 +165,7 @@ call s:LinkGroups('Special', 'Tag', 'SpecialChar', 'Delimiter', 'SpecialComment'
 call s:Highlight('NonText', s:chambray, s:bg, '')
 
 " Messages
-call s:Highlight('Error', s:red, 'NONE', '')
+call s:Highlight('Error', 'NONE', s:red, '')
 call s:Highlight('Todo', s:black, s:yellow, 'bold')
 
 call s:Highlight('Added', s:green1, s:tokyonight, '')
