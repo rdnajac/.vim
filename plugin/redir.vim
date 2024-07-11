@@ -24,6 +24,7 @@ function! Redir(cmd, rng, start, end)
     endif
     vnew
     let w:scratch = 1
+    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
     silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
     call setline(1, output)
 endfunction
