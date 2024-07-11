@@ -55,3 +55,6 @@
 [submodule "pack/vimfect/opt/vim-tmux-navigator"]
 	path = pack/vimfect/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
+[submodule "pack/vimfect/opt/tabular"]
+	path = pack/vimfect/opt/tabular
+	url = https://github.com/godlygeek/tabular
