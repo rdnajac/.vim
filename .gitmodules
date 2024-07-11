@@ -1,9 +1,6 @@
 [submodule "pack/vimfect/copilot.vim"]
 	path = pack/vimfect/opt/copilot.vim
 	url = https://github.com/github/copilot.vim
-[submodule "pack/vimfect/vim-which-key"]
-	path = pack/vimfect/start/vim-which-key
-	url = git@github.com:rdnajac/vim-which-key.git
 [submodule "pack/vimfect/ale"]
 	path = pack/vimfect/opt/ale
 	url = https://github.com/dense-analysis/ale
@@ -58,3 +55,9 @@
 [submodule "pack/vimfect/opt/tabular"]
 	path = pack/vimfect/opt/tabular
 	url = https://github.com/godlygeek/tabular
+[submodule "pack/vimfect/opt/markdown-preview.nvim"]
+	path = pack/vimfect/opt/markdown-preview.nvim
+	url = https://github.com/iamcco/markdown-preview.nvim
+[submodule "pack/vimfect/opt/vim-markdown-gfm"]
+	path = pack/vimfect/opt/vim-markdown-gfm
+	url = git@github.com:rdnajac/vim-markdown-gfm.git
