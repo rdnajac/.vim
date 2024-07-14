@@ -1,3 +1,5 @@
+" CAPS LOCK MAPS TO CTRL
+" WHEN IN DOUBT, PINKY OUT
 " rdnajac's vimrc {{{
 if !has('nvim')
     " sensible.vim {{{
@@ -64,7 +66,7 @@ if !has('nvim')
 	set ttimeout
 	set ttimeoutlen=100
     endif
-    set timeoutlen=300		  " time for a mapped sequence to complete
+    set timeoutlen=420		  " ms for a mapped sequence to complete
 " }}}
 else
     " neovim-specific settings {{{
@@ -113,20 +115,20 @@ set wildmenu                      " just use the default wildmode with this sett
 " set shiftround
 " set isfname+={,},\",\<,\>,(,),[,],\:
 
+nnoremap <C-q> :call utils#smartQuit()<CR>
+
 let g:mapleader      = ' '
 let g:maplocalleader = ','
 
 nnoremap <tab> :bnext<CR>
 nnoremap <s-tab> :bprevious<CR>
 nnoremap <leader><tab> :b#<CR>
-nnoremap <C-q> :wqall<CR>
 nnoremap <leader>b :b <C-d>
 nnoremap <leader>c :call info#HighlightGroup()<CR>
 nnoremap <leader>e :e!<CR>
-nnoremap <leader>f :find<space>
+nnoremap <leader>f :find<space> **/
 nnoremap <leader>h :set hlsearch!<CR>
 nnoremap <leader>m :make<CR>
-nnoremap <leader>q :call utils#smartQuit()<CR>
 nnoremap <leader>r :source $MYVIMRC<CR>
 nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
 nnoremap <leader>v :e $MYVIMRC<CR>
@@ -138,32 +140,48 @@ vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
 " nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
 " yank selection into command line
 vnoremap <leader>c y:<C-r>"<C-b>
-
-" more keymaps {{{1
 " better escape with jk/kj {{{2
-noremap jk <esc>
-noremap kj <esc>
-" inoremap jk <esc>
-" inoremap kj <esc>
-" vnoremap jk <esc>
-" vnoremap kj <esc>
+inoremap jk <esc>
+inoremap kj <esc>
+vnoremap jk <esc>
+vnoremap kj <esc>
 
 " indent/dedent in normal mode with < and > {{{2
 nnoremap > V`]>
 nnoremap < V`]<
 
 " toggle settings {{{2
+" helper functions {{{3
+function! ToggleTabline() abort
+    set &showtabline = &showtabline == 2 ? 0 : 2
+endfunction
+
+function! ToggleFoldColumn() abort
+    set &foldcolumn = &foldcolumn == 0 ? 1 : 0
+endfunction
+
+function! ToggleStatusline() abort
+    set &laststatus = &laststatus == 2 ? 0 : 2
+endfunction
+
+function! ToggleColorColumn() abort
+    " let &colorcolumn = &colorcolumn == '' ? '+1' : ''
+    let &colorcolumn = &colorcolumn == '' ? '81' : ''
+    " TODO: check if textwidth is set and use that if available ie '+1'
+endfunction 
+
+" }}}
 nnoremap <leader>sh  :set hlsearch!<CR>
 nnoremap <leader>sl  :set list!<CR>
 nnoremap <leader>sn  :set number!<CR>
 nnoremap <leader>sr  :set relativenumber!<CR>
 nnoremap <leader>sw  :set wrap!<CR>
 nnoremap <leader>ss  :set spell!<CR>
-nnoremap <leader>scl :set cursorline!<CR>
-nnoremap <leader>scc :set cursorcolumn!<CR>
-nnoremap <leader>sfc :let &foldcolumn  = (&foldcolumn  == 0 ? 1 : 0)<CR>
-nnoremap <leader>st  :let &showtabline = (&showtabline == 2 ? 0 : 2)<CR>
-nnoremap <leader>ss  :let &laststatus  = (&laststatus  == 2 ? 0 : 2)<CR>
+nnoremap <leader>sc  :call ToggleColorColumn()<CR>
+nnoremap <leader>sf  :call ToggleFoldColumn()<CR>
+nnoremap <leader>st  :call ToggleTabline()<CR>
+nnoremap <leader>i   :call ToggleTabline()<CR>
+nnoremap <leader>ss  :call ToggleStatusline()<CR>
 
 " better completion {{{2
 inoremap <silent> <localleader>o <C-x><C-o>
@@ -175,9 +193,8 @@ inoremap <silent> <localleader>t <C-x><C-]>
 inoremap <silent> <localleader>u <C-x><C-u>
 
 " no more fat fingers! {{{2
-cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
-
-" end keymaps }}}1
+cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'xall' : 'X'
+cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'xall' : 'X'
 
 augroup vimrc " {{{1
     autocmd!
@@ -201,7 +218,7 @@ augroup END
 augroup specialBuffers " {{{1
     autocmd!
     " quit with 'q'
-    autocmd FileType help,qf,netrw,man,ale-info
+    autocmd FileType help,qf,netrw,man,ale-info,which_key
 		\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
 		\ | set nobuflisted
 		\ | setlocal noruler
@@ -230,8 +247,10 @@ packadd! vim-surround
 packadd! vim-tbone
 packadd! vim-vinegar
 " packadd! vim-apathy
-" TODO delete this and figure out apathy
-set path+=~/.vim/**,~/cbmf/** 
+set path-=/usr/include		    " add this back for C/C++ development           
+set path+=$VIMRUNTIME/**
+set path+=$HOME/.vim/**
+set path+=$HOME/cbmf/**
 " packadd! vim-unimpaired
 " packadd! vim-obsession
 " packadd! vim-fugitive
@@ -245,7 +264,8 @@ packadd! vim-tmux-navigator
 
 " romainl gists {{{1
 " https://gist.github.com/romainl/3e0cb99343c72d04e9bc10f6d76ebbef
-" return to the mark with ` plus letter
+" Automatically set marks for certain filetypes {{{
+" Jump back to the mark with backtick followed by the mark letter
 augroup AutomaticMarks 
     autocmd!
     autocmd BufLeave vimrc        normal! mV
@@ -253,11 +273,13 @@ augroup AutomaticMarks
     autocmd BufLeave *.md         normal! mM
     autocmd BufLeave *.sh         normal! mS
 augroup END
+" }}}
 
-" Slightly more intuitive gt/gT (may need some unlearning to get used to)
+" Slightly more intuitive gt/gT {{{
 " https://gist.github.com/romainl/0f589e07a079ea4b7a77fd66ef16ebee
 " nnoremap <expr> gt ":tabnext +" . v:count1 . '<CR>'
 " nnoremap <expr> gT ":tabnext -" . v:count1 . '<CR>'
+" }}}
 
 " gq wrapper that:
 " - tries its best at keeping the cursor in place

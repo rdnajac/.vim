@@ -1,10 +1,6 @@
-
+finish
 let s:bufnr = -1
 let s:winnr = -1
-
-if !hlexists('WhichKeyFloating')
-  hi default link WhichKeyFloating Pmenu
-endif
 
 function! s:hide_cursor() abort
   " Hides/restores cursor at the start/end of the guide, works in vim

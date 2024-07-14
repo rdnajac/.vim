@@ -1,22 +1,57 @@
 " .vim/after/ftplugin/markdown.vim
-" setlocal foldlevel=3
+setlocal spell spelllang=en_us 
+" setlocal textwidth=80
 
-" snippets {{{1
-" headers {{{2
-inoremap <buffer> `1 #<Space>
-inoremap <buffer> `2 ##<Space>
-inoremap <buffer> `3 ###<Space>
-inoremap <buffer> `4 ####<Space>
-inoremap <buffer> `5 #####<Space>
-inoremap <buffer> `6 ######<Space>
+packadd! tabularize
+" https://gist.github.com/287147
+inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
-" fenced code blocks {{{2
-inoremap <buffer> `` ```<CR><CR>```<Up>
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+
+if exists(":Tabularize")
+    " map local leader t to tabularize on |
+    nmap <buffer> <localleader>t :Tabularize <Bar><CR>
+    vmap <buffer> <localleader>t :Tabularize <Bar><CR>
+endif
+
+" keymaps {{{1
+
+" 'snippets' {{{2
+" headers {{{3
+inoremap <buffer> <localleader>1 #<Space>
+inoremap <buffer> <localleader>2 ##<Space>
+inoremap <buffer> <localleader>3 ###<Space>
+inoremap <buffer> <localleader>4 ####<Space>
+inoremap <buffer> <localleader>5 #####<Space>
+inoremap <buffer> <localleader>6 ######<Space>
+
+" fenced code blocks {{{3
 inoremap <buffer> `c ```c<CR><CR>```<Up>
 inoremap <buffer> `p ```python<CR><CR>```<Up>
 inoremap <buffer> `s ```sh<CR><CR>```<Up>
 inoremap <buffer> `t ```text<CR><CR>```<Up>
 inoremap <buffer> `v ```vim<CR><CR>```<Up>
+
+" fold comments {{{3
+inoremap <buffer> <localleader>fo <!-- {{{ -->
+inoremap <buffer> <localleader>fc <!-- }}} -->
+
+
+inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
+
+" If you insist on writing it out and still getting it wrong...
+" inoremap <buffer> <--! <!--
+
 
 " }}}1
 function! JumpToNextHeading(direction, count) " {{{
@@ -68,8 +103,10 @@ setlocal foldtext=s:MyFoldText()
 setlocal foldexpr=s:MyFoldLevel()
 
 " markdown preview 
+" packadd! markdown-preview.nvim
+" moved to start
 " compile markdown preview
 " call mkdp#util#install()
-" let g:mkdp_page_title = '${name}'
-"nnoremap <leader>md :MarkdownPreview<cr>
+let g:mkdp_page_title = '${name}'
+nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
 

@@ -13,25 +13,6 @@ let g:netrw_altv=1          " open splits to the right
 xunmap gx
 nunmap gx
 nnoremap <silent> <leader>` :Lexplore<CR>
-" add tpope's vim-vinegar plugin
-packadd vim-vinegar
-" it helps to be explicit about what is being loaded
-" }}}
-" which-key {{{
-nnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
-vnoremap <silent> <leader>      :<c-u>silent WhichKey '<Space>'<CR>
-nnoremap <silent> <localleader> :<c-u>silent WhichKey ','<CR>
-vnoremap <silent> <localleader> :<c-u>silent WhichKey ','<CR>
-call which_key#register('<Space>', "g:which_key_map")
-
-" Create menus based on existing mappings. These must be manually
-" updated, but at least we don't rely on which-key to map our keys.
-" let g:which_key_map = {}
-
-autocmd! FileType which_key
-autocmd  FileType which_key set laststatus=0 noshowmode noruler
-  \| autocmd BufLeave <buffer> set laststatus=2 showmode
-
 " }}}
 " copilot {{{
 let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]
@@ -68,15 +49,13 @@ function! LinterStatus() abort
 endfunction
 " set statusline=%{LinterStatus()w  w}
 " }}}
-" ALE keymaps {{{
-nnoremap <leader>ai :ALEInfo<CR>
-nnoremap <leader>af :ALEFix<CR>
-nnoremap <leader>al :ALELint<CR>
-nnoremap <leader>an :ALENext<CR>
-nnoremap <leader>ap :ALEPrevious<CR>
-nnoremap <leader>aq :ALEDetail<CR>
-nnoremap <leader>ad :ALEGoToDefinition<CR>
-nnoremap <leader>ar :ALEFindReferences<CR>
+nnoremap <localleader>ai :ALEInfo<CR>
+nnoremap <localleader>af :ALEFix<CR>
+nnoremap <localleader>al :ALELint<CR>
+nnoremap <localleader>an :ALENext<CR>
+nnoremap <localleader>ap :ALEPrevious<CR>
+nnoremap <localleader>aq :ALEDetail<CR>
+nnoremap <localleader>ad :ALEGoToDefinition<CR>
+nnoremap <localleader>ar :ALEFindReferences<CR>
+nnoremap <localleader>ad :ALEDisable<CR>
 " }}}
-" }}}
-" vim: fdm=marker

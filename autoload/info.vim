@@ -6,3 +6,7 @@ function! info#HighlightGroup() abort
 " TODO print a more informative message
 " TODO: popup window?
 endfunction
+
+function! info#SyntaxGroup() abort
+	echo synIDtrans(synID(line('.'), col('.'), 0))
+endfunction

@@ -58,6 +58,3 @@
 [submodule "pack/vimfect/opt/markdown-preview.nvim"]
 	path = pack/vimfect/opt/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
-[submodule "pack/vimfect/opt/vim-markdown-gfm"]
-	path = pack/vimfect/opt/vim-markdown-gfm
-	url = git@github.com:rdnajac/vim-markdown-gfm.git

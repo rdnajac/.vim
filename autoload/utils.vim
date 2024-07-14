@@ -52,7 +52,5 @@ function! utils#Hyperlink() abort
   " endif
 endfunction
 
-" Map the function to <leader>k in visual mode
-vnoremap <leader>k :<C-U>call markdown#Hyperlink()<CR>
 
 " vim:foldmethod=marker:foldmarker=function!,endfunction

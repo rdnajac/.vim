@@ -1,4 +1,4 @@
-" Name:         scheme 
+" Name:         scheme
 " Description:  vim colorscheme inspired by tokyonight
 " Author:       rdnajac
 
@@ -19,7 +19,7 @@ let s:bg_alt = s:eigengrau
 let s:fg = '#c0caf5'
 " let s:fg_alt = '#3b4261'
 let s:comment = '#565f89'
-let s:fg_alt = s:comment 
+let s:fg_alt = s:comment
 let s:fg_dark = '#a9b1d6'
 
 let s:tokyonight = '#24283b'
@@ -33,6 +33,7 @@ let s:cyan = '#14afff'
 let s:dark5 = '#737aa2'
 let s:green = '#9ece6a'
 let s:green1 = '#73daca'
+let s:pink= '#ff69ff'
 let s:magenta = '#bb9af7'
 let s:magenta2 = '#ff007c'
 let s:neongreen = '#39ff14'
@@ -67,8 +68,8 @@ call s:Highlight('Comment', s:comment, 'NONE', 'italic')
 
 call s:Highlight('LineNr', s:fg_alt, s:bg, '')
 " MsgArea = the command line area
-call s:Highlight('MsgArea', s:neongreen, s:bg, '') 
-hi LineNr guifg=#3b4261 guibg=s:bg 
+call s:Highlight('MsgArea', s:neongreen, s:bg, '')
+hi LineNr guifg=#3b4261 guibg=s:bg
 
 hi! link SpecialKey PreProc
 " ColorColumn
@@ -100,7 +101,7 @@ call s:LinkGroups('PmenuSel', 'PmenuKindSel', 'PmenuExtraSel')
 call s:Highlight('PmenuSbar', s:yellow, s:bg, '')
 call s:Highlight('PmenuThumb', s:dark5, s:bg, '')
 
-call s:Highlight('Question', s:green, s:bg, '')
+call s:Highlight('Question', s:pink, s:bg, '')
 call s:Highlight('SignColumn', s:fg_alt, s:bg, '')
 hi! link CursorLineSign SignColumn
 
@@ -120,6 +121,7 @@ call s:Highlight('TabLine', s:fg_alt, 'NONE', '')
 call s:Highlight('TabLineSel', s:neongreen, 'NONE', 'bold')
 call s:Highlight('TabLineFill', 'NONE', s:bg, '')
 
+
 call s:Highlight('Title', s:blue, s:bg, 'bold')
 call s:Highlight('ToolbarLine', s:chambray, s:bg, '')
 call s:Highlight('ToolbarButton', s:cyan, s:bg, '')
@@ -127,8 +129,8 @@ call s:Highlight('ToolbarButton', s:cyan, s:bg, '')
 call s:Highlight('VertSplit', s:yellow, s:bg, '')
 call s:Highlight('Visual', s:yellow, s:tokyonight, '')
 " VisualNOS
-call s:Highlight('WarningMsg', s:yellow, s:bg, '')
-call s:Highlight('WildMenu', s:yellow, 'NONE', '')
+call s:Highlight('WarningMsg', s:pink, s:bg, '')
+call s:Highlight('WildMenu', s:pink, s:neongreen, '')
 
 " extra
 hi! link CursorIM Cursor

@@ -1,6 +1,38 @@
 # .vim
 
 ```text
+./
+├── README.md
+├── after/                      # these files are sourced *after* vimrc
+│   ├── ftplugin/               # filetype-specific settings
+│   └── plugin/
+│       └── config.vim          # configuration for plugins
+├── autoload/
+│   ├── format.vim              # functions to format buffers
+│   └── utils.vim               # utility functions
+├── colors/
+│   └── scheme.vim              # color scheme
+├── cspell.json                 # tell cspell to use the hidden vim spellfile
+├── pack/
+│   └── vimfect/                # git submodules are installed here
+│       ├── opt/                # packages added (in vimrc) with `packadd!`
+│       └── start/              # packages run on startup
+├── plugin/
+│   └── commands.vim            # vim commands to call functions from autoload
+├── vimfect*                    # script to install plugins as git submodules
+└── vimrc                       # main configuration file
+```
+
+## cool stuff
+
+- https://github.com/changemewtf/no_plugins
+- https://github.com/romainl/idiomatic-vimrc
+- https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29
+- https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
+
+## version
+
+```text
 VIM - Vi IMproved 9.1 (2024 Jan 02, compiled May 09 2024 07:15:02)
 macOS version - arm64
 Included patches: 1-400
@@ -50,45 +82,6 @@ Compilation: clang -c -I. -Iproto -DHAVE_CONFIG_H -DMACOS_X -DMACOS_X_DARWIN -g 
 Linking: clang -o vim -lm -lncurses -lsodium -liconv -lintl -framework AppKit -L/opt/homebrew/opt/lua/lib -llua5.4 -mmacosx-version-min=14.2 -fstack-protector-strong -L/opt/homebrew/opt/perl/lib/perl5/5.38/darwin-thread-multi-2level/CORE -lperl -L/opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12/lib/python3.12/config-3.12-darwin -lpython3.12 -framework CoreFoundation -lruby.3.3 -L/opt/homebrew/Cellar/ruby/3.3.1/lib
 ```
 
-## `tree -L 3 -F`
-
-```text
-./
-├── README.md
-├── after/              # these files are sourced *after* vimrc
-│   ├── ftplugin/           # filetype-specific settings
-│   │   ├── markdown.vim
-│   │   ├── python.vim
-│   │   ├── sh.vim
-│   │   └── tex.vim
-│   └── plugin/             # configuration for plugins
-│       └── config.vim
-├── autoload/               # isolated functions
-│   ├── format.vim
-│   └── utils.vim
-├── colors/
-│   └── scheme.vim
-├── cspell.json             # this file tells cspell to use vim spellfile
-├── pack/
-│   └── vimfect/                # git submodules are installed here
-│       ├── opt/                    # packages added (in vimrc) with `packadd!`
-│       └── start/                  # packages run on startup
-├── plugin/
-│   └── commands.vim            # vim commands
-├── syntax/
-│   ├── markdown.vim
-│   └── vim.vim
-├── vimfect*        # script to install plugins as git submodules
-└── vimrc           # main configuration file
-```
-
-## cool stuff
-
-- https://github.com/changemewtf/no_plugins
-- https://github.com/romainl/idiomatic-vimrc
-- https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29
-- https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
-
-> "Any sufficiently complicated set of Vim plugins contains
-> an ad hoc, informally-specified, bug-ridden, slow implementation
-> of half of Vim's features." -- _robertmeta's tenth rule_.
+> Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-
+> specified, bug-ridden, slow implementation of half of Vim's features.\
+> -- _robertmeta's tenth rule_.
