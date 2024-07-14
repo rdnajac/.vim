@@ -4,9 +4,6 @@
 [submodule "pack/vimfect/ale"]
 	path = pack/vimfect/opt/ale
 	url = https://github.com/dense-analysis/ale
-[submodule "pack/plugins/opt/vim-eunuch"]
-	path = pack/vimfect/opt/vim-eunuch
-	url = https://github.com/tpope/vim-eunuch.git
 [submodule "pack/plugins/opt/vim-surround"]
 	path = pack/vimfect/opt/vim-surround
 	url = https://github.com/tpope/vim-surround.git
