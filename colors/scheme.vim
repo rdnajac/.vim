@@ -69,13 +69,12 @@ call s:Highlight('Comment', s:comment, 'NONE', 'italic')
 call s:Highlight('LineNr', s:fg_alt, s:bg, '')
 " MsgArea = the command line area
 call s:Highlight('MsgArea', s:neongreen, s:bg, '')
-hi LineNr guifg=#3b4261 guibg=s:bg
 
 hi! link SpecialKey PreProc
 " ColorColumn
 call s:Highlight('Conceal', s:dark5, s:bg, '')
 call s:Highlight('Cursor', s:fg, s:bg_alt, '')
-call s:Highlight('CursorLine', 'NONE', s:bg_alt, 'underlined')
+call s:Highlight('CursorLine', 'NONE', s:bg_alt, '')
 call s:Highlight('CursorLineNr', s:yellow, s:bg, 'bold')
 call s:Highlight('CursorColumn', s:white, s:bg_alt, '')
 " DiffAdd

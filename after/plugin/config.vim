@@ -1,5 +1,6 @@
 " .vim/after/plugin/config.vim
 " configurations for vim packages
+let g:vimtex_view_method='skim'
 " netrw {{{
 " configure the appearance of netrw so that it looks like
 " a project drawer but don't try clicking on anything!
@@ -24,9 +25,9 @@ let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]
 let g:ale_completion_enabled = 0
 "set omnifunc=ale#completion#OmniFunc
 let g:ale_linters_explicit = 1
-let g:ale_linters = { 'sh': ['shellcheck'], 'markdown': ['markdownlint', 'marksman'], 'python': ['ruff'], 'vim': ['vint'], }
+let g:ale_linters = { 'markdown': ['markdownlint', 'marksman'], 'python': ['ruff'], 'vim': ['vint'], }
 let g:ale_fixers_explicit = 1
-let g:ale_fixers = { 'markdown': ['prettier', 'remove_trailing_lines', 'trim_whitespace'], 'sh': ['shfmt', 'shellharden', 'remove_trailing_lines', 'trim_whitespace'], }
+let g:ale_fixers = { 'markdown': ['prettier', 'remove_trailing_lines', 'trim_whitespace'] }
 " ALE interface {{{
 hi clear ALEErrorSign
 hi clear ALEWarningSign
@@ -58,4 +59,3 @@ nnoremap <localleader>aq :ALEDetail<CR>
 nnoremap <localleader>ad :ALEGoToDefinition<CR>
 nnoremap <localleader>ar :ALEFindReferences<CR>
 nnoremap <localleader>ad :ALEDisable<CR>
-" }}}

@@ -1,39 +1,19 @@
-" CAPS LOCK MAPS TO CTRL
-" WHEN IN DOUBT, PINKY OUT
-" rdnajac's vimrc {{{
+" CAPS LOCK MAPS TO CTRL -- WHEN IN DOUBT, PINKY OUT
+" rdnajac's vimrc {{{1
 if !has('nvim')
-  " sensible.vim {{{
-  if &compatible                  " technically, vim is always incompatible when a
-    set nocompatible              " vimrc is present, but let's handle the edge case
-  endif                           " when vim is run with the -u flag
-
-  if has('langmap') && exists('+langremap') && &langremap
-    set nolangremap  " Disable a legacy behavior that can break plugin maps.
-  endif
-
-  if !(exists('g:did_load_filetypes') && exists('g:did_load_ftplugin') && exists('g:did_indent_on'))
-    filetype plugin indent on
-  endif
-
-  if has('syntax') && !exists('g:syntax_on')
-    syntax enable
-  endif
-
-  " Correctly highlight $() and other modern affordances in filetype=sh.
-  " if !exists('g:is_posix') && !exists('g:is_bash') && !exists('g:is_kornshell') && !exists('g:is_dash')
-  "   let g:is_posix = 1
-  " endif
-  " Load matchit.vim, but only if the user hasn't installed a newer version.
-  if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
-    runtime! macros/matchit.vim
-  endif
-  " Enable the :Man command shipped inside Vim's man filetype plugin.
-  if exists(':Man') != 2 && !exists('g:loaded_man') && &filetype !=? 'man' && !has('nvim')
-    runtime ftplugin/man.vim
-  endif
-  " }}}
   set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
-  scriptencoding utf-8            " see `:h :scriptencoding`
+  scriptencoding utf-8
+  
+  " vim with a vimrc is always incompatible, but let's handle edge cases
+  if &compatible | set nocompatible | endif                           
+
+  " the following "sensible.vim" options have had their include guards removed
+  set nolangremap		  " disable a legacy behavior that can break plugin maps
+  filetype plugin indent on       " enable filetype detection, plugins, and indentation
+  syntax enable                   " source $VIMRUNTIME/syntax/syntax.vim
+  runtime! macros/matchit.vim     " enable % to match more than just parens
+  runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
+  
   set mouse=a                     " wait, that's illegal
   set hidden                      " enable background buffers
   set autoindent smarttab         " enable auto-indent and smart tabbing
@@ -42,93 +22,108 @@ if !has('nvim')
   set formatoptions+=j            " delete comment character when joining lines
   " set formatoptions-=o          " don't continue comments when pressing 'o'
   set hlsearch incsearch          " highlighted, incremental search
-  set swapfile backup undofile    " {{{
-  function! s:MkdirIfNotExists(dir) abort " {{{
-    if !isdirectory(a:dir)
-      call mkdir(a:dir, 'p', 0700)
-    endif
-  endfunction " }}}
-  let &backupdir = expand('~/.vim/.backup')
-  let &directory = expand('~/.vim/.swap')
-  set undodir=~/.vim/.undo
-
-  call s:MkdirIfNotExists(&backupdir)
-  call s:MkdirIfNotExists(&directory)
-  call s:MkdirIfNotExists(&undodir)
-  set spellfile=~/.vim/.spell/en.utf-8.add
-  set viminfo='10000,n~/.vim/.viminfo
-  set verbosefile=~/.vim/.vimlog.txt
-  set clipboard=unnamed
-  " }}}
-  " performance {{{
-  set updatetime=100              " used for CursorHold autocommands
-  if &ttimeoutlen == -1
-    set ttimeout
-    set ttimeoutlen=100
-  endif
   set timeoutlen=420		  " ms for a mapped sequence to complete
-" }}}
+  set updatetime=100              " used for CursorHold autocommands
+  
+  if &ttimeoutlen == -1 | set ttimeout ttimeoutlen=100 | endif
+
+  " set up vim home directory {{{2
+  let s:vim_home = expand('$HOME/.vim/')
+  " configure options for viminfo 
+  " set viminfo=
+  
+  set undofile swapfile backup
+  let &undodir     = s:vim_home . '.undo//'
+  let &directory   = s:vim_home . '.swap//'
+  let &backupdir   = s:vim_home . '.backup//'
+  let &viminfofile = s:vim_home . '.viminfo'
+  let &spellfile   = s:vim_home . '.spell/en.utf-8.add'
+  " let &verbosefile = s:vim_home . '.vimlog.txt'
+
+  if !isdirectory(&undodir)   | call mkdir(&undodir,   'p', 0700) | endif
+  if !isdirectory(&directory) | call mkdir(&directory, 'p', 0700) | endif
+  if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p', 0700) | endif
+  " }}}2
+  " clipboard settings {{{2
+  set clipboard=unnamed
 else
-  " neovim-specific settings {{{
   set clipboard=unnamedplus     
-  " }}}
 endif
-" }}}
-" display settings {{{
+
+" display settings {{{1
+
 set termguicolors
 silent! color scheme
 
+set cursorline                    " highlight the current line
 set lazyredraw                    " don't redraw the screen while executing macros, etc.
 set nowrap                        " don't wrap lines by default
 set linebreak                     " if we have to wrap lines, don't split words
 set number relativenumber         " show (relative) line numbers
 set numberwidth=3                 " line number column padding
 set showmatch                     " highlight matching brackets
-set cursorline                    " highlight the current line
+set pumheight=10                  " limit the number of items in a popup menu
 set splitbelow splitright         " where to open new splits by default
 set scrolloff=4 sidescrolloff=0   " scroll settings
-set showcmd
+set showcmd                       " show the command being typed
 " set showcmdloc=statusline       " show command in statusline 
 " set cmdheight=1                 " height of the command line
-" set pumheight=10
-set listchars=trail:¿,tab:→\
-set fillchars=
-set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
+set listchars=trail:¿,tab:→\      " show trailing whitespace and tabs
+set fillchars=                    " reset fillchars
 set fillchars+=eob:\ ,		  " don't show end of buffer as a column of ~
 set fillchars+=stl:\ ,            " display spaces properly in statusline
+
 " signcolumn is default is auto
 " set signcolumn=yes
 " set signcolumn=no
-" }}}
 
+" fold settings {{{2
+set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
+set foldmethod=marker		  " fold based on markers (default: {{{,}}})
+set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
+"set foldopen=all
+" set nofoldenable                  " don't fold by default; press 'zi' to toggle
+
+" other settings {{{1
 set autochdir                     " change directory to the file being edited
-set completeopt=menuone,noselect  " show menu even if there's only one match
 set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
-set iskeyword+=-                  " treat hyphens as part of a word
-set report=0                      " display how many replacements were made
-set shortmess+=A                  " avoid 'hit-enter' prompts
 set softtabstop=4 shiftwidth=4    " don't change tabstop!
 set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
+
+set completeopt=menuone,noselect  " show menu even if there's only one match
+set completeopt+=preview
+set report=0                      " display how many replacements were made
+set shortmess+=A                  " avoid 'hit-enter' prompts
+set shortmess-=S                  " don't show search count
 set wildmenu                      " just use the default wildmode with this setting
 
-" set foldopen+=insert,jump        " open folds when jumping to them or entering insert mode
+" set iskeyword+=-                  " treat hyphens as part of a word
+" set isks per ft; in vim, this interferes with option-= 
 " set shiftround
 " set isfname+={,},\",\<,\>,(,),[,],\:
 
-nnoremap <C-q> :call utils#smartQuit()<CR>
-
+" global variables
+let g:is_bash        = 1
+let g:tex_flavor     = "latex"
 let g:mapleader      = ' '
 let g:maplocalleader = ','
 
-nnoremap <tab> :bnext<CR>
-nnoremap <s-tab> :bprevious<CR>
-nnoremap <leader><tab> :b#<CR>
+" keymaps {{{1
+nnoremap <C-q> :call utils#smartQuit()<CR>
+vnoremap <C-s> :sort<CR>
+"nnoremap <C-m> :silent! make%<CR>redraw!
+
+" double space over word to find and replace
+nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
+
 nnoremap <leader>b :b <C-d>
-nnoremap <leader>c :call info#HighlightGroup()<CR>
+" TODO fix this:
+" nnoremap <leader>c :call info#HighlightGroup()<CR>
+" nnoremap <leader>c <Cmd>echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<CR>
 nnoremap <leader>e :e!<CR>
-nnoremap <leader>f :find<space> **/
-nnoremap <leader>h :set hlsearch!<CR>
-nnoremap <leader>m :make<CR>
+" nnoremap <leader>f :find<space> **/
+nnoremap <leader>f :find<space> 
+nnoremap <leader>h :nohlsearch<CR>
 nnoremap <leader>r :source $MYVIMRC<CR>
 nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
 nnoremap <leader>v :e $MYVIMRC<CR>
@@ -136,10 +131,24 @@ nnoremap <leader>w :w<CR>
 nnoremap <leader>x :!./%<CR>
 vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
 
+" swap lines in normal mode
+" - interferes with vim-vinegar
+" nnoremap - ddpkj
+" nnoremap _ kddpk
+
 " run current line
 " nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
 " yank selection into command line
 vnoremap <leader>c y:<C-r>"<C-b>
+
+" buffer/window navigation {{{2
+nnoremap <tab> :bnext<CR>
+nnoremap <s-tab> :bprevious<CR>
+nnoremap <leader><tab> :b#<CR>
+
+" navigate splits with <C-hjkl>
+packadd! vim-tmux-navigator
+
 " better escape with jk/kj {{{2
 inoremap jk <esc>
 inoremap kj <esc>
@@ -150,38 +159,21 @@ vnoremap kj <esc>
 nnoremap > V`]>
 nnoremap < V`]<
 
+" move lines up and down {{{2
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
 " toggle settings {{{2
-" helper functions {{{3
-function! ToggleTabline() abort
-  set &showtabline = &showtabline == 2 ? 0 : 2
-endfunction
-
-function! ToggleFoldColumn() abort
-  set &foldcolumn = &foldcolumn == 0 ? 1 : 0
-endfunction
-
-function! ToggleStatusline() abort
-  set &laststatus = &laststatus == 2 ? 0 : 2
-endfunction
-
-function! ToggleColorColumn() abort
-  " let &colorcolumn = &colorcolumn == '' ? '+1' : ''
-  let &colorcolumn = &colorcolumn == '' ? '81' : ''
-  " TODO: check if textwidth is set and use that if available ie '+1'
-endfunction 
-
-" }}}
-nnoremap <leader>sh  :set hlsearch!<CR>
-nnoremap <leader>sl  :set list!<CR>
-nnoremap <leader>sn  :set number!<CR>
-nnoremap <leader>sr  :set relativenumber!<CR>
-nnoremap <leader>sw  :set wrap!<CR>
-nnoremap <leader>ss  :set spell!<CR>
-nnoremap <leader>sc  :call ToggleColorColumn()<CR>
-nnoremap <leader>sf  :call ToggleFoldColumn()<CR>
-nnoremap <leader>st  :call ToggleTabline()<CR>
-nnoremap <leader>i   :call ToggleTabline()<CR>
-nnoremap <leader>ss  :call ToggleStatusline()<CR>
+nnoremap <leader>sl  :set list!<CR>:set list?<CR>
+nnoremap <leader>sn  :set number!<CR>:set number?<CR>
+nnoremap <leader>sr  :set relativenumber!<CR>:set relativenumber?<CR>
+nnoremap <leader>sw  :set wrap!<CR>:set wrap?<CR>
+nnoremap <leader>ss  :set spell!<CR>:set spell?<CR>
+nnoremap <leader>sc  :set &colorcolumn = &colorcolumn == '' ? '81' : ''<CR>:set colorcolumn?<CR>
+nnoremap <leader>sf  :set &foldcolumn  = &foldcolumn  == 0 ? 1 : 0<CR>:set foldcolumn?<CR>
+nnoremap <leader>st  :set &showtabline = &showtabline == 2 ? 0 : 2<CR>:set showtabline?<CR>
+nnoremap <leader>si  :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
+nnoremap <leader>ss  :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
 
 " better completion {{{2
 inoremap <silent> <localleader>o <C-x><C-o>
@@ -194,29 +186,47 @@ inoremap <silent> <localleader>u <C-x><C-u>
 
 " no more fat fingers! {{{2
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'xall' : 'X'
-cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'q' ? 'xall' : 'X'
+cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'Q' ? 'xall' : 'X'
 
-augroup vimrc " {{{1
+" center searches {{{2
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap * *zzzv
+nnoremap # #zzzv
+nnoremap g* g*zzzv
+nnoremap g# g#zzzv
+
+" abbreviations {{{2
+iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
+
+
+" }}}
+" autocmds {{{1
+augroup vimrc
   autocmd!
+  " set (short) filetype-specific settings
   autocmd FileType c	    setlocal cindent noexpandtab
   autocmd FileType cpp	    setlocal cindent expandtab
-  autocmd FileType python   setlocal cindent expandtab fdm=indent
+  autocmd FileType python   setlocal cindent expandtab fdm=indent fdl=99
   autocmd FileType vim	    setlocal sw=2 sts=2        fdm=marker
+  autocmd FileType tex      setlocal sw=2 sts=2 spell  fdm=syntax fdl=99
+  " put a modline containing ft=vim at the end of vimrc to enable 
 
   " automatically quit cmd window
   autocmd CmdwinEnter * quit
 augroup END
 
-augroup jumpToLastPosition " {{{1
+augroup jumpToLastPosition
   autocmd!
   autocmd BufReadPost *
 	\ let line = line("'\"")
 	\ | if line >= 1 && line <= line("$")
 	\ |   execute "normal! g`\""
+	\ |   execute "silent! normal! zozz"
 	\ | endif
 augroup END
 
-augroup specialBuffers " {{{1
+augroup specialBuffers
   autocmd!
   " quit with 'q'
   autocmd FileType help,qf,netrw,man,ale-info
@@ -224,19 +234,22 @@ augroup specialBuffers " {{{1
 	\ | set nobuflisted
 	\ | setlocal noruler
 	\ | setlocal laststatus=0 
+	\ | setlocal colorcolumn=
 augroup END
 
-augroup shebangs " {{{1
+augroup shebangs
   autocmd!
+  " TODO put these in ftplugins
   " autocmd BufNewFile *.sh call utils#SheBangs('')
   " autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
   " autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
   " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
 augroup END
 
-" plugins {{{1
-" save in ~/.vim/pack/*/opt then packadd! them
-packadd! ale
+" add plugins {{{1
+" save plugins in ~/.vim/pack/*/opt then packadd! 
+" add plugin configurations to after/plugin/*.vim
+" packadd! ale
 packadd! copilot.vim
 
 " tpope plugins
@@ -260,11 +273,11 @@ set path+=$HOME/cbmf/**
 " packadd! context.vim
 " packadd! tmux-complete.vim
 
-packadd! vim-tmux-navigator
+" TODO: quicklist manipulation https://github.com/romainl/vim-qlist
 
-" romainl gists {{{1
-" https://gist.github.com/romainl/3e0cb99343c72d04e9bc10f6d76ebbef
-" Automatically set marks for certain filetypes {{{
+
+" https://gist.github.com/romainl {{{1
+" Automatically set marks for certain filetypes {{{2
 " Jump back to the mark with backtick followed by the mark letter
 augroup AutomaticMarks 
   autocmd!
@@ -273,15 +286,13 @@ augroup AutomaticMarks
   autocmd BufLeave *.md         normal! mM
   autocmd BufLeave *.sh         normal! mS
 augroup END
-" }}}
 
-" Slightly more intuitive gt/gT {{{
+" Slightly more intuitive gt/gT {{{2
 " https://gist.github.com/romainl/0f589e07a079ea4b7a77fd66ef16ebee
 " nnoremap <expr> gt ":tabnext +" . v:count1 . '<CR>'
 " nnoremap <expr> gT ":tabnext -" . v:count1 . '<CR>'
-" }}}
 
-" gq wrapper that:
+" gq wrapper {{{2
 " - tries its best at keeping the cursor in place
 " - tries to handle formatter errors
 " function! Format(type, ...)
@@ -295,46 +306,22 @@ augroup END
 "     unlet w:gqview
 " endfunction
 " nmap <silent> GQ :let w:gqview = winsaveview()<CR>:set opfunc=Format<CR>g@"
-"
-" Use a bunch of standard UNIX commands for quick an dirty
-" whitespace-ba sed alignment
+
+" quick and dirty whitespace-based alignment {{{2
 " function! Align()
-" 	'<,'>!column -t|sed 's/  \(\S\)/ \1/g'
-" 	normal gv=
+"	'<,'>!column -t|sed 's/  \(\S\)/ \1/g'
+"	normal gv=
 " endfunction
 " xnoremap <silent> <key> :<C-u>silent call Align()<CR>
 
+" opposite of J {{{2
 " function! BreakHere()
-" 	s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
-" 	call histdel("/", -1)
+"	s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
+"	call histdel("/", -1)
 " endfunction
 " nnoremap <key> :<C-u>call BreakHere()<CR>
 
-" TODO: redirect output
-" https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
-" TODO: quicklist manipulation
-" https://github.com/romainl/vim-qlist
-
-" defaults.vim {{{
-" Do not recognize octal numbers for Ctrl-A and Ctrl-X
-set nrformats-=octal
-
-" CTRL-U in insert mode deletes a lot.
-" Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
-
-" I like highlighting strings inside C comments.
-let c_comment_strings=1
-
-" Convenient command to see the difference between 
-" the current buffer and the file it was loaded from.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
-	\ | wincmd p | diffthis
-endif
-
-" ignore these files and directories {{{
+" ignore these files and directories {{{1
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
 set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
 set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
@@ -346,8 +333,22 @@ set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
 set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
 
+" defaults.vim {{{1
+" defaults.vim is not loaded when using a vimrc file,
+" so let's copy the ones we want to use
+set nrformats-=octal		  " Ignore octal numbers for Ctrl-A and Ctrl-X
+let c_comment_strings=1	          " I like highlighting strings inside C comments.
+
+" CTRL-U in insert mode deletes a lot. Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" see the difference between current buffer and the file it was loaded from.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+endif
 " set nomodeline {{{1
 " Modelines have historically been a source of security vulnerabilities. 
 " TODO: disable modelines and use securemodelines
 " http://www.vim.org/scripts/script.php?script_id=1876
-" }}}1
+" vim: ft=vim

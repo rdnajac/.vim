@@ -7,7 +7,7 @@ nnoremap \b i#!/bin/bash<CR>#<CR>#<space>
 " set includeexpr to expand env vars in includes
 let &l:includeexpr = "substitute(v:fname, '$\\%(::\\)\\=env(\\([^)]*\\))', '\\=expand(\"$\".submatch(1))', 'g')"
 
-" vanilla linting
+" lint
 compiler shellcheck
 augroup Shellcheck
   autocmd!
@@ -15,7 +15,8 @@ augroup Shellcheck
   autocmd QuickFixCmdPost [^l]* cwindow
 augroup END
 
-let s:shfmt_options = '-bn -sr' " {{{
+let s:shfmt_options = '-bn -sr' 
+" shft --help {{{
 " -i,  --indent uint       0 for tabs (default), >0 for number of spaces
 " -bn, --binary-next-line  binary ops like && and | may start a line
 " -ci, --case-indent       switch cases will be indented
@@ -24,21 +25,22 @@ let s:shfmt_options = '-bn -sr' " {{{
 " -fn, --func-next-line    function opening braces are placed on a separate line
 "  }}}
 
-if exists('g:loaded_ale')
-    let b:ale_sh_shfmt_options = s:shfmt_options
+" format shell scripts on save
+function! s:format() abort
+    let l:pos = getpos(".")
+    let l:w = winsaveview()
+    silent execute '%!shfmt ' . s:shfmt_options
+    silent update
+    silent execute '!shellharden --replace -- ' . shellescape(expand('%'))
+    silent edit!
+    call setpos('.', l:pos)
+    call winrestview(l:w)
+    redraw!
+endfunction
 
-    " Add shellharden as a fixer
-    function! ShellHarden(buffer) abort
-	let command = 'cat ' . a:buffer . " | shellharden --transform ''"
-	return { 'command': command }
-    endfunction
-    execute ale#fix#registry#Add('shellharden', 'ShellHarden', ['sh'], 'Double quote everything!')
+augroup FormatOnSave
+    autocmd!
+    autocmd BufWritePre *.sh silent! call s:format()
+augroup END
 
-    " don't format on save for bashrc, bash_aliases, etc
-    if expand('%:t') =~? '^\(\.\?bash\(rc\|_aliases\|_profile\|_login\|_logout\|_history\)\|\.profile\)$'
-	let b:ale_fix_on_save = 0
-    else
-	let b:ale_fix_on_save = 1
-    endif
 
-endif 

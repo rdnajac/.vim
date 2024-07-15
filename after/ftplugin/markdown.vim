@@ -2,7 +2,23 @@
 setlocal spell spelllang=en_us 
 " setlocal textwidth=80
 
-packadd! tabularize
+function! s:prettier() abort
+    let l:pos = getpos(".")
+    let l:w = winsaveview()
+    silent execute '!prettier --write ' . shellescape(expand('%'))
+    silent! edit!
+    call setpos('.', l:pos)
+    call winrestview(l:w)
+    redraw!
+    normal! zo
+endfunction
+
+augroup PrettierOnSave
+    autocmd!
+    autocmd BufWritePre *.md call s:prettier()
+augroup END
+
+packadd! tabular " {{{
 " https://gist.github.com/287147
 inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 
@@ -23,6 +39,7 @@ if exists(":Tabularize")
     nmap <buffer> <localleader>t :Tabularize <Bar><CR>
     vmap <buffer> <localleader>t :Tabularize <Bar><CR>
 endif
+" }}}
 
 " keymaps {{{1
 
@@ -70,9 +87,9 @@ nnoremap <buffer> <silent> ]] :<C-u>call JumpToNextHeading("down", v:count1)<CR>
 nnoremap <leader>st i~~<Esc>A~~<Esc>
 
 let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim']
+
+" TODO set up compiler
 let b:markdownlint_options = '--disable MD013'
-let b:ale_fix_on_save = 1
-let b:ale_markdown_markdownlint_options = b:markdownlint_options
 
 function! s:MyFoldLevel()
   return s:headingDepth(v:lnum) > 0 ? ">1" : "="
