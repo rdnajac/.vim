@@ -53,4 +53,4 @@ function! utils#Hyperlink() abort
 endfunction
 
 
-" vim:foldmethod=marker:foldmarker=function!,endfunction
+" vim: foldmarker=function!,endfunction

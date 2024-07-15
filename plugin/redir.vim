@@ -50,18 +50,3 @@ endfunction
 " This command definition doesn't include -bar, so that it is possible to use double quotes in external commands.
 " Side effect: Vim commands can't be "chained".
 command! -nargs=1 -complete=command -range Redir silent call Redir(<q-args>, <range>, <line1>, <line2>)
-
-function! VX()
-    call s:close_scratch_windows()
-    let cmd = './' . expand('%')
-    let output = systemlist(cmd)
-    let height = float2nr(&lines * 0.2)
-    execute height . 'new'
-    let w:scratch = 1
-    setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
-    silent! nnoremap <silent> <buffer> q :<C-U>close<CR>
-    call setline(1, output)
-endfunction
-
-command! VX call VX()
-

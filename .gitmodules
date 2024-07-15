@@ -1,5 +1,5 @@
 [submodule "pack/vimfect/copilot.vim"]
-	path = pack/vimfect/opt/copilot.vim
+	path = pack/vimfect/start/copilot.vim
 	url = https://github.com/github/copilot.vim
 [submodule "pack/vimfect/ale"]
 	path = pack/vimfect/opt/ale
@@ -20,13 +20,13 @@
 	path = pack/vimfect/opt/vim-tbone
 	url = https://github.com/tpope/vim-tbone.git
 [submodule "pack/plugins/opt/vimtex"]
-	path = pack/vimfect/opt/vimtex
+	path = pack/vimfect/start/vimtex
 	url = https://github.com/lervag/vimtex.git
 [submodule "pack/vimfect/opt/vim-scriptease"]
 	path = pack/vimfect/opt/vim-scriptease
 	url = https://github.com/tpope/vim-scriptease.git
 [submodule "pack/vimfect/opt/python-mode"]
-	path = pack/vimfect/opt/python-mode
+	path = pack/vimfect/start/python-mode
 	url = https://github.com/python-mode/python-mode
 [submodule "pack/vimfect/opt/tmux-complete.vim"]
 	path = pack/vimfect/opt/tmux-complete.vim
@@ -53,5 +53,5 @@
 	path = pack/vimfect/opt/tabular
 	url = https://github.com/godlygeek/tabular
 [submodule "pack/vimfect/opt/markdown-preview.nvim"]
-	path = pack/vimfect/opt/markdown-preview.nvim
+	path = pack/vimfect/start/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
