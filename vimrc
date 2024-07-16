@@ -101,6 +101,18 @@ set wildmenu                      " just use the default wildmode with this sett
 " set isks per ft; in vim, this interferes with option-= 
 " set shiftround
 " set isfname+={,},\",\<,\>,(,),[,],\:
+"
+" from tpope/apathy
+setglobal path=.,,
+setglobal include=
+setglobal includeexpr=
+setglobal define=
+setglobal isfname+=@-@
+
+" add paths to path
+set path +=$VIMRUNTIME/**
+set path +=$HOME/.vim/**
+set path +=$HOME/cbmf/**
 
 " global variables
 let g:is_bash        = 1
@@ -247,6 +259,8 @@ augroup shebangs
 augroup END
 
 " add plugins {{{1
+
+
 " save plugins in ~/.vim/pack/*/opt then packadd! 
 " add plugin configurations to after/plugin/*.vim
 
