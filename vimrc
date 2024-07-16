@@ -199,8 +199,7 @@ nnoremap g# g#zzzv
 " abbreviations {{{2
 iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
 
-
-" }}}
+" }}}1
 " autocmds {{{1
 augroup vimrc
   autocmd!
@@ -249,8 +248,6 @@ augroup END
 " add plugins {{{1
 " save plugins in ~/.vim/pack/*/opt then packadd! 
 " add plugin configurations to after/plugin/*.vim
-" packadd! ale
-packadd! copilot.vim
 
 " tpope plugins
 packadd! vim-commentary
