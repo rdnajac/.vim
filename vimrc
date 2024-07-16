@@ -250,12 +250,8 @@ augroup END
 " add plugin configurations to after/plugin/*.vim
 
 " tpope plugins
-packadd! vim-commentary
-packadd! vim-repeat 
 packadd! vim-scriptease
-packadd! vim-surround
 packadd! vim-tbone
-packadd! vim-vinegar
 " packadd! vim-apathy
 set path-=/usr/include		    " add this back for C/C++ development           
 set path+=$VIMRUNTIME/**

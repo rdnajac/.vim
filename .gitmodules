@@ -4,18 +4,6 @@
 [submodule "pack/vimfect/ale"]
 	path = pack/vimfect/opt/ale
 	url = https://github.com/dense-analysis/ale
-[submodule "pack/plugins/opt/vim-surround"]
-	path = pack/vimfect/opt/vim-surround
-	url = https://github.com/tpope/vim-surround.git
-[submodule "pack/plugins/opt/vim-commentary"]
-	path = pack/vimfect/opt/vim-commentary
-	url = https://github.com/tpope/vim-commentary.git
-[submodule "pack/plugins/opt/vim-vinegar"]
-	path = pack/vimfect/opt/vim-vinegar
-	url = https://github.com/tpope/vim-vinegar.git
-[submodule "pack/plugins/opt/vim-repeat"]
-	path = pack/vimfect/opt/vim-repeat
-	url = https://github.com/tpope/vim-repeat.git
 [submodule "pack/plugins/opt/vim-tbone"]
 	path = pack/vimfect/opt/vim-tbone
 	url = https://github.com/tpope/vim-tbone.git
