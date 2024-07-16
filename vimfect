@@ -3,31 +3,26 @@
 ## Add git submodules to the repository
 
 set -euo pipefail
-set -x
+# set -x
 
-die() {
-	printf "\e[31m%s\e[0m\n" "$*"
-	exit 1
-}
+VIM_DIR="${HOME}/.vim"
+PACKDIR="${VIM_DIR}/pack/vimfect/opt"
+
+if [[ ! -d "$PACKDIR" ]]; then
+	mkdir -p "$PACKDIR"
+fi
 
 add_submodule() {
 	local url="$1"
-	[[ "$url" =~ ^https://github.com ]] \
-		&& github_url="${url%%\?*}" \
-		|| github_url="https://github.com/${url}.git"
-	# TODO
+	
+	cd "$PACKDIR" || { echo "Could not change to $PACKDIR"; exit 1; }
 
-	PLUGIN_DIR="${HOME}/.vim/pack/vimfect/opt"
-	mkdir -p "$PLUGIN_DIR"
-	cd "$PLUGIN_DIR" || die "Failed to change directory to $PLUGIN_DIR"
-
-	git submodule add --force --depth 1 --progress "$github_url"
+	git submodule add --force --depth 1 --progress "$url"
 }
-
-# Check if the user has provided at least one  url
-[[ $# -gt 0 ]] || die "Usage: $0 <url>..."
 
 while [[ $# -gt 0 ]]; do
 	add_submodule "$1"
 	shift
 done
+
+add_submodule https://github.com/vim/killersheep

@@ -1,15 +1,9 @@
 [submodule "pack/vimfect/copilot.vim"]
 	path = pack/vimfect/start/copilot.vim
 	url = https://github.com/github/copilot.vim
-[submodule "pack/vimfect/ale"]
-	path = pack/vimfect/opt/ale
-	url = https://github.com/dense-analysis/ale
 [submodule "pack/plugins/opt/vim-tbone"]
 	path = pack/vimfect/opt/vim-tbone
 	url = https://github.com/tpope/vim-tbone.git
-[submodule "pack/plugins/opt/vimtex"]
-	path = pack/vimfect/start/vimtex
-	url = https://github.com/lervag/vimtex.git
 [submodule "pack/vimfect/opt/vim-scriptease"]
 	path = pack/vimfect/opt/vim-scriptease
 	url = https://github.com/tpope/vim-scriptease.git
@@ -31,15 +25,12 @@
 [submodule "pack/vimfect/opt/vim-obsession"]
 	path = pack/vimfect/opt/vim-obsession
 	url = https://github.com/tpope/vim-obsession
-[submodule "pack/vimfect/opt/vim-apathy"]
-	path = pack/vimfect/opt/vim-apathy
-	url = https://github.com/tpope/vim-apathy.git
 [submodule "pack/vimfect/opt/vim-tmux-navigator"]
 	path = pack/vimfect/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
 [submodule "pack/vimfect/opt/tabular"]
 	path = pack/vimfect/opt/tabular
 	url = https://github.com/godlygeek/tabular
-[submodule "pack/vimfect/opt/markdown-preview.nvim"]
-	path = pack/vimfect/start/markdown-preview.nvim
-	url = https://github.com/iamcco/markdown-preview.nvim
+[submodule "pack/vimfect/opt/killersheep"]
+	path = pack/vimfect/opt/killersheep
+	url = https://github.com/vim/killersheep

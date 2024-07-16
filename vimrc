@@ -119,7 +119,7 @@ nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
 nnoremap <leader>b :b <C-d>
 " TODO fix this:
 " nnoremap <leader>c :call info#HighlightGroup()<CR>
-" nnoremap <leader>c <Cmd>echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')<CR>
+nnoremap <leader>c :call GetInfo()<CR>
 nnoremap <leader>e :e!<CR>
 " nnoremap <leader>f :find<space> **/
 nnoremap <leader>f :find<space> 
@@ -130,8 +130,9 @@ nnoremap <leader>v :e $MYVIMRC<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>x :!./%<CR>
 vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
-
+nnoremap <leader>i :execute 'verbose set '.expand("<cword>")<CR>
 " swap lines in normal mode
+" ft
 " - interferes with vim-vinegar
 " nnoremap - ddpkj
 " nnoremap _ kddpk
@@ -250,13 +251,7 @@ augroup END
 " add plugin configurations to after/plugin/*.vim
 
 " tpope plugins
-packadd! vim-scriptease
-packadd! vim-tbone
-" packadd! vim-apathy
-set path-=/usr/include		    " add this back for C/C++ development           
-set path+=$VIMRUNTIME/**
-set path+=$HOME/.vim/**
-set path+=$HOME/cbmf/**
+" packadd! vim-scriptease
 " packadd! vim-unimpaired
 " packadd! vim-obsession
 " packadd! vim-fugitive
