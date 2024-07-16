@@ -34,3 +34,15 @@
 [submodule "pack/vimfect/opt/killersheep"]
 	path = pack/vimfect/opt/killersheep
 	url = https://github.com/vim/killersheep
+[submodule "pack/vimfect/start/copilot.vim"]
+	path = pack/vimfect/start/copilot.vim
+	url = https://github.com/github/copilot.vim
+[submodule "pack/vimfect/start/vimtex"]
+	path = pack/vimfect/start/vimtex
+	url = https://github.com/lervag/vimtex
+[submodule "pack/vimfect/start/python-mode"]
+	path = pack/vimfect/start/python-mode
+	url = https://github.com/python-mode/python-mode
+[submodule "pack/vimfect/start/markdown-preview.nvim"]
+	path = pack/vimfect/start/markdown-preview.nvim
+	url = https://github.com/iamcco/markdown-preview.nvim

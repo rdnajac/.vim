@@ -6,7 +6,8 @@ set -euo pipefail
 # set -x
 
 VIM_DIR="${HOME}/.vim"
-PACKDIR="${VIM_DIR}/pack/vimfect/opt"
+PACKDIR="${VIM_DIR}/pack/vimfect"
+
 
 if [[ ! -d "$PACKDIR" ]]; then
 	mkdir -p "$PACKDIR"
@@ -15,7 +16,8 @@ fi
 add_submodule() {
 	local url="$1"
 	
-	cd "$PACKDIR" || { echo "Could not change to $PACKDIR"; exit 1; }
+	mkdir -vp "${PACKDIR}/opt" 
+	cd "${PACKDIR}/opt" || { echo "Could not change to $PACKDIR"; exit 1; }
 
 	git submodule add --force --depth 1 --progress "$url"
 }
@@ -25,4 +27,3 @@ while [[ $# -gt 0 ]]; do
 	shift
 done
 
-add_submodule https://github.com/vim/killersheep
