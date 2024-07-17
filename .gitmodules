@@ -29,7 +29,7 @@
 	path = pack/vimfect/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
 [submodule "pack/vimfect/opt/tabular"]
-	path = pack/vimfect/opt/tabular
+	path = pack/vimfect/start/tabular
 	url = https://github.com/godlygeek/tabular
 [submodule "pack/vimfect/opt/killersheep"]
 	path = pack/vimfect/opt/killersheep
