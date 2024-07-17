@@ -1,6 +1,12 @@
 " .vim/after/ftplugin/sh.vim
 setlocal cindent shiftwidth=8 softtabstop=8 noexpandtab
 
+" when joining lines, delete the \ at the start of line
+setlocal formatoptions+=j
+
+" make . part of a word
+setlocal iskeyword+=.
+
 " start with a shebang!
 nnoremap \b i#!/bin/bash<CR>#<CR>#<space>
 

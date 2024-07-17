@@ -1,11 +1,3 @@
-" autoload/tbone.vim
-" Maintainer:   Tim Pope <http://tpo.pe/>
-
-if exists('g:autoloaded_tbone') || v:version < 700 || &compatible
-  finish
-endif
-let g:autoloaded_tbone = 1
-
 " Section: Sessions
 
 function! tbone#session(...) abort
@@ -33,40 +25,19 @@ endfunction
 
 " Section: Completion
 
-function! s:fnameescape(string) abort
-  if type(a:string) ==# type([])
-    return map(copy(a:string), 's:fnameescape(v:val)')
-  elseif exists('*fnameescape')
-    return fnameescape(a:string)
-  elseif a:string ==# '-'
-    return '\-'
-  else
-    return substitute(escape(a:string," \t\n*?[{`$\\%#'\"|!<"),'^[+>]','\\&','')
-  endif
-endfunction
-
-function! s:systemarg(cmd) abort
-  if exists('*systemlist')
-    let results = systemlist(a:cmd)
-  else
-    let results = split(system(a:cmd), "\n")
-  endif
-  return join(s:fnameescape(results), "\n")
-endfunction
-
 function! tbone#complete_sessions(...) abort
-  return s:systemarg('tmux list-sessions -F "#S"')
+  return systemlist('tmux list-sessions -F "#S"')
 endfunction
 
 function! tbone#complete_windows(...) abort
-  return s:systemarg('tmux list-windows -F "#W" -t '.shellescape(tbone#session())) . "\n" .
-        \s:systemarg('tmux list-windows -F "#S:#W" -a') .
+  return systemlist('tmux list-windows -F "#W" -t '.shellescape(tbone#session())) . "\n" .
+        \systemlist('tmux list-windows -F "#S:#W" -a') .
         \ "\n^\n$\n!\n+\n-\n{start}\n{end}\n{last}\n{next}\n{previous}"
 endfunction
 
 function! tbone#complete_panes(...) abort
-  return s:systemarg('tmux list-panes -F "#W.#P" -s -t '.shellescape(tbone#session())) . "\n" .
-        \s:systemarg('tmux list-panes -F "#S:#W.#P" -a') .
+  return systemlist('tmux list-panes -F "#W.#P" -s -t '.shellescape(tbone#session())) . "\n" .
+        \systemlist('tmux list-panes -F "#S:#W.#P" -a') .
         \ "\n!\n+\n-\n{last}\n{next}\n{previous}" .
         \ "\n{top}\n{bottom}\n{left}\n{right}" .
         \ "\n{top-left}\n{top-right}\n{bottom-left}\n{bottom-right}" .
@@ -74,11 +45,11 @@ function! tbone#complete_panes(...) abort
 endfunction
 
 function! tbone#complete_clients(...) abort
-  return s:systemarg('tmux list-clients -F "#{client_tty}"')
+  return systemlist('tmux list-clients -F "#{client_tty}"')
 endfunction
 
 function! tbone#complete_buffers(...) abort
-  return s:systemarg('tmux list-buffers -F "#{buffer_name}"')
+  return systemlist('tmux list-buffers -F "#{buffer_name}"')
 endfunction
 
 function! tbone#complete_executable(lead, ...) abort

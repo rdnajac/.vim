@@ -1,11 +1,3 @@
-" Location: autoload/apathy.vim
-" Author: Tim Pope <http://tpo.pe/>
-
-if exists('g:autoloaded_apathy')
-  finish
-endif
-let g:autoloaded_apathy = 1
-
 function! apathy#Uniq(list) abort
   let i = 0
   let seen = {}

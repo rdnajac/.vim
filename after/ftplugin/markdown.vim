@@ -47,11 +47,11 @@ inoremap <buffer> <localleader>5 #####<Space>
 inoremap <buffer> <localleader>6 ######<Space>
 
 " fenced code blocks {{{3
-inoremap <buffer> `c ```c<CR><CR>```<Up>
-inoremap <buffer> `p ```python<CR><CR>```<Up>
-inoremap <buffer> `s ```sh<CR><CR>```<Up>
-inoremap <buffer> `t ```text<CR><CR>```<Up>
-inoremap <buffer> `v ```vim<CR><CR>```<Up>
+inoremap <buffer> <localleader>c ```c<CR><CR>```<Up>
+inoremap <buffer> <localleader>p ```python<CR><CR>```<Up>
+inoremap <buffer> <localleader>s ```sh<CR><CR>```<Up>
+inoremap <buffer> <localleader>t ```text<CR><CR>```<Up>
+inoremap <buffer> <localleader>v ```vim<CR><CR>```<Up>
 
 inoremap <buffer> <localleader>fo <!-- {{{ -->
 inoremap <buffer> <localleader>fc <!-- }}} -->

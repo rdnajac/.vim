@@ -1,28 +1,29 @@
-let s:escape = 'substitute(escape(v:val, ".$~"), "*", ".*", "g")'
+let g:netrw_liststyle =  3
+let g:netrw_winsize = 25
+let g:netrw_list_hide = netrw_gitignore#Hide()
+let g:netrw_list_hide .= ',\(^\|\s\s\)\zs\.\S\+'
+let g:netrw_browse_split=4  " open in prior window
+let g:netrw_altv=1          " open splits to the right
+
 let s:dotfiles = '\(^\|\s\s\)\zs\.\S\+'
-let g:netrw_list_hide = netrw_gitignore#Hide() . ',' . s:dotfiles
 
-" Including all of wildignore in netrw_list_hide is a bit much 
-" let g:netrw_list_hide =
-"       \ join(map(split(&wildignore, ','), '"^".' . s:escape . '. "/\\=$"'), ',') . ',^\.\.\=/\=$' .
-"       \ (get(g:, 'netrw_list_hide', '')[-strlen(s:dotfiles)-1:-1] ==# s:dotfiles ? ','.s:dotfiles : '')
+let s:escape = 'substitute(escape(v:val, ".$~"), "*", ".*", "g")'
 
-let g:netrw_altv          = 1          " open splits to the right
-let g:netrw_banner        = 0
-let g:netrw_browse_split  = 4  " open in prior window
-let g:netrw_liststyle     = 3
-let g:netrw_winsize       = 25
-
-
-" Why do we call this first?
+let g:netrw_list_hide =
+      \ join(map(split(&wildignore, ','), '"^".' . s:escape . '. "/\\=$"'), ',') . ',^\.\.\=/\=$' .
+      \ (get(g:, 'netrw_list_hide', '')[-strlen(s:dotfiles)-1:-1] ==# s:dotfiles ? ','.s:dotfiles : '')
+if !exists("g:netrw_banner")
+  let g:netrw_banner = 0
+endif
 unlet! s:netrw_up
 
 nnoremap <silent> <Plug>VinegarUp :call <SID>opendir('edit')<CR>
+
+nmap - <Plug>VinegarUp
+
 nnoremap <silent> <Plug>VinegarTabUp :call <SID>opendir('tabedit')<CR>
 nnoremap <silent> <Plug>VinegarSplitUp :call <SID>opendir('split')<CR>
 nnoremap <silent> <Plug>VinegarVerticalSplitUp :call <SID>opendir('vsplit')<CR>
-
-nmap <BS> <Plug>VinegarUp
 
 function! s:sort_sequence(suffixes) abort
   return '[\/]$,*' . (empty(a:suffixes) ? '' : ',\%(' .
@@ -57,6 +58,7 @@ function! s:seek(file) abort
   return pattern
 endfunction
 
+" TODO put this whole fild in after/ftplugin/netrw.vim
 augroup vinegar
   autocmd!
   autocmd FileType netrw call s:setup_vinegar()

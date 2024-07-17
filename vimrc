@@ -108,7 +108,7 @@ setglobal isfname+=@-@
 " set isfname+={,},\",\<,\>,(,),[,],\:
 
 " add paths to path
-set path +=$VIMRUNTIME/**
+" set path +=$VIMRUNTIME/**
 set path +=$HOME/.vim/**
 set path +=$HOME/cbmf/**
 
@@ -167,8 +167,6 @@ nnoremap > V`]>
 nnoremap < V`]<
 
 " move lines up and down {{{2
-nnoremap - ddpkj
-nnoremap _ kddpk
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
@@ -178,11 +176,24 @@ nnoremap <leader>sn :set number!<CR>:set number?<CR>
 nnoremap <leader>sr :set relativenumber!<CR>:set relativenumber?<CR>
 nnoremap <leader>sw :set wrap!<CR>:set wrap?<CR>
 nnoremap <leader>ss :set spell!<CR>:set spell?<CR>
-nnoremap <leader>sc :set &colorcolumn    = &colorcolumn == '' ? '81' : ''<CR>:set colorcolumn?<CR>
-nnoremap <leader>sf :set &foldcolumn     = &foldcolumn  == 0 ? 1 : 0<CR>:set foldcolumn?<CR>
-nnoremap <leader>st :set &showtabline    = &showtabline == 2 ? 0 : 2<CR>:set showtabline?<CR>
-nnoremap <leader>si :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
-nnoremap <leader>ss :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
+nnoremap <leader>st :call <SID>toggleTabline()<CR>
+nnoremap <leader>ss :call <SID>toggleStatusline()<CR>
+
+function s:toggleTabline()
+  if &showtabline == 2
+	set showtabline=0
+  else
+	set showtabline=2
+  endif
+endfunction
+
+function s:toggleStatusline()
+  if &laststatus == 2
+	set laststatus=0
+  else
+	set laststatus=2
+  endif
+endfunction
 
 " better completion {{{2
 inoremap <silent> <localleader>o <C-x><C-o>
