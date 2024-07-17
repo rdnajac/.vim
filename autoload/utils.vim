@@ -42,15 +42,9 @@ function! utils#SheBangs(shebang)
 endfunction
 
 function! utils#Hyperlink() abort
-    normal! gv"xy
-    let selection = getreg('x')
-  echom l:selection
   " if l:selection =~ '^https\?://'  " Check if selection starts with http or https
   "   execute "normal! c[`M](<C-r>\")mM"
   " else
   "   execute "normal! c[<C-r>\"]()"
   " endif
 endfunction
-
-
-" vim: foldmarker=function!,endfunction

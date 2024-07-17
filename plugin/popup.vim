@@ -37,6 +37,7 @@ function! VX()
     let cmd = './' . expand('%')
     call Popup(cmd, systemlist(cmd))
 endfunction
+" TODO turn this into a command with options
 
 command! -nargs=0 VX call VX()
 

@@ -51,7 +51,6 @@ else
 endif
 
 " display settings {{{1
-
 set termguicolors
 silent! color scheme
 
@@ -80,79 +79,74 @@ set fillchars+=stl:\ ,            " display spaces properly in statusline
 " fold settings {{{2
 set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
-set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
-"set foldopen=all
+"set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
+set foldopen=all
 " set nofoldenable                  " don't fold by default; press 'zi' to toggle
 
 " other settings {{{1
 set autochdir                     " change directory to the file being edited
-set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
-set softtabstop=4 shiftwidth=4    " don't change tabstop!
-set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
-
 set completeopt=menuone,noselect  " show menu even if there's only one match
 set completeopt+=preview
+set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
 set report=0                      " display how many replacements were made
+set softtabstop=4 shiftwidth=4    " don't change tabstop!
 set shortmess+=A                  " avoid 'hit-enter' prompts
 set shortmess-=S                  " don't show search count
+" set shiftround
+set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
 set wildmenu                      " just use the default wildmode with this setting
 
 " set iskeyword+=-                  " treat hyphens as part of a word
-" set isks per ft; in vim, this interferes with option-= 
-" set shiftround
-" set isfname+={,},\",\<,\>,(,),[,],\:
+set iskeyword+=_
 "
-" from tpope/apathy
+" tpope/apathy {{{1
 setglobal path=.,,
 setglobal include=
 setglobal includeexpr=
 setglobal define=
 setglobal isfname+=@-@
+" set isfname+={,},\",\<,\>,(,),[,],\:
 
 " add paths to path
 set path +=$VIMRUNTIME/**
 set path +=$HOME/.vim/**
 set path +=$HOME/cbmf/**
 
-" global variables
-let g:is_bash        = 1
-let g:tex_flavor     = "latex"
-let g:mapleader      = ' '
-let g:maplocalleader = ','
+" global variables {{{1
+let g:is_bash                   = 1
+let g:tex_flavor                = 'latex'
+let g:vimtex_view_method        = 'skim'
+let g:mapleader                 = ' '
+let g:maplocalleader            = ','
+let g:markdown_fenced_languages =
+      \ ['bash=sh', 'c', 'python', 'vim']
 
 " keymaps {{{1
 nnoremap <C-q> :call utils#smartQuit()<CR>
 vnoremap <C-s> :sort<CR>
 "nnoremap <C-m> :silent! make%<CR>redraw!
+nnoremap <silent> <leader>` :Lexplore<CR>
 
 " double space over word to find and replace
 nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
 
 nnoremap <leader>b :b <C-d>
-" TODO fix this:
-" nnoremap <leader>c :call info#HighlightGroup()<CR>
 nnoremap <leader>c :call GetInfo()<CR>
 nnoremap <leader>e :e!<CR>
-" nnoremap <leader>f :find<space> **/
-nnoremap <leader>f :find<space> 
+nnoremap <leader>f :find<space>
 nnoremap <leader>h :nohlsearch<CR>
+nnoremap <leader>i :execute 'verbose set '.expand("<cword>")<CR>
 nnoremap <leader>r :source $MYVIMRC<CR>
 nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
 nnoremap <leader>v :e $MYVIMRC<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>x :!./%<CR>
 vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
-nnoremap <leader>i :execute 'verbose set '.expand("<cword>")<CR>
-" swap lines in normal mode
-" ft
-" - interferes with vim-vinegar
-" nnoremap - ddpkj
-" nnoremap _ kddpk
 
 " run current line
 " nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
 " yank selection into command line
-vnoremap <leader>c y:<C-r>"<C-b>
+" vnoremap <leader>c y:<C-r>"<C-b>
 
 " buffer/window navigation {{{2
 nnoremap <tab> :bnext<CR>
@@ -173,20 +167,22 @@ nnoremap > V`]>
 nnoremap < V`]<
 
 " move lines up and down {{{2
+nnoremap - ddpkj
+nnoremap _ kddpk
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
 " toggle settings {{{2
-nnoremap <leader>sl  :set list!<CR>:set list?<CR>
-nnoremap <leader>sn  :set number!<CR>:set number?<CR>
-nnoremap <leader>sr  :set relativenumber!<CR>:set relativenumber?<CR>
-nnoremap <leader>sw  :set wrap!<CR>:set wrap?<CR>
-nnoremap <leader>ss  :set spell!<CR>:set spell?<CR>
-nnoremap <leader>sc  :set &colorcolumn = &colorcolumn == '' ? '81' : ''<CR>:set colorcolumn?<CR>
-nnoremap <leader>sf  :set &foldcolumn  = &foldcolumn  == 0 ? 1 : 0<CR>:set foldcolumn?<CR>
-nnoremap <leader>st  :set &showtabline = &showtabline == 2 ? 0 : 2<CR>:set showtabline?<CR>
-nnoremap <leader>si  :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
-nnoremap <leader>ss  :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
+nnoremap <leader>sl :set list!<CR>:set list?<CR>
+nnoremap <leader>sn :set number!<CR>:set number?<CR>
+nnoremap <leader>sr :set relativenumber!<CR>:set relativenumber?<CR>
+nnoremap <leader>sw :set wrap!<CR>:set wrap?<CR>
+nnoremap <leader>ss :set spell!<CR>:set spell?<CR>
+nnoremap <leader>sc :set &colorcolumn    = &colorcolumn == '' ? '81' : ''<CR>:set colorcolumn?<CR>
+nnoremap <leader>sf :set &foldcolumn     = &foldcolumn  == 0 ? 1 : 0<CR>:set foldcolumn?<CR>
+nnoremap <leader>st :set &showtabline    = &showtabline == 2 ? 0 : 2<CR>:set showtabline?<CR>
+nnoremap <leader>si :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
+nnoremap <leader>ss :set &showstatusline = &showstatusline == 2 ? 0 : 2<CR>:set showstatusline?<CR>
 
 " better completion {{{2
 inoremap <silent> <localleader>o <C-x><C-o>
@@ -197,9 +193,9 @@ inoremap <silent> <localleader>n <C-x><C-n>
 inoremap <silent> <localleader>t <C-x><C-]>
 inoremap <silent> <localleader>u <C-x><C-u>
 
-" no more fat fingers! {{{2
-cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'xall' : 'X'
-cnoreabbrev <expr> q getcmdtype() == ':' && getcmdline() == 'Q' ? 'xall' : 'X'
+" fat fingers! {{{2
+cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
+cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'q' : 'Q'
 
 " center searches {{{2
 nnoremap n nzzzv
@@ -212,7 +208,6 @@ nnoremap g# g#zzzv
 " abbreviations {{{2
 iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
 
-" }}}1
 " autocmds {{{1
 augroup vimrc
   autocmd!
@@ -234,14 +229,14 @@ augroup jumpToLastPosition
 	\ let line = line("'\"")
 	\ | if line >= 1 && line <= line("$")
 	\ |   execute "normal! g`\""
-	\ |   execute "silent! normal! zozz"
+	\ |   execute "silent! normal! zo"
 	\ | endif
 augroup END
 
 augroup specialBuffers
   autocmd!
   " quit with 'q'
-  autocmd FileType help,qf,netrw,man,ale-info
+  autocmd FileType help,qf,netrw,man
 	\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
 	\ | set nobuflisted
 	\ | setlocal noruler
@@ -258,9 +253,7 @@ augroup shebangs
   " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
 augroup END
 
-" add plugins {{{1
-
-
+" plugins {{{1
 " save plugins in ~/.vim/pack/*/opt then packadd! 
 " add plugin configurations to after/plugin/*.vim
 
@@ -277,10 +270,8 @@ augroup END
 
 " TODO: quicklist manipulation https://github.com/romainl/vim-qlist
 
-
 " https://gist.github.com/romainl {{{1
 " Automatically set marks for certain filetypes {{{2
-" Jump back to the mark with backtick followed by the mark letter
 augroup AutomaticMarks 
   autocmd!
   autocmd BufLeave vimrc        normal! mV
@@ -290,31 +281,8 @@ augroup AutomaticMarks
 augroup END
 
 " Slightly more intuitive gt/gT {{{2
-" https://gist.github.com/romainl/0f589e07a079ea4b7a77fd66ef16ebee
 " nnoremap <expr> gt ":tabnext +" . v:count1 . '<CR>'
 " nnoremap <expr> gT ":tabnext -" . v:count1 . '<CR>'
-
-" gq wrapper {{{2
-" - tries its best at keeping the cursor in place
-" - tries to handle formatter errors
-" function! Format(type, ...)
-"     normal! '[v']gq
-"     if v:shell_error > 0
-"         silent undo
-"         redraw
-"         echomsg 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
-"     endif
-"     call winrestview(w:gqview)
-"     unlet w:gqview
-" endfunction
-" nmap <silent> GQ :let w:gqview = winsaveview()<CR>:set opfunc=Format<CR>g@"
-
-" quick and dirty whitespace-based alignment {{{2
-" function! Align()
-"	'<,'>!column -t|sed 's/  \(\S\)/ \1/g'
-"	normal gv=
-" endfunction
-" xnoremap <silent> <key> :<C-u>silent call Align()<CR>
 
 " opposite of J {{{2
 " function! BreakHere()

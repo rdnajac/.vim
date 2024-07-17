@@ -1,12 +1,3 @@
-" eunuch.vim - Helpers for UNIX
-" Maintainer:   Tim Pope <http://tpo.pe/>
-" Version:      1.3
-
-if exists('g:loaded_eunuch') || &cp || v:version < 704
-  finish
-endif
-let g:loaded_eunuch = 1
-
 let s:slash_pat = exists('+shellslash') ? '[\/]' : '/'
 
 function! s:separator() abort
@@ -239,6 +230,7 @@ command! -bang -complete=file -nargs=+ Cfind   exe s:Grep(<q-bang>, <q-args>, s:
 command! -bang -complete=file -nargs=+ Clocate exe s:Grep(<q-bang>, <q-args>, 'locate', '')
 command! -bang -complete=file -nargs=+ Lfind   exe s:Grep(<q-bang>, <q-args>, s:FindPath(), 'l')
 command! -bang -complete=file -nargs=+ Llocate exe s:Grep(<q-bang>, <q-args>, 'locate', 'l')
+
 function! s:Grep(bang, args, prg, type) abort
   let grepprg = &l:grepprg
   let grepformat = &l:grepformat
@@ -400,5 +392,3 @@ augroup eunuch
         \ filetype detect | endif
   autocmd User FileChmodPost,FileUnlinkPost "
 augroup END
-
-" vim:set sw=2 sts=2:

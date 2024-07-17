@@ -1,40 +1,28 @@
-" Location:     plugin/vinegar.vim
-" Maintainer:   Tim Pope <http://tpo.pe/>
-" Version:      1.0
-" GetLatestVimScripts: 5671 1 :AutoInstall: vinegar.vim
-
-if exists("g:loaded_vinegar") || v:version < 700 || &cp
-  finish
-endif
-let g:loaded_vinegar = 1
-
-function! s:fnameescape(file) abort
-  if exists('*fnameescape')
-    return fnameescape(a:file)
-  else
-    return escape(a:file," \t\n*?[{`$\\%#'\"|!<")
-  endif
-endfunction
-
-let s:dotfiles = '\(^\|\s\s\)\zs\.\S\+'
-
 let s:escape = 'substitute(escape(v:val, ".$~"), "*", ".*", "g")'
-let g:netrw_list_hide =
-      \ join(map(split(&wildignore, ','), '"^".' . s:escape . '. "/\\=$"'), ',') . ',^\.\.\=/\=$' .
-      \ (get(g:, 'netrw_list_hide', '')[-strlen(s:dotfiles)-1:-1] ==# s:dotfiles ? ','.s:dotfiles : '')
-if !exists("g:netrw_banner")
-  let g:netrw_banner = 0
-endif
+let s:dotfiles = '\(^\|\s\s\)\zs\.\S\+'
+let g:netrw_list_hide = netrw_gitignore#Hide() . ',' . s:dotfiles
+
+" Including all of wildignore in netrw_list_hide is a bit much 
+" let g:netrw_list_hide =
+"       \ join(map(split(&wildignore, ','), '"^".' . s:escape . '. "/\\=$"'), ',') . ',^\.\.\=/\=$' .
+"       \ (get(g:, 'netrw_list_hide', '')[-strlen(s:dotfiles)-1:-1] ==# s:dotfiles ? ','.s:dotfiles : '')
+
+let g:netrw_altv          = 1          " open splits to the right
+let g:netrw_banner        = 0
+let g:netrw_browse_split  = 4  " open in prior window
+let g:netrw_liststyle     = 3
+let g:netrw_winsize       = 25
+
+
+" Why do we call this first?
 unlet! s:netrw_up
 
 nnoremap <silent> <Plug>VinegarUp :call <SID>opendir('edit')<CR>
-if empty(maparg('-', 'n')) && !hasmapto('<Plug>VinegarUp')
-  nmap - <Plug>VinegarUp
-endif
-
 nnoremap <silent> <Plug>VinegarTabUp :call <SID>opendir('tabedit')<CR>
 nnoremap <silent> <Plug>VinegarSplitUp :call <SID>opendir('split')<CR>
 nnoremap <silent> <Plug>VinegarVerticalSplitUp :call <SID>opendir('vsplit')<CR>
+
+nmap <BS> <Plug>VinegarUp
 
 function! s:sort_sequence(suffixes) abort
   return '[\/]$,*' . (empty(a:suffixes) ? '' : ',\%(' .
@@ -106,9 +94,8 @@ endfunction
 
 function! s:escaped(first, last) abort
   let files = s:relatives(a:first, a:last)
-  return join(map(files, 's:fnameescape(v:val)'), ' ')
+  return join(map(files, 'fnameescape(v:val)'), ' ')
 endfunction
-" 97f3fbc9596f3997ebf8e30bfdd00ebb34597722
 
 function! s:setup_vinegar() abort
   if !exists('s:netrw_up')

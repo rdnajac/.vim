@@ -18,10 +18,7 @@ augroup PrettierOnSave
     autocmd BufWritePre *.md call s:prettier()
 augroup END
 
-packadd! tabular " {{{
 " https://gist.github.com/287147
-inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
-
 function! s:align()
   let p = '^\s*|\s.*\s|\s*$'
   if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
@@ -33,17 +30,14 @@ function! s:align()
   endif
 endfunction
 
+inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
 
 if exists(":Tabularize")
-    " map local leader t to tabularize on |
     nmap <buffer> <localleader>t :Tabularize <Bar><CR>
     vmap <buffer> <localleader>t :Tabularize <Bar><CR>
 endif
-" }}}
 
-" keymaps {{{1
-
-" 'snippets' {{{2
 " headers {{{3
 inoremap <buffer> <localleader>1 #<Space>
 inoremap <buffer> <localleader>2 ##<Space>
@@ -59,18 +53,17 @@ inoremap <buffer> `s ```sh<CR><CR>```<Up>
 inoremap <buffer> `t ```text<CR><CR>```<Up>
 inoremap <buffer> `v ```vim<CR><CR>```<Up>
 
-" fold comments {{{3
 inoremap <buffer> <localleader>fo <!-- {{{ -->
 inoremap <buffer> <localleader>fc <!-- }}} -->
-
+inoremap <buffer> <localleader>f1 <!-- {{{1 -->
+inoremap <buffer> <localleader>f2 <!-- {{{2 -->
+inoremap <buffer> <localleader>f3 <!-- {{{3 -->
+inoremap <buffer> <localleader>f4 <!-- {{{4 -->
+inoremap <buffer> <localleader>f5 <!-- {{{5 -->
+inoremap <buffer> <localleader>f6 <!-- {{{6 -->
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
-" If you insist on writing it out and still getting it wrong...
-" inoremap <buffer> <--! <!--
-
-
-" }}}1
 function! JumpToNextHeading(direction, count) " {{{
 " https://gist.github.com/romainl/ac63e108c3d11084be62b3c04156c263
     let col = col(".")
@@ -86,7 +79,6 @@ nnoremap <buffer> <silent> ]] :<C-u>call JumpToNextHeading("down", v:count1)<CR>
 
 nnoremap <leader>st i~~<Esc>A~~<Esc>
 
-let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim']
 
 " TODO set up compiler
 let b:markdownlint_options = '--disable MD013'
@@ -120,9 +112,6 @@ setlocal foldtext=s:MyFoldText()
 setlocal foldexpr=s:MyFoldLevel()
 
 " markdown preview 
-" packadd! markdown-preview.nvim
-" moved to start
-" compile markdown preview
 " call mkdp#util#install()
 let g:mkdp_page_title = '${name}'
 nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
