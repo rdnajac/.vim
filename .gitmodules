@@ -22,9 +22,6 @@
 [submodule "pack/vimfect/opt/vim-unimpaired"]
 	path = pack/vimfect/opt/vim-unimpaired
 	url = https://github.com/tpope/vim-unimpaired
-[submodule "pack/vimfect/opt/vim-obsession"]
-	path = pack/vimfect/opt/vim-obsession
-	url = https://github.com/tpope/vim-obsession
 [submodule "pack/vimfect/opt/vim-tmux-navigator"]
 	path = pack/vimfect/opt/vim-tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator
@@ -46,3 +43,12 @@
 [submodule "pack/vimfect/start/markdown-preview.nvim"]
 	path = pack/vimfect/start/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
+[submodule "pack/vimfect/opt/vim-fugitive"]
+	path = pack/vimfect/opt/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive
+[submodule "pack/vimfect/opt/FastFold"]
+	path = pack/vimfect/opt/FastFold
+	url = https://github.com/Konfekt/FastFold
+[submodule "pack/vimfect/opt/vim-qlist"]
+	path = pack/vimfect/opt/vim-qlist
+	url = https://github.com/romainl/vim-qlist

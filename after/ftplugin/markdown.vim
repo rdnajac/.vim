@@ -1,44 +1,23 @@
 " .vim/after/ftplugin/markdown.vim
-setlocal spell spelllang=en_us 
 " setlocal textwidth=80
-
+let g:markdown_folding = 1
 function! s:prettier() abort
-    let l:pos = getpos(".")
-    let l:w = winsaveview()
-    silent execute '!prettier --write ' . shellescape(expand('%'))
-    silent! edit!
-    call setpos('.', l:pos)
-    call winrestview(l:w)
-    redraw!
-    normal! zo
+  let l:pos = getpos(".")
+  let l:w = winsaveview()
+  silent execute '!prettier --write ' . shellescape(expand('%'))
+  silent! edit!
+  call setpos('.', l:pos)
+  call winrestview(l:w)
+  redraw!
+  normal! zo
 endfunction
 
-augroup PrettierOnSave
-    autocmd!
-    autocmd BufWritePre *.md call s:prettier()
-augroup END
-
-" https://gist.github.com/287147
-function! s:align()
-  let p = '^\s*|\s.*\s|\s*$'
-  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-    Tabularize/|/l1
-    normal! 0
-    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-  endif
-endfunction
-
-inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+" augroup PrettierOnSave
+"     autocmd!
+"     autocmd BufWritePre *.md call s:prettier()
+" augroup END
 
 
-if exists(":Tabularize")
-    nmap <buffer> <localleader>t :Tabularize <Bar><CR>
-    vmap <buffer> <localleader>t :Tabularize <Bar><CR>
-endif
-
-" headers {{{3
 inoremap <buffer> <localleader>1 #<Space>
 inoremap <buffer> <localleader>2 ##<Space>
 inoremap <buffer> <localleader>3 ###<Space>
@@ -46,7 +25,6 @@ inoremap <buffer> <localleader>4 ####<Space>
 inoremap <buffer> <localleader>5 #####<Space>
 inoremap <buffer> <localleader>6 ######<Space>
 
-" fenced code blocks {{{3
 inoremap <buffer> <localleader>c ```c<CR><CR>```<Up>
 inoremap <buffer> <localleader>p ```python<CR><CR>```<Up>
 inoremap <buffer> <localleader>s ```sh<CR><CR>```<Up>
@@ -62,22 +40,16 @@ inoremap <buffer> <localleader>f4 <!-- {{{4 -->
 inoremap <buffer> <localleader>f5 <!-- {{{5 -->
 inoremap <buffer> <localleader>f6 <!-- {{{6 -->
 
+nnoremap <buffer> <localleader>fo A<Space><!-- {{{ -->
+nnoremap <buffer> <localleader>fc A<Space><!-- }}} -->
+nnoremap <buffer> <localleader>f1 A<Space><!-- {{{1 -->
+nnoremap <buffer> <localleader>f2 A<Space><!-- {{{2 -->
+nnoremap <buffer> <localleader>f3 A<Space><!-- {{{3 -->
+nnoremap <buffer> <localleader>f4 A<Space><!-- {{{4 -->
+nnoremap <buffer> <localleader>f5 A<Space><!-- {{{5 -->
+nnoremap <buffer> <localleader>f6 A<Space><!-- {{{6 -->
+
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
-
-function! JumpToNextHeading(direction, count) " {{{
-" https://gist.github.com/romainl/ac63e108c3d11084be62b3c04156c263
-    let col = col(".")
-    silent execute a:direction == "up" ? '?^#' : '/^#'
-    if a:count > 1
-        silent execute "normal! " . repeat("n", a:direction == "up" && col != 1 ? a:count : a:count - 1)
-    endif
-    silent execute "normal! " . col . "|"
-    unlet col
-endfunction " }}}
-nnoremap <buffer> <silent> [[ :<C-u>call JumpToNextHeading("up",   v:count1)<CR>
-nnoremap <buffer> <silent> ]] :<C-u>call JumpToNextHeading("down", v:count1)<CR>
-
-nnoremap <leader>st i~~<Esc>A~~<Esc>
 
 
 " TODO set up compiler
@@ -88,7 +60,7 @@ function! s:MyFoldLevel()
 endfunction
 
 function! s:headingDepth(lnum)
-    return (s:isFenced(a:lnum) ? 0 : len(matchstr(getline(a:lnum), '^#\{1,6}')))
+  return (s:isFenced(a:lnum) ? 0 : len(matchstr(getline(a:lnum), '^#\{1,6}')))
 endfunction
 
 function! s:isFenced(lnum)
@@ -107,12 +79,30 @@ function! s:MyFoldText()
   return indent . leading_spaces .title . trailing_spaces . linecount
 endfunction
 
-setlocal foldmethod=expr
-setlocal foldtext=s:MyFoldText()
-setlocal foldexpr=s:MyFoldLevel()
+" setlocal foldmethod=expr
+" setlocal foldtext=s:MyFoldText()
+" setlocal foldexpr=s:MyFoldLevel()
 
 " markdown preview 
 " call mkdp#util#install()
 let g:mkdp_page_title = '${name}'
 nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
+
+if exists(":Tabularize") " {{{
+  nmap <buffer> <localleader>t :Tabularize <Bar><CR>
+  vmap <buffer> <localleader>t :Tabularize <Bar><CR>
+
+  " https://gist.github.com/287147
+  function! s:align()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
+  endfunction
+  inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+endif
 

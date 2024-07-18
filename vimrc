@@ -1,3 +1,4 @@
+" vim: ft=vim: foldmethod=marker sw=2 sts=2
 " CAPS LOCK MAPS TO CTRL -- WHEN IN DOUBT, PINKY OUT
 " rdnajac's vimrc {{{1
 if !has('nvim')
@@ -50,6 +51,9 @@ else
   set clipboard=unnamedplus     
 endif
 
+set nomodeline                   " modelines are a security risk, see below
+" https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
+
 " display settings {{{1
 set termguicolors
 silent! color scheme
@@ -79,8 +83,9 @@ set fillchars+=stl:\ ,            " display spaces properly in statusline
 " fold settings {{{2
 set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
-"set foldopen+=insert,jump         " open folds when jumping to them or entering insert mode
-set foldopen=all
+set foldopen+=insert
+set foldopen+=jump
+"set foldopen=all
 " set nofoldenable                  " don't fold by default; press 'zi' to toggle
 
 " other settings {{{1
@@ -112,6 +117,7 @@ setglobal isfname+=@-@
 set path +=$HOME/.vim/**
 set path +=$HOME/cbmf/**
 
+
 " global variables {{{1
 let g:is_bash                   = 1
 let g:tex_flavor                = 'latex'
@@ -121,7 +127,19 @@ let g:maplocalleader            = ','
 let g:markdown_fenced_languages =
       \ ['bash=sh', 'c', 'python', 'vim']
 
+let g:netrw_liststyle =  3
+let g:netrw_winsize = 25
+let g:netrw_browse_split=4  " open in prior window
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_banner = 0
+" let g:netrw_sort_sequence = '[\/]$,*' . (empty(a:suffixes) ? '' : ',\%(' . join(map(split(a:suffixes, ','), 'escape(v:val, ".*$~")'), '\|') . '\)[*@]\=$')
+
+let s:dotfiles = '\(^\|\s\s\)\zs\.\S\+'
+let g:netrw_list_hide = netrw_gitignore#Hide() . ',' . s:dotfiles
+let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]
+
 " keymaps {{{1
+nnoremap <C-x> V:Twrite1<CR>
 nnoremap <C-q> :call utils#smartQuit()<CR>
 vnoremap <C-s> :sort<CR>
 "nnoremap <C-m> :silent! make%<CR>redraw!
@@ -167,6 +185,8 @@ nnoremap > V`]>
 nnoremap < V`]<
 
 " move lines up and down {{{2
+nnoremap - ddpkj
+nnoremap _ kddpk
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
@@ -225,9 +245,10 @@ augroup vimrc
   " set (short) filetype-specific settings
   autocmd FileType c	    setlocal cindent noexpandtab
   autocmd FileType cpp	    setlocal cindent expandtab
-  autocmd FileType python   setlocal cindent expandtab fdm=indent fdl=99
+  autocmd FileType python   setlocal cindent expandtab fdm=indent fdl=9
   autocmd FileType vim	    setlocal sw=2 sts=2        fdm=marker
-  autocmd FileType tex      setlocal sw=2 sts=2 spell  fdm=syntax fdl=99
+  autocmd FileType tex      setlocal sw=2 sts=2 spell  fdm=syntax fdl=9
+  autocmd FileType markdown setlocal            spell             fdl=2
   " put a modline containing ft=vim at the end of vimrc to enable 
 
   " automatically quit cmd window
@@ -267,19 +288,17 @@ augroup END
 " plugins {{{1
 " save plugins in ~/.vim/pack/*/opt then packadd! 
 " add plugin configurations to after/plugin/*.vim
+" packadd! vim-qlist
 
 " tpope plugins
+packadd! vim-fugitive
 " packadd! vim-scriptease
 " packadd! vim-unimpaired
-" packadd! vim-obsession
-" packadd! vim-fugitive
 
 " wellle plugins
 " packadd! targets.vim 
 " packadd! context.vim
 " packadd! tmux-complete.vim
-
-" TODO: quicklist manipulation https://github.com/romainl/vim-qlist
 
 " https://gist.github.com/romainl {{{1
 " Automatically set marks for certain filetypes {{{2
@@ -301,6 +320,7 @@ augroup END
 "	call histdel("/", -1)
 " endfunction
 " nnoremap <key> :<C-u>call BreakHere()<CR>
+
 
 " ignore these files and directories {{{1
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
@@ -328,8 +348,4 @@ inoremap <C-U> <C-G>u<C-U>
 if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 endif
-" set nomodeline {{{1
-" Modelines have historically been a source of security vulnerabilities. 
-" TODO: disable modelines and use securemodelines
-" http://www.vim.org/scripts/script.php?script_id=1876
-" vim: ft=vim
+
