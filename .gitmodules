@@ -52,3 +52,6 @@
 [submodule "pack/vimfect/opt/vim-qlist"]
 	path = pack/vimfect/opt/vim-qlist
 	url = https://github.com/romainl/vim-qlist
+[submodule "pack/vimfect/opt/vim-conjoin"]
+	path = pack/vimfect/opt/vim-conjoin
+	url = https://github.com/flwyd/vim-conjoin

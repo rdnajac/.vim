@@ -1,4 +1,4 @@
-" vim: ft=vim: foldmethod=marker sw=2 sts=2
+" vim: ft=vim foldmethod=marker sw=2 sts=2
 " CAPS LOCK MAPS TO CTRL -- WHEN IN DOUBT, PINKY OUT
 " rdnajac's vimrc {{{1
 if !has('nvim')
@@ -25,21 +25,22 @@ if !has('nvim')
   set hlsearch incsearch          " highlighted, incremental search
   set timeoutlen=420		  " ms for a mapped sequence to complete
   set updatetime=100              " used for CursorHold autocommands
+  set nomodeline                  " modelines are a security risk
   
   if &ttimeoutlen == -1 | set ttimeout ttimeoutlen=100 | endif
 
   " set up vim home directory {{{2
-  let s:vim_home = expand('$HOME/.vim/')
+  let s:VIMHOME = expand('$HOME/.vim/')
   " configure options for viminfo 
   " set viminfo=
   
   set undofile swapfile backup
-  let &undodir     = s:vim_home . '.undo//'
-  let &directory   = s:vim_home . '.swap//'
-  let &backupdir   = s:vim_home . '.backup//'
-  let &viminfofile = s:vim_home . '.viminfo'
-  let &spellfile   = s:vim_home . '.spell/en.utf-8.add'
-  " let &verbosefile = s:vim_home . '.vimlog.txt'
+  let &undodir     = s:VIMHOME . '.undo//'
+  let &directory   = s:VIMHOME . '.swap//'
+  let &backupdir   = s:VIMHOME . '.backup//'
+  let &viminfofile = s:VIMHOME . '.viminfo'
+  let &spellfile   = s:VIMHOME . '.spell/en.utf-8.add'
+  " let &verbosefile = s:VIMHOME . '.vimlog.txt'
 
   if !isdirectory(&undodir)   | call mkdir(&undodir,   'p', 0700) | endif
   if !isdirectory(&directory) | call mkdir(&directory, 'p', 0700) | endif
@@ -51,8 +52,6 @@ else
   set clipboard=unnamedplus     
 endif
 
-set nomodeline                   " modelines are a security risk, see below
-" https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
 
 " display settings {{{1
 set termguicolors
@@ -116,6 +115,7 @@ setglobal isfname+=@-@
 " set path +=$VIMRUNTIME/**
 set path +=$HOME/.vim/**
 set path +=$HOME/cbmf/**
+set path +=$HOME/.files/**
 
 
 " global variables {{{1
@@ -199,21 +199,21 @@ nnoremap <leader>ss :set spell!<CR>:set spell?<CR>
 nnoremap <leader>st :call <SID>toggleTabline()<CR>
 nnoremap <leader>ss :call <SID>toggleStatusline()<CR>
 
-function s:toggleTabline()
-  if &showtabline == 2
-	set showtabline=0
-  else
-	set showtabline=2
-  endif
+function! s:toggleTabline()
+  if &showtabline == 2 | set showtabline=0 | else | set showtabline=2 | endif
+endfunction
+function! s:toggleStatusline()
+    if &laststatus == 2 | set laststatus=0 | else | set laststatus=2 | endif
 endfunction
 
-function s:toggleStatusline()
-  if &laststatus == 2
-	set laststatus=0
-  else
-	set laststatus=2
-  endif
+function! s:toggle(opt, default)
+  let option = a:opt
+  let default_value = a:default
+  let command = 'if &' . option . ' == ' . default_value . ' | ' . 'set ' . option . '=0 | ' . 'else | ' . 'set ' . option . '=' . default_value . ' | ' . 'endif '
+  echo command
+  execute command
 endfunction
+" nnoremap <leader>ss :call <SID>toggle('statusline', 2)<CR>
 
 " better completion {{{2
 inoremap <silent> <localleader>o <C-x><C-o>
@@ -246,49 +246,58 @@ augroup vimrc
   autocmd FileType c	    setlocal cindent noexpandtab
   autocmd FileType cpp	    setlocal cindent expandtab
   autocmd FileType python   setlocal cindent expandtab fdm=indent fdl=9
-  autocmd FileType vim	    setlocal sw=2 sts=2        fdm=marker
+  autocmd FileType vim	    setlocal sw=2 sts=2        fdm=marker 
   autocmd FileType tex      setlocal sw=2 sts=2 spell  fdm=syntax fdl=9
   autocmd FileType markdown setlocal            spell             fdl=2
-  " put a modline containing ft=vim at the end of vimrc to enable 
 
   " automatically quit cmd window
   autocmd CmdwinEnter * quit
+  
+  " automatically open quickfix window after 
+  " running a command (that doesn't begin with 'l')
+  autocmd QuickFixCmdPost [^l]* cwindow
+
+  " if .vim/.netrwhist exists, delete it on vim close
+  autocmd VimLeave * 
+	      \ | let netrwhist = s:VIMHOME . '.netrwhist'
+	      \ | if filereadable(netrwhist) | call delete(netrwhist) | endif
 augroup END
 
-augroup jumpToLastPosition
-  autocmd!
-  autocmd BufReadPost *
-	\ let line = line("'\"")
-	\ | if line >= 1 && line <= line("$")
-	\ |   execute "normal! g`\""
-	\ |   execute "silent! normal! zo"
-	\ | endif
+augroup RestoreCursor
+    autocmd!
+    autocmd BufReadPost *
+		\ let line = line("'\"")
+		\ | if line >= 1 && line <= line("$")
+		\ |   execute "normal! g`\""
+		\ |   execute "silent! normal! zo"
+		\ | endif
 augroup END
 
 augroup specialBuffers
-  autocmd!
-  " quit with 'q'
-  autocmd FileType help,qf,netrw,man
-	\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
-	\ | set nobuflisted
-	\ | setlocal noruler
-	\ | setlocal laststatus=0 
-	\ | setlocal colorcolumn=
+    autocmd!
+    autocmd FileType help,qf,netrw,man
+		\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
+		\ | set nobuflisted
+		\ | setlocal noruler
+		\ | setlocal laststatus=0 
+		\ | setlocal colorcolumn=
 augroup END
 
 augroup shebangs
-  autocmd!
-  " TODO put these in ftplugins
-  " autocmd BufNewFile *.sh call utils#SheBangs('')
-  " autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
-  " autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
-  " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
+    autocmd!
+    " TODO put these in ftplugins
+    " autocmd BufNewFile *.sh call utils#SheBangs('')
+    " autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
+    " autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
+    " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
 augroup END
 
 " plugins {{{1
 " save plugins in ~/.vim/pack/*/opt then packadd! 
 " add plugin configurations to after/plugin/*.vim
+
 " packadd! vim-qlist
+packadd! vim-conjoin
 
 " tpope plugins
 packadd! vim-fugitive
@@ -299,40 +308,21 @@ packadd! vim-fugitive
 " packadd! targets.vim 
 " packadd! context.vim
 " packadd! tmux-complete.vim
+" }}}
 
-" https://gist.github.com/romainl {{{1
-" Automatically set marks for certain filetypes {{{2
-augroup AutomaticMarks 
-  autocmd!
-  autocmd BufLeave vimrc        normal! mV
-  autocmd BufLeave *.vim        normal! mV
-  autocmd BufLeave *.md         normal! mM
-  autocmd BufLeave *.sh         normal! mS
-augroup END
+function! Fmt()
+    let winview = winsaveview()
+    " now gq the whole thing
+    normal! gggqG
+    if v:shell_error > 0
+	silent undo
+	redraw
+	echomsg 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
+    endif
+    call winrestview(winview)
+endfunction
+" nmap <silent> Q :let w:gqview = winsaveview()<CR>:set opfunc=Format<CR>g@"
 
-" Slightly more intuitive gt/gT {{{2
-" nnoremap <expr> gt ":tabnext +" . v:count1 . '<CR>'
-" nnoremap <expr> gT ":tabnext -" . v:count1 . '<CR>'
-
-" opposite of J {{{2
-" function! BreakHere()
-"	s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
-"	call histdel("/", -1)
-" endfunction
-" nnoremap <key> :<C-u>call BreakHere()<CR>
-
-
-" ignore these files and directories {{{1
-set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
-set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
-set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
-set wildignore+=*.pdf,*.aux,*.fdb_latexmk,*.fls           " LaTeX files
-set wildignore+=*.zip,*.tar.gz,*.rar,*.7z,*.tar.xz,*.tgz  " Archives and compressed files
-set wildignore+=*.cmake,*.cmake.in,*.cmod,*/bin/*,*/build/* " C/C++ files and directories
-set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
-set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
-set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
-set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
 
 " defaults.vim {{{1
 " defaults.vim is not loaded when using a vimrc file,
@@ -346,6 +336,37 @@ inoremap <C-U> <C-G>u<C-U>
 
 " see the difference between current buffer and the file it was loaded from.
 if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 endif
 
+" https://gist.github.com/romainl {{{1
+augroup AutomaticMarks 
+    autocmd!
+    autocmd BufLeave vimrc        normal! mV
+    autocmd BufLeave *.vim        normal! mV
+    autocmd BufLeave *.md         normal! mM
+    autocmd BufLeave *.sh         normal! mS
+augroup END
+
+" Slightly more intuitive gt/gT
+" nnoremap <expr> gt ":tabnext +" . v:count1 . '<CR>'
+" nnoremap <expr> gT ":tabnext -" . v:count1 . '<CR>'
+
+" opposite of J
+function! BreakHere()
+    s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
+    call histdel("/", -1)
+endfunction
+nnoremap <C-j>  :<C-u>call BreakHere()<CR>
+
+" ignore these files and directories {{{1
+set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
+set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
+set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
+set wildignore+=*.pdf,*.aux,*.fdb_latexmk,*.fls           " LaTeX files
+set wildignore+=*.zip,*.tar.gz,*.rar,*.7z,*.tar.xz,*.tgz  " Archives and compressed files
+set wildignore+=*.cmake,*.cmake.in,*.cmod,*/bin/*,*/build/* " C/C++ files and directories
+set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
+set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
+set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
+set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
