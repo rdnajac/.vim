@@ -1,22 +1,41 @@
-if exists('g:loaded_vimux') || &compatible
+if exists('g:loaded_vimux')
   finish
 endif
 let g:loaded_vimux = 1
 
+function! VimuxTmux(arguments) abort
+  let l:tmuxCommand = VimuxOption('VimuxTmuxCommand').' '.a:arguments
+  if has_key(environ(), 'TMUX')
+    let l:output = system(l:tmuxCommand)
+    if v:shell_error
+      throw 'Tmux command failed with message:' . l:output
+    endif
+    return l:output
+  else
+    throw 'Aborting, because not inside tmux session.'
+  endif
+endfunction
+function! VimuxSendKeys(keys) abort
+  if exists('g:VimuxRunnerIndex')
+    call VimuxTmux('send-keys -t '.g:VimuxRunnerIndex.' '.a:keys)
+  else
+    echo 'No vimux runner pane/window. Create one with VimuxOpenRunner'
+  endif
+endfunction
+
+function! VimuxSendText(text) abort
+  call VimuxSendKeys(shellescape(substitute(a:text, '\n$', ' ', '')))
+endfunction
+
 " Set up all global options with defaults right away, in one place
-let g:VimuxDebug         = get(g:, 'VimuxDebug',         v:false)
-let g:VimuxHeight        = get(g:, 'VimuxHeight',        20)
 let g:VimuxOpenExtraArgs = get(g:, 'VimuxOpenExtraArgs', '')
-let g:VimuxOrientation   = get(g:, 'VimuxOrientation',   'v')
 let g:VimuxPromptString  = get(g:, 'VimuxPromptString',  'Command? ')
-let g:VimuxResetSequence = get(g:, 'VimuxResetSequence', 'q C-u')
 let g:VimuxRunnerName    = get(g:, 'VimuxRunnerName',    '')
 let g:VimuxRunnerType    = get(g:, 'VimuxRunnerType',    'pane')
 let g:VimuxRunnerQuery   = get(g:, 'VimuxRunnerQuery',   {})
 let g:VimuxTmuxCommand   = get(g:, 'VimuxTmuxCommand',   'tmux')
 let g:VimuxUseNearest    = get(g:, 'VimuxUseNearest',    v:true)
 let g:VimuxExpandCommand = get(g:, 'VimuxExpandCommand', v:false)
-let g:VimuxCloseOnExit   = get(g:, 'VimuxCloseOnExit',   v:false)
 let g:VimuxCommandShell  = get(g:, 'VimuxCommandShell',   v:true)
 
 function! VimuxOption(name) abort
@@ -29,11 +48,6 @@ command -bar VimuxOpenRunner :call VimuxOpenRunner()
 command -bar VimuxCloseRunner :call VimuxCloseRunner()
 command -nargs=? VimuxPromptCommand :call VimuxPromptCommand(<args>)
 command -bar VimuxTogglePane :call VimuxTogglePane()
-
-augroup VimuxAutocmds
-  au!
-  autocmd VimLeave * call s:autoclose()
-augroup END
 
 function! VimuxRunCommandInDir(command, useFile) abort
   let l:file = ''
@@ -59,24 +73,12 @@ function! VimuxRunCommand(command, ...) abort
   if exists('a:1')
     let l:autoreturn = a:1
   endif
-  let resetSequence = VimuxOption('VimuxResetSequence')
+  let resetSequence = 'q C-u'
   let g:VimuxLastCommand = a:command
   call VimuxSendKeys(resetSequence)
   call VimuxSendText(a:command)
   if l:autoreturn ==# 1
     call VimuxSendKeys('Enter')
-  endif
-endfunction
-
-function! VimuxSendText(text) abort
-  call VimuxSendKeys(shellescape(substitute(a:text, '\n$', ' ', '')))
-endfunction
-
-function! VimuxSendKeys(keys) abort
-  if exists('g:VimuxRunnerIndex')
-    call VimuxTmux('send-keys -t '.g:VimuxRunnerIndex.' '.a:keys)
-  else
-    echo 'No vimux runner pane/window. Create one with VimuxOpenRunner'
   endif
 endfunction
 
@@ -92,7 +94,6 @@ function! VimuxOpenRunner() abort
       call VimuxTmux('new-window '.extraArguments)
     endif
     let g:VimuxRunnerIndex = s:tmuxIndex()
-    call s:setRunnerName()
     call VimuxTmux('last-'.VimuxOption('VimuxRunnerType'))
   endif
 endfunction
@@ -136,21 +137,6 @@ function! VimuxPromptCommand(...) abort
   call VimuxRunCommand(l:command)
 endfunction
 
-function! VimuxTmux(arguments) abort
-  let l:tmuxCommand = VimuxOption('VimuxTmuxCommand').' '.a:arguments
-  if VimuxOption('VimuxDebug')
-    echom l:tmuxCommand
-  endif
-  if has_key(environ(), 'TMUX')
-    let l:output = system(l:tmuxCommand)
-    if v:shell_error
-      throw 'Tmux command failed with message:' . l:output
-    endif
-    return l:output
-  else
-    throw 'Aborting, because not inside tmux session.'
-  endif
-endfunction
 
 function! s:tmuxSession() abort
   return s:tmuxProperty('#S')
@@ -173,9 +159,7 @@ function! s:tmuxWindowId() abort
 endfunction
 
 function! s:vimuxPaneOptions() abort
-    let height = VimuxOption('VimuxHeight')
-    let orientation = VimuxOption('VimuxOrientation')
-    return '-l '.height.'% -'.orientation
+  return '-l 20% -v'
 endfunction
 
 ""
@@ -241,19 +225,6 @@ function! s:getTargetFilter() abort
   endif
 endfunction
 
-function! s:setRunnerName() abort
-  let targetName = VimuxOption('VimuxRunnerName')
-  if targetName ==# ''
-    return
-  endif
-  let runnerType = VimuxOption('VimuxRunnerType')
-  if runnerType ==# 'window'
-    call VimuxTmux('rename-window '.targetName)
-  elseif runnerType ==# 'pane'
-    call VimuxTmux('select-pane -T '.targetName)
-  endif
-endfunction
-
 function! s:tmuxProperty(property) abort
   return substitute(VimuxTmux("display -p '".a:property."'"), '\n$', '', '')
 endfunction
@@ -263,8 +234,3 @@ function! s:hasRunner(index) abort
   return match(VimuxTmux('list-'.runnerType."s -F '#{".runnerType."_id}'"), a:index)
 endfunction
 
-function! s:autoclose() abort
-  if VimuxOption('VimuxCloseOnExit')
-    call VimuxCloseRunner()
-  endif
-endfunction
