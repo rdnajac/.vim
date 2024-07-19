@@ -23,23 +23,11 @@ function! VimuxOption(name) abort
   return get(b:, a:name, get(g:, a:name))
 endfunction
 
-if !executable(VimuxOption('VimuxTmuxCommand'))
-  echohl ErrorMsg | echomsg 'Failed to find executable '.VimuxOption('VimuxTmuxCommand') | echohl None
-  finish
-endif
-
 command -nargs=* VimuxRunCommand :call VimuxRunCommand(<args>)
 command -bar VimuxRunLastCommand :call VimuxRunLastCommand()
 command -bar VimuxOpenRunner :call VimuxOpenRunner()
 command -bar VimuxCloseRunner :call VimuxCloseRunner()
-command -bar VimuxZoomRunner :call VimuxZoomRunner()
-command -bar VimuxInspectRunner :call VimuxInspectRunner()
-command -bar VimuxScrollUpInspect :call VimuxScrollUpInspect()
-command -bar VimuxScrollDownInspect :call VimuxScrollDownInspect()
-command -bar VimuxInterruptRunner :call VimuxInterruptRunner()
 command -nargs=? VimuxPromptCommand :call VimuxPromptCommand(<args>)
-command -bar VimuxClearTerminalScreen :call VimuxClearTerminalScreen()
-command -bar VimuxClearRunnerHistory :call VimuxClearRunnerHistory()
 command -bar VimuxTogglePane :call VimuxTogglePane()
 
 augroup VimuxAutocmds
@@ -132,49 +120,6 @@ function! VimuxTogglePane() abort
                   \)
       let g:VimuxRunnerType = 'window'
     endif
-  endif
-endfunction
-
-function! VimuxZoomRunner() abort
-  if exists('g:VimuxRunnerIndex')
-    if VimuxOption('VimuxRunnerType') ==# 'pane'
-      call VimuxTmux('resize-pane -Z -t '.g:VimuxRunnerIndex)
-    elseif VimuxOption('VimuxRunnerType') ==# 'window'
-      call VimuxTmux('select-window -t '.g:VimuxRunnerIndex)
-    endif
-  endif
-endfunction
-
-function! VimuxInspectRunner() abort
-  call VimuxTmux('select-'.VimuxOption('VimuxRunnerType').' -t '.g:VimuxRunnerIndex)
-  call VimuxTmux('copy-mode')
-endfunction
-
-function! VimuxScrollUpInspect() abort
-  call VimuxInspectRunner()
-  call VimuxTmux('last-'.VimuxOption('VimuxRunnerType'))
-  call VimuxSendKeys('C-u')
-endfunction
-
-function! VimuxScrollDownInspect() abort
-  call VimuxInspectRunner()
-  call VimuxTmux('last-'.VimuxOption('VimuxRunnerType'))
-  call VimuxSendKeys('C-d')
-endfunction
-
-function! VimuxInterruptRunner() abort
-  call VimuxSendKeys('^c')
-endfunction
-
-function! VimuxClearTerminalScreen() abort
-  if exists('g:VimuxRunnerIndex')
-    call VimuxSendKeys('C-l')
-  endif
-endfunction
-
-function! VimuxClearRunnerHistory() abort
-  if exists('g:VimuxRunnerIndex')
-    call VimuxTmux('clear-history -t '.g:VimuxRunnerIndex)
   endif
 endfunction
 
