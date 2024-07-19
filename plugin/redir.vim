@@ -1,14 +1,5 @@
 " https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
 
-function s:close_scratch_windows() 
-    for win in range(1, winnr('$'))
-	" Close all windows with 'scratch' variable set to true
-	if getwinvar(win, 'scratch')
-	    execute win . 'windo close'
-	endif
-    endfor
-endfunction
-
 
 function! Redir(cmd, rng, start, end)
     call s:close_scratch_windows()
@@ -41,6 +32,14 @@ function! Redir(cmd, rng, start, end)
     setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
     silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
     call setline(1, output)
+endfunction
+
+function s:close_scratch_windows() 
+    for win in range(1, winnr('$'))
+	if getwinvar(win, 'scratch')
+	    execute win . 'windo close'
+	endif
+    endfor
 endfunction
 
 " This command definition includes -bar, so that it is possible to "chain" Vim commands.
