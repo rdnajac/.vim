@@ -15,9 +15,14 @@ fi
 
 add_submodule() {
 	local url="$1"
+
+	# if url doesnt have https://github.com, add it
+	if [[ ! "$url" =~ ^https://github.com ]]; then
+		url="http://github.com/${url}.git"
+	fi
 	
-	mkdir -vp "${PACKDIR}/opt" 
-	cd "${PACKDIR}/opt" || { echo "Could not change to $PACKDIR"; exit 1; }
+	mkdir -vp "${PACKDIR}/start" 
+	cd "${PACKDIR}/start" || { echo "Could not change to $PACKDIR"; exit 1; }
 
 	git submodule add --force --depth 1 --progress "$url"
 }
@@ -27,3 +32,4 @@ while [[ $# -gt 0 ]]; do
 	shift
 done
 
+echo hi

@@ -15,16 +15,6 @@ function! utils#smartQuit() abort
     endif
 endfunction
 
-" helpers for selection
-function! s:v_sel() abort
-    normal! gv"xy
-    return getreg('x')
-endfunction
-
-function utils#test()
-    echom s:v_sel()
-endfunction
-
 function! utils#replaceSelection() abort
     normal! gv"xy
     let sel = getreg('x')

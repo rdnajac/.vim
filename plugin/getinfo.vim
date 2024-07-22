@@ -13,5 +13,3 @@ function GetInfo()
   let info = GetHi()
   call Popup('info', split(info, "\n"))
 endfunction
-
-

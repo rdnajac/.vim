@@ -1,7 +1,6 @@
-" vim: ft=vim foldmethod=marker sw=2 sts=2
+" rdnajac's vimrc
 " CAPS LOCK MAPS TO CTRL -- WHEN IN DOUBT, PINKY OUT
-" rdnajac's vimrc {{{1
-if !has('nvim')
+if !has('nvim')  " {{{
   set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
   scriptencoding utf-8
   
@@ -46,12 +45,10 @@ if !has('nvim')
   if !isdirectory(&directory) | call mkdir(&directory, 'p', 0700) | endif
   if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p', 0700) | endif
   " }}}2
-  " clipboard settings {{{2
   set clipboard=unnamed
 else
   set clipboard=unnamedplus     
 endif
-
 
 " display settings {{{1
 set termguicolors
@@ -84,8 +81,8 @@ set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
 set foldopen+=insert
 set foldopen+=jump
-"set foldopen=all
-" set nofoldenable                  " don't fold by default; press 'zi' to toggle
+" set foldopen=all
+" set nofoldenable                " don't fold by default; press 'zi' to toggle
 
 " other settings {{{1
 set autochdir                     " change directory to the file being edited
@@ -100,23 +97,13 @@ set shortmess-=S                  " don't show search count
 set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
 set wildmenu                      " just use the default wildmode with this setting
 
-" set iskeyword+=-                  " treat hyphens as part of a word
-set iskeyword+=_
-"
-" tpope/apathy {{{1
-setglobal path=.,,
-setglobal include=
-setglobal includeexpr=
-setglobal define=
-setglobal isfname+=@-@
+" set iskeyword+=-                " treat hyphens as part of a word
+set iskeyword+=_		  " treat underscores as part of a word
 " set isfname+={,},\",\<,\>,(,),[,],\:
-
-" add paths to path
 " set path +=$VIMRUNTIME/**
 set path +=$HOME/.vim/**
 set path +=$HOME/cbmf/**
 set path +=$HOME/.files/**
-
 
 " global variables {{{1
 let g:is_bash                   = 1
@@ -124,6 +111,7 @@ let g:tex_flavor                = 'latex'
 let g:vimtex_view_method        = 'skim'
 let g:mapleader                 = ' '
 let g:maplocalleader            = ','
+let g:markdown_folding	        = 1
 let g:markdown_fenced_languages =
       \ ['bash=sh', 'c', 'python', 'vim']
 
@@ -149,11 +137,6 @@ nnoremap <leader>v :e $MYVIMRC<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>x :!./%<CR>
 vnoremap <leader>r :<C-u>call utils#replaceSelection()<CR>
-
-" run current line
-" nnoremap <leader>rl ^yg_:r!<C-r>"<CR>
-" yank selection into command line
-" vnoremap <leader>c y:<C-r>"<C-b>
 
 " buffer/window navigation {{{2
 nnoremap <tab> :bnext<CR>
@@ -188,6 +171,7 @@ nnoremap <leader>ss :call <SID>toggleStatusline()<CR>
 function! s:toggleTabline()
   if &showtabline == 2 | set showtabline=0 | else | set showtabline=2 | endif
 endfunction
+
 function! s:toggleStatusline()
     if &laststatus == 2 | set laststatus=0 | else | set laststatus=2 | endif
 endfunction
@@ -231,7 +215,6 @@ iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
 " autocmds {{{1
 augroup vimrc
   autocmd!
-  " set (short) filetype-specific settings
   autocmd FileType c	    setlocal cindent noexpandtab
   autocmd FileType cpp	    setlocal cindent expandtab
   autocmd FileType python   setlocal cindent expandtab fdm=indent fdl=9
@@ -239,17 +222,19 @@ augroup vimrc
   autocmd FileType tex      setlocal sw=2 sts=2 spell  fdm=syntax fdl=9
   autocmd FileType markdown setlocal            spell             fdl=2
 
-  " automatically quit cmd window
-  autocmd CmdwinEnter * quit
-  
-  " automatically open quickfix window after 
-  " running a command (that doesn't begin with 'l')
-  autocmd QuickFixCmdPost [^l]* cwindow
+  autocmd CmdwinEnter * quit            " close command-line window upon entering
+  autocmd QuickFixCmdPost [^l]* cwindow " open quickfix window after running a command 
+					" (that doesn't begin with 'l')
+  autocmd BufLeave {} bd!              " close buffer when leaving it
+augroup END
 
-  " if .vim/.netrwhist exists, delete it on vim close
+augroup vimrc_netrw
+  autocmd!
+  autocmd BufLeave netrw call netrw#NetrwQuit()  " close window when we leave the buffer
   autocmd VimLeave * 
-	      \ | let netrwhist = s:VIMHOME . '.netrwhist'
-	      \ | if filereadable(netrwhist) | call delete(netrwhist) | endif
+	\ if filereadable(expand(expand('~/.vim/.netrwhist'))) 
+	\ | call delete(expand('~/.vim/.netrwhist')) 
+	\ | endif
 augroup END
 
 augroup RestoreCursor
@@ -262,7 +247,7 @@ augroup RestoreCursor
 		\ | endif
 augroup END
 
-augroup specialBuffers
+augroup SpecialBuffers
     autocmd!
     autocmd FileType help,qf,netrw,man
 		\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
@@ -272,47 +257,26 @@ augroup specialBuffers
 		\ | setlocal colorcolumn=
 augroup END
 
-augroup shebangs
-    autocmd!
-    " TODO put these in ftplugins
-    " autocmd BufNewFile *.sh call utils#SheBangs('')
-    " autocmd BufNewFile *.py call utils#SheBangs('#!/usr/bin/env python3')
-    " autocmd BufNewFile *.pl call utils#SheBangs('#!/usr/bin/env perl')
-    " autocmd BufNewFile *.R  call utils#SheBangs('#!/usr/bin/env Rscript')
-augroup END
-
-" plugins {{{1
-" save plugins in ~/.vim/pack/*/opt then packadd! 
-" add plugin configurations to after/plugin/*.vim
-
-" packadd! vim-qlist
+" opt plugins {{{1
+packadd! FastFold
+packadd! targets.vim 
 packadd! vim-conjoin
-
-" tpope plugins
-packadd! vim-fugitive
+" packadd! vim-qlist
 " packadd! vim-scriptease
-" packadd! vim-unimpaired
 
-" wellle plugins
-" packadd! targets.vim 
-" }}}
-
-function! Fmt()
-    let winview = winsaveview()
-    " now gq the whole thing
-    normal! gggqG
-    if v:shell_error > 0
-	silent undo
-	redraw
-	echomsg 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
-    endif
-    call winrestview(winview)
-endfunction
-" nmap <silent> Q :let w:gqview = winsaveview()<CR>:set opfunc=Format<CR>g@"
+" ignored files and directories {{{1
+set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
+set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
+set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
+set wildignore+=*.pdf,*.aux,*.fdb_latexmk,*.fls           " LaTeX files
+set wildignore+=*.zip,*.tar.gz,*.rar,*.7z,*.tar.xz,*.tgz  " Archives and compressed files
+set wildignore+=*.cmake,*.cmake.in,*.cmod,*/bin/*,*/build/* " C/C++ files and directories
+set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
+set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
+set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
+set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
 
 " defaults.vim {{{1
-" defaults.vim is not loaded when using a vimrc file,
-" so let's copy the ones we want to use
 set nrformats-=octal		  " Ignore octal numbers for Ctrl-A and Ctrl-X
 let c_comment_strings=1	          " I like highlighting strings inside C comments.
 
@@ -324,35 +288,5 @@ inoremap <C-U> <C-G>u<C-U>
 if !exists(":DiffOrig")
     command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
 endif
-
-" https://gist.github.com/romainl {{{1
-augroup AutomaticMarks 
-    autocmd!
-    autocmd BufLeave vimrc        normal! mV
-    autocmd BufLeave *.vim        normal! mV
-    autocmd BufLeave *.md         normal! mM
-    autocmd BufLeave *.sh         normal! mS
-augroup END
-
-" Slightly more intuitive gt/gT
-" nnoremap <expr> gt ":tabnext +" . v:count1 . '<CR>'
-" nnoremap <expr> gT ":tabnext -" . v:count1 . '<CR>'
-
-" opposite of J
-function! BreakHere()
-    s/^\(\s*\)\(.\{-}\)\(\s*\)\(\%#\)\(\s*\)\(.*\)/\1\2\r\1\4\6
-    call histdel("/", -1)
-endfunction
-nnoremap <C-j>  :<C-u>call BreakHere()<CR>
-
-" ignore these files and directories {{{1
-set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
-set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
-set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
-set wildignore+=*.pdf,*.aux,*.fdb_latexmk,*.fls           " LaTeX files
-set wildignore+=*.zip,*.tar.gz,*.rar,*.7z,*.tar.xz,*.tgz  " Archives and compressed files
-set wildignore+=*.cmake,*.cmake.in,*.cmod,*/bin/*,*/build/* " C/C++ files and directories
-set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
-set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
-set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
-set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
+" }}}1
+" vim: ft=vim foldmethod=marker sw=2 sts=2
