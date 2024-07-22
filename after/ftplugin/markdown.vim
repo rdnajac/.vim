@@ -1,22 +1,5 @@
-" .vim/after/ftplugin/markdown.vim
+" after/ftplugin/markdown.vim
 " setlocal textwidth=80
-let g:markdown_folding = 1
-function! s:prettier() abort
-  let l:pos = getpos(".")
-  let l:w = winsaveview()
-  silent execute '!prettier --write ' . shellescape(expand('%'))
-  silent! edit!
-  call setpos('.', l:pos)
-  call winrestview(l:w)
-  redraw!
-  normal! zo
-endfunction
-
-" augroup PrettierOnSave
-"     autocmd!
-"     autocmd BufWritePre *.md call s:prettier()
-" augroup END
-
 
 inoremap <buffer> <localleader>1 #<Space>
 inoremap <buffer> <localleader>2 ##<Space>
@@ -50,7 +33,6 @@ nnoremap <buffer> <localleader>f5 A<Space><!-- {{{5 -->
 nnoremap <buffer> <localleader>f6 A<Space><!-- {{{6 -->
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
-
 
 " TODO set up compiler
 let b:markdownlint_options = '--disable MD013'
@@ -105,4 +87,4 @@ if exists(":Tabularize") " {{{
   endfunction
   inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
 endif
-
+" vim: nofoldenable

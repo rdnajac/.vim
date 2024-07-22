@@ -1,4 +1,4 @@
-" hi!ghlighting for Markdown groups
+" after/syntax/markdown.vim 
 
 syntax region ghAlert start=/\[\!/ end=/\]/ contained
 " syntax match mdAlert '\[\![NOTE|TIP|IMPORTANT|WARNING|CAUTION]\]'
