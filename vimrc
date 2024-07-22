@@ -262,7 +262,10 @@ packadd! FastFold
 packadd! targets.vim 
 packadd! vim-conjoin
 " packadd! vim-qlist
-" packadd! vim-scriptease
+
+packadd! lsp
+packadd! vimcomplete
+" TODO add https://github.com/hrsh7th/vim-vsnip
 
 " ignored files and directories {{{1
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files

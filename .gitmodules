@@ -55,5 +55,13 @@
 
 # tpope/opt
 [submodule "tpope/vim-scriptease"]
-	path = pack/tpope/opt/vim-scriptease
+	path = pack/tpope/start/vim-scriptease
 	url = https://github.com/tpope/vim-scriptease.git
+
+# vim9 plugins
+[submodule "yegappan/lsp"]
+	path = pack/vim9/opt/lsp
+	url = http://github.com/yegappan/lsp.git
+[submodule "girishji/vimcomplete"]
+	path = pack/vim9/opt/vimcomplete
+	url = http://github.com/girishji/vimcomplete.git
