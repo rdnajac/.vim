@@ -9,13 +9,10 @@ let g:secure_modelines_allowed_items = [
       \ "expandtab",   "et",   "noexpandtab", "noet",
       \ "filetype",    "ft",
       \ "foldmethod",  "fdm",
-      \ "readonly",    "ro",   "noreadonly", "noro",
+      \ "readonly",    "ro",   "noreadonly",  "noro",
       \ "rightleft",   "rl",   "norightleft", "norl",
-      \ "cindent",     "cin",  "nocindent", "nocin",
-      \ "smartindent", "si",   "nosmartindent", "nosi",
-      \ "autoindent",  "ai",   "noautoindent", "noai",
-      \ "spell", "nospell",
-      \ "spelllang"
+      \ "spell",       "nospell", "spelllang", 
+      \ "wrap",        "nowrap", 
       \ ]
 
 function! s:DoOne(item) abort
@@ -99,10 +96,6 @@ function! s:DoModelines() abort
       call s:DoModeline(l:line)
     endfor
   endif
-endfun
-
-function! SecureModelines_DoModelines() abort
-  call s:DoModelines()
 endfun
 
 augroup SecureModeLines

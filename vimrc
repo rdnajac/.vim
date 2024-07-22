@@ -127,17 +127,6 @@ let g:maplocalleader            = ','
 let g:markdown_fenced_languages =
       \ ['bash=sh', 'c', 'python', 'vim']
 
-let g:netrw_liststyle =  3
-let g:netrw_winsize = 25
-let g:netrw_browse_split=4  " open in prior window
-let g:netrw_altv=1          " open splits to the right
-let g:netrw_banner = 0
-" let g:netrw_sort_sequence = '[\/]$,*' . (empty(a:suffixes) ? '' : ',\%(' . join(map(split(a:suffixes, ','), 'escape(v:val, ".*$~")'), '\|') . '\)[*@]\=$')
-
-let s:dotfiles = '\(^\|\s\s\)\zs\.\S\+'
-let g:netrw_list_hide = netrw_gitignore#Hide() . ',' . s:dotfiles
-let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]
-
 " keymaps {{{1
 nnoremap <C-x> V:Twrite1<CR>
 nnoremap <C-q> :call utils#smartQuit()<CR>
@@ -228,6 +217,9 @@ inoremap <silent> <localleader>u <C-x><C-u>
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'q' : 'Q'
 
+" easy command line! {{{2
+cnoreabbrev ?? verbose set ?<Left>
+ 
 " center searches {{{2
 nnoremap n nzzzv
 nnoremap N Nzzzv
