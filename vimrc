@@ -160,9 +160,6 @@ nnoremap <tab> :bnext<CR>
 nnoremap <s-tab> :bprevious<CR>
 nnoremap <leader><tab> :b#<CR>
 
-" navigate splits with <C-hjkl>
-packadd! vim-tmux-navigator
-
 " better escape with jk/kj {{{2
 inoremap jk <esc>
 inoremap kj <esc>
@@ -298,8 +295,6 @@ packadd! vim-fugitive
 
 " wellle plugins
 " packadd! targets.vim 
-" packadd! context.vim
-" packadd! tmux-complete.vim
 " }}}
 
 function! Fmt()
@@ -314,7 +309,6 @@ function! Fmt()
     call winrestview(winview)
 endfunction
 " nmap <silent> Q :let w:gqview = winsaveview()<CR>:set opfunc=Format<CR>g@"
-
 
 " defaults.vim {{{1
 " defaults.vim is not loaded when using a vimrc file,
