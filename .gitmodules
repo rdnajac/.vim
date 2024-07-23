@@ -58,8 +58,11 @@
 
 # vim9 plugins
 [submodule "yegappan/lsp"]
-	path = pack/vim9/opt/lsp
+	path = pack/vimfect/start/lsp
 	url = http://github.com/yegappan/lsp.git
 [submodule "girishji/vimcomplete"]
-	path = pack/vim9/opt/vimcomplete
+	path = pack/vimfect/start/vimcomplete
 	url = http://github.com/girishji/vimcomplete.git
+[submodule "dense-analysis/ale"]
+	path = pack/vimfect/start/ale
+	url = http://github.com/dense-analysis/ale.git
