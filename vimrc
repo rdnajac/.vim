@@ -1,9 +1,6 @@
 " rdnajac's vimrc
 " CAPS LOCK MAPS TO CTRL -- WHEN IN DOUBT, PINKY OUT
-if !has('nvim')  " {{{
-  set encoding=utf-8              " http://rbtnn.hateblo.jp/entry/2014/12/28/010913
-  scriptencoding utf-8
-  
+if !has('nvim')  " {{{1
   " vim with a vimrc is always incompatible, but let's handle edge cases
   if &compatible | set nocompatible | endif                           
 
@@ -13,26 +10,9 @@ if !has('nvim')  " {{{
   syntax enable                   " source $VIMRUNTIME/syntax/syntax.vim
   runtime! macros/matchit.vim     " enable % to match more than just parens
   runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
-  
-  set mouse=a                     " wait, that's illegal
-  set hidden                      " enable background buffers
-  set autoindent smarttab         " enable auto-indent and smart tabbing
-  set autoread autowrite          " automatically read/write files when changed
-  set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
-  set formatoptions+=j            " delete comment character when joining lines
-  " set formatoptions-=o          " don't continue comments when pressing 'o'
-  set hlsearch incsearch          " highlighted, incremental search
-  set timeoutlen=420		  " ms for a mapped sequence to complete
-  set updatetime=100              " used for CursorHold autocommands
-  set nomodeline                  " modelines are a security risk
-  
-  if &ttimeoutlen == -1 | set ttimeout ttimeoutlen=100 | endif
-
+  silent! color scheme            " use my custom colorscheme (in ~/.vim/colors/)
   " set up vim home directory {{{2
   let s:VIMHOME = expand('$HOME/.vim/')
-  " configure options for viminfo 
-  " set viminfo=
-  
   set undofile swapfile backup
   let &undodir     = s:VIMHOME . '.undo//'
   let &directory   = s:VIMHOME . '.swap//'
@@ -40,41 +20,63 @@ if !has('nvim')  " {{{
   let &viminfofile = s:VIMHOME . '.viminfo'
   let &spellfile   = s:VIMHOME . '.spell/en.utf-8.add'
   " let &verbosefile = s:VIMHOME . '.vimlog.txt'
-
+  " set viminfo=
   if !isdirectory(&undodir)   | call mkdir(&undodir,   'p', 0700) | endif
   if !isdirectory(&directory) | call mkdir(&directory, 'p', 0700) | endif
   if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p', 0700) | endif
   " }}}2
+  set autoindent smarttab         " enable auto-indent and smart tabbing
+  set autoread autowrite          " automatically read/write files when changed
+  set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
+  set formatoptions+=j            " delete comment character when joining lines
+  set formatoptions-=o            " don't continue comments when pressing 'o'
+  set hidden                      " enable background buffers
+  set hlsearch incsearch          " highlighted, incremental search
+  set mouse=a                     " wait, that's illegal
+  set nomodeline                  " modelines are a security risk
+  set nrformats-=octal		  " Ignore octal numbers for Ctrl-A and Ctrl-X
+  set path=.,,                    " C ftplugin should add "/usr/include"
+  set shortmess+=A                " avoid 'hit-enter' prompts
+  set shortmess-=S                " don't show search count
+  set showcmd                     " show the command being typed
+  set termguicolors
+  set ttimeout ttimeoutlen=50	  " time out on mappings 
+  set wildmenu                      " just use the default wildmode with this setting
   set clipboard=unnamed
 else
   set clipboard=unnamedplus     
 endif
 
-" display settings {{{1
-set termguicolors
-silent! color scheme
-
+" other settings {{{1
+set autochdir                     " change directory to the file being edited
+set breakindent                   " indent wrapped lines
+set completeopt+=preview	  " show preview window
+set completeopt=menuone,noselect  " show menu even if there's only one match
 set cursorline                    " highlight the current line
-set lazyredraw                    " don't redraw the screen while executing macros
-set nowrap                        " don't wrap lines by default
-set linebreak breakindent         " break at word boundaries and indent
-set number relativenumber         " show (relative) line numbers
-set numberwidth=3                 " line number column padding
-set showmatch                     " highlight matching brackets
-set pumheight=10                  " limit the number of items in a popup menu
-set splitbelow splitright         " where to open new splits by default
-set scrolloff=4 sidescrolloff=0   " scroll settings
-set showcmd                       " show the command being typed
-" set showcmdloc=statusline       " show command in statusline 
-" set cmdheight=1                 " height of the command line
-set listchars=trail:¿,tab:→\      " show trailing whitespace and tabs
-set fillchars=                    " reset fillchars
 set fillchars+=eob:\ ,		  " don't show end of buffer as a column of ~
 set fillchars+=stl:\ ,            " display spaces properly in statusline
-
-" signcolumn is default is auto
-" set signcolumn=yes
-" set signcolumn=no
+set fillchars=                    " reset fillchars
+set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
+set iskeyword+=-                  " treat hyphens as part of a word
+" set iskeyword+=_		  " treat underscores as part of a word
+set lazyredraw                    " don't redraw the screen while executing macros
+set linebreak breakindent         " break at word boundaries and indent
+set listchars=trail:¿,tab:→\      " show trailing whitespace and tabs
+set nowrap                        " don't wrap lines by default
+set number relativenumber         " show (relative) line numbers
+set numberwidth=3                 " line number column padding
+set path +=$HOME/.files/**
+set path +=$HOME/.vim/**
+set path +=$HOME/cbmf/**
+set pumheight=10                  " limit the number of items in a popup menu
+set report=0                      " display how many replacements were made
+set scrolloff=5                   " default 0, set to 5 in defaults.vim
+set shiftround			  " round indent to multiple of shiftwidth
+set showmatch                     " highlight matching brackets
+set splitbelow splitright         " where to open new splits by default
+set timeoutlen=420		  " ms for a mapped sequence to complete
+set updatetime=100                " used for CursorHold autocommands
+set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
 
 " fold settings {{{2
 set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
@@ -83,28 +85,6 @@ set foldopen+=insert
 set foldopen+=jump
 " set foldopen=all
 " set nofoldenable                " don't fold by default; press 'zi' to toggle
-
-" other settings {{{1
-set autochdir                     " change directory to the file being edited
-set breakindent                   " indent wrapped lines
-set completeopt=menuone,noselect  " show menu even if there's only one match
-set completeopt+=preview
-set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
-set report=0                      " display how many replacements were made
-set softtabstop=4 shiftwidth=4    " don't change tabstop!
-set shortmess+=A                  " avoid 'hit-enter' prompts
-set shortmess-=S                  " don't show search count
-" set shiftround
-set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
-set wildmenu                      " just use the default wildmode with this setting
-
-" set iskeyword+=-                " treat hyphens as part of a word
-set iskeyword+=_		  " treat underscores as part of a word
-" set isfname+={,},\",\<,\>,(,),[,],\:
-" set path +=$VIMRUNTIME/**
-set path +=$HOME/.vim/**
-set path +=$HOME/cbmf/**
-set path +=$HOME/.files/**
 
 " global variables {{{1
 let g:is_bash                   = 1
@@ -116,13 +96,12 @@ let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim']
 let g:mapleader                 = ' '
 let g:maplocalleader            = ','
 
-" move comment from above to the right column
-nnoremap <leader>mc ddpkJ
-
 " keymaps {{{1
 nnoremap <C-x> V:Twrite1<CR>
 vnoremap <C-s> :sort<CR>
-"nnoremap <C-m> :silent! make%<CR>redraw!
+nnoremap <C-m> :Make<CR>
+
+" open netrw 
 nnoremap <silent> <leader>` :Lexplore<CR>
 
 " double space over word to find and replace
@@ -169,7 +148,6 @@ nnoremap <leader>st :call <SID>toggle('showtabline', 2)<CR>
 nnoremap <leader>ss :call <SID>toggle('laststatus', 2)<CR>
 nnoremap <leader>sc :call <SID>toggle('colorcolumn', 81)<CR>
 
-
 " indent/dedent in normal mode with < and > {{{2
 nnoremap > V`]>
 nnoremap < V`]<
@@ -211,8 +189,8 @@ iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
 augroup vimrc
   autocmd!
   autocmd FileType c	    setlocal cindent noexpandtab
-  autocmd FileType cpp	    setlocal cindent expandtab
-  autocmd FileType python   setlocal cindent expandtab fdm=indent fdl=9
+  autocmd FileType cpp	    setlocal sw=4 sts=4 cindent expandtab
+  autocmd FileType python   setlocal sw=4 sts=4 cindent expandtab fdm=indent fdl=9
   autocmd FileType vim	    setlocal sw=2 sts=2        fdm=marker 
   autocmd FileType tex      setlocal sw=2 sts=2 spell  fdm=syntax fdl=9
   autocmd FileType markdown setlocal            spell             fdl=2
@@ -272,7 +250,6 @@ set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
 
 " defaults.vim {{{1
-set nrformats-=octal		  " Ignore octal numbers for Ctrl-A and Ctrl-X
 let c_comment_strings=1	          " I like highlighting strings inside C comments.
 
 " CTRL-U in insert mode deletes a lot. Use CTRL-G u to first break undo,

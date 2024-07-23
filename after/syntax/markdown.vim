@@ -1,7 +1,7 @@
 " after/syntax/markdown.vim 
 
 " Make code and H1 stand out more
-hi! link markdownCode String
+hi! link markdownCodeBlock String
 hi! link markdownH1   Constant 
 hi! link Folded Cyan 
 

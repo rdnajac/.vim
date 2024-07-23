@@ -12,7 +12,7 @@ PACKDIR="${VIM_DIR}/pack/vim9"
 
 if [[ ! -d "$PACKDIR" ]]; then
 	mkdir -p "$PACKDIR"
-fi
+f
 
 add_submodule() {
 	local url="$1"

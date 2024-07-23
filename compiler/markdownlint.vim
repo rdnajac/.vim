@@ -11,10 +11,9 @@ let current_compiler = "markdownlint"
 let s:cpo_save = &cpo
 set cpo&vim
 
-CompilerSet makeprg=markdownlint
+CompilerSet makeprg=markdownlint\ --fix
 CompilerSet errorformat=%f:%l:%c\ MD%n/%m,
 		       \%f:%l\ MD%n/%m,
-
 
 let &cpo = s:cpo_save
 unlet s:cpo_save

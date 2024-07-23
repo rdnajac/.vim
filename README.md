@@ -56,14 +56,13 @@ Linking: clang -o vim -lm -lncurses -lsodium -liconv -lintl -framework AppKit -L
 
 ## cool stuff
 
-- https://google.github.io/styleguide/vimscriptguide.xml
-- https://google.github.io/styleguide/vimscriptfull.xml
-- https://github.com/changemewtf/no_plugins
-- https://github.com/romainl/idiomatic-vimrc
-- https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29
-- https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries
+- <https://google.github.io/styleguide/vimscriptguide.xml>
+- <https://google.github.io/styleguide/vimscriptfull.xml>
+- <https://github.com/changemewtf/no_plugins>
+- <https://github.com/romainl/idiomatic-vimrc>
+- <https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29>
+- <https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries>
 
 > Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-
 > specified, bug-ridden, slow implementation of half of Vim's features.\
 > -- _robertmeta's tenth rule_.
-

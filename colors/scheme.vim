@@ -159,8 +159,9 @@ call s:Highlight('String', s:neongreen, 'NONE', '')
 
 call s:Highlight('Character', s:red, 'NONE', '')
 
-call s:Highlight('Special', s:magenta2, 'NONE', '')
-call s:LinkGroups('Special', 'Tag', 'SpecialChar', 'Delimiter', 'SpecialComment', 'Debug')
+call s:Highlight('Delimiter', s:magenta2, 'NONE', '')
+call s:Highlight('Special', s:teal, 'NONE', '')
+call s:LinkGroups('Special', 'Tag', 'SpecialChar', 'SpecialComment', 'Debug')
 
 call s:Highlight('NonText', s:chambray, s:bg, '')
 

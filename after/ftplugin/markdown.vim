@@ -1,7 +1,6 @@
 " after/ftplugin/markdown.vim
 " setlocal textwidth=80
 
-inoremap <buffer> <localleader>1 #<Space>
 inoremap <buffer> <localleader>2 ##<Space>
 inoremap <buffer> <localleader>3 ###<Space>
 inoremap <buffer> <localleader>4 ####<Space>
@@ -14,26 +13,7 @@ inoremap <buffer> <localleader>s ```sh<CR><CR>```<Up>
 inoremap <buffer> <localleader>t ```text<CR><CR>```<Up>
 inoremap <buffer> <localleader>v ```vim<CR><CR>```<Up>
 
-inoremap <buffer> <localleader>fo <!-- {{{ -->
-inoremap <buffer> <localleader>fc <!-- }}} -->
-inoremap <buffer> <localleader>f1 <!-- {{{1 -->
-inoremap <buffer> <localleader>f2 <!-- {{{2 -->
-inoremap <buffer> <localleader>f3 <!-- {{{3 -->
-inoremap <buffer> <localleader>f4 <!-- {{{4 -->
-inoremap <buffer> <localleader>f5 <!-- {{{5 -->
-inoremap <buffer> <localleader>f6 <!-- {{{6 -->
-
-nnoremap <buffer> <localleader>fo A<Space><!-- {{{ -->
-nnoremap <buffer> <localleader>fc A<Space><!-- }}} -->
-nnoremap <buffer> <localleader>f1 A<Space><!-- {{{1 -->
-nnoremap <buffer> <localleader>f2 A<Space><!-- {{{2 -->
-nnoremap <buffer> <localleader>f3 A<Space><!-- {{{3 -->
-nnoremap <buffer> <localleader>f4 A<Space><!-- {{{4 -->
-nnoremap <buffer> <localleader>f5 A<Space><!-- {{{5 -->
-nnoremap <buffer> <localleader>f6 A<Space><!-- {{{6 -->
-
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
-
 
 function! s:MyFoldLevel()
   return s:headingDepth(v:lnum) > 0 ? ">1" : "="
@@ -63,7 +43,6 @@ endfunction
 " setlocal foldtext=s:MyFoldText()
 " setlocal foldexpr=s:MyFoldLevel()
 
-" markdown preview 
 " call mkdp#util#install()
 let g:mkdp_page_title = '${name}'
 nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
