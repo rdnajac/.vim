@@ -29,11 +29,6 @@
 [submodule "vim/killersheep"]
 	path = pack/vimfect/opt/killersheep
 	url = https://github.com/vim/killersheep
-[submodule "romainl/vim-qlist"]
-	path = pack/vimfect/opt/vim-qlist
-	url = https://github.com/romainl/vim-qlist
-
-# tpope plugins
 [submodule "tpope/vim-apathy"]
 	path = pack/tpope/start/vim-apathy
 	url = http://github.com/tpope/vim-apathy.git
@@ -49,14 +44,15 @@
 [submodule "tpope/vim-surround"]
 	path = pack/tpope/start/vim-surround
 	url = http://github.com/tpope/vim-surround.git
-[submodule "tpope/vim-unimpaired"]
-	path = pack/tpope/start/vim-unimpaired
-	url = https://github.com/tpope/vim-unimpaired
-
-# tpope/opt
+[submodule "tpope/vim-tbone"]
+	path = pack/tpope/start/vim-tbone
+	url = http://github.com/tpope/vim-tbone.git
 [submodule "tpope/vim-scriptease"]
 	path = pack/tpope/start/vim-scriptease
 	url = https://github.com/tpope/vim-scriptease.git
+[submodule "tpope/vim-unimpaired"]
+	path = pack/tpope/start/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired
 
 # vim9 plugins
 [submodule "yegappan/lsp"]

@@ -6,7 +6,8 @@ set -euo pipefail
 # set -x
 
 VIM_DIR="${HOME}/.vim"
-PACKDIR="${VIM_DIR}/pack/vimfect"
+PACKDIR="${VIM_DIR}/pack/vim9"
+# PACKDIR="${VIM_DIR}/pack/vimfect"
 
 
 if [[ ! -d "$PACKDIR" ]]; then
@@ -24,7 +25,7 @@ add_submodule() {
 	mkdir -vp "${PACKDIR}/start" 
 	cd "${PACKDIR}/start" || { echo "Could not change to $PACKDIR"; exit 1; }
 
-	git submodule add --force --depth 1 --progress "$url"
+	git submodule add --force --depth 1 --progress --name "$1" "$url"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -32,4 +33,3 @@ while [[ $# -gt 0 ]]; do
 	shift
 done
 
-echo hi
