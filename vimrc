@@ -48,6 +48,7 @@ else
 endif
 
 " other settings {{{1
+set cindent		   	  " should this be default? 
 set autochdir                     " change directory to the file being edited
 set breakindent                   " indent wrapped lines
 set completeopt+=preview	  " show preview window
@@ -188,13 +189,10 @@ iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
 " autocmds {{{1
 augroup vimrc
   autocmd!
-  autocmd FileType c	    setlocal cindent noexpandtab
-  autocmd FileType cpp	    setlocal sw=4 sts=4 cindent expandtab
-  autocmd FileType python   setlocal sw=4 sts=4 cindent expandtab fdm=indent fdl=9
-  autocmd FileType vim	    setlocal sw=2 sts=2        fdm=marker 
-  autocmd FileType tex      setlocal sw=2 sts=2 spell  fdm=syntax fdl=9
-  autocmd FileType markdown setlocal            spell             fdl=2
-
+  autocmd FileType cpp	    setlocal sw=4 sts=4 expandtab fdm=syntax fdl=9
+  autocmd FileType python   setlocal sw=4 sts=4 expandtab fdm=indent fdl=9
+  autocmd FileType vim	    setlocal sw=2 sts=2 fdm=marker 
+  autocmd FileType tex      setlocal sw=2 sts=2 fdm=syntax fdl=9 spell  
   autocmd CmdwinEnter * quit            " close command-line window upon entering
   "autocmd BufLeave {} bd!              " close buffer when leaving it
 augroup END
@@ -233,7 +231,7 @@ packadd! FastFold
 packadd! targets.vim 
 packadd! vim-conjoin
 
-" packadd! lsp
+packadd! lsp
 " packadd! vimcomplete
 " TODO add https://github.com/hrsh7th/vim-vsnip
 
