@@ -34,8 +34,6 @@ nnoremap <buffer> <localleader>f6 A<Space><!-- {{{6 -->
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
-" TODO set up compiler
-let b:markdownlint_options = '--disable MD013'
 
 function! s:MyFoldLevel()
   return s:headingDepth(v:lnum) > 0 ? ">1" : "="
