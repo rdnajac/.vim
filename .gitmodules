@@ -29,6 +29,8 @@
 [submodule "vim/killersheep"]
 	path = pack/vimfect/opt/killersheep
 	url = https://github.com/vim/killersheep
+
+# tpope plugins
 [submodule "tpope/vim-apathy"]
 	path = pack/tpope/start/vim-apathy
 	url = http://github.com/tpope/vim-apathy.git
