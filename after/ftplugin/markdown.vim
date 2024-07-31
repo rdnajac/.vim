@@ -1,6 +1,12 @@
 " after/ftplugin/markdown.vim
 " setlocal textwidth=80
 
+" Insert hyperlink from clipboard
+vmap <buffer> <leader>k S]f]a()<Esc>hp
+
+" Turn url into hyperlink
+vmap <buffer> <localleader>k S)i[]<Left>
+
 inoremap <buffer> <localleader>2 ##<Space>
 inoremap <buffer> <localleader>3 ###<Space>
 inoremap <buffer> <localleader>4 ####<Space>
@@ -14,6 +20,7 @@ inoremap <buffer> <localleader>t ```text<CR><CR>```<Up>
 inoremap <buffer> <localleader>v ```vim<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
+
 
 function! s:MyFoldLevel()
   return s:headingDepth(v:lnum) > 0 ? ">1" : "="
@@ -46,22 +53,3 @@ endfunction
 " call mkdp#util#install()
 let g:mkdp_page_title = '${name}'
 nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
-
-if exists(":Tabularize") " {{{
-  nmap <buffer> <localleader>t :Tabularize <Bar><CR>
-  vmap <buffer> <localleader>t :Tabularize <Bar><CR>
-
-  " https://gist.github.com/287147
-  function! s:align()
-    let p = '^\s*|\s.*\s|\s*$'
-    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-      Tabularize/|/l1
-      normal! 0
-      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-    endif
-  endfunction
-  inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
-endif
-" vim: nofoldenable

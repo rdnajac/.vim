@@ -57,9 +57,6 @@
 	url = https://github.com/tpope/vim-unimpaired
 
 # vim9 plugins
-[submodule "yegappan/lsp"]
-	path = pack/vim9/opt/lsp
-	url = http://github.com/yegappan/lsp.git
-[submodule "girishji/vimcomplete"]
-	path = pack/vim9/opt/vimcomplete
-	url = http://github.com/girishji/vimcomplete.git
+[submodule "tpope/vim-eunuch"]
+	path = pack/vimfect/start/vim-eunuch
+	url = http://github.com/tpope/vim-eunuch.git

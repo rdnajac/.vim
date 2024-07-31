@@ -6,13 +6,13 @@ set -euo pipefail
 # set -x
 
 VIM_DIR="${HOME}/.vim"
-PACKDIR="${VIM_DIR}/pack/vim9"
+PACKDIR="${VIM_DIR}/pack/vimfect"
 # PACKDIR="${VIM_DIR}/pack/vimfect"
 
 
 if [[ ! -d "$PACKDIR" ]]; then
 	mkdir -p "$PACKDIR"
-f
+fi
 
 add_submodule() {
 	local url="$1"

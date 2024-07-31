@@ -6,11 +6,11 @@ hi! link markdownH1   Constant
 hi! link Folded Cyan 
 
 " alerts from gfm
-syn region ghAlert start=/\[\!/ end=/\]/ contained
-" syntax match mdAlert '\[\![NOTE|TIP|IMPORTANT|WARNING|CAUTION]\]'
-syn match mdBlockQuote '^>.*' contains=ghAlert
+" syn region ghAlert start=/\[\!/ end=/\]/ contained
+" " syntax match mdAlert '\[\![NOTE|TIP|IMPORTANT|WARNING|CAUTION]\]'
+" syn match mdBlockQuote '^>.*' contains=ghAlert
+" hi! link ghAlert Todo
 hi! link mdBlockQuote Comment
-hi! link ghAlert Todo
 
 hi Cyan guifg=#14afff guibg=#000000
 

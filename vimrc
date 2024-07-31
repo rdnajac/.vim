@@ -11,7 +11,7 @@ if !has('nvim')  " {{{1
   runtime! macros/matchit.vim     " enable % to match more than just parens
   runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
   silent! color scheme            " use my custom colorscheme (in ~/.vim/colors/)
-  " set up vim home directory {{{2
+  " set up vim home directory {{{3
   let s:VIMHOME = expand('$HOME/.vim/')
   set undofile swapfile backup
   let &undodir     = s:VIMHOME . '.undo//'
@@ -39,9 +39,20 @@ if !has('nvim')  " {{{1
   set shortmess+=A                " avoid 'hit-enter' prompts
   set shortmess-=S                " don't show search count
   set showcmd                     " show the command being typed
+  set ruler
   set termguicolors
-  set ttimeout ttimeoutlen=50	  " time out on mappings 
-  set wildmenu                      " just use the default wildmode with this setting
+  set ttimeout ttimeoutlen=69	  " time out on mappings 
+  set wildmenu                    " just use the default wildmode 
+  " defaults.vim {{{2
+  let c_comment_strings=1
+  " CTRL-U in insert mode deletes a lot. Use CTRL-G u to first break undo,
+  " so that you can undo CTRL-U after inserting a line break.
+  inoremap <C-U> <C-G>u<C-U>
+  " see the difference between current buffer and the file it was loaded from.
+  if !exists(":DiffOrig")
+    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
+  endif
+  " }}}2
   set clipboard=unnamed
 else
   set clipboard=unnamedplus     
@@ -50,7 +61,7 @@ endif
 " other settings {{{1
 set cindent		   	  " should this be default? 
 set autochdir                     " change directory to the file being edited
-set breakindent                   " indent wrapped lines
+" set breakindent                   " indent wrapped lines
 set completeopt+=preview	  " show preview window
 set completeopt=menuone,noselect  " show menu even if there's only one match
 set cursorline                    " highlight the current line
@@ -58,17 +69,15 @@ set fillchars+=eob:\ ,		  " don't show end of buffer as a column of ~
 set fillchars+=stl:\ ,            " display spaces properly in statusline
 set fillchars=                    " reset fillchars
 set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
-set iskeyword+=-                  " treat hyphens as part of a word
-" set iskeyword+=_		  " treat underscores as part of a word
 set lazyredraw                    " don't redraw the screen while executing macros
 set linebreak breakindent         " break at word boundaries and indent
 set listchars=trail:¿,tab:→\      " show trailing whitespace and tabs
 set nowrap                        " don't wrap lines by default
 set number relativenumber         " show (relative) line numbers
 set numberwidth=3                 " line number column padding
-set path +=$HOME/.files/**
-set path +=$HOME/.vim/**
-set path +=$HOME/cbmf/**
+set path+=$HOME/.files/**
+set path+=$HOME/.vim/**
+set path+=$HOME/cbmf/**
 set pumheight=10                  " limit the number of items in a popup menu
 set report=0                      " display how many replacements were made
 set scrolloff=5                   " default 0, set to 5 in defaults.vim
@@ -84,8 +93,13 @@ set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
 set foldopen+=insert
 set foldopen+=jump
-" set foldopen=all
 " set nofoldenable                " don't fold by default; press 'zi' to toggle
+
+" iskeyword {{{2
+set iskeyword+=_ 
+if &filetype != 'vim' && expand('%:t') != 'vimrc'
+  set iskeyword+=-
+endif
 
 " global variables {{{1
 let g:is_bash                   = 1
@@ -98,17 +112,28 @@ let g:mapleader                 = ' '
 let g:maplocalleader            = ','
 
 " keymaps {{{1
-nnoremap <C-x> V:Twrite1<CR>
+" nnoremap <C-@> V:Twrite1<CR>
+nnoremap <localleader>t0 V:Twrite0<CR>
+nnoremap <localleader>t1 V:Twrite1<CR>
+nnoremap <localleader>t2 V:Twrite2<CR>
+nnoremap <localleader>t3 V:Twrite3<CR>
+
 vnoremap <C-s> :sort<CR>
 nnoremap <C-m> :Make<CR>
-
-" open netrw 
-nnoremap <silent> <leader>` :Lexplore<CR>
 
 " double space over word to find and replace
 nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
 vnoremap <Space><Space> y:%s/\<<C-r>=escape(@",'/\')<CR>\>/
 " TODO why do we have < >
+
+function! EXE(tmux_pane)
+  " scp the current file to the remote server 
+  " !scp % my-ec2:~/
+  let cmd = '!scp % my-ec2:~/' 
+  execute cmd
+  let cmd = '!tmux send-keys -t ' . a:tmux_pane . ' "~/' . expand('$(basename %)') . '" Enter'
+  execute cmd
+endfunction
 
 nnoremap <leader>b :b <C-d>
 nnoremap <leader>c :call GetInfo()<CR>
@@ -173,8 +198,8 @@ cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'q' : 'Q'
 
 " easy command line! {{{2
-cnoreabbrev ?? verbose set ?<Left>
- 
+cnoreabbrev ?? verbose set?<Left>
+
 " center searches {{{2
 nnoremap n nzzzv
 nnoremap N Nzzzv
@@ -186,56 +211,48 @@ nnoremap g# g#zzzv
 " abbreviations {{{2
 iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
 
+" unmappings {{{2
+" no Ex mode
+nnoremap Q <nop>
+" avoid conflicts with tmux
+nnoremap <C-f> <nop>
+
 " autocmds {{{1
 augroup vimrc
   autocmd!
-  autocmd FileType cpp	    setlocal sw=4 sts=4 expandtab fdm=syntax fdl=9
-  autocmd FileType python   setlocal sw=4 sts=4 expandtab fdm=indent fdl=9
-  autocmd FileType vim	    setlocal sw=2 sts=2 fdm=marker 
-  autocmd FileType tex      setlocal sw=2 sts=2 fdm=syntax fdl=9 spell  
+  autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
+  autocmd FileType tex,markdown setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
+  autocmd FileType vim	        setlocal sw=2 sts=2 fdm=marker 
   autocmd CmdwinEnter * quit            " close command-line window upon entering
   "autocmd BufLeave {} bd!              " close buffer when leaving it
 augroup END
 
-augroup vimrc_netrw
+augroup RestoreCursor
   autocmd!
-  autocmd BufLeave netrw call netrw#NetrwQuit()  " close window when we leave the buffer
-  autocmd VimLeave * 
-	\ if filereadable(expand(expand('~/.vim/.netrwhist'))) 
-	\ | call delete(expand('~/.vim/.netrwhist')) 
+  autocmd BufReadPost *
+	\ let line = line("'\"")
+	\ | if line >= 1 && line <= line("$")
+	\ |   execute "normal! g`\""
+	\ |   execute "silent! normal! zo"
 	\ | endif
 augroup END
 
-augroup RestoreCursor
-    autocmd!
-    autocmd BufReadPost *
-		\ let line = line("'\"")
-		\ | if line >= 1 && line <= line("$")
-		\ |   execute "normal! g`\""
-		\ |   execute "silent! normal! zo"
-		\ | endif
-augroup END
-
 augroup SpecialBuffers
-    autocmd!
-    autocmd FileType help,qf,netrw,man
-		\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
-		\ | set nobuflisted
-		\ | setlocal noruler
-		\ | setlocal laststatus=0 
-		\ | setlocal colorcolumn=
+  autocmd!
+  autocmd FileType help,qf,netrw,man
+	\ silent! nnoremap <silent> <buffer> q :<C-U>close<CR> 
+	\ | set nobuflisted
+	\ | setlocal noruler
+	\ | setlocal laststatus=0 
+	\ | setlocal colorcolumn=
 augroup END
+" }}}1
 
-" opt plugins {{{1
 packadd! FastFold
 packadd! targets.vim 
 packadd! vim-conjoin
 
-packadd! lsp
-" packadd! vimcomplete
-" TODO add https://github.com/hrsh7th/vim-vsnip
-
-" ignored files and directories {{{1
+" ignored files and directories {{{2
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
 set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
 set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
@@ -246,17 +263,5 @@ set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
 set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
 set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
-
-" defaults.vim {{{1
-let c_comment_strings=1	          " I like highlighting strings inside C comments.
-
-" CTRL-U in insert mode deletes a lot. Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
-
-" see the difference between current buffer and the file it was loaded from.
-if !exists(":DiffOrig")
-    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
-endif
-" }}}1
+" }}}2
 " vim: ft=vim fdm=marker sw=2 sts=2
