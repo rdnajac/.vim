@@ -60,3 +60,6 @@
 [submodule "tpope/vim-eunuch"]
 	path = pack/vimfect/start/vim-eunuch
 	url = http://github.com/tpope/vim-eunuch.git
+[submodule "dense-analysis/ale"]
+	path = pack/vimfect/start/ale
+	url = http://github.com/dense-analysis/ale.git
