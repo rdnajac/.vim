@@ -13,7 +13,7 @@
 	path = pack/vimfect/start/vimtex
 	url = https://github.com/lervag/vimtex
 [submodule "python-mode/python-mode"]
-	path = pack/vimfect/start/python-mode
+	path = pack/vimfect/opt/python-mode
 	url = https://github.com/python-mode/python-mode
 
 # pack/vimfect/opt is for plugins that have to be loaded manually 
@@ -38,7 +38,7 @@
 	path = pack/tpope/start/vim-commentary
 	url = http://github.com/tpope/vim-commentary.git
 [submodule "tpope/vim-fugitive"]
-	path = pack/tpope/start/vim-fugitive
+	path = pack/tpope/opt/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
 [submodule "tpope/vim-obsession"]
 	path = pack/tpope/start/vim-obsession
@@ -63,3 +63,9 @@
 [submodule "dense-analysis/ale"]
 	path = pack/vimfect/start/ale
 	url = http://github.com/dense-analysis/ale.git
+[submodule "https://github.com/SirVer/ultisnips"]
+	path = pack/vimfect/start/ultisnips
+	url = https://github.com/SirVer/ultisnips
+[submodule "pack/vimfect/start/YouCompleteMe"]
+	path = pack/vimfect/start/YouCompleteMe
+	url = https://github.com/ycm-core/YouCompleteMe.git
