@@ -69,3 +69,6 @@
 [submodule "pack/vimfect/start/YouCompleteMe"]
 	path = pack/vimfect/start/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe.git
+[submodule "pack/vimfect/start/vim-tbone"]
+	path = pack/vimfect/start/vim-tbone
+	url = https://github.com/tpope/vim-tbone.git
