@@ -1,5 +1,5 @@
 " rdnajac's vimrc
-" CAPS LOCK MAPS TO CTRL -- WHEN IN DOUBT, PINKY OUT
+" REMEMBER: CAPS LOCK MAPS TO CTRL 
 if !has('nvim')  " {{{1
   " vim with a vimrc is always incompatible, but let's handle edge cases
   if &compatible | set nocompatible | endif                           
@@ -59,7 +59,7 @@ else
 endif
 
 " other settings {{{1
-set cindent		   	  " should this be default? 
+" set cindent		   	  " should this be default? 
 set autochdir                     " change directory to the file being edited
 " set breakindent                   " indent wrapped lines
 set completeopt+=preview	  " show preview window
@@ -93,15 +93,16 @@ set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
 set foldopen+=insert
 set foldopen+=jump
-" set nofoldenable                " don't fold by default; press 'zi' to toggle
+set nofoldenable                " don't fold by default; press 'zi' to toggle
 
 " iskeyword {{{2
 set iskeyword+=_ 
-if &filetype != 'vim' && expand('%:t') != 'vimrc'
-  set iskeyword+=-
-endif
+" if &filetype != 'vim' && expand('%:t') != 'vimrc'
+"   set iskeyword+=-
+" endif
 
 " global variables {{{1
+let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]
 let g:is_bash                   = 1
 let g:tex_flavor                = 'latex'
 let g:vimtex_view_method        = 'skim'
@@ -143,7 +144,9 @@ nnoremap <leader>h :nohlsearch<CR>
 nnoremap <leader>i :execute 'verbose set '.expand("<cword>")<CR>
 nnoremap <leader>q :call utils#smartQuit()<CR>
 nnoremap <leader>r :source $MYVIMRC<CR>
-nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
+" nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
+" edit ~/.vim
+nnoremap <leader>t :execute "e " . expand("~/.vim/after/ftplugin/") . &filetype . ".vim"<CR>
 nnoremap <leader>v :e $MYVIMRC<CR>
 nnoremap <leader>w :w<CR>
 nnoremap <leader>x :!./%<CR>
@@ -193,12 +196,23 @@ inoremap <silent> <localleader>n <C-x><C-n>
 inoremap <silent> <localleader>t <C-x><C-]>
 inoremap <silent> <localleader>u <C-x><C-u>
 
+" command line abbreviations {{{2
+cab wq  wqa!
+cab Wq	wqa!
+cab qW	wqa!
+cab Qw	wqa!
+cab WQ	wqa!
+cab QW	wqa!
+cab wqa wqa!
+cab qwa wqa!
+
 " fat fingers! {{{2
 cnoreabbrev <expr> X getcmdtype() == ':' && getcmdline() == 'X' ? 'x' : 'X'
 cnoreabbrev <expr> Q getcmdtype() == ':' && getcmdline() == 'Q' ? 'q' : 'Q'
 
 " easy command line! {{{2
 cnoreabbrev ?? verbose set?<Left>
+cnoreabbrev !! !./%
 
 " center searches {{{2
 nnoremap n nzzzv
@@ -209,7 +223,16 @@ nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 
 " abbreviations {{{2
-iab <expr> lr: strftime('LAST REVISION: ' . '%Y-%m-%d')
+" ia <expr> ,lr strftime('LAST REVISION: ' . '%Y-%m-%d')
+ia <expr> dt strftime('%Y-%m-%d')
+ia <expr> tm strftime('%H:%M:%S')
+ia <expr> dtm strftime('%Y-%m-%d %H:%M:%S')
+ia LR LAST REVISION: <C-R>=strftime('%Y-%m-%d')<CR>
+ia bb #!/bin/bash<CR>##<CR>##<space>
+ia p3 #!/usr/bin/env python3<CR>
+ia """ """<CR><CR>"""<Up>
+
+" nnoremap <localleader>b i#!/bin/bash<CR>#<CR>#<space>
 
 " unmappings {{{2
 " no Ex mode
@@ -221,7 +244,7 @@ nnoremap <C-f> <nop>
 augroup vimrc
   autocmd!
   autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
-  autocmd FileType tex,markdown setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
+  autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
   autocmd FileType vim	        setlocal sw=2 sts=2 fdm=marker 
   autocmd CmdwinEnter * quit            " close command-line window upon entering
   "autocmd BufLeave {} bd!              " close buffer when leaving it
@@ -233,7 +256,7 @@ augroup RestoreCursor
 	\ let line = line("'\"")
 	\ | if line >= 1 && line <= line("$")
 	\ |   execute "normal! g`\""
-	\ |   execute "silent! normal! zo"
+	\ |   execute "silent! normal! zO"
 	\ | endif
 augroup END
 
@@ -245,10 +268,13 @@ augroup SpecialBuffers
 	\ | setlocal noruler
 	\ | setlocal laststatus=0 
 	\ | setlocal colorcolumn=
+  autocmd BufLeave * if empty(expand('%')) 
+	\ && empty(&buftype) && line('$') == 1 && getline(1) == '' 
+        \ | execute 'bdelete!' | endif
 augroup END
 " }}}1
 
-packadd! FastFold
+" packadd! FastFold
 packadd! targets.vim 
 packadd! vim-conjoin
 
@@ -264,4 +290,9 @@ set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
 set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
 " }}}2
+
+" These are evil: “ ” 
+highlight Evil guifg=red guibg=orange 
+match Evil /“\|”/
+
 " vim: ft=vim fdm=marker sw=2 sts=2
