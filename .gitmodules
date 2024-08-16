@@ -38,7 +38,7 @@
 	path = pack/tpope/start/vim-commentary
 	url = http://github.com/tpope/vim-commentary.git
 [submodule "tpope/vim-fugitive"]
-	path = pack/tpope/opt/vim-fugitive
+	path = pack/tpope/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
 [submodule "tpope/vim-obsession"]
 	path = pack/tpope/start/vim-obsession
@@ -52,13 +52,8 @@
 [submodule "tpope/vim-scriptease"]
 	path = pack/tpope/start/vim-scriptease
 	url = https://github.com/tpope/vim-scriptease.git
-[submodule "tpope/vim-unimpaired"]
-	path = pack/tpope/start/vim-unimpaired
-	url = https://github.com/tpope/vim-unimpaired
-
-# vim9 plugins
 [submodule "tpope/vim-eunuch"]
-	path = pack/vimfect/start/vim-eunuch
+	path = pack/tpope/start/vim-eunuch
 	url = http://github.com/tpope/vim-eunuch.git
 [submodule "dense-analysis/ale"]
 	path = pack/vimfect/start/ale
@@ -69,6 +64,3 @@
 [submodule "pack/vimfect/start/YouCompleteMe"]
 	path = pack/vimfect/start/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe.git
-[submodule "pack/vimfect/start/vim-tbone"]
-	path = pack/vimfect/start/vim-tbone
-	url = https://github.com/tpope/vim-tbone.git
