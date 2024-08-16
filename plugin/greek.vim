@@ -1,50 +1,55 @@
-" maybe don't use this in latex math mode
-inoremap <localleader>Alp Α	
-inoremap <localleader>Bet Β	
-inoremap <localleader>Gam Γ	
-inoremap <localleader>Del Δ	
-inoremap <localleader>Eps Ε	
-inoremap <localleader>Zet Ζ	
-inoremap <localleader>Eta Η	
-inoremap <localleader>The Θ	
-inoremap <localleader>Iot Ι	
-inoremap <localleader>Kap Κ	
-inoremap <localleader>Lam Λ	
-inoremap <localleader>Mu  Μ	
-inoremap <localleader>Nu  Ν	
-inoremap <localleader>Xi  Ξ	
-inoremap <localleader>Omi Ο	
-inoremap <localleader>Pi  Π	
-inoremap <localleader>Rho Ρ	
-inoremap <localleader>Sig Σ	
-inoremap <localleader>Tau Τ	
-inoremap <localleader>Ups Υ	
-inoremap <localleader>Phi Φ	
-inoremap <localleader>Chi Χ	
-inoremap <localleader>Psi Ψ	
-inoremap <localleader>Ome Ω	
+" Insert Greek letters with <leader> + first two letters of the name
+" XXX: Omicron is omitted
+" XXX: maybe don't use this in latex math mode
 
-inoremap <localleader>alp α
-inoremap <localleader>bet β
-inoremap <localleader>gam γ
-inoremap <localleader>del δ
-inoremap <localleader>eps ε
-inoremap <localleader>zet ζ
-inoremap <localleader>eta η
-inoremap <localleader>the θ
-inoremap <localleader>iot ι
-inoremap <localleader>kap κ
-inoremap <localleader>lam λ
-inoremap <localleader>mu  μ
-inoremap <localleader>nu  ν
-inoremap <localleader>xi  ξ
-inoremap <localleader>omi ο
-inoremap <localleader>pi  π
-inoremap <localleader>rho ρ
-inoremap <localleader>sig σ
-inoremap <localleader>tau τ
-inoremap <localleader>ups υ
-inoremap <localleader>phi φ
-inoremap <localleader>chi χ
-inoremap <localleader>psi ψ
-inoremap <localleader>ome ω
+" Uppercase
+inoremap <localleader>Al Α	
+inoremap <localleader>Be Β	
+inoremap <localleader>Ga Γ	
+inoremap <localleader>De Δ	
+inoremap <localleader>Ep Ε	
+inoremap <localleader>Ze Ζ	
+inoremap <localleader>Et Η	
+inoremap <localleader>Th Θ	
+inoremap <localleader>Io Ι	
+inoremap <localleader>Ka Κ	
+inoremap <localleader>La Λ	
+inoremap <localleader>Mu Μ	
+inoremap <localleader>Nu Ν	
+inoremap <localleader>Xi Ξ	
+" inoremap <localleader>Om Ο	
+inoremap <localleader>Pi Π	
+inoremap <localleader>Rh Ρ	
+inoremap <localleader>Si Σ	
+inoremap <localleader>Ta Τ	
+inoremap <localleader>Up Υ	
+inoremap <localleader>Ph Φ	
+inoremap <localleader>Ch Χ	
+inoremap <localleader>Ps Ψ	
+inoremap <localleader>Om Ω	
+
+" Lowercase
+inoremap <localleader>al α
+inoremap <localleader>be β
+inoremap <localleader>ga γ
+inoremap <localleader>de δ
+inoremap <localleader>ep ε
+inoremap <localleader>ze ζ
+inoremap <localleader>et η
+inoremap <localleader>th θ
+inoremap <localleader>io ι
+inoremap <localleader>ka κ
+inoremap <localleader>la λ
+inoremap <localleader>mu μ
+inoremap <localleader>nu ν
+inoremap <localleader>xi ξ
+" inoremap <localleader>om ο
+inoremap <localleader>pi π
+inoremap <localleader>rh ρ
+inoremap <localleader>si σ
+inoremap <localleader>ta τ
+inoremap <localleader>up υ
+inoremap <localleader>ph φ
+inoremap <localleader>ch χ
+inoremap <localleader>ps ψ
+inoremap <localleader>om ω
