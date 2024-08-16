@@ -1,17 +1,21 @@
 " Define a global dictionary to map filetypes to emojis
 let g:filetype_emojis = {
-	    \ 'py': '🐍',
-	    \ 'sh': '🐚',
-	    \ 'vim': '🛠️',
-	    \ 'md': '📝',
-	    \ 'html': '🌐',
-	    \ 'css': '🎨',
+	    \ 'py':       '🐍',
+	    \ 'sh':       '🐚',
+	    \ 'vim':      '🛠️',
+	    \ 'markdown': '📜',
+	    \ 'html':     '🌐',
+	    \ 'css':      '🎨',
+	    \ 'R':        '📊',
 	    \ }
 
+let s:modified = '📝'
+
 function! s:get_filetype_emoji(buf) abort
-    return getbufvar(a:buf, "&mod") ? '📝' : 
-		\ get(g:filetype_emojis, getbufvar(a:buf, "&filetype"), '💾')
-    " TODO why do added buffers default to '💾' before setting filetype?
+  if getbufvar(a:buf, "&modified")
+		return s:modified
+  else 
+    return get(g:filetype_emojis, getbufvar(a:buf, "&filetype"), '💾')
 endfunction
 
 function! s:get_filename(buf) abort
