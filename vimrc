@@ -1,5 +1,8 @@
 " rdnajac's vimrc
 " REMEMBER: CAPS LOCK MAPS TO CTRL 
+
+set encoding=utf-8
+scriptencoding utf-8
 if !has('nvim')  " {{{1
   " vim with a vimrc is always incompatible, but let's handle edge cases
   if &compatible | set nocompatible | endif                           
