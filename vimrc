@@ -108,7 +108,7 @@ let g:tex_flavor                = 'latex'
 let g:vimtex_view_method        = 'skim'
 let g:markdown_syntax_conceal   = 1
 let g:markdown_folding	        = 1
-let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim']
+let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim', 'tex']
 let g:mapleader                 = ' '
 let g:maplocalleader            = ','
 
@@ -197,6 +197,7 @@ inoremap <silent> <localleader>t <C-x><C-]>
 inoremap <silent> <localleader>u <C-x><C-u>
 
 " command line abbreviations {{{2
+cab qw  wqa!
 cab wq  wqa!
 cab Wq	wqa!
 cab qW	wqa!
@@ -228,8 +229,6 @@ ia <expr> dt strftime('%Y-%m-%d')
 ia <expr> tm strftime('%H:%M:%S')
 ia <expr> dtm strftime('%Y-%m-%d %H:%M:%S')
 ia LR LAST REVISION: <C-R>=strftime('%Y-%m-%d')<CR>
-ia bb #!/bin/bash<CR>##<CR>##<space>
-ia p3 #!/usr/bin/env python3<CR>
 ia """ """<CR><CR>"""<Up>
 
 " nnoremap <localleader>b i#!/bin/bash<CR>#<CR>#<space>

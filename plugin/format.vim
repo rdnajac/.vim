@@ -1,6 +1,5 @@
 function! Fmt()
     let winview = winsaveview()
-    " now gq the whole thing
     normal! gggqG
     if v:shell_error > 0
 	silent undo
@@ -9,13 +8,12 @@ function! Fmt()
     endif
     call winrestview(winview)
 endfunction
-" nmap <silent> Q :let w:gqview = winsaveview()<CR>:set opfunc=Format<CR>g@"
 
 augroup formatters
   autocmd!
   
   " use shellfmt and shellharden to format shell scripts
-  autocmd FileType sh setlocal formatprg=shellharden\ --transform\ <(shfmt\ -bn\ -sr\ -fn\ %)
+  autocmd FileType sh setlocal formatprg=shellharden\ --transform\ <(shfmt\ -bn\ -sr\ -ci\ -kp\ %)
   " -i,  --indent uint       0 for tabs (default), >0 for number of spaces
   " -bn, --binary-next-line  binary ops like && and | may start a line
   " -sr, --space-redirects   redirect operators will be followed by a space
@@ -28,3 +26,6 @@ augroup formatters
   autocmd FileType markdown,html setlocal formatprg=prettier\ --stdin-filepath\ %
 
 augroup END
+
+" command to format the current buffer
+command! FMT call Fmt()
