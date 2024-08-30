@@ -21,10 +21,10 @@
 	path = pack/vimfect/opt/FastFold
 	url = https://github.com/Konfekt/FastFold
 [submodule "flwyd/vim-conjoin"]
-	path = pack/vimfect/opt/vim-conjoin
+	path = pack/vimfect/start/vim-conjoin
 	url = https://github.com/flwyd/vim-conjoin
 [submodule "wellle/targets.vim"]
-	path = pack/vimfect/opt/targets.vim
+	path = pack/vimfect/start/targets.vim
 	url = https://github.com/wellle/targets.vim
 [submodule "vim/killersheep"]
 	path = pack/vimfect/opt/killersheep
