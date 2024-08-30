@@ -32,7 +32,6 @@ augroup MyYCMCustom
         \ }
 augroup END
 
-
 " Clear existing YCM highlight groups
 hi clear YcmErrorSign
 hi clear YcmWarningSign
@@ -40,5 +39,3 @@ hi clear YcmErrorLine
 hi clear YcmWarningLine
 hi clear YcmErrorSignLineNr
 hi clear YcmWarningSignLineNr
-
-

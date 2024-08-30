@@ -20,4 +20,3 @@ let g:UltiSnipsExpandTrigger="<c-space>"
 " let g:UltiSnipsListSnippets=<c-tab>
 let g:UltiSnipsExpandOrJumpTrigger = "<c-space>"
 " let g:UltiSnipsJumpOrExpandTrigger =
-
