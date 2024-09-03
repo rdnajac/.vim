@@ -1,20 +1,18 @@
-" rdnajac's vimrc
-" REMEMBER: CAPS LOCK MAPS TO CTRL 
-
 set encoding=utf-8
 scriptencoding utf-8
-if !has('nvim')  " {{{1
-  " vim with a vimrc is always incompatible, but let's handle edge cases
-  if &compatible | set nocompatible | endif                           
 
-  " the following "sensible.vim" options have had their include guards removed
+silent! color scheme            " my colorscheme (in ~/.vim/colors/)
+
+if !has('nvim')
+  if &compatible | set nocompatible | endif                           
+				  " sensible.vim {{{
   set nolangremap		  " disable a legacy behavior that can break plugin maps
   filetype plugin indent on       " enable filetype detection, plugins, and indentation
   syntax enable                   " source $VIMRUNTIME/syntax/syntax.vim
   runtime! macros/matchit.vim     " enable % to match more than just parens
   runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
-  silent! color scheme            " use my custom colorscheme (in ~/.vim/colors/)
-  " set up vim home directory {{{3
+  "}}}
+  " set up vim home directory {{{
   let s:VIMHOME = expand('$HOME/.vim/')
   set undofile swapfile backup
   let &undodir     = s:VIMHOME . '.undo//'
@@ -27,7 +25,7 @@ if !has('nvim')  " {{{1
   if !isdirectory(&undodir)   | call mkdir(&undodir,   'p', 0700) | endif
   if !isdirectory(&directory) | call mkdir(&directory, 'p', 0700) | endif
   if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p', 0700) | endif
-  " }}}2
+  " }}}
   set autoindent smarttab         " enable auto-indent and smart tabbing
   set autoread autowrite          " automatically read/write files when changed
   set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
@@ -46,21 +44,12 @@ if !has('nvim')  " {{{1
   set termguicolors
   set ttimeout ttimeoutlen=69	  " time out on mappings 
   set wildmenu                    " just use the default wildmode 
-  " defaults.vim {{{2
-  let c_comment_strings=1
-  " CTRL-U in insert mode deletes a lot. Use CTRL-G u to first break undo,
-  " so that you can undo CTRL-U after inserting a line break.
-  inoremap <C-U> <C-G>u<C-U>
-  " see the difference between current buffer and the file it was loaded from.
-  if !exists(":DiffOrig")
-    command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis | wincmd p | diffthis
-  endif
-  " }}}2
   set clipboard=unnamed
 else
   set clipboard=unnamedplus     
 endif
 
+" packadd! FastFold
 " other settings {{{1
 " set cindent		   	  " should this be default? 
 set autochdir                     " change directory to the file being edited
@@ -105,6 +94,7 @@ set iskeyword+=_
 " endif
 
 " global variables {{{1
+let g:c_comment_strings         = 1
 let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]
 let g:is_bash                   = 1
 let g:tex_flavor                = 'latex'
@@ -116,28 +106,13 @@ let g:mapleader                 = ' '
 let g:maplocalleader            = ','
 
 " keymaps {{{1
-" nnoremap <C-@> V:Twrite1<CR>
-nnoremap <localleader>t0 V:Twrite0<CR>
-nnoremap <localleader>t1 V:Twrite1<CR>
-nnoremap <localleader>t2 V:Twrite2<CR>
-nnoremap <localleader>t3 V:Twrite3<CR>
 
 vnoremap <C-s> :sort<CR>
-nnoremap <C-m> :Make<CR>
 
 " double space over word to find and replace
 nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
 vnoremap <Space><Space> y:%s/\<<C-r>=escape(@",'/\')<CR>\>/
 " TODO why do we have < >
-
-function! EXE(tmux_pane)
-  " scp the current file to the remote server 
-  " !scp % my-ec2:~/
-  let cmd = '!scp % my-ec2:~/' 
-  execute cmd
-  let cmd = '!tmux send-keys -t ' . a:tmux_pane . ' "~/' . expand('$(basename %)') . '" Enter'
-  execute cmd
-endfunction
 
 nnoremap <leader>b :b <C-d>
 nnoremap <leader>c :call GetInfo()<CR>
@@ -250,6 +225,7 @@ augroup vimrc
   autocmd FileType vim	        setlocal sw=2 sts=2 fdm=marker 
   autocmd CmdwinEnter * quit            " close command-line window upon entering
   "autocmd BufLeave {} bd!              " close buffer when leaving it
+  autocmd BufNewFile,BufRead bash_aliases set filetype=sh
 augroup END
 
 augroup RestoreCursor
@@ -275,12 +251,8 @@ augroup SpecialBuffers
         \ | execute 'bdelete!' | endif
 augroup END
 " }}}1
-
-" packadd! FastFold
-packadd! targets.vim 
-packadd! vim-conjoin
-
-" ignored files and directories {{{2
+"
+" ignored files and directories {{{
 set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
 set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
 set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
@@ -291,7 +263,7 @@ set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
 set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
 set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
-" }}}2
+" }}}
 
 " These are evil: “ ” 
 highlight Evil guifg=red guibg=orange 

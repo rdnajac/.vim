@@ -5,3 +5,5 @@ command -nargs=0 LOL   execute utils#lol()
 command -nargs=0 Make  execute 'silent make! %' | redraw! 
 command -nargs=0 Ctags execute 'ctags --recurse --tag-relative -f ./.git/tags .'
 
+nnoremap <C-m> :Make<CR>
+

@@ -1,8 +1,9 @@
 " after/ftplugin/sh.vim
+setlocal wrap
 setlocal iskeyword+=.
 
 " snippets
-inoremap <buffer> () ()<Space>{<CR>}<Esc>O
+" inoremap <buffer> () ()<Space>{<CR>}<Esc>O
 " inoremap <buffer> if if ; then<CR><CR>fi<CR><Up><Up><Esc>O
 " iab ,if if ; then<CR><CR>fi<Up><Up><Right>[<Space>]<Left><Left>
 " iab ,for for ; do<CR><CR>done<Up><Up><Esc>O

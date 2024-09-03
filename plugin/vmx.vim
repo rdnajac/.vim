@@ -62,3 +62,11 @@ command! RunVisualSelectionAsShellCmd call RunVisualSelectionAsShellCmd()
 command! RunVisualSelectionAsVimScript call RunVisualSelectionAsVimScript()
 command! GetVimInfo call GetVimInfo()
 
+function! EXE(tmux_pane)
+  " scp the current file to the remote server 
+  " !scp % my-ec2:~/
+  let cmd = '!scp % my-ec2:~/' 
+  execute cmd
+  let cmd = '!tmux send-keys -t ' . a:tmux_pane . ' "~/' . expand('$(basename %)') . '" Enter'
+  execute cmd
+endfunction
