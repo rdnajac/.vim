@@ -65,7 +65,7 @@ set lazyredraw                    " don't redraw the screen while executing macr
 set linebreak breakindent         " break at word boundaries and indent
 set listchars=trail:¿,tab:→\      " show trailing whitespace and tabs
 set nowrap                        " don't wrap lines by default
-set number relativenumber         " show (relative) line numbers
+" set number relativenumber         " show (relative) line numbers
 set numberwidth=3                 " line number column padding
 set path+=$HOME/.files/**
 set path+=$HOME/.vim/**
@@ -226,6 +226,7 @@ augroup vimrc
   autocmd CmdwinEnter * quit            " close command-line window upon entering
   "autocmd BufLeave {} bd!              " close buffer when leaving it
   autocmd BufNewFile,BufRead bash_aliases set filetype=sh
+  autocmd BufNewFile,BufRead *.html set filetype=html
 augroup END
 
 augroup RestoreCursor
