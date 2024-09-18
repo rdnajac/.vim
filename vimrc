@@ -107,6 +107,9 @@ let g:maplocalleader            = ','
 
 " keymaps {{{1
 
+" paste without overwriting the clipboard
+xnoremap <silent> p "_dP
+
 vnoremap <C-s> :sort<CR>
 
 " double space over word to find and replace
