@@ -35,7 +35,7 @@ if !has('nvim')
   set mouse=a                     " wait, that's illegal
   set nomodeline                  " modelines are a security risk
   set nrformats-=octal		  " Ignore octal numbers for Ctrl-A and Ctrl-X
-  set path=.,,                    " C ftplugin should add "/usr/include"
+  set path=.,,                    " C ftplugin should add '/usr/include'
   set shortmess+=A                " avoid 'hit-enter' prompts
   set shortmess-=S                " don't show search count
   set showcmd                     " show the command being typed
@@ -46,6 +46,7 @@ if !has('nvim')
   set clipboard=unnamed
 else
   set clipboard=unnamedplus     
+  echom 'vimrc loaded'
 endif
 
 " other settings {{{1
@@ -259,5 +260,4 @@ set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thu
 highlight Evil guifg=red guibg=orange 
 match Evil /“\|”/
 
-echom 'vimrc loaded'
 " vim: ft=vim fdm=marker sw=2 sts=2
