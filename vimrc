@@ -31,6 +31,7 @@ if !has('nvim')
   set formatoptions-=o            " don't continue comments when pressing 'o'
   set hidden                      " enable background buffers
   set hlsearch incsearch          " highlighted, incremental search
+  set lazyredraw                  " don't redraw the screen while executing macros
   set mouse=a                     " wait, that's illegal
   set nomodeline                  " modelines are a security risk
   set nrformats-=octal		  " Ignore octal numbers for Ctrl-A and Ctrl-X
@@ -58,7 +59,6 @@ set fillchars+=eob:\ ,		  " don't show end of buffer as a column of ~
 set fillchars+=stl:\ ,            " display spaces properly in statusline
 set fillchars=                    " reset fillchars
 set ignorecase smartcase          " ignore case when searching, unless there's a capital letter
-set lazyredraw                    " don't redraw the screen while executing macros
 set linebreak breakindent         " break at word boundaries and indent
 set listchars=trail:¿,tab:→\      " show trailing whitespace and tabs
 set nowrap                        " don't wrap lines by default
@@ -258,4 +258,6 @@ set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thu
 
 highlight Evil guifg=red guibg=orange 
 match Evil /“\|”/
+
+echom 'vimrc loaded'
 " vim: ft=vim fdm=marker sw=2 sts=2
