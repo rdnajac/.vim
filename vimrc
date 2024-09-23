@@ -1,8 +1,5 @@
 set encoding=utf-8
 scriptencoding utf-8
-
-silent! color scheme            " my colorscheme (in ~/.vim/colors/)
-
 if !has('nvim')
   if &compatible | set nocompatible | endif                           
 				  " sensible.vim {{{
@@ -12,6 +9,7 @@ if !has('nvim')
   runtime! macros/matchit.vim     " enable % to match more than just parens
   runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
   "}}}
+  silent! color scheme            " my colorscheme (in ~/.vim/colors/)
   " set up vim home directory {{{
   let s:VIMHOME = expand('$HOME/.vim/')
   set undofile swapfile backup
@@ -49,7 +47,6 @@ else
   set clipboard=unnamedplus     
 endif
 
-" packadd! FastFold
 " other settings {{{1
 " set cindent		   	  " should this be default? 
 set autochdir                     " change directory to the file being edited
@@ -69,7 +66,7 @@ set nowrap                        " don't wrap lines by default
 set numberwidth=3                 " line number column padding
 set path+=$HOME/.files/**
 set path+=$HOME/.vim/**
-set path+=$HOME/cbmf/**
+set path+=$HOME/rdnajac/**
 set pumheight=10                  " limit the number of items in a popup menu
 set report=0                      " display how many replacements were made
 set scrolloff=5                   " default 0, set to 5 in defaults.vim
@@ -85,7 +82,7 @@ set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
 set foldopen+=insert
 set foldopen+=jump
-set nofoldenable                " don't fold by default; press 'zi' to toggle
+" set nofoldenable                " don't fold by default; press 'zi' to toggle
 
 " iskeyword {{{2
 set iskeyword+=_ 
@@ -102,10 +99,10 @@ let g:vimtex_view_method        = 'skim'
 let g:markdown_syntax_conceal   = 1
 let g:markdown_folding	        = 1
 let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim', 'tex']
-let g:mapleader                 = ' '
-let g:maplocalleader            = ','
 
 " keymaps {{{1
+let g:mapleader                 = ' '
+let g:maplocalleader            = ','
 
 " paste without overwriting the clipboard
 xnoremap <silent> p "_dP
@@ -119,14 +116,13 @@ vnoremap <Space><Space> y:%s/\<<C-r>=escape(@",'/\')<CR>\>/
 
 nnoremap <leader>b :b <C-d>
 nnoremap <leader>c :call GetInfo()<CR>
-nnoremap <leader>e :e!<CR>
 nnoremap <leader>f :find<space>
 nnoremap <leader>h :nohlsearch<CR>
 nnoremap <leader>i :execute 'verbose set '.expand("<cword>")<CR>
-nnoremap <leader>q :call utils#smartQuit()<CR>
+nnoremap <leader>q :call utils#smart_quit()<CR>
 nnoremap <leader>r :source $MYVIMRC<CR>
 " nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
-" edit ~/.vim
+
 nnoremap <leader>t :execute "e " . expand("~/.vim/after/ftplugin/") . &filetype . ".vim"<CR>
 nnoremap <leader>v :e $MYVIMRC<CR>
 nnoremap <leader>w :w<CR>
@@ -204,15 +200,6 @@ nnoremap # #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 
-" abbreviations {{{2
-" ia <expr> ,lr strftime('LAST REVISION: ' . '%Y-%m-%d')
-ia <expr> dt strftime('%Y-%m-%d')
-ia <expr> tm strftime('%H:%M:%S')
-ia <expr> dtm strftime('%Y-%m-%d %H:%M:%S')
-ia LR LAST REVISION: <C-R>=strftime('%Y-%m-%d')<CR>
-ia """ """<CR><CR>"""<Up>
-
-" nnoremap <localleader>b i#!/bin/bash<CR>#<CR>#<space>
 
 " unmappings {{{2
 " no Ex mode
@@ -269,8 +256,6 @@ set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
 " }}}
 
-" These are evil: “ ” 
 highlight Evil guifg=red guibg=orange 
 match Evil /“\|”/
-
 " vim: ft=vim fdm=marker sw=2 sts=2
