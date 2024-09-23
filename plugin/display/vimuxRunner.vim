@@ -1,7 +1,6 @@
 " vim: ft=vim: fdm=marker
 command! -nargs=* -complete=shellcmd VMX call s:vimux(<q-args>)
 
-
 function! s:vimuxSendKeys(keys) abort
   call s:openRunner()
   call system('tmux send-keys -t ' . g:VimuxRunner . ' C-u')

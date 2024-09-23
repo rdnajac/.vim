@@ -7,7 +7,7 @@ augroup vimrc_netrw
 	\ | call delete(expand('~/.vim/.netrwhist')) 
 	\ | endif
 augroup END
-nnoremap <silent> <leader>` :Lexplore<CR>
+nnoremap <silent> <leader>e :Lexplore<CR>
 " unmap NetrwBrowseX because I keep fat fingering it
 xunmap gx
 nunmap gx
