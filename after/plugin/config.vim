@@ -9,6 +9,7 @@
 
 imap <silent><script><expr> <c-j> copilot#Accept("\<CR>")
 let g:copilot_no_tab_map = v:true
+let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/cbmf"]
 
 " UltiSnips says I need this
 " inoremap <c-x><c-k> <c-x><c-k>

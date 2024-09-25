@@ -5,7 +5,7 @@
 command -nargs=0 LOL   execute utils#lol()
 command -nargs=0 Make  execute 'silent make! %' | redraw! 
 command -nargs=0 Ctags execute 'ctags --recurse --tag-relative -f ./.git/tags .'
-command -nargs=0 Fmt   call utils#format#FormatBuffer()
+command -nargs=0 Fmt   call format#buffer()
 
 command -nargs=0 GetInfo call info#get()
 command -nargs=* VX call run#file_with_args(<f-args>)
