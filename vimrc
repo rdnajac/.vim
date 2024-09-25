@@ -1,7 +1,7 @@
 set encoding=utf-8
 scriptencoding utf-8
 if !has('nvim')
-  if &compatible | set nocompatible | endif                           
+  if &compatible | set nocompatible | endif
   set nolangremap		  " disable a legacy behavior that can break plugin maps
   filetype plugin indent on       " enable filetype detection, plugins, and indentation
   syntax enable                   " source $VIMRUNTIME/syntax/syntax.vim
@@ -39,16 +39,18 @@ if !has('nvim')
   set showcmd                     " show the command being typed
   set ruler
   set termguicolors
-  set ttimeout ttimeoutlen=69	  " time out on mappings 
-  set wildmenu                    " just use the default wildmode 
+  set ttimeout ttimeoutlen=69	  " time out on mappings
+  set wildmenu                    " just use the default wildmode
   set path+=$HOME/.files/**
   set path+=$HOME/.vim/**
   set path+=$HOME/rdnajac/**
 else
   echom 'sourcing vimrc >^.^<'
+  " can we set nvim options here?
+  set pumblend=10
 endif
 
-" set cindent		   	  " should this be default? 
+" set cindent		   	  " should this be default?
 set autochdir                     " change directory to the file being edited
 " set breakindent                   " indent wrapped lines
 set completeopt+=preview	  " show preview window
@@ -71,13 +73,13 @@ set showmatch                     " highlight matching brackets
 set splitbelow splitright         " where to open new splits by default
 set timeoutlen=420		  " ms for a mapped sequence to complete
 set updatetime=100                " used for CursorHold autocommands
-set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys 
+set whichwrap+=<,>,[,],h,l        " wrap around newlines with these keys
 set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
 set foldopen+=insert
 set foldopen+=jump
 " set nofoldenable                " don't fold by default; press 'zi' to toggle
-set iskeyword+=_ 
+set iskeyword+=_
 if &filetype != 'vim' && expand('%:t') != 'vimrc'
   set iskeyword+=-
 else
@@ -87,7 +89,7 @@ endif
 if system('uname') =~? '^darwin'
   set clipboard=unnamed
 else
-  set clipboard=unnamedplus     
+  set clipboard=unnamedplus
 endif
 
 " keymaps {{{1
@@ -129,7 +131,7 @@ nnoremap <leader>sr :set relativenumber!<CR>:set relativenumber?<CR>
 nnoremap <leader>sw :set wrap!<CR>:set wrap?<CR>
 
 function! s:toggle(opt, default)
-  execute 'if &'.a:opt.' == '.a:default.' | '.'set '.a:opt.'=0 | '.'else | '.'set '.a:opt.'='.a:default.' | '.'endif ' 
+  execute 'if &'.a:opt.' == '.a:default.' | '.'set '.a:opt.'=0 | '.'else | '.'set '.a:opt.'='.a:default.' | '.'endif '
 endfunction
 
 nnoremap <leader>st :call <SID>toggle('showtabline', 2)<CR>
@@ -177,7 +179,7 @@ augroup vimrc
   autocmd!
   autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
   autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
-  autocmd FileType vim	        setlocal sw=2 sts=2 fdm=marker 
+  autocmd FileType vim	        setlocal sw=2 sts=2 fdm=marker
   autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab
   autocmd CmdwinEnter * quit            " close command-line window upon entering
   autocmd BufNewFile,BufRead bash_aliases set filetype=sh
@@ -215,5 +217,13 @@ set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
 set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
 set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
 set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
+" }}}
+" additional untested configs from LazyVim {{{
+" https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
+set grepformat="%f:%l:%c:%m"
+set grepprg="rg --vimgrep"
+set jumpoptions="view"
+set splitkeep="screen"
+set virtualedit="block"
 " }}}
 " vim: ft=vim fdm=marker sw=2 sts=2
