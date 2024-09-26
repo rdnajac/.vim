@@ -46,6 +46,8 @@ if !has('nvim')
   set clipboard=unnamed
 else
   set clipboard=unnamedplus     
+  source $HOME/.vim/plugin/display/mystatusline.vim
+  source $HOME/.vim/plugin/display/mytabline.vim
   echom 'vimrc loaded'
 endif
 
@@ -211,6 +213,8 @@ nnoremap <C-f> <nop>
 " autocmds {{{1
 augroup vimrc
   autocmd!
+  " autocmd FileType 
+  autocmd FileType c            setlocal sw=8 sts=8 noexpandtab
   autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
   autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
   autocmd FileType vim	        setlocal sw=2 sts=2 fdm=marker 
