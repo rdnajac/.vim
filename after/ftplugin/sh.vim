@@ -2,6 +2,8 @@
 setlocal wrap
 setlocal iskeyword+=.
 
+let g:is_bash = 1
+
 " snippets
 " inoremap <buffer> () ()<Space>{<CR>}<Esc>O
 " inoremap <buffer> if if ; then<CR><CR>fi<CR><Up><Up><Esc>O

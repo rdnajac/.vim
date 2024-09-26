@@ -4,8 +4,9 @@ setlocal fdl=1
 setlocal textwidth=80
 setlocal noautoindent
 
-" turn on markdown folding
-let b:markdown_folding = 1
+let g:markdown_syntax_conceal   = 1
+let g:markdown_folding	        = 1
+let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim', 'tex']
 
 " Insert hyperlink from clipboard
 vmap <buffer> <leader>k S]f]a()<Esc>hp

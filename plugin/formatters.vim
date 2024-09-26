@@ -2,7 +2,7 @@ augroup formatters
   autocmd!
   
   " use shellfmt and shellharden to format shell scripts
-  autocmd FileType sh setlocal formatprg=shellharden\ --transform\ <(shfmt\ -bn\ -sr\ -ci\ -kp\ %)
+  autocmd FileType sh setlocal formatprg=shellharden\ --transform\ <(shfmt\ -bn\ -sr\ %)
   " -i,  --indent uint       0 for tabs (default), >0 for number of spaces
   " -bn, --binary-next-line  binary ops like && and | may start a line
   " -sr, --space-redirects   redirect operators will be followed by a space
