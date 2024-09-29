@@ -1,8 +1,6 @@
-" after/ftplugin/sh.vim
+setlocal sw=8 sts=8 noexpandtab
 setlocal wrap
 setlocal iskeyword+=.
-
-let g:is_bash = 1
 
 " snippets
 " inoremap <buffer> () ()<Space>{<CR>}<Esc>O

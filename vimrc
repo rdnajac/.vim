@@ -41,14 +41,13 @@ if !has('nvim')
   set termguicolors
   set ttimeout ttimeoutlen=69	  " time out on mappings
   set wildmenu                    " just use the default wildmode
-  set path+=$HOME/.files/**
-  set path+=$HOME/.vim/**
-  set path+=$HOME/rdnajac/**
+  " set path+=$HOME/.files/**
+  " set path+=$HOME/.vim/**
+  " set path+=$HOME/rdnajac/**
 else
   echom 'sourcing vimrc >^.^<'
   source $HOME/.vim/plugin/display/mystatusline.vim
   source $HOME/.vim/plugin/display/mytabline.vim
-  set clipboard=unnamedplus     
   " can we set nvim-specefic options here?
   set pumblend=10
 endif
@@ -109,6 +108,7 @@ nnoremap <leader>f :find<space>
 nnoremap <leader>h :nohlsearch<CR>
 nnoremap <leader>i :execute 'verbose set '.expand("<cword>")<CR>
 nnoremap <leader>q :call SmartQuit()<CR>
+nnoremap <leader>r :source $MYVIMRC<CR>
 " nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
 
 nnoremap <leader>t :execute "e " . expand("~/.vim/after/ftplugin/") . &filetype . ".vim"<CR>
@@ -177,16 +177,10 @@ nnoremap g# g#zzzv
 nnoremap Q <nop>
 " avoid conflicts with tmux
 nnoremap <C-f> <nop>
+
 " autocmds {{{1
 augroup vimrc
   autocmd!
-  " autocmd FileType 
-  autocmd FileType c            setlocal sw=8 sts=8 noexpandtab
-  autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
-  autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
-  autocmd FileType vim	        setlocal sw=2 sts=2 fdm=marker
-  autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab
-  autocmd CmdwinEnter * quit            " close command-line window upon entering
   autocmd BufNewFile,BufRead bash_aliases set filetype=sh
   autocmd BufNewFile,BufRead *.html set filetype=html
 augroup END
@@ -200,13 +194,13 @@ augroup RestoreCursor
 	\ |   execute "silent! normal! zO"
 	\ | endif
 augroup END
-" }}}1
-" extra syntax highlighting {{{
-augroup StringInComments
+
+augroup HighlightStringsInComments
     autocmd!
     autocmd Syntax * syntax region CommentBacktickString start=/`/ end=/`/ contained containedin=.*Comment
     autocmd Syntax * highlight link CommentBacktickString String
 augroup END
+" }}}
 
 highlight Evil guifg=red guibg=orange
 match Evil /“\|”/

@@ -9,6 +9,6 @@ augroup formatters
   " -fn, --func-next-line    function opening braces are placed on a separate line
   
   autocmd FileType python setlocal formatprg=black\ --quiet\ -
-  autocmd FileType markdown,html,css,json,scss,js,jsx,ts,tsx setlocal formatprg=prettier\ --stdin-filepath\ %
+  autocmd FileType markdown,html,css,json,scss,js,jsx,ts,tsx setlocal formatprg=npx\ prettier\ --stdin-filepath\ %
 
 augroup END

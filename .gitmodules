@@ -41,13 +41,13 @@
 	path = pack/tpope/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
 [submodule "tpope/vim-obsession"]
-	path = pack/tpope/start/vim-obsession
+	path = pack/tpope/opt/vim-obsession
 	url = http://github.com/tpope/vim-obsession.git
 [submodule "tpope/vim-surround"]
 	path = pack/tpope/start/vim-surround
 	url = http://github.com/tpope/vim-surround.git
 [submodule "tpope/vim-tbone"]
-	path = pack/tpope/start/vim-tbone
+	path = pack/tpope/opt/vim-tbone
 	url = http://github.com/tpope/vim-tbone.git
 [submodule "tpope/vim-scriptease"]
 	path = pack/tpope/start/vim-scriptease
@@ -64,3 +64,6 @@
 [submodule "pack/vimfect/start/YouCompleteMe"]
 	path = pack/vimfect/start/YouCompleteMe
 	url = https://github.com/ycm-core/YouCompleteMe.git
+[submodule "pack/tpope/start/vim-vinegar"]
+	path = pack/tpope/start/vim-vinegar
+	url = https://github.com/tpope/vim-vinegar

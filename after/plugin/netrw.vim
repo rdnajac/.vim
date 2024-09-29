@@ -12,9 +12,8 @@ nnoremap <silent> <leader>e :Lexplore<CR>
 xunmap gx
 nunmap gx
 
-let s:dotfiles           = '\(^\|\s\s\)\zs\.\S\+'
-
-let g:netrw_list_hide    = s:dotfiles
+" let s:dotfiles           = '\(^\|\s\s\)\zs\.\S\+'
+" let g:netrw_list_hide    = s:dotfiles
 " let g:netrw_list_hide    += netrw_gitignore#Hide()
 let g:netrw_winsize      = 20 
 let g:netrw_banner       = 0  " suppress the banner
