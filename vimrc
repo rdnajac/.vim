@@ -44,12 +44,6 @@ if !has('nvim')
   " set path+=$HOME/.files/**
   " set path+=$HOME/.vim/**
   " set path+=$HOME/rdnajac/**
-else
-  echom 'sourcing vimrc >^.^<'
-  source $HOME/.vim/plugin/display/mystatusline.vim
-  source $HOME/.vim/plugin/display/mytabline.vim
-  " can we set nvim-specefic options here?
-  set pumblend=10
 endif
 
 " set cindent		   	  " should this be default?
@@ -181,6 +175,12 @@ nnoremap <C-f> <nop>
 " autocmds {{{1
 augroup vimrc
   autocmd!
+  autocmd FileType c            setlocal sw=8 sts=8 noexpandtab
+  autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
+  autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
+  autocmd FileType vim,lua      setlocal sw=2 sts=2 fdm=marker
+  autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab wrap iskeyword+=.
+  autocmd CmdwinEnter * quit
   autocmd BufNewFile,BufRead bash_aliases set filetype=sh
   autocmd BufNewFile,BufRead *.html set filetype=html
 augroup END
@@ -225,4 +225,38 @@ set jumpoptions="view"
 set splitkeep="screen"
 set virtualedit="block"
 " }}}
+
+if has('nvim')
+  " source $HOME/.vim/plugin/display/mystatusline.vim
+  " source $HOME/.vim/plugin/display/mytabline.vim
+  set runtimepath+=~/.vim/plugin
+  " set runtimepath+=~/.vim/lua
+  set pumblend=10
+  let g:tmux_navigator_disable_netrw_workaround = 1
+  echom 'sourced vimrc! >^.^<'
+else 
+call plug#begin()
+" tabular conjoin targets vimtex
+Plug 'tpope/vim-apathy'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-repeat'
+Plug 'github/copilot.vim'
+Plug 'godlygeek/tabular'
+Plug 'wellle/targets.vim'
+Plug 'lervag/vimtex'
+Plug 'flwyd/vim-conjoin'
+Plug 'iamcco/markdown-preview.nvim'
+call plug#end()
+
+endif
+
+  let g:copilot_no_tab_map = v:true
+  imap <silent><script><expr> <c-j> copilot#Accept("\<C-j>")
+  let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/rdnajac"]
+
 " vim: ft=vim fdm=marker sw=2 sts=2
