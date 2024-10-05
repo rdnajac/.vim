@@ -1,5 +1,18 @@
 " after/ftplugin/markdown.vim
 " setlocal textwidth=80
+setlocal fdl=1
+setlocal textwidth=80
+setlocal noautoindent
+
+let g:markdown_syntax_conceal   = 1
+let g:markdown_folding	        = 1
+let g:markdown_fenced_languages = ['bash=sh', 'cpp', 'python', 'vim', 'tex']
+
+" Insert hyperlink from clipboard
+vmap <buffer> <leader>k S]f]a()<Esc>hp
+
+" Turn url into hyperlink
+vmap <buffer> <localleader>k S)i[]<Left>
 
 inoremap <buffer> <localleader>2 ##<Space>
 inoremap <buffer> <localleader>3 ###<Space>
@@ -7,13 +20,35 @@ inoremap <buffer> <localleader>4 ####<Space>
 inoremap <buffer> <localleader>5 #####<Space>
 inoremap <buffer> <localleader>6 ######<Space>
 
-inoremap <buffer> <localleader>c ```c<CR><CR>```<Up>
-inoremap <buffer> <localleader>p ```python<CR><CR>```<Up>
-inoremap <buffer> <localleader>s ```sh<CR><CR>```<Up>
-inoremap <buffer> <localleader>t ```text<CR><CR>```<Up>
-inoremap <buffer> <localleader>v ```vim<CR><CR>```<Up>
+inoremap <buffer> `c ```cpp<CR><CR>```<Up>
+inoremap <buffer> `p ```python<CR><CR>```<Up>
+inoremap <buffer> `s ```sh<CR><CR>```<Up>
+inoremap <buffer> `o ```console<CR><CR>```<Up>
+inoremap <buffer> `v ```vim<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
+
+" increment/decrement headings with C-a and C-x
+nnoremap <buffer> <C-a> :call IncHeading()<CR>
+nnoremap <buffer> <C-x> :call DecHeading()<CR>
+
+function! IncHeading()
+	let line = getline('.')
+	let level = len(matchstr(line, '^#\+'))
+	if level < 6
+		let new_line = substitute(line, '^#\+', repeat('#', level + 1), '')
+		call setline('.', new_line)
+	endif
+endfunction
+
+function! DecHeading()
+	let line = getline('.')
+	let level = len(matchstr(line, '^#\+'))
+	if level > 1
+		let new_line = substitute(line, '^#\+', repeat('#', level - 1), '')
+		call setline('.', new_line)
+	endif
+endfunction
 
 function! s:MyFoldLevel()
   return s:headingDepth(v:lnum) > 0 ? ">1" : "="
@@ -39,29 +74,6 @@ function! s:MyFoldText()
   return indent . leading_spaces .title . trailing_spaces . linecount
 endfunction
 
-" setlocal foldmethod=expr
-" setlocal foldtext=s:MyFoldText()
-" setlocal foldexpr=s:MyFoldLevel()
-
 " call mkdp#util#install()
 let g:mkdp_page_title = '${name}'
 nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
-
-if exists(":Tabularize") " {{{
-  nmap <buffer> <localleader>t :Tabularize <Bar><CR>
-  vmap <buffer> <localleader>t :Tabularize <Bar><CR>
-
-  " https://gist.github.com/287147
-  function! s:align()
-    let p = '^\s*|\s.*\s|\s*$'
-    if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-      Tabularize/|/l1
-      normal! 0
-      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-    endif
-  endfunction
-  inoremap <buffer> <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
-endif
-" vim: nofoldenable

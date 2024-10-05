@@ -2,9 +2,14 @@
 
 My personal Vim configuration.
 
+```vim
+" init.vim
+source $HOME/.vim/vimrc
+```
+
 ## `--version`
 
-```text
+```console
 VIM - Vi IMproved 9.1 (2024 Jan 02, compiled May 09 2024 07:15:02)
 macOS version - arm64
 Included patches: 1-400
@@ -54,15 +59,21 @@ Compilation: clang -c -I. -Iproto -DHAVE_CONFIG_H -DMACOS_X -DMACOS_X_DARWIN -g 
 Linking: clang -o vim -lm -lncurses -lsodium -liconv -lintl -framework AppKit -L/opt/homebrew/opt/lua/lib -llua5.4 -mmacosx-version-min=14.2 -fstack-protector-strong -L/opt/homebrew/opt/perl/lib/perl5/5.38/darwin-thread-multi-2level/CORE -lperl -L/opt/homebrew/opt/python@3.12/Frameworks/Python.framework/Versions/3.12/lib/python3.12/config-3.12-darwin -lpython3.12 -framework CoreFoundation -lruby.3.3 -L/opt/homebrew/Cellar/ruby/3.3.1/lib
 ```
 
-## cool stuff
+## Spell Checking
 
-- <https://google.github.io/styleguide/vimscriptguide.xml>
-- <https://google.github.io/styleguide/vimscriptfull.xml>
-- <https://github.com/changemewtf/no_plugins>
-- <https://github.com/romainl/idiomatic-vimrc>
-- <https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29>
-- <https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries>
+Use [cspell](http://streetsidesoftware.github.io/cspell/) for spell checking.
+Download the dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries).
+
+## References
+
+- [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
+- Google's Vimscript Style Guide:
+  - [Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml)
+  - [Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
+- [No Plugins](https://github.com/changemewtf/no_plugins)
+- [Idiomatic Vimrc](https://github.com/romainl/idiomatic-vimrcr)
+
 
 > Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-
 > specified, bug-ridden, slow implementation of half of Vim's features.\
-> -- _robertmeta's tenth rule_.
+> -- _robertmeta's tenth rule_

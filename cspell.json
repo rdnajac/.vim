@@ -3,8 +3,7 @@
     "dictionaryDefinitions": [
         {
             "name": "my-vim-spell",
-            "path": ".spell/en.utf-8.add",
+            "path": ".spell/en.utf-8.add"
         }
     ]
 }
-
