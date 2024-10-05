@@ -44,11 +44,10 @@ if !has('nvim')
   " set path+=$HOME/.files/**
   " set path+=$HOME/.vim/**
   " set path+=$HOME/rdnajac/**
+  set foldlevel=99		  " open all folds by default
 endif
 
-" set cindent		   	  " should this be default?
 set autochdir                     " change directory to the file being edited
-" set breakindent                   " indent wrapped lines
 set completeopt+=preview	  " show preview window
 set completeopt=menuone,noselect  " show menu even if there's only one match
 set cursorline                    " highlight the current line
@@ -74,7 +73,8 @@ set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
 set foldmethod=marker		  " fold based on markers (default: {{{,}}})
 set foldopen+=insert
 set foldopen+=jump
-" set nofoldenable                " don't fold by default; press 'zi' to toggle
+
+" `iskeyword` is used for word motions, completion, etc.
 set iskeyword+=_
 if &filetype != 'vim' && expand('%:t') != 'vimrc'
   set iskeyword+=-
@@ -172,7 +172,7 @@ nnoremap Q <nop>
 " avoid conflicts with tmux
 nnoremap <C-f> <nop>
 
-" autocmds {{{1
+" easy ftplugin configuration {{{1
 augroup vimrc
   autocmd!
   autocmd FileType c            setlocal sw=8 sts=8 noexpandtab
@@ -185,63 +185,19 @@ augroup vimrc
   autocmd BufNewFile,BufRead *.html set filetype=html
 autocmd FileType markdown setlocal commentstring=>\ %s
 augroup END
-
-augroup RestoreCursor
-  autocmd!
-  autocmd BufReadPost *
-	\ let line = line("'\"")
-	\ | if line >= 1 && line <= line("$")
-	\ |   execute "normal! g`\""
-	\ |   execute "silent! normal! zO"
-	\ | endif
-augroup END
-
-augroup HighlightStringsInComments
-    autocmd!
-    autocmd Syntax * syntax region CommentBacktickString start=/`/ end=/`/ contained containedin=.*Comment
-    autocmd Syntax * highlight link CommentBacktickString String
-augroup END
-
-augroup VimHighlightError
-  autocmd!
-  autocmd BufReadPost,BufNewFile *.vim  if search('vim9script', 'nw') == 0 | syn match Error /^\s*#.*$/ | endif
-augroup END
-  
-" }}}
-
-highlight Evil guifg=red guibg=orange
-match Evil /“\|”/
-" }}}
-" ignored files and directories {{{
-set wildignore+=*.o,*.out,*.a,*.so,*.lib,*.bin,*/.git/*   " General build files
-set wildignore+=*.pyo,*.pyd,*/.cache/*,*/dist/*           " Python files and directories
-set wildignore+=*.swp,*.swo,*.tmp,*.temp                  " Swap and temporary files
-set wildignore+=*.pdf,*.aux,*.fdb_latexmk,*.fls           " LaTeX files
-set wildignore+=*.zip,*.tar.gz,*.rar,*.7z,*.tar.xz,*.tgz  " Archives and compressed files
-set wildignore+=*.cmake,*.cmake.in,*.cmod,*/bin/*,*/build/* " C/C++ files and directories
-set wildignore+=*/out/*,*/vendor/*,*/target/*,*/.vscode/*,*/.idea/*
-set wildignore+=*.jpg,*.png,*.gif,*.bmp,*.tiff,*.ico,*.svg,*.webp,*.img
-set wildignore+=*.mp*p4,*.avi,*.mkv,*.mov,*.flv,*.wmv,*.webm,*.m4v,*.flac,*.wav
-set wildignore+=*.deb,*.rpm,*.dylib,*.app,*.dmg,*.DS_Store,*.exe,*.dll,*.msi,Thumbs.db
-" }}}
-" additional untested configs from LazyVim {{{
-" https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
-set grepformat="%f:%l:%c:%m"
-set grepprg="rg --vimgrep"
-set jumpoptions="view"
-set splitkeep="screen"
-set virtualedit="block"
 " }}}
 
 if has('nvim')
+  echom 'sourced vimrc! >^.^< loading nvim-specific settings...'
   " source $HOME/.vim/plugin/display/mystatusline.vim
   " source $HOME/.vim/plugin/display/mytabline.vim
   set runtimepath+=~/.vim/
-  " set runtimepath+=~/.vim/lua
   set pumblend=10
   let g:tmux_navigator_disable_netrw_workaround = 1
-  echom 'sourced vimrc! >^.^<'
 endif
+
+" TODO add vim-plug to runtimepath for nvim
+" TODO check if plug#begin is called after setting runtimepath
 call plug#begin()
 " tabular conjoin targets vimtex
 Plug 'tpope/vim-apathy'
@@ -252,18 +208,23 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-repeat'
-Plug 'github/copilot.vim'
 Plug 'godlygeek/tabular'
 Plug 'wellle/targets.vim'
 Plug 'lervag/vimtex'
 Plug 'flwyd/vim-conjoin'
+Plug 'jiangmiao/auto-pairs'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
+if !has('nvim')
+  " Plug 'github/copilot.vim'
+  " Plug 'dense-analysis/ale'
+  " Plug 'ycm-core/YouCompleteMe'
+endif
 call plug#end()
-
 
 let g:copilot_no_tab_map = v:true
 imap <silent><script><expr> <c-j> copilot#Accept("\<C-j>")
 let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/rdnajac"]
 let g:tex_flavor         = 'latex'
 let g:vimtex_view_method = 'skim'
+
 " vim: ft=vim fdm=marker sw=2 sts=2
