@@ -6,7 +6,7 @@ setlocal noautoindent
 
 let g:markdown_syntax_conceal   = 1
 let g:markdown_folding	        = 1
-let g:markdown_fenced_languages = ['bash=sh', 'c', 'python', 'vim', 'tex']
+let g:markdown_fenced_languages = ['bash=sh', 'cpp', 'python', 'vim', 'tex']
 
 " Insert hyperlink from clipboard
 vmap <buffer> <leader>k S]f]a()<Esc>hp
@@ -20,11 +20,11 @@ inoremap <buffer> <localleader>4 ####<Space>
 inoremap <buffer> <localleader>5 #####<Space>
 inoremap <buffer> <localleader>6 ######<Space>
 
-inoremap <buffer> <localleader>c ```c<CR><CR>```<Up>
-inoremap <buffer> <localleader>p ```python<CR><CR>```<Up>
-inoremap <buffer> <localleader>s ```sh<CR><CR>```<Up>
-inoremap <buffer> <localleader>t ```text<CR><CR>```<Up>
-inoremap <buffer> <localleader>v ```vim<CR><CR>```<Up>
+inoremap <buffer> `c ```cpp<CR><CR>```<Up>
+inoremap <buffer> `p ```python<CR><CR>```<Up>
+inoremap <buffer> `s ```sh<CR><CR>```<Up>
+inoremap <buffer> `o ```console<CR><CR>```<Up>
+inoremap <buffer> `v ```vim<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
