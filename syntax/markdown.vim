@@ -7,6 +7,7 @@
 if exists("b:current_syntax")
   finish
 endif
+echom "Loading markdown syntax"
 
 if !exists('main_syntax')
   let main_syntax = 'markdown'
@@ -24,6 +25,7 @@ unlet! b:current_syntax
 if !exists('g:markdown_fenced_languages')
   let g:markdown_fenced_languages = []
 endif
+echom "markdown_fenced_languages: " . string(g:markdown_fenced_languages)
 let s:done_include = {}
 for s:type in map(copy(g:markdown_fenced_languages),'matchstr(v:val,"[^=]*$")')
   if has_key(s:done_include, matchstr(s:type,'[^.]*'))
@@ -123,6 +125,13 @@ syn region markdownCode matchgroup=markdownCodeDelimiter start="`` \=" end=" \=`
 syn region markdownCodeBlock matchgroup=markdownCodeDelimiter start="^\s*\z(`\{3,\}\).*$" end="^\s*\z1\ze\s*$" keepend
 syn region markdownCodeBlock matchgroup=markdownCodeDelimiter start="^\s*\z(\~\{3,\}\).*$" end="^\s*\z1\ze\s*$" keepend
 
+" LaTeX math expressions
+syn region markdownMathInline matchgroup=markdownMathDelimiter start="\\\@<!\$" end="\$" keepend contains=@texMathZoneX
+syn region markdownMathDisplay matchgroup=markdownMathDelimiter start="^\s*\$\$" end="\$\$$" keepend contains=@texMathZoneX
+hi def link markdownMathInline texMathZoneX
+hi def link markdownMathDisplay texMathZoneX
+hi def link markdownMathDelimiter Delimiter
+
 syn match markdownFootnote "\[^[^\]]\+\]"
 syn match markdownFootnoteDefinition "^\[^[^\]]\+\]:"
 
@@ -145,7 +154,7 @@ if get(b:, 'markdown_yaml_head', get(g:, 'markdown_yaml_head', main_syntax ==# '
 endif
 
 syn match markdownEscape "\\[][\\`*_{}()<>#+.!-]"
-syn match markdownError "\w\@<=_\w\@="
+" syn match markdownError "\w\@<=_\w\@="
 
 hi def link markdownH1                    htmlH1
 hi def link markdownH2                    htmlH2
@@ -197,4 +206,36 @@ if main_syntax ==# 'markdown'
   unlet main_syntax
 endif
 
+" after/syntax/markdown.vim 
+
+" Make code and H1 stand out more
+hi! link markdownH1   Constant 
+hi! link Folded Cyan 
+
+" alerts from gfm
+" syn region ghAlert start=/\[\!/ end=/\]/ contained
+" " syntax match mdAlert '\[\![NOTE|TIP|IMPORTANT|WARNING|CAUTION]\]'
+" syn match mdBlockQuote '^>.*' contains=ghAlert
+" hi! link ghAlert Todo
+hi! link mdBlockQuote Comment
+
+hi Cyan guifg=#14afff guibg=#000000
+
+" " [link](URL) | [link][id] | [link][] | ![image](URL)
+" "syn region mkdFootnotes matchgroup=mkdDelimiter start="\[^"    end="\]"
+" syn region mkdID  matchgroup=mkdDelimiter   start="\["    end="\]" contained oneline conceal
+" syn region mkdURL matchgroup=mkdDelimiter   start="("     end=")"  contained oneline conceal
+" "syn region mkdLink matchgroup=mkdDelimiter  start="\\\@<!!\?\[\ze[^]\n]*\n\?[^]\n]*\][[(]" end="\]" contains=@mkdNonListItem,@Spell nextgroup=mkdURL,mkdID skipwhite' . concealends
+" "                         ------------ _____________________ ----------------------------- _________________________ ----------------- __
+" " Autolink with parenthesis.
+" syn region  mkdInlineURL matchgroup=mkdDelimiter start="(\(https\?:\/\/\(\w\+\(:\w\+\)\?@\)\?\([A-Za-z0-9][-_0-9A-Za-z]*\.\)\{1,}\(\w\{2,}\.\?\)\{1,}\(:[0-9]\{1,5}\)\?[^] \t]*)\)\@=" end=")"
+
+hi! link markdownLinkText              Cyan
+hi! link markdownUrl                   String
+hi! link markdownAutomaticLink         markdownUrl
+hi! link markdownUrlTitle              String
+
+" these link to Statement...
+" hi! link markdownOrderedListMarker
+" hi! link markdownListMarker
 " vim:set sw=2:

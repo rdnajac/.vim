@@ -179,10 +179,11 @@ augroup vimrc
   autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
   autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
   autocmd FileType vim,lua      setlocal sw=2 sts=2 fdm=marker
-  autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab wrap iskeyword+=.
+  autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab wrap 
   autocmd CmdwinEnter * quit
   autocmd BufNewFile,BufRead bash_aliases set filetype=sh
   autocmd BufNewFile,BufRead *.html set filetype=html
+autocmd FileType markdown setlocal commentstring=>\ %s
 augroup END
 
 augroup RestoreCursor
@@ -200,6 +201,12 @@ augroup HighlightStringsInComments
     autocmd Syntax * syntax region CommentBacktickString start=/`/ end=/`/ contained containedin=.*Comment
     autocmd Syntax * highlight link CommentBacktickString String
 augroup END
+
+augroup VimHighlightError
+  autocmd!
+  autocmd BufReadPost,BufNewFile *.vim  if search('vim9script', 'nw') == 0 | syn match Error /^\s*#.*$/ | endif
+augroup END
+  
 " }}}
 
 highlight Evil guifg=red guibg=orange
@@ -229,12 +236,12 @@ set virtualedit="block"
 if has('nvim')
   " source $HOME/.vim/plugin/display/mystatusline.vim
   " source $HOME/.vim/plugin/display/mytabline.vim
-  set runtimepath+=~/.vim/plugin
+  set runtimepath+=~/.vim/
   " set runtimepath+=~/.vim/lua
   set pumblend=10
   let g:tmux_navigator_disable_netrw_workaround = 1
   echom 'sourced vimrc! >^.^<'
-else 
+endif
 call plug#begin()
 " tabular conjoin targets vimtex
 Plug 'tpope/vim-apathy'
@@ -250,13 +257,13 @@ Plug 'godlygeek/tabular'
 Plug 'wellle/targets.vim'
 Plug 'lervag/vimtex'
 Plug 'flwyd/vim-conjoin'
-Plug 'iamcco/markdown-preview.nvim'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 call plug#end()
 
-endif
 
-  let g:copilot_no_tab_map = v:true
-  imap <silent><script><expr> <c-j> copilot#Accept("\<C-j>")
-  let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/rdnajac"]
-
+let g:copilot_no_tab_map = v:true
+imap <silent><script><expr> <c-j> copilot#Accept("\<C-j>")
+let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/rdnajac"]
+let g:tex_flavor         = 'latex'
+let g:vimtex_view_method = 'skim'
 " vim: ft=vim fdm=marker sw=2 sts=2
