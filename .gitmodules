@@ -1,5 +1,0 @@
-# this is a comment
-# pack/vimfect/start is for plugins that are always loaded
-[submodule "lua/tokyonight.nvim"]
-	path = lua/tokyonight.nvim
-	url = git@github.com:folke/tokyonight.nvim.git

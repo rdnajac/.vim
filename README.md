@@ -66,6 +66,7 @@ Download the dictionaries from [cspell-dicts](https://github.com/streetsidesoftw
 
 ## References
 
+- [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
 - Google's Vimscript Style Guide:
   - [Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml)
   - [Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
