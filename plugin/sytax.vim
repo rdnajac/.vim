@@ -1,6 +1,5 @@
-" global syntax settings
+scriptencoding utf-8
 " https://stackoverflow.com/a/28399202/26469286
-
 " For files that don't have filetype-specific syntax rules
 " autocmd BufNewFile,BufRead *syntax match NotPrintableAscii "[^\x20-\x7F]"
 " For files that do have filetype-specific syntax rules
@@ -8,7 +7,6 @@
 " hi NotPrintableAscii ctermbg=236
 
 " wrap it in an augroup to avoid errors when sourcing the file multiple times
-" define a new syntax region called
 highlight Evil guifg=red guibg=orange
 augroup GlobalSyntaxSettings
 	autocmd!

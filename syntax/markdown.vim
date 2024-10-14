@@ -7,7 +7,6 @@
 if exists("b:current_syntax")
   finish
 endif
-echom "Loading markdown syntax"
 
 if !exists('main_syntax')
   let main_syntax = 'markdown'
@@ -25,7 +24,6 @@ unlet! b:current_syntax
 if !exists('g:markdown_fenced_languages')
   let g:markdown_fenced_languages = []
 endif
-echom "markdown_fenced_languages: " . string(g:markdown_fenced_languages)
 let s:done_include = {}
 for s:type in map(copy(g:markdown_fenced_languages),'matchstr(v:val,"[^=]*$")')
   if has_key(s:done_include, matchstr(s:type,'[^.]*'))

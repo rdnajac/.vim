@@ -33,7 +33,7 @@ if !has('nvim')
   set mouse=a                     " wait, that's illegal
   set nomodeline                  " modelines are a security risk
   set nrformats-=octal		  " Ignore octal numbers for Ctrl-A and Ctrl-X
-  set path=.,,                    " C ftplugin should add '/usr/include'
+  "set path=.,,                    " C ftplugin should add '/usr/include'
   set shortmess+=A                " avoid 'hit-enter' prompts
   set shortmess-=S                " don't show search count
   set showcmd                     " show the command being typed
@@ -45,6 +45,11 @@ if !has('nvim')
   " set path+=$HOME/.vim/**
   " set path+=$HOME/rdnajac/**
   set foldlevel=99		  " open all folds by default
+else
+  echom 'sourcing vimrc! >^.^<'
+  "set runtimepath+=~/.vim/
+  set pumblend=10
+  let g:tmux_navigator_disable_netrw_workaround = 1
 endif
 
 set autochdir                     " change directory to the file being edited
@@ -169,6 +174,7 @@ nnoremap g# g#zzzv
 " unmappings {{{2
 " no Ex mode
 nnoremap Q <nop>
+" TODO make Q format?
 " avoid conflicts with tmux
 nnoremap <C-f> <nop>
 
@@ -177,29 +183,33 @@ augroup vimrc
   autocmd!
   autocmd FileType c            setlocal sw=8 sts=8 noexpandtab
   autocmd FileType cpp,python   setlocal sw=4 sts=4 fdm=syntax fdl=9 expandtab
+  " autocmd FileType cpp		setlocal fo-=cro
   autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax fdl=9 spell
   autocmd FileType vim,lua      setlocal sw=2 sts=2 fdm=marker
   autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab wrap 
   autocmd CmdwinEnter * quit
-  autocmd BufNewFile,BufRead bash_aliases set filetype=sh
+augroup END
+
+augroup fixsyntax
+  autocmd!
+  " force syntax highlighting for html template files
   autocmd BufNewFile,BufRead *.html set filetype=html
-autocmd FileType markdown setlocal commentstring=>\ %s
+  " vim gets confused if these are not prefixed with a dot
+  autocmd BufNewFile,BufRead bash_aliases set filetype=sh
+  autocmd BufNewFile,BufRead gitconfig set filetype=gitconfig
 augroup END
 " }}}
 
-if has('nvim')
-  echom 'sourced vimrc! >^.^< loading nvim-specific settings...'
-  " source $HOME/.vim/plugin/display/mystatusline.vim
-  " source $HOME/.vim/plugin/display/mytabline.vim
-  set runtimepath+=~/.vim/
-  set pumblend=10
-  let g:tmux_navigator_disable_netrw_workaround = 1
+" automatically downloads vim-plug to your machine if not found {{{2
+" https://cs4118.github.io/dev-guides/vim-workflow.html
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    exec 'autocmd VimEnter * PlugInstall --sync | source $MYVIMRC'
 endif
-
-" TODO add vim-plug to runtimepath for nvim
-" TODO check if plug#begin is called after setting runtimepath
-call plug#begin()
-" tabular conjoin targets vimtex
+" }}}
+"
+call plug#begin('~/.vim/.plugged')
 Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -214,17 +224,20 @@ Plug 'lervag/vimtex'
 Plug 'flwyd/vim-conjoin'
 Plug 'jiangmiao/auto-pairs'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
-if !has('nvim')
-  " Plug 'github/copilot.vim'
-  " Plug 'dense-analysis/ale'
-  " Plug 'ycm-core/YouCompleteMe'
-endif
+Plug 'machakann/vim-highlightedyank'
+Plug 'github/copilot.vim'
+Plug 'dense-analysis/ale'
+Plug 'ycm-core/YouCompleteMe'
+Plug 'ervandew/supertab'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 call plug#end()
 
+let g:tex_flavor                = 'latex'
+let g:is_bash                   = 1
+let g:vimtex_view_method        = 'skim'
+let g:copilot_workspace_folders = ['~/.vim', '~/.files', '~/rdnajac']
 let g:copilot_no_tab_map = v:true
 imap <silent><script><expr> <c-j> copilot#Accept("\<C-j>")
-let g:copilot_workspace_folders = ["~/.vim", "~/.files", "~/rdnajac"]
-let g:tex_flavor         = 'latex'
-let g:vimtex_view_method = 'skim'
 
-" vim: ft=vim fdm=marker sw=2 sts=2
+" vim: ft=vim fdm=marker fdl=2 sw=2 sts=2

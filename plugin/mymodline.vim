@@ -2,24 +2,25 @@
 " https://github.com/numirias/security/blob/master/doc/2019-06-04_ace-vim-neovim.md
 let g:secure_modelines_modelines     = 1
 let g:secure_modelines_allowed_items = [
-      \ "textwidth",   "tw",
-      \ "softtabstop", "sts",
-      \ "tabstop",     "ts",
-      \ "shiftwidth",  "sw",
-      \ "expandtab",   "et",   "noexpandtab", "noet",
-      \ "filetype",    "ft",
-      \ "foldmethod",  "fdm",
-      \ "readonly",    "ro",   "noreadonly",  "noro",
-      \ "rightleft",   "rl",   "norightleft", "norl",
-      \ "spell",       "nospell", "spelllang", 
-      \ "wrap",        "nowrap", 
+      \ 'textwidth',   'tw',
+      \ 'softtabstop', 'sts',
+      \ 'tabstop',     'ts',
+      \ 'shiftwidth',  'sw',
+      \ 'expandtab',   'et',   'noexpandtab', 'noet',
+      \ 'filetype',    'ft',
+      \ 'foldmethod',  'fdm',
+      \ 'foldlevel',   'fdl',
+      \ 'readonly',    'ro',   'noreadonly',  'noro',
+      \ 'rightleft',   'rl',   'norightleft', 'norl',
+      \ 'spell',       'nospell', 'spelllang', 
+      \ 'wrap',        'nowrap', 
       \ ]
 
 function! s:DoOne(item) abort
   let l:matches = matchlist(a:item, '^\([a-z]\+\)\%([-+^]\?=[a-zA-Z0-9_\-,.]\+\)\?$')
   if len(l:matches) > 0
     if index(g:secure_modelines_allowed_items, l:matches[1]) != -1
-      exec "setlocal " . a:item
+      exec 'setlocal ' . a:item
     else
       echohl WarningMsg
       echo "Ignoring '" . a:item . "' in modeline"

@@ -1,12 +1,15 @@
 " after/ftplugin/markdown.vim
 " setlocal textwidth=80
-setlocal fdl=1
 setlocal textwidth=80
 setlocal noautoindent
 
+" forget html comments, treat quoted text as comments 
+" for easy toggling from commentary 
+setlocal commentstring=>\ %s
+
 let g:markdown_syntax_conceal   = 1
 let g:markdown_folding	        = 1
-let g:markdown_fenced_languages = ['bash=sh', 'cpp', 'python', 'vim', 'tex']
+let g:markdown_fenced_languages = ['sh', 'cpp', 'python', 'vim', 'tex']
 
 " Insert hyperlink from clipboard
 vmap <buffer> <leader>k S]f]a()<Esc>hp
