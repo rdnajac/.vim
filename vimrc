@@ -11,8 +11,6 @@ runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
 silent! color scheme            " my colorscheme (in ~/.vim/colors/)
 
 source $HOME/.vim/init.vim
-source $HOME/.vim/init/keys.vim " key mappings
-source $HOME/.vim/init/plug.vim " plugins from vim-plug
 
 " configure the home directory, undo, swap, backup, and info files
 set undofile swapfile backup
@@ -50,7 +48,7 @@ set foldlevel=99                " open all folds by default
 augroup myftplugin
   autocmd!
   autocmd FileType c            setlocal sw=8 sts=8 noexpandtab
-  autocmd FileType cpp,python   setlocal sw=4 sts=4   expandtab
+  autocmd FileType cpp          setlocal sw=4 sts=4   expandtab
   autocmd FileType python       setlocal sw=4 sts=4   expandtab fdm=indent
   autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab wrap
   autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax  spell
