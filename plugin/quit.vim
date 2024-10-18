@@ -1,5 +1,4 @@
 " Quit buffers smartly
-
 cab qw  wqa!
 cab wq  wqa!
 cab Wq	wqa!

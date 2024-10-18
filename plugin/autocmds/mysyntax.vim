@@ -24,3 +24,12 @@ augroup VimHighlightError
   autocmd!
   autocmd BufReadPost,BufNewFile *.vim  if search('vim9script', 'nw') == 0 | syn match Error /^\s*#.*$/ | endif
 augroup END
+
+augroup fixsyntax
+  autocmd!
+  " force syntax highlighting for html template files
+  autocmd BufNewFile,BufRead *.html set filetype=html
+  " vim gets confused if these are not prefixed with a dot
+  autocmd BufNewFile,BufRead bash_aliases set filetype=sh
+  autocmd BufNewFile,BufRead gitconfig set filetype=gitconfig
+augroup END

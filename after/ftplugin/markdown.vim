@@ -80,3 +80,6 @@ endfunction
 " call mkdp#util#install()
 let g:mkdp_page_title = '${name}'
 nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
+
+" ALE
+let b:fix_on_save = 1

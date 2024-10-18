@@ -1,4 +1,5 @@
 " statusline configuration
+scriptencoding utf-8
 
 " Left-align
 " ==========
@@ -10,11 +11,9 @@ set statusline+=\ %F
 set statusline+=\ %m
 set statusline+=\ %y
 
-
-" Right-align 
+" Right-align
 " ===========
-set statusline+=%=              
+set statusline+=%=
 " set statusline+=ascii:\ %3b\ hex:\ 0x%02B\ " ASCII and hex value of char under cursor
 set statusline+=%S
 set statusline+=\ [%2v,\%P]
-

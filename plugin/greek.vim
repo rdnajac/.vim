@@ -1,32 +1,33 @@
-" Insert Greek letters with <leader> + first two letters of the name
-" XXX: Omicron is omitted
-" XXX: maybe don't use this in latex math mode
+" Insert Greek letters with <localleader> + first two letters of the name
+" XXX: omicron is omitted
+" XXX: don't use this in latex math mode
+scriptencoding utf-8
 
 " Uppercase
-inoremap <localleader>Al Α	
-inoremap <localleader>Be Β	
-inoremap <localleader>Ga Γ	
-inoremap <localleader>De Δ	
-inoremap <localleader>Ep Ε	
-inoremap <localleader>Ze Ζ	
-inoremap <localleader>Et Η	
-inoremap <localleader>Th Θ	
-inoremap <localleader>Io Ι	
-inoremap <localleader>Ka Κ	
-inoremap <localleader>La Λ	
-inoremap <localleader>Mu Μ	
-inoremap <localleader>Nu Ν	
-inoremap <localleader>Xi Ξ	
-" inoremap <localleader>Om Ο	
-inoremap <localleader>Pi Π	
-inoremap <localleader>Rh Ρ	
-inoremap <localleader>Si Σ	
-inoremap <localleader>Ta Τ	
-inoremap <localleader>Up Υ	
-inoremap <localleader>Ph Φ	
-inoremap <localleader>Ch Χ	
-inoremap <localleader>Ps Ψ	
-inoremap <localleader>Om Ω	
+inoremap <localleader>Al Α
+inoremap <localleader>Be Β
+inoremap <localleader>Ga Γ
+inoremap <localleader>De Δ
+inoremap <localleader>Ep Ε
+inoremap <localleader>Ze Ζ
+inoremap <localleader>Et Η
+inoremap <localleader>Th Θ
+inoremap <localleader>Io Ι
+inoremap <localleader>Ka Κ
+inoremap <localleader>La Λ
+inoremap <localleader>Mu Μ
+inoremap <localleader>Nu Ν
+inoremap <localleader>Xi Ξ
+" inoremap <localleader>Om Ο
+inoremap <localleader>Pi Π
+inoremap <localleader>Rh Ρ
+inoremap <localleader>Si Σ
+inoremap <localleader>Ta Τ
+inoremap <localleader>Up Υ
+inoremap <localleader>Ph Φ
+inoremap <localleader>Ch Χ
+inoremap <localleader>Ps Ψ
+inoremap <localleader>Om Ω
 
 " Lowercase
 inoremap <localleader>al α

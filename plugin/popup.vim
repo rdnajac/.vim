@@ -1,9 +1,5 @@
 " vim/plugin/popup.vim
 scriptencoding utf-8
-if exists('g:loaded_popup')
-  finish
-endif
-let g:loaded_popup = 1
 
 let g:popup_options = {
       \ 'hidden': v:true,
@@ -12,14 +8,19 @@ let g:popup_options = {
       \ 'borderchars': ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
       \ 'line': (&lines - 2),
       \ 'close': 'click',
+      \ 'title': '',
       \ }
 
-function! g:PopupNotify() abort
-  let popid = popup_create('Hello, world!', g:popup_options)
-  call popup_show(popid) 
-endfunction
+function! g:Popup(text, ...)
+    let popup_opts = copy(g:popup_options)
+    
+    if a:0 > 0
+        let title = a:1
+        if title !=# ''
+            let popup_opts['title'] = title
+        endif
+    endif
 
-function! g:PopupShow(text) abort
-    let popid = popup_create(a:text, g:popup_options)
+    let popid = popup_create(a:text, popup_opts)
     call popup_show(popid)
 endfunction
