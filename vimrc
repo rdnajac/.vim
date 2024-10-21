@@ -87,6 +87,7 @@ Plug 'dense-analysis/ale'
 " Plug 'SirVer/ultisnips'
 " Plug 'honza/vim-snippets'
 Plug 'bfrg/vim-c-cpp-modern'
+Plug 'bfrg/vim-cuda-syntax'
 call plug#end()
 
 " other plugins
