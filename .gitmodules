@@ -1,0 +1,3 @@
+[submodule "pack/vimfect/start/vim-cuda"]
+	path = pack/vimfect/start/vim-cuda
+	url = git@github.com:rdnajac/vim-cuda.git
