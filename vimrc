@@ -51,8 +51,8 @@ augroup myftplugin
   autocmd FileType cpp          setlocal sw=4 sts=4   expandtab
   autocmd FileType python       setlocal sw=4 sts=4   expandtab fdm=indent
   autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab wrap
-  autocmd FileType tex          setlocal sw=2 sts=2 fdm=syntax  spell
-  autocmd FileType vim,lua      setlocal sw=2 sts=2 fdm=marker
+  autocmd FileType tex          setlocal sw=2 sts=2   expandtab fdm=syntax  spell
+  autocmd FileType vim,lua      setlocal sw=2 sts=2   expandtab fdm=marker
   autocmd FileType * setlocal formatoptions+=j
   autocmd FileType * setlocal formatoptions-=o
   autocmd CmdwinEnter * quit
@@ -89,7 +89,7 @@ Plug 'dense-analysis/ale'
 call plug#end()
 
 " other plugins
-
+packadd YouCompleteMe
 
 let g:tex_flavor                = 'latex'
 let g:is_bash                   = 1
