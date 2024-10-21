@@ -86,6 +86,7 @@ Plug 'dense-analysis/ale'
 " Plug 'ervandew/supertab'
 " Plug 'SirVer/ultisnips'
 " Plug 'honza/vim-snippets'
+Plug 'bfrg/vim-c-cpp-modern'
 call plug#end()
 
 " other plugins
