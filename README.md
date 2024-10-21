@@ -7,6 +7,29 @@ My personal Vim configuration.
 source $HOME/.vim/vimrc
 ```
 
+## YouCompleteMe
+
+ycm included as a git submodule.
+
+If you have not cloned the repo:
+
+```sh
+git clone --recurse-submodules git@github.com:rdnajac/.vim.git ~/.vim
+```
+
+If you have already cloned the repo:
+
+```sh
+cd ~/.vim/pack/vimfect/opt/YouCompleteMe
+git submodule update --init --recursive
+```
+
+### Install
+
+```sh
+
+```
+
 ## `--version`
 
 ```console
@@ -72,7 +95,6 @@ Download the dictionaries from [cspell-dicts](https://github.com/streetsidesoftw
   - [Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
 - [No Plugins](https://github.com/changemewtf/no_plugins)
 - [Idiomatic Vimrc](https://github.com/romainl/idiomatic-vimrcr)
-
 
 > Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-
 > specified, bug-ridden, slow implementation of half of Vim's features.\
