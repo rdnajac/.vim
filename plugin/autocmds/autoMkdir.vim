@@ -1,3 +1,6 @@
+" autocmds/autoMkdir.vim
+" Automatically create directories for new files
+
 function! s:autoMkdir(file)
   if a:file =~# '^\w\+:[\\/][\\/]'
     return
@@ -9,7 +12,7 @@ function! s:autoMkdir(file)
   endif
 endfunction
 
-augroup auto_mkdir
+augroup autoMkdir
   autocmd!
   autocmd BufWritePre * call s:autoMkdir(expand('<afile>'))
 augroup END

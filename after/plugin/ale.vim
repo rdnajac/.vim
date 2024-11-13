@@ -65,4 +65,3 @@ function! LinterStatus() abort
 endfunction
 " set statusline=%{LinterStatus()w  w}
 " }}}
-
