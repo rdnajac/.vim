@@ -1,21 +1,25 @@
 " after/ftplugin/markdown.vim
-" setlocal textwidth=80
 setlocal textwidth=80
 setlocal noautoindent
 
-" forget html comments, treat quoted text as comments 
-" for easy toggling from commentary 
-setlocal commentstring=>\ %s
-
 let g:markdown_syntax_conceal   = 1
 let g:markdown_folding	        = 1
-let g:markdown_fenced_languages = ['sh', 'cpp', 'python', 'vim', 'tex']
+let g:markdown_fenced_languages = ['sh', 'cpp', 'cuda', 'python', 'vim']
+
+" forget html comments, treat quoted text as comments
+" for easy toggling from commentary
+setlocal commentstring=>\ %s
+
 
 " Insert hyperlink from clipboard
 vmap <buffer> <leader>k S]f]a()<Esc>hp
 
 " Turn url into hyperlink
 vmap <buffer> <localleader>k S)i[]<Left>
+
+" Insert an octothorpe at the beginning of the line that already has text
+nnoremap <buffer> <localleader>h ^i#<Space><Esc>
+inoremap <buffer> <localleader>h <C-o>i#<Space>
 
 inoremap <buffer> <localleader>2 ##<Space>
 inoremap <buffer> <localleader>3 ###<Space>
@@ -83,3 +87,14 @@ nnoremap <buffer> <localleader>md :MarkdownPreview<cr>
 
 " ALE
 let b:fix_on_save = 1
+
+" create a line break at the cursor
+function! BreakHere() abort
+  let line = getline('.')
+  let col = col('.')
+  let before = strpart(line, 0, col - 1)
+  let after = strpart(line, col - 1)
+  call setline('.', before)
+  call append('.', after)
+endfunction
+nnoremap <localleader>j :call BreakHere()<CR>

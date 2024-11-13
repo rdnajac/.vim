@@ -1,6 +1,6 @@
 # .vim
 
-My personal Vim configuration.
+My Vim configuration.
 
 ```vim
 " init.vim
@@ -11,7 +11,7 @@ source $HOME/.vim/vimrc
 
 ycm included as a git submodule.
 
-If you have not cloned the repo:
+If you have not yet cloned the repo:
 
 ```sh
 git clone --recurse-submodules git@github.com:rdnajac/.vim.git ~/.vim
@@ -22,12 +22,6 @@ If you have already cloned the repo:
 ```sh
 cd ~/.vim/pack/vimfect/opt/YouCompleteMe
 git submodule update --init --recursive
-```
-
-### Install
-
-```sh
-
 ```
 
 ## `--version`
@@ -97,5 +91,6 @@ Download the dictionaries from [cspell-dicts](https://github.com/streetsidesoftw
 - [Idiomatic Vimrc](https://github.com/romainl/idiomatic-vimrcr)
 
 > Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-
-> specified, bug-ridden, slow implementation of half of Vim's features.\
-> -- _robertmeta's tenth rule_
+> specified, bug-ridden, slow implementation of half of Vim's features.
+>
+> _robertmeta's tenth rule_

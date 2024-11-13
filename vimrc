@@ -47,12 +47,16 @@ set foldlevel=99                " open all folds by default
 
 augroup myftplugin
   autocmd!
-  autocmd FileType c            setlocal sw=8 sts=8 noexpandtab
-  autocmd FileType cpp          setlocal sw=4 sts=4   expandtab
-  autocmd FileType python       setlocal sw=4 sts=4   expandtab fdm=indent
-  autocmd FileType sh	        setlocal sw=8 sts=8 noexpandtab wrap
-  autocmd FileType tex          setlocal sw=2 sts=2   expandtab fdm=syntax  spell
-  autocmd FileType vim,lua      setlocal sw=2 sts=2   expandtab fdm=marker
+  autocmd FileType sh	          setlocal sw=8 sts=8 noexpandtab wrap
+  autocmd FileType c              setlocal sw=8 sts=8 noexpandtab
+  autocmd FileType cpp            setlocal sw=4 sts=4   expandtab
+  autocmd FileType cuda           setlocal sw=4 sts=4   expandtab
+  autocmd FileType python         setlocal sw=4 sts=4   expandtab fdm=indent
+  autocmd FileType tex            setlocal sw=2 sts=2   expandtab fdm=syntax  spell
+  autocmd FileType vim,lua        setlocal sw=2 sts=2   expandtab fdm=marker
+  autocmd FileType javascript     setlocal sw=2 sts=2   expandtab
+  autocmd FileType html,css       setlocal sw=2 sts=2   expandtab
+  autocmd FileType json,yaml,toml setlocal sw=2 sts=2   expandtab
   autocmd FileType * setlocal formatoptions+=j
   autocmd FileType * setlocal formatoptions-=o
   autocmd CmdwinEnter * quit
@@ -82,20 +86,17 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' 
 Plug 'machakann/vim-highlightedyank'
 Plug 'github/copilot.vim'
 Plug 'dense-analysis/ale'
-" Plug 'ycm-core/YouCompleteMe'
 " Plug 'ervandew/supertab'
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
-Plug 'bfrg/vim-c-cpp-modern'
-Plug 'bfrg/vim-cuda-syntax'
+" Plug 'bfrg/vim-c-cpp-modern'
+" Plug 'bfrg/vim-cuda-syntax'
 call plug#end()
 
 " other plugins
 packadd YouCompleteMe
 
-let g:tex_flavor                = 'latex'
-let g:is_bash                   = 1
-let g:vimtex_view_method        = 'skim'
+let g:is_bash            = 1
+let g:tex_flavor         = 'latex'
+let g:vimtex_view_method = 'skim'
 
 " copilot settings
 let g:copilot_workspace_folders = ['~/.vim', '~/.files', '~/rdnajac']

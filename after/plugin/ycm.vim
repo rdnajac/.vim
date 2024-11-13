@@ -36,7 +36,7 @@ let s:popup_options = {
 
 augroup MyYCMCustom
   autocmd!
-  autocmd FileType * let b:ycm_hover = {
+  autocmd FileType * let g:ycm_hover = {
 	\ 'command': 'GetDoc',
 	\ 'syntax': &filetype,
 	\ 'popup_params': s:popup_options
