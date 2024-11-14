@@ -1,7 +1,4 @@
 " init.vim
-" This file is sourced by nvim on startup.It contains settings common to both
-" vim and nvim, as well as settings specific to nvim.
-
 set autochdir                   " change directory to the file being edited
 set completeopt+=preview	" show preview window
 set completeopt=menuone,noselect " show menu even if there's only one match
@@ -29,8 +26,10 @@ set whichwrap+=<,>,[,],h,l      " wrap around newlines with these keys
 
 if has('nvim')
   echom 'sourcing init.vim! >^.^<'
+  " add vim's runtime path to nvim's runtime path to share plugins
+  set runtimepath+=~/.vim/
   set pumblend=10
-  "let g:tmux_navigator_disable_netrw_workaround = 1
+  let g:tmux_navigator_disable_netrw_workaround = 1
 endif
 
 " clipboard setting
