@@ -1,3 +1,0 @@
-[submodule "pack/vimfect/opt/YouCompleteMe"]
-	path = pack/vimfect/opt/YouCompleteMe
-	url = git@github.com:ycm-core/YouCompleteMe.git
