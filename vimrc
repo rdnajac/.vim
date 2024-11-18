@@ -67,14 +67,12 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' 
 Plug 'machakann/vim-highlightedyank'
 Plug 'github/copilot.vim'
 Plug 'dense-analysis/ale'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 " Plug 'ervandew/supertab'
 " Plug 'bfrg/vim-c-cpp-modern'
 " Plug 'bfrg/vim-cuda-syntax'
 " Plug 'lifepillar/vim-colortemplate'
 call plug#end()
-
-" other plugins
-" packadd YouCompleteMe
 
 let g:mapleader = ' '
 let g:maplocalleader = '\'
