@@ -71,10 +71,8 @@ Plug 'dense-analysis/ale'
 " Plug 'bfrg/vim-c-cpp-modern'
 " Plug 'bfrg/vim-cuda-syntax'
 " Plug 'lifepillar/vim-colortemplate'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 call plug#end()
-
-" other plugins
-" packadd YouCompleteMe
 
 let g:mapleader = ' '
 let g:maplocalleader = '\'
