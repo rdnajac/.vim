@@ -1,6 +1,0 @@
-[submodule "pack/vimfect/start/vim-cuda"]
-	path = pack/vimfect/start/vim-cuda
-	url = git@github.com:rdnajac/vim-cuda.git
-[submodule "pack/vimfect/opt/YouCompleteMe"]
-	path = pack/vimfect/opt/YouCompleteMe
-	url = https://github.com/ycm-core/YouCompleteMe.git

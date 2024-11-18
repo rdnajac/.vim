@@ -1,4 +1,6 @@
 " after/plugin/netrw.vim
+if has('nvim') | finish | endif
+
 nnoremap <silent> <leader>e :Lexplore<CR>
 
 "let s:dotfiles           = '\(\|\s\s\)\zs\.\S\+'
@@ -15,10 +17,6 @@ augroup netrw_autocmds
   autocmd!
   autocmd BufLeave netrw call netrw#NetrwQuit()
   autocmd FileType netrw nmap <buffer> <Tab> :bd<CR>
-  autocmd VimLeave *
-	\ if filereadable(expand(expand('~/.vim/.netrwhist')))
-	\ | call delete(expand('~/.vim/.netrwhist'))
-	\ | endif
 augroup END
 
 " unmap NetrwBrowseX because I keep fat fingering it

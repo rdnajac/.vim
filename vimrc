@@ -8,9 +8,6 @@ filetype plugin indent on       " enable filetype detection, plugins, and indent
 syntax enable                   " source $VIMRUNTIME/syntax/syntax.vim
 runtime! macros/matchit.vim     " enable % to match more than just parens
 runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
-silent! color scheme            " my colorscheme (in ~/.vim/colors/)
-
-source $HOME/.vim/init.vim
 
 " configure the home directory, undo, swap, backup, and info files
 set undofile swapfile backup
@@ -45,22 +42,6 @@ set ttimeout ttimeoutlen=69	" time out on mappings
 set wildmenu                    " just use the default wildmode
 set foldlevel=99                " open all folds by default
 
-augroup myftplugin
-  autocmd!
-  autocmd FileType sh	          setlocal sw=8 sts=8 noexpandtab wrap
-  autocmd FileType c              setlocal sw=8 sts=8 noexpandtab
-  autocmd FileType cpp            setlocal sw=4 sts=4   expandtab
-  autocmd FileType cuda           setlocal sw=4 sts=4   expandtab
-  autocmd FileType python         setlocal sw=4 sts=4   expandtab fdm=indent
-  autocmd FileType tex            setlocal sw=2 sts=2   expandtab fdm=syntax  spell
-  autocmd FileType vim,lua        setlocal sw=2 sts=2   expandtab fdm=marker
-  autocmd FileType javascript     setlocal sw=2 sts=2   expandtab
-  autocmd FileType html,css       setlocal sw=2 sts=2   expandtab
-  autocmd FileType json,yaml,toml setlocal sw=2 sts=2   expandtab
-  autocmd FileType * setlocal formatoptions+=j
-  autocmd FileType * setlocal formatoptions-=o
-  autocmd CmdwinEnter * quit
-augroup END
 
 " https://cs4118.github.io/dev-guides/vim-workflow.html
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -86,14 +67,15 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' 
 Plug 'machakann/vim-highlightedyank'
 Plug 'github/copilot.vim'
 Plug 'dense-analysis/ale'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 " Plug 'ervandew/supertab'
 " Plug 'bfrg/vim-c-cpp-modern'
 " Plug 'bfrg/vim-cuda-syntax'
+" Plug 'lifepillar/vim-colortemplate'
 call plug#end()
 
-" other plugins
-packadd YouCompleteMe
-
+let g:mapleader = ' '
+let g:maplocalleader = '\'
 let g:is_bash            = 1
 let g:tex_flavor         = 'latex'
 let g:vimtex_view_method = 'skim'
@@ -102,5 +84,4 @@ let g:vimtex_view_method = 'skim'
 let g:copilot_workspace_folders = ['~/.vim', '~/.files', '~/rdnajac']
 let g:copilot_no_tab_map = v:true
 imap <silent><script><expr> <c-j> copilot#Accept("\<C-j>")
-
 " vim: ft=vim fdm=marker fdl=1 sw=2 sts=2 expandtab
