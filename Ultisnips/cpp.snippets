@@ -1,0 +1,49 @@
+snippet \main "auto main" bA
+int main(int argc, char *argv[])
+{
+    ${0}
+    
+    return 0;
+}
+endsnippet
+
+snippet \std "using namespace std" Ab
+using namespace std;
+endsnippet
+
+snippet \all "include all" bA
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <sstream>
+
+using namespace std;
+endsnippet
+
+snippet \fun "function" bA
+${1:returnType} ${2:name}(${3:args})
+{
+    ${1} result;
+    
+    return result;
+}
+endsnippet
+
+snippet \forit "for iterator" bA
+for (auto ${1:it} = ${2:begin}; ${1} != ${3:end}; ++${1}) {
+    ${0}
+}
+endsnippet
+
+snippet \forvec "for vector" bA
+for (auto ${1:it} : ${2:vec}) {
+    ${0}
+}
+endsnippet
+
+snippet \fori "for i" bA
+for (int ${1:i} = 0; ${1} < ${2:n}; ${1}++) {
+    ${0}
+}
+endsnippet
