@@ -66,12 +66,14 @@ Plug 'flwyd/vim-conjoin'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 Plug 'machakann/vim-highlightedyank'
 Plug 'github/copilot.vim'
-Plug 'dense-analysis/ale'
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
-" Plug 'ervandew/supertab'
-" Plug 'bfrg/vim-c-cpp-modern'
-" Plug 'bfrg/vim-cuda-syntax'
-" Plug 'lifepillar/vim-colortemplate'
+Plug 'ervandew/supertab'
+
+" Vim9
+Plug 'yegappan/lsp'
+Plug 'girishji/vimcomplete'
+" Snipets
+"Plug 'hrsh7th/vim-vsnip'
+"Plug 'rsh7th/vim-vsnip-integ'
 call plug#end()
 
 let g:mapleader = ' '
