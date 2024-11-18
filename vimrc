@@ -8,9 +8,6 @@ filetype plugin indent on       " enable filetype detection, plugins, and indent
 syntax enable                   " source $VIMRUNTIME/syntax/syntax.vim
 runtime! macros/matchit.vim     " enable % to match more than just parens
 runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
-silent! color scheme            " my colorscheme (in ~/.vim/colors/)
-
-source $HOME/.vim/init.vim
 
 " configure the home directory, undo, swap, backup, and info files
 set undofile swapfile backup
@@ -73,11 +70,14 @@ Plug 'dense-analysis/ale'
 " Plug 'ervandew/supertab'
 " Plug 'bfrg/vim-c-cpp-modern'
 " Plug 'bfrg/vim-cuda-syntax'
+" Plug 'lifepillar/vim-colortemplate'
 call plug#end()
 
 " other plugins
 " packadd YouCompleteMe
 
+let g:mapleader = ' '
+let g:maplocalleader = '\'
 let g:is_bash            = 1
 let g:tex_flavor         = 'latex'
 let g:vimtex_view_method = 'skim'
