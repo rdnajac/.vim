@@ -27,7 +27,7 @@ set updatetime=100              " used for CursorHold autocommands
 set whichwrap+=<,>,[,],h,l      " wrap around newlines with these keys
 
 if has('nvim')
-  " echom 'sourcing init.vim! >^.^<'
+  echom '>^.^<'
   set pumblend=10
   set signcolumn=yes
   let g:tmux_navigator_disable_netrw_workaround = 1
