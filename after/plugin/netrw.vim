@@ -1,4 +1,6 @@
 " after/plugin/netrw.vim
+if has('nvim') | finish | endif
+
 nnoremap <silent> <leader>e :Lexplore<CR>
 
 "let s:dotfiles           = '\(\|\s\s\)\zs\.\S\+'
