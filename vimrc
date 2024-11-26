@@ -72,6 +72,7 @@ Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 " Plug 'bfrg/vim-c-cpp-modern'
 " Plug 'bfrg/vim-cuda-syntax'
 " Plug 'lifepillar/vim-colortemplate'
+Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 call plug#end()
 
 let g:mapleader = ' '
