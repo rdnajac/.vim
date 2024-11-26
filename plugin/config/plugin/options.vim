@@ -29,10 +29,7 @@ set whichwrap+=<,>,[,],h,l      " wrap around newlines with these keys
 if has('nvim')
   echom '>^.^<'
   set pumblend=10
-  set signcolumn=yes
-  let g:tmux_navigator_disable_netrw_workaround = 1
 else
-  silent! color scheme            " my colorscheme (in ~/.vim/colors/)
 endif
 
 " clipboard setting

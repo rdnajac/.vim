@@ -1,5 +1,6 @@
 " keymaps.vim
-" leader and localleader defined elsewhere
+let g:mapleader = ' '
+let g:maplocalleader = '\'
 
 " paste without overwriting the clipboard
 xnoremap <silent> p "_dP
