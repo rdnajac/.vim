@@ -1,6 +1,6 @@
 " keymaps.vim
-let g:mapleader = ' '
-let g:maplocalleader = '\'
+" let g:mapleader = ' '
+" let g:maplocalleader = '\'
 
 " paste without overwriting the clipboard
 xnoremap <silent> p "_dP
@@ -70,10 +70,10 @@ nnoremap > V`]>
 nnoremap < V`]<
 
 " move lines up and down
-nnoremap - ddpkj
-nnoremap _ kddpk
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
+"nnoremap - ddpkj
+"nnoremap _ kddpk
+"vnoremap J :m '>+1<CR>gv=gv
+"vnoremap K :m '<-2<CR>gv=gv
 
 " easy command line
 cnoreabbrev ?? verbose set?<Left>
@@ -83,7 +83,7 @@ cnoreabbrev !! !./%
 " unmappings
 " no Ex mode
 nnoremap Q <nop>
-" TODO make Q format?
+nnoremap Q ggVGgq
 
 " avoid conflicts with tmux
 nnoremap <C-f> <nop>
