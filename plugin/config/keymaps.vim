@@ -1,5 +1,6 @@
 " keymaps.vim
-" leader and localleader defined elsewhere
+let g:mapleader = ' '
+let g:maplocalleader = '\'
 
 " paste without overwriting the clipboard
 xnoremap <silent> p "_dP
@@ -69,10 +70,10 @@ nnoremap > V`]>
 nnoremap < V`]<
 
 " move lines up and down
-nnoremap - ddpkj
-nnoremap _ kddpk
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
+" nnoremap - ddpkj
+" nnoremap _ kddpk
+" vnoremap J :m '>+1<CR>gv=gv
+" vnoremap K :m '<-2<CR>gv=gv
 
 " easy command line
 cnoreabbrev ?? verbose set?<Left>

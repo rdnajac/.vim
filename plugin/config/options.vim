@@ -1,18 +1,11 @@
-" _config.vim
-" scriptencoding utf-8
-
 set autochdir                   " change directory to the file being edited
 set completeopt+=preview	" show preview window
 set completeopt=menuone,noselect " show menu even if there's only one match
 set cursorline                  " highlight the current line
-set fillchars+=eob:\ ,		" don't show end of buffer as a column of ~
-set fillchars+=fold:\ ,foldopen:▾,foldclose:▸,foldsep:│
-set fillchars+=stl:\ ,          " display spaces properly in statusline
-set foldopen+=insert,jump       "
+set foldopen+=insert,jump
 set ignorecase smartcase        " ignore case when searching, unless there's a capital letter
 set iskeyword+=_                " is used for word motions, completion, etc.
 set linebreak breakindent       " break at word boundaries and indent
-set listchars=trail:¿,tab:→\    " show trailing whitespace and tabs
 set nowrap                      " don't wrap lines by default
 set number relativenumber       " show (relative) line numbers
 set numberwidth=3               " line number column padding
@@ -33,11 +26,4 @@ if has('nvim')
   let g:tmux_navigator_disable_netrw_workaround = 1
 else
   silent! color scheme            " my colorscheme (in ~/.vim/colors/)
-endif
-
-" clipboard setting
-if system('uname') =~? '^darwin'
-  set clipboard=unnamed
-else
-  set clipboard=unnamedplus
 endif
