@@ -1,6 +1,5 @@
+" after/plugin/ale.vim
 scriptencoding utf-8
-
-" if ale isn't installed, don't load this file
 if !exists('g:loaded_ale') || has('nvim')
   finish
 endif

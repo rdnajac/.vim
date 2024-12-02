@@ -1,6 +1,5 @@
+" after/plugin/ycm.vim
 scriptencoding utf-8
-
-" if ycm isn't installed, don't load this file
 if !exists('g:loaded_youcompleteme') || has('nvim')
   finish
 endif
