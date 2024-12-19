@@ -2,23 +2,21 @@
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 
-" paste without overwriting the clipboard
-xnoremap <silent> p "_dP
-
 vnoremap <C-s> :sort<CR>
 
-nnoremap <leader>b :b <C-d>
-nnoremap <leader>f :find<space>
-nnoremap <leader>h :nohlsearch<CR>
-nnoremap <leader>i :execute 'verbose set '.expand("<cword>")<CR>
-nnoremap <leader>q :call SmartQuit()<CR>
-nnoremap <leader>r :source $MYVIMRC<CR>
-" nnoremap <leader>t :TTags<space>*<space>*<space>.<CR>
-
-nnoremap <leader>t :execute "e " . expand("~/.vim/after/ftplugin/") . &filetype . ".vim"<CR>
 nnoremap <leader>v :e $MYVIMRC<CR>
-nnoremap <leader>w :w<CR>
-nnoremap <leader>x :!./%<CR>
+nnoremap <localleader>w :w<CR>
+nnoremap <localleader>x :!./%<CR>
+nnoremap <localleader>b :b <C-d>
+nnoremap <localleader>f :find<space>
+nnoremap <localleader>q :call SmartQuit()<CR>
+nnoremap <localleader>r :source $MYVIMRC<CR>
+nnoremap <localleader>t :TTags<space>*<space>*<space>.<CR>
+
+function! s:edit_ftplugin()
+  execute 'e ' . expand('~/.vim/after/ftplugin/') . &filetype . '.vim'
+endfunction
+nnoremap <localleader>t :call s:edit_ftplugin()<CR>
 
 " buffer/window navigation
 nnoremap <tab> :bnext<CR>
@@ -52,18 +50,25 @@ nnoremap g# g#zzzv
 " }}}
 
 " toggle settings
-nnoremap <leader>sl :set list!<CR>:set list?<CR>
-nnoremap <leader>sn :set nornu number!<CR>:set number?<CR>
-nnoremap <leader>sr :set relativenumber!<CR>:set relativenumber?<CR>
-nnoremap <leader>sw :set wrap!<CR>:set wrap?<CR>
+nnoremap <localleader>h :nohlsearch<CR>
+nnoremap <localleader>sl :set list!<CR>:set list?<CR>
+nnoremap <localleader>sn :set nornu number!<CR>:set number?<CR>
+nnoremap <localleader>sr :set relativenumber!<CR>:set relativenumber?<CR>
+nnoremap <localleader>sw :set wrap!<CR>:set wrap?<CR>
 
 function! s:toggle(opt, default)
   execute 'if &'.a:opt.' == '.a:default.' | '.'set '.a:opt.'=0 | '.'else | '.'set '.a:opt.'='.a:default.' | '.'endif '
 endfunction
 
-nnoremap <leader>st :call <SID>toggle('showtabline', 2)<CR>
-nnoremap <leader>ss :call <SID>toggle('laststatus', 2)<CR>
-nnoremap <leader>sc :call <SID>toggle('colorcolumn', 81)<CR>
+nnoremap <localleader>st :call <SID>toggle('showtabline', 2)<CR>
+nnoremap <localleader>ss :call <SID>toggle('laststatus', 2)<CR>
+nnoremap <localleader>sc :call <SID>toggle('colorcolumn', 81)<CR>
+
+vnoremap <localleader>r :<C-u>call utils#replaceSelection()<CR>
+" double space over word to find and replace
+" the angle brackets are word boundaries
+" nnoremap <Space><Space> :%s/\<<C-r>=expand("<cword>")<CR>\>/
+" vnoremap <Space><Space> y:%s/\<<C-r>=escape(@",'/\')<CR>\>/
 
 " indent/dedent in normal mode with < and >
 nnoremap > V`]>
@@ -79,7 +84,6 @@ nnoremap < V`]<
 cnoreabbrev ?? verbose set?<Left>
 cnoreabbrev !! !./%
 
-
 " unmappings
 " no Ex mode
 nnoremap Q <nop>
@@ -87,3 +91,6 @@ nnoremap Q <nop>
 
 " avoid conflicts with tmux
 nnoremap <C-f> <nop>
+
+" paste without overwriting the clipboard
+xnoremap <silent> p "_dP

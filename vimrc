@@ -8,6 +8,7 @@ filetype plugin indent on       " enable filetype detection, plugins, and indent
 syntax enable                   " source $VIMRUNTIME/syntax/syntax.vim
 runtime! macros/matchit.vim     " enable % to match more than just parens
 runtime ftplugin/man.vim        " enable the :Man command shipped inside Vim
+silent! color scheme            " my colorscheme (in ~/.vim/colors/)
 
 " configure the home directory, undo, swap, backup, and info files
 " set viminfo=
@@ -23,22 +24,18 @@ if !isdirectory(&undodir)   | call mkdir(&undodir,   'p', 0700) | endif
 if !isdirectory(&directory) | call mkdir(&directory, 'p', 0700) | endif
 if !isdirectory(&backupdir) | call mkdir(&backupdir, 'p', 0700) | endif
 
-" these settings are default in neovim
 set autoindent smarttab	        " enable auto-indent and smart tabbing
-set autoread autowrite          " automatically read/write files when changed
 set backspace=indent,eol,start  " configure backspace behavior to be more intuitive
 set hidden                      " enable background buffers
 set hlsearch incsearch          " highlighted, incremental search
 set lazyredraw                  " don't redraw the screen while executing macros
-set mouse=a                     " wait, that's illegal
-set nomodeline                  " modelines are a security risk
+" set nomodeline                  " modelines are a security risk
 set nrformats-=octal		" ignore octal numbers for Ctrl-A and Ctrl-X
 set shortmess+=A                " avoid 'hit-enter' prompts
 set shortmess-=S                " don't show search count
 set showcmd                     " show the command being typed
 set ruler                       " show the cursor position all the time
 set termguicolors               " enable true colors in the terminal
-set ttimeout ttimeoutlen=69	" time out on mappings
 set wildmenu                    " just use the default wildmode
 set foldlevel=99                " open all folds by default
 
@@ -72,8 +69,15 @@ Plug 'dense-analysis/ale'
 Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --clangd-completer' }
 call plug#end()
 
+set rtp+=~/.local/share/nvim/lazy/tokyonight.nvim/extras/vim
+silent! colorscheme tokyonight
+hi Normal guibg=NONE
+
+
 let g:is_bash            = 1
 let g:tex_flavor         = 'latex'
 let g:vimtex_view_method = 'skim'
+
+nnoremap ; :
 
 " vim: ft=vim fdm=marker fdl=1 sw=2 sts=2 expandtab

@@ -1,4 +1,5 @@
 scriptencoding utf-8
+let g:loaded_mytabline = 1
 let g:filetype_emojis = {
       \ 'py':       '🐍',
       \ 'sh':       '🐚',
@@ -34,6 +35,4 @@ function! MyTabline() abort
   endfor
   return line . '👾'
 endfunction
-
 set tabline=%!MyTabline()
-set showtabline=2

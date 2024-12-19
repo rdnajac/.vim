@@ -1,5 +1,6 @@
 " statusline configuration
 scriptencoding utf-8
+let g:loaded_mystatusline = 1
 
 " Left-align
 " ==========

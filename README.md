@@ -75,6 +75,7 @@ Download the dictionaries from [cspell-dicts](https://github.com/streetsidesoftw
   - [Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
 - [No Plugins](https://github.com/changemewtf/no_plugins)
 - [Idiomatic Vimrc](https://github.com/romainl/idiomatic-vimrcr)
+- [Five Minute Vimscript]( http://andrewscala.com/vimscript/)
 
 ---
 
