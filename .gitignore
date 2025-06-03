@@ -1,0 +1,6 @@
+*lazy-lock.json
+*lazyvim.json
+*viminfo
+*vimlog.txt
+**vim/pack
+**/*netrwhist
