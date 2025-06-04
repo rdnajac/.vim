@@ -4,6 +4,13 @@ _G.LazyVim = require('lazyvim.util')
 -- HACK: capture the `LazyFile` event
 -- require('lazyvim.util.plugin').lazy_file()
 LazyVim.plugin.lazy_file()
+LazyVim.format.setup()
+-- LazyVim.news.setup()
+-- LazyVim.root.setup()
+-- LazyVim.track("colorscheme")
+-- dd('tokyonight did config?')
+-- require("tokyonight").load()
+-- LazyVim.cmp.
 
 return {
   'tpope/vim-abolish',

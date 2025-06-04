@@ -71,7 +71,7 @@ augroup FileTypeSettings " {{{
   autocmd FileType cpp,cuda       setl sw=4 sts=4
   autocmd FileType json,toml,yaml setl sw=2 sts=2
   autocmd FileType python         setl sw=4 sts=4
-  autocmd FileType r,rmd,quarto   setl sw=2 sts=2
+  autocmd FileType r,rmd,quarto   setl sw=2 sts=2 kp=:Rhelp
   autocmd FileType vim,lua        setl sw=2 sts=2 kp=:help
   autocmd FileType tex            setl            fdm=syntax
 augroup END
@@ -167,6 +167,7 @@ nnoremap <leader>v <Cmd>edit $MYVIMRC<CR>
 nnoremap <leader>w <Cmd>write<CR>
 
 nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/after/ftplugin/' . &ft . '.vim'<CR>
+nnoremap <leader>fs <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/snippets/' . &ft . '.json'<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
 nmap <C-c> ciw
@@ -175,6 +176,9 @@ vmap <C-s> :sort<CR>
 " no-shift for case-toggle
 nnoremap ` ~
 nnoremap ~ `
+
+" navigate tagstack backwards
+nnoremap <C-[> <C-t>
 
 " goto
 " nnoremap gh yi':silent !open https://github.com/<C-R>0<CR>
@@ -332,5 +336,7 @@ let g:ale_linters = {
 let g:ale_linters_explicit = 1
 let g:ale_virtualtext_cursor = 'current'
 " let g:ale_set_highlights = 0
+
+let g:rout_follow_colorscheme = v:true
 
 " vim: fdm=marker fdl=0

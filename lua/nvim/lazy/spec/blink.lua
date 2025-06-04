@@ -1,5 +1,12 @@
+local function trigger(ctx, char)
+  local _, col = unpack(ctx.cursor)
+  local pattern = ("%s%%w*$"):format(vim.pesc(char))
+  return ctx.line:sub(1, col):match(pattern) ~= nil
+end
+
 return {
   -- https://cmp.saghen.dev/
+  ---@module "blink.cmp"
   'Saghen/blink.cmp',
   dependencies = {
     'mgalliou/blink-cmp-tmux',
@@ -7,6 +14,7 @@ return {
     'moyiz/blink-emoji.nvim',
     'bydlw98/blink-cmp-env',
   },
+  -- :
   build = 'cargo build --release',
   event = 'InsertEnter',
   opts = function()
@@ -70,36 +78,36 @@ return {
           function(cmp)
             if cmp.is_menu_visible() then
               return cmp.select_next()
+            else
+              cmp.show({ providers = { 'copilot' } })
             end
           end,
-          'fallback',
+          -- 'fallback',
         },
       },
       sources = {
         default = function()
-          local default_sources = { 'lsp', 'path', 'buffer', 'copilot', 'emoji', 'env', 'lazydev' }
-          local extra_sources = { 'snippets' }
-          local shell_sources = { 'snippets', 'env', 'tmux' }
+          -- 'emoji', 'env',
+          local default_sources = { 'lsp', 'buffer', 'snippets', 'path', 'emoji' }
+          -- :e
           local row, col = unpack(vim.api.nvim_win_get_cursor(0))
           row = row - 1
           local check_col = col > 0 and col - 1 or col
           local ok, node = pcall(vim.treesitter.get_node, { pos = { row, check_col } })
           if
-            ok
-            and node
-            and vim.tbl_contains({ 'comment', 'comment_content', 'line_comment', 'block_comment' }, node:type())
+              ok
+              and node
+              and vim.tbl_contains({ 'comment', 'comment_content', 'line_comment', 'block_comment' }, node:type())
           then
             return default_sources
-          elseif vim.bo.filetype == 'vim' then
-            return { 'path', 'snippets', 'copilot', 'lsp', 'emoji', 'env' }
-          elseif vim.bo.filetype == 'lua' then
-            return { 'lazydev', 'path' }
-          elseif vim.bo.filetype == 'sh' then
-            return vim.list_extend(vim.deepcopy(default_sources), shell_sources)
           else
-            return vim.list_extend(vim.deepcopy(default_sources), extra_sources)
+            return { 'path', 'buffer' }
           end
         end,
+        per_filetype = {
+          lua = { inherit_defaults = false, 'lazydev', 'path', 'snippets' },
+          sh = { inherit_defaults = true, 'tmux', 'env' },
+        },
         -- min_keyword_length = 3,
         providers = {
           path = {
@@ -121,15 +129,15 @@ return {
           copilot = {
             name = 'copilot',
             module = 'blink-copilot',
-            score_offset = 10,
+            -- score_offset = 10,
             async = true,
-            opts = { max_completions = 2 },
+            opts = { max_completions = 5 },
           },
           lsp = {
             transform_items = function(_, items)
               return vim.tbl_filter(function(item)
                 return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-                  and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
+                    and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
               end, items)
             end,
           },
@@ -151,15 +159,23 @@ return {
               show_braces = false,
               show_documentation_window = true,
             },
+            should_show_items = function(ctx, _)
+              return trigger(ctx, '$')
+            end
+            -- :for
           },
           emoji = {
             module = 'blink-emoji',
             name = 'emoji',
-            score_offset = -1,
+            score_offset = 20,
+            should_show_items = function(ctx, _)
+              return trigger(ctx, ':')
+            end
           },
           lazydev = {
             name = 'LazyDev',
             module = 'lazydev.integrations.blink',
+            -- :scient
             score_offset = 100, -- show at a higher priority than lsp
           },
         },
@@ -167,3 +183,4 @@ return {
     }
   end,
 }
+-- 🔯 $

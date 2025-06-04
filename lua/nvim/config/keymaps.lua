@@ -37,6 +37,7 @@ require('which-key').add({
   { '<leader>L', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
   { '<leader>R', '<Cmd>restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
 
+
   { 'gL', function() require('nvim.lazy.goto') end, { desc = 'Goto LazyVim module' }, },
 
   { '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer', },
@@ -89,6 +90,7 @@ require('which-key').add({
   { '<leader>u', group = 'ui', icon = { icon = '󰙵 ', color = 'cyan' } },
   { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes', icon = { icon = ' ', color = 'yellow' }, },
   { '<leader>ui', function() vim.show_pos() end, desc = 'Inspect Pos' },
+  { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss Notifications' },
   { '<leader>uz', function() Snacks.zen() end, desc = 'Zen Mode', icon = { icon = ' ', color = 'blue' }, },
 })
 
@@ -98,6 +100,7 @@ require('which-key').add({
   { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
   { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },
   { '<leader>F', function() Snacks.picker.smart() end, desc = 'Smart Find Files', },
+  { '<leader>n', function() Snacks.picker.notifications() end, desc = "Notification History" },
   { '<leader>z', function() Snacks.picker.zoxide() end, desc = 'Zoxide', icon = { icon = '󰄻 ' }, },
 
   { '<leader>p', group = 'Pickers' },

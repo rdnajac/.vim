@@ -21,6 +21,10 @@ return {
         hl['CopilotSuggestion'] = { bg = '#414868', fg = '#7AA2F7' }
       end,
     },
+    config = function(opts)
+      print('tokyonight config?')
+      require('tokyonight').setup(opts)
+    end
   },
   {
     'folke/snacks.nvim',
@@ -32,14 +36,12 @@ return {
       image = { enabled = true },
       indent = { indent = { only_current = true, only_scope = true } },
       input = { enabled = true },
-      notifier = { enabled = false },
-      -- notifier = { style = 'fancy', date_format = '%T', timeout = 3000 },
+      notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
       picker = require('munchies.picker').opts,
       quickfile = { enabled = true },
       scope = { enabled = true },
       scroll = { enabled = true },
       statuscolumn = { enabled = true },
-      -- statuscolumn = { left = { 'sign' }, right = { 'git' } },
       terminal = {
         start_insert = true,
         auto_insert = false,
@@ -52,6 +54,7 @@ return {
   {
     'folke/which-key.nvim',
     event = 'VeryLazy',
+    ---@class wk_opts
     opts = {
       show_help = false,
       keys = {
@@ -63,9 +66,8 @@ return {
       spec = {
         {
           mode = { 'n' },
-          -- { '<localleader>l', desc = '+vimtex' },
-          -- { '<localleader>r', group = '+R', icon = { icon = ' ', color = 'blue' } },
-          -- { '<localleader>re', group = '++renv' },
+          { '<localleader>l', desc = '+vimtex' },
+          { '<localleader>r', group = '+R', icon = { icon = ' ', color = 'blue' } },
 
           -- add icons for existing (vim) keymaps
           { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
@@ -103,27 +105,24 @@ return {
           -- yox	'cursorline' 'cursorcolumn' (x as in crosshairs)
         },
         mode = { 'n', 'v' },
-        { '[', group = 'prev' },
-        { ']', group = 'next' },
-        { 'g', group = 'goto' },
-        { 'z', group = 'fold' },
+        { '[',  group = 'prev' },
+        { ']',  group = 'next' },
+        { 'g',  group = 'goto' },
+        { 'z',  group = 'fold' },
 
         -- better descriptions
         { 'gx', desc = 'Open with system app' },
 
         -- nvim lsp defaults
-        -- { 'grn' }
+        {
+          icon = { icon = ' ', color = 'orange' },
+          { 'gr', group = 'LSP', },
+          { 'gO' },
+        },
 
         -- keep things tidy
         { 'g~', hidden = true },
         { 'gc', hidden = true },
-
--- - "grn" is mapped in Normal mode to |vim.lsp.buf.rename()|
--- - "gra" is mapped in Normal and Visual mode to |vim.lsp.buf.code_action()|
--- - "grr" is mapped in Normal mode to |vim.lsp.buf.references()|
--- - "gri" is mapped in Normal mode to |vim.lsp.buf.implementation()|
--- - "gO" is mapped in Normal mode to |vim.lsp.buf.document_symbol()|
--- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
       },
     },
   },

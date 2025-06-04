@@ -48,7 +48,7 @@ end
 -- § lsp {{{
 -- Refer to :h vim.lsp.config() for more information.
 vim.lsp.config('*', {
-  -- capabilities = require('blink.cmp').get_lsp_capabilities(),
+  capabilities = require('blink.cmp').get_lsp_capabilities(),
   -- capabilities = require('blink.cmp').get_lsp_capabilities(nil, true),
 
   ---@param client vim.lsp.Client
@@ -56,16 +56,25 @@ vim.lsp.config('*', {
   on_attach = function(client, bufnr)
     local opts = { buffer = bufnr }
 
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    -- vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
-    -- vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
-
     if client:supports_method('textDocument/inlayHint') then
       vim.lsp.inlay_hint.enable(true, opts)
     end
+
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
+    require('which-key').add({
+      { "grr",        function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
+      { "gd",         function() Snacks.picker.lsp_definitions() end,       desc = "Goto Definition" },
+      { "gD",         function() Snacks.picker.lsp_declarations() end,      desc = "Goto Declaration" },
+      { "gI",         function() Snacks.picker.lsp_implementations() end,   desc = "Goto Implementation" },
+      { "gy",         function() Snacks.picker.lsp_type_definitions() end,  desc = "Goto T[y]pe Definition" },
+      { "<leader>ss", function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols" },
+      { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
+    })
+
 
     if client:supports_method('textDocument/codeLens') then
       vim.lsp.codelens.refresh()
@@ -75,7 +84,6 @@ vim.lsp.config('*', {
       })
 
       client.server_capabilities.documentFormattingProvider = false
-
       print('LSP attached: ' .. client.name)
     end
   end,

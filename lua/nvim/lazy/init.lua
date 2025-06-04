@@ -6,6 +6,10 @@ else
   vim.opt.rtp:prepend(lazypath)
 end
 
+_G.dd = function(...)
+  print(...)
+end
+
 ---@class LazyConfig
 require('lazy').setup({
   spec = { import = 'nvim.lazy.spec' },
@@ -35,4 +39,3 @@ require('lazy').setup({
   },
   profiling = { loader = true, require = false },
 })
-

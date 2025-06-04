@@ -1,7 +1,7 @@
-
 return {
   {
     'mason-org/mason.nvim',
+    build = ':MasonUpdate',
     event = "VeryLazy",
     opts = {
       ui = {

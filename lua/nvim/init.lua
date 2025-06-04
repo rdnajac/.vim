@@ -24,7 +24,7 @@ vim.api.nvim_create_autocmd('User', {
     require('nvim.config.keymaps')
     require('nvim.config.options')
     require('munchies')
-    vim.cmd([[color tokyonight]])
+    -- vim.cmd([[color tokyonight]])
   end,
 })
 
