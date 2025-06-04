@@ -7,7 +7,7 @@ vmap b  Sb
 nmap S  viWS
 nmap yss ys_
 
-if has('nvim')
+if !has('nvim')
   " Start interactive EasyAlign in visual mode (e.g. vipga)
   xmap ga <Plug>(EasyAlign)
 

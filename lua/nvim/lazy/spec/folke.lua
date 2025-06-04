@@ -1,5 +1,4 @@
 return {
-  { 'folke/lazy.nvim', version = false },
   {
     'folke/tokyonight.nvim',
     priority = 1001,
@@ -23,9 +22,8 @@ return {
       end,
     },
   },
-  { -- https://github.com/folke/snacks.nvim?tab=readme-ov-file#-features
+  {
     'folke/snacks.nvim',
-    lazy = false,
     priority = 1000,
     opts = {
       bigfile = { enabled = true },
@@ -50,73 +48,13 @@ return {
       },
       words = { enabled = true },
     },
-    init = function()
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'VeryLazy',
-        callback = function()
-          -- Setup some globals for debugging (lazy-loaded)
-          _G.dd = function(...)
-            Snacks.debug.inspect(...)
-          end
-          _G.bt = function()
-            Snacks.debug.backtrace()
-          end
-          vim.print = _G.dd -- Override print to use snacks for `:=` command
-
-          vim.api.nvim_create_user_command('Scriptnames', function()
-            require('munchies.picker').scriptnames()
-          end, { desc = 'Scriptnames' })
-
-          vim.api.nvim_create_user_command('Chezmoi', function()
-            require('munchies.picker').chezmoi()
-          end, { desc = 'Chezmoi' })
-          -- toggles
-          Snacks.toggle.profiler():map('<leader>dpp')
-          Snacks.toggle.profiler_highlights():map('<leader>dph')
-          Snacks.toggle.option('autochdir'):map('<leader>ta')
-          Snacks.toggle
-            .option('showtabline', { off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = 'Tabline' })
-            :map('<leader>uA')
-          Snacks.toggle
-            .option(
-              'conceallevel',
-              { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level' }
-            )
-            :map('<leader>uc')
-          Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map('<leader>uL')
-          Snacks.toggle.option('spell', { name = 'Spelling' }):map('<leader>us')
-          Snacks.toggle.option('laststatus', { off = 0, on = 3 }):map('<leader>uu')
-          Snacks.toggle.option('wrap', { name = 'Wrap' }):map('<leader>uw')
-          Snacks.toggle.option('list'):map('<leader>u?')
-
-          Snacks.toggle.animate():map('<leader>ua')
-          Snacks.toggle.diagnostics():map('<leader>ud')
-          Snacks.toggle.dim():map('<leader>uD')
-          Snacks.toggle.line_number():map('<leader>ul')
-          Snacks.toggle.treesitter():map('<leader>uT')
-          Snacks.toggle.indent():map('<leader>ug')
-          Snacks.toggle.scroll():map('<leader>uS')
-          Snacks.toggle.words():map('<leader>uW')
-          Snacks.toggle.zoom():map('<leader>uZ')
-
-          if vim.lsp.inlay_hint then
-            Snacks.toggle.inlay_hints():map('<leader>uh')
-          end
-
-          -- Custom toggles
-          require('munchies.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
-          require('munchies.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
-          require('munchies.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
-        end,
-      })
-    end,
   },
   {
     'folke/which-key.nvim',
     event = 'VeryLazy',
     opts = {
       show_help = false,
-     keys = {
+      keys = {
         scroll_down = '<C-j>',
         scroll_up = '<C-k>',
       },
@@ -124,7 +62,6 @@ return {
       sort = { 'order', 'alphanum', 'mod' },
       spec = {
         {
-          -- TODO: offload these to keymaps.lua
           mode = { 'n' },
           -- { '<localleader>l', desc = '+vimtex' },
           -- { '<localleader>r', group = '+R', icon = { icon = ' ', color = 'blue' } },
@@ -174,9 +111,19 @@ return {
         -- better descriptions
         { 'gx', desc = 'Open with system app' },
 
+        -- nvim lsp defaults
+        -- { 'grn' }
+
         -- keep things tidy
         { 'g~', hidden = true },
         { 'gc', hidden = true },
+
+-- - "grn" is mapped in Normal mode to |vim.lsp.buf.rename()|
+-- - "gra" is mapped in Normal and Visual mode to |vim.lsp.buf.code_action()|
+-- - "grr" is mapped in Normal mode to |vim.lsp.buf.references()|
+-- - "gri" is mapped in Normal mode to |vim.lsp.buf.implementation()|
+-- - "gO" is mapped in Normal mode to |vim.lsp.buf.document_symbol()|
+-- - CTRL-S is mapped in Insert mode to |vim.lsp.buf.signature_help()|
       },
     },
   },

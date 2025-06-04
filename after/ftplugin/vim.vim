@@ -20,5 +20,3 @@ imap <M-Left> <Left>
 imap <M-Right> <Right>
 
 setlocal iskeyword-=#
-setlocal foldmethod=marker
-" setlocal foldlevel=0

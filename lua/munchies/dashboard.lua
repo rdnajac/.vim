@@ -25,7 +25,7 @@ M.opts = {
       -- TODO use Snacks
       -- { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
       -- { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-      { icon = ' ', key = 'c', desc = 'Config', action = ':Chezmoi' },
+      { icon = ' ', key = 'c', desc = 'Config', action = '<leader>fc' },
       { icon = '󰒲 ', key = 'l', desc = 'Lazy', action = ':Lazy' },
       { icon = ' ', key = 'x', desc = 'Extras', action = ':LazyExtras' },
       { icon = ' ', key = 'h', desc = 'Health', action = ':checkhealth' },

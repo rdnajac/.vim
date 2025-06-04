@@ -1,8 +1,12 @@
 return {
-  mason_ensure_installed({ 'r-languageserver' }),
+  {
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
+    opts = { ensure_installed = { 'r-languageserver' } },
+  },
   {
     'R-nvim/R.nvim',
-    event = "LazyFile",
+    -- event = 'LazyFile',
+    event = 'VeryLazy',
     ---@type RConfigUserOpts
     opts = {
       R_args = { '--quiet', '--no-save' },

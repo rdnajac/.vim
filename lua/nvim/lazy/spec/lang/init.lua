@@ -1,10 +1,3 @@
--- Helper functions to install language servers and treesitter parsers
-_G.mason_ensure_installed = function(tools)
-  return {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = { ensure_installed = tools },
-  }
-end
 
 return {
   {

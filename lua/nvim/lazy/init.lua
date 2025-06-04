@@ -6,41 +6,21 @@ else
   vim.opt.rtp:prepend(lazypath)
 end
 
+---@class LazyConfig
 require('lazy').setup({
-  spec = {
-    {
-      'LazyVim/LazyVim',
-      { import = 'lazyvim.plugins.coding' },
-      { import = 'lazyvim.plugins.extras.editor.dial' },
-      { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
-      { import = 'lazyvim.plugins.extras.ui.treesitter-context' },
-    },
-    'tpope/vim-abolish',
-    'tpope/vim-apathy',
-    'tpope/vim-fugitive',
-    'tpope/vim-repeat',
-    'tpope/vim-surround',
-    'tpope/vim-tbone',
-    'tpope/vim-unimpaired',
-    'stevearc/oil.nvim',
-    {
-      import = 'nvim.lazy.spec',
-    },
-  },
-  install = { colorscheme = { 'tokyonight' } },
-  ui = {
-    border = 'rounded',
-      -- stylua: ignore
-    custom_keys = {
-      ['<localleader>d'] = { function(plugin) dd(plugin) end, desc = 'Debug Plugin', },
-    },
-  },
+  spec = { import = 'nvim.lazy.spec' },
+  pkg = { enabled = false },
   rocks = { enabled = false },
-  change_detection = { enabled = true, notify = false },
+  install = { colorscheme = { 'tokyonight' } },
+  change_detection = { notify = false },
+  ui = { border = 'rounded' },
   performance = {
     reset_packpath = true,
     rtp = {
-      reset = false,
+      paths = {
+        -- vim.fn.stdpath('data') .. '/lazy/snacks.nvim',
+        vim.fn.stdpath('data') .. '/lazy/LazyVim',
+      },
       disabled_plugins = {
         'gzip',
         -- 'matchit',
@@ -53,5 +33,6 @@ require('lazy').setup({
       },
     },
   },
-  profiling = { loader = false, require = false },
+  profiling = { loader = true, require = false },
 })
+

@@ -20,6 +20,7 @@ return {
     require('mini.align').setup()
     require('mini.icons').setup()
     require('mini.diff').setup({
+
       mappings = {
         apply = '',
         reset = '',

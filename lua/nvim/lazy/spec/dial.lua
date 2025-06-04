@@ -1,6 +1,6 @@
 return {
   'monaqa/dial.nvim',
-  event = { 'LazyFile' },
+  event = { 'InsertEnter' },
   init = function()
     vim.g.dials_by_ft = {
       css = 'css',
@@ -14,7 +14,7 @@ return {
       zsh = 'sh',
     }
   end,
-  config = function()
+  opts = function()
     local augend = require('dial.augend')
     local new_dial = function(elements, word)
       return augend.constant.new({ elements = elements, word = word, cyclic = true })

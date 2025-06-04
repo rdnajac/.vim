@@ -1,10 +1,19 @@
+-- § settings {{{
 vim.opt.backup = true
 vim.opt.backupdir = vim.fn.stdpath('state') .. '/backup//'
+vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
+-- vim.opt.foldexpr = "v:lua.require'lazyvim.util'.ui.foldexpr()"
+vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
+vim.opt.foldtext = ''
+vim.opt.foldmethod = 'expr'
+vim.opt.foldlevel = 99
+vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
 vim.opt.mousescroll = 'hor:0'
 vim.opt.pumblend = 0
--- vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = 'yes'
+vim.opt.smoothscroll = true
 vim.opt.winborder = 'rounded'
-
+-- }}}
 -- § diagnostics {{{
 vim.diagnostic.config({
   underline = false,
@@ -72,3 +81,4 @@ vim.lsp.config('*', {
   end,
 })
 --- }}}
+-- vim: fdm=marker fdl=0

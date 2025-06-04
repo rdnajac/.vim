@@ -1,7 +1,13 @@
 {
   "snippet": {
     "prefix": "snippet",
-    "body": "\"snippet\": {\n  \"prefix\": \"${1:snippet}\",\n  \"body\": \"${0}\",\n  \"description\": \"New snippet.\"\n}",
+    "body": [
+      "${1:snippet}: {\n",
+      "  \"prefix\": \"${1:snippet}\",\n",
+      "  \"body\": \"${0}\",\n",
+      "  \"description\": \"New snippet.\"\n",
+      "}"
+    ],
     "description": "new snippet"
   }
 }

@@ -1,28 +1,28 @@
 {
-  "snippet": {
+  "init": {
     "prefix": "init",
     "body": ["init = function()\n  ${0}\nend,"],
     "description": "lazy spec init"
   },
+  "init": {
+    "prefix": "config",
+    "body": ["init = function()\n  ${0}\nend,"],
+    "description": "lazy spec init"
+  },
   "require": {
-    "prefix": "req",
+    "prefix": "require",
     "body": ["require(${1:module})"],
     "description": "Require module"
   },
   "return": {
-    "prefix": "rt",
+    "prefix": "return",
     "body": ["return $0"],
     "description": "return value"
   },
   "assigment": {
-    "prefix": "ll",
+    "prefix": "local",
     "body": ["local ${1:varName} = ${0:value}"],
     "description": "define a variable"
-  },
-  "local": {
-    "prefix": "l",
-    "body": ["local ${0}"],
-    "description": "declare a variable"
   },
   "locreq": {
     "prefix": "lreq",
@@ -56,29 +56,21 @@
     "prefix": "foreach",
     "body": ["for i, ${1:x} in pairs(${2:table}) do", "\t$0", "end"]
   },
-  "forline": {
-    "prefix": "forline",
-    "body": [
-      "local f = io.open(${1:${2:filename}}, \"${3:r}\")\n",
-      "while true do",
-      "\tline = f:read()",
-      "\tif line == nil then break end\n",
-      "\t${0}",
-      "end"
-    ],
-    "description": "read file line by line"
-  },
   "function": {
-    "prefix": "fu",
+    "prefix": "function",
     "body": ["function ${1:name}($2)", "\t${0}", "end"]
   },
   "inline-function": {
-    "prefix": "f=",
+    "prefix": "lfu",
     "body": ["local ${1:name} = function($2)", "\t${0}", "end"]
   },
   "print": {
     "prefix": "p",
     "body": ["print(${0})"]
+  },
+  "print": {
+    "prefix": "dd",
+    "body": ["dd(${0})"]
   },
   "self": {
     "prefix": "self:",

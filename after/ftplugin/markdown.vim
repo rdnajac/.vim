@@ -1,5 +1,5 @@
 " after/ftplugin/markdown.vim
-hi clear RenderMarkdownCode 
+hi clear RenderMarkdownCode
 let g:markdown_fenced_languages = ['sh', 'cpp', 'cuda', 'python', 'vim', 'lua', 'r']
 
 if executable('prettier')
@@ -38,6 +38,8 @@ inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
 if has('nvim')
   setlocal formatoptions+=ro
+  nmap <leader>k v:lua require('nvim.util.link').linkify()
+
   finish
 endif
 let g:markdown_syntax_conceal = 1

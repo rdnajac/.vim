@@ -5,20 +5,8 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 
 let s:VIMHOME = expand('$HOME/.config/vim//')
-let g:plug_home = s:VIMHOME . './pack/plugged//'
-let &spellfile  = s:VIMHOME . '.spell/en.utf-8.add'
-
-if !has('nvim')
-  let &undodir     = s:VIMHOME . '.undo//'
-  let &viminfofile = s:VIMHOME . '.viminfo'
-  " let &verbosefile = s:VIMHOME . '.vimlog.txt'
-
-  " better escape
-  noremap jk <esc>
-  noremap kj <esc>
-
-  silent! color scheme
-endif
+let g:plug_home = s:VIMHOME . '.plugged//'
+let &spellfile = s:VIMHOME . '.spell/en.utf-8.add'
 
 " § settings {{{1
 " set backup
@@ -37,13 +25,15 @@ set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
 set fillchars+=stl:\ ,
 set formatoptions-=o
+set foldmethod=marker
+set foldopen+=insert,jump
 set ignorecase smartcase
 set linebreak
 set list
 set listchars=trail:¿,tab:→\ "
 set mouse=a
 set nowrap
-set number relativenumber
+" set number relativenumber
 set numberwidth=2
 set pumheight=10
 set report=0
@@ -60,24 +50,16 @@ set updatetime=69
 set whichwrap+=<,>,[,],h,l
 set signcolumn=yes
 
-" folding
-set foldopen+=insert,jump
-if has('nvim')
-  set foldmethod=expr
-  set foldexpr=v:lua.vim.treesitter.foldexpr()
-  set foldlevel=99
-else
-  set foldmethod=marker
-endif
-
 set completeopt=menu,preview,preinsert,longest
 " set completeopt=menu,preview,longest
 set wildmode=longest:full,full
 
 if system('uname') =~? '^darwin'
-  set clipboard=unnamed
-else
-  set clipboard=unnamedplus
+  if !has('nvim')
+    set clipboard=unnamed
+  else
+    set clipboard=unnamedplus
+  endif
 endif
 " }}}
 
@@ -154,6 +136,8 @@ augroup END
 " § commands {{{1
 command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
+
+command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 " current file
 command CDC cd %:p:h
@@ -287,7 +271,16 @@ cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 " }}}1
 
 " § plugins/nvim {{{1
-if !has('nvim')
+if !has('nvim') " {{{2
+  let &undodir     = s:VIMHOME . '.undo//'
+  let &viminfofile = s:VIMHOME . '.viminfo'
+  " let &verbosefile = s:VIMHOME . '.vimlog.txt'
+
+  " better escape
+  noremap jk <esc>
+  noremap kj <esc>
+
+  silent! color scheme
   call plug#begin()
   " Plug 'rdnajac/after'
   " Plug 'tpope/vim-sensible'
@@ -314,6 +307,7 @@ if !has('nvim')
   " only load plugins on certain filetypes
   Plug 'lervag/vimtex', { 'for': 'tex' }
   call plug#end()
+  " }}}
 else
   if !exists('g:loaded_nvim')
     lua require('nvim')

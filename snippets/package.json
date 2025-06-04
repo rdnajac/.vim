@@ -2,6 +2,7 @@
   "name": "my-snippets",
   "contributes": {
     "snippets": [
+      { "language": "lua",          "path": "./lua.json" },
       { "language": "vim",          "path": "./vim.json" },
       { "language": "c",            "path": "./c/c.json" },
       { "language": "cdoc",         "path": "./c/cdoc.json" },
@@ -9,8 +10,6 @@
       { "language": "cppdoc",       "path": "./cpp/cppdoc.json" },
       { "language": "json",         "path": "./json.json" },
       { "language": "cmake",        "path": "./cmake.json" },
-      { "language": "lua",          "path": "./lua/lua.json" },
-      { "language": "luadoc",       "path": "./lua/luadoc.json" },
       { "language": "dockerfile",   "path": "./docker/docker_file.json" },
       { "language": "yaml",         "path": "./docker/docker-compose.json" },
       { "language": "editorconfig", "path": "./editorconfig.json" },
