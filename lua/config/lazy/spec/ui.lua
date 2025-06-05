@@ -25,12 +25,18 @@ return {
           theme = 'auto',
           globalstatus = vim.o.laststatus == 3,
           disabled_filetypes = { statusline = { 'snacks_dashboard' } },
+          section_separators = { left = '', right = '' },
+          component_separators = { left = '', right = '' },
         },
         sections = {
           lualine_a = { 'mode' },
           lualine_b = {
             LazyVim.lualine.root_dir(),
-            LazyVim.lualine.pretty_path({ relative = 'root' }),
+            LazyVim.lualine.pretty_path({
+              relative = 'root',
+              modified_sign = ' 💾',
+              number = 4,
+            }),
           },
           lualine_c = {
             {

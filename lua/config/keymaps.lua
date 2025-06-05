@@ -156,6 +156,8 @@ for _, combo in ipairs({ 'jk', 'kj' }) do
   map_combo('t', combo, '<BS><BS><C-\\><C-n>')
 end
 
+local edit_config = require('util.togo').config
+
 require('which-key').add({
   { '\\\\', function() Snacks.dashboard.open() end, desc = 'Snacks Dashboard' },
   { '\\i', function() edit_config('lazy/init') end, desc = 'init' },
@@ -163,6 +165,9 @@ require('which-key').add({
   { '\\o', function() edit_config('options') end, desc = 'options' },
   { '\\k', function() edit_config('keymaps') end, desc = 'keymaps' },
   { '\\s', function() edit_config('lazy/spec/init') end, desc = 'LazySpec' },
+  -- TODO: goto LazyVim/Snacks/Plugins 
+  -- TODO: Zoxide picker in oil
+  { '\\L', function() edit_config('lazy/spec/init') end, desc = 'LazySpec' },
 })
 
 -- toggles {{{

@@ -21,10 +21,10 @@ vim.diagnostic.config({
   severity_sort = true,
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = icons.Error,
-      [vim.diagnostic.severity.WARN] = icons.Warn,
-      [vim.diagnostic.severity.HINT] = icons.Hint,
-      [vim.diagnostic.severity.INFO] = icons.Info,
+      [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+      [vim.diagnostic.severity.WARN]  = icons.diagnostics.Warn,
+      [vim.diagnostic.severity.HINT]  = icons.diagnostics.Hint,
+      [vim.diagnostic.severity.INFO]  = icons.diagnostics.Info,
     },
     numhl = {
       [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
