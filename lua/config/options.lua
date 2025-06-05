@@ -7,7 +7,7 @@ vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
 vim.opt.foldtext = ''
 vim.opt.foldmethod = 'expr'
 vim.opt.foldlevel = 99
-vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
+-- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
 vim.opt.mousescroll = 'hor:0'
 vim.opt.pumblend = 0
 vim.opt.signcolumn = 'yes'
@@ -48,7 +48,7 @@ end
 -- § lsp {{{
 -- Refer to :h vim.lsp.config() for more information.
 vim.lsp.config('*', {
-  capabilities = require('blink.cmp').get_lsp_capabilities(),
+  -- capabilities = require('blink.cmp').get_lsp_capabilities(),
   -- capabilities = require('blink.cmp').get_lsp_capabilities(nil, true),
 
   ---@param client vim.lsp.Client
@@ -66,7 +66,7 @@ vim.lsp.config('*', {
     vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
     vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
     require('which-key').add({
-      { "grr",        function() Snacks.picker.lsp_references() end, nowait = true, desc = "References" },
+      { "grr",        function() Snacks.picker.lsp_references() end,        nowait = true,                  desc = "References" },
       { "gd",         function() Snacks.picker.lsp_definitions() end,       desc = "Goto Definition" },
       { "gD",         function() Snacks.picker.lsp_declarations() end,      desc = "Goto Declaration" },
       { "gI",         function() Snacks.picker.lsp_implementations() end,   desc = "Goto Implementation" },
@@ -74,7 +74,6 @@ vim.lsp.config('*', {
       { "<leader>ss", function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols" },
       { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
     })
-
 
     if client:supports_method('textDocument/codeLens') then
       vim.lsp.codelens.refresh()

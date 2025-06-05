@@ -5,7 +5,7 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 
 let s:VIMHOME = expand('$HOME/.config/vim//')
-let g:plug_home = s:VIMHOME . '.plugged//'
+let g:plug_home = s:VIMHOME . 'plugged//'
 let &spellfile = s:VIMHOME . '.spell/en.utf-8.add'
 
 " § settings {{{1
@@ -140,9 +140,9 @@ command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 " current file
-command CDC cd %:p:h
+command! CDC cd %:p:h
 " parent directory
-command CDP cd %:p:h:h
+command! CDP cd %:p:h:h
 
 command! BreakHere call utils#breakHere()
 command! ReplaceSelection call utils#replaceSelection()
@@ -159,6 +159,8 @@ command! -range SendVisual <line1>,<line2>call ooze#sendvisual()
 " }}}
 
 " § keymaps {{{1
+nnoremap ` ~
+
 nnoremap <leader>a :normal! ggVG<CR>
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
@@ -172,13 +174,6 @@ nnoremap <leader>fD <Cmd>Delete!<CR>
 
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
-
-" no-shift for case-toggle
-nnoremap ` ~
-nnoremap ~ `
-
-" navigate tagstack backwards
-nnoremap <C-[> <C-t>
 
 " goto
 " nnoremap gh yi':silent !open https://github.com/<C-R>0<CR>
@@ -274,8 +269,7 @@ cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 " }}}1
 
-" § plugins/nvim {{{1
-if !has('nvim') " {{{2
+if !has('nvim')
   let &undodir     = s:VIMHOME . '.undo//'
   let &viminfofile = s:VIMHOME . '.viminfo'
   " let &verbosefile = s:VIMHOME . '.vimlog.txt'
@@ -285,33 +279,31 @@ if !has('nvim') " {{{2
   noremap kj <esc>
 
   silent! color scheme
+
   call plug#begin()
   " Plug 'rdnajac/after'
   " Plug 'tpope/vim-sensible'
   " Plug 'christoomey/vim-tmux-navigator'
+  " Plug 'tpope/vim-commentary'
+  " Plug 'tpope/vim-endwise'
+  " Plug 'tpope/vim-scriptease'
+  " Plug 'tpope/vim-speeddating'
+  " Plug 'tpope/vim-vinegar'
+  " Plug 'vuciv/golf'
+  " Plug 'github/copilot.vim'
+  " Plug 'junegunn/vim-easy-align'
+  " Plug 'junegunn/fzf.vim'
+  " Plug '~/GitHub/rdnajac/src/fzf/'
   Plug 'dense-analysis/ale'
-  Plug 'folke/tokyonight.nvim'
-  Plug 'github/copilot.vim'
+  Plug 'lervag/vimtex',
   Plug 'tpope/vim-abolish'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'junegunn/fzf.vim'
-  Plug '~/GitHub/rdnajac/src/fzf/'
   Plug 'tpope/vim-apathy'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-tbone'
   Plug 'tpope/vim-unimpaired'
-  Plug 'tpope/vim-commentary'
-  Plug 'tpope/vim-endwise'
-  Plug 'tpope/vim-scriptease'
-  Plug 'tpope/vim-speeddating'
-  Plug 'tpope/vim-vinegar'
-  Plug 'vuciv/golf'
-  " only load plugins on certain filetypes
-  Plug 'lervag/vimtex', { 'for': 'tex' }
   call plug#end()
-  " }}}
 else
   if !exists('g:loaded_nvim')
     lua require('nvim')

@@ -11,7 +11,7 @@
   },
   "require": {
     "prefix": "require",
-    "body": ["require(${1:module})"],
+    "body": ["require('${1:module}')"],
     "description": "Require module"
   },
   "return": {
@@ -65,7 +65,7 @@
     "body": ["local ${1:name} = function($2)", "\t${0}", "end"]
   },
   "print": {
-    "prefix": "p",
+    "prefix": "print",
     "body": ["print(${0})"]
   },
   "print": {

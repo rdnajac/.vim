@@ -1,4 +1,5 @@
 return {
+  { import = 'lazyvim.plugins.coding' },
   {
     'github/copilot.vim',
     cmd = 'Copilot',

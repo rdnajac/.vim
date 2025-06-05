@@ -37,7 +37,6 @@ require('which-key').add({
   { '<leader>L', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
   { '<leader>R', '<Cmd>restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
 
-
   { 'gL', function() require('nvim.lazy.goto') end, { desc = 'Goto LazyVim module' }, },
 
   { '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer', },
@@ -144,7 +143,7 @@ require('which-key').add({
   { '<leader>s/', function() Snacks.picker.search_history() end, desc = 'Search History', },
 })
 
-  -- better escape " {{{1
+-- better escape " {{{1
 local map_combo = require('mini.keymap').map_combo
 
 -- Modes: i = insert, c = command, x = visual, s = select
@@ -188,17 +187,16 @@ local function edit(file, should_warn)
 end
 
 local edit_config = function(mod)
-  return edit(vim.fn.stdpath('config') .. '/lua/nvim/config/' .. mod .. '.lua')
+  return edit(vim.fn.stdpath('config') .. '/lua/config/' .. mod .. '.lua')
 end
 
 require('which-key').add({
-  { '\\\\', function() Snacks.dashboard.open() end, desc = 'Open Snacks Dashboard' },
-  { '\\i', function() edit(vim.fn.stdpath('config') .. '/lua/nvim/init.lua') end, desc = 'Nvim' },
-  { '\\a', function() edit_config('autocmds') end, desc = 'Autocmds' },
-  { '\\o', function() edit_config('options') end, desc = 'Options' },
-  { '\\k', function() edit_config('keymaps') end, desc = 'Keymaps' },
-  { '\\l', function() edit(vim.fn.stdpath('config') .. '/lua/nvim/lazy/init.lua') end, desc = 'Lazy' },
-  { '\\s', function() edit(vim.fn.stdpath('config') .. '/lua/nvim/lazy/spec/init.lua') end, desc = 'LazySpec' },
+  { '\\\\', function() Snacks.dashboard.open() end, desc = 'Snacks Dashboard' },
+  { '\\i', function() edit_config('lazy/init') end, desc = 'init' },
+  { '\\a', function() edit_config('autocmds') end, desc = 'autocmds' },
+  { '\\o', function() edit_config('options') end, desc = 'options' },
+  { '\\k', function() edit_config('keymaps') end, desc = 'keymaps' },
+  { '\\s', function() edit_config('lazy/spec/init') end, desc = 'LazySpec' },
 })
 
 -- toggles {{{
