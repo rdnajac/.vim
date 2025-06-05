@@ -1,8 +1,8 @@
 return {
   {
     'mason-org/mason.nvim',
-    build = ':MasonUpdate',
-    event = "VeryLazy",
+    -- build = ':MasonUpdate',
+    event = 'VeryLazy',
     opts = {
       ui = {
         icons = {
@@ -18,7 +18,9 @@ return {
     event = 'VeryLazy',
     dependencies = { 'mason-org/mason.nvim' },
     opts_extend = { 'ensure_installed' },
-    opts = { ensure_installed = { 'prettier' } },
+    opts = {
+      ensure_installed = { 'prettier' },
+    },
   },
-  -- { import = 'confqnvim.lazy.spec.lang' },
+  { import = 'config.lazy.spec.lang' },
 }

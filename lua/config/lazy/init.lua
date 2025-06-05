@@ -1,4 +1,3 @@
--- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim/'
 
 if not vim.uv.fs_stat(lazypath) then
@@ -7,8 +6,6 @@ else
   vim.opt.rtp:prepend(lazypath)
 end
 
--- vim.g.lazyvim_check_order = false
-
 package.loaded['lazyvim.config.options'] = true
 
 local M = {}
@@ -16,7 +13,26 @@ local M = {}
 ---@param opts LazyConfig
 function M.load(opts)
   opts = vim.tbl_deep_extend('force', {
-    spec = { { import = 'config.lazy.spec' } },
+    spec = {
+      {
+        'LazyVim/LazyVim',
+        -- { import = 'lazyvim.plugins', cond = not vim.env.LAZY },
+        { import = 'lazyvim.plugins.init' },
+      },
+      {
+        import = 'config.lazy.spec',
+      },
+      { 'dense-analysis/ale' },
+      { 'lervag/vimtex' },
+      { 'tpope/vim-abolish' },
+      { 'tpope/vim-apathy' },
+      { 'tpope/vim-fugitive' },
+      { 'tpope/vim-repeat' },
+      { 'tpope/vim-surround' },
+      { 'tpope/vim-tbone' },
+      { 'tpope/vim-unimpaired' },
+    },
+    rocks = { enabled = false },
     install = { colorscheme = { 'tokyonight' } },
     change_detection = { notify = false },
     ui = { border = 'rounded' },

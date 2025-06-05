@@ -33,16 +33,10 @@ end, { expr = true, desc = 'Escape and Clear hlsearch' })
 
 -- stylua: ignore start
 require('which-key').add({
-  { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-  { '<leader>L', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
-  { '<leader>R', '<Cmd>restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
-
-  { 'gL', function() require('nvim.lazy.goto') end, { desc = 'Goto LazyVim module' }, },
+  { 'gL', function() require('util.togo').lazy() end, { desc = 'Goto LazyVim module' }, },
 
   { '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer', },
   { '<leader>>', function() Snacks.scratch.select() end, desc = 'Select Scratch Buffer', },
-  -- { '<leader>n', function() Snacks.picker.notifications() end, desc = 'Notification History', },
-  -- { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss All Notifications', },
 
   { '<leader>bd', function() Snacks.bufdelete() end, desc = 'Delete Buffer', mode = 'n' },
 
@@ -53,9 +47,8 @@ require('which-key').add({
   { '<leader>da', '<Cmd>ALEInfo<CR>', desc = 'Ale' },
   { '<leader>db', '<Cmd>BlinkCmp status<CR>', desc = 'Blink'},
   { '<leader>dc', ':=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities' },
-  { '<leader>dd', '<Cmd>LazyDev lsp<CR>', desc = 'LazyDev lsp' },
-  { '<leader>dD', '<Cmd>LazyDev debug<CR>', desc = 'LazyDev debug' },
-  { '<leader>dl', '<Cmd>checkhealth lsp<CR>', desc = 'LSP' },
+  { '<leader>dd', '<Cmd>LazyDev debug<CR>', desc = 'LazyDev debug' },
+  { '<leader>dl', '<Cmd>LazyDev lsp<CR>', desc = 'LazyDev lsp' },
   { '<leader>dL', '<Cmd>Lazy! load all <Bar> checkhealth<CR>', desc = 'LazyHealth', mode = 'n' },
   { '<leader>ds', '<Cmd>checkhealth snacks<CR>', desc = 'Snacks Health' },
   { '<leader>dS', ':=require("snacks").meta.get()<CR>', desc = 'Snacks' },
@@ -96,10 +89,16 @@ require('which-key').add({
 -- stylua: ignore
 require('which-key').add({
   { '<localleader>p', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec', },
+
+  { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
+  { '<leader>L', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
+  { '<leader>R', '<Cmd>restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
   { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
   { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },
   { '<leader>F', function() Snacks.picker.smart() end, desc = 'Smart Find Files', },
   { '<leader>n', function() Snacks.picker.notifications() end, desc = "Notification History" },
+  { '<leader>U', function() Snacks.picker.undo() end,desc = 'Undotree', },
+  { '<leader>H', function() Snacks.picker.help() end, desc = 'Help Pages', },
   { '<leader>z', function() Snacks.picker.zoxide() end, desc = 'Zoxide', icon = { icon = '󰄻 ' }, },
 
   { '<leader>p', group = 'Pickers' },
@@ -110,7 +109,6 @@ require('which-key').add({
   { '<leader>p:', function() Snacks.picker.command_history() end, desc = 'Command History', },
   { '<leader>pd', function() Snacks.picker.diagnostics() end, desc = 'Diagnostics', },
   { '<leader>pD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Buffer Diagnostics', },
-  { '<leader>ph', function() Snacks.picker.help() end, desc = 'Help Pages', },
   { '<leader>pH', function() Snacks.picker.highlights() end, desc = 'Highlights', },
   { '<leader>pi', function() Snacks.picker.icons() end, desc = 'Icons', },
   { '<leader>pj', function() Snacks.picker.jumps() end, desc = 'Jumps', },
@@ -118,8 +116,7 @@ require('which-key').add({
   { '<leader>pm', function() Snacks.picker.man() end, desc = 'Man Pages', },
   { '<leader>pM', function() Snacks.picker.marks() end, desc = 'Marks', },
   { '<leader>pq', function() Snacks.picker.qflist() end, desc = 'Quickfix List', },
-  { '<leader>pR', function() Snacks.picker.resume() end, desc = 'Resume', },
-  { '<leader>pu', function() Snacks.picker.undo() end,desc = 'Undotree', },
+  { '<leader>pp', function() Snacks.picker.resume() end, desc = 'Resume', },
 
   { '<leader>fb', function() Snacks.picker.buffers() end, desc = 'Buffers', },
   { '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = 'Buffers (all)', },
@@ -159,37 +156,6 @@ for _, combo in ipairs({ 'jk', 'kj' }) do
   map_combo('t', combo, '<BS><BS><C-\\><C-n>')
 end
 
--- § edit shortcuts {{{1
--- TODO: use snacks
---- Display a warning message using Neovim's notification system.
---- @param msg string: The warning message to display.
-local function warn(msg)
-  vim.notify(msg, vim.log.levels.WARN)
-end
-
---- Edit a file if it is readable, otherwise optionally display a warning.
---- @param file string: The path to the file to edit.
---- @param should_warn? boolean: Whether to warn if the file is not found.
---- @return boolean: True if the file was successfully edited, false otherwise.
-local function edit(file, should_warn)
-  if vim.fn.filereadable(file) == 1 then
-    if Snacks.util.is_float() then
-      vim.cmd('q')
-    end
-    vim.cmd('edit ' .. file)
-    return true
-  else
-    if should_warn then
-      warn('File not found: ' .. file)
-    end
-    return false
-  end
-end
-
-local edit_config = function(mod)
-  return edit(vim.fn.stdpath('config') .. '/lua/config/' .. mod .. '.lua')
-end
-
 require('which-key').add({
   { '\\\\', function() Snacks.dashboard.open() end, desc = 'Snacks Dashboard' },
   { '\\i', function() edit_config('lazy/init') end, desc = 'init' },
@@ -203,15 +169,12 @@ require('which-key').add({
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
 Snacks.toggle.option('autochdir'):map('<leader>ta')
-Snacks.toggle
-.option('showtabline', { off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = 'Tabline' })
-:map('<leader>uA')
-Snacks.toggle
-.option(
-  'conceallevel',
-  { off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level' }
-)
-:map('<leader>uc')
+Snacks.toggle.option('showtabline', {
+  off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = 'Tabline'
+}):map('<leader>uA')
+Snacks.toggle.option('conceallevel', {
+  off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level'
+}):map('<leader>uc')
 Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map('<leader>uL')
 Snacks.toggle.option('spell', { name = 'Spelling' }):map('<leader>us')
 Snacks.toggle.option('laststatus', { off = 0, on = 3 }):map('<leader>uu')

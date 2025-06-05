@@ -46,6 +46,7 @@ local detail = 0
 
 return {
   'stevearc/oil.nvim',
+  lazy = false,
   -- stylua: ignore
   keys = {
     {
@@ -60,36 +61,13 @@ return {
       desc = 'Open Oil',
     } },
   opts = function()
-    local refresh = require("oil.actions").refresh
+    local refresh = require('oil.actions').refresh
     local orig_refresh = refresh.callback
     refresh.callback = function(...)
       git_status = M.new_git_status()
       orig_refresh(...)
     end
 
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'OilActionsPost',
-      callback = function(event)
-        if event.data.actions.type == 'move' then
-          Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
-        end
-      end,
-      desc = 'Snacks rename on move',
-    })
-
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'OilActionsPre',
-      callback = function(event)
-        -- TODO: is this loop necessary?
-        for _, action in ipairs(event.data.actions) do
-          if action.type == 'delete' then
-            local _, path = require('oil.util').parse_url(action.url)
-            Snacks.bufdelete({ file = path, force = true })
-          end
-        end
-      end,
-      desc = 'Delete buffer on delete',
-    })
 
     ---@type oil.setupOpts
     return {
@@ -133,8 +111,9 @@ return {
           callback = function()
             local oil = require('oil')
             local entry = oil.get_cursor_entry()
-            if not entry or entry.type ~= 'file' then return end
-
+            if not entry or entry.type ~= 'file' then
+              return
+            end
             local path = oil.get_current_dir() .. entry.name
             vim.fn.chansend(vim.v.servername, string.format([[<Cmd>edit %s<CR>]], vim.fn.fnameescape(path)))
           end,
@@ -159,5 +138,5 @@ return {
         },
       },
     }
-  end
+  end,
 }

@@ -3,6 +3,8 @@ vim.g.lazyvim_check_order = false
 return {
   {
     'LazyVim/LazyVim',
+    version = false,
+    ---@type LazyVimConfig
     opts = {
       defaults = {
         autocmds = false,
@@ -12,8 +14,15 @@ return {
         lazyvim = true,
         neovim = true,
       },
+      icons = {
+        diagnostics = {
+          Error = '🔥',
+          Warn = '💩',
+          Hint = '🧠',
+          Info = '👾',
+        },
+      },
     },
-    { import = 'lazyvim.plugins.init' },
   },
   {
     'folke/tokyonight.nvim',
@@ -127,11 +136,11 @@ return {
         scroll_up = '<C-k>',
       },
       preset = 'helix',
-      sort = { 'order', 'alphanum', 'mod' },
+      sort = { 'order', 'case', 'alphanum', 'mod' },
       spec = {
         {
           mode = { 'n' },
-          { '<localleader>l', desc = '+vimtex' },
+          { '<localleader>l', group = '+vimtex' },
           { '<localleader>r', group = '+R', icon = { icon = ' ', color = 'blue' } },
 
           -- add icons for existing (vim) keymaps
@@ -190,5 +199,10 @@ return {
         { 'gc', hidden = true },
       },
     },
+  },
+  {
+    'folke/persistence.nvim',
+    event = 'BufReadPre',
+    opts = {},
   },
 }

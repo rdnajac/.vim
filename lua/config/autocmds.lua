@@ -101,14 +101,42 @@ vim.api.nvim_create_autocmd('FileType', {
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd("CmdlineEnter", {
+-- TODO: Snacks.toggle.statusline
+vim.api.nvim_create_autocmd('CmdlineEnter', {
   callback = function()
     vim.opt.laststatus = 0
   end,
 })
 
-vim.api.nvim_create_autocmd("CmdlineLeave", {
+vim.api.nvim_create_autocmd('CmdlineLeave', {
   callback = function()
-    vim.opt.laststatus = 2
+    -- vim.g.lualine_laststatus?
+    vim.opt.laststatus = 3
   end,
 })
+
+-- Snacks.util.on_module('oil', function()
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'OilActionsPost',
+    callback = function(event)
+      if event.data.actions.type == 'move' then
+        Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
+      end
+    end,
+    desc = 'Snacks rename on Oil move',
+  })
+
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'OilActionsPre',
+    callback = function(event)
+      -- TODO: is this loop necessary?
+      for _, action in ipairs(event.data.actions) do
+        if action.type == 'delete' then
+          local _, path = require('oil.util').parse_url(action.url)
+          Snacks.bufdelete({ file = path, force = true })
+        end
+      end
+    end,
+    desc = 'Delete buffer on Oil delete',
+  })
+-- end)

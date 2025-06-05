@@ -1,6 +1,6 @@
 local function trigger(ctx, char)
   local _, col = unpack(ctx.cursor)
-  local pattern = ("%s%%w*$"):format(vim.pesc(char))
+  local pattern = ('%s%%w*$'):format(vim.pesc(char))
   return ctx.line:sub(1, col):match(pattern) ~= nil
 end
 
@@ -43,6 +43,13 @@ return {
           draw = {
             treesitter = { 'lsp' },
             columns = { { 'kind_icon' }, { 'label', 'label_description', 'source_name', gap = 1 } },
+            components = {
+              kind_icon = {
+                text = function(ctx)
+                  return LazyVim.config.icons.kinds[ctx.kind] or ''
+                end,
+              },
+            },
           },
         },
       },
@@ -87,17 +94,15 @@ return {
       },
       sources = {
         default = function()
-          -- 'emoji', 'env',
-          local default_sources = { 'lsp', 'buffer', 'snippets', 'path', 'emoji' }
-          -- :e
+          local default_sources = { 'lsp', 'buffer', 'snippets', 'path', 'emoji', 'copilot' }
           local row, col = unpack(vim.api.nvim_win_get_cursor(0))
           row = row - 1
           local check_col = col > 0 and col - 1 or col
           local ok, node = pcall(vim.treesitter.get_node, { pos = { row, check_col } })
           if
-              ok
-              and node
-              and vim.tbl_contains({ 'comment', 'comment_content', 'line_comment', 'block_comment' }, node:type())
+            ok
+            and node
+            and vim.tbl_contains({ 'comment', 'comment_content', 'line_comment', 'block_comment' }, node:type())
           then
             return default_sources
           else
@@ -105,7 +110,7 @@ return {
           end
         end,
         per_filetype = {
-          lua = { inherit_defaults = false, 'lazydev', 'path', 'snippets' },
+          lua = { inherit_defaults = true, 'lazydev' },
           sh = { inherit_defaults = true, 'tmux', 'env' },
         },
         -- min_keyword_length = 3,
@@ -137,7 +142,7 @@ return {
             transform_items = function(_, items)
               return vim.tbl_filter(function(item)
                 return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-                    and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
+                  and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
               end, items)
             end,
           },
@@ -161,7 +166,7 @@ return {
             },
             should_show_items = function(ctx, _)
               return trigger(ctx, '$')
-            end
+            end,
             -- :for
           },
           emoji = {
@@ -170,7 +175,7 @@ return {
             score_offset = 20,
             should_show_items = function(ctx, _)
               return trigger(ctx, ':')
-            end
+            end,
           },
           lazydev = {
             name = 'LazyDev',
@@ -183,4 +188,3 @@ return {
     }
   end,
 }
--- 🔯 $

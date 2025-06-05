@@ -15,15 +15,16 @@ vim.opt.smoothscroll = true
 vim.opt.winborder = 'rounded'
 -- }}}
 -- § diagnostics {{{
+  local icons = LazyVim.config.icons
 vim.diagnostic.config({
   underline = false,
   severity_sort = true,
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = '🔥',
-      [vim.diagnostic.severity.WARN] = '💩',
-      [vim.diagnostic.severity.HINT] = '👾',
-      [vim.diagnostic.severity.INFO] = '🧠',
+      [vim.diagnostic.severity.ERROR] = icons.Error,
+      [vim.diagnostic.severity.WARN] = icons.Warn,
+      [vim.diagnostic.severity.HINT] = icons.Hint,
+      [vim.diagnostic.severity.INFO] = icons.Info,
     },
     numhl = {
       [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
@@ -61,18 +62,17 @@ vim.lsp.config('*', {
     end
 
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'go', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', 'gs', vim.lsp.buf.signature_help, opts)
+-- TODO: ensure only map to buffer
+-- stylua: ignore
     require('which-key').add({
-      { "grr",        function() Snacks.picker.lsp_references() end,        nowait = true,                  desc = "References" },
-      { "gd",         function() Snacks.picker.lsp_definitions() end,       desc = "Goto Definition" },
-      { "gD",         function() Snacks.picker.lsp_declarations() end,      desc = "Goto Declaration" },
-      { "gI",         function() Snacks.picker.lsp_implementations() end,   desc = "Goto Implementation" },
-      { "gy",         function() Snacks.picker.lsp_type_definitions() end,  desc = "Goto T[y]pe Definition" },
-      { "<leader>ss", function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols" },
-      { "<leader>sS", function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
+
+      { 'grr', function() Snacks.picker.lsp_references() end, nowait = true, desc = 'References', },
+      { 'gd', function() Snacks.picker.lsp_definitions() end, desc = 'Goto Definition', },
+      { 'gD', function() Snacks.picker.lsp_declarations() end, desc = 'Goto Declaration', },
+      { 'gI', function() Snacks.picker.lsp_implementations() end, desc = 'Goto Implementation', },
+      { 'gy', function() Snacks.picker.lsp_type_definitions() end, desc = 'Goto T[y]pe Definition', },
+      { 'grs', function() Snacks.picker.lsp_symbols() end, desc = 'LSP Symbols', },
+      { 'grw', function() Snacks.picker.lsp_workspace_symbols() end, desc = 'LSP Workspace Symbols', },
     })
 
     if client:supports_method('textDocument/codeLens') then
