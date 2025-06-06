@@ -73,6 +73,7 @@ M.chezmoi = function()
     --   return { { item.text } }
     -- end,
     -- preview = 'file',
+    frequency = true,
     confirm = function(picker, item)
       picker:close()
       require('chezmoi.commands').edit({

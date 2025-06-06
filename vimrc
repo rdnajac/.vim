@@ -155,7 +155,6 @@ vnoremap <C-r> <cmd>ReplaceSelection<CR>
 nnoremap Q <Cmd>call format#buffer()<CR>
 
 command! -range SendVisual <line1>,<line2>call ooze#sendvisual()
-
 " }}}
 
 " § keymaps {{{1
@@ -175,7 +174,7 @@ nnoremap <leader>fD <Cmd>Delete!<CR>
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
 
-" goto
+" FIXME: make this a gx wrapper
 " nnoremap gh yi':silent !open https://github.com/<C-R>0<CR>
 nmap gh <C-space>y:silent! !open https://github.com/<C-R>0<CR>
 
@@ -189,8 +188,8 @@ nnoremap <silent> <leader>bD    :bd<CR>
 map <silent> <C-q> <Cmd>bd<CR>
 " }}}
 " resize splits {{{
-nnoremap <M-Up>    :resize -2<CR>
-nnoremap <M-Down>  :resize +2<CR>
+" nnoremap <M-Up>    :resize -2<CR>
+" nnoremap <M-Down>  :resize +2<CR>
 nnoremap <M-Left>  :vertical resize -2<CR>
 nnoremap <M-Right> :vertical resize +2<CR>
 " }}}
@@ -210,7 +209,7 @@ nnoremap <expr> n ('Nn'[v:searchforward]) . 'zvzz'
 xnoremap <expr> n  'Nn'[v:searchforward]
 onoremap <expr> n  'Nn'[v:searchforward]
 
-nnoremap <expr> N ('Nn'[v:searchforward]) . 'zvzz'
+nnoremap <expr> N ('nN'[v:searchforward]) . 'zvzz'
 xnoremap <expr> N  'nN'[v:searchforward]
 onoremap <expr> N  'nN'[v:searchforward]
 
@@ -219,14 +218,7 @@ nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 " }}}
-" insert comment above/below {{{
-nnoremap <silent> gco o<Esc>Vcx<Esc>:normal gcc<CR>fxa<BS>
-nnoremap <silent> gcO O<Esc>Vcx<Esc>:normal gcc<CR>fxa<BS>
 
-nnoremap <silent> gco o<Esc>VcTODO:<Space><Esc>:normal gcc<CR>fxa
-nnoremap <silent> gcO O<Esc>VcTODO:<Space><Esc>:normal gcc<CR>fxa
-
-" }}}
 " better indenting {{{
 vnoremap < <gv
 vnoremap > >gv
@@ -289,6 +281,7 @@ if !has('nvim')
   " Plug 'tpope/vim-scriptease'
   " Plug 'tpope/vim-speeddating'
   " Plug 'tpope/vim-vinegar'
+  " Plug 'tpope/vim-unimpaired'
   " Plug 'vuciv/golf'
   " Plug 'github/copilot.vim'
   " Plug 'junegunn/vim-easy-align'
@@ -302,7 +295,7 @@ if !has('nvim')
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-tbone'
-  Plug 'tpope/vim-unimpaired'
+  Plug 'jiangmiao/auto-pairs'
   call plug#end()
 else
   if !exists('g:loaded_nvim')
