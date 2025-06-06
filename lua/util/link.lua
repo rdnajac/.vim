@@ -30,5 +30,4 @@ M.linkify = function()
   end)
 end
 
-
 return M

@@ -63,5 +63,4 @@ M.setup = function()
   vim.keymap.set('n', ',<CR>', '<Cmd>RunFile<CR>', { silent = true })
 end
 
-
 return M

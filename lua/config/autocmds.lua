@@ -98,7 +98,6 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Set a bg color for certain filetypes',
 })
 
-
 -- Snacks.util.on_module('oil', function()
 vim.api.nvim_create_autocmd('User', {
   pattern = 'OilActionsPost',

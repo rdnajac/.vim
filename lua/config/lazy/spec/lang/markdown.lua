@@ -9,7 +9,7 @@ return {
       },
       -- checkbox = { enabled = false },
       code = {
-	inline_pad = 1,
+        inline_pad = 1,
         border = 'thick',
         right_pad = 1,
         sign = true,

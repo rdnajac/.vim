@@ -1,4 +1,4 @@
-  ---@module "blink.cmp"
+---@module "blink.cmp"
 
 local function trigger(ctx, char)
   local _, col = unpack(ctx.cursor)

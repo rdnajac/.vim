@@ -1,3 +1,4 @@
+local lazyopts = require('config.lazy.opts')
 local lazy = vim.env.LAZY
 
 if lazy == '1' then
@@ -8,8 +9,7 @@ else
   if lazy == '0' then
     print('hacks')
     local M = require('lazyvim.config')
-    M.setup(require('config.lazy.opts'))
-    -- M.setup()
+    M.setup(lazyopts)
     M.init()
   else
     _G.LazyVim = require('lazyvim.util')
@@ -20,8 +20,7 @@ end
 return {
   {
     'LazyVim/LazyVim',
-    -- call setup ourselves in hacks
-    opts = require('config.lazy.opts'),
+    opts = lazyopts,
     enabled = lazy ~= '0', -- true for nil or '1'; false for '0' (hack mode)
   },
   { 'dense-analysis/ale' },

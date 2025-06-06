@@ -17,12 +17,17 @@ function M.load(opts)
     spec = {
       {
         'LazyVim/LazyVim',
-        {
-          import = 'lazyvim.plugins',
-          cond = vim.env.LAZY == '1', -- true only in strict LazyVim mode
-          -- TODO: disable plugins
-        },
+        { import = 'lazyvim.plugins', cond = vim.env.LAZY == '1' },
+        { import = 'lazyvim.plugins.coding', cond = vim.env.LAZY ~= '1' },
       },
+      { 'dense-analysis/ale' },
+      { 'lervag/vimtex' },
+      { 'tpope/vim-abolish' },
+      { 'tpope/vim-apathy' },
+      { 'tpope/vim-fugitive' },
+      { 'tpope/vim-repeat' },
+      { 'tpope/vim-surround' },
+      { 'tpope/vim-tbone' },
       { import = 'config.lazy.spec' },
     },
     rocks = { enabled = false },

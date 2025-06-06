@@ -3,11 +3,11 @@ function _G.get_oil_winbar()
   local dir = require('oil').get_current_dir(bufnr)
   if dir then
     return vim.fn.fnamemodify(dir, ':~')
-    -- return LazyVim.lualine.pretty_path({
-    --   relative = 'root',
-    --   readonly_icon = '',
-    --   number = 4,
-    -- })
+  -- return LazyVim.lualine.pretty_path({
+  --   relative = 'root',
+  --   readonly_icon = '',
+  --   number = 4,
+  -- })
   else
     -- If there is no current directory (e.g. over ssh), just show the buffer name
     return vim.api.nvim_buf_get_name(0)
@@ -83,7 +83,7 @@ return {
       constrain_cursor = 'name',
       watch_for_changes = true,
       view_options = {
-        winbar = "%{%v:lua.get_oil_winbar()%}",
+        winbar = '%{%v:lua.get_oil_winbar()%}',
         -- winbar = '%!v:lua.get_oil_winbar()',
 
         is_hidden_file = function(name, bufnr)
