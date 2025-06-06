@@ -36,6 +36,7 @@ M.opts = {
 }
 
 M.init = function()
+  print('init colorscheme')
   local tokyonightpath = vim.fn.stdpath('data') .. '/lazy/tokyonight.nvim/'
   vim.opt.rtp:append(tokyonightpath)
   require('tokyonight').load(M.opts)

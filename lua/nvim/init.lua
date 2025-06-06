@@ -11,6 +11,7 @@ if vim.env.PROF then
   })
 end
 
+--require('nvim.colorscheme').init()
 -- bootstrap lazy.nvim and LazyVim
 require('config.lazy').load({
   profiling = {
