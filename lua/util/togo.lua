@@ -42,4 +42,20 @@ M.config = function(mod)
   return edit(vim.fn.stdpath('config') .. '/lua/config/' .. mod .. '.lua')
 end
 
+function M.gx()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.fn.col('.')
+  local pattern = '["\']([%w_-]+/[%w_.-]+)["\']'
+
+  for start_idx, quoted in line:gmatch('()' .. pattern) do
+    local finish = start_idx + #quoted - 1
+    if col >= start_idx and col <= finish then
+      vim.cmd('silent! !open https://github.com/' .. quoted)
+      return
+    end
+  end
+
+  vim.cmd('normal! gx')
+end
+
 return M
