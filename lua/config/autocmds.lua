@@ -1,3 +1,4 @@
+print('au')
 local aug = function(aug)
   vim.api.nvim_create_augroup('nvim_' .. aug, { clear = true })
 end
@@ -12,6 +13,28 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     (vim.hl or vim.highlight).on_yank()
   end,
   desc = 'Highlight on yank',
+})
+
+local cmd_group = vim.api.nvim_create_augroup('cmdline', { clear = true })
+
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+  group = cmd_group,
+  callback = function(args)
+    if vim.bo[args.buf].filetype ~= 'snacks_dashboard' then
+      vim.api.nvim_create_autocmd('CmdlineLeave', {
+        once = true,
+        callback = function()
+          vim.o.laststatus = 3
+        end,
+      })
+      vim.o.laststatus = 0
+    end
+  end,
+})
+
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+  group = cmd_group,
+  command = 'set laststatus=0',
 })
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -50,17 +73,6 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Use bash parser for kitty config',
 })
 
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  group = aug('cmdline'),
-  callback = function()
-    vim.cmd([[
-        cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
-        cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
-    ]])
-  end,
-  desc = 'Set up command line abbreviations when entering cmdline',
-})
-
 vim.api.nvim_create_autocmd('TermOpen', {
   group = aug('ooze'),
   callback = function(args)
@@ -80,63 +92,35 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     if Snacks.util.is_transparent() then
       vim.cmd([[setlocal winhighlight=Normal:SpecialWindow]])
+      -- TODO: configure window
     end
   end,
   desc = 'Set a bg color for certain filetypes',
 })
 
--- vim.api.nvim_create_autocmd('LspAttach', {
---   group = vim.api.nvim_create_augroup('lsp-path-prepend', { clear = true }),
---   desc = 'Prepend LSP root and default path to &path on attach',
---   callback = function(args)
---     local client = vim.lsp.get_client_by_id(args.data.client_id)
---     if client and client.config.root_dir then
---       local root = vim.fn.escape(client.config.root_dir, ' \\')
---       local default = vim.fn.escape(vim.o.path, ' \\')
---       vim.cmd('set path-=' .. root)
---       vim.cmd('set path-=' .. default)
---       vim.cmd('set path^=' .. root)
---       vim.cmd('set path^=' .. default)
---     end
---   end,
--- })
-
--- TODO: Snacks.toggle.statusline
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  callback = function()
-    vim.opt.laststatus = 0
-  end,
-})
-
-vim.api.nvim_create_autocmd('CmdlineLeave', {
-  callback = function()
-    -- vim.g.lualine_laststatus?
-    vim.opt.laststatus = 3
-  end,
-})
 
 -- Snacks.util.on_module('oil', function()
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'OilActionsPost',
-    callback = function(event)
-      if event.data.actions.type == 'move' then
-        Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
-      end
-    end,
-    desc = 'Snacks rename on Oil move',
-  })
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'OilActionsPost',
+  callback = function(event)
+    if event.data.actions.type == 'move' then
+      Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
+    end
+  end,
+  desc = 'Snacks rename on Oil move',
+})
 
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'OilActionsPre',
-    callback = function(event)
-      -- TODO: is this loop necessary?
-      for _, action in ipairs(event.data.actions) do
-        if action.type == 'delete' then
-          local _, path = require('oil.util').parse_url(action.url)
-          Snacks.bufdelete({ file = path, force = true })
-        end
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'OilActionsPre',
+  callback = function(event)
+    -- TODO: is this loop necessary?
+    for _, action in ipairs(event.data.actions) do
+      if action.type == 'delete' then
+        local _, path = require('oil.util').parse_url(action.url)
+        Snacks.bufdelete({ file = path, force = true })
       end
-    end,
-    desc = 'Delete buffer on Oil delete',
-  })
+    end
+  end,
+  desc = 'Delete buffer on Oil delete',
+})
 -- end)

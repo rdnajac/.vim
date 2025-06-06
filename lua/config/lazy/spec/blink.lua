@@ -1,3 +1,5 @@
+  ---@module "blink.cmp"
+
 local function trigger(ctx, char)
   local _, col = unpack(ctx.cursor)
   local pattern = ('%s%%w*$'):format(vim.pesc(char))
@@ -6,7 +8,6 @@ end
 
 return {
   -- https://cmp.saghen.dev/
-  ---@module "blink.cmp"
   'Saghen/blink.cmp',
   dependencies = {
     'mgalliou/blink-cmp-tmux',
@@ -31,7 +32,6 @@ return {
       desc = 'Keep completing path on <Tab>',
     })
 
-    ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     return {
       signature = { enabled = true },
@@ -95,19 +95,20 @@ return {
       sources = {
         default = function()
           local default_sources = { 'lsp', 'buffer', 'snippets', 'path', 'emoji', 'copilot' }
-          local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-          row = row - 1
-          local check_col = col > 0 and col - 1 or col
-          local ok, node = pcall(vim.treesitter.get_node, { pos = { row, check_col } })
-          if
-            ok
-            and node
-            and vim.tbl_contains({ 'comment', 'comment_content', 'line_comment', 'block_comment' }, node:type())
-          then
-            return default_sources
-          else
-            return { 'path', 'buffer' }
-          end
+          return default_sources
+          -- local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+          -- row = row - 1
+          -- local check_col = col > 0 and col - 1 or col
+          -- local ok, node = pcall(vim.treesitter.get_node, { pos = { row, check_col } })
+          -- if
+          --   ok
+          --   and node
+          --   and vim.tbl_contains({ 'comment', 'comment_content', 'line_comment', 'block_comment' }, node:type())
+          -- then
+          --   return default_sources
+          -- else
+          --   return { 'path', 'buffer' }
+          -- end
         end,
         per_filetype = {
           lua = { inherit_defaults = true, 'lazydev' },
@@ -125,7 +126,7 @@ return {
             },
           },
           snippets = {
-            score_offset = 20,
+            score_offset = 100,
             opts = { friendly_snippets = false },
             should_show_items = function(ctx)
               return ctx.trigger.initial_kind ~= 'trigger_character'
@@ -164,24 +165,22 @@ return {
               show_braces = false,
               show_documentation_window = true,
             },
-            should_show_items = function(ctx, _)
-              return trigger(ctx, '$')
-            end,
-            -- :for
+            -- should_show_items = function(ctx, _)
+            --   return trigger(ctx, '$')
+            -- end,
           },
           emoji = {
             module = 'blink-emoji',
             name = 'emoji',
             score_offset = 20,
-            should_show_items = function(ctx, _)
-              return trigger(ctx, ':')
-            end,
+            -- should_show_items = function(ctx, _)
+            --   return trigger(ctx, ':')
+            -- end,
           },
           lazydev = {
             name = 'LazyDev',
             module = 'lazydev.integrations.blink',
-            -- :scient
-            score_offset = 100, -- show at a higher priority than lsp
+            score_offset = 100,
           },
         },
       },

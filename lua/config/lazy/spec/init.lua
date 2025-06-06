@@ -1,52 +1,37 @@
-vim.g.lazyvim_check_order = false
+local lazy = vim.env.LAZY
+
+if lazy == '1' then
+  print('zzz')
+else
+  vim.g.lazyvim_check_order = false
+  vim.opt.rtp:append(vim.fn.stdpath('data') .. '/lazy/LazyVim/')
+  if lazy == '0' then
+    print('hacks')
+    local M = require('lazyvim.config')
+    M.setup(require('config.lazy.opts'))
+    -- M.setup()
+    M.init()
+  else
+    _G.LazyVim = require('lazyvim.util')
+  end
+  LazyVim.plugin.lazy_file()
+end
 
 return {
   {
     'LazyVim/LazyVim',
-    version = false,
-    ---@type LazyVimConfig
-    opts = {
-      defaults = {
-        autocmds = false,
-        keymaps = false,
-      },
-      news = {
-        lazyvim = true,
-        neovim = true,
-      },
-      icons = {
-        diagnostics = {
-          Error = '🔥',
-          Warn = '💩',
-          Hint = '🧠',
-          Info = '👾',
-        },
-      },
-    },
+    -- call setup ourselves in hacks
+    opts = require('config.lazy.opts'),
+    enabled = lazy ~= '0', -- true for nil or '1'; false for '0' (hack mode)
   },
-  {
-    'folke/tokyonight.nvim',
-    priority = 1001,
-    opts = {
-      style = 'night',
-      dim_inactive = true,
-      transparent = true,
-      styles = {
-        comments = { italic = true },
-        keywords = { italic = false, bold = true },
-        sidebars = 'transparent',
-        floats = 'transparent',
-      },
-      on_highlights = function(hl, _)
-        hl['Folded'] = { fg = '#7aa2f7', bg = '#16161d' }
-        hl['String'] = { fg = '#39ff14' }
-        hl['SpecialWindow'] = { bg = '#1f2335' }
-        -- hl['NormalFloat'] = { bg = '#1f2335' }
-        hl['SpellBad'] = { bg = '#ff0000' }
-        hl['CopilotSuggestion'] = { bg = '#414868', fg = '#7AA2F7' }
-      end,
-    },
-  },
+  { 'dense-analysis/ale' },
+  { 'lervag/vimtex' },
+  { 'tpope/vim-abolish' },
+  { 'tpope/vim-apathy' },
+  { 'tpope/vim-fugitive' },
+  { 'tpope/vim-repeat' },
+  { 'tpope/vim-surround' },
+  { 'tpope/vim-tbone' },
   {
     'folke/snacks.nvim',
     priority = 1000,
@@ -100,7 +85,7 @@ return {
           commands = { layout = { preset = 'ivy' } },
           files = { layout = { preset = 'sidebar' } },
           grep = { layout = { preset = 'ivy' }, follow = true, ignored = true },
-          help = { layout = { preset = 'vscode' } },
+          help = { layout = { preset = 'ivy_split' } },
           keymaps = { layout = { preset = 'ivy_split' }, confirm = 'edit' },
           notifications = { layout = { preset = 'ivy_split' }, confirm = 'edit' },
           pickers = { layout = { preset = 'vscode' } },
@@ -125,84 +110,5 @@ return {
         },
       },
     },
-  },
-  {
-    'folke/which-key.nvim',
-    ---@class wk_opts
-    opts = {
-      show_help = false,
-      keys = {
-        scroll_down = '<C-j>',
-        scroll_up = '<C-k>',
-      },
-      preset = 'helix',
-      sort = { 'order', 'case', 'alphanum', 'mod' },
-      spec = {
-        {
-          mode = { 'n' },
-          { '<localleader>l', group = '+vimtex' },
-          { '<localleader>r', group = '+R', icon = { icon = ' ', color = 'blue' } },
-
-          -- add icons for existing (vim) keymaps
-          { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
-          { '<leader>r', icon = { icon = ' ', color = 'azure' } },
-          { '<leader>v', icon = { icon = ' ', color = 'azure' } },
-          { '<leader>ft', icon = { icon = ' ', color = 'azure' } },
-          {
-            '<leader>b',
-            group = 'buffer',
-            expand = function()
-              return require('which-key.extras').expand.buf()
-            end,
-          },
-          {
-            '<c-w>',
-            group = 'windows',
-            expand = function()
-              return require('which-key.extras').expand.win()
-            end,
-          },
-          -- TODO: add unimpaired toggles
-          -- yob	'background' (dark is off, light is on)
-          -- yoc	'cursorline'
-          -- yod	'diff' (actually |:diffthis| / |:diffoff|)
-          -- yoh	'hlsearch'
-          -- yoi	'ignorecase'
-          -- yol	'list'
-          -- yon	'number'
-          -- yor	'relativenumber'
-          -- yos	'spell'
-          -- yot	'colorcolumn' ("+1" or last used value)
-          -- you	'cursorcolumn'
-          -- yov	'virtualedit'
-          -- yow	'wrap'
-          -- yox	'cursorline' 'cursorcolumn' (x as in crosshairs)
-        },
-        mode = { 'n', 'v' },
-        { '[', group = 'prev' },
-        { ']', group = 'next' },
-        { 'g', group = 'goto' },
-        { 'z', group = 'fold' },
-
-        -- better descriptions
-        { 'gx', desc = 'Open with system app' },
-
-        -- nvim lsp defaults
-        {
-          icon = { icon = ' ', color = 'orange' },
-          { 'gr', group = 'LSP' },
-          { 'gO' },
-        },
-
-        -- keep things tidy
-        { 'g~', hidden = true },
-        { 'gc', hidden = true },
-      },
-    },
-  },
-  {
-    'folke/persistence.nvim',
-    event = 'BufReadPre',
-    opts = {},
   },
 }

@@ -9,18 +9,18 @@ return {
         scroll_up = '<C-k>',
       },
       preset = 'helix',
-      sort = { 'order', 'case', 'alphanum', 'mod' },
+      sort = { 'order', 'alphanum', 'case', 'mod' },
       spec = {
         {
-          mode = { 'n' },
-          { '<localleader>l', group = '+vimtex' },
-          { '<localleader>r', group = '+R', icon = { icon = ' ', color = 'blue' } },
+          {
+            mode = { 'n', 'v' },
+            { '[', group = 'prev' },
+            { ']', group = 'next' },
+            { 'g', group = 'goto' },
+            { 'z', group = 'fold' },
+          },
 
-          -- add icons for existing (vim) keymaps
-          { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
-          { '<leader>r', icon = { icon = ' ', color = 'azure' } },
-          { '<leader>v', icon = { icon = ' ', color = 'azure' } },
-          { '<leader>ft', icon = { icon = ' ', color = 'azure' } },
+          mode = { 'n' },
           {
             '<leader>b',
             group = 'buffer',
@@ -35,6 +35,15 @@ return {
               return require('which-key.extras').expand.win()
             end,
           },
+          {
+            icon = { icon = ' ', color = 'green' },
+            { '<leader>r' },
+            { '<leader>v' },
+            { '<leader>ft', desc = 'filetype plugin' },
+            { '<leader>fs', desc = 'filetype snippets' },
+          },
+          { '<localleader>l', group = 'vimtex' },
+          { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
           -- TODO: add unimpaired toggles
           -- yob	'background' (dark is off, light is on)
           -- yoc	'cursorline'
@@ -51,25 +60,12 @@ return {
           -- yow	'wrap'
           -- yox	'cursorline' 'cursorcolumn' (x as in crosshairs)
         },
-        mode = { 'n', 'v' },
-        { '[', group = 'prev' },
-        { ']', group = 'next' },
-        { 'g', group = 'goto' },
-        { 'z', group = 'fold' },
-
-        -- better descriptions
-        { 'gx', desc = 'Open with system app' },
-
-        -- nvim lsp defaults
         {
-          icon = { icon = ' ', color = 'orange' },
-          { 'gr', group = 'LSP' },
-          { 'gO' },
+          hidden = true,
+          { 'g~' },
+          { 'g#' },
+          { 'g*' },
         },
-
-        -- keep things tidy
-        { 'g~', hidden = true },
-        { 'gc', hidden = true },
       },
     },
   },

@@ -6,6 +6,7 @@ else
   vim.opt.rtp:prepend(lazypath)
 end
 
+-- HACK: skip loading `LazyVim` options
 package.loaded['lazyvim.config.options'] = true
 
 local M = {}
@@ -16,21 +17,13 @@ function M.load(opts)
     spec = {
       {
         'LazyVim/LazyVim',
-        -- { import = 'lazyvim.plugins', cond = not vim.env.LAZY },
-        { import = 'lazyvim.plugins.init' },
+        {
+          import = 'lazyvim.plugins',
+          cond = vim.env.LAZY == '1', -- true only in strict LazyVim mode
+          -- TODO: disable plugins
+        },
       },
-      {
-        import = 'config.lazy.spec',
-      },
-      { 'dense-analysis/ale' },
-      { 'lervag/vimtex' },
-      { 'tpope/vim-abolish' },
-      { 'tpope/vim-apathy' },
-      { 'tpope/vim-fugitive' },
-      { 'tpope/vim-repeat' },
-      { 'tpope/vim-surround' },
-      { 'tpope/vim-tbone' },
-      { 'tpope/vim-unimpaired' },
+      { import = 'config.lazy.spec' },
     },
     rocks = { enabled = false },
     install = { colorscheme = { 'tokyonight' } },
