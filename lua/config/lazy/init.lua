@@ -1,25 +1,12 @@
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim/'
-
-if not vim.uv.fs_stat(lazypath) then
-  load(vim.fn.system('curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua'))()
-else
-  vim.opt.rtp:prepend(lazypath)
-end
-
--- HACK: skip loading `LazyVim` options
-package.loaded['lazyvim.config.options'] = true
-
 local M = {}
 
 ---@param opts LazyConfig
 function M.load(opts)
   opts = vim.tbl_deep_extend('force', {
     spec = {
-      {
-        'LazyVim/LazyVim',
-        { import = 'lazyvim.plugins', cond = vim.env.LAZY == '1' },
-        { import = 'lazyvim.plugins.coding', cond = vim.env.LAZY ~= '1' },
-      },
+      -- { dir = vim.fn.stdpath('config') .. '/lua/test.nvim', opts = {} },
+      { import = 'config.lazy.vim' },
+      { import = 'config.lazy.spec' },
       { 'dense-analysis/ale' },
       { 'lervag/vimtex' },
       { 'tpope/vim-abolish' },
@@ -27,8 +14,9 @@ function M.load(opts)
       { 'tpope/vim-fugitive' },
       { 'tpope/vim-repeat' },
       { 'tpope/vim-surround' },
+      { 'tpope/vim-scriptease' },
       { 'tpope/vim-tbone' },
-      { import = 'config.lazy.spec' },
+      { 'nvim-lua/plenary.nvim', lazy = true },
     },
     rocks = { enabled = false },
     install = { colorscheme = { 'tokyonight' } },
@@ -36,6 +24,7 @@ function M.load(opts)
     ui = { border = 'rounded' },
     performance = {
       rtp = {
+        paths = { vim.fn.stdpath('config') .. '/pack/tpope/start' },
         disabled_plugins = {
           'gzip',
           -- 'matchit',
@@ -49,7 +38,9 @@ function M.load(opts)
       },
     },
   }, opts or {})
+  ddd('lazy setup pre')
   require('lazy').setup(opts)
+  ddd('lazy setup post')
 end
 
 return M

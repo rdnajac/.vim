@@ -1,22 +1,149 @@
 print('au')
-local aug = function(aug)
-  vim.api.nvim_create_augroup('nvim_' .. aug, { clear = true })
+
+local group = vim.api.nvim_create_augroup('my_autocmds', { clear = true })
+
+--- @param event string|string[]
+--- @param pattern string|string[]
+--- @param callback function
+--- @param desc? string
+local au = function(event, pattern, callback, desc)
+  local opts = { group = group, pattern = pattern, callback = callback }
+
+  if desc then
+    opts.desc = desc
+  end
+  vim.api.nvim_create_autocmd(event, opts)
 end
 
-local audebug = function(ev)
+local db = function(ev)
   print(string.format('event fired: %s', vim.inspect(ev)))
 end
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-  group = aug('highlight_yank'),
-  callback = function()
-    (vim.hl or vim.highlight).on_yank()
+-- vim.api.nvim_create_autocmd('BufEnter', {
+--   callback = function(ev)
+--     audebug(ev)
+--   end,
+-- })
+
+au('TextYankPost', '*', function()
+  vim.hl.on_yank()
+end)
+
+au('FileType', { 'checkhealth', 'help', 'man', 'qf', 'tsplayground' }, function(ev)
+  vim.bo[ev.buf].buflisted = false
+  vim.schedule(function()
+    vim.keymap.set('n', 'q', function()
+      vim.cmd('close')
+      pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
+    end, {
+      buffer = ev.buf,
+      silent = true,
+      desc = 'Quit buffer',
+    })
+  end)
+end)
+
+au('FileType', { 'kitty', 'ghostty' }, function(event)
+  if require('nvim-treesitter.parsers').has_parser('bash') then
+    vim.treesitter.language.register('bash', event.match)
+    vim.treesitter.start(0, 'bash')
+  end
+end, 'Use bash parser for kitty and ghostty configs')
+
+au('FileType', { 'help', 'man', 'oil' }, function()
+  -- if Snacks.util.is_transparent() then
+  vim.cmd([[setlocal winhighlight=Normal:SpecialWindow]])
+  -- TODO: configure window
+  -- end
+end)
+
+-- Show relative numbers only when they matter (linewise and blockwise
+-- selection) and 'number' is set (avoids horizontal flickering)
+au('ModeChanged', '*:[V\x16]*', function()
+  vim.wo.relativenumber = vim.wo.number
+end, 'Show relative line numbers')
+
+-- Hide relative numbers when neither linewise/blockwise mode is on
+au('ModeChanged', '[V\x16]*:*', function()
+  vim.wo.relativenumber = string.find(vim.fn.mode(), '^[V\22]') ~= nil
+end, 'Hide relative line numbers')
+
+vim.api.nvim_create_autocmd('TermOpen', {
+  callback = function(args)
+    -- args.buf contains the buffer that triggered the autocmd
+    if vim.bo[args.buf].filetype == 'snacks_terminal' then
+      vim.g.ooze_channel = vim.bo[args.buf].channel
+      vim.g.ooze_buffer = vim.api.nvim_get_current_buf()
+      vim.g.ooze_send_on_enter = 1
+    end
   end,
-  desc = 'Highlight on yank',
+  desc = 'Capture the job ID (`channel`) of a newly opened Snacks terminal',
 })
 
-local cmd_group = vim.api.nvim_create_augroup('cmdline', { clear = true })
+-- Snacks.util.on_module('oil', function()
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'OilActionsPost',
+  callback = function(ev)
+    if ev.data.actions.type == 'move' then
+      Snacks.rename.on_rename_file(ev.data.actions.src_url, ev.data.actions.dest_url)
+    end
+  end,
+  desc = 'Snacks rename on Oil move',
+})
 
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'OilActionsPre',
+  callback = function(ev)
+    -- TODO: is this loop necessary?
+    for _, action in ipairs(ev.data.actions) do
+      if action.type == 'delete' then
+        local _, path = require('oil.util').parse_url(action.url)
+        Snacks.bufdelete({ file = path, force = true })
+      end
+    end
+  end,
+  desc = 'Delete buffer on Oil delete',
+})
+
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = 'oil://*',
+  callback = function(args)
+    local oil = require('oil')
+    local dir = oil.get_current_dir(args.buf)
+    if dir then
+      vim.cmd.lcd(dir)
+    end
+  end,
+  desc = 'Sync lcd with Oil directory on buffer enter',
+})
+
+-- end)
+
+-- vim.api.nvim_create_autocmd("LspProgress", {
+--   callback = function(ev)
+--     local value = ev.data.params.value -- lsp.ProgressParams.value
+--     local client = vim.lsp.get_client_by_id(ev.data.client_id)
+--     if not client or type(value) ~= "table" then return end
+--
+--     local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+--     local icon = value.kind == "end" and ""
+--       or spinner[math.floor(vim.uv.hrtime() / 8e7) % #spinner + 1]
+--
+--     local msg = string.format(
+--       "[%s] %s%s",
+--       client.name,
+--       value.title or "",
+--       value.message and (" - " .. value.message) or ""
+--     )
+--
+--     _G.lualine_lsp_progress = {
+--       msg = msg,
+--       icon = icon,
+--     }
+--   end,
+-- })
+
+local cmd_group = vim.api.nvim_create_augroup('cmdline', { clear = true })
 vim.api.nvim_create_autocmd('CmdlineEnter', {
   group = cmd_group,
   callback = function(args)
@@ -37,89 +164,9 @@ vim.api.nvim_create_autocmd('CmdlineEnter', {
   command = 'set laststatus=0',
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-  group = aug('close_with_q'),
-  pattern = {
-    'checkhealth',
-    'help',
-    'man',
-    'qf',
-    'tsplayground',
-  },
-  callback = function(event)
-    vim.bo[event.buf].buflisted = false
-    vim.schedule(function()
-      vim.keymap.set('n', 'q', function()
-        vim.cmd('close')
-        pcall(vim.api.nvim_buf_delete, event.buf, { force = true })
-      end, {
-        buffer = event.buf,
-        silent = true,
-        desc = 'Quit buffer',
-      })
-    end)
-  end,
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  group = vim.api.nvim_create_augroup('kitty', { clear = true }),
-  pattern = 'kitty',
-  callback = function()
-    if require('nvim-treesitter.parsers').has_parser('bash') then
-      vim.treesitter.language.register('bash', 'kitty')
-      vim.treesitter.start(0, 'bash')
-    end
-  end,
-  desc = 'Use bash parser for kitty config',
-})
-
-vim.api.nvim_create_autocmd('TermOpen', {
-  group = aug('ooze'),
-  callback = function(args)
-    -- args.buf contains the buffer that triggered the autocmd
-    if vim.bo[args.buf].filetype == 'snacks_terminal' then
-      vim.g.ooze_channel = vim.bo[args.buf].channel
-      vim.g.ooze_buffer = vim.api.nvim_get_current_buf()
-      vim.g.ooze_send_on_enter = 1
-    end
-  end,
-  desc = 'Capture the job ID (`channel`) of a newly opened Snacks terminal',
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  group = aug('winhl'),
-  pattern = { 'man', 'help' },
-  callback = function()
-    if Snacks.util.is_transparent() then
-      vim.cmd([[setlocal winhighlight=Normal:SpecialWindow]])
-      -- TODO: configure window
-    end
-  end,
-  desc = 'Set a bg color for certain filetypes',
-})
-
--- Snacks.util.on_module('oil', function()
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'OilActionsPost',
-  callback = function(event)
-    if event.data.actions.type == 'move' then
-      Snacks.rename.on_rename_file(event.data.actions.src_url, event.data.actions.dest_url)
-    end
-  end,
-  desc = 'Snacks rename on Oil move',
-})
-
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'OilActionsPre',
-  callback = function(event)
-    -- TODO: is this loop necessary?
-    for _, action in ipairs(event.data.actions) do
-      if action.type == 'delete' then
-        local _, path = require('oil.util').parse_url(action.url)
-        Snacks.bufdelete({ file = path, force = true })
-      end
-    end
-  end,
-  desc = 'Delete buffer on Oil delete',
-})
--- end)
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = { 'man' },
+--   callback = function(event)
+--     vim.bo[event.buf].buflisted = false
+--   end,
+-- })

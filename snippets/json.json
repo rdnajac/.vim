@@ -3,9 +3,9 @@
     "prefix": "snippet",
     "body": [
       "${1:snippet}: {\n",
-      "  \"prefix\": \"${1:snippet}\",\n",
-      "  \"body\": \"${0}\",\n",
-      "  \"description\": \"New snippet.\"\n",
+      "  \"prefix\": \"${1:snippet}\",",
+      "  \"body\": \"${0}\",",
+      "  \"description\": \"${2}\"",
       "}"
     ],
     "description": "new snippet"

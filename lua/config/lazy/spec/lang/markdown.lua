@@ -1,3 +1,14 @@
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('markdown', { clear = true }),
+  pattern = 'markdown',
+  callback = function()
+    vim.cmd([[
+      hi RenderMarkdownCode guibg=NONE
+      nmap <leader>k v:lua require('nvim.util.link').linkify()
+    ]])
+  end,
+})
+
 return {
   {
     'MeanderingProgrammer/render-markdown.nvim',

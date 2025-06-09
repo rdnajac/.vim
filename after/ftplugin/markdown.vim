@@ -6,11 +6,11 @@ if executable('prettier')
   let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
 endif
 
+setlocal formatoptions+=ro
+
 setlocal textwidth=80
 setlocal noautoindent
 setlocal conceallevel=1
-
-hi clear RenderMarkdownCode
 
 " treat quoted text as comments for easy toggling
 setlocal commentstring=>\ %s
@@ -35,14 +35,6 @@ inoremap <buffer> `$ ```console<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
-
-if has('nvim')
-  setlocal formatoptions+=ro
-  nmap <leader>k v:lua require('nvim.util.link').linkify()
-
-  finish
-endif
-let g:markdown_syntax_conceal = 1
-let g:markdown_folding        = 1
-
-call greek#setupmappings()
+" let g:markdown_syntax_conceal = 1
+" let g:markdown_folding        = 1
+" call greek#setupmappings()

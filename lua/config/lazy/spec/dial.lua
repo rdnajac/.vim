@@ -1,6 +1,6 @@
 return {
   'monaqa/dial.nvim',
-  { import = 'lazyvim.plugins.extras.editor.dial' },
+  import = 'lazyvim.plugins.extras.editor.dial',
   event = { 'InsertEnter' },
   init = function()
     vim.g.dials_by_ft = {

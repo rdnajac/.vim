@@ -5,18 +5,27 @@ vim.lsp.config('*', {
   ---@param client vim.lsp.Client
   ---@param bufnr integer
   on_attach = function(client, bufnr)
-    local opts = { buffer = bufnr }
-
-    if client:supports_method('textDocument/inlayHint') then
-      vim.lsp.inlay_hint.enable(true, opts)
-      Snacks.toggle.inlay_hints():map('<leader>uh')
-    end
+    -- Snacks.notify('Attaching: ' .. client.name .. '...')
 
     if client:supports_method('textDocument/documentSymbol') then
       require('nvim-navic').attach(client, bufnr)
     end
 
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    if client:supports_method('textDocument/inlayHint') then
+      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+      Snacks.toggle.inlay_hints():map('<leader>uh')
+    end
+
+    if client:supports_method('textDocument/codeLens') then
+      vim.lsp.codelens.refresh()
+      vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+        buffer = bufnr,
+        callback = vim.lsp.codelens.refresh,
+      })
+
+      client.server_capabilities.documentFormattingProvider = false
+
+      vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
     -- stylua: ignore
     require('which-key').add({
       icon = { icon = ' ', color = 'orange' },
@@ -30,16 +39,6 @@ vim.lsp.config('*', {
       { 'grs', function() Snacks.picker.lsp_symbols() end,           desc = 'LSP Symbols', buffer = bufnr },
       { 'grw', function() Snacks.picker.lsp_workspace_symbols() end, desc = 'LSP Workspace Symbols', buffer = bufnr },
     })
-
-    if client:supports_method('textDocument/codeLens') then
-      vim.lsp.codelens.refresh()
-      vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-        buffer = bufnr,
-        callback = vim.lsp.codelens.refresh,
-      })
-
-      client.server_capabilities.documentFormattingProvider = false
-      print('LSP attached: ' .. client.name)
     end
   end,
 })

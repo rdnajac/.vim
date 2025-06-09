@@ -1,8 +1,12 @@
+ddd('lazy/opts')
 ---@class LazyVimOptions
 return {
-  colorscheme = function()
-    require('nvim.colorscheme').init()
-  end,
+  -- colorscheme = function()
+  --   ddd('init colorscheme')
+  --   local colorscheme = require('config.lazy.spec.colorscheme').opts
+  --   -- vim.opt.rtp:append(vim.fn.stdpath('data') .. '/lazy/tokyonight.nvim/')
+  --   require('tokyonight').load(colorscheme)
+  -- end,
   defaults = {
     autocmds = false,
     keymaps = false,
@@ -12,32 +16,21 @@ return {
     neovim = false,
   },
   -- icons used by other plugins
-  -- stylua: ignore
   icons = {
-    misc = {
-      dots = "󰇘",
+    misc = { dots = '󰇘' },
+    ft = { octo = '' },
+    diagnostics = {
+      Error = '🔥',
+      Warn = '💩',
+      Hint = '🧠',
+      Info = '👾',
     },
-    ft = {
-      octo = "",
-    },
-    dap = {
-      Stopped             = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
-      Breakpoint          = " ",
-      BreakpointCondition = " ",
-      BreakpointRejected  = { " ", "DiagnosticError" },
-      LogPoint            = ".>",
-    },
-  diagnostics = {
-    Error = '🔥',
-    Warn = '💩',
-    Hint = '🧠',
-    Info = '👾',
-  },
     git = {
-      added    = " ",
-      modified = " ",
-      removed  = " ",
+      added = ' ',
+      modified = ' ',
+      removed = ' ',
     },
+    -- stylua: ignore
     kinds = {
       Array         = " ",
       Boolean       = "󰨙 ",

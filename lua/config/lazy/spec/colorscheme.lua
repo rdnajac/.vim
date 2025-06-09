@@ -1,4 +1,7 @@
-local M = {}
+local M = {
+  'folke/tokyonight.nvim',
+  -- dev = true,
+}
 
 ---@class tokyonight.Config
 M.opts = {
@@ -21,7 +24,9 @@ M.opts = {
   on_highlights = function(hl, colors)
     -- hl['Folded'] = { fg = colors.blue, bg = '#16161d' }
     hl['Folded'] = { fg = colors.blue }
+    -- hl['Special'] = { fg = 'NONE', bold = true }
     hl['SpecialWindow'] = { bg = '#1f2335' }
+    -- hl['EdgyNormal'] = { bg = '#1f2335' }
 
     -- hl['NormalFloat'] = { bg = '#1f2335' }
     hl['SpellBad'] = { bg = colors.red }
@@ -34,12 +39,5 @@ M.opts = {
     hl['RenderMarkdownCode'] = { bg = 'NONE' }
   end,
 }
-
-M.init = function()
-  print('init colorscheme')
-  local tokyonightpath = vim.fn.stdpath('data') .. '/lazy/tokyonight.nvim/'
-  vim.opt.rtp:append(tokyonightpath)
-  require('tokyonight').load(M.opts)
-end
 
 return M

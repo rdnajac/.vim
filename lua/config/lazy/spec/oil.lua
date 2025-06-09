@@ -1,19 +1,3 @@
-function _G.get_oil_winbar()
-  local bufnr = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-  local dir = require('oil').get_current_dir(bufnr)
-  if dir then
-    return vim.fn.fnamemodify(dir, ':~')
-  -- return LazyVim.lualine.pretty_path({
-  --   relative = 'root',
-  --   readonly_icon = '',
-  --   number = 4,
-  -- })
-  else
-    -- If there is no current directory (e.g. over ssh), just show the buffer name
-    return vim.api.nvim_buf_get_name(0)
-  end
-end
-
 local M = {}
 
 M.new_git_status = function()
@@ -49,22 +33,14 @@ end
 local git_status = M.new_git_status()
 local detail = 0
 
-return {
+---@type LazyPluginSpec
+M.spec = {
   'stevearc/oil.nvim',
   lazy = false,
-  -- stylua: ignore
   keys = {
-    {
-      '-',
-      function()
-        if vim.fn.winnr('$') == 1 then
-          vim.cmd('Oil --float')
-        else
-          vim.cmd('Oil')
-        end
-      end,
-      desc = 'Open Oil',
-    } },
+    { '-', '<Cmd>Oil<CR>' },
+    { '<leader>e', '<Cmd>vsplit | Oil<CR>' },
+  },
   opts = function()
     local refresh = require('oil.actions').refresh
     local orig_refresh = refresh.callback
@@ -76,15 +52,10 @@ return {
     ---@type oil.setupOpts
     return {
       default_file_explorer = true,
-      -- win_options = {},
-      -- delete_to_trash = true,
-      -- prompt_save_on_select_new_entry = false,
       skip_confirm_for_simple_edits = true,
       constrain_cursor = 'name',
       watch_for_changes = true,
       view_options = {
-        winbar = '%{%v:lua.get_oil_winbar()%}',
-        -- winbar = '%!v:lua.get_oil_winbar()',
 
         is_hidden_file = function(name, bufnr)
           local dir = require('oil').get_current_dir(bufnr)
@@ -141,7 +112,10 @@ return {
             end
           end,
         },
+        ['yf'] = { 'actions.yank_entry', mode = 'n'},
       },
     }
   end,
 }
+
+return M.spec

@@ -9,5 +9,11 @@
     "prefix": "ifef",
     "body": ["if !exists('g:${1}')", "  finish", "endif"],
     "description": "Global variable declaration"
+  },
+
+  "command": {
+    "prefix": "<Cmd>",
+    "body": "<Cmd>${0}<CR>",
+    "description": "Command call."
   }
 }

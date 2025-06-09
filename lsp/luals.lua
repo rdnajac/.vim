@@ -7,6 +7,11 @@ return {
   -- log_level = vim.lsp.protocol.MessageType.Warning,
   settings = {
     Lua = {
+      diagnostics = {
+        disable = {
+          'missing-fields',
+        },
+      },
       hover = {
         previewFields = 255,
       },

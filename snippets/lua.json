@@ -1,4 +1,8 @@
 {
+  "function": {
+    "prefix": "function",
+    "body": ["function${1: name}($2)", "\t${0}", "end"]
+  },
   "init": {
     "prefix": "init",
     "body": ["init = function()\n  ${0}\nend,"],
@@ -55,14 +59,6 @@
   "foreach": {
     "prefix": "foreach",
     "body": ["for i, ${1:x} in pairs(${2:table}) do", "\t$0", "end"]
-  },
-  "function": {
-    "prefix": "function",
-    "body": ["function ${1:name}($2)", "\t${0}", "end"]
-  },
-  "inline-function": {
-    "prefix": "lfu",
-    "body": ["local ${1:name} = function($2)", "\t${0}", "end"]
   },
   "print": {
     "prefix": "print",

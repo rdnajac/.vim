@@ -7,12 +7,16 @@ vim.opt.foldlevel = 99
 vim.opt.foldmethod = 'expr'
 vim.opt.foldtext = ''
 -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
-vim.opt.laststatus = 0
 vim.opt.mousescroll = 'hor:0'
 vim.opt.pumblend = 0
 vim.opt.signcolumn = 'yes'
 vim.opt.smoothscroll = true
 vim.opt.winborder = 'rounded'
+
+-- HACK: don't show lualine on dashboard
+if vim.fn.argc(-1) == 0 then
+  vim.opt.laststatus = 0
+end
 
 if vim.fn.has('nvim-0.12') == 1 then
   vim.opt.cmdheight = 0

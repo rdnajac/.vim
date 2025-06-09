@@ -12,9 +12,9 @@ let &spellfile = s:VIMHOME . '.spell/en.utf-8.add'
 " set backup
 set undofile undolevels=10000
 
-" set autochdir
 set autowrite
 set breakindent
+" set confirm
 set cursorline
 set fillchars+=diff:╱,
 set fillchars+=eob:\ ,
@@ -24,7 +24,7 @@ set fillchars+=foldopen:▾,
 set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
 set fillchars+=stl:\ ,
-set formatoptions-=o
+set formatoptions-=or
 set foldmethod=marker
 set foldopen+=insert,jump
 set ignorecase smartcase
@@ -33,8 +33,8 @@ set list
 set listchars=trail:¿,tab:→\ "
 set mouse=a
 set nowrap
-" set number relativenumber
-set numberwidth=2
+set number
+set numberwidth=3
 set pumheight=10
 set report=0
 set scrolloff=8
@@ -64,55 +64,52 @@ endif
 " }}}
 
 " § autocmds {{{1
-augroup FileTypeSettings " {{{
+augroup vimrc " {{{2
   autocmd!
-  autocmd FileType sh,zsh         setl sw=8 sts=8 noet wrap
-  autocmd FileType c              setl sw=8 sts=8 noet
-  autocmd FileType cpp,cuda       setl sw=4 sts=4
-  autocmd FileType json,toml,yaml setl sw=2 sts=2
-  autocmd FileType python         setl sw=4 sts=4
-  autocmd FileType r,rmd,quarto   setl sw=2 sts=2 kp=:Rhelp
-  autocmd FileType vim,lua        setl sw=2 sts=2 kp=:help
-  autocmd FileType tex            setl            fdm=syntax
+  autocmd BufReadPost $MYVIMRC call vim#vimrcmarks()
+  autocmd BufWritePost $MYVIMRC source $MYVIMRC | echom 'vimrc reloaded'
 augroup END
-" }}}
-augroup ConfigFileSettings " {{{
+
+augroup FileTypeSettings " {{{2
+  au!
+  au FileType sh,zsh           setl sw=8 sts=8 noet wrap nonu
+  au FileType c                setl sw=8 sts=8 noet
+  au FileType cpp,cuda         setl sw=4 sts=4
+  au FileType toml,yaml        setl sw=2 sts=2
+  au FileType python           setl sw=4 sts=4
+  au FileType r,rmd,quarto     setl sw=2 sts=2 kp=:Rhelp
+  au FileType vim,lua          setl sw=2 sts=2 kp=:help  nonu
+  au FileType tex              setl            fdm=syntax
+  au FileType json,jsonc,json5 setl sw=2 sts=2 conceallevel=0
+augroup END
+
+augroup ConfigFileSettings " {{{2
   autocmd!
   autocmd FileType tmux,sshconfig,mason setlocal iskeyword+=- | nnoremap <buffer> <C-Space> viW
 augroup END
-" }}}
-augroup RestoreCursorOpenFold " {{{
+
+augroup RestoreCursorOpenFold " {{{2
   autocmd!
   autocmd BufWinEnter * let line = line("'\"") |
 	\ if line >= 1 && line <= line("$") |
 	\   execute "silent! normal! g`\"zO" |
 	\ endif
 augroup END
-" }}}
-augroup NoCmdwin " {{{
-  autocmd!
-  autocmd CmdwinEnter * quit
-augroup END
-" }}}
-augroup AutoMkdir " {{{
-  autocmd!
-  autocmd BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
-augroup END
-" }}}
-augroup AutoReloadFile " {{{
+
+augroup AutoReloadFile " {{{2
   autocmd!
   autocmd FocusGained * if &buftype !=# 'nofile' | checktime | endif
   if has('nvim')
     autocmd TermClose,TermLeave * if &buftype !=# 'nofile' | checktime | endif
   endif
 augroup END
-" }}}
-augroup ResizeSplits " {{{
+
+augroup ResizeSplits " {{{2
   autocmd!
   autocmd VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
 augroup END
-" }}}
-augroup SetLocalPath " {{{
+
+augroup SetLocalPath " {{{2
   autocmd!
   let s:default_path = escape(&path, '\ ') " store default value of 'path'
 
@@ -125,14 +122,9 @@ augroup SetLocalPath " {{{
 	\ exec "set path^=" . s:tempPath |
 	\ exec "set path^=" . s:default_path
 augroup END
-augroup vimrc " {{{
-  autocmd!
-  " when we read $MYVIMRC, apply the marks from vim#vimrcmarks()
-  autocmd BufReadPost vimrc call vim#vimrcmarks()
-augroup END
 
-" }}}1
-
+aug NoCmdwin | au! | au CmdwinEnter * quit | aug END
+aug AutoMkdir | au! | au BufWritePre * call bin#mkdir#mkdir(expand('<afile>')) | aug END
 " § commands {{{1
 command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
@@ -140,7 +132,8 @@ command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 " current file
-command! CDC cd %:p:h
+command! CDC cd %:p:h <BAR> pwd
+nmap _ <Cmd>CDC<CR>
 " parent directory
 command! CDP cd %:p:h:h
 
@@ -155,16 +148,34 @@ vnoremap <C-r> <cmd>ReplaceSelection<CR>
 nnoremap Q <Cmd>call format#buffer()<CR>
 
 command! -range SendVisual <line1>,<line2>call ooze#sendvisual()
+
+if has('nvim')
+command! Chezmoi     :lua require('munchies.picker').chezmoi()
+command! Scriptnames :lua require('munchies.picker').scriptnames()
+" command! LazyHealth  :lua Lazy! load all <BAR> checkhealth<CR>
+
+" TODO: vim.api.nvim_create_autocmd('CmdlineEnter', {
+cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
+cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
+cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
+endif
+
+cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
 " }}}
 
 " § keymaps {{{1
 nnoremap ` ~
+" nnoremap ~ <Cmd>pwd<CR>
 
-nnoremap <leader>a :normal! ggVG<CR>
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
-nnoremap <leader>r <Cmd>source $MYVIMRC <Bar> echom 'Reloaded config!'<CR>
+
+nnoremap <leader>a :normal! ggVG<CR>
+nnoremap <leader>m <Cmd>messages<CR>
+" nnoremap <leader>r <Cmd>source $MYVIMRC <Bar> echom 'Reloaded config!'<CR>
+nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>v <Cmd>edit $MYVIMRC<CR>
+nnoremap <leader>e <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>
 
 nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/after/ftplugin/' . &ft . '.vim'<CR>
@@ -244,6 +255,19 @@ inoremap <silent> ,n <C-x><C-n>
 inoremap <silent> ,t <C-x><C-]>
 inoremap <silent> ,u <C-x><C-u>
 " }}}
+" insert special chars " {{{
+inoremap \sec §
+iabbrev n- –
+iabbrev m- —
+
+" toggles {{{
+nmap ~~ :set autochdir!<BAR>set autochdir?<CR>
+nmap ~w :set wrap!<BAR>set wrap?<CR>
+nmap ~s :set spell!<BAR>set wrap?<CR>
+nmap ~l :set list!<BAR>set list?<CR>
+nmap ~n :set number!<BAR>set number?<CR>
+" }}}
+
 " command-line {{{
 nnoremap ; :
 
@@ -260,6 +284,7 @@ command! Wqa wqa!
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 " }}}1
+
 
 if !has('nvim')
   let &undodir     = s:VIMHOME . '.undo//'
@@ -324,4 +349,4 @@ let g:ale_virtualtext_cursor = 'current'
 
 let g:rout_follow_colorscheme = v:true
 
-" vim: fdm=marker fdl=0
+" vim: fdm=marker fdl=1
