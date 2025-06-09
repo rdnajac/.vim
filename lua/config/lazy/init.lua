@@ -7,7 +7,7 @@ function M.load(opts)
       -- { dir = vim.fn.stdpath('config') .. '/lua/test.nvim', opts = {} },
       { import = 'config.lazy.vim' },
       { import = 'config.lazy.spec' },
-      { 'dense-analysis/ale' },
+      -- { 'dense-analysis/ale' },
       { 'lervag/vimtex' },
       { 'tpope/vim-abolish' },
       { 'tpope/vim-apathy' },
@@ -24,7 +24,7 @@ function M.load(opts)
     ui = { border = 'rounded' },
     performance = {
       rtp = {
-        paths = { vim.fn.stdpath('config') .. '/pack/tpope/start' },
+        -- paths = { vim.fn.stdpath('config') .. '/pack/tpope/start' },
         disabled_plugins = {
           'gzip',
           -- 'matchit',

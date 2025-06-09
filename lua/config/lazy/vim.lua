@@ -4,6 +4,9 @@ local lazy = vim.env.LAZY
 
 if lazy == '1' then
   print('zzz')
+  vim.g.autoformat = false
+  vim.g.lazyvim_picker = 'snacks'
+  vim.g.lazyvim_cmp = 'blink.cmp'
 else
   vim.g.lazyvim_check_order = false
   vim.opt.rtp:append(vim.fn.stdpath('data') .. '/lazy/LazyVim/')
@@ -17,6 +20,7 @@ else
   end
   LazyVim.plugin.lazy_file()
 end
+
 -- HACK: skip loading `LazyVim` options
 package.loaded['lazyvim.config.options'] = true
 

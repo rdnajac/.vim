@@ -1,5 +1,6 @@
 setlocal expandtab
-setlocal formatprg=stylua\ --search-parent-directories\ -
+" setlocal formatprg=stylua\ --search-parent-directories\ -
+let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
 
 setlocal formatoptions-=o
 

@@ -8,6 +8,18 @@ let s:VIMHOME = expand('$HOME/.config/vim//')
 let g:plug_home = s:VIMHOME . 'plugged//'
 let &spellfile = s:VIMHOME . '.spell/en.utf-8.add'
 
+if !has('nvim')
+  let &undodir     = s:VIMHOME . '.undo//'
+  let &viminfofile = s:VIMHOME . '.viminfo'
+  " let &verbosefile = s:VIMHOME . '.vimlog.txt'
+
+  " better escape
+  noremap jk <esc>
+  noremap kj <esc>
+
+  silent! color scheme
+endif
+
 " § settings {{{1
 " set backup
 set undofile undolevels=10000
@@ -33,6 +45,8 @@ set list
 set listchars=trail:¿,tab:→\ "
 set mouse=a
 set nowrap
+set noruler
+set laststatus=0
 set number
 set numberwidth=3
 set pumheight=10
@@ -66,8 +80,12 @@ endif
 " § autocmds {{{1
 augroup vimrc " {{{2
   autocmd!
-  autocmd BufReadPost $MYVIMRC call vim#vimrcmarks()
-  autocmd BufWritePost $MYVIMRC source $MYVIMRC | echom 'vimrc reloaded'
+  au BufReadPost $MYVIMRC call vim#vimrcmarks()
+  au CmdwinEnter * quit
+  au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
+  " au BufDelete * if winnr('$') == 1 && &filetype ==# 'snacks_terminal' | execute 'qa!' | endif
+  " au BufDelete * if len(filter(getbufinfo(), 'v:val.listed')) == 0 | execute 'qa!' | endif
+  au BufWritePost $MYVIMRC source $MYVIMRC | echom 'vimrc reloaded'
 augroup END
 
 augroup FileTypeSettings " {{{2
@@ -123,8 +141,6 @@ augroup SetLocalPath " {{{2
 	\ exec "set path^=" . s:default_path
 augroup END
 
-aug NoCmdwin | au! | au CmdwinEnter * quit | aug END
-aug AutoMkdir | au! | au BufWritePre * call bin#mkdir#mkdir(expand('<afile>')) | aug END
 " § commands {{{1
 command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
@@ -150,14 +166,15 @@ nnoremap Q <Cmd>call format#buffer()<CR>
 command! -range SendVisual <line1>,<line2>call ooze#sendvisual()
 
 if has('nvim')
-command! Chezmoi     :lua require('munchies.picker').chezmoi()
-command! Scriptnames :lua require('munchies.picker').scriptnames()
-" command! LazyHealth  :lua Lazy! load all <BAR> checkhealth<CR>
+  command! Chezmoi     :lua require('munchies.picker').chezmoi()
+  command! Plugins     :lua require('munchies.picker').plugins()
+  command! Scriptnames :lua require('munchies.picker').scriptnames()
+  " command! LazyHealth  :lua Lazy! load all <BAR> checkhealth<CR>
 
-" TODO: vim.api.nvim_create_autocmd('CmdlineEnter', {
-cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
-cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
-cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
+  " TODO: vim.api.nvim_create_autocmd('CmdlineEnter', {
+  cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
+  cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
+  cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
 endif
 
 cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
@@ -285,55 +302,53 @@ cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 " }}}1
 
+" key = vimscript plugin, value = also enabled in nvim
+let g:vim_plugins = {
+      \ 'christoomey/vim-tmux-navigator': 0,
+      \ 'dense-analysis/ale'            : 0,
+      \ 'github/copilot.vim'            : 0,
+      \ 'jiangmiao/auto-pairs'          : 0,
+      \ 'junegunn/fzf.vim'              : 0,
+      \ 'junegunn/vim-easy-align'       : 0,
+      \ 'lervag/vimtex'                 : 1,
+      \ 'tpope/vim-abolish'             : 1,
+      \ 'tpope/vim-apathy'              : 1,
+      \ 'tpope/vim-commentary'          : 0,
+      \ 'tpope/vim-endwise'             : 0,
+      \ 'tpope/vim-fugitive'            : 1,
+      \ 'tpope/vim-repeat'              : 1,
+      \ 'tpope/vim-scriptease'          : 1,
+      \ 'tpope/vim-sensible'            : 0,
+      \ 'tpope/vim-speeddating'         : 0,
+      \ 'tpope/vim-surround'            : 1,
+      \ 'tpope/vim-tbone'               : 1,
+      \ 'tpope/vim-unimpaired'          : 0,
+      \ 'tpope/vim-vinegar'             : 0,
+      \ 'vuciv/golf'                    : 0,
+      \ '~/GitHub/rdnajac/src/fzf/'     : 0,
+      \ }
 
-if !has('nvim')
-  let &undodir     = s:VIMHOME . '.undo//'
-  let &viminfofile = s:VIMHOME . '.viminfo'
-  " let &verbosefile = s:VIMHOME . '.vimlog.txt'
-
-  " better escape
-  noremap jk <esc>
-  noremap kj <esc>
-
-  silent! color scheme
-
-  call plug#begin()
-  " Plug 'rdnajac/after'
-  " Plug 'tpope/vim-sensible'
-  " Plug 'christoomey/vim-tmux-navigator'
-  " Plug 'tpope/vim-commentary'
-  " Plug 'tpope/vim-endwise'
-  " Plug 'tpope/vim-scriptease'
-  " Plug 'tpope/vim-speeddating'
-  " Plug 'tpope/vim-vinegar'
-  " Plug 'tpope/vim-unimpaired'
-  " Plug 'vuciv/golf'
-  " Plug 'github/copilot.vim'
-  " Plug 'junegunn/vim-easy-align'
-  " Plug 'junegunn/fzf.vim'
-  " Plug '~/GitHub/rdnajac/src/fzf/'
-  Plug 'dense-analysis/ale'
-  Plug 'lervag/vimtex',
-  Plug 'tpope/vim-abolish'
-  Plug 'tpope/vim-apathy'
-  Plug 'tpope/vim-fugitive'
-  Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-tbone'
-  Plug 'jiangmiao/auto-pairs'
-  call plug#end()
-else
+if has('nvim')
   if !exists('g:loaded_nvim')
     lua require('nvim')
     let g:loaded_nvim = 1
   endif
   let g:ale_disable_lsp = 1
   let g:ale_use_neovim_diagnostics_api = 1
+else
+  call plug#begin()
+  for [plugin, enabled] in items(g:vim_plugins)
+    if enabled
+      execute 'Plug' string(plugin)
+    endif
+  endfor
+  call plug#end()
 endif
 " }}}
 
 let g:copilot_workspace_folders = ['~/GitHub', '~/.local/share/chezmoi/']
 
+" ALE globals {{{1
 let g:ale_fixers = {
       \   '*': ['remove_trailing_lines', 'trim_whitespace'],
       \   'lua': ['stylua'],
@@ -346,7 +361,5 @@ let g:ale_linters = {
 let g:ale_linters_explicit = 1
 let g:ale_virtualtext_cursor = 'current'
 " let g:ale_set_highlights = 0
-
-let g:rout_follow_colorscheme = v:true
-
+" }}}
 " vim: fdm=marker fdl=1

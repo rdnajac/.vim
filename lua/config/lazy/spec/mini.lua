@@ -10,6 +10,7 @@ return {
       end
     end,
     config = function()
+      require('mini.align').setup({})
       require('mini.icons').setup({
         file = {
           ['.keep'] = { glyph = '󰊢', hl = 'MiniIconsGrey' },

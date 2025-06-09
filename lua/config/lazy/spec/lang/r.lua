@@ -5,10 +5,10 @@ return {
   },
   {
     'R-nvim/R.nvim',
-    -- event = 'LazyFile',
     event = 'VeryLazy',
-    -- init = function()
--- let g:rout_follow_colorscheme = v:true
+    init = function()
+      vim.g.rout_follow_colorscheme = true
+    end,
     ---@type RConfigUserOpts
     opts = {
       R_args = { '--quiet', '--no-save' },

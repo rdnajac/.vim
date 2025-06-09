@@ -1,4 +1,5 @@
 vim.lsp.enable('bash-language-server')
+
 return {
   {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
