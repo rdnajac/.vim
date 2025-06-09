@@ -84,7 +84,7 @@ vim.api.nvim_create_autocmd('User', {
     end
     require('nvim.diagnostic')
     require('nvim.lsp')
-    -- require('munchies')
+    require('munchies')
     vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
     vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
   end,

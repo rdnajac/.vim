@@ -28,6 +28,18 @@ local oil_ext = {
   filetypes = { 'oil' },
 }
 
+local snacks_terminal_ext = {
+  sections = {
+    lualine_a = {
+  function()
+    local chan = vim.b.terminal_job_id or "?"
+    return "term:" .. tostring(chan)
+  end,
+},
+  },
+  filetypes = { 'snacks_terminal' },
+}
+
 return {
   {
     'nvim-lualine/lualine.nvim',
@@ -43,8 +55,8 @@ return {
           -- globalstatus = vim.opt.laststatus == 3,
           globalstatus = true,
           disabled_filetypes = {
-            statusline = { 'help', 'man', 'snacks_dashboard' },
-            winbar = { 'lazy', 'mason', 'snacks_dashboard' },
+            statusline = { 'help', 'man', 'snacks_dashboard',  },
+            winbar = { 'lazy', 'mason', 'snacks_dashboard', 'snacks_terminal' },
           },
           section_separators = { left = '', right = '' },
           component_separators = { left = '', right = '' },
@@ -165,7 +177,7 @@ return {
             { 'location', padding = { left = 0, right = 1 } },
           },
         },
-        extensions = { 'fugitive', 'lazy', man_ext, 'mason', oil_ext },
+        extensions = { 'fugitive', 'lazy', man_ext, 'mason', oil_ext, snacks_terminal_ext },
       }
       return opts
     end,

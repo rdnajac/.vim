@@ -20,7 +20,7 @@ local function _create_flags()
 
   flag({
     name = 'ooze_send_on_enter',
-    default = 0,
+    default = 1,
     mapping = '<leader>t<CR>',
     desc = 'Toggle Send on Enter',
     label = 'Send Line',
@@ -91,7 +91,7 @@ M.setup = function()
     vim.cmd('call ooze#runfile()')
   end, {})
 
-  vim.keymap.set('n', ',<CR>', '<Cmd>RunFile<CR>', { silent = true })
+  vim.keymap.set('n', '<M-CR>', '<Cmd>RunFile<CR>', { silent = true })
   -- vim.keymap.set({'n', 't'}, '<C-\\>', snacks_terminal_toggle_or_open, { desc = 'Toggle Snacks Terminal' })
 end
 

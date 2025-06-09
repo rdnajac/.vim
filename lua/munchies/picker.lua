@@ -97,4 +97,37 @@ M.hardway = {
   end,
 }
 
+local lazypath_items = function()
+  local path = vim.fn.stdpath('data') .. '/lazy'
+  local dirs = vim.fn.glob(path .. '/*', true, true)
+  local items = {}
+
+  for _, dir in ipairs(dirs) do
+    if vim.fn.isdirectory(dir) == 1 then
+      table.insert(items, {
+        text = vim.fn.fnamemodify(dir, ':t'),
+        file = dir,
+        item = dir,
+      })
+    end
+  end
+
+  return items
+end
+
+M.plugins = function()
+  Snacks.picker.pick({
+    title = 'Lazy Plugins',
+    items = lazypath_items(),
+    format = function(item)
+      return { { item.text } }
+    end,
+    confirm = function(_, item)
+      Snacks.picker.files({
+        cwd = item.item,
+      })
+    end,
+  })
+end
+
 return M
