@@ -4,5 +4,6 @@
 *vimlog.txt
 **vim/pack
 **/*netrwhist
-plugged
 pack
+plugged
+**/*repro

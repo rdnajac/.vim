@@ -12,8 +12,7 @@ end
 vim.opt.runtimepath:prepend(lazypath)
 
 local plugins = {
-  'folke/tokyonight.nvim',
-  'folke/LazyVim',
+  { 'LazyVim/LazyVim', import = 'lazyvim.plugins' },
   -- add any other plugins here
 }
 require('lazy').setup(plugins, {
