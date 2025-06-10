@@ -1,6 +1,3 @@
-" comment-out and duplicate line
-nmap yc "xyygcc"xp
-
 " surround shortcuts
 vmap `  S`
 vmap b  Sb

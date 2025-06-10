@@ -190,6 +190,7 @@ nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>v <Cmd>edit $MYVIMRC<CR>
 nnoremap <leader>e <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>
+nnoremap <leader>> <Cmd>edit #<CR>
 
 nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/after/ftplugin/' . &ft . '.vim'<CR>
 nnoremap <leader>fs <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/snippets/' . &ft . '.json'<CR>
@@ -241,7 +242,13 @@ nnoremap *  *zzzv
 nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
-" }}}
+
+" comments {{{
+" comment-out and duplicate line
+nmap yc "xyygcc"xp
+
+" toggle visual selection
+vmap ~ gc
 
 " better indenting {{{
 vnoremap < <gv
