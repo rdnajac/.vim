@@ -1,6 +1,7 @@
 return {
   'folke/noice.nvim',
   event = 'VeryLazy',
+  ---@class NoiceConfig
   opts = {
     cmdline = {
       enabled = true,

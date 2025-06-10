@@ -11,6 +11,16 @@ return {
     end,
     config = function()
       require('mini.align').setup({})
+      require('mini.diff').setup({
+        view = {
+          style = 'sign',
+          signs = {
+            add = '▎',
+            change = '▎',
+            delete = '',
+          },
+        },
+      })
       require('mini.icons').setup({
         file = {
           ['.keep'] = { glyph = '󰊢', hl = 'MiniIconsGrey' },
@@ -33,6 +43,33 @@ return {
           dotenv = { glyph = '', hl = 'MiniIconsYellow' },
         },
       })
+
+      Snacks.toggle({
+        name = 'Mini Diff Signs',
+        get = function()
+          return vim.g.minidiff_disable ~= true
+        end,
+        set = function(state)
+          vim.g.minidiff_disable = not state
+          if state then
+            require('mini.diff').enable(0)
+          else
+            require('mini.diff').disable(0)
+          end
+          vim.defer_fn(function()
+            vim.cmd([[redraw!]])
+          end, 200)
+        end,
+      }):map('<leader>uG')
     end,
+    keys = {
+      {
+        '<leader>go',
+        function()
+          require('mini.diff').toggle_overlay(0)
+        end,
+        desc = 'Toggle mini.diff overlay',
+      },
+    },
   },
 }

@@ -154,11 +154,23 @@ return {
           },
 
           lualine_x = {
-          -- stylua: ignore
             {
-              function() return require('noice').api.status.command.get() end,
-              cond = function() return package.loaded['noice'] and require('noice').api.status.command.has() end,
-              color = function() return { fg = Snacks.util.color('Statement') } end,
+              -- require('noice').api.status.mode.get,
+              function()
+                local val = require('noice').api.statusline.mode.get()
+                return val:match('^recording @.+') and val or ''
+              end,
+              cond = require('noice').api.status.mode.has,
+              color = function()
+                return { fg = Snacks.util.color('Statement') }
+              end,
+            },
+            {
+              require('noice').api.status.command.get,
+              cond = require('noice').api.status.command.has,
+              color = function()
+                return { fg = Snacks.util.color('Statement') }
+              end,
             },
             {
               function()
@@ -212,7 +224,8 @@ return {
       }
     end,
   },
-  { import = 'lazyvim.plugins.extras.editor.mini-diff' },
+  -- { import = 'config.lazy.spec.ui.edgy' },
+  { import = 'config.lazy.spec.ui.noice' },
   { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
   -- { import = 'lazyvim.plugins.extras.ui.treesitter-context' },
 
@@ -285,9 +298,5 @@ return {
       end
       return opts
     end,
-  },
-  {
-    'folke/noice.nvim',
-    lazy = true,
   },
 }
