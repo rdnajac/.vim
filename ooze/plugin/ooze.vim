@@ -5,3 +5,5 @@ let g:loaded_ooze = 1
 
 
 command! -range=% OozeVisual call ooze#visual()
+
+lua require('ooze').setup()
