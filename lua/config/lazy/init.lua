@@ -4,9 +4,8 @@ local M = {}
 function M.load(opts)
   opts = vim.tbl_deep_extend('force', {
     spec = {
-      -- { dir = vim.fn.stdpath('config') .. '/ooze', lazy=false },
-      { import = 'config.lazy.vim' },
       { import = 'config.lazy.spec' },
+      { dir = vim.fn.stdpath('config') .. '/ooze', lazy=false },
       { 'nvim-lua/plenary.nvim', lazy = true },
     },
     rocks = { enabled = false },

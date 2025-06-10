@@ -1,2 +1,2 @@
 -- require('munchies.spinner')
-require('munchies.terminal').setup()
+-- require('munchies.terminal').setup()
