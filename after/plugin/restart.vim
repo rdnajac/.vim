@@ -7,8 +7,11 @@ if has('nvim')
     autocmd!
     autocmd VimEnter * if filereadable(s:sesh) |
 	  \ execute 'source ' . s:sesh |
-          \ call timer_start(1, { -> execute('edit') }) |
+	  \ if filereadable(expand('%')) |
+	  \   call timer_start(1, { -> execute('edit') }) |
+	  \ endif |
 	  \ call delete(s:sesh) |
 	  \ endif
   augroup END
+
 endif

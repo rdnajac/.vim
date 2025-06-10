@@ -110,38 +110,13 @@ vim.api.nvim_create_autocmd('BufEnter', {
   callback = function(args)
     local oil = require('oil')
     local dir = oil.get_current_dir(args.buf)
-    if dir then
+    -- if dir and dir exists
+    if dir and vim.fn.isdirectory(dir) == 1 then
       vim.cmd.lcd(dir)
     end
   end,
   desc = 'Sync lcd with Oil directory on buffer enter',
 })
-
--- end)
-
--- vim.api.nvim_create_autocmd("LspProgress", {
---   callback = function(ev)
---     local value = ev.data.params.value -- lsp.ProgressParams.value
---     local client = vim.lsp.get_client_by_id(ev.data.client_id)
---     if not client or type(value) ~= "table" then return end
---
---     local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
---     local icon = value.kind == "end" and ""
---       or spinner[math.floor(vim.uv.hrtime() / 8e7) % #spinner + 1]
---
---     local msg = string.format(
---       "[%s] %s%s",
---       client.name,
---       value.title or "",
---       value.message and (" - " .. value.message) or ""
---     )
---
---     _G.lualine_lsp_progress = {
---       msg = msg,
---       icon = icon,
---     }
---   end,
--- })
 
 local cmd_group = vim.api.nvim_create_augroup('cmdline', { clear = true })
 vim.api.nvim_create_autocmd('CmdlineEnter', {

@@ -4,8 +4,9 @@ scriptencoding=utf-8
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 
+" § settings {{{2
 let s:VIMHOME = expand('$HOME/.config/vim//')
-let g:plug_home = s:VIMHOME . 'plugged//'
+let g:plug_home = s:VIMHOME . './plugged//'
 let &spellfile = s:VIMHOME . '.spell/en.utf-8.add'
 
 if !has('nvim')
@@ -18,25 +19,30 @@ if !has('nvim')
   noremap kj <esc>
 
   silent! color scheme
+
+  if system('uname') =~? '^darwin'
+    set clipboard=unnamed
+  else
+    set clipboard=unnamedplus
+  endif
 endif
 
-" § settings {{{1
+" options {{{
 " set backup
 set undofile undolevels=10000
-
 set autowrite
 set breakindent
 " set confirm
 set cursorline
 set fillchars+=diff:╱,
-set fillchars+=eob:\ ,
-set fillchars+=fold:\ ,
-set fillchars+=foldclose:▸,
-set fillchars+=foldopen:▾,
-set fillchars+=foldsep:\ ,
-set fillchars+=foldsep:│
+  set fillchars+=eob:\ ,
+  set fillchars+=fold:\ ,
+  set fillchars+=foldclose:▸,
+  set fillchars+=foldopen:▾,
+  set fillchars+=foldsep:\ ,
+  set fillchars+=foldsep:│
 set fillchars+=stl:\ ,
-set formatoptions-=or
+  set formatoptions-=or
 set foldmethod=marker
 set foldopen+=insert,jump
 set ignorecase smartcase
@@ -67,15 +73,7 @@ set signcolumn=yes
 set completeopt=menu,preview,preinsert,longest
 " set completeopt=menu,preview,longest
 set wildmode=longest:full,full
-
-if system('uname') =~? '^darwin'
-  if !has('nvim')
-    set clipboard=unnamed
-  else
-    set clipboard=unnamedplus
-  endif
-endif
-" }}}
+" }}}2
 
 " § autocmds {{{1
 augroup vimrc " {{{2
@@ -149,7 +147,6 @@ command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-
 
 " current file
 command! CDC cd %:p:h <BAR> pwd
-nmap _ <Cmd>CDC<CR>
 " parent directory
 command! CDP cd %:p:h:h
 
@@ -178,7 +175,6 @@ if has('nvim')
 endif
 
 cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
-" }}}
 
 " § keymaps {{{1
 nnoremap ` ~
@@ -300,8 +296,9 @@ command! Wqa wqa!
 " wildmenu
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
-" }}}1
 
+
+" § plugins {{{1
 " key = vimscript plugin, value = also enabled in nvim
 let g:vim_plugins = {
       \ 'christoomey/vim-tmux-navigator': 0,
@@ -337,10 +334,8 @@ if has('nvim')
   let g:ale_use_neovim_diagnostics_api = 1
 else
   call plug#begin()
-  for [plugin, enabled] in items(g:vim_plugins)
-    if enabled
-      execute 'Plug' string(plugin)
-    endif
+  for [plugin, _] in items(g:vim_plugins)
+    execute 'Plug' string(plugin)
   endfor
   call plug#end()
 endif

@@ -21,7 +21,14 @@ function M.load(opts)
     rocks = { enabled = false },
     install = { colorscheme = { 'tokyonight' } },
     change_detection = { notify = false },
-    ui = { border = 'rounded' },
+    ui = {
+      border = 'rounded',
+      custom_keys = {
+        ['<localleader>d'] = function(plugin)
+          dd(plugin)
+        end,
+      },
+    },
     performance = {
       rtp = {
         -- paths = { vim.fn.stdpath('config') .. '/pack/tpope/start' },

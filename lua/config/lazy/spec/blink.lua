@@ -34,6 +34,7 @@ return {
 
     ---@type blink.cmp.Config
     return {
+      fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
       signature = { enabled = true },
       cmdline = { enabled = false },
       completion = {
@@ -53,13 +54,16 @@ return {
           },
         },
       },
-      -- stylua: ignore
       keymap = {
         ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
         ['<C-e>'] = { 'hide', 'fallback' },
         ['<Tab>'] = {
           function(cmp)
-            return cmp.snippet_active() and false or cmp.select_and_accept()
+            if cmp.snippet_active() then
+              return cmp.accept()
+            else
+              return cmp.select_and_accept()
+            end
           end,
           'snippet_forward',
           'fallback',
@@ -94,7 +98,7 @@ return {
       },
       sources = {
         default = function()
-          local default_sources = { 'lsp', 'buffer', 'snippets', 'path', 'emoji', 'copilot' }
+          local default_sources = { 'lsp', 'snippets', 'path', 'emoji', 'copilot' }
           return default_sources
           -- local row, col = unpack(vim.api.nvim_win_get_cursor(0))
           -- row = row - 1
@@ -113,6 +117,7 @@ return {
         per_filetype = {
           lua = { inherit_defaults = true, 'lazydev' },
           sh = { inherit_defaults = true, 'tmux', 'env' },
+          oil = {},
         },
         -- min_keyword_length = 3,
         providers = {
@@ -140,10 +145,11 @@ return {
             opts = { max_completions = 5 },
           },
           lsp = {
+            score_offset = 1,
             transform_items = function(_, items)
               return vim.tbl_filter(function(item)
                 return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-                  and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
+                -- and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
               end, items)
             end,
           },

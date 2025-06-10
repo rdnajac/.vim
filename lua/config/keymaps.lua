@@ -106,6 +106,7 @@ wk.add({
   { '<leader>u', group = 'ui', icon = { icon = '󰙵 ', color = 'cyan' } },
   { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes', icon = { icon = ' ', color = 'yellow' }, },
   { '<leader>ui', function() vim.show_pos() end, desc = 'Inspect Pos' },
+  { '<leader>uI', function() vim.treesitter.inspect_tree() vim.api.nvim_input('I') end, { desc = 'Inspect Tree' }},
   { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss Notifications' },
   { '<leader>ur', '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>', desc = 'Redraw/Clear/Diff' },
   { '<leader>uz', function() Snacks.zen() end, desc = 'Zen Mode', icon = { icon = ' ', color = 'blue' }, },
@@ -211,8 +212,8 @@ end, { desc = 'Change Directory' })
 
 vim.keymap.set('n', '<leader>q', function()
   if #vim.fn.getbufinfo({ buflisted = 1 }) > 1 then
-    vim.cmd('bdelete')
-    -- Snacks.bufdelete()
+    -- vim.cmd('bdelete')
+    Snacks.bufdelete()
   else
     vim.cmd('quit')
   end

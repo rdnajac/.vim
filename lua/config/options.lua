@@ -2,6 +2,7 @@ print('op')
 vim.opt.backup = false
 vim.opt.backupdir = vim.fn.stdpath('state') .. '/backup//'
 vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
+vim.opt.cmdheight = 0
 vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
 vim.opt.foldlevel = 99
 vim.opt.foldmethod = 'expr'
@@ -18,12 +19,11 @@ if vim.fn.argc(-1) == 0 then
   vim.opt.laststatus = 0
 end
 
-if vim.fn.has('nvim-0.12') == 1 then
-  vim.opt.cmdheight = 0
-  require('vim._extui').enable({
-    msg = {
-      pos = 'box',
-      box = { timeout = 2000 },
-    },
-  })
-end
+-- if vim.fn.has('nvim-0.12') == 1 then
+--   require('vim._extui').enable({
+--     msg = {
+--       pos = 'box',
+--       box = { timeout = 2000 },
+--     },
+--   })
+-- end

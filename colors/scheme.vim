@@ -173,6 +173,11 @@ call s:Highlight('Added', s:green1, s:tokyonight, '')
 call s:Highlight('Changed', s:yellow, s:eigengrau, '')
 call s:Highlight('Removed', s:red, s:tokyonight, '')
 
+" =============================================================================
+" Highlighting groups for VimL
+" =============================================================================
+call s:Highlight('vimFuncSID', s:blue, 'NONE', '')
+
 
 " =============================================================================
 " Terminal Colors
