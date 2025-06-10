@@ -16,7 +16,14 @@ local man_ext = {
 
 local oil_ext = {
   winbar = {
-    lualine_a = {
+    -- lualine_a = {
+    --   {
+    --     function()
+    --       return '🧪'
+    --     end,
+    --   },
+    -- },
+    lualine_b = {
       function()
         local oildir = require('oil').get_current_dir()
         if oildir then
@@ -31,11 +38,11 @@ local oil_ext = {
 local snacks_terminal_ext = {
   sections = {
     lualine_a = {
-  function()
-    local chan = vim.b.terminal_job_id or "?"
-    return "term:" .. tostring(chan)
-  end,
-},
+      function()
+        local chan = vim.b.terminal_job_id or '?'
+        return 'term channel: ' .. tostring(chan)
+      end,
+    },
   },
   filetypes = { 'snacks_terminal' },
 }
@@ -52,10 +59,9 @@ return {
       local opts = {
         options = {
           theme = 'auto',
-          -- globalstatus = vim.opt.laststatus == 3,
           globalstatus = true,
           disabled_filetypes = {
-            statusline = { 'help', 'man', 'snacks_dashboard',  },
+            statusline = { 'help', 'man', 'snacks_dashboard' },
             winbar = { 'lazy', 'mason', 'snacks_dashboard', 'snacks_terminal' },
           },
           section_separators = { left = '', right = '' },
@@ -73,9 +79,9 @@ return {
                 return icon .. (name and (name .. '/') or '')
               end,
               cond = function()
-                local cwd = LazyVim.root.cwd()
+                local cwd = vim.fn.getcwd()
                 local root = LazyVim.root.get({ normalize = true })
-                return (root ~= cwd and (root:find(cwd, 1, true) == 1 or cwd:find(root, 1, true) == 1 or true))
+                return cwd:find(root, 1, true) == 1
               end,
               color = function()
                 return { fg = '#000000', bold = true }
@@ -96,12 +102,23 @@ return {
           },
           lualine_c = { { 'navic', color_correction = 'dynamic' } },
 
+          lualine_y = {
+            {
+              'diagnostics',
+              symbols = {
+                error = icons.diagnostics.Error,
+                warn = icons.diagnostics.Warn,
+                info = icons.diagnostics.Info,
+                hint = icons.diagnostics.Hint,
+              },
+            },
+          },
           lualine_z = {
             Snacks.profiler.status(),
             { -- display the number of plugins that have pending updates
               function()
                 if require('lazy.status').has_updates() then
-                  return require('lazy.status').updates() .. ' ' .. zzz
+                  return require('lazy.status').updates() .. ' 󰒲 '
                 end
                 return ''
               end,
@@ -118,7 +135,7 @@ return {
                 return vim.fn.fnamemodify(vim.fn.getcwd(), ':~')
               end,
             },
-            { 'branch' },
+            -- { 'branch' },
           },
           lualine_c = {
             {
@@ -137,14 +154,11 @@ return {
           },
 
           lualine_x = {
+          -- stylua: ignore
             {
-              'diagnostics',
-              symbols = {
-                error = icons.diagnostics.Error,
-                warn = icons.diagnostics.Warn,
-                info = icons.diagnostics.Info,
-                hint = icons.diagnostics.Hint,
-              },
+              function() return require('noice').api.status.command.get() end,
+              cond = function() return package.loaded['noice'] and require('noice').api.status.command.has() end,
+              color = function() return { fg = Snacks.util.color('Statement') } end,
             },
             {
               function()
@@ -271,5 +285,9 @@ return {
       end
       return opts
     end,
+  },
+  {
+    'folke/noice.nvim',
+    lazy = true,
   },
 }
