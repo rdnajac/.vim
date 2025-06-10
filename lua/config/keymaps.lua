@@ -65,7 +65,14 @@ wk.add({
   -- TODO: Zoxide picker in oil
 })
 
--- stylua: ignore start
+wk.add({
+  { '<leader>l', group = 'Lazy' },
+  { '<leader>ll', '<Cmd>Lazy<CR>', desc = 'Lazy' },
+  { '<leader>lx', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
+  -- TODO: map lazy configs
+})
+
+-- stylua: ignore
 wk.add({
   { 'gL', function() require('util.togo').lazy() end, desc = 'Goto LazyVim module' },
   { 'gx', function() require('util.togo').gx() end, desc = 'Open with system app' },
@@ -118,8 +125,6 @@ wk.add({
 wk.add({
   { '<localleader>p', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec', },
 
-  { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-  { '<leader>L', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
   { '<leader>R', '<Cmd>Restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
   { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
   { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },
@@ -136,7 +141,7 @@ wk.add({
   { '<leader>pD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Buffer Diagnostics', },
   { '<leader>pa', function() Snacks.picker.autocmds() end, desc = 'Autocmds', },
   { '<leader>pc', function() Snacks.picker.commands() end, desc = 'Commands', },
-  { '<leader>pC', function() Snacks.picker.command_history() end, desc = 'Command History', },
+  { '<leader>p:', function() Snacks.picker.command_history() end, desc = 'Command History', },
   { '<leader>pd', function() Snacks.picker.diagnostics() end, desc = 'Diagnostics', },
   { '<leader>ph', function() Snacks.picker.highlights() end, desc = 'Highlights', },
   { '<leader>pi', function() Snacks.picker.icons() end, desc = 'Icons', },
@@ -155,45 +160,54 @@ wk.add({
 
 local function insert_comment(lhs, text)
   local above = lhs:sub(-1) == lhs:sub(-1):upper()
-  local dir = above and "above" or "below"
-  local prefix = above and "O" or "o"
-  local cmd = string.format("%s<Esc>Vc%s¿<Esc>:normal gcc<CR>A<BS>", prefix, text)
-  local description = ("Insert %s (%s)"):format(text ~= "" and text or "comment", dir) 
+  local dir = above and 'above' or 'below'
+  local prefix = above and 'O' or 'o'
+  local cmd = string.format('%s<Esc>Vc%s¿<Esc>:normal gcc<CR>A<BS>', prefix, text and text .. ': ' or '')
+  local description = ('Insert %s (%s)'):format(text ~= '' and text or 'comment', dir)
 
-  return { lhs, cmd, desc = description, silent = true, }
+  return { lhs, cmd, desc = description, silent = true }
 end
 
 wk.add({
-{ 'gc', group = 'comments' },
-  insert_comment("gco", ""),
-  insert_comment("gcO", ""),
-  insert_comment("gct", "TODO"),
-  insert_comment("gcT", "TODO"),
-  insert_comment("gcf", "FIXME"),
-  insert_comment("gcF", "FIXME"),
+  { 'gc', group = 'comments' },
+  insert_comment('gco', ''),
+  insert_comment('gcO', ''),
+  insert_comment('gct', 'TODO'),
+  insert_comment('gcT', 'TODO'),
+  insert_comment('gcf', 'FIXME'),
+  insert_comment('gcF', 'FIXME'),
+  insert_comment('gch', 'HACK'),
+  insert_comment('gcH', 'HACK'),
+  insert_comment('gcb', 'BUG'),
+  insert_comment('gcB', 'BUG'),
 })
 
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
 
-Snacks.toggle.option('showtabline', {
-  off = 0, on = vim.o.showtabline > 0 and vim.o.showtabline or 2, name = 'Tabline'
-}):map('<leader>uA')
+Snacks.toggle
+  .option('showtabline', {
+    off = 0,
+    on = vim.o.showtabline > 0 and vim.o.showtabline or 2,
+    name = 'Tabline',
+  })
+  :map('<leader>uA')
 
-Snacks.toggle.option('conceallevel', {
-  off = 0, on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2, name = 'Conceal Level'
-}):map('<leader>uc')
-
--- Snacks.toggle.option('laststatus', { off = 0, on = 3 }):map('<leader>uu')
+Snacks.toggle
+  .option('conceallevel', {
+    off = 0,
+    on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2,
+    name = 'Conceal Level',
+  })
+  :map('<leader>uc')
 
 Snacks.toggle.animate():map('<leader>ua')
 Snacks.toggle.diagnostics():map('<leader>ud')
 Snacks.toggle.dim():map('<leader>uD')
--- Snacks.toggle.line_number():map('<leader>ul')
-Snacks.toggle.treesitter():map('<leader>uT')
+Snacks.toggle.treesitter():map('<leader>ut')
 Snacks.toggle.indent():map('<leader>ug')
-Snacks.toggle.scroll():map('<leader>uS')
-Snacks.toggle.words():map('<leader>uW')
+Snacks.toggle.scroll():map('<leader>us')
+Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
 
 -- Custom toggles
