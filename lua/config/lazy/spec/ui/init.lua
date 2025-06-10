@@ -16,13 +16,7 @@ local man_ext = {
 
 local oil_ext = {
   winbar = {
-    -- lualine_a = {
-    --   {
-    --     function()
-    --       return '🧪'
-    --     end,
-    --   },
-    -- },
+    -- lualine_a = { { function() return '🧪' end, }, },
     lualine_b = {
       function()
         local oildir = require('oil').get_current_dir()
@@ -52,7 +46,6 @@ return {
     'nvim-lualine/lualine.nvim',
     event = { 'LazyFile', 'VeryLazy' },
     opts = function()
-      vim.opt.laststatus = 3
       -- PERF: we don't need this lualine require madness 🤷
       local lualine_require = require('lualine_require')
       lualine_require.require = require
@@ -140,6 +133,11 @@ return {
           lualine_c = {
             {
               'diff',
+              symbols = {
+                added = icons.git.added,
+                modified = icons.git.modified,
+                removed = icons.git.removed,
+              },
               source = function()
                 local summary = vim.b.minidiff_summary
                 return summary

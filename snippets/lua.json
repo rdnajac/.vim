@@ -3,87 +3,104 @@
     "prefix": "function",
     "body": ["function${1: name}($2)", "\t${0}", "end"]
   },
+
+  "module": {
+    "prefix": "local M",
+    "body": [
+      "local M = {}\n",
+      "$0\n",
+      "return M"
+    ],
+    "description": "Module skeleton"
+  },
+
   "init": {
     "prefix": "init",
-    "body": ["init = function()\n  ${0}\nend,"],
+    "body": [
+      "init = function()",
+      "  ${0}",
+      "end,"
+    ],
     "description": "lazy spec init"
   },
-  "init": {
+
+  "config": {
     "prefix": "config",
-    "body": ["init = function()\n  ${0}\nend,"],
-    "description": "lazy spec init"
+    "body": [
+      "config = function()",
+      "  ${0}",
+      "end,"
+    ],
+    "description": "lazy spec config"
   },
+
+  "keys": {
+    "prefix": "keys",
+    "body": [
+      "keys = {",
+	"  { ${0} },",
+	"}"
+    ],
+    "description": "lazy spec keys"
+  },
+
   "require": {
     "prefix": "require",
     "body": ["require('${1:module}')"],
     "description": "Require module"
   },
+
   "return": {
     "prefix": "return",
     "body": ["return $0"],
     "description": "return value"
   },
+
   "assigment": {
     "prefix": "local",
     "body": ["local ${1:varName} = ${0:value}"],
     "description": "define a variable"
   },
+
   "locreq": {
     "prefix": "lreq",
     "body": ["local ${1:var} = require(${2:module})"],
     "description": "Require module as a variable"
   },
-  "class": {
-    "prefix": "cl",
-    "body": [
-      "${1:M} = {}\n",
-      "$1.${2:new} = function($3)",
-      "\t${6}",
-      "end"
-    ],
-    "description": "Create a class"
-  },
+
   "if": {
     "prefix": "if",
     "body": ["if ${1:true} then", "\t$0", "end"]
   },
+
   "elseif": {
     "prefix": "elseif",
     "body": ["elseif ${1:true} then", "\t$0"]
   },
+
   "for": {
     "prefix": "for",
     "body": ["for ${1:i}=${2:1},${3:10} do", "\t$0", "end"],
     "description": "for loop range"
   },
+
   "foreach": {
     "prefix": "foreach",
     "body": ["for i, ${1:x} in pairs(${2:table}) do", "\t$0", "end"]
   },
+
   "print": {
     "prefix": "print",
     "body": ["print(${0})"]
   },
+
   "print": {
     "prefix": "dd",
     "body": ["dd(${0})"]
   },
-  "self": {
-    "prefix": "self:",
-    "body": ["function self:${1:methodName}($2)", "\t$0", "end"]
-  },
+
   "while": {
     "prefix": "while",
     "body": ["while ${1:true} do", "\t$0", "end"]
-  },
-  "pcall": {
-    "prefix": "pca",
-    "body": ["pcall(${1:function})"],
-    "description": "Protect call a function"
-  },
-  "locpcall": {
-    "prefix": "lpca",
-    "body": ["local ${1:status}, ${2:err_or_value} = pcall(${3:function})"],
-    "description": "Protect call a function as a variable"
   }
 }

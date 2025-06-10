@@ -35,14 +35,14 @@ set breakindent
 " set confirm
 set cursorline
 set fillchars+=diff:╱,
-  set fillchars+=eob:\ ,
-  set fillchars+=fold:\ ,
-  set fillchars+=foldclose:▸,
-  set fillchars+=foldopen:▾,
-  set fillchars+=foldsep:\ ,
-  set fillchars+=foldsep:│
+set fillchars+=eob:\ ,
+set fillchars+=fold:\ ,
+set fillchars+=foldclose:▸,
+set fillchars+=foldopen:▾,
+set fillchars+=foldsep:\ ,
+set fillchars+=foldsep:│
 set fillchars+=stl:\ ,
-  set formatoptions-=or
+set formatoptions-=or
 set foldmethod=marker
 set foldopen+=insert,jump
 set ignorecase smartcase
@@ -52,8 +52,8 @@ set listchars=trail:¿,tab:→\ "
 set mouse=a
 set nowrap
 set noruler
-set laststatus=0
-set number
+" set laststatus=0
+" set number
 set numberwidth=3
 set pumheight=10
 set report=0
