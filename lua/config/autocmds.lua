@@ -1,4 +1,3 @@
-print('config/autocmds.lua')
 local group = vim.api.nvim_create_augroup('my_autocmds', { clear = true })
 
 --- @param event string|string[]

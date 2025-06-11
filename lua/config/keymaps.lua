@@ -1,4 +1,3 @@
-print('config/keymaps.lua')
 local wk = require('which-key')
 
 local function command(lhs, cmd, opts)

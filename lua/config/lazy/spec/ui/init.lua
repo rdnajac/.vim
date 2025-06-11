@@ -1,3 +1,4 @@
+print('/…/spec/ui/init.lua trying to call LazyVim')
 local icons = require('config.lazy.opts').icons
 -- FIXME: LazyVim isn't set up yet?
 -- local icons = LazyVim.config.icons
