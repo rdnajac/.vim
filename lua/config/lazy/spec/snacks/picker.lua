@@ -59,7 +59,7 @@ M.config = {
       end,
     },
     files = {
-      layout = { preset = 'sidebar' },
+      -- layout = { preset = 'vscode' },
       follow = true,
       hidden = true,
       ignored = false,

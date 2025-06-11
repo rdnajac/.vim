@@ -1,4 +1,4 @@
-print('ke')
+print('config/keymaps.lua')
 local wk = require('which-key')
 
 local function command(lhs, cmd, opts)
@@ -23,6 +23,7 @@ wk.add({
   command('<leader>dH', 'LazyHealth'),
   { '<leader>dS', ':=require("snacks").meta.get()<CR>', desc = 'Snacks' },
   { '<leader>dw', ':=vim.lsp.buf.list_workspace_folders()<CR>', desc = 'LSP Workspace Folders' },
+
   { '<leader>dh', group = 'health', icon = { icon = '' } },
   health('<leader>dhc', 'config'),
   health('<leader>dhk', 'which-key'),
@@ -68,7 +69,13 @@ wk.add({
 wk.add({
   { '<leader>l', group = 'Lazy' },
   { '<leader>ll', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-  { '<leader>lx', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
+  {
+    '<leader>lx',
+    function()
+      LazyVim.extras.show()
+    end,
+    desc = 'Lazy Extras',
+  },
   -- TODO: map lazy configs
 })
 
@@ -255,4 +262,28 @@ for _, combo in ipairs({ 'jk', 'kj' }) do
   map_combo('t', combo, '<BS><BS><C-\\><C-n>')
 end
 -- }}}
+
+local path = function()
+  return (
+    LazyVim.lualine.pretty_path({
+      relative = 'root',
+      modified_sign = '',
+      length = 4,
+      modified_hl = '',
+      directory_hl = '',
+      filename_hl = '',
+    })()
+  )
+end
+
+local function insert_debug_print()
+  local file = path():gsub('^lua/', '')
+  local line_nr = vim.fn.line('.')
+  local print_stmt = line_nr == 1 and string.format("print('%s')", file)
+    or string.format("print('%s: %d')", file, line_nr + 1)
+  vim.cmd('normal! ' .. (line_nr == 1 and 'O' or 'o') .. print_stmt)
+end
+
+vim.keymap.set('n', '<leader>D', insert_debug_print, { desc = 'Insert Debug Print' })
+vim.keymap.set('n', '<localleader>D', '<Cmd>set laststatus?<CR>', { desc = 'Insert Debug Print' })
 -- vim: fdm=marker fdl=1

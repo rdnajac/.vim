@@ -1,4 +1,3 @@
-ddd('lazy/vim')
 local lazyopts = require('config.lazy.opts')
 local lazy = vim.env.LAZY
 

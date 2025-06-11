@@ -1,5 +1,4 @@
-print('au')
-
+print('config/autocmds.lua')
 local group = vim.api.nvim_create_augroup('my_autocmds', { clear = true })
 
 --- @param event string|string[]
@@ -110,12 +109,19 @@ vim.api.nvim_create_autocmd('BufEnter', {
   callback = function(args)
     local oil = require('oil')
     local dir = oil.get_current_dir(args.buf)
-    -- if dir and dir exists
     if dir and vim.fn.isdirectory(dir) == 1 then
       vim.cmd.lcd(dir)
     end
   end,
   desc = 'Sync lcd with Oil directory on buffer enter',
+})
+
+vim.api.nvim_create_autocmd('BufLeave', {
+  pattern = 'oil://*',
+  callback = function()
+    vim.cmd.lcd(vim.fn.getcwd(-1, -1))
+  end,
+  desc = 'Restore lcd to CWD on leaving Oil buffer',
 })
 
 local cmd_group = vim.api.nvim_create_augroup('cmdline', { clear = true })

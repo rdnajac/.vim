@@ -1,8 +1,7 @@
-ddd('lazy/opts')
+print('config/lazy/opts.lua')
 ---@class LazyVimOptions
 return {
   -- colorscheme = function()
-  --   ddd('init colorscheme')
   --   local colorscheme = require('config.lazy.spec.colorscheme').opts
   --   -- vim.opt.rtp:append(vim.fn.stdpath('data') .. '/lazy/tokyonight.nvim/')
   --   require('tokyonight').load(colorscheme)

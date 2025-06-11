@@ -35,9 +35,7 @@ function M.load(opts)
       },
     },
   }, opts or {})
-  ddd('lazy setup pre')
   require('lazy').setup(opts)
-  ddd('lazy setup post')
 end
 
 return M

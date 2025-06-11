@@ -57,34 +57,13 @@ require('config.lazy').load({
   },
 })
 
--- HACK: autocmds can be loaded lazily when not opening a file
-local lazy_env = vim.env.LAZY
-local lazy_autocmds = vim.fn.argc(-1) == 0
-
-if lazy_env == nil then
-  if not lazy_autocmds then
-    require('config.autocmds')
-  end
-end
-
 --- load settings **after** `VeryLazy` event " {{{1
 vim.api.nvim_create_autocmd('User', {
   pattern = 'VeryLazy',
   callback = function()
-    if lazy_env == nil then
-      require('config.options')
-      require('config.keymaps')
-      if lazy_autocmds then
-        require('config.autocmds')
-      end
-    elseif lazy_env == '0' then
-      print('using hax')
-    else
-      print('zzz')
-    end
+    require('config.options')
     require('nvim.diagnostic')
     require('nvim.lsp')
-    require('munchies')
     vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
     vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
   end,

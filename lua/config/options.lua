@@ -1,4 +1,4 @@
-print('op')
+print('config/options.lua')
 vim.opt.backup = false
 vim.opt.backupdir = vim.fn.stdpath('state') .. '/backup//'
 vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
@@ -15,7 +15,8 @@ vim.opt.smoothscroll = true
 vim.opt.winborder = 'rounded'
 
 -- HACK: don't show lualine on dashboard
-if vim.fn.argc(-1) == 0 then
+-- PERF: does checking ft affect performance?
+if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
   vim.opt.laststatus = 0
 end
 
