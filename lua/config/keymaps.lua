@@ -61,16 +61,13 @@ wk.add({
   map_config('\\s', 'lazy/spec/init'),
 })
 
+-- stylua: ignore
 wk.add({
-  { '<leader>l', group = 'Lazy' },
-  { '<leader>ll', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-  {
-    '<leader>lx',
-    function()
-      LazyVim.extras.show()
-    end,
-    desc = 'Lazy Extras',
-  },
+  -- { '<leader>l', group = 'Lazy' },
+  -- { '<leader>ll', '<Cmd>Lazy<CR>', desc = 'Lazy' },
+  -- { '<leader>lx', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
+  { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
+  { '<leader>L', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
 })
 
 -- stylua: ignore
@@ -111,6 +108,12 @@ wk.add({
   { '<leader>gl', function() Snacks.picker.git_log() end, desc = 'Git Log (cwd)', mode = 'n' },
 
   { '<leader>s', group = 'search/grep' },
+  { '<leader>sa', function() Snacks.picker.autocmds() end, desc = 'Autocmds', },
+  { '<leader>sc', function() Snacks.picker.commands() end, desc = 'Commands', },
+  { '<leader>sh', function() Snacks.picker.help() end, desc = 'Help Pages', },
+  { '<leader>sH', function() Snacks.picker.highlights() end, desc = 'Highlights', },
+  { '<leader>si', function() Snacks.picker.icons() end, desc = 'Icons', },
+  { '<leader>sk', function() Snacks.picker.keymaps() end, desc = 'Keymaps', },
 
   { '<leader>u', group = 'ui', icon = { icon = '󰙵 ', color = 'cyan' } },
   { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes', icon = { icon = ' ', color = 'yellow' }, },
@@ -127,14 +130,15 @@ wk.add({
 wk.add({
   { '<localleader>p', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec', },
 
-  { '<leader>r', '<Cmd>Restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
-  -- { '<leader>r', function() require('util.restart') end, desc = 'Restart Neovim', icon = { icon = '' } },
-  { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
   { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },
+  { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
+  { '<leader>D', function() require('util.debugprint').insert() end, desc = 'Insert Debug Print' },
   { '<leader>F', function() Snacks.picker.smart() end, desc = 'Smart Find Files', },
-  { '<leader>n', function() Snacks.picker.notifications() end, desc = "Notification History" },
   { '<leader>U', function() Snacks.picker.undo() end,desc = 'Undotree', },
   { '<leader>h', function() Snacks.picker.help() end, desc = 'Help Pages', },
+  { '<leader>n', function() Snacks.picker.notifications() end, desc = "Notification History" },
+  { '<leader>r', '<Cmd>Restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
+  -- { '<leader>r', function() require('util.restart') end, desc = 'Restart Neovim', icon = { icon = '' } },
   { '<leader>z', function() Snacks.picker.zoxide() end, desc = 'Zoxide', icon = { icon = '󰄻 ' }, },
 
   { '<leader>p', group = 'Pickers', icon = { icon = ' ' } },
@@ -259,10 +263,6 @@ for _, combo in ipairs({ 'jk', 'kj' }) do
   map_combo('t', combo, '<BS><BS><C-\\><C-n>')
 end
 -- }}}
-
-vim.keymap.set('n', '<leader>D', function()
-  require('util.debugprint').insert()
-end, { desc = 'Insert Debug Print' })
 
 vim.keymap.set('n', '_', function()
   local cwd = vim.fn.getcwd()

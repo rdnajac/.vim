@@ -6,14 +6,14 @@ local _create_flags = function()
 
   flag({
     name = 'ooze_auto_advance',
-    mapping = '<leader>tA',
+    mapping = '~A',
     desc = 'Toggle Auto Advance',
     label = 'Auto Advance (Line Feed)',
   })
 
   flag({
     name = 'ooze_auto_scroll',
-    mapping = '<leader>ts',
+    mapping = '~s',
     desc = 'Toggle Auto Scroll',
     label = 'Auto Scroll',
   })
@@ -21,21 +21,21 @@ local _create_flags = function()
   flag({
     name = 'ooze_send_on_enter',
     default = 0,
-    mapping = '<leader>t<CR>',
+    mapping = '~<CR>',
     desc = 'Toggle Send on Enter',
     label = 'Send Line',
   })
 
   flag({
     name = 'ooze_auto_exec',
-    mapping = '<leader>tx',
+    mapping = '~x',
     desc = 'Toggle Auto Execute',
     label = 'Auto Execute',
   })
 
   flag({
     name = 'ooze_skip_comments',
-    mapping = '<leader>tk',
+    mapping = '~k',
     desc = 'Toggle Auto Skip Comments',
     label = 'Skip Comments',
   })
