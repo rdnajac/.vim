@@ -1,19 +1,17 @@
+-- Snacks terminal flags
+flag({
+  name = 'snacks_terminal_auto_insert',
+  mapping = '<leader>ti',
+  desc = 'Toggle Terminal Auto Insert',
+  label = 'Auto Insert (on buffer enter)',
+})
 
-  -- Snacks terminal flags
-  flag({
-    name = 'snacks_terminal_auto_insert',
-    mapping = '<leader>ti',
-    desc = 'Toggle Terminal Auto Insert',
-    label = 'Auto Insert (on buffer enter)',
-  })
-
-  flag({
-    name = 'snacks_terminal_start_insert',
-    mapping = '<leader>tI',
-    desc = 'Toggle Terminal Start Insert',
-    label = 'Start Insert (on terminal open)',
-  })
-end
+flag({
+  name = 'snacks_terminal_start_insert',
+  mapping = '<leader>tI',
+  desc = 'Toggle Terminal Start Insert',
+  label = 'Start Insert (on terminal open)',
+})
 
 local function snacks_terminal_toggle_or_open()
   local var = Snacks.util.var
@@ -28,4 +26,3 @@ local function snacks_terminal_toggle_or_open()
     term:toggle()
   end
 end
-

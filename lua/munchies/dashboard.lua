@@ -1,4 +1,4 @@
-Loaal str = [["The computing scientist's main challenge is not to get confused by the complexities of his own making."]]
+local str = [["The computing scientist's main challenge is not to get confused by the complexities of his own making."]]
 
 -- stylua: ignore start
 local short = function() return vim.o.lines < 24 end

@@ -1,4 +1,4 @@
-langsetup({ { 'ruff', 'ruff' }, })
+langsetup({ { 'ruff', 'ruff' } })
 return {
   -- {
   --   'WhoIsSethDaniel/mason-tool-installer.nvim',

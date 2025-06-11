@@ -112,7 +112,7 @@ M.spec = {
             end
           end,
         },
-        ['yf'] = { 'actions.yank_entry', mode = 'n'},
+        ['yf'] = { 'actions.yank_entry', mode = 'n' },
       },
     }
   end,

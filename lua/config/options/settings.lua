@@ -16,6 +16,6 @@ vim.opt.winborder = 'rounded'
 -- HACK: don't show lualine on dashboard
 -- PERF: does checking ft affect performance?
 if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
--- if vim.fn.argc(-1) == 0 then
+  -- if vim.fn.argc(-1) == 0 then
   vim.opt.laststatus = 0
 end

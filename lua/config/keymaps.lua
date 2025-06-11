@@ -265,12 +265,12 @@ vim.keymap.set('n', '<leader>D', function()
   require('util.debugprint').insert()
 end, { desc = 'Insert Debug Print' })
 
-vim.keymap.set("n", "_", function()
+vim.keymap.set('n', '_', function()
   local cwd = vim.fn.getcwd()
-  local target = vim.fn.expand("%:p:h")
+  local target = vim.fn.expand('%:p:h')
   if cwd == target then
-    target = require("lazyvim.util").root.get()
+    target = require('lazyvim.util').root.get()
   end
-  vim.cmd("cd " .. target .. " | pwd")
+  vim.cmd('cd ' .. target .. ' | pwd')
 end)
 -- vim: fdm=marker fdl=1

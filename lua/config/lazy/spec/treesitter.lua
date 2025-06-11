@@ -17,7 +17,7 @@ return {
     end,
     opts_extend = { 'ensure_installed' },
     opts = {
-    -- TODO: implement this
+      -- TODO: implement this
       incremental_selection = {
         enable = true,
         keymaps = {
