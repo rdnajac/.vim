@@ -1,5 +1,6 @@
 local wk = require('which-key')
 
+-- debug/health {{{
 local function command(lhs, cmd, opts)
   opts = opts or {}
   opts.desc = opts.desc or cmd
@@ -127,7 +128,8 @@ wk.add({
 wk.add({
   { '<localleader>p', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec', },
 
-  { '<leader>R', '<Cmd>Restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
+  { '<leader>r', '<Cmd>Restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
+  -- { '<leader>r', function() require('util.restart') end, desc = 'Restart Neovim', icon = { icon = '' } },
   { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
   { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },
   { '<leader>F', function() Snacks.picker.smart() end, desc = 'Smart Find Files', },
@@ -263,6 +265,12 @@ vim.keymap.set('n', '<leader>D', function()
   require('util.debugprint').insert()
 end, { desc = 'Insert Debug Print' })
 
--- XXX: delete me 
-vim.keymap.set('n', '<localleader>D', '<Cmd>set laststatus?<CR>', { desc = 'Insert Debug Print' })
+vim.keymap.set("n", "_", function()
+  local cwd = vim.fn.getcwd()
+  local target = vim.fn.expand("%:p:h")
+  if cwd == target then
+    target = require("lazyvim.util").root.get()
+  end
+  vim.cmd("cd " .. target .. " | pwd")
+end)
 -- vim: fdm=marker fdl=1

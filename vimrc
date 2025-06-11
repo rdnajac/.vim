@@ -186,7 +186,7 @@ nnoremap <leader>Q <Cmd>qa<CR>
 nnoremap <leader>a :normal! ggVG<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 " nnoremap <leader>r <Cmd>source $MYVIMRC <Bar> echom 'Reloaded config!'<CR>
-nnoremap <leader>r <Cmd>Restart<CR>
+" nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>v <Cmd>edit $MYVIMRC<CR>
 nnoremap <leader>e <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>

@@ -1,8 +1,6 @@
 if has('nvim')
   let s:sesh = fnameescape(fnamemodify($MYVIMRC, ':h') . '/Session.vim')
 
-  command! Restart execute 'mksession! ' . s:sesh | restart
-
   augroup RestoreSession
     autocmd!
     autocmd VimEnter * if filereadable(s:sesh) |
@@ -13,4 +11,5 @@ if has('nvim')
 	  \ endif
   augroup END
 
+  command! Restart execute 'mksession! ' . s:sesh | restart
 endif
