@@ -1,5 +1,6 @@
 -- XXX: experimental!
 vim.loader.enable()
+
 local lazypath = vim.fn.stdpath('data') .. '/lazy'
 local lazynvim = lazypath .. '/lazy.nvim'
 
@@ -61,11 +62,9 @@ require('config.lazy').load({
 vim.api.nvim_create_autocmd('User', {
   pattern = 'VeryLazy',
   callback = function()
-    require('config.options')
     require('nvim.diagnostic')
     require('nvim.lsp')
-    vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
-    vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
+    require('nvim.settings')
   end,
 })
 -- vim: fdm=marker fdl=1

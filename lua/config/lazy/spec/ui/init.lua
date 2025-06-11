@@ -1,4 +1,6 @@
 local icons = require('config.lazy.opts').icons
+-- FIXME: LazyVim isn't set up yet?
+-- local icons = LazyVim.config.icons
 
 local man_ext = {
   winbar = {

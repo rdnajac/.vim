@@ -1,4 +1,3 @@
-print('nvim/lsp.lua')
 -- Refer to :h vim.lsp.config() for more information.
 vim.lsp.config('*', {
   capabilities = require('blink.cmp').get_lsp_capabilities(),
