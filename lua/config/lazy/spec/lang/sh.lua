@@ -1,17 +1,10 @@
-vim.lsp.enable('bash-language-server')
-
+langsetup({
+  { 'bash-language-server', 'bash-language-server' },
+  'shfmt',
+  'shellcheck',
+  'shellharden',
+})
 return {
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = {
-      ensure_installed = {
-        'bash-language-server',
-        'shfmt',
-        'shellcheck',
-        'shellharden',
-      },
-    },
-  },
   {
     -- highlighting for chezmoi files template files
     'alker0/chezmoi.vim',

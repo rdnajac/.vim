@@ -1,10 +1,6 @@
-vim.lsp.enable('luals')
+langsetup({ { 'lua-language-server', 'luals' }, 'stylua' })
 
 return {
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = { ensure_installed = { 'lua-language-server', 'stylua' } },
-  },
   {
     'folke/lazydev.nvim',
     ft = 'lua',

@@ -1,8 +1,7 @@
-vim.lsp.enable('ruff')
-
+langsetup({ { 'ruff', 'ruff' }, })
 return {
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = { ensure_installed = { 'ruff' } },
-  },
+  -- {
+  --   'WhoIsSethDaniel/mason-tool-installer.nvim',
+  --   opts = { ensure_installed = { 'ruff' } },
+  -- },
 }

@@ -1,5 +1,30 @@
 ddd('config/lazy/spec/lang/init.lua')
 -- BUG: why is this printing twice?
+
+_G.lang_spec = setmetatable({
+  tools = {},
+  lsps = {},
+}, {
+  __newindex = function(t, k, v)
+    local items = type(v[1]) == 'table' and v or { v }
+    for _, item in ipairs(items) do
+      local tool, lsp = item[1] or item, item[2]
+      table.insert(t.tools, tool)
+      if lsp then
+        table.insert(t.lsps, lsp)
+      end
+    end
+    rawset(t, k, v)
+  end,
+})
+
+_G.langsetup = setmetatable({}, {
+  __call = function(_, entries)
+    local key = debug.getinfo(2, 'S').source:match('([^/\\]+)%.lua$')
+    _G.lang_spec[key] = entries
+  end,
+})
+
 return {
   {
     'mason-org/mason.nvim',
@@ -19,10 +44,9 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     event = 'VeryLazy',
     dependencies = { 'mason-org/mason.nvim' },
-    opts_extend = { 'ensure_installed' },
-    opts = {
-      ensure_installed = { 'prettier' },
-    },
+    opts = function()
+      return { ensure_installed = _G.lang_spec.tools }
+    end,
   },
   { import = 'config.lazy.spec.lang' },
 }

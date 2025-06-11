@@ -1,8 +1,6 @@
+langsetup({ { 'r-languageserver', 'r_languageserver' } })
+
 return {
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = { ensure_installed = { 'r-languageserver' } },
-  },
   {
     'R-nvim/R.nvim',
     event = 'VeryLazy',

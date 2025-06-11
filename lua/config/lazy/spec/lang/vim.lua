@@ -1,10 +1,6 @@
-vim.lsp.enable('vimls')
+langsetup({ { 'vim-language-server', 'vimls' } })
 
 return {
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    opts = { ensure_installed = { 'vim-language-server' } },
-  },
   -- iterate over the plugins defined in vim.g.vim_plugins
   -- and add them to the spec if they are enabled for nvim
   unpack(vim.tbl_map(
