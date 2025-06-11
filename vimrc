@@ -193,6 +193,7 @@ nnoremap <leader>w <Cmd>write<CR>
 nnoremap <leader>> <Cmd>edit #<CR>
 
 nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/after/ftplugin/' . &ft . '.vim'<CR>
+nnoremap <leader>fT <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/lua/config/lazy/spec/lang/' . &ft . '.lua'<CR>
 nnoremap <leader>fs <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/snippets/' . &ft . '.json'<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
@@ -334,7 +335,7 @@ let g:vim_plugins = {
 
 if has('nvim')
   if !exists('g:loaded_nvim')
-    lua require('nvim')
+    lua require('config.lazy')
     let g:loaded_nvim = 1
   endif
   let g:ale_disable_lsp = 1

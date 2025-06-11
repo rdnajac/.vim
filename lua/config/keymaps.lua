@@ -57,7 +57,7 @@ wk.add({
   map_config('\\o', 'options/init'),
   map_config('\\k', 'keymaps'),
   map_config('\\i', 'lazy/init'),
-  map_config('\\l', 'lazy/spec/init'),
+  map_config('\\s', 'lazy/spec/init'),
 })
 
 wk.add({
@@ -170,6 +170,7 @@ local function insert_comment(lhs, text)
   return { lhs, cmd, desc = description, silent = true }
 end
 
+vim.keymap.del('n', 'gc')
 wk.add({
   { 'gc', group = 'comments' },
   insert_comment('gco', ''),
