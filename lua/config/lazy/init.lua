@@ -39,14 +39,14 @@ if vim.env.PROF then
   Snacks.profiler.startup(profiler)
 end
 
--- bootstrap `lazy.nvim` and `LazyVim` {{{1
+-- bootstrap `lazy.nvim` and `LazyVim` {{{2
 if not vim.uv.fs_stat(lazynvim) then
   load(vim.fn.system('curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua'))()
 else
   vim.opt.rtp:prepend(lazynvim)
 end
 
----@type LazyConfig
+---@type LazyConfig {{{1
 require('lazy').setup({
   spec = {
     { import = 'config.lazy.spec' },
@@ -54,7 +54,7 @@ require('lazy').setup({
   },
   profiling = {
     loader = false,
-    require = true,
+    require = false,
   },
   dev = {
     path = '~/GitHub/folke',
@@ -87,6 +87,5 @@ require('lazy').setup({
   },
   -- }}}3
 })
--- }}}1
 _G.LazyVim = require('lazyvim.util')
--- vim: fdm=marker fdl=2
+-- vim: fdm=marker fdl=1

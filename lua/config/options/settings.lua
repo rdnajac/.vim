@@ -2,9 +2,11 @@ vim.opt.backup = false
 vim.opt.backupdir = vim.fn.stdpath('state') .. '/backup//'
 vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
 vim.opt.cmdheight = 0
+-- TODO: folding.lua?
 vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
 vim.opt.foldlevel = 99
-vim.opt.foldmethod = 'expr'
+-- TODO: set per filetype
+-- vim.opt.foldmethod = 'expr'
 vim.opt.foldtext = ''
 -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
 vim.opt.mousescroll = 'hor:0'

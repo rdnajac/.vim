@@ -138,6 +138,7 @@ augroup SetLocalPath " {{{2
 	\ exec "set path^=" . s:tempPath |
 	\ exec "set path^=" . s:default_path
 augroup END
+" }}}2
 
 " § commands {{{1
 command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
@@ -178,7 +179,9 @@ cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? '
 
 " § keymaps {{{1
 nnoremap ` ~
-" nnoremap ~ <Cmd>pwd<CR>
+
+nmap <C-c> ciw
+vmap <C-s> :sort<CR>
 
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
@@ -196,13 +199,6 @@ nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/aft
 nnoremap <leader>fT <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/lua/config/lazy/spec/lang/' . &ft . '.lua'<CR>
 nnoremap <leader>fs <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/snippets/' . &ft . '.json'<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
-
-nmap <C-c> ciw
-vmap <C-s> :sort<CR>
-
-" FIXME: make this a gx wrapper
-" nnoremap gh yi':silent !open https://github.com/<C-R>0<CR>
-nmap gh <C-space>y:silent! !open https://github.com/<C-R>0<CR>
 
 " buffers {{{
 nnoremap <silent> <Tab>         :bnext<CR>
@@ -346,12 +342,14 @@ else
     execute 'Plug' string(plugin)
   endfor
   call plug#end()
+  nmap gh vi'C-space>y:silent! !open https://github.com/<C-R>0<CR>
 endif
-" }}}
+
+" global variables {{{2
 
 let g:copilot_workspace_folders = ['~/GitHub', '~/.local/share/chezmoi/']
 
-" ALE globals {{{1
+" ALE globals {{{3
 let g:ale_fixers = {
       \   '*': ['remove_trailing_lines', 'trim_whitespace'],
       \   'lua': ['stylua'],
@@ -364,5 +362,5 @@ let g:ale_linters = {
 let g:ale_linters_explicit = 1
 let g:ale_virtualtext_cursor = 'current'
 " let g:ale_set_highlights = 0
-" }}}
+" }}}1
 " vim: fdm=marker fdl=1
