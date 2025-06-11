@@ -1,6 +1,5 @@
 " after/ftplugin/markdown.vim
-hi clear RenderMarkdownCode
-let g:markdown_fenced_languages = ['sh', 'cpp', 'cuda', 'python', 'vim', 'lua', 'r']
+let g:markdown_fenced_languages = ['sh', 'cpp', 'python', 'vim', 'lua', 'r']
 
 if executable('prettier')
   let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
@@ -14,6 +13,10 @@ setlocal conceallevel=1
 
 " treat quoted text as comments for easy toggling
 setlocal commentstring=>\ %s
+
+
+hi RenderMarkdownCode guibg=NONE
+nmap <leader>k v:lua require('nvim.util.link').linkify()
 
 " make selection **bold**
 vmap <buffer> <C-b> S*vi*S*

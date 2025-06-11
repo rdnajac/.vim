@@ -1,6 +1,7 @@
 -- Refer to :h vim.lsp.config() for more information.
 vim.lsp.config('*', {
-  capabilities = require('blink.cmp').get_lsp_capabilities(),
+  -- TODO:
+  -- capabilities = require('blink.cmp').get_lsp_capabilities(),
 
   ---@param client vim.lsp.Client
   ---@param bufnr integer

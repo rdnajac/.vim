@@ -1,8 +1,4 @@
-print('/…/spec/ui/init.lua trying to call LazyVim')
-local icons = require('config.lazy.opts').icons
--- FIXME: LazyVim isn't set up yet?
--- local icons = LazyVim.config.icons
-
+ddd('config/lazy/spec/ui/init.lua')
 local man_ext = {
   winbar = {
     lualine_a = {
@@ -102,10 +98,10 @@ return {
             {
               'diagnostics',
               symbols = {
-                error = icons.diagnostics.Error,
-                warn = icons.diagnostics.Warn,
-                info = icons.diagnostics.Info,
-                hint = icons.diagnostics.Hint,
+                error = LazyVim.config.icons.diagnostics.Error,
+                warn = LazyVim.config.icons.diagnostics.Warn,
+                info = LazyVim.config.icons.diagnostics.Info,
+                hint = LazyVim.config.icons.diagnostics.Hint,
               },
             },
           },
@@ -137,9 +133,9 @@ return {
             {
               'diff',
               symbols = {
-                added = icons.git.added,
-                modified = icons.git.modified,
-                removed = icons.git.removed,
+                added = LazyVim.config.icons.git.added,
+                modified = LazyVim.config.icons.git.modified,
+                removed = LazyVim.config.icons.git.removed,
               },
               source = function()
                 local summary = vim.b.minidiff_summary
@@ -177,7 +173,7 @@ return {
               function()
                 for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
                   if client.name == 'GitHub Copilot' then
-                    return icons.kinds.Copilot
+                    return LazyVim.config.icons.kinds.Copilot
                   end
                 end
                 return ''
@@ -220,7 +216,7 @@ return {
         separator = ' ',
         highlight = true,
         depth_limit = 7,
-        icons = icons.kinds,
+        icons = LazyVim.config.icons.kinds,
         lazy_update_context = true,
       }
     end,

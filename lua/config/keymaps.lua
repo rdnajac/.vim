@@ -53,16 +53,11 @@ end
 
 -- stylua: ignore
 wk.add({
-  { '\\\\', function() Snacks.dashboard.open() end, desc = 'Snacks Dashboard', },
-  { '\\i', '<Cmd>e ' .. vim.fn.stdpath('config') .. '/lua/nvim/init.lua<CR>', desc = 'init' },
-  { '\\m', '<Cmd>e ' .. vim.fn.stdpath('config') .. '/lua/munchies/init.lua<CR>', desc = 'munchies' },
   map_config('\\a', 'autocmds'),
-  map_config('\\o', 'options'),
+  map_config('\\o', 'options/init'),
   map_config('\\k', 'keymaps'),
-  map_config('\\L', 'lazy/init'),
-  map_config('\\P', 'lazy/spec/init'),
-  -- TODO: goto LazyVim/Snacks/Plugins
-  -- TODO: Zoxide picker in oil
+  map_config('\\i', 'lazy/init'),
+  map_config('\\l', 'lazy/spec/init'),
 })
 
 wk.add({
@@ -83,6 +78,7 @@ wk.add({
   { 'gL', function() require('util.togo').lazy() end, desc = 'Goto LazyVim module' },
   { 'gx', function() require('util.togo').gx() end, desc = 'Open with system app' },
 
+  { '\\\\', function() Snacks.dashboard.open() end, desc = 'Snacks Dashboard', },
   { ',,', function() Snacks.terminal.toggle() end, desc = 'Snacks Terminal', mode = { 'n', 't' } },
   { '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer', },
   { '<leader>>', function() Snacks.scratch.select() end, desc = 'Select Scratch Buffer', },
@@ -262,27 +258,10 @@ for _, combo in ipairs({ 'jk', 'kj' }) do
 end
 -- }}}
 
-local path = function()
-  return (
-    LazyVim.lualine.pretty_path({
-      relative = 'root',
-      modified_sign = '',
-      length = 4,
-      modified_hl = '',
-      directory_hl = '',
-      filename_hl = '',
-    })()
-  )
-end
+vim.keymap.set('n', '<leader>D', function()
+  require('util.debugprint').insert()
+end, { desc = 'Insert Debug Print' })
 
-local function insert_debug_print()
-  local file = path():gsub('^lua/', '')
-  local line_nr = vim.fn.line('.')
-  local print_stmt = line_nr == 1 and string.format("print('%s')", file)
-    or string.format("print('%s: %d')", file, line_nr + 1)
-  vim.cmd('normal! ' .. (line_nr == 1 and 'O' or 'o') .. print_stmt)
-end
-
-vim.keymap.set('n', '<leader>D', insert_debug_print, { desc = 'Insert Debug Print' })
+-- XXX: delete me 
 vim.keymap.set('n', '<localleader>D', '<Cmd>set laststatus?<CR>', { desc = 'Insert Debug Print' })
 -- vim: fdm=marker fdl=1

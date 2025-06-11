@@ -1,3 +1,5 @@
+ddd('config/lazy/spec/lang/init.lua')
+-- BUG: why is this printing twice?
 return {
   {
     'mason-org/mason.nvim',
