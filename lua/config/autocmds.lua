@@ -65,6 +65,8 @@ au('ModeChanged', '[V\x16]*:*', function()
   vim.wo.relativenumber = string.find(vim.fn.mode(), '^[V\22]') ~= nil
 end, 'Hide relative line numbers')
 
+-- TODO: move these to ooze ----------------------------------------------------
+
 vim.api.nvim_create_autocmd('TermOpen', {
   callback = function(args)
     -- args.buf contains the buffer that triggered the autocmd
@@ -77,7 +79,6 @@ vim.api.nvim_create_autocmd('TermOpen', {
   desc = 'Capture the job ID (`channel`) of a newly opened Snacks terminal',
 })
 
--- Snacks.util.on_module('oil', function()
 vim.api.nvim_create_autocmd('User', {
   pattern = 'OilActionsPost',
   callback = function(ev)
@@ -121,31 +122,3 @@ vim.api.nvim_create_autocmd('BufLeave', {
   end,
   desc = 'Restore lcd to CWD on leaving Oil buffer',
 })
-
-local cmd_group = vim.api.nvim_create_augroup('cmdline', { clear = true })
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  group = cmd_group,
-  callback = function(args)
-    if vim.bo[args.buf].filetype ~= 'snacks_dashboard' then
-      vim.api.nvim_create_autocmd('CmdlineLeave', {
-        once = true,
-        callback = function()
-          vim.o.laststatus = 3
-        end,
-      })
-      vim.o.laststatus = 0
-    end
-  end,
-})
-
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  group = cmd_group,
-  command = 'set laststatus=0',
-})
-
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = { 'man' },
---   callback = function(event)
---     vim.bo[event.buf].buflisted = false
---   end,
--- })

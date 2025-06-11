@@ -130,4 +130,30 @@ M.plugins = function()
   })
 end
 
+M.lazy_dirs = function()
+  local path = vim.fn.stdpath('data') .. '/lazy'
+  local dirs = vim.fn.glob(path .. '/*', true, true)
+  local items = {}
+
+  for _, dir in ipairs(dirs) do
+    if vim.fn.isdirectory(dir) == 1 then
+      table.insert(items, {
+        text = vim.fn.fnamemodify(dir, ':t'),
+        file = dir,
+      })
+    end
+  end
+
+  Snacks.picker.pick({
+    title = 'Lazy Dirs',
+    items = items,
+    format = function(item)
+      return { { item.text } }
+    end,
+    layout = { preset = 'vscode' },
+    confirm = function(_, item)
+      Snacks.picker.grep({ cwd = item.file })
+    end,
+  })
+end
 return M

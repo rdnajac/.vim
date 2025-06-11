@@ -1,4 +1,3 @@
-
 return {
   -- { import = 'config.lazy.spec.ui.edgy' },
   { import = 'config.lazy.spec.ui.lualine' },

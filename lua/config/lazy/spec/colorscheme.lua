@@ -29,6 +29,7 @@ M.opts = {
     -- hl['EdgyNormal'] = { bg = '#1f2335' }
 
     -- hl['NormalFloat'] = { bg = '#1f2335' }
+    hl['MsgArea'] = { fg = colors.green }
     hl['SpellBad'] = { bg = colors.red }
     hl['FloatBorder'] = { fg = colors.green }
     hl['helpSectionDelim'] = { fg = colors.green }

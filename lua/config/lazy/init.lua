@@ -1,4 +1,5 @@
 vim.loader.enable() -- XXX: experimental!
+-- TODO: fix tabline/winbar
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy'
 local lazynvim = lazypath .. '/lazy.nvim'
@@ -45,30 +46,27 @@ else
   vim.opt.rtp:prepend(lazynvim)
 end
 
----@type LazyConfig {{{1
-require('lazy').setup({
-  spec = {
-    { import = 'config.lazy.spec' },
-    { dir = vim.fn.stdpath('config') .. '/ooze', lazy = false },
-  },
+require('lazy').setup({ ---@type LazyConfig
+  spec = { { import = 'config.lazy.spec' }, },
   profiling = {
     loader = false,
     require = false,
   },
+  rocks = { enabled = false },
   dev = {
-    path = '~/GitHub/folke',
-    -- patterns = { 'folke' },
+    path = '~/GitHub/rdnajac',
     fallback = true,
   },
-  -- more options... {{{3
-  rocks = { enabled = false },
   install = { colorscheme = { 'tokyonight' } },
-  change_detection = { notify = false },
   ui = {
     border = 'rounded',
+    icons = require('config.lazy.emojis').ui.icons,
     -- stylua: ignore
-    custom_keys = { ['<localleader>d'] = function(plugin) dd(plugin) end },
+    custom_keys = {
+      ['<localleader>d'] = function(plugin) dd(plugin) end,
+    },
   },
+  change_detection = { notify = false },
   performance = {
     rtp = {
       -- paths = { vim.fn.stdpath('config') .. '/pack/tpope/start' },
@@ -84,7 +82,6 @@ require('lazy').setup({
       },
     },
   },
-  -- }}}3
 })
 _G.LazyVim = require('lazyvim.util')
 -- vim: fdm=marker fdl=1

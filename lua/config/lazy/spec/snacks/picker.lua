@@ -64,7 +64,15 @@ M.config = {
       hidden = true,
       ignored = false,
     },
-    grep = { follow = true, ignored = true },
+    grep = {
+      config = function(opts)
+        local cwd = opts.cwd or vim.loop.cwd()
+        opts.title = '󰱽 Grep (' .. vim.fn.fnamemodify(cwd, ':~') .. ')'
+        return opts
+      end,
+      follow = true,
+      ignored = true,
+    },
     help = { layout = { preset = 'vscode' } },
     keymaps = { layout = { preset = 'ivy_split' }, confirm = 'edit' },
     notifications = { layout = { preset = 'ivy_split' } },

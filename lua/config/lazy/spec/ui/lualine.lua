@@ -1,3 +1,4 @@
+local has_noice, noice = pcall(require, 'noice')
 local man_ext = {
   winbar = {
     lualine_a = {
@@ -148,20 +149,20 @@ return {
         },
 
         lualine_x = {
+
           {
-            -- require('noice').api.status.mode.get,
             function()
-              local val = require('noice').api.statusline.mode.get()
+              local val = noice.api.statusline.mode.get()
               return val:match('^recording @.+') and val or ''
             end,
-            cond = require('noice').api.status.mode.has,
+            cond = has_noice and noice.api.statusline.mode.has,
             color = function()
               return { fg = Snacks.util.color('Statement') }
             end,
           },
           {
-            require('noice').api.status.command.get,
-            cond = require('noice').api.status.command.has,
+            noice.api.status.command.get,
+            cond = has_noice and noice.api.status.command.has,
             color = function()
               return { fg = Snacks.util.color('Statement') }
             end,

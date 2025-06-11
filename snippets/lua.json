@@ -4,6 +4,11 @@
     "body": ["function${1: name}($2)", "\t${0}", "end"]
   },
 
+  "set": {
+    "prefix": "set",
+    "body": "vim.opt.${0}"
+  },
+
   "module": {
     "prefix": "local M",
     "body": [

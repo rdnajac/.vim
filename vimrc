@@ -191,9 +191,10 @@ nnoremap <leader>m <Cmd>messages<CR>
 " nnoremap <leader>r <Cmd>source $MYVIMRC <Bar> echom 'Reloaded config!'<CR>
 " nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>v <Cmd>edit $MYVIMRC<CR>
-nnoremap <leader>e <Cmd>edit<CR>
+nnoremap <leader>E <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>
-nnoremap <leader>> <Cmd>edit #<CR>
+nnoremap <leader>t <Cmd>edit #<CR>
+nnoremap <leader>i :help index<CR>
 
 nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/after/ftplugin/' . &ft . '.vim'<CR>
 nnoremap <leader>fT <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/lua/config/lazy/spec/lang/' . &ft . '.lua'<CR>
