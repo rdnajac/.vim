@@ -74,7 +74,6 @@ endfunction
 autocmd QuickFixCmdPost [^l]* cwindow | silent! call s:qf_signs()
 autocmd QuickFixCmdPost   l*  lwindow | silent! call s:qf_signs()
 
-" TODO:
 function! s:toggle(opt, default) abort
   execute 'if &'.a:opt.' == '.a:default.' | '.'set '.a:opt.'=0 | '.'else | '.'set '.a:opt.'='.a:default.' | '.'endif '
 endfunction

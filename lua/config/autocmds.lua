@@ -49,10 +49,9 @@ au('FileType', { 'kitty', 'ghostty' }, function(event)
 end, 'Use bash parser for kitty and ghostty configs')
 
 au('FileType', { 'help', 'man', 'oil' }, function()
-  -- if Snacks.util.is_transparent() then
-  vim.cmd([[setlocal winhighlight=Normal:SpecialWindow]])
-  -- TODO: configure window
-  -- end
+  if Snacks.util.is_transparent() then
+    vim.cmd([[setlocal winhighlight=Normal:SpecialWindow]])
+  end
 end)
 
 -- Show relative numbers only when they matter (linewise and blockwise

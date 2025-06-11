@@ -71,7 +71,6 @@ wk.add({
     end,
     desc = 'Lazy Extras',
   },
-  -- TODO: map lazy configs
 })
 
 -- stylua: ignore

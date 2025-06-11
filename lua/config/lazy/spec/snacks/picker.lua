@@ -68,7 +68,6 @@ M.config = {
     help = { layout = { preset = 'vscode' } },
     keymaps = { layout = { preset = 'ivy_split' }, confirm = 'edit' },
     notifications = { layout = { preset = 'ivy_split' } },
-    -- TODO: fix this
     pickers = { layout = { preset = 'vscode' } },
     zoxide = {
       layout = { preset = 'vscode' },

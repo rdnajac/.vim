@@ -1,5 +1,4 @@
 vim.loader.enable() -- XXX: experimental!
--- TODO: track clipboard option values during init
 
 local lazypath = vim.fn.stdpath('data') .. '/lazy'
 local lazynvim = lazypath .. '/lazy.nvim'
