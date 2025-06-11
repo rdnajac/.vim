@@ -1,5 +1,7 @@
 return {
+  { 'folke/ts-comments.nvim', event = 'VeryLazy', opts = {} },
   {
+    -- TODO: migrate to tree-sitter v2
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     event = { 'VeryLazy' },
@@ -15,6 +17,7 @@ return {
     end,
     opts_extend = { 'ensure_installed' },
     opts = {
+    -- TODO: implement this
       incremental_selection = {
         enable = true,
         keymaps = {

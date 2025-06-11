@@ -33,6 +33,5 @@ return {
       end)
     end,
   },
-  { import = 'lazyvim.plugins.coding' },
   { 'nvim-lua/plenary.nvim', lazy = true },
 }

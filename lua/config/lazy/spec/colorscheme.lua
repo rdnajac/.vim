@@ -31,6 +31,7 @@ M.opts = {
     -- hl['NormalFloat'] = { bg = '#1f2335' }
     hl['SpellBad'] = { bg = colors.red }
     hl['FloatBorder'] = { fg = colors.green }
+    hl['helpSectionDelim'] = { fg = colors.green }
 
     -- hl['SnacksIndent'] = { fg = colors.green }
     -- hl['SnacksScope'] = { fg = colors.green }
