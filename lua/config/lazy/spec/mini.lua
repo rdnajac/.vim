@@ -20,21 +20,6 @@ return {
       },
     })
 
-    -- require('mini.pairs').setup({
-    -- HACK: unclear how to setup
-    LazyVim.mini.pairs({
-      modes = { insert = true, command = true, terminal = false },
-      -- skip autopair when next character is one of these
-      skip_next = [=[[%w%%%'%[%"%.%`%$]]=],
-      -- skip autopair when the cursor is inside these treesitter nodes
-      skip_ts = { 'string' },
-      -- skip autopair when next character is closing pair
-      -- and there are more closing pairs than opening pairs
-      skip_unbalanced = true,
-      -- better deal with markdown code blocks
-      markdown = true,
-    })
-
     local ai = require('mini.ai')
     local mini_ai_opts = {
       n_lines = 500,
@@ -57,7 +42,7 @@ return {
       },
     }
 
-    -- HACK: unclear how to setup
+    -- HACK:
     require('mini.ai').setup(mini_ai_opts)
     LazyVim.on_load('which-key.nvim', function()
       vim.schedule(function()

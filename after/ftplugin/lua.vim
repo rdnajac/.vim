@@ -4,11 +4,13 @@ let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --s
 
 setlocal formatoptions-=o
 
-if !exists('g:AutoPairsLoaded')
-  inoremap <buffer> {<SPACE> {}<LEFT><SPACE><LEFT><SPACE>
-  inoremap <buffer> {<CR> {<CR>}<ESC>O
-  " imap vim.cmd vim.cmd([[<c-g>u]])<Left><Left><Left><CR><CR><esc>hi<Space><Space>
-endif
+" simple auto-braackets
+inoremap <buffer> ( ()<Left>
+inoremap <buffer> ' ''<Left>
+inoremap <buffer> {<SPACE> {}<LEFT><SPACE><LEFT><SPACE>
+inoremap <buffer> {<CR> {<CR>}<ESC>O
+
+" imap vim.cmd vim.cmd([[<c-g>u]])<Left><Left><Left><CR><CR><esc>hi<Space><Space>
 
 " nnoremap <buffer> \mf i---@diagnostic disable-next-line: missing-fields<esc>
 " nnoremap <buffer> \ul i---@diagnostic disable-next-line: unused-local<esc>
