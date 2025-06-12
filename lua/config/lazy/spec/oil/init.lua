@@ -39,7 +39,7 @@ M.spec = {
   lazy = false,
   keys = {
     { '-', '<Cmd>Oil<CR>' },
-    { '<leader>e', '<Cmd>vsplit | Oil<CR>' },
+    { '<leader>e', '<Cmd>leftabove 30vsplit +Oil<CR>' },
   },
   opts = function()
     local refresh = require('oil.actions').refresh
@@ -113,6 +113,7 @@ M.spec = {
           end,
         },
         ['yf'] = { 'actions.yank_entry', mode = 'n' },
+        ['z'] = { '<Cmd>Zoxide<CR>' },
       },
     }
   end,

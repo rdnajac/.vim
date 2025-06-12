@@ -11,7 +11,7 @@ function! s:scroll() abort
 endfunction
 
 function! s:ooze(text) abort
-  if g:ooze_auto_exc
+  if g:ooze_auto_exec
     let text = a:text . s:newline
   endif
   call chansend(g:ooze_channel, text)
@@ -68,5 +68,3 @@ command! -range=% OozeVisual call ooze#visual()
 function! ooze#test() abort
   echom 'ooze exists!'
 endfunction
-
-nnoremap <leader>e :leftabove 30vsplit +Oil<CR>

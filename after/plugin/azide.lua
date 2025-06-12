@@ -1,0 +1,2 @@
+-- azide.nvim: navigate your filesystem with `n3`-like keybindings in Neovim
+-- using `nvim.oil` and `zoxide`. Powered by `Snacks`.

@@ -13,21 +13,6 @@ local man_ext = {
   filetypes = { 'man' },
 }
 
-local oil_ext = {
-  winbar = {
-    -- lualine_a = { { function() return '🧪' end, }, },
-    lualine_b = {
-      function()
-        local oildir = require('oil').get_current_dir()
-        if oildir then
-          return vim.fn.fnamemodify(oildir, ':~')
-        end
-      end,
-    },
-  },
-  filetypes = { 'oil' },
-}
-
 local snacks_terminal_ext = {
   sections = {
     lualine_a = {
@@ -53,19 +38,23 @@ return {
         disabled_filetypes = {
           statusline = { 'help', 'man', 'snacks_dashboard' },
           winbar = { 'lazy', 'mason', 'snacks_dashboard', 'snacks_terminal' },
+          tabline = { 'snacks_dashboard',  },
         },
         section_separators = { left = '', right = '' },
         component_separators = { left = '', right = '' },
       },
 
-      winbar = {
+      tabline = {
         lualine_a = {
           {
             function()
+              local bufname = vim.api.nvim_buf_get_name(0)
+              if bufname:match('^oil://') then
+                return '󰙅 Oil'
+              end
               local icon = '󱉭 '
               local root = LazyVim.root.get({ normalize = true })
               local name = vim.fs.basename(root)
-
               return icon .. (name and (name .. '/') or '')
             end,
             cond = function()
@@ -80,6 +69,11 @@ return {
         },
         lualine_b = {
           function()
+              local bufname = vim.api.nvim_buf_get_name(0)
+              if bufname:match('^oil://') then
+              local oildir = require('oil').get_current_dir()
+              return oildir and vim.fn.fnamemodify(oildir, ':~') or bufname
+            end
             return LazyVim.lualine.pretty_path({
               relative = 'root',
               modified_sign = ' 💾',
@@ -198,7 +192,7 @@ return {
           { 'location', padding = { left = 0, right = 1 } },
         },
       },
-      extensions = { 'fugitive', 'lazy', man_ext, 'mason', oil_ext, snacks_terminal_ext },
+      extensions = { 'fugitive', 'lazy', man_ext, 'mason', snacks_terminal_ext },
     }
     return opts
   end,
