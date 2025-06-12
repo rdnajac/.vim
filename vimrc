@@ -178,6 +178,8 @@ endif
 cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
 
 " § keymaps {{{1
+nnoremap <BS> <C-o>
+nnoremap <leader><BS> <C-t>
 nnoremap ` ~
 
 nmap <C-c> ciw
@@ -196,9 +198,14 @@ nnoremap <leader>w <Cmd>write<CR>
 nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>i :help index<CR>
 
-nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/after/ftplugin/' . &ft . '.vim'<CR>
-nnoremap <leader>fT <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/lua/config/lazy/lang/' . &ft . '.lua'<CR>
-nnoremap <leader>fs <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/snippets/' . &ft . '.json'<CR>
+function! s:edit(relpath, ext)
+  let suffix = empty(&filetype) ? '' : &filetype . a:ext
+  execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/' . a:relpath . suffix
+endfunction
+
+nnoremap <leader>ft :call <SID>edit('after/ftplugin/', '.vim')<CR>
+nnoremap <leader>fT :call <SID>edit('lua/config/lazy/lang/', '.lua')<CR>
+nnoremap <leader>fs :call <SID>edit('snippets/', '.json')<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
 " buffers {{{
@@ -312,7 +319,7 @@ let g:vim_plugins = {
       \ 'jiangmiao/auto-pairs'          : 0,
       \ 'junegunn/fzf.vim'              : 0,
       \ 'junegunn/vim-easy-align'       : 0,
-      \ 'lervag/vimtex'                 : 1,
+      \ 'lervag/vimtex'                 : 0,
       \ 'tpope/vim-abolish'             : 1,
       \ 'tpope/vim-apathy'              : 1,
       \ 'tpope/vim-commentary'          : 0,

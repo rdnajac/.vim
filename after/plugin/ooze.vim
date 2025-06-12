@@ -7,5 +7,3 @@ let g:loaded_ooze = 1
 " to the pinned directory
 
 command! -range=% OozeVisual call ooze#visual()
-
-lua require('ooze').setup()

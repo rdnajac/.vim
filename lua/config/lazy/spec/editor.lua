@@ -9,7 +9,7 @@ return {
         scroll_up = '<C-k>',
       },
       preset = 'helix',
-      sort = { 'order', 'alphanum', 'case', 'mod' },
+      sort = { 'order', 'alphanum', 'case', 'mod', 'group' },
       spec = {
         {
           {
@@ -51,9 +51,10 @@ return {
           {
             icon = { icon = '󰢱 ', color = 'blue' },
             { '<leader>r' },
+            { '<leader>R' },
             { '<leader>fT', desc = 'filetype plugin (.lua)' },
           },
-          { '<localleader>l', group = 'vimtex' },
+          -- { '<localleader>l', group = 'vimtex' },
           { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
         },
         {

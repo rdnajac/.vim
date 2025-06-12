@@ -12,6 +12,7 @@ vim.opt.foldtext = ''
 vim.opt.mousescroll = 'hor:0'
 vim.opt.pumblend = 0
 vim.opt.signcolumn = 'yes'
+-- vim.opt.showtabline = 2
 vim.opt.smoothscroll = true
 vim.opt.winborder = 'rounded'
 
@@ -19,4 +20,6 @@ vim.opt.winborder = 'rounded'
 if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
   -- if vim.fn.argc(-1) == 0 then
   vim.opt.laststatus = 0
+-- else
+--   vim.opt.showtabline = 2
 end

@@ -43,5 +43,4 @@ vim.lsp.config('*', {
     end
   end,
 })
-
 vim.lsp.enable(_G.lang_spec.lsps)

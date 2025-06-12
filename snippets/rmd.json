@@ -1,0 +1,21 @@
+{
+  "YAML Header": {
+    "prefix": "---",
+    "body": [
+      "---",
+      "title: ${1:title}",
+      "date: ${2:\"`r Sys.Date()`\"}",
+      "output: ${4:pdf_document}",
+      "---"
+    ]
+  },
+  "Insert Code Block": {
+    "prefix": "```",
+    "body": [
+      "```{${1:r}}",
+      "${0}",
+      "```"
+    ],
+    "description": "Insert fenced code block (defaults to R)"
+  }
+}

@@ -3,10 +3,11 @@ setlocal expandtab
 let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
 
 setlocal formatoptions-=o
+setlocal foldmethod=expr
 
 " simple auto-braackets
-inoremap <buffer> ( ()<Left>
-inoremap <buffer> ' ''<Left>
+" inoremap <buffer> ( ()<Left>
+" inoremap <buffer> ' ''<Left>
 inoremap <buffer> {<SPACE> {}<LEFT><SPACE><LEFT><SPACE>
 inoremap <buffer> {<CR> {<CR>}<ESC>O
 

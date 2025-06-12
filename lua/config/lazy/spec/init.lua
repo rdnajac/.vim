@@ -8,15 +8,10 @@ return {
     end,
     priority = 10000,
     opts = {
-      defaults = {
-        autocmds = false,
-        keymaps = false,
-      },
-      news = {
-        lazyvim = false,
-        neovim = false,
-      },
-      icons = {
+      -- stylua: ignore
+      defaults = { autocmds = false, keymaps = false, },
+      news     = { lazyvim  = false, neovim  = false, },
+      icons    = {
         diagnostics = {
           Error = '🔥',
           Warn = '💩',

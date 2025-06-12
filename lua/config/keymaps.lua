@@ -20,6 +20,7 @@ wk.add({
   { '<leader>dc', ':=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities' },
   command('<leader>dd', 'LazyDev debug'),
   command('<leader>dl', 'LazyDev lsp'),
+  command('<leader>dL', 'checkhealth vim.lsp'),
   command('<leader>dH', 'LazyHealth'),
   { '<leader>dS', ':=require("snacks").meta.get()<CR>', desc = 'Snacks' },
   { '<leader>dw', ':=vim.lsp.buf.list_workspace_folders()<CR>', desc = 'LSP Workspace Folders' },
@@ -110,11 +111,12 @@ wk.add({
 
   { '<leader>s', group = 'search/grep' },
   { '<leader>sa', function() Snacks.picker.autocmds() end, desc = 'Autocmds', },
-  { '<leader>sc', function() Snacks.picker.commands() end, desc = 'Commands', },
+  { '<leader>sC', function() Snacks.picker.commands() end, desc = 'Commands', },
   { '<leader>sh', function() Snacks.picker.help() end, desc = 'Help Pages', },
   { '<leader>sH', function() Snacks.picker.highlights() end, desc = 'Highlights', },
   { '<leader>si', function() Snacks.picker.icons() end, desc = 'Icons', },
   { '<leader>sk', function() Snacks.picker.keymaps() end, desc = 'Keymaps', },
+  { '<leader>su', function() Snacks.picker.undo() end,desc = 'Undotree', },
 
   { '<leader>u', group = 'ui', icon = { icon = '󰙵 ', color = 'cyan' } },
   { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes', icon = { icon = ' ', color = 'yellow' }, },
@@ -135,10 +137,10 @@ wk.add({
   { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
   { '<leader>D', function() require('util.debugprint').insert() end, desc = 'Insert Debug Print' },
   { '<leader>F', function() Snacks.picker.smart() end, desc = 'Smart Find Files', },
-  { '<leader>U', function() Snacks.picker.undo() end,desc = 'Undotree', },
   { '<leader>h', function() Snacks.picker.help() end, desc = 'Help Pages', },
   { '<leader>n', function() Snacks.picker.notifications() end, desc = "Notification History" },
   { '<leader>r', '<Cmd>Restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
+  { '<leader>R', '<Cmd>restart!<CR>', desc = 'Force restart Neovim', icon = { icon = '' } },
   -- { '<leader>r', function() require('util.restart') end, desc = 'Restart Neovim', icon = { icon = '' } },
   { '<leader>z', function() Snacks.picker.zoxide() end, desc = 'Zoxide', icon = { icon = '󰄻 ' }, },
 

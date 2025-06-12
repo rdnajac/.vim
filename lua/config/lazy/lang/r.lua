@@ -1,12 +1,18 @@
 langsetup({ { 'r-languageserver', 'r_languageserver' } })
+local filetypes = { 'r', 'rmd', 'quarto' } 
 
 return {
   {
     'R-nvim/R.nvim',
-    event = 'VeryLazy',
+    -- event = 'VeryLazy',
+    ft = filetypes,
     init = function()
       vim.g.rout_follow_colorscheme = true
     end,
+    keys = {
+      { '<localleader>r', '', desc = 'R', ft = filetypes },
+      { '<localleader>R', '<Plug>RStart', ft = filetypes },
+    },
     ---@type RConfigUserOpts
     opts = {
       R_args = { '--quiet', '--no-save' },
@@ -15,7 +21,6 @@ return {
       hook = {
         on_filetype = function()
           vim.cmd([[
-            nnoremap <buffer> ,, <Plug>RStart
             nnoremap <buffer> ]r <Plug>NextRChunk
             nnoremap <buffer> [r <Plug>PreviousRChunk
             vnoremap <buffer> <CR> <Plug>RSendSelection
@@ -26,20 +31,19 @@ return {
             nnoremap <buffer> <localleader>rq <Plug>RClose
             nnoremap <buffer> <localleader>rD <Plug>RSetwd
 
-            nnoremap <buffer> <localleader>r? :RSend getwd()<CR>
-            nnoremap <buffer> <localleader>rR :RSend source(".Rprofile")<CR>
-            nnoremap <buffer> <localleader>rd :RSend setwd(vim.fn.expand("<cword>"))<CR>
-
-            nnoremap <buffer> <localleader>rs :RSend renv::status()<CR>
-            nnoremap <buffer> <localleader>rS :RSend renv::snapshot()<CR>
-            nnoremap <buffer> <localleader>rr :RSend renv::restore()<CR>
-          ]])
+            nnoremap <buffer> <localleader>r? <Cmd>RSend getwd()<CR>
+            nnoremap <buffer> <localleader>rR <Cmd>RSend source(".Rprofile")<CR>
+            nnoremap <buffer> <localleader>rd <Cmd>RSend setwd(vim.fn.expand("<cword>"))<CR>
+            nnoremap <buffer> <localleader>rs <Cmd>RSend renv::status()<CR>
+            nnoremap <buffer> <localleader>rS <Cmd>RSend renv::snapshot()<CR>
+            nnoremap <buffer> <localleader>rr <Cmd>RSend renv::restore()<CR>
+            ]])
           vim.keymap.set('n', '<localleader>rq', function()
-            local file = vim.fn.expand('%:p')
-            vim.cmd('RSend quarto::quarto_preview(file="' .. file .. '")')
+            vim.cmd('RSend quarto::quarto_preview(file="' .. vim.fn.expand('%:p') .. '")')
           end, { buffer = true, desc = 'Quarto Preview' })
         end,
         after_config = function()
+          -- TODO: this should go in colorscheme?
           vim.cmd([[
             hi clear RCodeBlock
             hi clear RCodeComment
