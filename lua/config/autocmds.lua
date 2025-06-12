@@ -65,7 +65,10 @@ au('ModeChanged', '[V\x16]*:*', function()
   vim.wo.relativenumber = string.find(vim.fn.mode(), '^[V\22]') ~= nil
 end, 'Hide relative line numbers')
 
+local ooze_group = vim.api.nvim_create_augroup('ooze', { clear = true })
+
 vim.api.nvim_create_autocmd('TermOpen', {
+  group = ooze_group,
   callback = function(args)
     -- args.buf contains the buffer that triggered the autocmd
     if vim.bo[args.buf].filetype == 'snacks_terminal' then
@@ -77,10 +80,8 @@ vim.api.nvim_create_autocmd('TermOpen', {
   desc = 'Capture the job ID (`channel`) of a newly opened Snacks terminal',
 })
 
-local group = vim.api.nvim_create_augroup('ooze', { clear = true })
-
 vim.api.nvim_create_autocmd('User', {
-  group = group,
+  group = ooze_group,
   pattern = 'OilActionsPost',
   callback = function(ev)
     if ev.data.actions.type == 'move' then
@@ -91,7 +92,7 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 vim.api.nvim_create_autocmd('User', {
-  group = group,
+  group = ooze_group,
   pattern = 'OilActionsPre',
   callback = function(ev)
     -- TODO: is this loop necessary?
@@ -106,7 +107,7 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 vim.api.nvim_create_autocmd('BufEnter', {
-  group = group,
+  group = ooze_group,
   pattern = 'oil://*',
   callback = function(args)
     local oil = require('oil')
@@ -119,7 +120,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
 })
 
 vim.api.nvim_create_autocmd('BufLeave', {
-  group = group,
+  group = ooze_group,
   pattern = 'oil://*',
   callback = function()
     vim.cmd.lcd(vim.fn.getcwd(-1, -1))

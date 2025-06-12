@@ -32,8 +32,11 @@ return {
       hl['FloatBorder'] = { fg = colors.green }
       hl['helpSectionDelim'] = { fg = colors.green }
 
-      -- hl['SnacksIndent'] = { fg = colors.green }
-      -- hl['SnacksScope'] = { fg = colors.green }
+    -- hl['NormalFloat'] = { bg = '#1f2335' }
+    hl['MsgArea'] = { fg = colors.green }
+    hl['SpellBad'] = { bg = colors.red }
+    hl['FloatBorder'] = { fg = colors.green }
+    hl['helpSectionDelim'] = { fg = colors.green }
 
       hl['CopilotSuggestion'] = { bg = '#414868', fg = '#7aa2f7' }
       hl['RenderMarkdownCode'] = { bg = 'NONE' }
