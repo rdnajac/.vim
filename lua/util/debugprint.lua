@@ -13,11 +13,13 @@ local path = function()
   )
 end
 
+local print_func = 'print'
+
 M.insert = function()
   local file = path():gsub('^lua/', '')
   local line_nr = vim.fn.line('.')
-  local print_stmt = line_nr == 1 and string.format("ddd('%s')", file)
-    or string.format("ddd('%s: %d')", file, line_nr + 1)
+  local print_stmt = line_nr == 1 and string.format("%s('%s')", print_func, file)
+    or string.format("%s('%s: %d')", print_func, file, line_nr + 1)
   vim.cmd('normal! ' .. (line_nr == 1 and 'O' or 'o') .. print_stmt)
 end
 

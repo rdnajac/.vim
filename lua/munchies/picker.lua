@@ -131,7 +131,7 @@ M.plugins = function()
 end
 
 M.lazy_dirs = function()
-  local path = vim.fn.stdpath('data') .. '/lazy'
+  local path = lazypath
   local dirs = vim.fn.glob(path .. '/*', true, true)
   local items = {}
 

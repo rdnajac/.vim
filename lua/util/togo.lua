@@ -1,5 +1,3 @@
-local LazyVimPath = vim.fn.stdpath('data') .. '/lazy/LazyVim'
-
 --- Edit a file if it is readable, otherwise optionally display a warning.
 --- @param file string: The path to the file to edit.
 --- @param should_warn? boolean: Whether to warn if the file is not found.
@@ -22,6 +20,7 @@ end
 local M = {}
 
 M.lazy = function()
+  local LazyVimPath = lazypath .. '/LazyVim'
   local ft = vim.bo.filetype
   local word = vim.fn.expand('<cWORD>'):gsub('[,\'"]', ''):gsub('%.', '/')
   local target
@@ -39,7 +38,7 @@ M.lazy = function()
 end
 
 M.config = function(mod)
-  return edit(vim.fn.stdpath('config') .. '/lua/config/' .. mod .. '.lua')
+  return edit(vim.fn.stdpath('config') .. '/lua/nvim/' .. mod .. '.lua')
 end
 
 function M.gx()

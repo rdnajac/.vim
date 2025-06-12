@@ -38,7 +38,7 @@ return {
         disabled_filetypes = {
           statusline = { 'help', 'man', 'snacks_dashboard' },
           winbar = { 'lazy', 'mason', 'snacks_dashboard', 'snacks_terminal' },
-          tabline = { 'snacks_dashboard',  },
+          tabline = { 'snacks_dashboard' },
         },
         section_separators = { left = '', right = '' },
         component_separators = { left = '', right = '' },
@@ -69,8 +69,8 @@ return {
         },
         lualine_b = {
           function()
-              local bufname = vim.api.nvim_buf_get_name(0)
-              if bufname:match('^oil://') then
+            local bufname = vim.api.nvim_buf_get_name(0)
+            if bufname:match('^oil://') then
               local oildir = require('oil').get_current_dir()
               return oildir and vim.fn.fnamemodify(oildir, ':~') or bufname
             end
@@ -144,23 +144,24 @@ return {
 
         lualine_x = {
 
-          {
-            function()
-              local val = noice.api.statusline.mode.get()
-              return val:match('^recording @.+') and val or ''
-            end,
-            cond = has_noice and noice.api.statusline.mode.has,
-            color = function()
-              return { fg = Snacks.util.color('Statement') }
-            end,
-          },
-          {
-            noice.api.status.command.get,
-            cond = has_noice and noice.api.status.command.has,
-            color = function()
-              return { fg = Snacks.util.color('Statement') }
-            end,
-          },
+          -- TODO: this but without noice
+          -- {
+          --   function()
+          --     local val = noice.api.statusline.mode.get()
+          --     return val:match('^recording @.+') and val or ''
+          --   end,
+          --   cond = has_noice and noice.api.statusline.mode.has,
+          --   color = function()
+          --     return { fg = Snacks.util.color('Statement') }
+          --   end,
+          -- },
+          -- {
+          --   noice.api.status.command.get,
+          --   cond = has_noice and noice.api.status.command.has,
+          --   color = function()
+          --     return { fg = Snacks.util.color('Statement') }
+          --   end,
+          -- },
           {
             function()
               for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do

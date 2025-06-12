@@ -1,0 +1,44 @@
+local lazynvim = lazypath .. '/lazy.nvim'
+
+if not vim.uv.fs_stat(lazynvim) then
+  load(vim.fn.system('curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua'))()
+else
+  vim.opt.rtp:prepend(lazynvim)
+end
+
+require('lazy').setup({ ---@type LazyConfig
+  spec = {
+    { import = 'lazy.spec' },
+    { import = 'lazy.lang' },
+  },
+  profiling = { loader = false, require = false },
+  rocks = { enabled = false },
+  dev = {
+    path = '~/GitHub/rdnajac',
+    fallback = true,
+  },
+  install = { colorscheme = { 'tokyonight' } },
+  ui = {
+    border = 'rounded',
+    -- icons = require('lazy.emojis').ui,
+    -- stylua: ignore
+    custom_keys = {
+      ['<localleader>d'] = function(plugin) dd(plugin) end,
+    },
+  },
+  change_detection = { notify = false },
+  performance = {
+    rtp = {
+      disabled_plugins = {
+        'gzip',
+        -- 'matchit',
+        -- 'matchparen',
+        -- 'netrwPlugin',
+        'tarPlugin',
+        'tohtml',
+        'tutor',
+        'zipPlugin',
+      },
+    },
+  },
+})

@@ -1,6 +1,3 @@
-ddd('config/lazy/spec/lang/init.lua')
--- BUG: why is this printing twice?
-
 _G.lang_spec = setmetatable({
   tools = {},
   lsps = {},

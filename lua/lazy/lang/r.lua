@@ -1,5 +1,5 @@
 langsetup({ { 'r-languageserver', 'r_languageserver' } })
-local filetypes = { 'r', 'rmd', 'quarto' } 
+local filetypes = { 'r', 'rmd', 'quarto' }
 
 return {
   {

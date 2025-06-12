@@ -23,7 +23,7 @@ return {
           title = 'Oil',
           ft = 'oil',
           filter = function(buf, win)
-            return vim.api.nvim_win_get_config(win).relative == '' 
+            return vim.api.nvim_win_get_config(win).relative == ''
             -- or vim.bo[buf].filetype == 'oil'
           end,
           pinned = true,

@@ -15,7 +15,8 @@ return {
       },
     },
     config = function(_, opts)
-      require('config.lazy.devpatch')
+      -- HACK: fix lsp name mismatch
+      require('lazy.devpatch')
       require('lazydev.config').setup(opts)
     end,
   },

@@ -7,12 +7,6 @@ local function command(lhs, cmd, opts)
   return { lhs, '<Cmd>' .. cmd .. '<CR>', opts }
 end
 
-local function health(lhs, cmd, opts)
-  opts = opts or {}
-  opts.desc = opts.desc or cmd
-  return { lhs, '<Cmd>checkhealth ' .. cmd .. '<CR>', opts }
-end
-
 wk.add({
   { '<leader>d', group = 'debug' },
   command('<leader>da', 'ALEInfo'),
@@ -24,8 +18,14 @@ wk.add({
   command('<leader>dH', 'LazyHealth'),
   { '<leader>dS', ':=require("snacks").meta.get()<CR>', desc = 'Snacks' },
   { '<leader>dw', ':=vim.lsp.buf.list_workspace_folders()<CR>', desc = 'LSP Workspace Folders' },
+})
 
-  { '<leader>dh', group = 'health', icon = { icon = '' } },
+local function health(lhs, module, opts)
+  return command(lhs, 'checkhealth ' .. module, opts)
+end
+
+wk.add({
+  { '<leader>dh', group = 'health', icon = { icon = '', color = 'red' } },
   health('<leader>dhc', 'config'),
   health('<leader>dhk', 'which-key'),
   health('<leader>dhs', 'snacks'),
@@ -42,10 +42,11 @@ end
 wk.add({
   map_pickers('c', vim.fn.stdpath('config'), 'Config Files'),
   map_pickers('G', vim.fn.expand('~/GitHub/'), 'GitHub Repos'),
-  map_pickers('L', vim.fn.stdpath('data') .. '/lazy/LazyVim', 'LazyVim'),
-  map_pickers('P', vim.fn.stdpath('data') .. '/lazy', 'Plugins'),
-  map_pickers('S', vim.fn.stdpath('data') .. '/lazy/snacks.nvim', 'Snacks'),
-  map_pickers('V', vim.fn.expand('$VIMRUNTIME'), '$VIMRUNTIME'),
+  map_pickers('P', lazypath, 'Plugins'),
+  map_pickers('L', lazypath .. '/LazyVim', 'LazyVim'),
+  map_pickers('S', lazypath .. '/snacks.nvim', 'Snacks'),
+  map_pickers('v', vim.fn.expand('$VIMRUNTIME'), '$VIMRUNTIME'),
+  map_pickers('V', vim.fn.expand('$VIM'), '$VIM'),
 })
 
 -- stylua: ignore
@@ -55,20 +56,15 @@ end
 
 -- stylua: ignore
 wk.add({
+  map_config('\\i', 'init'),
   map_config('\\a', 'autocmds'),
   map_config('\\o', 'options/init'),
   map_config('\\k', 'keymaps'),
-  map_config('\\i', 'lazy/init'),
-  map_config('\\s', 'lazy/spec/init'),
+  -- map_config('\\s', 'lazy/spec/init'),
 })
 
 -- stylua: ignore
 wk.add({
-  -- { '<leader>l', group = 'Lazy' },
-  -- { '<leader>ll', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-  -- { '<leader>lx', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
-  { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-  { '<leader>L', function() LazyVim.extras.show() end, desc = 'Lazy Extras' },
 })
 
 -- stylua: ignore
@@ -131,6 +127,7 @@ wk.add({
 
 -- stylua: ignore
 wk.add({
+  { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
   { '<localleader>p', function() Snacks.picker.lazy() end, desc = 'Search for Plugin Spec', },
 
   { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },

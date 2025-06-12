@@ -1,9 +1,7 @@
 return {
-  -- { import = 'config.lazy.spec.ui.edgy' },
-  { import = 'config.lazy.spec.ui.lualine' },
-  -- { import = 'config.lazy.spec.ui.noice' },
-  { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
-  -- { import = 'lazyvim.plugins.extras.ui.treesitter-context' },
+  -- { import = 'lazy.spec.ui.edgy' },
+  { import = 'lazy.spec.ui.lualine' },
+  -- { import = 'lazy.spec.ui.noice' },
   {
     'SmiteshP/nvim-navic',
     lazy = true,

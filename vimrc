@@ -164,10 +164,10 @@ nnoremap Q <Cmd>call format#buffer()<CR>
 command! -range SendVisual <line1>,<line2>call ooze#sendvisual()
 
 if has('nvim')
+  command! LazyHealth Lazy! load all | checkhealth
   command! Chezmoi     :lua require('munchies.picker').chezmoi()
   command! Plugins     :lua require('munchies.picker').plugins()
   command! Scriptnames :lua require('munchies.picker').scriptnames()
-  " command! LazyHealth  :lua Lazy! load all <BAR> checkhealth<CR>
 
   " TODO: vim.api.nvim_create_autocmd('CmdlineEnter', {
   cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
@@ -301,6 +301,7 @@ cnoreabbrev ?? verbose set?<Left>
 
 cabbr <expr> %% expand('%:p:h')
 
+command! E e!
 command! W w!
 command! Wq wq!
 command! Wqa wqa!
@@ -339,7 +340,7 @@ let g:vim_plugins = {
 
 if has('nvim')
   if !exists('g:loaded_nvim')
-    lua require('config.lazy')
+    lua require('nvim')
     let g:loaded_nvim = 1
   endif
   let g:ale_disable_lsp = 1
