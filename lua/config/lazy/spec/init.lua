@@ -1,4 +1,3 @@
-ddd('config/lazy/spec/init.lua')
 require('config.lazy.file')
 
 return {

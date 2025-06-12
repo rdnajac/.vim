@@ -48,5 +48,4 @@ return {
       return { ensure_installed = _G.lang_spec.tools }
     end,
   },
-  { import = 'config.lazy.spec.lang' },
 }

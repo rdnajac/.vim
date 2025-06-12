@@ -1,5 +1,6 @@
 return {
   'folke/noice.nvim',
+  dependencies = { 'rcarriga/nvim-notify', opts = {} },
   event = 'VeryLazy',
   ---@class NoiceConfig
   opts = {
@@ -23,7 +24,11 @@ return {
         input = { view = 'cmdline_input', icon = '󰥻 ' },
       },
     },
-    messages = { enabled = true },
+    messages = {
+      enabled = true,
+      view = 'notify',
+    },
+    notify = { enabled = true },
     popupmenu = { enabled = false },
     lsp = {
       progress = { enabled = false },
@@ -38,14 +43,11 @@ return {
     },
     routes = {
       {
-        filter = {
-          event = 'msg_show',
-          any = {
-            { find = '%d+L, %d+B' },
-            { find = '; after #%d+' },
-            { find = '; before #%d+' },
-          },
-        },
+        filter = { event = 'msg_show', kind = 'emsg' },
+        view = 'notify',
+      },
+      {
+        filter = { event = 'msg_show' },
         view = 'mini',
       },
     },

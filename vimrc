@@ -197,7 +197,7 @@ nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>i :help index<CR>
 
 nnoremap <leader>ft <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/after/ftplugin/' . &ft . '.vim'<CR>
-nnoremap <leader>fT <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/lua/config/lazy/spec/lang/' . &ft . '.lua'<CR>
+nnoremap <leader>fT <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/lua/config/lazy/lang/' . &ft . '.lua'<CR>
 nnoremap <leader>fs <Cmd>execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/snippets/' . &ft . '.json'<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
@@ -324,7 +324,7 @@ let g:vim_plugins = {
       \ 'tpope/vim-speeddating'         : 0,
       \ 'tpope/vim-surround'            : 1,
       \ 'tpope/vim-tbone'               : 1,
-      \ 'tpope/vim-unimpaired'          : 0,
+      \ 'tpope/vim-unimpaired'          : 1,
       \ 'tpope/vim-vinegar'             : 0,
       \ 'vuciv/golf'                    : 0,
       \ '~/GitHub/rdnajac/src/fzf/'     : 0,

@@ -47,7 +47,10 @@ else
 end
 
 require('lazy').setup({ ---@type LazyConfig
-  spec = { { import = 'config.lazy.spec' }, },
+  spec = {
+    { import = 'config.lazy.spec' },
+    { import = 'config.lazy.lang' },
+  },
   profiling = {
     loader = false,
     require = false,

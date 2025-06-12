@@ -18,3 +18,4 @@ return {
     suggest = { fromVimruntime = true, fromRuntimepath = true },
   },
 }
+-- TODO: should this display settings in checkhealth lsp?
