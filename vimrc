@@ -181,6 +181,7 @@ cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? '
 nnoremap <BS> <C-o>
 nnoremap <leader><BS> <C-t>
 nnoremap ` ~
+vmap - gc
 
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>

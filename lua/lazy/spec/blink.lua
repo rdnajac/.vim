@@ -1,11 +1,3 @@
----@module "blink.cmp"
-
-local function trigger(ctx, char)
-  local _, col = unpack(ctx.cursor)
-  local pattern = ('%s%%w*$'):format(vim.pesc(char))
-  return ctx.line:sub(1, col):match(pattern) ~= nil
-end
-
 return {
   -- https://cmp.saghen.dev/
   'Saghen/blink.cmp',
@@ -15,7 +7,6 @@ return {
     'moyiz/blink-emoji.nvim',
     'bydlw98/blink-cmp-env',
   },
-  -- :
   build = 'cargo build --release',
   event = 'InsertEnter',
   opts = function()
@@ -32,6 +23,7 @@ return {
       desc = 'Keep completing path on <Tab>',
     })
 
+    ---@module "blink.cmp"
     ---@type blink.cmp.Config
     return {
       fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
@@ -171,9 +163,6 @@ return {
               show_braces = false,
               show_documentation_window = true,
             },
-            -- should_show_items = function(ctx, _)
-            --   return trigger(ctx, '$')
-            -- end,
           },
           emoji = {
             module = 'blink-emoji',

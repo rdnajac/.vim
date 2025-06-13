@@ -1,14 +1,18 @@
--- by: https://gist.github.com/Leenuus/7a2ea47b88bfe16430b42e4e48122718
+-- originally by: https://gist.github.com/Leenuus/7a2ea47b88bfe16430b42e4e48122718
+local M = {}
 
-local function redir_vim_command(cmd)
+M.redir = function(cmd)
   vim.cmd('redir => output')
   vim.cmd('silent ' .. cmd)
   vim.cmd('redir END')
-  local output = vim.fn.split(vim.g.output, '\n')
-  ToScratch(output, {})
+  return vim.fn.split(vim.g.output, '\n')
 end
 
-function ToScratch(text, opts)
+M.redir_lua_command = function(cmd)
+  return M.redir_vim_command('lua ' .. cmd)
+end
+
+function ToScratch(cmd opts)
   opts = opts or {}
   -- opts.name = opts.name or cmd
   opts.template = table.concat(text, '\n')
@@ -157,3 +161,5 @@ vim.api.nvim_create_user_command('EvalRange', function(args)
   local bang = args.bang
   evaler("'<,'>")(bang)
 end, { bar = true, bang = true, range = true })
+
+return M

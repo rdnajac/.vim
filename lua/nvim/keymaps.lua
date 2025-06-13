@@ -17,6 +17,7 @@ wk.add({
   command('<leader>dL', 'checkhealth vim.lsp'),
   command('<leader>dH', 'LazyHealth'),
   { '<leader>dS', ':=require("snacks").meta.get()<CR>', desc = 'Snacks' },
+  { '<leader>dr', function() Snacks.debug.run() end },
   { '<leader>dw', ':=vim.lsp.buf.list_workspace_folders()<CR>', desc = 'LSP Workspace Folders' },
 })
 
@@ -219,9 +220,9 @@ Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
 
 -- Custom toggles
-require('munchies.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
-require('munchies.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
-require('munchies.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
+-- require('munchies.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
+-- require('snacks.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
+-- require('snacks.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
 
 vim.keymap.set('n', '<leader>cd', function()
   vim.ui.input({ prompt = 'Change Directory: ', default = vim.fn.getcwd() }, function(input)
@@ -264,7 +265,7 @@ for _, combo in ipairs({ 'jk', 'kj' }) do
 end
 -- }}}
 
-vim.keymap.set('n', '_', function()
+vim.keymap.set('n', '~', function()
   local cwd = vim.fn.getcwd()
   local target = vim.fn.expand('%:p:h')
   if cwd == target then

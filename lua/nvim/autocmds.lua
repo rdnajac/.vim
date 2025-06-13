@@ -48,7 +48,7 @@ au('FileType', { 'kitty', 'ghostty' }, function(event)
   end
 end, 'Use bash parser for kitty and ghostty configs')
 
-au('FileType', { 'help', 'man', 'oil' }, function()
+au('FileType', { 'help', 'man' }, function()
   if Snacks.util.is_transparent() then
     vim.cmd([[setlocal winhighlight=Normal:SpecialWindow]])
   end

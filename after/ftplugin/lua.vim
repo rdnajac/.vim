@@ -21,6 +21,16 @@ inoremap <buffer> \si  --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> \sis --<SPACE>stylua:<SPACE>ignore<SPACE>start
 inoremap <buffer> \sie --<SPACE>stylua:<SPACE>ignore<SPACE>end
 
+" local function transform
+nmap <leader>cl ^wdwf(i<Space>=<Space><Esc>px
+
+" local to M transform
+nmap <leader>cm ^v2f<Space>cM.<Esc>
+
+" M transform
+nmap <leader>cM ^v2f<Space>cM.<Esc>
+
+
 if has ('nvim')
   lua vim.api.nvim_set_hl(0, 'LspReferenceText', {})
 endif

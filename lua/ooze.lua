@@ -3,7 +3,7 @@ local M = {}
 -- Define custom global flags with built-in toggles using Snacks Toggle
 -- stylua: ignore
 local _create_flags = function()
-  local flag = require('munchies.toggle').flag
+  local flag = require('snacks.toggle').flag
   flag({ name = 'ooze_auto_advance',  mapping = '~A',    desc = 'Toggle Auto Advance',       label = 'Auto Advance (Line Feed)', })
   flag({ name = 'ooze_auto_scroll',   mapping = '~s',    desc = 'Toggle Auto Scroll',        label = 'Auto Scroll',              })
   flag({ name = 'ooze_send_on_enter', mapping = '~<CR>', desc = 'Toggle Send on Enter',      label = 'Send Line',                })

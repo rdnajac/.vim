@@ -1,6 +1,5 @@
 return {
   'folke/noice.nvim',
-  dependencies = { 'rcarriga/nvim-notify', opts = {} },
   event = 'VeryLazy',
   ---@class NoiceConfig
   opts = {

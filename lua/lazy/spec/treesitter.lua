@@ -18,6 +18,8 @@ return {
     opts_extend = { 'ensure_installed' },
     opts = {
       -- TODO: implement this
+      -- change to space space
+      -- normal mode <C-space> to trigger blink
       incremental_selection = {
         enable = true,
         keymaps = {

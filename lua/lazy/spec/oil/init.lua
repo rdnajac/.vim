@@ -33,14 +33,31 @@ end
 local git_status = M.new_git_status()
 local detail = 0
 
+local add_oil = function()
+  local oil = require('oil')
+  local entry = oil.get_cursor_entry()
+  if not entry then
+    return
+  end
+
+  if entry.type == 'directory' then
+    require('oil.actions').select.callback()
+    return
+  end
+
+  local path = oil.get_current_dir() .. entry.name
+  local curr_win = vim.api.nvim_get_current_win()
+
+  vim.cmd('wincmd p')
+  vim.cmd('edit ' .. vim.fn.fnameescape(path))
+  vim.api.nvim_set_current_win(curr_win)
+end
+
 ---@type LazyPluginSpec
 M.spec = {
   'stevearc/oil.nvim',
   lazy = false,
-  keys = {
-    { '-', '<Cmd>Oil<CR>' },
-    { '<leader>e', '<Cmd>leftabove 30vsplit +Oil<CR>' },
-  },
+  keys = { { '-', '<Cmd>Oil<CR>' } },
   opts = function()
     local refresh = require('oil.actions').refresh
     local orig_refresh = refresh.callback
@@ -81,21 +98,19 @@ M.spec = {
 
       keymaps = {
         ['h'] = { 'actions.parent', mode = 'n' },
-        -- ['l'] = { 'actions.select', mode = 'n' },
         ['l'] = {
-          desc = 'Send to main window',
+          desc = 'Send to other window',
           callback = function()
-            local oil = require('oil')
-            local entry = oil.get_cursor_entry()
-            if not entry or entry.type ~= 'file' then
-              return
-            end
-            local path = oil.get_current_dir() .. entry.name
-            vim.fn.chansend(vim.v.servername, string.format([[<Cmd>edit %s<CR>]], vim.fn.fnameescape(path)))
+            add_oil()
           end,
         },
         ['<Left>'] = { 'actions.parent', mode = 'n' },
-        ['<Right>'] = { 'actions.select', mode = 'n' },
+        ['<Right>'] = {
+          desc = 'Send to other window',
+          callback = function()
+            add_oil()
+          end,
+        },
         ['q'] = { 'actions.close', mode = 'n' },
         ['<Tab>'] = { 'actions.close', mode = 'n' },
         ['gi'] = {

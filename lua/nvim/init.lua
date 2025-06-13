@@ -3,20 +3,17 @@ vim.loader.enable() -- XXX: experimental!
 
 _G.lazypath = vim.fn.stdpath('data') .. '/lazy'
 
--- HACK: add `Snacks` snacks to rtp early
-vim.opt.rtp:append(lazypath .. '/snacks.nvim')
-
-local Snacks = require('snacks')
--- stylua: ignore start
-_G.bt  = function()    Snacks.debug.backtrace() end
-_G.p   = function(...) Snacks.debug.profile(...) end
-_G.dd  = function(...) Snacks.debug.inspect(...) end
-_G.ddd = function(...) if vim.env.DEBUG then print(...) end end
--- stylua: ignore end
+_G.dd = function(...)
+  Snacks.debug.inspect(...)
+end
+_G.bt = function()
+  Snacks.debug.backtrace()
+end
 vim.print = _G.dd
 
 -- optional profiling with `PROF=1 nvim`
 if vim.env.PROF then
+  vim.opt.rtp:append(lazypath .. '/snacks.nvim')
   ---@type snacks.profiler.Config
   local profiler = {
     startup = {
@@ -25,7 +22,7 @@ if vim.env.PROF then
     },
     presets = { startup = { min_time = 0, sort = false } },
   }
-  Snacks.profiler.startup(profiler)
+  require('snacks').profiler.startup(profiler)
 end
 
 require('lazy.bootstrap')

@@ -15,8 +15,8 @@ return {
       -- options = { bottom = { size = 20 } },
       -- bottom = {
       --   { ft = 'help', filter = function(buf) return vim.bo[buf].buftype == 'help' end },
-      --   { ft = 'man',  filter = function(buf) return vim.bo[buf].buftype == 'man'  end },
       -- },
+      --   { ft = 'man',  filter = function(buf) return vim.bo[buf].buftype == 'man'  end },
       ---@type (Edgy.View.Opts|string)[]
       left = {
         {
