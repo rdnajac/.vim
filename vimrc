@@ -275,11 +275,11 @@ iabbrev n- –
 iabbrev m- —
 
 " toggles {{{
-nmap ~~ :set autochdir!<BAR>set autochdir?<CR>
-nmap ~w :set wrap!<BAR>set wrap?<CR>
-nmap ~s :set spell!<BAR>set wrap?<CR>
-nmap ~l :set list!<BAR>set list?<CR>
-nmap ~n :set number!<BAR>set number?<CR>
+nmap <leader>yl :set list!<BAR>set list?<CR>
+nmap <leader>yn :set number!<BAR>set number?<CR>
+nmap <leader>ys :set spell!<BAR>set wrap?<CR>
+nmap <leader>yw :set wrap!<BAR>set wrap?<CR>
+nmap <leader>y~ :set autochdir!<BAR>set autochdir?<CR>
 
 " surround " {{{
 " NOTE: requqires vim-surround

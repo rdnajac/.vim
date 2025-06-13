@@ -13,9 +13,9 @@ inoremap <buffer> {<CR> {<CR>}<ESC>O
 
 " imap vim.cmd vim.cmd([[<c-g>u]])<Left><Left><Left><CR><CR><esc>hi<Space><Space>
 
-" nnoremap <buffer> \mf i---@diagnostic disable-next-line: missing-fields<esc>
-" nnoremap <buffer> \ul i---@diagnostic disable-next-line: unused-local<esc>
-" nnoremap <buffer> \uf i---@diagnostic disable-next-line: undefined-field<esc>
+inoremap <buffer> \mf ---@diagnostic disable-next-line: missing-fields
+inoremap <buffer> \ul ---@diagnostic disable-next-line: unused-local
+inoremap <buffer> \uf ---@diagnostic disable-next-line: undefined-field
 
 inoremap <buffer> \si  --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> \sis --<SPACE>stylua:<SPACE>ignore<SPACE>start
