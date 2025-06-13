@@ -6,10 +6,12 @@ else
   vim.opt.rtp:prepend(lazynvim)
 end
 
-require('lazy').setup({ ---@type LazyConfig
+---@type LazyConfig
+require('lazy').setup({
   spec = {
     { import = 'lazy.spec' },
     { import = 'lazy.lang' },
+    -- { import = 'lazy.xtra' },
   },
   profiling = { loader = false, require = false },
   rocks = { enabled = false },

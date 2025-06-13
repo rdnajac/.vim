@@ -1,4 +1,4 @@
--- HACK: patch before plugin loads
+-- HACK: patch LazyDev before loading the plugin
 local lazydev_path = require('lazy.core.config').spec.plugins['lazydev.nvim'].dir
 package.preload['lazydev.lsp'] = function()
   local mod = dofile(lazydev_path .. '/lua/lazydev/lsp.lua')
