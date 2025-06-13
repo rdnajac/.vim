@@ -1,3 +1,7 @@
+function! ooze#test() abort
+  echom 'ooze exists!'
+endfunction
+
 let s:newline = "\n"
 
 function! s:scroll() abort
@@ -63,8 +67,13 @@ function! ooze#runfile() abort
   call s:ooze(l:file)
 endfunction
 
-command! -range=% OozeVisual call ooze#visual()
 
-function! ooze#test() abort
-  echom 'ooze exists!'
+function! s:CR() abort
+  if v:lua.Snacks.util.var(0, 'ooze_send_on_enter', 0) == 1
+    call ooze#sendline()
+    call ooze#linefeed()
+    return ''
+  else
+    return "\<CR>"
+  endif
 endfunction

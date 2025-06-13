@@ -72,10 +72,10 @@ M.flag = function(opts)
   -- Define the variable if it doesn't exist
   vim.cmd(string.format(
     [[
-    if !exists('g:%s')
-      let g:%s = %s
-    endif
-  ]],
+      if !exists('g:%s')
+        let g:%s = %s
+      endif
+    ]],
     name,
     name,
     default
@@ -95,6 +95,8 @@ M.flag = function(opts)
   if mapping then
     toggle:map(mapping, { desc = desc })
   end
+
+  require('which-key').add({'mapping', desc = 'Toggle ' .. name })
 
   return toggle
 end

@@ -9,7 +9,7 @@ let s:VIMHOME = expand('$HOME/.config/vim//')
 let g:plug_home = s:VIMHOME . './plugged//'
 let &spellfile = s:VIMHOME . '.spell/en.utf-8.add'
 
-if !has('nvim')
+if !has('nvim') " {{{3
   let &undodir     = s:VIMHOME . '.undo//'
   let &viminfofile = s:VIMHOME . '.viminfo'
   " let &verbosefile = s:VIMHOME . '.vimlog.txt'
@@ -141,41 +141,27 @@ augroup END
 " }}}2
 
 " § commands {{{1
+" TODO: move these to plugin
 command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
-
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 " current file
 command! CDC cd %:p:h <BAR> pwd
+
 " parent directory
 command! CDP cd %:p:h:h
 
 command! BreakHere call utils#breakHere()
-command! ReplaceSelection call utils#replaceSelection()
-command! CleanWhitespace call format#whitespace()
-nmap <leader>fw <cmd>CleanWhitespace<CR>
-
 nnoremap <space>j <Cmd>BreakHere<CR>
+
+command! ReplaceSelection call utils#replaceSelection()
 vnoremap <C-r> <cmd>ReplaceSelection<CR>
+command! CleanWhitespace call format#whitespace()
+nnoremap <leader>fw <cmd>CleanWhitespace<CR>
 
 nnoremap Q <Cmd>call format#buffer()<CR>
 
-command! -range SendVisual <line1>,<line2>call ooze#sendvisual()
-
-if has('nvim')
-  command! LazyHealth Lazy! load all | checkhealth
-  command! Chezmoi     :lua require('munchies.picker').chezmoi()
-  command! Plugins     :lua require('munchies.picker').plugins()
-  command! Scriptnames :lua require('munchies.picker').scriptnames()
-
-  " TODO: vim.api.nvim_create_autocmd('CmdlineEnter', {
-  cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
-  cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
-  cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
-endif
-
-cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
 
 " § keymaps {{{1
 nnoremap <BS> <C-o>
@@ -205,7 +191,7 @@ function! s:edit(relpath, ext)
 endfunction
 
 nnoremap <leader>ft :call <SID>edit('after/ftplugin/', '.vim')<CR>
-nnoremap <leader>fT :call <SID>edit('lua/config/lazy/lang/', '.lua')<CR>
+nnoremap <leader>fT :call <SID>edit('lua/lazy/lang/', '.lua')<CR>
 nnoremap <leader>fs :call <SID>edit('snippets/', '.json')<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
@@ -217,13 +203,13 @@ nnoremap <silent> <leader>bD    :bd<CR>
 
 " Close buffer
 map <silent> <C-q> <Cmd>bd<CR>
-" }}}
+
 " resize splits {{{
 " nnoremap <M-Up>    :resize -2<CR>
 " nnoremap <M-Down>  :resize +2<CR>
 nnoremap <M-Left>  :vertical resize -2<CR>
 nnoremap <M-Right> :vertical resize +2<CR>
-" }}}
+
 " smarter j/k {{{
 nnoremap <expr> j      v:count == 0 ? 'gj' : 'j'
 xnoremap <expr> j      v:count == 0 ? 'gj' : 'j'
@@ -233,7 +219,7 @@ nnoremap <expr> <Down> v:count == 0 ? 'gj' : 'j'
 xnoremap <expr> <Down> v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
 xnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
-" }}}
+
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n {{{
 " normal mode also openz folds and centers the cursor
 nnoremap <expr> n ('Nn'[v:searchforward]) . 'zvzz'
@@ -244,12 +230,14 @@ nnoremap <expr> N ('nN'[v:searchforward]) . 'zvzz'
 xnoremap <expr> N  'nN'[v:searchforward]
 onoremap <expr> N  'nN'[v:searchforward]
 
+" center searches
 nnoremap *  *zzzv
 nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 
 " comments {{{
+" NOTE: requqires vim-commentary if vim
 " comment-out and duplicate line
 nmap yc "xyygcc"xp
 
@@ -261,17 +249,17 @@ vnoremap < <gv
 vnoremap > >gv
 nnoremap > V`]>
 nnoremap < V`]<
-" }}}
+
 " smart delete/paste {{{
 vnoremap <silent> p "_dP
 vnoremap <silent> <leader>d p"_d
 vnoremap <silent> <leader>p "_dP
-" }}}
+
 " insert mode undo breakpoints {{{
 inoremap , ,<c-g>u
 inoremap . .<c-g>u
 inoremap ; ;<c-g>u
-" }}}
+
 " easier completion {{{
 inoremap <silent> ,o <C-x><C-o>
 inoremap <silent> ,f <C-x><C-f>
@@ -280,8 +268,8 @@ inoremap <silent> ,l <C-x><C-l>
 inoremap <silent> ,n <C-x><C-n>
 inoremap <silent> ,t <C-x><C-]>
 inoremap <silent> ,u <C-x><C-u>
-" }}}
-" insert special chars " {{{
+
+" insert special chars {{{
 inoremap \sec §
 iabbrev n- –
 iabbrev m- —
@@ -292,13 +280,23 @@ nmap ~w :set wrap!<BAR>set wrap?<CR>
 nmap ~s :set spell!<BAR>set wrap?<CR>
 nmap ~l :set list!<BAR>set list?<CR>
 nmap ~n :set number!<BAR>set number?<CR>
-" }}}
 
-" command-line {{{
+" surround " {{{
+" NOTE: requqires vim-surround
+vmap `  S`
+vmap '  S'
+vmap "  S"
+vmap b  Sb
+nmap S  viWS
+nmap yss ys
+
+" cmdline {{{
 nnoremap ; :
 
 cnoreabbrev !! !./%
 cnoreabbrev ?? verbose set?<Left>
+cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
+cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
 
 cabbr <expr> %% expand('%:p:h')
 
@@ -307,10 +305,9 @@ command! W w!
 command! Wq wq!
 command! Wqa wqa!
 
-" wildmenu
+" wildmenu {{{
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
-
 
 " § plugins {{{1
 " key = vimscript plugin, value = also enabled in nvim
@@ -342,6 +339,7 @@ let g:vim_plugins = {
 if has('nvim')
   if !exists('g:loaded_nvim')
     lua require('nvim')
+    command! LazyHealth Lazy! load all | checkhealth
     let g:loaded_nvim = 1
   endif
   let g:ale_disable_lsp = 1

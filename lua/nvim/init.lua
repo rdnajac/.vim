@@ -4,7 +4,9 @@ vim.loader.enable() -- XXX: experimental!
 _G.lazypath = vim.fn.stdpath('data') .. '/lazy'
 
 _G.dd = function(...)
-  Snacks.debug.inspect(...)
+  return (function(...)
+    return Snacks.debug.inspect(...)
+  end)(...)
 end
 _G.bt = function()
   Snacks.debug.backtrace()
@@ -40,7 +42,6 @@ LazyVim.on_very_lazy(function()
   end
   require('nvim.keymaps')
   require('nvim.options')
-  vim.cmd([[do VimResized]])
-  LazyVim.format.setup()
-  LazyVim.root.setup()
+  require('munchies')
+  require('util')
 end)

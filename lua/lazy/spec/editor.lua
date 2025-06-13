@@ -3,13 +3,10 @@ return {
     'folke/which-key.nvim',
     ---@class wk_opts
     opts = {
-      show_help = false,
-      keys = {
-        scroll_down = '<C-j>',
-        scroll_up = '<C-k>',
-      },
+      keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
       preset = 'helix',
-      sort = { 'order', 'alphanum', 'case', 'mod', 'group' },
+      show_help = false,
+      sort = { 'order', 'alphanum', 'case', 'mod' },
       spec = {
         {
           {
@@ -55,14 +52,8 @@ return {
             { '<leader>fT', desc = 'filetype plugin (.lua)' },
           },
           -- { '<localleader>l', group = 'vimtex' },
-          { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
         },
-        {
-          hidden = true,
-          { 'g~' },
-          { 'g#' },
-          { 'g*' },
-        },
+        { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
       },
     },
   },
@@ -123,8 +114,6 @@ return {
       { '[t', function() require('todo-comments').jump_prev() end, desc = 'Previous Todo Comment', },
       { '<leader>xt', '<Cmd>Trouble todo toggle<CR>', desc = 'Todo (Trouble)' },
       { '<leader>xT', '<Cmd>Trouble todo toggle filter = {tag = {TODO,FIX,FIXME}}<CR>', desc = 'Todo/Fix/Fixme (Trouble)', },
-      { '<leader>st', '<Cmd>TodoTelescope<CR>', desc = 'Todo' },
-      { '<leader>sT', '<Cmd>TodoTelescope keywords=TODO,FIX,FIXME<CR>', desc = 'Todo/Fix/Fixme' },
     },
   },
 }

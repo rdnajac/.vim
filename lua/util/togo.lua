@@ -37,10 +37,6 @@ M.lazy = function()
   edit(target)
 end
 
-M.config = function(mod)
-  return edit(vim.fn.stdpath('config') .. '/lua/nvim/' .. mod .. '.lua')
-end
-
 function M.gx()
   local line = vim.api.nvim_get_current_line()
   local col = vim.fn.col('.')

@@ -2,9 +2,7 @@ local M = {}
 
 ---@type snacks.picker.Config
 M.config = {
-  layout = {
-    preset = 'ivy',
-  },
+  layout = { preset = 'ivy' },
   layouts = {
     vscode = {
       reverse = true,

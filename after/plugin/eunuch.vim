@@ -1,5 +1,5 @@
+" https://github.com/tpope/vim-eunuch/blob/master/doc/eunuch.txt
 
-" Adapted from autoload/dist/script.vim.
 let s:interpreters = {
       \ '.':      '/bin/sh',
       \ 'sh':     '/bin/bash',

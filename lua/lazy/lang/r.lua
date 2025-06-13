@@ -8,11 +8,11 @@ return {
     ft = filetypes,
     init = function()
       vim.g.rout_follow_colorscheme = true
+      require('which-key').add({
+        { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
+      })
     end,
-    keys = {
-      { '<localleader>r', '', desc = 'R', ft = filetypes },
-      { '<localleader>R', '<Plug>RStart', ft = filetypes },
-    },
+    keys = { { '<localleader>R', '<Plug>RStart', ft = filetypes } },
     ---@type RConfigUserOpts
     opts = {
       R_args = { '--quiet', '--no-save' },
