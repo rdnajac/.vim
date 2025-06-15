@@ -7,7 +7,7 @@ return {
     -- HACK: override the default LazyVim config entirely
     config = function()
       _G.LazyVim = require('lazyvim.util')
-      LazyVim.config = require('lazy.opts')
+      LazyVim.config = require('lazy.config')
       LazyVim.track('colorscheme')
       require('tokyonight').load()
       LazyVim.track()

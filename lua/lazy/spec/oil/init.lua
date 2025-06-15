@@ -6,6 +6,8 @@ return {
   lazy = false,
   keys = {
     { '-', '<Cmd>Oil<CR>' },
+    -- { '<leader>e', '<Cmd>Oil<CR>' },
+    -- { '<leader>e', '<Cmd>topleft 30vsplit +Oil<CR>' },
   },
   opts = function()
     local refresh = require('oil.actions').refresh

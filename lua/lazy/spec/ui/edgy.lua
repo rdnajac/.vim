@@ -1,5 +1,6 @@
 return {
   'folke/edgy.nvim',
+  enabled = false,
   event = 'VeryLazy',
     -- stylua: ignore
     keys = {
@@ -10,13 +11,12 @@ return {
   opts = function()
     local opts = {
       exit_when_last = true,
-
       -- animate = { enabled = false },
       -- options = { bottom = { size = 20 } },
       -- bottom = {
       --   { ft = 'help', filter = function(buf) return vim.bo[buf].buftype == 'help' end },
-      -- },
       --   { ft = 'man',  filter = function(buf) return vim.bo[buf].buftype == 'man'  end },
+      -- }
       ---@type (Edgy.View.Opts|string)[]
       left = {
         {
@@ -26,11 +26,10 @@ return {
             return vim.api.nvim_win_get_config(win).relative == ''
             -- or vim.bo[buf].filetype == 'oil'
           end,
-          pinned = true,
-          collapsed = true,
+          -- pinned = true,
+          -- collapsed = true,
           -- open = 'Oil',
           -- open = 'vsplit +Oil',
-          open = 'Oil',
           size = { width = 30 },
         },
       },
