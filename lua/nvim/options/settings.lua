@@ -4,7 +4,7 @@ vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
 vim.opt.cmdheight = 0
 -- TODO: move to utils.folding.lua?
 vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
-vim.opt.foldlevel = 99
+-- vim.opt.foldlevel = 99
 -- TODO: set per filetype
 -- vim.opt.foldmethod = 'expr'
 vim.opt.foldtext = ''

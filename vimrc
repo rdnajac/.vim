@@ -45,6 +45,7 @@ set fillchars+=stl:\ ,
 set formatoptions-=or
 set foldmethod=marker
 set foldopen+=insert,jump
+set foldlevel=99
 set ignorecase smartcase
 set linebreak
 set list
@@ -185,7 +186,7 @@ nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
 nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zz
 nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zz
 nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zz
-" nnoremap <leader>E <Cmd>edit<CR>
+nnoremap <leader>E <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>
 nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>i :help index<CR>
@@ -347,6 +348,8 @@ if has('nvim')
     lua require('nvim')
     command! LazyHealth Lazy! load all | checkhealth
     let g:loaded_nvim = 1
+    " HACK: this isnt loaded automatically in nvim
+    call fold#text()
   endif
   let g:ale_disable_lsp = 1
   let g:ale_use_neovim_diagnostics_api = 1
