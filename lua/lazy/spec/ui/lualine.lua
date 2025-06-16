@@ -93,7 +93,7 @@ return {
           },
           lualine_c = { { 'navic', color_correction = 'dynamic' } },
 
-          lualine_y = { { 'diagnostics', symbols = { icons.diagnostics } } },
+          lualine_y = { { 'diagnostics', symbols = LazyVim.config.icons.diagnostics } },
           lualine_z = {
             Snacks.profiler.status(),
             { -- display the number of plugins that have pending updates
