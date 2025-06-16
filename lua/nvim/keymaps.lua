@@ -60,7 +60,7 @@ wk.add({
   -- map_config('\\s', 'lazy/spec/init'),
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
   { '\\m', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/munchies/init.lua<CR>', desc = 'Munchies' },
-  { '\\u', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/utils/init.lua<CR>', desc = 'Utils' },
+  { '\\u', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/util/init.lua<CR>', desc = 'Utils' },
 })
 
 -- insert comments {{{2
@@ -89,6 +89,16 @@ wk.add({
   insert_comment('gcB', 'BUG'),
 })
 
+-- nvim {{{1
+-- stylua: ignore
+wk.add({
+icon = { icon = ' ', color = 'green' },
+  { '<leader>S', '<Cmd>Scripts<CR>', desc = 'Scriptnames' },
+  { '<leader>r', '<Cmd>Restart<CR>', desc = 'Restart Neovim' },
+  { '<leader>R', '<Cmd>restart!<CR>', desc = 'Force restart Neovim' },
+  { '<leader>D', function() require('util.debugprint').insert() end, desc = 'Insert Debug Print' },
+})
+
 -- vimrc/lazy/snacks {{{1
 -- stylua: ignore
 wk.add({
@@ -102,11 +112,7 @@ wk.add({
   { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },
   { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
 
-  { '<leader>D', function() require('util.debugprint').insert() end, desc = 'Insert Debug Print' },
   { '<leader>F', function() Snacks.picker.smart() end, desc = 'Smart Find Files', },
-  { '<leader>S', '<Cmd>Scripts<CR>', desc = 'Scriptnames', icon = { icon = '' } },
-  { '<leader>r', '<Cmd>Restart<CR>', desc = 'Restart Neovim', icon = { icon = '' } },
-  { '<leader>R', '<Cmd>restart!<CR>', desc = 'Force restart Neovim', icon = { icon = '' } },
   -- { '<leader>r', function() require('util.restart') end, desc = 'Restart Neovim', icon = { icon = '' } },
 
   { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
@@ -114,7 +120,7 @@ wk.add({
   { '<leader>bd', function() Snacks.bufdelete() end, desc = 'Delete Buffer', mode = 'n' },
 
   { '<leader>c', group = 'code' },
-  { '<leader>cz', function() require('munchies.picker').chezmoi() end, desc = 'Chezmoi', },
+  { '<leader>cz', '<Cmd>Chezmoi<CR>', desc = 'Chezmoi', },
 
   { '<leader>h', function() Snacks.picker.help() end, desc = 'Help', },
 
@@ -167,7 +173,7 @@ wk.add({
   { '<leader>su', function() Snacks.picker.undo() end,desc = 'Undotree', },
 
   { '<leader>y', group = 'toggle' },
-  
+
   { '<leader>z', function() Snacks.picker.zoxide() end, desc = 'Zoxide', icon = { icon = '󰄻 ' }, },
 })
 
@@ -197,7 +203,35 @@ wk.add({
   { '<leader>sp', function() require('munchies.picker.plugins').grep() end, desc = 'Lazy Plugins', },
 })
 
--- snacks toggles {{{2
+-- snacks profiler {{{2
+wk.add({
+  { '<leader>dp', group = 'profiler' },
+  -- stylua: ignore
+  { '<leader>dps', function() Snacks.profiler.scratch() end, desc = 'Profiler Scratch Buffer' } ,
+})
+Snacks.toggle.profiler():map('<leader>dpp')
+Snacks.toggle.profiler_highlights():map('<leader>dph')
+-- }}}1
+
+-- ui {{{2
+vim.keymap.set({ 'i', 'n', 's' }, '<esc>', function()
+  vim.cmd('noh')
+  LazyVim.cmp.actions.snippet_stop()
+  return '<Esc>'
+end, { expr = true, desc = 'Escape and Clear hlsearch' })
+
+-- stylua: ignore
+wk.add({
+  { '<leader>u', group = 'ui', icon = { icon = '󰙵 ', color = 'cyan' } },
+  { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes', icon = { icon = ' ', color = 'yellow' }, },
+  { '<leader>ui', function() vim.show_pos() end, desc = 'Inspect Pos', },
+  { '<leader>uI', function() vim.treesitter.inspect_tree() vim.api.nvim_input('I') end, { desc = 'Inspect Tree' }, },
+  { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss Notifications', },
+  { '<leader>ur', '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>', desc = 'Redraw/Clear/Diff' },
+  { '<leader>uz', function() Snacks.zen() end, desc = 'Zen Mode', icon = { icon = ' ', color = 'blue' }, },
+})
+
+-- snacks toggles {{{3
 Snacks.toggle.animate():map('<leader>ua')
 -- Snacks.toggle.option('showtabline', {
 --   off = 0,
@@ -219,33 +253,6 @@ Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
 
 -- Custom toggles
--- require('munchies.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
--- require('snacks.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
--- require('snacks.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
--- snacks profiler {{{2
-wk.add({
-  { '<leader>dp', group = 'profiler' },
-  -- stylua: ignore
-  { '<leader>dps', function() Snacks.profiler.scratch() end, desc = 'Profiler Scratch Buffer' } })
-Snacks.toggle.profiler():map('<leader>dpp')
-Snacks.toggle.profiler_highlights():map('<leader>dph')
--- }}}1
-
--- ui {{{2
--- stylua: ignore
-wk.add({
-  { '<leader>u', group = 'ui', icon = { icon = '󰙵 ', color = 'cyan' } },
-  { '<leader>uC', function() Snacks.picker.colorschemes() end, desc = 'Colorschemes', icon = { icon = ' ', color = 'yellow' }, },
-  { '<leader>ui', function() vim.show_pos() end, desc = 'Inspect Pos', },
-  { '<leader>uI', function() vim.treesitter.inspect_tree() vim.api.nvim_input('I') end, { desc = 'Inspect Tree' }, },
-  { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss Notifications', },
-  { '<leader>ur', '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>', desc = 'Redraw/Clear/Diff' },
-  { '<leader>uz', function() Snacks.zen() end, desc = 'Zen Mode', icon = { icon = ' ', color = 'blue' }, },
-})
-
-vim.keymap.set({ 'i', 'n', 's' }, '<esc>', function()
-  vim.cmd('noh')
-  -- TODO: set up
-  -- LazyVim.cmp.actions.snippet_stop()
-  return '<esc>'
-end, { expr = true, desc = 'Escape and Clear hlsearch' })
+require('munchies.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
+require('munchies.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
+require('munchies.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })

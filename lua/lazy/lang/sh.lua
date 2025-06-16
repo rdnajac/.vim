@@ -17,12 +17,7 @@ return {
     'xvzc/chezmoi.nvim',
     enabled = true,
     cmd = { 'ChezmoiEdit', 'ChezmoiList' },
-    opts = {
-      edit = {
-        watch = false,
-        force = false,
-      },
-    },
+    opts = { edit = { watch = false, force = false } },
     init = function()
       -- vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufWritePost' }, {
       --   pattern = os.getenv('HOME') .. '/.config/vim/*',

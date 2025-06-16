@@ -1,15 +1,44 @@
 # .vim
 
-My Vim configuration.
+My (n)vim configuration.
 
-## Resources
+## neovim
 
-- [Five Minute Vimscript](http://andrewscala.com/vimscript/)
-- [Extra vim-plug stuff](https://github.com/junegunn/vim-plug/wiki/extra)
+### Installation
 
-## netrw
+Install prereqs:
 
-h: netrw provides 'ssh hints':
+```sh
+sudo apt-get install ninja-build gettext cmake curl build-essential
+```
+
+Build from source:
+
+```sh
+git clone https://github.com/neovim/neovim.git
+cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install
+cd  .. && ls
+```
+
+## Plugins
+
+Use [`lazy.nvim`](https://lazy.folke.io/) to manage plugins
+and spend hours optimizing for milliseconds.
+
+### Snacks
+
+#### Image
+
+Equation to do null hypothesis testing:
+
+$$
+Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
+$$
+
+
+### netrw
+
+`h: netrw` provides 'ssh hints':
 
 ```vimdoc
 Thomer Gil has provided a hint on how to speed up netrw+ssh:
@@ -24,11 +53,57 @@ Both pages are offline...
 - <https://web.archive.org/web/20120319233142/https://www.usevim.com/2012/03/16/editing-remote-files/>
 
 - <https://web.archive.org/web/20120319233142/https://www.usevim.com/2012/03/16/editing-remote-files/#expand>
-<!-- TODO: add image sources -->
 
 Luckily they have been cached by the Internet Archive.
 
+### Spell Checking
+
+Download [cspell](http://streetsidesoftware.github.io/cspell/)
+dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries)
+
+## QoL
+
+Some plugins save their state in the cache. If you want to reset the state of a
+plugin, you can delete the cache.
+
+```sh
+rm -rf ~/.cache/nvim
+```
+
+Others will save files to ~/.local/share/nvim. You can delete these files, too.
+
+```sh
+rm -rf ~/.local/share/nvim
+```
+
+| `<plugin>`       | note                        | `<path>`                      |
+| ---------------- | --------------------------- | ----------------------------- |
+| `blink`          | Blink.cmp completion cache  | `~/.local/share/nvim/blink`   |
+| `lazy`           | LazyVim root                | `~/.local/share/nvim/lazy`    |
+| `mason`          | Mason packages and binaries | `~/.local/share/nvim/mason`   |
+| `Snacks.scratch` | Snacks scratch buffers      | `~/.local/share/nvim/scratch` |
+| `Snacks.picker`  | Snacks picker histories     | `~/.local/share/nvim/snacks`  |
+
+Finally, there is ~/.local/state/nvim, where we have:
+
+- backup/
+- grug-far/
+- lazy/
+- sessions/
+- shada/
+- swap/
+- undo/
+- various log files
+
+To clean up:
+
+```sh
+rm -rf ~/.local/state/nvim/{*.log,sessions,swap,undo}
+```
+
 ## Cheatsheet
+
+<!-- TODO: add image sources -->
 
 ![Vim Cheatsheet](./assets/vim-cheatsheet.png)
 
@@ -36,20 +111,22 @@ Luckily they have been cached by the Internet Archive.
 
 ![Vim Pipes](./assets/vim-pipes.png)
 
-## Spell Checking
 
-Download [cspell](http://streetsidesoftware.github.io/cspell/)
-dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries)
+## Resources and references
 
-## References
-
+- [Five Minute Vimscript](http://andrewscala.com/vimscript/)
 - [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
 - Google's Vimscript Style Guide:
   - [Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml)
   - [Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
-- [No Plugins](https://github.com/changemewtf/no_plugins)
 - [Idiomatic Vimrc](https://github.com/romainl/idiomatic-vimrcr)
-- [Five Minute Vimscript](http://andrewscala.com/vimscript/)
+- [No Plugins](https://github.com/changemewtf/no_plugins)
+
+- [Neovim](https://neovim.io/)
+- [Neovim config without plugins](https://boltless.me/posts/neovim-config-without-plugins-2025/)
+- [`lazy.nvim` plugin manager](https://lazy.folke.io/)
+- [LazyVim](https://www.lazyvim.org)
+- [`lsp-zero`](https://lsp-zero.netlify.app/docs/)
 
 ---
 

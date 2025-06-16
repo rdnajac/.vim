@@ -40,4 +40,5 @@ M.files = function()
     Snacks.picker.files({ cwd = dir })
   end)
 end
+
 return M

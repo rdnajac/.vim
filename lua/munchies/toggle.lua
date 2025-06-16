@@ -70,16 +70,7 @@ M.flag = function(opts)
   local desc = opts.desc or ('Toggle ' .. name)
 
   -- Define the variable if it doesn't exist
-  vim.cmd(string.format(
-    [[
-      if !exists('g:%s')
-        let g:%s = %s
-      endif
-    ]],
-    name,
-    name,
-    default
-  ))
+  vim.cmd(string.format([[ if !exists('g:%s') | let g:%s = %s | endif ]], name, name, default))
 
   local toggle = Snacks.toggle({
     name = opts.label or name:gsub('_', ' '):gsub('^%l', string.upper),
@@ -96,7 +87,7 @@ M.flag = function(opts)
     toggle:map(mapping, { desc = desc })
   end
 
-  require('which-key').add({'mapping', desc = 'Toggle ' .. name })
+  require('which-key').add({ 'mapping', desc = 'Toggle ' .. name })
 
   return toggle
 end

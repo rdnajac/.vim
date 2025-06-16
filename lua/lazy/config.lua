@@ -1,11 +1,11 @@
 return {
   icons = {
-    ft = { octo = ' ' },
+    -- ft = { octo = ' ' },
     diagnostics = {
-      Error = '🔥',
-      Warn = '💩',
-      Hint = '🧠',
-      Info = '👾',
+      error = '🔥',
+      warn = '💩',
+      hint = '🧠',
+      info = '👾',
     },
     git = {
       added = ' ',
@@ -13,6 +13,6 @@ return {
       removed = ' ',
     },
     kinds = require('snacks.picker.config.defaults').defaults.icons.kinds,
-    misc = { dots = '󰇘' },
+    -- misc = { dots = '󰇘' },
   },
 }

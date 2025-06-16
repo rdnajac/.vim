@@ -4,6 +4,7 @@ let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --s
 
 setlocal formatoptions-=o
 setlocal foldmethod=expr
+setlocal foldtext=fold#text()
 
 " simple auto-braackets
 " inoremap <buffer> ( ()<Left>
@@ -29,7 +30,6 @@ nmap <leader>cm ^v2f<Space>cM.<Esc>
 
 " M transform
 nmap <leader>cM ^v2f<Space>cM.<Esc>
-
 
 if has ('nvim')
   lua vim.api.nvim_set_hl(0, 'LspReferenceText', {})

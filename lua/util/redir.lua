@@ -12,7 +12,7 @@ M.redir_lua_command = function(cmd)
   return M.redir_vim_command('lua ' .. cmd)
 end
 
-function ToScratch(cmd opts)
+function ToScratch(cmd, opts)
   opts = opts or {}
   -- opts.name = opts.name or cmd
   opts.template = table.concat(text, '\n')

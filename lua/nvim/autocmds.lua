@@ -65,6 +65,7 @@ au('ModeChanged', '[V\x16]*:*', function()
   vim.wo.relativenumber = string.find(vim.fn.mode(), '^[V\22]') ~= nil
 end, 'Hide relative line numbers')
 
+-- TODO: move this
 local ooze_group = vim.api.nvim_create_augroup('ooze', { clear = true })
 vim.api.nvim_create_autocmd('TermOpen', {
   group = ooze_group,

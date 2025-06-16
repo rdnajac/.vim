@@ -24,4 +24,3 @@ vim.keymap.set('n', '~', function()
   end
   vim.cmd('cd ' .. target .. ' | pwd')
 end)
-

@@ -1,11 +1,12 @@
 vim.cmd([[
 " vim commands for Snacks functions
-command! Chezmoi :lua require('munchies.picker').chezmoi()
-command! Config :lua require('munchies.picker').chezmoi()
-" command! Plugins :lua require('munchies.picker').plugins()
-command! Scripts :lua require('munchies.picker').scripts()
-command! Lazygit :lua Snacks.Lazygit()
+  command! Chezmoi lua require('munchies.picker.chezmoi')()
+  command! Scripts lua require('munchies.picker.scriptnames')()
+  command! PluginGrep lua require('munchies.picker.plugins').grep()
+  command! PluginFiles lua require('munchies.picker.plugins').files()
 
-cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
-cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
+  command! Lazygit :lua Snacks.Lazygit()
+
+  cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
+  cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
 ]])

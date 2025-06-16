@@ -57,7 +57,7 @@ M.config = {
       end,
     },
     files = {
-      -- layout = { preset = 'vscode' },
+      layout = { preset = 'vscode' },
       follow = true,
       hidden = true,
       ignored = false,

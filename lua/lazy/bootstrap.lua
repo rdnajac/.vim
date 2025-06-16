@@ -15,6 +15,7 @@ require('lazy').setup({
   },
   profiling = { loader = false, require = false },
   rocks = { enabled = false },
+
   dev = {
     path = '~/GitHub/rdnajac',
     fallback = true,
@@ -33,9 +34,9 @@ require('lazy').setup({
     rtp = {
       disabled_plugins = {
         'gzip',
-        -- 'matchit',
-        -- 'matchparen',
-        -- 'netrwPlugin',
+        'matchit',
+        'matchparen',
+        'netrwPlugin',
         'tarPlugin',
         'tohtml',
         'tutor',

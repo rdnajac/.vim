@@ -5,13 +5,13 @@ return {
     -- stylua: ignore
     keys = {
     -- TODO: snacks toggle
-      { '<leader>ue', function() require('edgy').toggle() end, desc = 'Edgy Toggle', },
-      { '<leader>uE', function() require('edgy').select() end, desc = 'Edgy Select Window', },
+      { '<leader>e', function() require('edgy').toggle() end, desc = 'Edgy Toggle', },
+      { '<leader>ue', function() require('edgy').select() end, desc = 'Edgy Select Window', },
     },
   opts = function()
     local opts = {
       exit_when_last = true,
-      -- animate = { enabled = false },
+      animate = { enabled = false }, -- animate messes with statusline
       -- options = { bottom = { size = 20 } },
       -- bottom = {
       --   { ft = 'help', filter = function(buf) return vim.bo[buf].buftype == 'help' end },
@@ -20,15 +20,15 @@ return {
       ---@type (Edgy.View.Opts|string)[]
       left = {
         {
-          title = 'Oil',
+          -- title = 'Oil',
           ft = 'oil',
-          filter = function(buf, win)
-            return vim.api.nvim_win_get_config(win).relative == ''
-            -- or vim.bo[buf].filetype == 'oil'
-          end,
-          -- pinned = true,
-          -- collapsed = true,
-          -- open = 'Oil',
+          -- filter = function(buf, win)
+          --   return vim.api.nvim_win_get_config(win).relative == ''
+          --   -- or vim.bo[buf].filetype == 'oil'
+          -- end,
+          pinned = true,
+          collapsed = false,
+          open = 'Oil',
           -- open = 'vsplit +Oil',
           size = { width = 30 },
         },

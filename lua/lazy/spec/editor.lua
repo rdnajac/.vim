@@ -37,8 +37,9 @@ return {
           {
             icon = { icon = ' ', color = 'green' },
             -- { '<leader>r' },
-            { '<leader>v' },
+            { '<leader>v', group = 'vimrc' },
             { '<leader>E' },
+            { '<leader>m' },
             { '<leader>w' },
             { '<leader>i' },
             { '<leader>t' },
@@ -47,8 +48,6 @@ return {
           },
           {
             icon = { icon = '󰢱 ', color = 'blue' },
-            { '<leader>r' },
-            { '<leader>R' },
             { '<leader>fT', desc = 'filetype plugin (.lua)' },
           },
           -- { '<localleader>l', group = 'vimtex' },

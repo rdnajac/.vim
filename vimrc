@@ -78,7 +78,6 @@ set wildmode=longest:full,full
 " § autocmds {{{1
 augroup vimrc " {{{2
   autocmd!
-  au BufReadPost $MYVIMRC call vim#vimrcmarks()
   au CmdwinEnter * quit
   au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
   " au BufDelete * if winnr('$') == 1 && &filetype ==# 'snacks_terminal' | execute 'qa!' | endif
@@ -162,6 +161,8 @@ nnoremap <leader>fw <cmd>CleanWhitespace<CR>
 
 nnoremap Q <Cmd>call format#buffer()<CR>
 
+" auto pairs in cmdline
+cnoremap ( ()<Left>
 
 " § keymaps {{{1
 nnoremap <BS> <C-o>
@@ -171,16 +172,20 @@ vmap - gc
 
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
+nmap <C-Space> viw%
 
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
 
 nnoremap <leader>a :normal! ggVG<CR>
 nnoremap <leader>m <Cmd>messages<CR>
-" nnoremap <leader>r <Cmd>source $MYVIMRC <Bar> echom 'Reloaded config!'<CR>
 " nnoremap <leader>r <Cmd>Restart<CR>
-nnoremap <leader>v <Cmd>edit $MYVIMRC<CR>
-nnoremap <leader>E <Cmd>edit<CR>
+nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zz
+nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
+nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zz
+nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zz
+nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zz
+" nnoremap <leader>E <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>
 nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>i :help index<CR>
@@ -334,6 +339,7 @@ let g:vim_plugins = {
       \ 'tpope/vim-vinegar'             : 0,
       \ 'vuciv/golf'                    : 0,
       \ '~/GitHub/rdnajac/src/fzf/'     : 0,
+      \ 'andymass/vim-matchup'          : 1,
       \ }
 
 if has('nvim')
