@@ -11,7 +11,7 @@ require('lazy').setup({
   spec = {
     { import = 'lazy.spec' },
     { import = 'lazy.lang' },
-    -- { import = 'lazy.xtra' },
+    { import = 'lazy.xtra.formatting' },
   },
   profiling = { loader = false, require = false },
   rocks = { enabled = false },

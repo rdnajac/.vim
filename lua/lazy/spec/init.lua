@@ -1,3 +1,4 @@
+vim.g.autoformat = true
 require('lazy.file')
 
 return {
