@@ -42,10 +42,8 @@ au('FileType', { 'help', 'man', 'qf', 'query' }, function(ev)
 end)
 
 au('FileType', { 'kitty', 'ghostty' }, function(event)
-  if require('nvim-treesitter.parsers').has_parser('bash') then
-    vim.treesitter.language.register('bash', event.match)
-    vim.treesitter.start(0, 'bash')
-  end
+  vim.treesitter.language.register('bash', event.match)
+  vim.treesitter.start(0, 'bash')
 end, 'Use bash parser for kitty and ghostty configs')
 
 au('FileType', { 'help', 'man' }, function()
@@ -64,6 +62,14 @@ end, 'Show relative line numbers')
 au('ModeChanged', '[V\x16]*:*', function()
   vim.wo.relativenumber = string.find(vim.fn.mode(), '^[V\22]') ~= nil
 end, 'Hide relative line numbers')
+
+-- Auto-insert LSP template for new files in ~/.config/nvim/lsp/*.lua
+au('BufNewFile', 'lsp/*.lua', function()
+  local template = vim.fn.stdpath('config') .. '/templates/lsp.lua'
+  if vim.fn.filereadable(template) == 1 then
+    vim.cmd('0r ' .. template)
+  end
+end, 'Insert LSP template')
 
 -- TODO: move this
 local ooze_group = vim.api.nvim_create_augroup('ooze', { clear = true })
