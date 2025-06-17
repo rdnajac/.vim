@@ -1,9 +1,10 @@
-local function escape_pattern(text)
-  -- Escape magic chars for `:s` command
+local M = {}
+
+local function escape(text)
   return text:gsub('([/\\])', '\\%1')
 end
 
-function ReplaceSelection()
+function M.selection()
   vim.cmd('normal! gv"xy')
   local sel = vim.fn.getreg('x')
 
@@ -14,12 +15,12 @@ function ReplaceSelection()
 
   vim.ui.input({ prompt = 'Replace all instances of "' .. sel .. '" with: ' }, function(rep)
     if rep and rep ~= '' then
-      local search = escape_pattern(sel)
-      local replacement = escape_pattern(rep)
+      local search = escape(sel)
+      local replacement = escape(rep)
       local cmd = string.format('%%s/%s/%s/g', search, replacement)
       vim.cmd(cmd)
     end
   end)
 end
 
-vim.keymap.set('v', '<C-r>', ReplaceSelection, { desc = 'Replace selected text globally' })
+return M

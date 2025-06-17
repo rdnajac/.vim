@@ -13,6 +13,6 @@ return {
       removed = ' ',
     },
     kinds = require('snacks.picker.config.defaults').defaults.icons.kinds,
-    -- misc = { dots = '󰇘' },
+    misc = { dots = '…' },
   },
 }

@@ -44,7 +44,7 @@ return {
       words = { enabled = true },
     },
   },
-  { import = 'lazyvim.plugins.extras.editor.mini-files' },
+  -- { import = 'lazyvim.plugins.extras.editor.mini-files' },
   { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
   { 'nvim-lua/plenary.nvim', lazy = true },
 }
