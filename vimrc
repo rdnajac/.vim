@@ -174,7 +174,7 @@ vmap - gc
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
 nmap <C-Space> viw%
-
+nnoremap <leader><Space> viW
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
 

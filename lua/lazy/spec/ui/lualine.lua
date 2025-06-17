@@ -46,49 +46,93 @@ return {
             winbar = { 'lazy', 'mason', 'snacks_dashboard', 'snacks_terminal' },
             tabline = { 'snacks_dashboard' },
           },
-          section_separators = { left = '', right = '' },
-          component_separators = { left = '', right = '' },
+          -- section_separators = { left = '', right = '' },
+          section_separators = {},
+          -- section_separators = { left = '', right = '' },
+          component_separators = {},
+          -- component_separators = { left = '', right = '' },
         },
 
         tabline = {
           lualine_a = {
             {
               function()
-                -- local bufname = vim.api.nvim_buf_get_name(0)
-                -- if bufname:match('^oil://') then
-                --   return '󰙅 Oil'
-                -- end
-                -- TODO: display root root dir only
                 local icon = '󱉭 '
+                local bufname = vim.api.nvim_buf_get_name(0)
+                if bufname:match('^oil://') then
+                  local oildir = require('oil').get_current_dir()
+                  if not oildir then
+                    return icon .. '[oil]'
+                  end
+                  local root = LazyVim.root.get({ normalize = false })
+                  if root and oildir:find(root, 1, true) == 1 then
+                    local path = oildir:sub(#root + 2)
+                    local name = vim.fs.basename(root)
+                    return icon .. name .. (path ~= '' and '/' .. path or '') .. '/'
+                  end
+                  return icon .. vim.fn.fnamemodify(oildir, ':~') .. '/'
+                end
                 local root = LazyVim.root.get({ normalize = false })
+                if not root then
+                  return ''
+                end
+                local cwd = vim.fn.getcwd()
+                local path = cwd:sub(#root + 2)
                 local name = vim.fs.basename(root)
-                return icon .. (name and (name .. '/') or '')
+                return icon .. name .. (path ~= '' and '/' .. path or '') .. '/'
               end,
               cond = function()
-                local cwd = vim.fn.getcwd()
-                local root = LazyVim.root.get({ normalize = true })
-                return cwd:find(root, 1, true) == 1
+                local bufname = vim.api.nvim_buf_get_name(0)
+                return bufname:match('^oil://') or LazyVim.root.get({ normalize = true }) ~= nil
               end,
               color = function()
                 return { fg = '#000000', bold = true }
               end,
             },
           },
+
           lualine_b = {
             function()
-              local bufname = vim.api.nvim_buf_get_name(0)
-              if bufname:match('^oil://') then
-                local oildir = require('oil').get_current_dir()
-                return oildir and vim.fn.fnamemodify(oildir, ':~') or bufname
+              local path = vim.fn.expand('%:p')
+              if path == '' then
+                return ''
               end
-              return LazyVim.lualine.pretty_path({
-                relative = 'root',
-                modified_sign = ' 💾',
-                length = 2,
-                modified_hl = '',
-                directory_hl = '',
-                filename_hl = '',
-              })()
+
+              local cwd = LazyVim.root.cwd()
+              local root = LazyVim.root.get({ normalize = true })
+              path = LazyVim.norm(path)
+
+              if not root or not path:find(root, 1, true) then
+                return vim.fn.fnamemodify(path, ':~')
+              end
+
+              local rel = path:sub(#root + 2)
+              local cwd_rel = cwd:sub(#root + 2)
+              local rel_parts = vim.split(rel, '/')
+              local cwd_parts = vim.split(cwd_rel, '/')
+
+              local i = 1
+              while rel_parts[i] and cwd_parts[i] and rel_parts[i] == cwd_parts[i] do
+                i = i + 1
+              end
+
+              local up = #cwd_parts - i + 1
+              local path_parts = {}
+              for _ = 1, up do
+                table.insert(path_parts, '..')
+              end
+              for j = i, #rel_parts do
+                table.insert(path_parts, rel_parts[j])
+              end
+
+              local out = table.concat(path_parts, '/')
+              if vim.bo.modified then
+                out = out .. ' 💾'
+              end
+              if vim.bo.readonly then
+                out = out .. ' 🔐'
+              end
+              return out
             end,
           },
           lualine_c = { { 'navic', color_correction = 'dynamic' } },
@@ -168,23 +212,23 @@ return {
           },
           lualine_y = {
             {
-              'filetype',
-              icon_only = true,
-              separator = '',
-              padding = { left = 1, right = 0 },
-            },
-            {
               'lsp_status',
-              icon = '',
+              icon = ' ',
               symbols = { done = '' },
               ignore_lsp = { 'GitHub Copilot' },
               separator = '',
             },
+            {
+              'filetype',
+              icon_only = true,
+              separator = '',
+              padding = { left = 0, right = 1 },
+            },
           },
-          -- lualine_z = {
-          --   { 'progress', separator = ' ', padding = { left = 1, right = 0 } },
-          --   { 'location', padding = { left = 0, right = 1 } },
-          -- },
+          lualine_z = {
+            { 'progress', separator = ' ', padding = { left = 1, right = 0 } },
+            { 'location', padding = { left = 0, right = 1 } },
+          },
         },
         extensions = { 'fugitive', 'lazy', man_ext, 'mason', snacks_terminal_ext },
       }
