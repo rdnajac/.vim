@@ -74,14 +74,6 @@ endfunction
 autocmd QuickFixCmdPost [^l]* cwindow | silent! call s:qf_signs()
 autocmd QuickFixCmdPost   l*  lwindow | silent! call s:qf_signs()
 
-function! s:toggle(opt, default) abort
-  execute 'if &'.a:opt.' == '.a:default.' | '.'set '.a:opt.'=0 | '.'else | '.'set '.a:opt.'='.a:default.' | '.'endif '
-endfunction
-
-" nnoremap <localleader>st :call <SID>toggle('showtabline', 2)<CR>
-" nnoremap <localleader>ss :call <SID>toggle('laststatus', 2)<CR>
-" nnoremap <localleader>sc :call <SID>toggle('colorcolumn', 81)<CR>
-
 " syntax
 " https://stackoverflow.com/a/28399202/26469286
 " For files that don't have filetype-specific syntax rules
