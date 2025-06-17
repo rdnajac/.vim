@@ -70,6 +70,7 @@ set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
 set signcolumn=yes
+set showtabline=2
 
 set completeopt=menu,preview,preinsert,longest
 " set completeopt=menu,preview,longest
@@ -82,7 +83,7 @@ augroup vimrc " {{{2
   au CmdwinEnter * quit
   au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
   " au BufDelete * if winnr('$') == 1 && &filetype ==# 'snacks_terminal' | execute 'qa!' | endif
-  " au BufDelete * if len(filter(getbufinfo(), 'v:val.listed')) == 0 | execute 'qa!' | endif
+" au BufDelete * if len(filter(getbufinfo(), 'v:val.listed')) == 0 | execute 'qa!' | endif
   au BufWritePost $MYVIMRC source $MYVIMRC | echom 'vimrc reloaded'
 augroup END
 
@@ -168,12 +169,12 @@ cnoremap ( ()<Left>
 " § keymaps {{{1
 nnoremap <BS> <C-o>
 nnoremap <leader><BS> <C-t>
-nnoremap ` ~
+" nnoremap ` ~
 vmap - gc
 
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
-nmap <C-Space> viw%
+" nmap <C-Space> viw%
 nnoremap <leader><Space> viW
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
@@ -185,6 +186,7 @@ nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zz
 nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
 nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zz
 nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zz
+nnoremap <leader>vv <Cmd>edit +/$MYVIMRC<CR>
 nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zz
 nnoremap <leader>E <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>
@@ -340,7 +342,7 @@ let g:vim_plugins = {
       \ 'tpope/vim-vinegar'             : 0,
       \ 'vuciv/golf'                    : 0,
       \ '~/GitHub/rdnajac/src/fzf/'     : 0,
-      \ 'andymass/vim-matchup'          : 1,
+      \ 'andymass/vim-matchup'          : 0,
       \ }
 
 if has('nvim')
