@@ -2,6 +2,10 @@
 
 My (n)vim configuration.
 
+## TODO
+
+- [ ] `vim-matchup` breaks on a commented 'if'
+
 ## neovim
 
 ### Installation

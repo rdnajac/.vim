@@ -365,6 +365,7 @@ endif
 " global variables {{{2
 
 let g:copilot_workspace_folders = ['~/GitHub', '~/.local/share/chezmoi/']
+let g:matchup_delim_noskips = 2
 
 " ALE globals {{{3
 let g:ale_fixers = {
