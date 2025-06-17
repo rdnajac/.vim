@@ -26,23 +26,15 @@ return {
   {
     'mason-org/mason.nvim',
     build = ':MasonUpdate',
-    event = 'VeryLazy',
+    lazy = false,
     opts = {
-      ui = {
-        icons = {
-          package_installed = '✓',
-          package_pending = '➜',
-          package_uninstalled = '✗',
-        },
-      },
+      -- ui = {
+      --   icons = {
+      --     package_installed = '✓',
+      --     package_pending = '➜',
+      --     package_uninstalled = '✗',
+      --   },
+      -- },
     },
-  },
-  {
-    'WhoIsSethDaniel/mason-tool-installer.nvim',
-    event = 'VeryLazy',
-    dependencies = { 'mason-org/mason.nvim' },
-    opts = function()
-      return { ensure_installed = _G.lang_spec.tools }
-    end,
   },
 }
