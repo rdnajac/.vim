@@ -30,33 +30,34 @@ local keymaps = {
   ['q'] = { 'actions.close', mode = 'n' },
   ['<Tab>'] = { 'actions.close', mode = 'n' },
   ['<Left>'] = { 'actions.parent', mode = 'n' },
-  ['<Right>'] = {
-    callback = function()
-      local oil = require('oil')
-      local entry = oil.get_cursor_entry()
-      if not entry then
-        return
-      end
-
-      if entry.type == 'directory' then
-        oil.actions.select.callback({ close = false })
-      else
-        local dir = oil.get_current_dir()
-        local filepath = vim.fs.joinpath(dir, entry.name)
-        local wins = vim.api.nvim_list_wins()
-        local curr = vim.api.nvim_get_current_win()
-        for _, win in ipairs(wins) do
-          if win ~= curr then
-            vim.api.nvim_set_current_win(win)
-            vim.cmd('edit ' .. vim.fn.fnameescape(filepath))
-            break
-          end
-        end
-      end
-    end,
-    desc = 'Edit in other win or select dir',
-    mode = 'n',
-  },
+  ['<Right>'] = 'actions.select',
+  -- ['<Right>'] = {
+  --   callback = function()
+  --     local oil = require('oil')
+  --     local entry = oil.get_cursor_entry()
+  --     if not entry then
+  --       return
+  --     end
+  --
+  --     if entry.type == 'directory' then
+  --       oil.actions.select.callback({ close = false })
+  --     else
+  --       local dir = oil.get_current_dir()
+  --       local filepath = vim.fs.joinpath(dir, entry.name)
+  --       local wins = vim.api.nvim_list_wins()
+  --       local curr = vim.api.nvim_get_current_win()
+  --       for _, win in ipairs(wins) do
+  --         if win ~= curr then
+  --           vim.api.nvim_set_current_win(win)
+  --           vim.cmd('edit ' .. vim.fn.fnameescape(filepath))
+  --           break
+  --         end
+  --       end
+  --     end
+  --   end,
+  --   desc = 'Edit in other win or select dir',
+  --   mode = 'n',
+  -- },
   ['h'] = { 'actions.parent', mode = 'n' },
   ['l'] = 'actions.select',
   ['Y'] = { 'actions.yank_entry', mode = 'n' },

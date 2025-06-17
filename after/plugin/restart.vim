@@ -12,4 +12,5 @@ if has('nvim')
   augroup END
 
   command! Restart execute 'mksession! ' . s:sesh | restart
+  command! Ree Restart
 endif

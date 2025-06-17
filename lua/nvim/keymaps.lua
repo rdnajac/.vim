@@ -20,7 +20,7 @@ end
 wk.add({
   { '<leader>d', group = 'debug' },
   command('<leader>da', 'ALEInfo'),
-  command('<leader>db', 'BlinkCmp status'),
+  command('<leader>db', 'BLINKC:p status'),
   { '<leader>dc', ':=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities' },
   command('<leader>dd', 'LazyDev debug'),
   command('<leader>dl', 'LazyDev lsp'),
@@ -30,15 +30,15 @@ wk.add({
   { '<leader>dw', ':=vim.lsp.buf.list_workspace_folders()<CR>', desc = 'LSP Workspace Folders' },
 })
 
-local function health(lhs, module, opts)
+local function checkhealth(lhs, module, opts)
   return command(lhs, 'checkhealth ' .. module, opts)
 end
 
 wk.add({
   { '<leader>dh', group = 'health', icon = { icon = '', color = 'red' } },
-  health('<leader>dhc', 'config'),
-  health('<leader>dhk', 'which-key'),
-  health('<leader>dhs', 'snacks'),
+  checkhealth('<leader>dhc', 'config'),
+  checkhealth('<leader>dhk', 'which-key'),
+  checkhealth('<leader>dhs', 'snacks'),
 })
 
 vim.keymap.set({ 'n', 'v' }, '<leader>dr', function()
@@ -47,17 +47,17 @@ end)
 
 -- edit config files  {{{2
 local confpath = vim.fn.stdpath('config') .. '/lua/nvim/'
-local function map_config(lhs, mod)
+local function config(lhs, mod)
   return { lhs, '<Cmd>edit ' .. confpath .. mod .. '.lua<CR>', desc = mod }
 end
 
 -- stylua: ignore
 wk.add({
-  map_config('\\i', 'init'),
-  map_config('\\a', 'autocmds'),
-  map_config('\\o', 'options/init'),
-  map_config('\\k', 'keymaps'),
-  -- map_config('\\s', 'lazy/spec/init'),
+  config('\\i', 'init'),
+  config('\\a', 'autocmds'),
+  config('\\o', 'options/init'),
+  config('\\k', 'keymaps'),
+  -- config('\\s', 'lazy/spec/init'),
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
   { '\\m', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/munchies/init.lua<CR>', desc = 'Munchies' },
   { '\\u', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/util/init.lua<CR>', desc = 'Utils' },
@@ -93,88 +93,330 @@ wk.add({
 -- stylua: ignore
 wk.add({
 icon = { icon = ' ', color = 'green' },
-  { '<leader>S', '<Cmd>Scripts<CR>', desc = 'Scriptnames' },
-  { '<leader>r', '<Cmd>Restart<CR>', desc = 'Restart Neovim' },
-  { '<leader>R', '<Cmd>restart!<CR>', desc = 'Force restart Neovim' },
+  command('<leader>S',  'Scripts'),
+  command('<leader>r',  'Restart'),
+  command('<leader>R',  'restart!'),
+  command('<leader>C',  'Chezmoi'),
+  command('<leader>cd', 'CD'),
+  command('~',          'SmartCD'),
+  command('<leader>q',  'Quit'),
+  command('<leader>Q',  'Quit!'),
   { '<leader>D', function() require('util.debugprint').insert() end, desc = 'Insert Debug Print' },
 })
 
--- vimrc/lazy/snacks {{{1
+-- snacks {{{1
 -- stylua: ignore
+local function fu(lhs, fn, desc, mode)
+  return { lhs, function() fn() end, desc = desc, mode = mode, }
+end
+
 wk.add({
-  { 'gL', function() require('util.togo').lazy() end, desc = 'Goto LazyVim module' },
-  { 'gx', function() require('util.togo').gx() end, desc = 'Open with system app' },
-
-  { '\\\\', function() Snacks.dashboard.open() end, desc = 'Snacks Dashboard', },
-  { ',,', function() Snacks.terminal.toggle() end, desc = 'Snacks Terminal', mode = { 'n', 't' } },
-  { '<leader>.', function() Snacks.scratch() end, desc = 'Toggle Scratch Buffer', },
-  { '<leader>>', function() Snacks.scratch.select() end, desc = 'Select Scratch Buffer', },
-  { '<leader>,', function() Snacks.picker.buffers() end, desc = 'Buffers', },
-  { '<leader>/', function() Snacks.picker.grep() end, desc = 'Grep (Root Dir)', icon = { icon = ' ' }, },
-
-  { '<leader>F', function() Snacks.picker.smart() end, desc = 'Smart Find Files', },
+  {
+    'gL',
+    function()
+      require('util.togo').lazy()
+    end,
+    desc = 'Goto LazyVim module',
+  },
+  {
+    'gx',
+    function()
+      require('util.togo').gx()
+    end,
+    desc = 'Open with system app',
+  },
+  { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
+  --
+  fu(',,', Snacks.terminal.toggle, 'Snacks Terminal', { 'n', 't' }),
+  fu('\\\\', Snacks.dashboard.open, 'Snacks Dashboard'),
+  fu('<leader>.', Snacks.scratch, 'Toggle Scratch Buffer'),
+  fu('<leader>>', Snacks.scratch.select, 'Select Scratch Buffer'),
+  fu('<leader>,', Snacks.picker.buffers, 'Buffers'),
+  fu('<leader>/', Snacks.picker.grep, 'Grep (Root Dir)'),
+  fu('<leader>F', Snacks.picker.smart, 'Smart Find Files'),
   -- { '<leader>r', function() require('util.restart') end, desc = 'Restart Neovim', icon = { icon = '' } },
 
-  { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
+  {
+    '<leader>bd',
+    function()
+      Snacks.bufdelete()
+    end,
+    desc = 'Delete Buffer',
+  },
 
-  { '<leader>bd', function() Snacks.bufdelete() end, desc = 'Delete Buffer', mode = 'n' },
-
-  { '<leader>c', group = 'code' },
-  { '<leader>cz', '<Cmd>Chezmoi<CR>', desc = 'Chezmoi', },
-
-  { '<leader>h', function() Snacks.picker.help() end, desc = 'Help', },
+  {
+    '<leader>h',
+    function()
+      Snacks.picker.help()
+    end,
+    desc = 'Help',
+  },
 
   { '<leader>f', group = 'file/find', icon = { color = 'azure' } },
-  { '<leader>fC', function() Snacks.rename.rename_file() end, desc = 'Change (rename) File on disk', },
-  { '<leader>ff', function() Snacks.picker.files({ cwd = Snacks.git.get_root() }) end, desc = 'Files (root)', },
-  { '<leader>fr', function() Snacks.picker.recent() end, desc = 'Recent' },
-  { '<leader>fR', function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = 'Recent (cwd)', },
+  {
+    '<leader>fC',
+    function()
+      Snacks.rename.rename_file()
+    end,
+    desc = 'Change (rename) File on disk',
+  },
+  {
+    '<leader>ff',
+    function()
+      Snacks.picker.files({ cwd = Snacks.git.get_root() })
+    end,
+    desc = 'Files (root)',
+  },
+  {
+    '<leader>fr',
+    function()
+      Snacks.picker.recent()
+    end,
+    desc = 'Recent',
+  },
+  {
+    '<leader>fR',
+    function()
+      Snacks.picker.recent({ filter = { cwd = true } })
+    end,
+    desc = 'Recent (cwd)',
+  },
 
   { '<leader>g', group = 'git' },
-  { '<leader>gb', function() Snacks.picker.git_log_line() end, desc = 'Git Blame Line', },
-  { '<leader>gB', function() Snacks.gitbrowse() end, desc = 'Git Browse (open)', },
-  { '<leader>gd', function() Snacks.picker.git_diff() end, desc = 'Git Diff (hunks)', },
-  { '<leader>gs', function() Snacks.picker.git_status() end, desc = 'Git Status', },
-  { '<leader>gS', function() Snacks.picker.git_stash() end, desc = 'Git Stash', },
+  {
+    '<leader>gb',
+    function()
+      Snacks.picker.git_log_line()
+    end,
+    desc = 'Git Blame Line',
+  },
+  {
+    '<leader>gB',
+    function()
+      Snacks.gitbrowse()
+    end,
+    desc = 'Git Browse (open)',
+  },
+  {
+    '<leader>gd',
+    function()
+      Snacks.picker.git_diff()
+    end,
+    desc = 'Git Diff (hunks)',
+  },
+  {
+    '<leader>gs',
+    function()
+      Snacks.picker.git_status()
+    end,
+    desc = 'Git Status',
+  },
+  {
+    '<leader>gS',
+    function()
+      Snacks.picker.git_stash()
+    end,
+    desc = 'Git Stash',
+  },
   { '<leader>ga', ':!git add %<CR>', desc = 'Git Add (file)', mode = 'n' },
-  { '<leader>gg', function() Snacks.lazygit() end, desc = 'Lazygit (cwd)', mode = 'n' },
-  { '<leader>gf', function() Snacks.picker.git_log_file() end, desc = 'Git Current File History', mode = 'n' },
-  { '<leader>gl', function() Snacks.picker.git_log() end, desc = 'Git Log (cwd)', mode = 'n' },
+  {
+    '<leader>gg',
+    function()
+      Snacks.lazygit()
+    end,
+    desc = 'Lazygit (cwd)',
+    mode = 'n',
+  },
+  {
+    '<leader>gf',
+    function()
+      Snacks.picker.git_log_file()
+    end,
+    desc = 'Git Current File History',
+    mode = 'n',
+  },
+  {
+    '<leader>gl',
+    function()
+      Snacks.picker.git_log()
+    end,
+    desc = 'Git Log (cwd)',
+    mode = 'n',
+  },
 
   { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
 
-  { '<leader>n', function() Snacks.picker.notifications() end, desc = "Notification History" },
+  {
+    '<leader>n',
+    function()
+      Snacks.picker.notifications()
+    end,
+    desc = 'Notification History',
+  },
 
   { '<leader>p', group = 'Pickers', icon = { icon = ' ' } },
-  { '<leader>P', function() Snacks.picker() end, desc = 'Pickers' },
-  { '<leader>p"', function() Snacks.picker.registers() end, desc = 'Registers', },
-  { '<leader>p/', function() Snacks.picker.search_history() end, desc = 'Search History', },
-  { '<leader>pD', function() Snacks.picker.diagnostics_buffer() end, desc = 'Buffer Diagnostics', },
-  { '<leader>pa', function() Snacks.picker.autocmds() end, desc = 'Autocmds', },
-  { '<leader>pc', function() Snacks.picker.commands() end, desc = 'Commands', },
-  { '<leader>p:', function() Snacks.picker.command_history() end, desc = 'Command History', },
-  { '<leader>pd', function() Snacks.picker.diagnostics() end, desc = 'Diagnostics', },
-  { '<leader>ph', function() Snacks.picker.highlights() end, desc = 'Highlights', },
-  { '<leader>pi', function() Snacks.picker.icons() end, desc = 'Icons', },
-  { '<leader>pj', function() Snacks.picker.jumps() end, desc = 'Jumps', },
-  { '<leader>pk', function() Snacks.picker.keymaps() end, desc = 'Keymaps', },
-  { '<leader>pp', function() Snacks.picker.resume() end, desc = 'Resume', },
-  { '<leader>pq', function() Snacks.picker.qflist() end, desc = 'Quickfix List', },
+  {
+    '<leader>P',
+    function()
+      Snacks.picker()
+    end,
+    desc = 'Pickers',
+  },
+  {
+    '<leader>p"',
+    function()
+      Snacks.picker.registers()
+    end,
+    desc = 'Registers',
+  },
+  {
+    '<leader>p/',
+    function()
+      Snacks.picker.search_history()
+    end,
+    desc = 'Search History',
+  },
+  {
+    '<leader>pD',
+    function()
+      Snacks.picker.diagnostics_buffer()
+    end,
+    desc = 'Buffer Diagnostics',
+  },
+  {
+    '<leader>pa',
+    function()
+      Snacks.picker.autocmds()
+    end,
+    desc = 'Autocmds',
+  },
+  {
+    '<leader>pc',
+    function()
+      Snacks.picker.commands()
+    end,
+    desc = 'Commands',
+  },
+  {
+    '<leader>p:',
+    function()
+      Snacks.picker.command_history()
+    end,
+    desc = 'Command History',
+  },
+  {
+    '<leader>pd',
+    function()
+      Snacks.picker.diagnostics()
+    end,
+    desc = 'Diagnostics',
+  },
+  {
+    '<leader>ph',
+    function()
+      Snacks.picker.highlights()
+    end,
+    desc = 'Highlights',
+  },
+  {
+    '<leader>pi',
+    function()
+      Snacks.picker.icons()
+    end,
+    desc = 'Icons',
+  },
+  {
+    '<leader>pj',
+    function()
+      Snacks.picker.jumps()
+    end,
+    desc = 'Jumps',
+  },
+  {
+    '<leader>pk',
+    function()
+      Snacks.picker.keymaps()
+    end,
+    desc = 'Keymaps',
+  },
+  {
+    '<leader>pp',
+    function()
+      Snacks.picker.resume()
+    end,
+    desc = 'Resume',
+  },
+  {
+    '<leader>pq',
+    function()
+      Snacks.picker.qflist()
+    end,
+    desc = 'Quickfix List',
+  },
   -- { '<leader>pM', function() Snacks.picker.marks() end, desc = 'Marks', },
   -- { '<leader>pm', function() Snacks.picker.man() end, desc = 'Man Pages', },
 
   { '<leader>s', group = 'search/grep' },
-  { '<leader>sa', function() Snacks.picker.autocmds() end, desc = 'Autocmds', },
-  { '<leader>sC', function() Snacks.picker.commands() end, desc = 'Commands', },
-  { '<leader>sh', function() Snacks.picker.help() end, desc = 'Help Pages', },
-  { '<leader>sH', function() Snacks.picker.highlights() end, desc = 'Highlights', },
-  { '<leader>si', function() Snacks.picker.icons() end, desc = 'Icons', },
-  { '<leader>sk', function() Snacks.picker.keymaps() end, desc = 'Keymaps', },
-  { '<leader>su', function() Snacks.picker.undo() end,desc = 'Undotree', },
+  {
+    '<leader>sa',
+    function()
+      Snacks.picker.autocmds()
+    end,
+    desc = 'Autocmds',
+  },
+  {
+    '<leader>sC',
+    function()
+      Snacks.picker.commands()
+    end,
+    desc = 'Commands',
+  },
+  {
+    '<leader>sh',
+    function()
+      Snacks.picker.help()
+    end,
+    desc = 'Help Pages',
+  },
+  {
+    '<leader>sH',
+    function()
+      Snacks.picker.highlights()
+    end,
+    desc = 'Highlights',
+  },
+  {
+    '<leader>si',
+    function()
+      Snacks.picker.icons()
+    end,
+    desc = 'Icons',
+  },
+  {
+    '<leader>sk',
+    function()
+      Snacks.picker.keymaps()
+    end,
+    desc = 'Keymaps',
+  },
+  {
+    '<leader>su',
+    function()
+      Snacks.picker.undo()
+    end,
+    desc = 'Undotree',
+  },
 
   { '<leader>y', group = 'toggle' },
 
-  { '<leader>z', function() Snacks.picker.zoxide() end, desc = 'Zoxide', icon = { icon = '󰄻 ' }, },
+  {
+    '<leader>z',
+    function()
+      Snacks.picker.zoxide()
+    end,
+    desc = 'Zoxide',
+    icon = { icon = '󰄻 ' },
+  },
 })
 
 -- dual pickers {{{2

@@ -3,10 +3,11 @@ local git_status_cache = git_status.new()
 
 return {
   'stevearc/oil.nvim',
+  enabled = true,
   lazy = false,
   keys = {
-    { '-', '<Cmd>Oil<CR>' },
-    { '_', '<Cmd>Oil --float<CR>' },
+    { '_', '<Cmd>Oil<CR>' },
+    -- { '_', '<Cmd>Oil --float<CR>' },
     -- { '<leader>e', '<Cmd>Oil<CR>' },
     -- { '<leader>e', '<Cmd>topleft 30vsplit +Oil<CR>' },
   },
