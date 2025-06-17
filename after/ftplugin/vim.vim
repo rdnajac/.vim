@@ -9,3 +9,7 @@ imap <M-Left> <Left>
 imap <M-Right> <Right>
 
 setlocal foldtext=fold#text()
+
+if has('nvim')
+  lua vim.treesitter.start()
+endif
