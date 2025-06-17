@@ -2,8 +2,7 @@ local M = {}
 
 function M.nnn()
   -- start a socket that we can listen for the result on
-  local socketname = vim.fn.tempname()
-  vim.fn.serverstart(socketname)
+  local socketname = vim.v.servername
 
   -- generate the nnn command with the right parameters
   local currentLocation = vim.fn.expand('%:p:h')

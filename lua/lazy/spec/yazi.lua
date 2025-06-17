@@ -3,13 +3,13 @@ return {
   event = 'VeryLazy',
   -- stylua: ignore
   keys = {
-    { '-',          '<cmd>Yazi<cr>',        desc = 'Open yazi at the current file',                     },
-    { '<leader>cw', '<cmd>Yazi cwd<cr>',    desc = 'Open yazi at the current dir', },
-    { '<c-up>',     '<cmd>Yazi toggle<cr>', desc = 'Resume the last yazi session',                      },
+    { '<leader>-',  '<Cmd>Yazi<CR>',        desc = 'Open yazi at the current file',                     },
+    { '<leader>cw', '<Cmd>Yazi cwd<CR>',    desc = 'Open yazi at the current dir', },
+    { '<leader>_',  '<Cmd>Yazi toggle<CR>', desc = 'Resume the last yazi session',                      },
   },
   ---@type YaziConfig
   opts = {
-    open_for_directories = true,
+    open_for_directories = false,
     keymaps = {
       show_help = '<F1>',
       -- TODO: on delete, d to confirm
@@ -17,9 +17,4 @@ return {
     floating_window_scaling_factor = 1,
     yazi_floating_window_border = 'none',
   },
-  -- init = function()
-  --   -- More details: https://github.com/mikavilpas/yazi.nvim/issues/802
-  --   -- vim.g.loaded_netrw = 1
-  --   vim.g.loaded_netrwPlugin = 1
-  -- end,
 }
