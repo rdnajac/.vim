@@ -1,15 +1,15 @@
 return {
-
   {
     'nvim-lualine/lualine.nvim',
     event = { 'LazyFile', 'VeryLazy' },
     opts = function()
-      vim.opt.showtabline = 2
-      vim.opt.showcmdloc = 'statusline'
+      local x = require('lazy.spec.lualine.extensions')
       -- PERF: we don't need this lualine require madness 🤷
       local lualine_require = require('lualine_require')
       lualine_require.require = require
-      local x = require('lazy.spec.lualine.extensions')
+
+      vim.opt.showtabline = 2
+      vim.opt.showcmdloc = 'statusline'
 
       local opts = {
         options = {
@@ -18,16 +18,15 @@ return {
           always_show_tabline = true,
           disabled_filetypes = {
             statusline = { 'help', 'man', 'snacks_dashboard' },
-            winbar = { 'lazy', 'mason', 'snacks_dashboard', 'snacks_terminal' },
-            tabline = { 'snacks_dashboard' },
+            winbar = { 'oil' },
+            -- tabline = { 'snacks_dashboard' },
           },
           section_separators = {},
           component_separators = {},
         },
-
         tabline = require('lazy.spec.lualine.tabline'),
         sections = require('lazy.spec.lualine.statusline'),
-        -- sections = require('lazy.spec.lualine.statusline-nocolor'),
+        winbar = require('lazy.spec.lualine.winbar'),
         extensions = {
           'fugitive',
           'lazy',
@@ -39,7 +38,6 @@ return {
       return opts
     end,
   },
-
   {
     'SmiteshP/nvim-navic',
     lazy = true,

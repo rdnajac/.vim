@@ -1,23 +1,15 @@
-local ns = vim.api.nvim_create_namespace('lualine_showcmd_eval')
-
-vim.on_key(function()
-  local ok, res = pcall(vim.api.nvim_eval_statusline, '%S', {})
-  if ok and res and res.str ~= '' then
-    require('lualine').refresh()
-  end
-end, ns)
 return {
   lualine_a = { { 'mode', separator = { right = '' } } },
   lualine_b = {
-  { '%S',
+    {
+      '%S',
       cond = function()
         local ok, res = pcall(vim.api.nvim_eval_statusline, '%S', {})
         return ok and res and res.str ~= ''
       end,
       separator = { right = '' },
+    },
   },
-  },
-
   lualine_c = {
     {
       function()
@@ -27,23 +19,41 @@ return {
       color = { fg = '#ff3344', bg = 'NONE', gui = 'bold' },
     },
     -- Snacks.profiler.status(),
-    -- { '%=', color = 'Normal' }, -- balance and define center
   },
 
   lualine_x = {},
-  lualine_y = {},
+  lualine_y = { { 'diagnostics', symbols = LazyVim.config.icons.diagnostics, color = { bg = 'NONE' } } },
   lualine_z = {
+    {
+      function()
+        local highlighter = require('vim.treesitter.highlighter')
+        local buf = vim.api.nvim_get_current_buf()
+        if highlighter.active[buf] then
+          return '  '
+        end
+        return ''
+      end,
+    },
     {
       function()
         for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
           if client.name == 'GitHub Copilot' then
-            return LazyVim.config.icons.kinds.Copilot
+            return ' ' .. LazyVim.config.icons.kinds.Copilot
           end
         end
         return ''
       end,
-      color = { fg = '#000000', gui = 'reverse,bold' },
     },
-    { require('lazy.spec.lualine.lsp_status'), color = { fg = '#000000', gui = 'reverse,bold' } },
+    {
+      function()
+        return ''
+      end,
+      padding = { left = 0, right = 0 },
+      cond = function()
+        local clients = vim.lsp.get_clients({ bufnr = 0 })
+        return #clients > 0
+      end,
+    },
+    { require('lazy.spec.lualine.components.lsp_status') },
   },
 }
