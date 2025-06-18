@@ -3,9 +3,10 @@ local M = {}
 ---@type snacks.picker.Config
 M.config = {
   layout = { preset = 'mylayout' },
-  layouts = { mylayout = require('munchies.picker.layout') },
-  win = { preview = { minimal = true } },
-  ---@type snacks.picker.matcher.Config
+  layouts = {
+    mylayout = require('munchies.picker.layout'),
+    vscode = require('munchies.picker.layout'),
+  },
   matcher = {
     frecency = true,
     sort_empty = true,
@@ -38,26 +39,6 @@ M.config = {
       follow = true,
       hidden = true,
       ignored = false,
-      win = {
-        input = {
-          keys = {
-            ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
-            ['<a-z>'] = {
-              function(self)
-                self:close()
-                Snacks.picker.zoxide({
-                  confirm = function(_, item)
-                    vim.cmd('cd ' .. vim.fn.fnameescape(item.file))
-                    vim.cmd('pwd')
-                    Snacks.picker.resume({ cwd = item.file })
-                  end,
-                })
-              end,
-              mode = { 'i', 'n' },
-            },
-          },
-        },
-      },
     },
     grep = {
       config = function(opts)
@@ -68,9 +49,22 @@ M.config = {
       follow = true,
       ignored = true,
     },
-    help = { confirm = 'vsplit' }, -- TODO: keymap?
     keymaps = { confirm = 'edit' },
     notifications = { layout = { preset = 'ivy_split' } },
+  },
+  win = {
+    input = {
+      keys = {
+        ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+        ['<a-z>'] = {
+          function(self)
+            require('munchies.picker.zoxide').cd_and_resume_picking(self)
+          end,
+          mode = { 'i', 'n' },
+        },
+      },
+    },
+    preview = { minimal = true },
   },
 }
 
