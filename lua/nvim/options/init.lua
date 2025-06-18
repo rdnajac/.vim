@@ -13,7 +13,6 @@ vim.opt.jumpoptions = 'view,stack'
 -- HACK: don't show lualine on dashboard
 if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
   vim.opt.laststatus = 0
-  -- vim.opt.showtabline = 0
 end
 
 -- TODO: use snacks highlight

@@ -5,6 +5,7 @@
 
 ; highlight `source_code` nodes within comments as strings
 ; for more information, see `:h treesitter-query` and `h: treesitter-language-injections`
+; TODO - don't highlight unclosed backticks like `this
 ((source_code) @string
  (#set! "priority" 151))
 

@@ -1,5 +1,6 @@
 local M = {}
 
+---@module "snacks"
 ---@type snacks.picker.Config
 M.config = {
   layout = { preset = 'mylayout' },
@@ -13,6 +14,7 @@ M.config = {
   },
   sources = {
     autocmds = { confirm = 'edit' },
+    keymaps = { confirm = 'edit' },
     commands = {
       confirm = function(picker, item)
         picker:close()
@@ -47,9 +49,8 @@ M.config = {
         return opts
       end,
       follow = true,
-      ignored = true,
+      ignored = false,
     },
-    keymaps = { confirm = 'edit' },
     notifications = { layout = { preset = 'ivy_split' } },
   },
   win = {

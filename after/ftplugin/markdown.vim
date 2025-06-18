@@ -41,3 +41,7 @@ inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 " let g:markdown_syntax_conceal = 1
 " let g:markdown_folding        = 1
 " call greek#setupmappings()
+
+if has('nvim')
+  lua vim.treesitter.start()
+endif

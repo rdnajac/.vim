@@ -14,3 +14,6 @@ if executable('shfmt')
   endif
 endif
 
+if has('nvim')
+  lua vim.treesitter.start()
+endif

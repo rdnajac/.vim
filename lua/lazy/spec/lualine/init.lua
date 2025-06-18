@@ -18,7 +18,7 @@ return {
           always_show_tabline = true,
           disabled_filetypes = {
             statusline = { 'help', 'man', 'snacks_dashboard' },
-            winbar = { 'oil', 'snacks_terminal', 'snacks_dashboard'},
+            winbar = { 'oil', 'snacks_terminal', 'snacks_dashboard' },
             -- tabline = { 'snacks_dashboard' },
           },
           section_separators = {},

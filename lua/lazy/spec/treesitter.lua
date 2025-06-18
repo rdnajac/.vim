@@ -7,6 +7,7 @@ local ensure_installed = {
   'cpp',
   'cuda',
   -- this should be `highlighted` or
+  -- `hi` or nor `w
   'comment', -- HACK: this is a custom parser
   'diff',
   'dockerfile',
@@ -48,6 +49,7 @@ return {
     branch = 'main',
     build = ':TSUpdate',
     init = function()
+      -- FIXME: don't chagne the source code!
       -- require('nvim-treesitter.parsers').comment = {
       --   install_info = {
       --     path = vim.fn.expand('~/GitHub/rdnajac/tree-sitter-comment'),

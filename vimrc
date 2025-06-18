@@ -33,7 +33,7 @@ set undofile undolevels=10000
 set autowrite
 set breakindent
 " set confirm
-set cursorline
+" set cursorline
 set fillchars+=diff:╱,
 set fillchars+=eob:\ ,
 set fillchars+=fold:\ ,
@@ -168,11 +168,10 @@ cnoremap ( ()<Left>
 
 " § keymaps {{{1
 nnoremap <BS> <C-o>
-nnoremap <Space><BS> <C-i>
 
-" nnoremap <leader><BS> <C-t>
-" nnoremap ` ~
+nnoremap ` ~
 vmap - gc
+nmap vv Vgc
 
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
@@ -188,7 +187,7 @@ nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zz
 nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
 nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zz
 nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zz
-nnoremap <leader>vv <Cmd>edit +/$MYVIMRC<CR>
+nnoremap <leader>vv <Cmd>edit $MYVIMRC<CR>
 nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zz
 nnoremap <leader>E <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>

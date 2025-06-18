@@ -1,14 +1,6 @@
 return {
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    init = function()
-      vim.api.nvim_create_autocmd('FileType', {
-        pattern = 'markdown',
-        callback = function(args)
-          vim.treesitter.start(args.buf, 'markdown')
-        end,
-      })
-    end,
     opts = {
       file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion' },
       completions = { blink = { enabled = false } },
