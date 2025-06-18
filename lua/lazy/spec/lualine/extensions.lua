@@ -27,12 +27,12 @@ M.snacks_terminal = {
 }
 
 M.oil = {
-  winbar = {
+  inactive_winbar = {
     lualine_a = {
       function()
         local ok, oil = pcall(require, 'oil')
         if ok then
-          return vim.fn.fnamemodify(oil.get_current_dir(), ':~')
+          return vim.fn.fnamemodify(oil.get_cursor_entry(), ':~')
         else
           return ''
         end

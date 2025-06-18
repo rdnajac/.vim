@@ -22,7 +22,7 @@ return {
             -- tabline = { 'snacks_dashboard' },
           },
           section_separators = {},
-          component_separators = {},
+          component_separators = { left = '', right = '' },
         },
         tabline = require('lazy.spec.lualine.tabline'),
         sections = require('lazy.spec.lualine.statusline'),

@@ -17,6 +17,7 @@ return {
       cond = require('lazy.status').has_updates,
     },
   },
+
   lualine_z = {
     {
       function()
@@ -29,6 +30,8 @@ return {
       function()
         return '  ' .. os.date('%T')
       end,
+      separator = { left = ' ' },
+
       color = { gui = 'reverse,bold' },
     },
   },

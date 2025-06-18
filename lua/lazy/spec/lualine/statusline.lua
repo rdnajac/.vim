@@ -11,6 +11,8 @@ return {
     },
   },
   lualine_c = {
+    { 'diff', symbols = LazyVim.config.icons.git },
+    { 'diagnostics', symbols = LazyVim.config.icons.diagnostics, color = { bg = 'NONE' } },
     {
       function()
         local reg = vim.fn.reg_recording()
@@ -22,14 +24,14 @@ return {
   },
 
   lualine_x = {},
-  lualine_y = { { 'diagnostics', symbols = LazyVim.config.icons.diagnostics, color = { bg = 'NONE' } } },
+  lualine_y = {},
   lualine_z = {
     {
       function()
         local highlighter = require('vim.treesitter.highlighter')
         local buf = vim.api.nvim_get_current_buf()
         if highlighter.active[buf] then
-          return '  '
+          return ' '
         end
         return ''
       end,
@@ -38,7 +40,7 @@ return {
       function()
         for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
           if client.name == 'GitHub Copilot' then
-            return ' ' .. LazyVim.config.icons.kinds.Copilot
+            return LazyVim.config.icons.kinds.Copilot
           end
         end
         return ''
