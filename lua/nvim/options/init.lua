@@ -15,7 +15,16 @@ if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
   vim.opt.showtabline = 0
 end
 
+-- TODO: use snacks highlight
+local base_statusline_highlights =
+  { 'StatusLine', 'StatusLineNC', 'Tabline', 'TabLineFill', 'TabLineSel', 'Winbar', 'WinbarNC' }
+
+for _, hl_group in pairs(base_statusline_highlights) do
+  vim.api.nvim_set_hl(0, hl_group, { bg = 'NONE' })
+end
+
 require('nvim.options.diagnostic')
 require('nvim.options.folding')
 require('nvim.options.lsp')
 require('nvim.options.x')
+

@@ -58,6 +58,7 @@ M.prefix = {
     return icon .. vim.fs.basename(root) .. (rel ~= '' and '/' .. rel or '') .. '/'
   end,
   color = { fg = '#000000', gui = 'bold' },
+  separator = { right = '🭛' },
 }
 
 M.suffix = {
@@ -79,19 +80,35 @@ M.suffix = {
     local parts = relative_parts(rel_path, rel_cwd)
     local out = table.concat(parts, '/')
 
+    if out:sub(1, 3) == '../' then
+      out = out:gsub('^%./+', ''):gsub('^%../+', '')
+    end
+
     if #parts == 0 then
       out = './'
     end
-
-    if vim.bo.modified then
-      out = out .. '  '
-    end
-    if vim.bo.readonly then
-      out = out .. '  '
-    end
-
     return out
   end,
+  cond = function()
+    return not vim.api.nvim_buf_get_name(0):match('^oil://')
+  end,
+}
+
+M.modified = {
+  function()
+    local out = ''
+    if vim.bo.modified or vim.bo.readonly then
+      out = ' '
+      if vim.bo.modified then
+        out = out .. ''
+      end
+      if vim.bo.readonly then
+        out = out .. ''
+      end
+    end
+    return out
+  end,
+  separator = { right = '' },
 }
 
 return M

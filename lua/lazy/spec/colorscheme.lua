@@ -24,7 +24,6 @@ return {
       hl['Folded'] = { fg = colors.blue }
       -- hl['Special'] = { fg = 'NONE', bold = true }
 
-      -- hl['NormalFloat'] = { bg = '#1f2335' }
       hl['SpecialWindow'] = { bg = '#1f2335' }
 
       hl['MsgArea'] = { fg = colors.green }
