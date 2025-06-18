@@ -17,20 +17,19 @@ return {
       cond = require('lazy.status').has_updates,
     },
   },
-  lualine_z = {
-    {
-      function()
-        return '🭄'
-      end,
-      color = { gui = 'bold' },
-      padding = { left = 0, right = 0 },
-    },
-    {
-      function()
-        return '  ' .. os.date('%T')
-      end,
-      separator = { left = ' ' },
-      color = { gui = 'reverse,bold' },
-    },
-  },
+  lualine_z = require('lazy.spec.lualine.components.time').clock,
+  -- {
+  --   function()
+  --     return '🭄'
+  --   end,
+  --   color = { gui = 'bold' },
+  --   padding = { left = 0, right = 0 },
+  -- },
+  -- {
+  --   function()
+  --     return '  ' .. os.date('%T')
+  --   end,
+  --   separator = { left = ' ' },
+  --   color = { gui = 'reverse,bold' },
+  -- },
 }

@@ -14,18 +14,6 @@ M.man = {
   filetypes = { 'man' },
 }
 
-M.snacks_terminal = {
-  sections = {
-    lualine_a = {
-      function()
-        local chan = vim.b.terminal_job_id or '?'
-        return 'term channel: ' .. tostring(chan)
-      end,
-    },
-  },
-  filetypes = { 'snacks_terminal' },
-}
-
 M.oil = {
   inactive_winbar = {
     lualine_a = {
@@ -41,5 +29,34 @@ M.oil = {
   },
   filetypes = { 'oil' },
 }
+
+M.snacks_terminal = {
+  sections = {
+    lualine_a = {
+      { 'mode', separator = { right = '' } },
+    },
+    lualine_b = {
+      {
+        function()
+          local chan = vim.b.terminal_job_id or '?'
+          return 'channel: ' .. tostring(chan)
+        end,
+        separator = { right = '' },
+      },
+    },
+    lualine_c = {
+      function()
+        return vim.b.term_title or ''
+      end,
+    },
+  },
+  filetypes = { 'snacks_terminal' },
+}
+
+-- M.snacks_dashboard = {
+--   inactive_winbar = {},
+--   active_winbar = {},
+--   filetypes = { 'snacks_dashboard' },
+-- }
 
 return M

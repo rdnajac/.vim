@@ -1,5 +1,6 @@
 vim.cmd([[
 " vim commands for Snacks functions
+  command! ToggleTerm lua Snacks.terminal.toggle()
   command! Chezmoi lua require('munchies.picker.chezmoi')()
   command! Scripts lua require('munchies.picker.scriptnames')()
   command! PluginGrep lua require('munchies.picker.plugins').grep()
