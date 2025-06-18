@@ -26,4 +26,20 @@ M.snacks_terminal = {
   filetypes = { 'snacks_terminal' },
 }
 
+M.oil = {
+  winbar = {
+    lualine_a = {
+      function()
+        local ok, oil = pcall(require, 'oil')
+        if ok then
+          return vim.fn.fnamemodify(oil.get_current_dir(), ':~')
+        else
+          return ''
+        end
+      end,
+    },
+  },
+  filetypes = { 'oil' },
+}
+
 return M

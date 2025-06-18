@@ -26,12 +26,15 @@ return {
         },
         tabline = require('lazy.spec.lualine.tabline'),
         sections = require('lazy.spec.lualine.statusline'),
-        winbar = require('lazy.spec.lualine.winbar'),
+        winbar = require('lazy.spec.lualine.winbar').active,
+        inactive_winbar = require('lazy.spec.lualine.winbar').inactive,
+
         extensions = {
           'fugitive',
           'lazy',
           'mason',
           x.man,
+          x.oil,
           x.snacks_terminal,
         },
       }

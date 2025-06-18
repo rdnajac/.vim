@@ -20,13 +20,14 @@ return {
   lualine_z = {
     {
       function()
-        return '   ' .. os.date('%F')
+        return '🭄'
       end,
-      color = { gui = 'reverse,bold' },
+      color = { gui = 'bold' },
+      padding = { left = 0, right = 0 },
     },
     {
       function()
-        return '   ' .. os.date('%T')
+        return '  ' .. os.date('%T')
       end,
       color = { gui = 'reverse,bold' },
     },

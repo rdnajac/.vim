@@ -89,6 +89,7 @@ M.suffix = {
     end
     return out
   end,
+  separator = { right = '🭛' },
   cond = function()
     return not vim.api.nvim_buf_get_name(0):match('^oil://')
   end,
