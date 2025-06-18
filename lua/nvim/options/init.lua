@@ -8,6 +8,7 @@ vim.opt.pumblend = 0
 vim.opt.signcolumn = 'yes'
 vim.opt.smoothscroll = true
 vim.opt.winborder = 'rounded'
+vim.opt.jumpoptions = 'view,stack'
 
 -- HACK: don't show lualine on dashboard
 if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
@@ -27,4 +28,3 @@ require('nvim.options.diagnostic')
 require('nvim.options.folding')
 require('nvim.options.lsp')
 require('nvim.options.x')
-

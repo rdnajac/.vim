@@ -168,7 +168,9 @@ cnoremap ( ()<Left>
 
 " § keymaps {{{1
 nnoremap <BS> <C-o>
-nnoremap <leader><BS> <C-t>
+nnoremap <Space><BS> <C-i>
+
+" nnoremap <leader><BS> <C-t>
 " nnoremap ` ~
 vmap - gc
 

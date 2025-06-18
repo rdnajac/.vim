@@ -81,31 +81,18 @@ return {
           function(cmp)
             if cmp.is_menu_visible() then
               return cmp.select_next()
-            else
-              cmp.show({ providers = { 'copilot' } })
             end
           end,
-          -- 'fallback',
+          'fallback',
+        },
+        ['<M-j>'] = {
+          function(cmp)
+            cmp.show({ providers = { 'copilot' } })
+          end,
         },
       },
       sources = {
-        default = function()
-          local default_sources = { 'lsp', 'snippets', 'path', 'emoji', 'copilot' }
-          return default_sources
-          -- local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-          -- row = row - 1
-          -- local check_col = col > 0 and col - 1 or col
-          -- local ok, node = pcall(vim.treesitter.get_node, { pos = { row, check_col } })
-          -- if
-          --   ok
-          --   and node
-          --   and vim.tbl_contains({ 'comment', 'comment_content', 'line_comment', 'block_comment' }, node:type())
-          -- then
-          --   return default_sources
-          -- else
-          --   return { 'path', 'buffer' }
-          -- end
-        end,
+        default = { 'lsp', 'snippets', 'path', 'emoji', 'copilot' },
         per_filetype = {
           lua = { inherit_defaults = true, 'lazydev' },
           sh = { inherit_defaults = true, 'tmux', 'env' },
@@ -168,9 +155,6 @@ return {
             module = 'blink-emoji',
             name = 'emoji',
             score_offset = 20,
-            -- should_show_items = function(ctx, _)
-            --   return trigger(ctx, ':')
-            -- end,
           },
           lazydev = {
             name = 'LazyDev',

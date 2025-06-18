@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd('User', {
       vim.defer_fn(function()
         oil.open_preview(nil, function(err)
           if not err then
-            vim.cmd.wincmd({ args = { "|" }, count = 30 })
+            vim.cmd.wincmd({ args = { '|' }, count = 30 })
           end
         end)
       end, 0)

@@ -2,28 +2,9 @@ local M = {}
 
 ---@type snacks.picker.Config
 M.config = {
-  layout = { preset = 'ivy' },
-  layouts = {
-    vscode = {
-      reverse = true,
-      layout = {
-        box = 'vertical',
-        backdrop = false,
-        height = 0.4,
-        row = vim.o.lines - math.floor(0.4 * vim.o.lines),
-        {
-          win = 'list',
-          border = 'rounded',
-          title = '{title} {live} {flags}',
-          title_pos = 'left',
-        },
-        {
-          win = 'input',
-          height = 1,
-        },
-      },
-    },
-  },
+  -- layout = { preset = 'ivy' },
+  layout = { preset = 'mylayout' },
+  layouts = { mylayout = require('munchies.picker.layout') },
   win = { preview = { minimal = true } },
   ---@type snacks.picker.matcher.Config
   matcher = {
@@ -32,7 +13,7 @@ M.config = {
   },
   sources = {
     autocmds = { confirm = 'edit' },
-    buffers = { layout = { preset = 'vscode' } },
+    buffers = { layout = { preset = 'mylayout' } },
     commands = {
       confirm = function(picker, item)
         picker:close()
@@ -56,10 +37,29 @@ M.config = {
       end,
     },
     files = {
-      layout = { preset = 'vscode' },
       follow = true,
       hidden = true,
       ignored = false,
+      win = {
+        input = {
+          keys = {
+            ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
+            ['<a-z>'] = {
+              function(self)
+                self:close()
+                Snacks.picker.zoxide({
+                  confirm = function(_, item)
+                    vim.cmd('cd ' .. vim.fn.fnameescape(item.file))
+                    vim.cmd('pwd')
+                    Snacks.picker.resume({ cwd = item.file })
+                  end,
+                })
+              end,
+              mode = { 'i', 'n' },
+            },
+          },
+        },
+      },
     },
     grep = {
       config = function(opts)
@@ -70,14 +70,9 @@ M.config = {
       follow = true,
       ignored = true,
     },
-    help = { layout = { preset = 'vscode' } },
-    keymaps = { layout = { preset = 'ivy_split' }, confirm = 'edit' },
+    help = { confirm = 'vsplit' }, -- TODO: keymap?
+    keymaps = { confirm = 'edit' },
     notifications = { layout = { preset = 'ivy_split' } },
-    pickers = { layout = { preset = 'vscode' } },
-    zoxide = {
-      layout = { preset = 'vscode' },
-      confirm = { 'edit' },
-    },
   },
 }
 

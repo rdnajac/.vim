@@ -44,6 +44,7 @@ end)
 au('FileType', { 'kitty', 'ghostty' }, function(event)
   vim.treesitter.language.register('bash', event.match)
   vim.treesitter.start(0, 'bash')
+  vim.cmd('setlocal commentstring=#%s')
 end, 'Use bash parser for kitty and ghostty configs')
 
 au('FileType', { 'help', 'man' }, function()

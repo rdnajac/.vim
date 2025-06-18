@@ -17,9 +17,9 @@ function M.foldexpr()
 end
 
 M.setup = function()
-vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
-vim.opt.foldlevel = 99
-vim.opt.foldtext = ''
+  vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
+  vim.opt.foldlevel = 99
+  vim.opt.foldtext = ''
 end
 
 return M.setup()

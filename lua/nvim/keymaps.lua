@@ -89,6 +89,12 @@ wk.add({
   insert_comment('gcB', 'BUG'),
 })
 
+-- goto {{{2
+-- stylua: ignore
+wk.add({
+  { 'gL', function() require('util.togo').lazy() end, desc = 'Goto LazyVim module', },
+})
+
 -- nvim {{{1
 -- stylua: ignore
 wk.add({
@@ -101,6 +107,8 @@ icon = { icon = ' ', color = 'green' },
   command('`',          'SmartCD'),
   command('<leader>q',  'Quit'),
   command('<leader>Q',  'Quit!'),
+  command('<leader>z',  'Zoxide'),
+    -- icon = { icon = '󰄻 ' },
   { '<leader>D', function() require('util.debugprint').insert() end, desc = 'Insert Debug Print' },
 })
 
@@ -111,22 +119,8 @@ local function fu(lhs, fn, desc, mode)
 end
 
 wk.add({
-  {
-    'gL',
-    function()
-      require('util.togo').lazy()
-    end,
-    desc = 'Goto LazyVim module',
-  },
-  {
-    'gx',
-    function()
-      require('util.togo').gx()
-    end,
-    desc = 'Open with system app',
-  },
   { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
-  --
+
   fu(',,', Snacks.terminal.toggle, 'Snacks Terminal', { 'n', 't' }),
   fu('\\\\', Snacks.dashboard.open, 'Snacks Dashboard'),
   fu('<leader>.', Snacks.scratch, 'Toggle Scratch Buffer'),
@@ -134,289 +128,62 @@ wk.add({
   fu('<leader>,', Snacks.picker.buffers, 'Buffers'),
   fu('<leader>/', Snacks.picker.grep, 'Grep (Root Dir)'),
   fu('<leader>F', Snacks.picker.smart, 'Smart Find Files'),
-  -- { '<leader>r', function() require('util.restart') end, desc = 'Restart Neovim', icon = { icon = '' } },
 
-  {
-    '<leader>bd',
-    function()
-      Snacks.bufdelete()
-    end,
-    desc = 'Delete Buffer',
-  },
+  fu('<leader>bd', Snacks.bufdelete, 'Delete Buffer'),
+  fu('<leader>h', Snacks.picker.help, 'Help'),
 
-  {
-    '<leader>h',
-    function()
-      Snacks.picker.help()
-    end,
-    desc = 'Help',
-  },
-
-  { '<leader>f', group = 'file/find', icon = { color = 'azure' } },
-  {
-    '<leader>fC',
-    function()
-      Snacks.rename.rename_file()
-    end,
-    desc = 'Change (rename) File on disk',
-  },
-  {
-    '<leader>ff',
-    function()
-      Snacks.picker.files({ cwd = Snacks.git.get_root() })
-    end,
-    desc = 'Files (root)',
-  },
-  {
-    '<leader>fr',
-    function()
-      Snacks.picker.recent()
-    end,
-    desc = 'Recent',
-  },
-  {
-    '<leader>fR',
-    function()
-      Snacks.picker.recent({ filter = { cwd = true } })
-    end,
-    desc = 'Recent (cwd)',
-  },
+  { '<leader>f', group = 'file/find' },
+  fu('<leader>fC', Snacks.rename.rename_file, 'Change (rename) file on disk'),
+  fu('<leader>ff', Snacks.picker.files, 'Find Files'),
+  fu('<leader>fr', Snacks.picker.recent, 'Find Recent'),
 
   { '<leader>g', group = 'git' },
-  {
-    '<leader>gb',
-    function()
-      Snacks.picker.git_log_line()
-    end,
-    desc = 'Git Blame Line',
-  },
-  {
-    '<leader>gB',
-    function()
-      Snacks.gitbrowse()
-    end,
-    desc = 'Git Browse (open)',
-  },
-  {
-    '<leader>gd',
-    function()
-      Snacks.picker.git_diff()
-    end,
-    desc = 'Git Diff (hunks)',
-  },
-  {
-    '<leader>gs',
-    function()
-      Snacks.picker.git_status()
-    end,
-    desc = 'Git Status',
-  },
-  {
-    '<leader>gS',
-    function()
-      Snacks.picker.git_stash()
-    end,
-    desc = 'Git Stash',
-  },
+  fu('<leader>gb', Snacks.picker.git_log_line, 'Git Blame Line'),
+  fu('<leader>gB', Snacks.gitbrowse, 'Git Browse (open)'),
+  fu('<leader>gd', Snacks.picker.git_diff, 'Git Diff (hunks)'),
+  fu('<leader>gs', Snacks.picker.git_status, 'Git Status'),
+  fu('<leader>gS', Snacks.picker.git_stash, 'Git Stash'),
   { '<leader>ga', ':!git add %<CR>', desc = 'Git Add (file)', mode = 'n' },
+  fu('<leader>gg', Snacks.lazygit, 'Lazygit (cwd)', 'n'),
+  fu('<leader>gf', Snacks.picker.git_log_file, 'Git Current File History', 'n'),
+  fu('<leader>gl', Snacks.picker.git_log, 'Git Log (cwd)', 'n'),
   {
-    '<leader>gg',
+    '<leader>gx',
     function()
-      Snacks.lazygit()
+      require('util.togo').gx()
     end,
-    desc = 'Lazygit (cwd)',
-    mode = 'n',
-  },
-  {
-    '<leader>gf',
-    function()
-      Snacks.picker.git_log_file()
-    end,
-    desc = 'Git Current File History',
-    mode = 'n',
-  },
-  {
-    '<leader>gl',
-    function()
-      Snacks.picker.git_log()
-    end,
-    desc = 'Git Log (cwd)',
-    mode = 'n',
+    desc = 'Open GitHub Repo in browser',
   },
 
   { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-
-  {
-    '<leader>n',
-    function()
-      Snacks.picker.notifications()
-    end,
-    desc = 'Notification History',
-  },
+  fu('<leader>n', Snacks.picker.notifications, 'Notification History'),
 
   { '<leader>p', group = 'Pickers', icon = { icon = ' ' } },
-  {
-    '<leader>P',
-    function()
-      Snacks.picker()
-    end,
-    desc = 'Pickers',
-  },
-  {
-    '<leader>p"',
-    function()
-      Snacks.picker.registers()
-    end,
-    desc = 'Registers',
-  },
-  {
-    '<leader>p/',
-    function()
-      Snacks.picker.search_history()
-    end,
-    desc = 'Search History',
-  },
-  {
-    '<leader>pD',
-    function()
-      Snacks.picker.diagnostics_buffer()
-    end,
-    desc = 'Buffer Diagnostics',
-  },
-  {
-    '<leader>pa',
-    function()
-      Snacks.picker.autocmds()
-    end,
-    desc = 'Autocmds',
-  },
-  {
-    '<leader>pc',
-    function()
-      Snacks.picker.commands()
-    end,
-    desc = 'Commands',
-  },
-  {
-    '<leader>p:',
-    function()
-      Snacks.picker.command_history()
-    end,
-    desc = 'Command History',
-  },
-  {
-    '<leader>pd',
-    function()
-      Snacks.picker.diagnostics()
-    end,
-    desc = 'Diagnostics',
-  },
-  {
-    '<leader>ph',
-    function()
-      Snacks.picker.highlights()
-    end,
-    desc = 'Highlights',
-  },
-  {
-    '<leader>pi',
-    function()
-      Snacks.picker.icons()
-    end,
-    desc = 'Icons',
-  },
-  {
-    '<leader>pj',
-    function()
-      Snacks.picker.jumps()
-    end,
-    desc = 'Jumps',
-  },
-  {
-    '<leader>pk',
-    function()
-      Snacks.picker.keymaps()
-    end,
-    desc = 'Keymaps',
-  },
-  {
-    '<leader>pp',
-    function()
-      Snacks.picker.resume()
-    end,
-    desc = 'Resume',
-  },
-  {
-    '<leader>pq',
-    function()
-      Snacks.picker.qflist()
-    end,
-    desc = 'Quickfix List',
-  },
-  -- { '<leader>pM', function() Snacks.picker.marks() end, desc = 'Marks', },
-  -- { '<leader>pm', function() Snacks.picker.man() end, desc = 'Man Pages', },
+  fu('<leader>P', Snacks.picker, 'Pickers'),
+  fu('<leader>p"', Snacks.picker.registers, 'Registers'),
+  fu('<leader>p/', Snacks.picker.search_history, 'Search History'),
+  fu('<leader>pD', Snacks.picker.diagnostics_buffer, 'Buffer Diagnostics'),
+  fu('<leader>pa', Snacks.picker.autocmds, 'Autocmds'),
+  fu('<leader>pc', Snacks.picker.commands, 'Commands'),
+  fu('<leader>p:', Snacks.picker.command_history, 'Command History'),
+  fu('<leader>pd', Snacks.picker.diagnostics, 'Diagnostics'),
+  fu('<leader>ph', Snacks.picker.highlights, 'Highlights'),
+  fu('<leader>pi', Snacks.picker.icons, 'Icons'),
+  fu('<leader>pj', Snacks.picker.jumps, 'Jumps'),
+  fu('<leader>pk', Snacks.picker.keymaps, 'Keymaps'),
+  fu('<leader>pp', Snacks.picker.resume, 'Resume'),
+  fu('<leader>pq', Snacks.picker.qflist, 'Quickfix List'),
 
   { '<leader>s', group = 'search/grep' },
-  {
-    '<leader>sa',
-    function()
-      Snacks.picker.autocmds()
-    end,
-    desc = 'Autocmds',
-  },
-  {
-    '<leader>sC',
-    function()
-      Snacks.picker.commands()
-    end,
-    desc = 'Commands',
-  },
-  {
-    '<leader>sh',
-    function()
-      Snacks.picker.help()
-    end,
-    desc = 'Help Pages',
-  },
-  {
-    '<leader>sH',
-    function()
-      Snacks.picker.highlights()
-    end,
-    desc = 'Highlights',
-  },
-  {
-    '<leader>si',
-    function()
-      Snacks.picker.icons()
-    end,
-    desc = 'Icons',
-  },
-  {
-    '<leader>sk',
-    function()
-      Snacks.picker.keymaps()
-    end,
-    desc = 'Keymaps',
-  },
-  {
-    '<leader>su',
-    function()
-      Snacks.picker.undo()
-    end,
-    desc = 'Undotree',
-  },
+  fu('<leader>sa', Snacks.picker.autocmds, 'Autocmds'),
+  fu('<leader>sC', Snacks.picker.commands, 'Commands'),
+  fu('<leader>sh', Snacks.picker.help, 'Help Pages'),
+  fu('<leader>sH', Snacks.picker.highlights, 'Highlights'),
+  fu('<leader>si', Snacks.picker.icons, 'Icons'),
+  fu('<leader>sk', Snacks.picker.keymaps, 'Keymaps'),
+  fu('<leader>su', Snacks.picker.undo, 'Undotree'),
 
   { '<leader>y', group = 'toggle' },
-
-  {
-    '<leader>z',
-    function()
-      Snacks.picker.zoxide()
-    end,
-    desc = 'Zoxide',
-    icon = { icon = '󰄻 ' },
-  },
 })
 
 -- dual pickers {{{2
