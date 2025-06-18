@@ -12,7 +12,6 @@ return {
   },
   lualine_c = {
     { 'diff', symbols = LazyVim.config.icons.git },
-    { 'diagnostics', symbols = LazyVim.config.icons.diagnostics, color = { bg = 'NONE' } },
     {
       function()
         local reg = vim.fn.reg_recording()
@@ -20,7 +19,7 @@ return {
       end,
       color = { fg = '#ff3344', bg = 'NONE', gui = 'bold' },
     },
-    -- Snacks.profiler.status(),
+    Snacks.profiler.status(),
   },
 
   lualine_x = {},

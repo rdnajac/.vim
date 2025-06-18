@@ -57,7 +57,6 @@ M.prefix = {
     local rel = cwd:find(root, 1, true) == 1 and cwd:sub(#root + 2) or ''
     return icon .. vim.fs.basename(root) .. (rel ~= '' and '/' .. rel or '') .. '/'
   end,
-  color = { gui = 'bold' },
   separator = { right = '🭛' },
 }
 

@@ -35,7 +35,8 @@ return {
           auto_show = true,
           draw = {
             treesitter = { 'lsp' },
-            columns = { { 'kind_icon' }, { 'label', 'label_description', 'source_name', gap = 1 } },
+            -- columns = { { 'kind_icon' }, { 'label', 'label_description', 'source_name', gap = 1 } },
+            columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
             components = {
               kind_icon = {
                 text = function(ctx)

@@ -3,15 +3,12 @@ local lualine_require = require('lualine_require')
 local M = lualine_require.require('lualine.component'):extend()
 
 local default_options = {
-  -- icon = '',
-  -- icon = '',
   symbols = {
     -- Use standard unicode characters for the spinner and done symbols:
     spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
     done = require('lazy.spec.lualine.components.filetype_icon'),
     separator = ' ',
   },
-  -- List of LSP names to ignore (e.g., `null-ls`):
   ignore_lsp = { 'GitHub Copilot' },
 }
 

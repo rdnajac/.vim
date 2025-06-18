@@ -1,17 +1,20 @@
 local str = [["The computing scientist's main challenge is not to get confused by the complexities of his own making."]]
 local M = {}
 
+---@module "snacks"
 ---@type snacks.dashboard.Config
 M.config = {
   sections = {
     { section = 'header' },
     { section = 'keys', padding = 1 },
-    -- {
-    --   section = 'terminal',
-    --   padding = 1,
-    --   width = 69,
-    --   cmd = 'cowsay ' .. str .. ' | lolcat',
-    -- },
+    {
+      section = 'terminal',
+      padding = 1,
+      width = 69,
+      cmd = 'cowsay ' .. str .. ' | lolcat',
+      opts = { win_opts = { border = 'none' } },
+      indent = 8,
+    },
     { section = 'startup' },
   },
   preset = {

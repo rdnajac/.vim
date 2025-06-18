@@ -2,7 +2,6 @@ local M = {}
 
 ---@type snacks.picker.Config
 M.config = {
-  -- layout = { preset = 'ivy' },
   layout = { preset = 'mylayout' },
   layouts = { mylayout = require('munchies.picker.layout') },
   win = { preview = { minimal = true } },
@@ -13,7 +12,6 @@ M.config = {
   },
   sources = {
     autocmds = { confirm = 'edit' },
-    buffers = { layout = { preset = 'mylayout' } },
     commands = {
       confirm = function(picker, item)
         picker:close()

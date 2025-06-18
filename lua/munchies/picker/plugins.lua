@@ -25,7 +25,6 @@ local pick_plugin = function(pick)
     confirm = function(_, item)
       pick(item.item)
     end,
-    layout = { preset = 'vscode' },
   })
 end
 
