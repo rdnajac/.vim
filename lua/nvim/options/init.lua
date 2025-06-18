@@ -1,8 +1,3 @@
-require('nvim.options.diagnostic')
-require('nvim.options.folding')
-require('nvim.options.lsp')
-require('nvim.options.x')
-
 vim.opt.backup = true
 vim.opt.backupdir = vim.fn.stdpath('state') .. '/backup//'
 vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
@@ -19,3 +14,8 @@ vim.opt.jumpoptions = 'view,stack'
 if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
   vim.opt.laststatus = 0
 end
+
+require('nvim.options.diagnostic')
+require('nvim.options.folding')
+require('nvim.options.lsp')
+require('nvim.options.x')

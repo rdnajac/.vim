@@ -6,5 +6,10 @@ function! fold#text()
   let foldtextstart = strpart(repeat(s:foldchar, v:foldlevel * 2) . ' ' . line, 0, (winwidth(0) * 2) / 3)
   let foldtextend = lines_count_text . repeat(s:foldchar, 8)
   let foldtextlength = strlen(substitute(foldtextstart . foldtextend, '.', 'x', 'g')) + &foldcolumn
-  return foldtextstart . repeat(s:foldchar, winwidth(0) - foldtextlength) . foldtextend
+  let width = 80
+  " let width = min([80, winwidth(0) - foldtextlength])
+  let pre = foldtextstart
+  let post = lines_count_text
+  let fill = repeat(s:foldchar, width - strdisplaywidth(pre . post))
+  return pre . fill . post
 endfunction

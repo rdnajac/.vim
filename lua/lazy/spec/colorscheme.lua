@@ -21,7 +21,13 @@ return {
     end,
     -- stylua: ignore
     on_highlights = function(hl, colors)
-      -- hl['Folded']           = { fg   = colors.blue, bg = '#16161d' }
+      hl['StatusLine']          = { bg   = 'NONE' }
+      hl['StatusLineNC']        = { bg   = 'NONE' }
+      hl['Tabline']             = { bg   = 'NONE' }
+      hl['TabLineFill']         = { bg   = 'NONE' }
+      hl['TabLineSel']          = { bg   = 'NONE' }
+      hl['Winbar']              = { bg   = 'NONE' }
+      hl['WinbarNC']            = { bg   = 'NONE' }
       hl['Folded']              = { fg   = colors.blue }
       -- hl['Special']          = { fg   = 'NONE', bold    = true }
 
@@ -37,14 +43,6 @@ return {
 
       hl['SnacksPickerTitle']   = { bold = true, fg        = colors.green }
 
-      -- PERF: in case sidebars = transparent doesnt work the way I think it should
-      hl['StatusLine']          = { bg   = 'NONE' }
-      hl['StatusLineNC']        = { bg   = 'NONE' }
-      hl['Tabline']             = { bg   = 'NONE' }
-      hl['TabLineFill']         = { bg   = 'NONE' }
-      hl['TabLineSel']          = { bg   = 'NONE' }
-      hl['Winbar']              = { bg   = 'NONE' }
-      hl['WinbarNC']            = { bg   = 'NONE' }
 
     end,
   },
