@@ -248,6 +248,7 @@ nnoremap g# g#zzzv
 " NOTE: requqires vim-commentary if vim
 " comment-out and duplicate line
 nmap yc "xyygcc"xp
+nmap <C--> v-
 
 " toggle visual selection
 vmap ~ gc

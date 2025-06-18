@@ -3,6 +3,11 @@
     "prefix": "function",
     "body": ["function${1: name}($2)", "\t${0}", "end"]
   },
+  
+  "function": {
+    "prefix": " = function",
+    "body": ["= function($1)", "\t${0}", "end"]
+  },
 
   "set": {
     "prefix": "set",

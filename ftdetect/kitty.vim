@@ -1,1 +1,1 @@
-au BufNewFile,BufRead */kitty/*.conf setfiletype kitty
+au BufNewFile,BufRead */kitty/*.conf,*/kitty.conf setfiletype kitty
