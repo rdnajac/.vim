@@ -165,16 +165,15 @@ wk.add({
   fu('<leader>si', Snacks.picker.icons, 'Icons'),
   fu('<leader>sk', Snacks.picker.keymaps, 'Keymaps'),
   fu('<leader>su', Snacks.picker.undo, 'Undotree'),
-
-  { '<leader>y', group = 'toggle' },
 })
 
 -- dual pickers {{{2
--- stylua: ignore
 local function map_pickers(key, path, desc)
+  local opts = { cwd = path, matcher = { frecency = true } }
+-- stylua: ignore
   return {
-    { '<leader>f' .. key, function() Snacks.picker.files({cwd = path }) end, desc = desc, },
-    { '<leader>s' .. key, function() Snacks.picker.grep({ cwd = path }) end, desc = desc, },
+    { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc, },
+    { '<leader>s' .. key, function() Snacks.picker.grep(opts) end, desc = desc, },
   }
 end
 

@@ -20,4 +20,3 @@ wk.add({
   { 'gl', function() require('util.togo').lazy() end, desc = 'Goto LazyVim module' },
   { 'gb', function() require('util.togo').github() end, desc = 'Open GitHub Repo in browser' },
 })
-

@@ -55,7 +55,7 @@ M.sources = {
   icons = {
     layout = {
       layout = {
-       reverse = true,
+        reverse = true,
         relative = 'cursor',
         row = 1,
         width = 0.3,
@@ -63,9 +63,31 @@ M.sources = {
         height = 0.3,
         border = 'none',
         box = 'vertical',
-        { win = 'input', height = 1, border = 'rounded', title = '{title} {live} {flags}', title_pos = 'center' },
-        { win = 'list', border = 'rounded' },
+        { win = 'input', height = 1, border = 'rounded' },
+        -- { win = 'list', border = 'rounded' },
       },
+    },
+  },
+}
+
+---@type snacks.picker.layout.Config
+M.layout = {
+  reverse = true,
+  layout = {
+    box = 'vertical',
+    backdrop = false,
+    height = 0.4,
+    row = vim.o.lines - math.floor(0.4 * vim.o.lines),
+    {
+      win = 'list',
+      border = 'rounded',
+      -- TODO: set titles in picker calls
+      title = '{title} {live} {flags}',
+      title_pos = 'left',
+    },
+    {
+      win = 'input',
+      height = 1,
     },
   },
 }

@@ -21,6 +21,7 @@ return {
   {
     'folke/snacks.nvim',
     priority = 1000,
+    ---@module "snacks"
     ---@type snacks.Config
     opts = {
       bigfile = { enabled = true },
@@ -34,12 +35,8 @@ return {
       picker = {
         layout = { preset = 'mylayout' },
         layouts = {
-          mylayout = require('munchies.picker.layout'),
-          vscode = require('munchies.picker.layout'),
-        },
-        matcher = {
-          frecency = true,
-          -- sort_empty = false,
+          mylayout = require('munchies.picker').layout,
+          vscode = require('munchies.picker').layout,
         },
         sources = require('munchies.picker').sources,
         win = {
