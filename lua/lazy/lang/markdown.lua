@@ -4,9 +4,7 @@ return {
     opts = {
       file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion' },
       completions = { blink = { enabled = false } },
-      bullet = {
-        right_pad = 1,
-      },
+      bullet = { right_pad = 1 },
       -- checkbox = { enabled = false },
       code = {
         inline_pad = 1,

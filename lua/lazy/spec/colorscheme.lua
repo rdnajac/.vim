@@ -19,22 +19,33 @@ return {
       -- colors.orange = '#ff007c'
       -- colors.yellow = '#ff007c'
     end,
+    -- stylua: ignore
     on_highlights = function(hl, colors)
-      -- hl['Folded'] = { fg = colors.blue, bg = '#16161d' }
-      hl['Folded'] = { fg = colors.blue }
-      -- hl['Special'] = { fg = 'NONE', bold = true }
+      -- hl['Folded']           = { fg   = colors.blue, bg = '#16161d' }
+      hl['Folded']              = { fg   = colors.blue }
+      -- hl['Special']          = { fg   = 'NONE', bold    = true }
 
-      hl['SpecialWindow'] = { bg = '#1f2335' }
+      hl['SpecialWindow']       = { bg   = '#1f2335' }
 
-      hl['MsgArea'] = { fg = colors.green }
-      hl['SpellBad'] = { bg = colors.red }
-      hl['FloatBorder'] = { fg = colors.green }
+      hl['MsgArea']             = { fg   = colors.green }
+      hl['SpellBad']            = { bg   = colors.red }
+      hl['FloatBorder']         = { fg   = colors.green }
 
-      hl['helpSectionDelim'] = { fg = colors.green }
-      hl['CopilotSuggestion'] = { bg = '#414868', fg = '#7aa2f7' }
-      hl['RenderMarkdownCode'] = { bg = 'NONE' }
+      hl['helpSectionDelim']    = { fg   = colors.green }
+      hl['CopilotSuggestion']   = { bg   = '#414868', fg   = '#7aa2f7' }
+      hl['RenderMarkdownCode']  = { bg   = 'NONE' }
 
-      hl['SnacksPickerTitle'] = { bold = true, fg = colors.green }
+      hl['SnacksPickerTitle']   = { bold = true, fg        = colors.green }
+
+      -- PERF: in case sidebars = transparent doesnt work the way I think it should
+      hl['StatusLine']          = { bg   = 'NONE' }
+      hl['StatusLineNC']        = { bg   = 'NONE' }
+      hl['Tabline']             = { bg   = 'NONE' }
+      hl['TabLineFill']         = { bg   = 'NONE' }
+      hl['TabLineSel']          = { bg   = 'NONE' }
+      hl['Winbar']              = { bg   = 'NONE' }
+      hl['WinbarNC']            = { bg   = 'NONE' }
+
     end,
   },
 }
