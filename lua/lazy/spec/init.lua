@@ -21,7 +21,7 @@ return {
   {
     'folke/snacks.nvim',
     priority = 1000,
-    ---@module "snacks"
+    ---@type snacks.Config
     opts = {
       bigfile = { enabled = true },
       dashboard = require('munchies.dashboard').config,
@@ -30,7 +30,33 @@ return {
       indent = { indent = { only_current = true, only_scope = true } },
       input = { enabled = true },
       notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
-      picker = require('munchies.picker').config,
+      ---@type snacks.picker.Config
+      picker = {
+        layout = { preset = 'mylayout' },
+        layouts = {
+          mylayout = require('munchies.picker.layout'),
+          vscode = require('munchies.picker.layout'),
+        },
+        matcher = {
+          frecency = true,
+          -- sort_empty = false,
+        },
+        sources = require('munchies.picker').sources,
+        win = {
+          input = {
+            keys = {
+              ['<Esc>'] = { 'close', mode = { 'i', 'n' } },
+              ['<a-z>'] = {
+                function(self)
+                  require('munchies.picker.zoxide').cd_and_resume_picking(self)
+                end,
+                mode = { 'i', 'n' },
+              },
+            },
+          },
+          preview = { minimal = true },
+        },
+      },
       quickfile = { enabled = true },
       scope = { enabled = true },
       scroll = { enabled = true },
@@ -44,7 +70,6 @@ return {
       words = { enabled = true },
     },
   },
-  -- { import = 'lazyvim.plugins.extras.editor.mini-files' },
   { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
   { 'nvim-lua/plenary.nvim', lazy = true },
 }

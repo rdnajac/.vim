@@ -37,7 +37,7 @@ M.lazy = function()
   edit(target)
 end
 
-function M.gx()
+function M.github()
   local line = vim.api.nvim_get_current_line()
   local col = vim.fn.col('.')
   local pattern = '["\']([%w_-]+/[%w_.-]+)["\']'
@@ -49,8 +49,6 @@ function M.gx()
       return
     end
   end
-
-  vim.cmd('normal! gx')
 end
 
 return M

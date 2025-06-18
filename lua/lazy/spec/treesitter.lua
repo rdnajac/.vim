@@ -6,8 +6,6 @@ local ensure_installed = {
   'cmake',
   'cpp',
   'cuda',
-  -- this should be `highlighted` or
-  -- `hi` or nor `w
   'comment', -- HACK: this is a custom parser
   'diff',
   'dockerfile',
@@ -48,6 +46,7 @@ return {
     lazy = false,
     branch = 'main',
     build = ':TSUpdate',
+    opts = { install_dir = vim.fn.stdpath('data') .. '/site' },
     init = function()
       -- FIXME: don't chagne the source code!
       -- require('nvim-treesitter.parsers').comment = {
@@ -60,5 +59,4 @@ return {
       require('nvim-treesitter').install(ensure_installed)
     end,
   },
-  config = { install_dir = vim.fn.stdpath('data') .. '/site' },
 }

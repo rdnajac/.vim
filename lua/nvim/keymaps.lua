@@ -25,20 +25,9 @@ wk.add({
   command('<leader>dd', 'LazyDev debug'),
   command('<leader>dl', 'LazyDev lsp'),
   command('<leader>dL', 'checkhealth vim.lsp'),
-  command('<leader>dH', 'LazyHealth'),
+  command('<leader>dh', 'LazyHealth'),
   { '<leader>dS', ':=require("snacks").meta.get()<CR>', desc = 'Snacks' },
   { '<leader>dw', ':=vim.lsp.buf.list_workspace_folders()<CR>', desc = 'LSP Workspace Folders' },
-})
-
-local function checkhealth(lhs, module, opts)
-  return command(lhs, 'checkhealth ' .. module, opts)
-end
-
-wk.add({
-  { '<leader>dh', group = 'health', icon = { icon = '', color = 'red' } },
-  checkhealth('<leader>dhc', 'config'),
-  checkhealth('<leader>dhk', 'which-key'),
-  checkhealth('<leader>dhs', 'snacks'),
 })
 
 vim.keymap.set({ 'n', 'v' }, '<leader>dr', function()
@@ -89,22 +78,24 @@ wk.add({
   insert_comment('gcB', 'BUG'),
 })
 
--- goto {{{2
--- stylua: ignore
+-- cd {{{2
 wk.add({
-  { 'gL', function() require('util.togo').lazy() end, desc = 'Goto LazyVim module', },
+  { 'cd', group = 'cd', icon = { icon = '󰒋 ', color = 'blue' } },
+  { 'cD', '<Cmd>SmartCD<CR>', desc = 'SmartCD' },
+  { 'cdd', '<Cmd>SmartCD<CR>', desc = 'SmartCD' },
+  { 'cdb', '<Cmd>cd %:p:h<BAR>pwd<CR>', desc = 'buffer directory' },
+  { 'cdp', '<Cmd>cd %:p:h:h<BAR>pwd<CR>', desc = 'parent directory' },
 })
 
 -- nvim {{{1
 -- stylua: ignore
 wk.add({
 icon = { icon = ' ', color = 'green' },
+  command('cz',  'Chezmoi'),
   command('<leader>S',  'Scripts'),
   command('<leader>r',  'Restart'),
   command('<leader>R',  'restart!'),
-  command('<leader>C',  'Chezmoi'),
   command('<leader>cd', 'CD'),
-  command('`',          'SmartCD'),
   command('<leader>q',  'Quit'),
   command('<leader>Q',  'Quit!'),
   command('<leader>z',  'Zoxide'),
@@ -122,7 +113,6 @@ wk.add({
   { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
 
   fu(',,', Snacks.terminal.toggle, 'Snacks Terminal', { 'n', 't' }),
-  fu('\\\\', Snacks.dashboard.open, 'Snacks Dashboard'),
   fu('<leader>.', Snacks.scratch, 'Toggle Scratch Buffer'),
   fu('<leader>>', Snacks.scratch.select, 'Select Scratch Buffer'),
   fu('<leader>,', Snacks.picker.buffers, 'Buffers'),
@@ -147,13 +137,6 @@ wk.add({
   fu('<leader>gg', Snacks.lazygit, 'Lazygit (cwd)', 'n'),
   fu('<leader>gf', Snacks.picker.git_log_file, 'Git Current File History', 'n'),
   fu('<leader>gl', Snacks.picker.git_log, 'Git Log (cwd)', 'n'),
-  {
-    '<leader>gx',
-    function()
-      require('util.togo').gx()
-    end,
-    desc = 'Open GitHub Repo in browser',
-  },
 
   { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
   fu('<leader>n', Snacks.picker.notifications, 'Notification History'),

@@ -23,7 +23,6 @@ return {
       desc = 'Keep completing path on <Tab>',
     })
 
-    ---@module "blink.cmp"
     ---@type blink.cmp.Config
     return {
       fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },

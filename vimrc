@@ -82,9 +82,8 @@ augroup vimrc " {{{2
   autocmd!
   au CmdwinEnter * quit
   au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
-  " au BufDelete * if winnr('$') == 1 && &filetype ==# 'snacks_terminal' | execute 'qa!' | endif
-" au BufDelete * if len(filter(getbufinfo(), 'v:val.listed')) == 0 | execute 'qa!' | endif
-  au BufWritePost $MYVIMRC source $MYVIMRC | echom 'vimrc reloaded'
+  " https://gist.github.com/romainl/379904f91fa40533175dfaec4c833f2f#but-this-doesnt-work-when-i-auto-source-my-vimrc
+  au BufWritePost $MYVIMRC nested source $MYVIMRC | echom 'vimrc reloaded'
 augroup END
 
 augroup FileTypeSettings " {{{2
@@ -147,14 +146,8 @@ command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
-" current file
-command! CDC cd %:p:h <BAR> pwd
-
-" parent directory
-command! CDP cd %:p:h:h
-
-command! BreakHere call utils#breakHere()
-nnoremap <space>j <Cmd>BreakHere<CR>
+" command! BreakHere call utils#breakHere()
+" nnoremap <space>j <Cmd>BreakHere<CR>
 
 command! ReplaceSelection call utils#replaceSelection()
 vnoremap <C-r> <cmd>ReplaceSelection<CR>
@@ -170,8 +163,6 @@ cnoremap ( ()<Left>
 nnoremap <BS> <C-o>
 
 nnoremap ` ~
-vmap - gc
-nmap vv Vgc
 
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
@@ -183,16 +174,16 @@ nnoremap <leader>Q <Cmd>qa<CR>
 nnoremap <leader>a :normal! ggVG<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 " nnoremap <leader>r <Cmd>Restart<CR>
-nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zz
-nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
 nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zz
+nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zz
 nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zz
-nnoremap <leader>vv <Cmd>edit $MYVIMRC<CR>
 nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zz
+nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
+nnoremap <leader>vv <Cmd>edit $MYVIMRC<CR>
 nnoremap <leader>E <Cmd>edit<CR>
 nnoremap <leader>w <Cmd>write<CR>
 nnoremap <leader>t <Cmd>edit #<CR>
-nnoremap <leader>i :help index<CR>
+nnoremap <leader>i <Cmd>help index<CR>
 
 function! s:edit(relpath, ext)
   let suffix = empty(&filetype) ? '' : &filetype . a:ext
@@ -245,14 +236,11 @@ nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 
-" comments {{{
-" NOTE: requqires vim-commentary if vim
+" comments (`commentary`) {{{
+nmap vv Vgc
+vmap ~ gc
 " comment-out and duplicate line
 nmap yc "xyygcc"xp
-nmap <C--> v-
-
-" toggle visual selection
-vmap ~ gc
 
 " better indenting {{{
 vnoremap < <gv
@@ -261,7 +249,7 @@ nnoremap > V`]>
 nnoremap < V`]<
 
 " smart delete/paste {{{
-vnoremap <silent> p "_dP
+" vnoremap <silent> p "_dP
 vnoremap <silent> <leader>d p"_d
 vnoremap <silent> <leader>p "_dP
 
@@ -284,14 +272,14 @@ inoremap \sec §
 iabbrev n- –
 iabbrev m- —
 
-" toggles {{{
-nmap <leader>yl :set list!<BAR>set list?<CR>
-nmap <leader>yn :set number!<BAR>set number?<CR>
-nmap <leader>ys :set spell!<BAR>set wrap?<CR>
-nmap <leader>yw :set wrap!<BAR>set wrap?<CR>
-nmap <leader>y~ :set autochdir!<BAR>set autochdir?<CR>
+" toggles (`unimpaired`) {{{
+nmap yol :set list!<BAR>set list?<CR>
+nmap yon :set number!<BAR>set number?<CR>
+nmap yos :set spell!<BAR>set wrap?<CR>
+nmap yow :set wrap!<BAR>set wrap?<CR>
+nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 
-" surround " {{{
+" `surround` {{{
 " NOTE: requqires vim-surround
 vmap `  S`
 vmap '  S'

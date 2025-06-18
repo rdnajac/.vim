@@ -8,9 +8,16 @@ vim.cmd([[
 local select = require('util.select')
 -- stylua: ignore start
 vim.keymap.set('n', '<C-Space>', function() select.start() end, { desc = 'Start selection'})
-vim.keymap.set('x', '<Space>', function() select.increment() end, { desc = 'Increment selection' })
+vim.keymap.set('x', '<C-Space>', function() select.increment() end, { desc = 'Increment selection' })
 vim.keymap.set('x', '<BS>', function() select.decrement() end, { desc = 'Decrement selection' })
+
+vim.keymap.set('v', '<C-r>', function() require('util.replace').selection() end, { desc = 'Replace' })
 -- stylua: ignore end
-vim.keymap.set('v', '<C-r>', function()
-  require('util.replace').selection()
-end, { desc = 'Replace selected text globally' })
+
+local wk = require('which-key')
+-- stylua: ignore
+wk.add({
+  { 'gl', function() require('util.togo').lazy() end, desc = 'Goto LazyVim module' },
+  { 'gb', function() require('util.togo').github() end, desc = 'Open GitHub Repo in browser' },
+})
+

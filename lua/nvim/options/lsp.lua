@@ -1,13 +1,10 @@
 -- Refer to :h vim.lsp.config() for more information.
 vim.lsp.config('*', {
-  -- TODO:
-  -- capabilities = require('blink.cmp').get_lsp_capabilities(),
+  capabilities = require('blink.cmp').get_lsp_capabilities(),
 
   ---@param client vim.lsp.Client
   ---@param bufnr integer
   on_attach = function(client, bufnr)
-    -- Snacks.notify('Attaching: ' .. client.name .. '...')
-
     if client:supports_method('textDocument/documentSymbol') then
       require('nvim-navic').attach(client, bufnr)
     end
@@ -27,6 +24,7 @@ vim.lsp.config('*', {
       client.server_capabilities.documentFormattingProvider = false
 
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
+
     -- stylua: ignore
     require('which-key').add({
       icon = { icon = ' ', color = 'orange' },

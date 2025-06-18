@@ -1,71 +1,72 @@
 local M = {}
 
----@module "snacks"
----@type snacks.picker.Config
-M.config = {
-  layout = { preset = 'mylayout' },
-  layouts = {
-    mylayout = require('munchies.picker.layout'),
-    vscode = require('munchies.picker.layout'),
-  },
-  matcher = {
-    frecency = true,
-    sort_empty = true,
-  },
-  sources = {
-    autocmds = { confirm = 'edit' },
-    keymaps = { confirm = 'edit' },
-    commands = {
-      confirm = function(picker, item)
-        picker:close()
-        if item.command then
-          local sid = item.command.script_id
-          if sid and sid ~= 0 then
-            local src
-            for line in vim.fn.execute('scriptnames'):gmatch('[^\r\n]+') do
-              local id, path = line:match('^%s*(%d+):%s+(.+)$')
-              if tonumber(id) == sid then
-                src = path
-                break
-              end
-            end
-            if src then
-              vim.cmd('edit ' .. src)
-              vim.fn.search('\\<' .. item.cmd .. '\\>', 'w')
+---@type snacks.picker.sources.Config
+M.sources = {
+  autocmds = { confirm = 'edit' },
+  keymaps = { confirm = 'edit' },
+  commands = {
+    confirm = function(picker, item)
+      picker:close()
+      if item.command then
+        local sid = item.command.script_id
+        if sid and sid ~= 0 then
+          local src
+          for line in vim.fn.execute('scriptnames'):gmatch('[^\r\n]+') do
+            local id, path = line:match('^%s*(%d+):%s+(.+)$')
+            if tonumber(id) == sid then
+              src = path
+              break
             end
           end
+          if src then
+            vim.cmd('edit ' .. src)
+            vim.fn.search('\\<' .. item.cmd .. '\\>', 'w')
+          end
         end
-      end,
-    },
-    files = {
-      follow = true,
-      hidden = true,
-      ignored = false,
-    },
-    grep = {
-      config = function(opts)
-        local cwd = opts.cwd or vim.loop.cwd()
-        opts.title = '󰱽 Grep (' .. vim.fn.fnamemodify(cwd, ':~') .. ')'
-        return opts
-      end,
-      follow = true,
-      ignored = false,
-    },
-    notifications = { layout = { preset = 'ivy_split' } },
+      end
+    end,
   },
-  win = {
-    input = {
-      keys = {
-        ['<Esc>'] = { 'close', mode = { 'n', 'i' } },
-        ['<a-z>'] = {
-          function(self)
-            require('munchies.picker.zoxide').cd_and_resume_picking(self)
-          end,
-          mode = { 'i', 'n' },
-        },
+  notifications = { layout = { preset = 'ivy' } },
+  pickers = { layout = { preset = 'ivy' } },
+  undo = { layout = { preset = 'ivy' } },
+  files = {
+    follow = true,
+    hidden = true,
+    ignored = false,
+  },
+  recent = {
+    filter = {
+      paths = {
+        [vim.fn.stdpath('data')] = true,
+        [vim.fn.stdpath('cache')] = false,
+        [vim.fn.stdpath('state')] = false,
       },
     },
-    preview = { minimal = true },
+  },
+  grep = {
+    config = function(opts)
+      local cwd = opts.cwd or vim.loop.cwd()
+      opts.title = '󰱽 Grep (' .. vim.fn.fnamemodify(cwd, ':~') .. ')'
+      return opts
+    end,
+    follow = true,
+    ignored = false,
+  },
+  icons = {
+    layout = {
+      layout = {
+       reverse = true,
+        relative = 'cursor',
+        row = 1,
+        width = 0.3,
+        min_width = 48,
+        height = 0.3,
+        border = 'none',
+        box = 'vertical',
+        { win = 'input', height = 1, border = 'rounded', title = '{title} {live} {flags}', title_pos = 'center' },
+        { win = 'list', border = 'rounded' },
+      },
+    },
   },
 }
 
