@@ -11,7 +11,7 @@ end
 wk.add({
   { '<leader>d', group = 'debug' },
   command('<leader>da', 'ALEInfo'),
-  command('<leader>db', 'BLINKC:p status'),
+  command('<leader>db', 'BLINK status'),
   { '<leader>dc', ':=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities' },
   command('<leader>dd', 'LazyDev debug'),
   command('<leader>dl', 'LazyDev lsp'),
@@ -69,6 +69,23 @@ wk.add({
   insert_comment('gcB', 'BUG'),
 })
 
+wk.add({
+  {
+    'gl',
+    function()
+      require('nvim.util.togo').lazy()
+    end,
+    desc = 'Goto LazyVim module',
+  },
+  {
+    'gb',
+    function()
+      require('nvim.util.togo').github()
+    end,
+    desc = 'Open GitHub Repo in browser',
+  },
+})
+
 -- cd {{{2
 wk.add({
   { 'cd', group = 'cd', icon = { icon = '󰒋 ', color = 'blue' } },
@@ -91,7 +108,7 @@ icon = { icon = ' ', color = 'green' },
   command('<leader>Q',  'Quit!'),
   command('<leader>z',  'Zoxide'),
     -- icon = { icon = '󰄻 ' },
-  { '<leader>D', function() require('util.debugprint').insert() end, desc = 'Insert Debug Print' },
+  { '<leader>D', function() require('nvim.util.debugprint').insert() end, desc = 'Insert Debug Print' },
 })
 
 -- snacks {{{1

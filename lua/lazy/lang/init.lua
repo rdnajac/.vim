@@ -24,6 +24,17 @@ _G.langsetup = setmetatable({}, {
 
 return {
   {
+    'nvim-treesitter/nvim-treesitter',
+    lazy = false,
+    branch = 'main',
+    build = ':TSUpdate',
+    config = function()
+      -- call own setup
+      require('nvim.treesitter').setup()
+    end,
+  },
+  { 'folke/ts-comments.nvim', event = 'VeryLazy', opts = {} },
+  {
     'mason-org/mason.nvim',
     build = ':MasonUpdate',
     lazy = false,

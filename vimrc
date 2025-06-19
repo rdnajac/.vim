@@ -140,6 +140,11 @@ command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
+command! CD           lua require('util.cd').prompt()
+command! SmartCD      lua require('util.cd').smart()
+command! InstallTools lua require('util.installer').mason_install()
+command! -bang Quit   lua require('util.quit').func('<bang>')
+
 " command! BreakHere call utils#breakHere()
 " nnoremap <space>j <Cmd>BreakHere<CR>
 
@@ -154,9 +159,8 @@ nnoremap Q <Cmd>call format#buffer()<CR>
 cnoremap ( ()<Left>
 
 " § keymaps {{{1
-nnoremap <BS> <C-o>
-
 nnoremap ` ~
+nnoremap <BS> <C-o>
 
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
@@ -174,8 +178,8 @@ nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zz
 nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zz
 nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
 nnoremap <leader>vv <Cmd>edit $MYVIMRC<CR>
-nnoremap <leader>E <Cmd>edit<CR>
-nnoremap <leader>w <Cmd>write<CR>
+nnoremap <leader>E <Cmd>edit!<CR>
+nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>i <Cmd>help index<CR>
 
@@ -187,6 +191,7 @@ endfunction
 nnoremap <leader>ft :call <SID>edit('after/ftplugin/', '.vim')<CR>
 nnoremap <leader>fT :call <SID>edit('lua/lazy/lang/', '.lua')<CR>
 nnoremap <leader>fs :call <SID>edit('snippets/', '.json')<CR>
+nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
 " buffers {{{
@@ -304,29 +309,27 @@ cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 " § plugins {{{1
 " key = vimscript plugin, value = also enabled in nvim
 let g:vim_plugins = {
-      \ 'christoomey/vim-tmux-navigator': 0,
-      \ 'dense-analysis/ale'            : 0,
-      \ 'github/copilot.vim'            : 0,
-      \ 'jiangmiao/auto-pairs'          : 0,
-      \ 'junegunn/fzf.vim'              : 0,
-      \ 'junegunn/vim-easy-align'       : 0,
-      \ 'lervag/vimtex'                 : 0,
-      \ 'tpope/vim-abolish'             : 1,
-      \ 'tpope/vim-apathy'              : 1,
-      \ 'tpope/vim-commentary'          : 0,
-      \ 'tpope/vim-endwise'             : 0,
-      \ 'tpope/vim-fugitive'            : 1,
-      \ 'tpope/vim-repeat'              : 1,
-      \ 'tpope/vim-scriptease'          : 1,
-      \ 'tpope/vim-sensible'            : 0,
-      \ 'tpope/vim-speeddating'         : 0,
-      \ 'tpope/vim-surround'            : 1,
-      \ 'tpope/vim-tbone'               : 1,
-      \ 'tpope/vim-unimpaired'          : 1,
-      \ 'tpope/vim-vinegar'             : 0,
-      \ 'vuciv/golf'                    : 0,
-      \ '~/GitHub/rdnajac/src/fzf/'     : 0,
-      \ 'andymass/vim-matchup'          : 0,
+      \ 'dense-analysis/ale'        : 0,
+      \ 'github/copilot.vim'        : 0,
+      \ 'lervag/vimtex'             : 0,
+      \ '~/GitHub/rdnajac/src/fzf/' : 0,
+      \ 'junegunn/fzf.vim'          : 0,
+      \ 'junegunn/vim-easy-align'   : 0,
+      \ 'tpope/vim-abolish'         : 1,
+      \ 'tpope/vim-apathy'          : 1,
+      \ 'tpope/vim-commentary'      : 0,
+      \ 'tpope/vim-endwise'         : 0,
+      \ 'tpope/vim-fugitive'        : 1,
+      \ 'tpope/vim-repeat'          : 1,
+      \ 'tpope/vim-scriptease'      : 1,
+      \ 'tpope/vim-sensible'        : 0,
+      \ 'tpope/vim-speeddating'     : 0,
+      \ 'tpope/vim-surround'        : 1,
+      \ 'tpope/vim-tbone'           : 1,
+      \ 'tpope/vim-unimpaired'      : 1,
+      \ 'tpope/vim-vinegar'         : 0,
+      \ 'vuciv/golf'                : 0,
+      \ 'cohama/lexima.vim'         : 1,
       \ }
 
 if has('nvim')

@@ -1,5 +1,4 @@
 vim.loader.enable() -- XXX: experimental!
--- TODO: fix tabline/winbar
 
 _G.lazypath = vim.fn.stdpath('data') .. '/lazy'
 
@@ -30,18 +29,17 @@ end
 require('lazy.bootstrap')
 
 -- autocmds can be loaded lazily when not opening a file
-local lazy_autocmds = vim.fn.argc(-1) == 0
+local lazy = vim.fn.argc(-1) == 0
 
-if not lazy_autocmds then
+if not lazy then
   require('nvim.autocmds')
 end
 
 LazyVim.on_very_lazy(function()
-  if lazy_autocmds then
+  if lazy then
     require('nvim.autocmds')
   end
   require('nvim.keymaps')
   require('nvim.options')
   require('munchies')
-  require('util')
 end)
