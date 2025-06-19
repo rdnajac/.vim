@@ -1,5 +1,13 @@
 local M = {}
 
+M.checkhealth = {
+  winbar = {},
+  inactive_winbar = {},
+  sections = {},
+  tabline = {},
+  filetypes = { 'checkhealth' },
+}
+
 M.man = {
   winbar = {
     lualine_a = {

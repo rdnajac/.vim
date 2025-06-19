@@ -33,6 +33,7 @@ return {
           'fugitive',
           'lazy',
           'mason',
+          x.checkhealth,
           x.man,
           x.oil,
           x.snacks_terminal,

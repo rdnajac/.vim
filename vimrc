@@ -13,13 +13,7 @@ if !has('nvim') " {{{3
   let &undodir     = s:VIMHOME . '.undo//'
   let &viminfofile = s:VIMHOME . '.viminfo'
   " let &verbosefile = s:VIMHOME . '.vimlog.txt'
-
-  " better escape
-  noremap jk <esc>
-  noremap kj <esc>
-
   silent! color scheme
-
   if system('uname') =~? '^darwin'
     set clipboard=unnamed
   else
@@ -27,7 +21,7 @@ if !has('nvim') " {{{3
   endif
 endif
 
-" options {{{
+" options {{{2
 " set backup
 set undofile undolevels=10000
 set autowrite

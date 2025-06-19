@@ -8,6 +8,14 @@ return {
     end
   end,
   config = function()
+    -- local map_combo = require('mini.keymap').map_combo
+    --
+    -- for _, combo in ipairs({ 'jk', 'kj' }) do
+    --   -- Map both 'jk' and 'kj' to <Esc> in normal-ish modes
+    --   map_combo({ 'i', 'c', 'v', 's' }, combo, '<BS><BS><Esc>')
+    --   -- Terminal mode: 'jk' and 'kj' to <C-\><C-n>
+    --   map_combo('t', combo, '<BS><BS><C-\\><C-n>')
+    -- end
     require('mini.align').setup({})
     require('mini.diff').setup({
       view = {

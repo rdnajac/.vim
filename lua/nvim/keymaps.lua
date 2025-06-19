@@ -1,14 +1,5 @@
 -- vim: fdm=marker fdl=1
 local wk = require('which-key')
--- better escape {{{2
-local map_combo = require('mini.keymap').map_combo
-
-for _, combo in ipairs({ 'jk', 'kj' }) do
-  -- Map both 'jk' and 'kj' to <Esc> in normal-ish modes
-  map_combo({ 'i', 'c', 'v', 's' }, combo, '<BS><BS><Esc>')
-  -- Terminal mode: 'jk' and 'kj' to <C-\><C-n>
-  map_combo('t', combo, '<BS><BS><C-\\><C-n>')
-end
 
 -- debug/health {{{2
 local function command(lhs, cmd, opts)
