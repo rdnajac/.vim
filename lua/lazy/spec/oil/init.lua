@@ -8,10 +8,10 @@ return {
   keys = {
     { '-', '<Cmd>Oil<CR>' },
     { '_', '<Cmd>Oil --float<CR>' },
-    -- { '<leader>e', '<Cmd>Oil<CR>' },
-    -- { '<leader>e', '<Cmd>topleft 30vsplit +Oil<CR>' },
   },
   opts = function()
+    require('lazy.spec.oil.au')
+
     local refresh = require('oil.actions').refresh
     local orig_refresh = refresh.callback
     refresh.callback = function(...)
@@ -19,14 +19,10 @@ return {
       orig_refresh(...)
     end
 
-    LazyVim.on_very_lazy(function()
-      require('lazy.spec.oil.autocmds')
-    end)
-
     ---@type oil.setupOpts
     return {
       default_file_explorer = true,
-      skip_confirm_for_simple_edits = true,
+      -- skip_confirm_for_simple_edits = true,
       constrain_cursor = 'name',
       watch_for_changes = true,
       keymaps = require('lazy.spec.oil.keymaps'),
@@ -34,7 +30,6 @@ return {
       float = {
         padding = 2, -- default = `2`
         -- border = 'none', -- default - `rounded`
-        border = 'rounded', -- default - `rounded`
         win_options = {
           winblend = 0,
         },
@@ -42,7 +37,6 @@ return {
         -- peview_split = 'right',
         override = function(conf)
           conf.row = 1 -- assuming we have tabline
-          -- conf.width = 30
           return conf
         end,
       },
@@ -65,13 +59,6 @@ return {
         is_always_hidden = function(name, _)
           return name == '../'
         end,
-      },
-
-      preview_win = {
-        -- Whether the preview window is automatically updated when the cursor is moved
-        update_on_cursor_moved = true,
-        -- How to open the preview window "load"|"scratch"|"fast_scratch"
-        -- preview_method = 'load',
       },
     }
   end,
