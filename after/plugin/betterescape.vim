@@ -3,6 +3,9 @@
 let g:esc_j_lasttime = 0
 let g:esc_k_lasttime = 0
 
+let s:escape ="\<BS>\<Esc>"
+let s:term_escape ="\<BS>\<C-\>\<C-N>"
+
 function! s:escape(key)
   let l:now = reltimefloat(reltime())
   if a:key ==# 'j'
@@ -16,18 +19,13 @@ function! s:escape(key)
   if l:timediff <= 0.069 && l:timediff >= 0.001
     let g:esc_j_lasttime = 0
     let g:esc_k_lasttime = 0
-    return "\<BS>\<Esc>"
-    " TODO: terminal mode
+    return mode() ==# 't' ? s:term_escape : s:escape
   endif
   return a:key
 endfunction
 
-inoremap <expr> j <SID>escape('j')
-inoremap <expr> k <SID>escape('k')
-
-vnoremap <expr> j <SID>escape('j')
-vnoremap <expr> k <SID>escape('k')
-
-cnoremap <expr> j <SID>escape('j')
-cnoremap <expr> k <SID>escape('k')
-
+for mode in ['i', 'v', 'c', 't']
+  for key in ['j', 'k']
+    execute mode . 'noremap <expr> ' . key . ' <SID>escape(''' . key . ''')'
+  endfor
+endfor
