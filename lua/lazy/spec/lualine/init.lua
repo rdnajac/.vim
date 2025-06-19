@@ -24,8 +24,18 @@ return {
           section_separators = {},
           component_separators = { left = '', right = '' },
         },
-        tabline = require('lazy.spec.lualine.tabline'),
         sections = require('lazy.spec.lualine.statusline'),
+        tabline = {
+          lualine_a = { require('lazy.spec.lualine.components.path').prefix },
+          lualine_b = {
+            require('lazy.spec.lualine.components.path').suffix,
+            require('lazy.spec.lualine.components.path').modified,
+          },
+          -- lualine_c = {},
+          lualine_x = {},
+          lualine_y = { require('lazy.spec.lualine.components.lazy_updates') },
+          lualine_z = require('lazy.spec.lualine.components.time').clock,
+        },
         winbar = require('lazy.spec.lualine.winbar').active,
         inactive_winbar = require('lazy.spec.lualine.winbar').inactive,
 

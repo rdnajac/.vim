@@ -31,8 +31,17 @@ M.inactive = {
         end
         return icon
       end,
+      cond = function()
+        return vim.bo.bufhidden ~= 'wipe'
+      end,
     },
-    { 'filename', separator = { right = '🭛' } },
+    {
+      'filename',
+      separator = { right = '🭛' },
+      cond = function()
+        return vim.bo.bufhidden ~= 'wipe'
+      end,
+    },
   },
   lualine_z = { date },
 }
