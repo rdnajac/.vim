@@ -28,7 +28,11 @@ M.sources = {
   },
   notifications = { layout = { preset = 'ivy' } },
   pickers = { layout = { preset = 'ivy' } },
-  undo = { layout = { preset = 'ivy' } },
+  undo = {
+    layout = { preset = 'ivy' },
+    -- FIXME: what does this readlly do?
+    select = "copy",
+  },
   files = {
     follow = true,
     hidden = true,

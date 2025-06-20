@@ -1,7 +1,7 @@
 local M = {}
 
 -- optimized treesitter foldexpr for Neovim >= 0.10.0
-function M.foldexpr()
+M.expr = function()
   local buf = vim.api.nvim_get_current_buf()
   if vim.b[buf].ts_folds == nil then
     if vim.bo[buf].filetype == '' then
@@ -16,10 +16,7 @@ function M.foldexpr()
   return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or '0'
 end
 
-M.setup = function()
-  vim.opt.foldexpr = 'v:lua.LazyVim.ui.foldexpr()'
-  vim.opt.foldlevel = 99
-  vim.opt.foldtext = ''
-end
+-- vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "v:lua.my_foldexpr()"
 
-return M.setup()
+return M

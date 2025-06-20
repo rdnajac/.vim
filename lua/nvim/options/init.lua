@@ -16,6 +16,5 @@ if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
 end
 
 require('nvim.options.diagnostic')
-require('nvim.options.folding')
 require('nvim.options.lsp')
 require('nvim.options.x')
