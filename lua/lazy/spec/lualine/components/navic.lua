@@ -10,6 +10,7 @@ local default_options = {
     return navic.is_available()
   end,
   color_correction = nil,
+  -- color_correction = 'dynamic',
   navic_opts = nil,
 }
 
