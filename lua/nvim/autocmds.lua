@@ -8,16 +8,6 @@ local au = function(event, pattern, callback, desc)
   vim.api.nvim_create_autocmd(event, { group = group, pattern = pattern, callback = callback })
 end
 
-local db = function(ev)
-  print(string.format('event fired: %s', vim.inspect(ev)))
-end
-
--- vim.api.nvim_create_autocmd('BufEnter', {
---   callback = function(ev)
---     audebug(ev)
---   end,
--- })
-
 au('TextYankPost', '*', function()
   vim.hl.on_yank()
 end)
