@@ -69,14 +69,6 @@ wk.add({
   insert_comment('gcB', 'BUG'),
 })
 
--- cd {{{2
-wk.add({
-  { 'cd', group = 'cd', icon = { icon = '󰒋 ', color = 'blue' } },
-  { 'cdb', '<Cmd>cd %:p:h<BAR>pwd<CR>', desc = 'buffer directory' },
-  { 'cdc', '<Cmd>SmartCD<CR>', desc = 'SmartCD' },
-  { 'cdp', '<Cmd>cd %:p:h:h<BAR>pwd<CR>', desc = 'parent directory' },
-})
-
 -- nvim {{{1
 -- stylua: ignore
 wk.add({
@@ -85,7 +77,6 @@ icon = { icon = ' ', color = 'green' },
   command('<leader>S',  'Scripts'),
   command('<leader>r',  'Restart'),
   command('<leader>R',  'restart!'),
-  command('<leader>cd', 'CD'),
   command('<leader>z',  'Zoxide'),
     -- icon = { icon = '󰄻 ' },
   { '<leader>D', function() require('nvim.util.debug').insert() end, desc = 'Insert Debug Print' },

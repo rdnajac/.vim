@@ -139,8 +139,7 @@ command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 " TODO:  use lua api to define commands since it works better with lsp rename
-command! CD           lua require('nvim.util.cd').prompt()
-command! SmartCD      lua require('nvim.util.cd').smart()
+command! SmartCD call cd#smart()
 command! InstallTools lua require('nvim.util.installer').mason_install()
 
 command! -bang Quit call quit#buffer(<q-bang>)
@@ -191,7 +190,10 @@ nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 " available key pairs in normal mode {{{
 " https://gist.github.com/romainl/1f93db9dc976ba851bbb
-" nmap gb vi'C-space>y:silent! !open https://github.com/<C-R>0<CR>
+nnoremap cdc <Cmd>CdSmart<CR>
+nnoremap cdb <Cmd>cd %:p:h<BAR>pwd<CR>
+nnoremap cdp <Cmd>cd %:p:h:h<BAR>pwd<CR>
+
 nnoremap gb viqzy:!open https://github.com/<C-R>z<CR>
 xnoremap gb zy:!open https://github.com/<C-R>z<CR>
 
