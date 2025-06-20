@@ -21,7 +21,7 @@ if !has('nvim') " {{{3
   endif
 endif
 
-" options {{{2
+" options {{{3
 " set backup
 set undofile undolevels=10000
 set autowrite
@@ -38,6 +38,7 @@ set fillchars+=foldsep:│
 set fillchars+=stl:\ ,
 set formatoptions-=or
 set foldopen+=insert,jump
+set foldtext=fold#text()
 set ignorecase smartcase
 set linebreak
 set list
@@ -67,7 +68,6 @@ set showtabline=2
 set completeopt=menu,preview,preinsert,longest
 " set completeopt=menu,preview,longest
 set wildmode=longest:full,full
-" }}}2
 
 " § autocmds {{{1
 augroup vimrc " {{{2
@@ -142,10 +142,10 @@ command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-
 command! CD           lua require('nvim.util.cd').prompt()
 command! SmartCD      lua require('nvim.util.cd').smart()
 command! InstallTools lua require('nvim.util.installer').mason_install()
-command! -bang Quit   lua require('nvim.util.quit').func('<bang>')
 
-" command! BreakHere call utils#breakHere()
-" nnoremap <space>j <Cmd>BreakHere<CR>
+command! -bang Quit call quit#buffer(<q-bang>)
+nnoremap <leader>q <Cmd>Quit<CR>
+nnoremap <leader>Q <Cmd>Quit!<CR>
 
 command! ReplaceSelection call utils#replaceSelection()
 vnoremap <C-r> <cmd>ReplaceSelection<CR>
@@ -273,19 +273,27 @@ inoremap <silent> ,n <C-x><C-n>
 inoremap <silent> ,t <C-x><C-]>
 inoremap <silent> ,u <C-x><C-u>
 
-" insert special chars {{{
+" unimpaired {{{2
+nnoremap ]e :execute 'move .+' . v:count1<CR>==
+inoremap ]e <Esc>:m .+1<CR>==gi
+vnoremap ]e :<C-u>execute "'<,'>move '>+" . v:count1<CR>gv=gv
+nnoremap [e :execute 'move .-' . (v:count1 + 1)<CR>==
+inoremap [e <Esc>:m .-2<CR>==gi
+vnoremap [e :<C-u>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv
+
+" insert special chars {{{2
 inoremap \sec §
 iabbrev n- –
 iabbrev m- —
 
-" toggles (`unimpaired`) {{{w
+" toggles (`unimpaired`) {{{2
 nmap yol :set list!<BAR>set list?<CR>
 nmap yon :set number!<BAR>redraw!<BAR>set number?<CR>
 nmap yos :set spell!<BAR>set wrap?<CR>
 nmap yow :set wrap!<BAR>set wrap?<CR>
 nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 
-" `surround` {{{
+" `surround` {{{2
 vmap `  S`
 vmap '  S'
 vmap "  S"
@@ -293,7 +301,7 @@ vmap b  Sb
 nmap S  viWS
 nmap yss ys
 
-" cmdline {{{
+" cmdline {{{2
 nnoremap ; :
 
 cnoreabbrev !! !./%
@@ -308,7 +316,7 @@ command! W w!
 command! Wq wq!
 command! Wqa wqa!
 
-" wildmenu {{{
+" wildmenu {{{2
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 
@@ -344,8 +352,6 @@ if has('nvim')
     lua require('nvim')
     command! LazyHealth Lazy! load all | checkhealth
     let g:loaded_nvim = 1
-    " HACK: this isnt loaded automatically in nvim
-    call fold#text()
   endif
   let g:ale_disable_lsp = 1
   let g:ale_use_neovim_diagnostics_api = 1

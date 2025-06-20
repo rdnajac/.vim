@@ -1,30 +1,16 @@
 -- vim: fdm=marker
--- stylua: ignore start
-vim.keymap.set("n", "]e", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
-vim.keymap.set("i", "]e", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
-vim.keymap.set("v", "]e", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
-vim.keymap.set("n", "[e", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
-vim.keymap.set("i", "[e", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
-vim.keymap.set("v", "[e", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
-vim.cmd([[
-nnoremap ww w
-pwd
-]])
--- stylua: ignore end
 
 local wk = require('which-key')
 
 -- debug/health {{{2
-local function command(lhs, cmd, opts)
-  opts = opts or {}
-  opts.desc = opts.desc or cmd
-  return { lhs, '<Cmd>' .. cmd .. '<CR>', opts }
+local function command(lhs, cmd)
+  return { lhs, '<Cmd>' .. cmd .. '<CR>' }
 end
 
 wk.add({
   { '<leader>d', group = 'debug' },
   command('<leader>da', 'ALEInfo'),
-  command('<leader>db', 'BLINK status'),
+  command('<leader>db', 'Blink status'),
   { '<leader>dc', ':=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities' },
   command('<leader>dd', 'LazyDev debug'),
   command('<leader>dl', 'LazyDev lsp'),
@@ -39,22 +25,22 @@ vim.keymap.set({ 'n', 'v' }, '<leader>dr', function()
 end)
 
 -- edit config files  {{{2
-local confpath = vim.fn.stdpath('config') .. '/lua/nvim/'
+local p = vim.fn.stdpath('config') .. '/lua/'
 local function config(lhs, mod)
-  return { lhs, '<Cmd>edit ' .. confpath .. mod .. '.lua<CR>', desc = mod }
+  return { lhs, '<Cmd>edit ' .. p .. mod .. '.lua<CR>', desc = mod }
 end
 
 -- stylua: ignore
 wk.add({
-  config('\\i', 'init'),
-  config('\\a', 'autocmds'),
-  config('\\o', 'options'),
-  config('\\k', 'keymaps'),
-  -- config('\\s', 'lazy/spec/init'),
+  config('\\a', 'nvim/autocmds'),
+  config('\\i', 'nvim/init'),
+  config('\\k', 'nvim/keymaps'),
+  config('\\o', 'nvim/options'),
+  config('\\l', 'lazy/spec/init'),
+  config('\\b', 'lazy/bootstrap.lua'),
+  config('\\m', 'munchies/init.lua'),
+  config('\\u', 'util/init.lua'),
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
-  { '\\m', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/munchies/init.lua<CR>', desc = 'Munchies' },
-  { '\\l', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/lazy/bootstrap.lua<CR>', desc = 'Lazy' },
-  { '\\u', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/util/init.lua<CR>', desc = 'Utils' },
 })
 
 -- insert comments {{{2
@@ -100,11 +86,9 @@ icon = { icon = ' ', color = 'green' },
   command('<leader>r',  'Restart'),
   command('<leader>R',  'restart!'),
   command('<leader>cd', 'CD'),
-  command('<leader>q',  'Quit'),
-  command('<leader>Q',  'Quit!'),
   command('<leader>z',  'Zoxide'),
     -- icon = { icon = '󰄻 ' },
-  { '<leader>D', function() require('nvim.util.debugprint').insert() end, desc = 'Insert Debug Print' },
+  { '<leader>D', function() require('nvim.util.debug').insert() end, desc = 'Insert Debug Print' },
 })
 
 -- snacks {{{1
@@ -222,7 +206,6 @@ wk.add({
   { '<leader>ui', function() vim.show_pos() end, desc = 'Inspect Pos', },
   { '<leader>uI', function() vim.treesitter.inspect_tree() vim.api.nvim_input('I') end, { desc = 'Inspect Tree' }, },
   { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss Notifications', },
-  { '<leader>ur', '<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>', desc = 'Redraw/Clear/Diff' },
   { '<leader>uz', function() Snacks.zen() end, desc = 'Zen Mode', icon = { icon = ' ', color = 'blue' }, },
 })
 

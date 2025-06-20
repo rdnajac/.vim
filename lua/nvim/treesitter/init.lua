@@ -1,5 +1,4 @@
 -- Incremental selection
-_G.selected_nodes = {}
 
 local M = {}
 
@@ -44,43 +43,6 @@ M.parsers = {
   'yaml',
 }
 
-local function select_node(node)
-  if node then
-    local start_row, start_col, end_row, end_col = node:range()
-    vim.fn.setpos("'<", { 0, start_row + 1, start_col + 1, 0 })
-    vim.fn.setpos("'>", { 0, end_row + 1, end_col, 0 })
-    vim.cmd('normal! gv')
-  end
-end
-
-M.start = function()
-  _G.selected_nodes = {}
-  local current_node = vim.treesitter.get_node()
-  if current_node then
-    table.insert(_G.selected_nodes, current_node)
-    select_node(current_node)
-  end
-end
-
-M.increment = function()
-  local current_node = _G.selected_nodes[#_G.selected_nodes]
-  if current_node then
-    local parent = current_node:parent()
-    if parent then
-      table.insert(_G.selected_nodes, parent)
-      select_node(parent)
-    end
-  end
-end
-
-M.decrement = function()
-  table.remove(_G.selected_nodes)
-  local current_node = _G.selected_nodes[#_G.selected_nodes]
-  if current_node then
-    select_node(current_node)
-  end
-end
-
 M.register_parser = function()
   vim.api.nvim_create_autocmd('User', {
     pattern = 'TSUpdate',
@@ -107,10 +69,11 @@ end
 M.setup = function()
 M.register_parser()
 require('nvim-treesitter').install(M.parsers)
+local sel = require('nvim.treesitter.selection')
 
-vim.keymap.set('n', '<C-Space>', function() M.start()     end, { desc = 'Start     selection' })
-vim.keymap.set('x', '<C-Space>', function() M.increment() end, { desc = 'Increment selection' })
-vim.keymap.set('x', '<BS>',      function() M.decrement() end, { desc = 'Decrement selection' })
+vim.keymap.set('n', '<C-Space>', function() sel.start()     end, { desc = 'Start     selection' })
+vim.keymap.set('x', '<C-Space>', function() sel.increment() end, { desc = 'Increment selection' })
+vim.keymap.set('x', '<BS>',      function() sel.decrement() end, { desc = 'Decrement selection' })
 end
 
 return M

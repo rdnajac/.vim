@@ -1,4 +1,3 @@
-vim.g.autoformat = true
 require('lazy.file')
 
 return {
@@ -12,10 +11,10 @@ return {
       LazyVim.track('colorscheme')
       require('tokyonight').load()
       LazyVim.track()
-      LazyVim.on_very_lazy(function()
-        LazyVim.format.setup()
-        LazyVim.root.setup()
-      end)
+      -- LazyVim.on_very_lazy(function()
+      --   LazyVim.format.setup()
+      --   LazyVim.root.setup()
+      -- end)
     end,
   },
   {
@@ -57,7 +56,7 @@ return {
       quickfile = { enabled = true },
       scope = { enabled = true },
       scroll = { enabled = true },
-      statuscolumn = { enabled = true },
+      statuscolumn = { enabled = false },
       terminal = {
         start_insert = true,
         auto_insert = false,
