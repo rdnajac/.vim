@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-function vim#chars#greek() " {{{
+function greek#setup() " {{{
 " Uppercase Greek letters " {{{
 iabbrev \Alpha Α
 iabbrev \Beta Β
@@ -52,8 +52,4 @@ iabbrev \psi ψ
 iabbrev \omega ω
 " }}}
 endfunction
-" }}}
-
-function vim#chars#symbols() " {{{
-
 " }}}
