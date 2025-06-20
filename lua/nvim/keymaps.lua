@@ -1,4 +1,17 @@
--- vim: fdm=marker fdl=1
+-- vim: fdm=marker
+-- stylua: ignore start
+vim.keymap.set("n", "]e", "<cmd>execute 'move .+' . v:count1<cr>==", { desc = "Move Down" })
+vim.keymap.set("i", "]e", "<esc><cmd>m .+1<cr>==gi", { desc = "Move Down" })
+vim.keymap.set("v", "]e", ":<C-u>execute \"'<,'>move '>+\" . v:count1<cr>gv=gv", { desc = "Move Down" })
+vim.keymap.set("n", "[e", "<cmd>execute 'move .-' . (v:count1 + 1)<cr>==", { desc = "Move Up" })
+vim.keymap.set("i", "[e", "<esc><cmd>m .-2<cr>==gi", { desc = "Move Up" })
+vim.keymap.set("v", "[e", ":<C-u>execute \"'<,'>move '<-\" . (v:count1 + 1)<cr>gv=gv", { desc = "Move Up" })
+vim.cmd([[
+nnoremap ww w
+pwd
+]])
+-- stylua: ignore end
+
 local wk = require('which-key')
 
 -- debug/health {{{2
@@ -35,11 +48,12 @@ end
 wk.add({
   config('\\i', 'init'),
   config('\\a', 'autocmds'),
-  config('\\o', 'options/init'),
+  config('\\o', 'options'),
   config('\\k', 'keymaps'),
   -- config('\\s', 'lazy/spec/init'),
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
   { '\\m', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/munchies/init.lua<CR>', desc = 'Munchies' },
+  { '\\l', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/lazy/bootstrap.lua<CR>', desc = 'Lazy' },
   { '\\u', '<Cmd>edit ' .. vim.fn.stdpath('config') .. '/lua/util/init.lua<CR>', desc = 'Utils' },
 })
 
@@ -69,29 +83,11 @@ wk.add({
   insert_comment('gcB', 'BUG'),
 })
 
-wk.add({
-  {
-    'gl',
-    function()
-      require('nvim.util.togo').lazy()
-    end,
-    desc = 'Goto LazyVim module',
-  },
-  {
-    'gb',
-    function()
-      require('nvim.util.togo').github()
-    end,
-    desc = 'Open GitHub Repo in browser',
-  },
-})
-
 -- cd {{{2
 wk.add({
   { 'cd', group = 'cd', icon = { icon = '󰒋 ', color = 'blue' } },
-  { 'cD', '<Cmd>SmartCD<CR>', desc = 'SmartCD' },
-  { 'cdd', '<Cmd>SmartCD<CR>', desc = 'SmartCD' },
   { 'cdb', '<Cmd>cd %:p:h<BAR>pwd<CR>', desc = 'buffer directory' },
+  { 'cdc', '<Cmd>SmartCD<CR>', desc = 'SmartCD' },
   { 'cdp', '<Cmd>cd %:p:h:h<BAR>pwd<CR>', desc = 'parent directory' },
 })
 

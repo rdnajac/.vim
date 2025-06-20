@@ -32,8 +32,7 @@ if has ('nvim')
   lua vim.api.nvim_set_hl(0, 'LspReferenceText', {})
   setlocal foldmethod=expr
   setlocal foldexpr=v:lua.require('nvim.treesitter.fold').expr()
-  setlocal foldlevel=1
+  setlocal foldlevel=0
   " lua vim.treesitter.start()
 endif
-
 setlocal foldtext=fold#text()

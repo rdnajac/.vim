@@ -1,5 +1,6 @@
 local M = {}
 
+-- configure defaults here
 ---@type snacks.picker.sources.Config
 M.sources = {
   autocmds = { confirm = 'edit' },
@@ -31,11 +32,11 @@ M.sources = {
   undo = {
     layout = { preset = 'ivy' },
     -- FIXME: what does this readlly do?
-    select = "copy",
+    select = 'copy',
   },
   files = {
     follow = true,
-    hidden = true,
+    hidden = false,
     ignored = false,
   },
   recent = {

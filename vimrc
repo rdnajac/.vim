@@ -153,11 +153,8 @@ command! CleanWhitespace call format#whitespace()
 nnoremap <leader>fw <cmd>CleanWhitespace<CR>
 
 nnoremap Q <Cmd>call format#buffer()<CR>
-
-" auto pairs in cmdline
-" cnoremap ( ()<Left>
-
 " § keymaps {{{1
+
 nnoremap ` ~
 nnoremap <BS> <C-o>
 
@@ -192,8 +189,17 @@ nnoremap <leader>fT :call <SID>edit('lua/lazy/lang/', '.lua')<CR>
 nnoremap <leader>fs :call <SID>edit('snippets/', '.json')<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
+" available key pairs in normal mode {{{
+" https://gist.github.com/romainl/1f93db9dc976ba851bbb
+" nmap gb vi'C-space>y:silent! !open https://github.com/<C-R>0<CR>
+nnoremap gb viqzy:!open https://github.com/<C-R>z<CR>
+xnoremap gb zy:!open https://github.com/<C-R>z<CR>
 
-" buffers {{{
+" splitjoin: gJ and gS
+" vim-surround: cs, ds, and ys
+nnoremap zq <Cmd>silent normal! 1z=<CR>
+
+" buffers {{{2
 nnoremap <silent> <Tab>         :bnext<CR>
 nnoremap <silent> <S-Tab>       :bprev<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
@@ -202,13 +208,13 @@ nnoremap <silent> <leader>bD    :bd<CR>
 " Close buffer
 map <silent> <C-q> <Cmd>bd<CR>
 
-" resize splits {{{
+" resize splits {{{2
 " nnoremap <M-Up>    :resize -2<CR>
 " nnoremap <M-Down>  :resize +2<CR>
 nnoremap <M-Left>  :vertical resize -2<CR>
 nnoremap <M-Right> :vertical resize +2<CR>
 
-" smarter j/k {{{
+" smarter j/k {{{2
 nnoremap <expr> j      v:count == 0 ? 'gj' : 'j'
 xnoremap <expr> j      v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> k      v:count == 0 ? 'gk' : 'k'
@@ -218,6 +224,7 @@ xnoremap <expr> <Down> v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
 xnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
 
+" better n/N {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n {{{
 " normal mode also openz folds and centers the cursor
 nnoremap <expr> n ('Nn'[v:searchforward]) . 'zvzz'
@@ -228,35 +235,36 @@ nnoremap <expr> N ('nN'[v:searchforward]) . 'zvzz'
 xnoremap <expr> N  'nN'[v:searchforward]
 onoremap <expr> N  'nN'[v:searchforward]
 
-" center searches
+" center searches {{{2
 nnoremap *  *zzzv
 nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 
-" comments (`commentary`) {{{
+" comments (`commentary`) {{{2
 nmap vv Vgc
 vmap ~ gc
 " comment-out and duplicate line
 nmap yc "xyygcc"xp
 
-" better indenting {{{
+" better indenting {{{2
 vnoremap < <gv
 vnoremap > >gv
 nnoremap > V`]>
 nnoremap < V`]<
 
-" smart delete/paste {{{
-" vnoremap <silent> p "_dP
-vnoremap <silent> <leader>d p"_d
-vnoremap <silent> <leader>p "_dP
+" smart delete/paste {{{2
+" delete without yanking
+vnoremap <silent> dy p"_d
+" yank and paste
+vnoremap <silent> yp "_dP
 
-" insert mode undo breakpoints {{{
+" insert mode undo breakpoints {{{2
 inoremap , ,<c-g>u
 inoremap . .<c-g>u
 inoremap ; ;<c-g>u
 
-" easier completion {{{
+" easier completion {{{2
 inoremap <silent> ,o <C-x><C-o>
 inoremap <silent> ,f <C-x><C-f>
 inoremap <silent> ,i <C-x><C-i>
@@ -270,9 +278,9 @@ inoremap \sec §
 iabbrev n- –
 iabbrev m- —
 
-" toggles (`unimpaired`) {{{
+" toggles (`unimpaired`) {{{w
 nmap yol :set list!<BAR>set list?<CR>
-nmap yon :set number!<BAR>set number?<CR>
+nmap yon :set number!<BAR>redraw!<BAR>set number?<CR>
 nmap yos :set spell!<BAR>set wrap?<CR>
 nmap yow :set wrap!<BAR>set wrap?<CR>
 nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
@@ -303,6 +311,7 @@ command! Wqa wqa!
 " wildmenu {{{
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
+
 
 " § plugins {{{1
 " key = vimscript plugin, value = also enabled in nvim
@@ -346,7 +355,6 @@ else
     execute 'Plug' string(plugin)
   endfor
   call plug#end()
-  nmap gb vi'C-space>y:silent! !open https://github.com/<C-R>0<CR>
 endif
 
 " global variables {{{2

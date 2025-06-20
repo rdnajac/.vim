@@ -39,7 +39,7 @@ end, 'Use bash parser for kitty and ghostty configs')
 
 au('FileType', { 'help', 'man' }, function()
   if Snacks.util.is_transparent() then
-    vim.cmd([[setlocal winhighlight=Normal:SpecialWindow]])
+    Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
   end
 end)
 
