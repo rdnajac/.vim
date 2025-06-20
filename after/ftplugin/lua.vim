@@ -2,15 +2,11 @@ setlocal expandtab
 " setlocal formatprg=stylua\ --search-parent-directories\ -
 let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
 
-setlocal foldmethod=expr
-setlocal foldtext=fold#text()
-
 " simple auto-braackets
 " inoremap <buffer> ( ()<Left>
 " inoremap <buffer> ' ''<Left>
 inoremap <buffer> {<SPACE> {},<LEFT><LEFT><SPACE><LEFT><SPACE>
 inoremap <buffer> {<CR> {<CR>},<ESC>O
-
 
 inoremap <buffer> \mf ---@diagnostic disable-next-line: missing-fields
 inoremap <buffer> \ul ---@diagnostic disable-next-line: unused-local
@@ -34,4 +30,10 @@ nmap <leader>cM ^v2f<Space>cM.<Esc>
 
 if has ('nvim')
   lua vim.api.nvim_set_hl(0, 'LspReferenceText', {})
+  setlocal foldmethod=expr
+  setlocal foldexpr=v:lua.require('nvim.treesitter.fold').expr()
+  setlocal foldlevel=1
+  " lua vim.treesitter.start()
 endif
+
+setlocal foldtext=fold#text()

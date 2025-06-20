@@ -15,7 +15,6 @@ require('lazy').setup({
   },
   profiling = { loader = false, require = false },
   rocks = { enabled = false },
-
   dev = {
     path = '~/GitHub/rdnajac',
     fallback = true,
@@ -23,20 +22,18 @@ require('lazy').setup({
   install = { colorscheme = { 'tokyonight' } },
   ui = {
     border = 'rounded',
-    -- icons = require('lazy.emojis').ui,
     -- stylua: ignore
-    custom_keys = {
-      ['<localleader>d'] = function(plugin) dd(plugin) end,
-    },
+    custom_keys = { ['<localleader>d'] = function(plugin) dd(plugin) end },
+    -- icons = require('lazy.emojis').ui,
   },
   change_detection = { notify = false },
   performance = {
     rtp = {
-      paths = { { vim.fn.stdpath('config') .. '/queries' } },
+      -- paths = { { vim.fn.stdpath('config') .. '/queries' } },
       disabled_plugins = {
         'gzip',
-        'matchit',
-        'matchparen',
+        -- 'matchit',
+        -- 'matchparen',
         'netrwPlugin',
         'tarPlugin',
         'tohtml',

@@ -64,7 +64,7 @@ M.sources = {
         border = 'none',
         box = 'vertical',
         { win = 'input', height = 1, border = 'rounded' },
-        -- { win = 'list', border = 'rounded' },
+        { win = 'list', border = 'rounded' },
       },
     },
   },

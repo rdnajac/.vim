@@ -50,7 +50,9 @@ return {
             icon = { icon = '󰢱 ', color = 'blue' },
             { '<leader>fT', desc = 'filetype plugin (.lua)' },
           },
+          -- better descriptions
           -- { '<localleader>l', group = 'vimtex' },
+          { "gx", desc = "Open with system app" },
         },
         { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
       },

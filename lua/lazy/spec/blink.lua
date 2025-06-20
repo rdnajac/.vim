@@ -17,7 +17,7 @@ return {
         if item.kind == require('blink.cmp.types').CompletionItemKind.path then
           vim.defer_fn(function()
             require('blink.cmp').show()
-          end, 10)
+          end, 1)
         end
       end,
       desc = 'Keep completing path on <Tab>',

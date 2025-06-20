@@ -1,6 +1,13 @@
 function! fold#text()
   let s:foldchar = '—'
-  let line = substitute(getline(v:foldstart), '\s*"\?\s*{{{\d*\s*$', '', '')
+  let line1 = getline(v:foldstart)
+  let indent = matchstr(line1, '^\s*')
+  if line1 =~ '^\s*{'
+    let next = getline(v:foldstart + 1)
+    let line = indent . substitute(next, '^\s*', '{ ', '')
+  else
+    let line = substitute(line1, '\s*"\?\s*{{{\d*\s*$', '', '')
+  endif
   let lines_count = v:foldend - v:foldstart + 1
   let lines_count_text = '|' . printf("%10s", lines_count . ' lines') . ' |'
   let pre = line

@@ -37,9 +37,7 @@ set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
 set fillchars+=stl:\ ,
 set formatoptions-=or
-set foldmethod=marker
 set foldopen+=insert,jump
-set foldlevel=99
 set ignorecase smartcase
 set linebreak
 set list
@@ -140,10 +138,11 @@ command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
-command! CD           lua require('util.cd').prompt()
-command! SmartCD      lua require('util.cd').smart()
-command! InstallTools lua require('util.installer').mason_install()
-command! -bang Quit   lua require('util.quit').func('<bang>')
+" TODO:  use lua api to define commands since it works better with lsp rename
+command! CD           lua require('nvim.util.cd').prompt()
+command! SmartCD      lua require('nvim.util.cd').smart()
+command! InstallTools lua require('nvim.util.installer').mason_install()
+command! -bang Quit   lua require('nvim.util.quit').func('<bang>')
 
 " command! BreakHere call utils#breakHere()
 " nnoremap <space>j <Cmd>BreakHere<CR>
@@ -156,7 +155,7 @@ nnoremap <leader>fw <cmd>CleanWhitespace<CR>
 nnoremap Q <Cmd>call format#buffer()<CR>
 
 " auto pairs in cmdline
-cnoremap ( ()<Left>
+" cnoremap ( ()<Left>
 
 " § keymaps {{{1
 nnoremap ` ~
@@ -279,7 +278,6 @@ nmap yow :set wrap!<BAR>set wrap?<CR>
 nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 
 " `surround` {{{
-" NOTE: requqires vim-surround
 vmap `  S`
 vmap '  S'
 vmap "  S"
@@ -325,11 +323,11 @@ let g:vim_plugins = {
       \ 'tpope/vim-sensible'        : 0,
       \ 'tpope/vim-speeddating'     : 0,
       \ 'tpope/vim-surround'        : 1,
-      \ 'tpope/vim-tbone'           : 1,
-      \ 'tpope/vim-unimpaired'      : 1,
+      \ 'tpope/vim-tbone'           : 0,
+      \ 'tpope/vim-unimpaired'      : 0,
       \ 'tpope/vim-vinegar'         : 0,
       \ 'vuciv/golf'                : 0,
-      \ 'cohama/lexima.vim'         : 1,
+      \ 'AndrewRadev/splitjoin.vim' : 1
       \ }
 
 if has('nvim')
@@ -348,7 +346,7 @@ else
     execute 'Plug' string(plugin)
   endfor
   call plug#end()
-  nmap gh vi'C-space>y:silent! !open https://github.com/<C-R>0<CR>
+  nmap gb vi'C-space>y:silent! !open https://github.com/<C-R>0<CR>
 endif
 
 " global variables {{{2

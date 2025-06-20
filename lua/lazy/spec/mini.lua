@@ -8,14 +8,6 @@ return {
     end
   end,
   config = function()
-    -- local map_combo = require('mini.keymap').map_combo
-    --
-    -- for _, combo in ipairs({ 'jk', 'kj' }) do
-    --   -- Map both 'jk' and 'kj' to <Esc> in normal-ish modes
-    --   map_combo({ 'i', 'c', 'v', 's' }, combo, '<BS><BS><Esc>')
-    --   -- Terminal mode: 'jk' and 'kj' to <C-\><C-n>
-    --   map_combo('t', combo, '<BS><BS><C-\\><C-n>')
-    -- end
     require('mini.align').setup({})
     require('mini.diff').setup({
       view = {
@@ -49,14 +41,8 @@ return {
         U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
       },
     }
-
-    -- HACK:
     require('mini.ai').setup(mini_ai_opts)
-    LazyVim.on_load('which-key.nvim', function()
-      vim.schedule(function()
-        LazyVim.mini.ai_whichkey(mini_ai_opts)
-      end)
-    end)
+    LazyVim.mini.ai_whichkey(mini_ai_opts)
 
     require('mini.icons').setup({
       file = {
