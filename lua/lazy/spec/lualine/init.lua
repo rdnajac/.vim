@@ -10,6 +10,7 @@ return {
 
       vim.opt.showtabline = 2
       vim.opt.showcmdloc = 'statusline'
+      vim.g.navic_silence = true
 
       local opts = {
         options = {
@@ -50,13 +51,6 @@ return {
         },
       }
       return opts
-    end,
-  },
-  {
-    'SmiteshP/nvim-navic',
-    lazy = true,
-    init = function()
-      vim.g.navic_silence = true
     end,
   },
 }
