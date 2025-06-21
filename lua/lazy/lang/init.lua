@@ -29,16 +29,30 @@ return {
     branch = 'main',
     build = ':TSUpdate',
     config = function()
-      -- call own setup
-      require('nvim.treesitter').setup()
+      local ensure_installed = require('nvim.treesitter').parsers
+      require('nvim-treesitter').install(ensure_installed)
+    end,
+    keys = function()
+      local sel = require('nvim.treesitter.selection')
+      -- stylua: ignore
+      return {
+        { '<C-Space>', function() sel.start() end, mode = 'n', desc = 'Start selection' },
+        { '<C-Space>', function() sel.increment() end, mode = 'x', desc = 'Increment selection' },
+        { '<BS>', function() sel.decrement() end, mode = 'x', desc = 'Decrement selection' },
+      }
     end,
   },
-  { 'folke/ts-comments.nvim', event = 'VeryLazy', opts = {} },
+  {
+    'folke/ts-comments.nvim',
+    event = 'VeryLazy',
+    opts = {},
+  },
   {
     'mason-org/mason.nvim',
     build = ':MasonUpdate',
     lazy = false,
     opts = {
+      -- PERF:
       -- ui = {
       --   icons = {
       --     package_installed = '✓',

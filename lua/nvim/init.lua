@@ -43,3 +43,5 @@ LazyVim.on_very_lazy(function()
   require('nvim.options').setup()
   require('munchies')
 end)
+
+require('nvim.hacks')

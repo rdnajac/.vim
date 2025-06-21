@@ -17,16 +17,18 @@ au('FileType', { 'lua', 'vim' }, function()
   vim.opt.formatoptions:remove({ 'r', 'o' })
 end)
 
-au('FileType', { 'help', 'man', 'qf', 'query' }, function(ev)
+au('FileType', { 'help', 'man', 'qf' }, function(ev)
   vim.bo[ev.buf].buflisted = false
   vim.schedule(function()
+    if Snacks.util.is_transparent() then
+      Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
+    end
     vim.keymap.set('n', 'q', function()
       vim.cmd('close')
       pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
     end, {
       buffer = ev.buf,
       silent = true,
-      desc = 'Quit buffer',
     })
   end)
 end)
@@ -37,22 +39,7 @@ au('FileType', { 'kitty', 'ghostty' }, function(event)
   vim.cmd('setlocal commentstring=#%s')
 end, 'Use bash parser for kitty and ghostty configs')
 
-au('FileType', { 'help', 'man' }, function()
-  if Snacks.util.is_transparent() then
-    Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
-  end
-end)
-
--- Show relative numbers only when they matter (linewise and blockwise
--- selection) and 'number' is set (avoids horizontal flickering)
-au('ModeChanged', '*:[V\x16]*', function()
-  vim.wo.relativenumber = vim.wo.number
-end, 'Show relative line numbers')
-
--- Hide relative numbers when neither linewise/blockwise mode is on
-au('ModeChanged', '[V\x16]*:*', function()
-  vim.wo.relativenumber = string.find(vim.fn.mode(), '^[V\22]') ~= nil
-end, 'Hide relative line numbers')
+au('FileType', { 'help', 'man' }, function() end)
 
 -- Auto-insert LSP template for new files in ~/.config/nvim/lsp/*.lua
 au('BufNewFile', 'lsp/*.lua', function()

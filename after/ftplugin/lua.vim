@@ -6,7 +6,8 @@ let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --s
 " inoremap <buffer> ( ()<Left>
 " inoremap <buffer> ' ''<Left>
 inoremap <buffer> {<SPACE> {},<LEFT><LEFT><SPACE><LEFT><SPACE>
-inoremap <buffer> {<CR> {<CR>},<ESC>O
+inoremap <buffer> {<CR> {<CR>},<C-c>O
+inoremap <buffer> {, {<CR>},<C-c>O
 
 inoremap <buffer> \mf ---@diagnostic disable-next-line: missing-fields
 inoremap <buffer> \ul ---@diagnostic disable-next-line: unused-local

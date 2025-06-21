@@ -16,9 +16,9 @@ M.options = function()
   -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
   vim.opt.mousescroll = 'hor:0'
   vim.opt.pumblend = 0
-  vim.opt.signcolumn = 'yes'
   vim.opt.smoothscroll = true
   vim.opt.winborder = 'rounded'
+
   vim.opt.jumpoptions = 'view,stack'
 
   -- HACK: don't show lualine on dashboard
@@ -104,28 +104,6 @@ M.ui = function()
       --   target = 'cmd',
       --   timeout = 4000,
       -- },
-    })
-  end
-
-  if not LazyVim.has('lualine') then
-    local cmd_group = vim.api.nvim_create_augroup('cmdline', { clear = true })
-    vim.api.nvim_create_autocmd('CmdlineEnter', {
-      group = cmd_group,
-      callback = function(args)
-        if vim.bo[args.buf].filetype ~= 'snacks_dashboard' then
-          vim.api.nvim_create_autocmd('CmdlineLeave', {
-            once = true,
-            callback = function()
-              vim.o.laststatus = 3
-            end,
-          })
-          vim.o.laststatus = 0
-        end
-      end,
-    })
-    vim.api.nvim_create_autocmd('CmdlineEnter', {
-      group = cmd_group,
-      command = 'set laststatus=0',
     })
   end
 end

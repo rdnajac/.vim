@@ -1,23 +1,18 @@
 function! quit#buffer(bang) abort
-  if a:bang == ''
-    execute 'bdelete'
-  elseif has('nvim')
-    call v:lua.Snacks.bufdelete()
+  let l:bufs = filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
+
+  if len(l:bufs) > 1
+    quit!
   else
-    let l:bufs = filter(getbufinfo({'buflisted':1}), 'v:val.bufnr != bufnr("")')
-    if !empty(l:bufs)
-      if empty(a:bang) && getbufvar('%', '&modified')
-	echohl WarningMsg
-	echom 'No write since last change for buffer '.bufnr('%').' (use :Bclose!)'
-	echohl None
-	return
+    if has('nvim')
+      if a:bang == ''
+	call v:lua.Snacks.bufdelete()
+      else
+	execute 'bdelete!'
       endif
-      let l:btarget = bufnr('%')
-      let l:wcurrent = winnr()
-      execute ':confirm :bdelete '.l:btarget
-      execute l:wcurrent.'wincmd w'
     else
-      quit
+      execute ':confirm bdelete ' . bufnr('%')
+      execute winnr() . 'wincmd w'
     endif
   endif
 endfunction

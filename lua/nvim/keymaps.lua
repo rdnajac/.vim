@@ -54,20 +54,20 @@ local function insert_comment(lhs, text)
   return { lhs, cmd, desc = description, silent = true }
 end
 
-vim.keymap.del('n', 'gc')
-wk.add({
-  { 'gc', group = 'comments' },
-  insert_comment('gco', ''),
-  insert_comment('gcO', ''),
-  insert_comment('gct', 'TODO'),
-  insert_comment('gcT', 'TODO'),
-  insert_comment('gcf', 'FIXME'),
-  insert_comment('gcF', 'FIXME'),
-  insert_comment('gch', 'HACK'),
-  insert_comment('gcH', 'HACK'),
-  insert_comment('gcb', 'BUG'),
-  insert_comment('gcB', 'BUG'),
-})
+-- vim.keymap.del('n', 'gc')
+-- wk.add({
+--   { 'gc', group = 'comments' },
+--   insert_comment('gco', ''),
+--   insert_comment('gcO', ''),
+--   insert_comment('gct', 'TODO'),
+--   insert_comment('gcT', 'TODO'),
+--   insert_comment('gcf', 'FIXME'),
+--   insert_comment('gcF', 'FIXME'),
+--   insert_comment('gch', 'HACK'),
+--   insert_comment('gcH', 'HACK'),
+--   insert_comment('gcb', 'BUG'),
+--   insert_comment('gcB', 'BUG'),
+-- })
 
 -- nvim {{{1
 -- stylua: ignore

@@ -47,7 +47,7 @@ set mouse=a
 set nowrap
 set noruler
 " set laststatus=0
-" set number
+set number
 set numberwidth=3
 set pumheight=10
 set report=0
@@ -56,14 +56,14 @@ set shiftround
 set shortmess+=aAcCI
 set shortmess-=o
 set showmatch
+set showtabline=2
+set signcolumn=number
 set splitbelow splitright
 set splitkeep=screen
 set termguicolors
 set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
-set signcolumn=yes
-set showtabline=2
 
 set completeopt=menu,preview,preinsert,longest
 " set completeopt=menu,preview,longest
@@ -80,13 +80,13 @@ augroup END
 
 augroup FileTypeSettings " {{{2
   au!
-  au FileType sh,zsh           setl sw=8 sts=8 noet wrap nonu
+  au FileType sh,zsh           setl sw=8 sts=8 noet wrap
   au FileType c                setl sw=8 sts=8 noet
   au FileType cpp,cuda         setl sw=4 sts=4
   au FileType toml,yaml        setl sw=2 sts=2
   au FileType python           setl sw=4 sts=4
   au FileType r,rmd,quarto     setl sw=2 sts=2 kp=:Rhelp
-  au FileType vim,lua          setl sw=2 sts=2 kp=:help  nonu
+  au FileType vim,lua          setl sw=2 sts=2 kp=:help
   au FileType tex              setl            fdm=syntax
   au FileType json,jsonc,json5 setl sw=2 sts=2 conceallevel=0
 augroup END
@@ -115,6 +115,13 @@ augroup END
 augroup ResizeSplits " {{{2
   autocmd!
   autocmd VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
+augroup END
+
+augroup VisualRelativeNumbers " {{{3
+  autocmd!
+  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 augroup END
 
 augroup SetLocalPath " {{{2
@@ -146,8 +153,6 @@ command! -bang Quit call quit#buffer(<q-bang>)
 nnoremap <leader>q <Cmd>Quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
 
-command! ReplaceSelection call utils#replaceSelection()
-vnoremap <C-r> <cmd>ReplaceSelection<CR>
 command! CleanWhitespace call format#whitespace()
 nnoremap <leader>fw <cmd>CleanWhitespace<CR>
 
@@ -164,14 +169,13 @@ nnoremap <leader><Space> viW
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
 
-nnoremap <leader>a :normal! ggVG<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 " nnoremap <leader>r <Cmd>Restart<CR>
-nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zz
-nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zz
-nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zz
-nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zz
-nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zz
+nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zvzz
+nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zvzz
+nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zvzz
+nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zvzz
+nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zvzz
 nnoremap <leader>vv <Cmd>edit $MYVIMRC<CR>
 nnoremap <leader>E <Cmd>edit!<CR>
 nnoremap <leader>w <Cmd>write!<CR>
