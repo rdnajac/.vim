@@ -39,8 +39,6 @@ au('FileType', { 'kitty', 'ghostty' }, function(event)
   vim.cmd('setlocal commentstring=#%s')
 end, 'Use bash parser for kitty and ghostty configs')
 
-au('FileType', { 'help', 'man' }, function() end)
-
 -- Auto-insert LSP template for new files in ~/.config/nvim/lsp/*.lua
 au('BufNewFile', 'lsp/*.lua', function()
   local template = vim.fn.stdpath('config') .. '/templates/lsp.lua'
