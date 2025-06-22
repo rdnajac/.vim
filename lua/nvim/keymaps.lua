@@ -1,24 +1,5 @@
--- vim: fdm=marker
-
+-- vim: fdm=marker fdl=2
 local wk = require('which-key')
-
--- debug/health {{{2
-local function command(lhs, cmd)
-  return { lhs, '<Cmd>' .. cmd .. '<CR>' }
-end
-
-wk.add({
-  { '<leader>d', group = 'debug' },
-  command('<leader>da', 'ALEInfo'),
-  command('<leader>db', 'Blink status'),
-  { '<leader>dc', ':=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities' },
-  command('<leader>dd', 'LazyDev debug'),
-  command('<leader>dl', 'LazyDev lsp'),
-  command('<leader>dL', 'checkhealth vim.lsp'),
-  command('<leader>dh', 'LazyHealth'),
-  { '<leader>dS', ':=require("snacks").meta.get()<CR>', desc = 'Snacks' },
-  { '<leader>dw', ':=vim.lsp.buf.list_workspace_folders()<CR>', desc = 'LSP Workspace Folders' },
-})
 
 vim.keymap.set({ 'n', 'v' }, '<leader>dr', function()
   Snacks.debug.run()
@@ -43,43 +24,16 @@ wk.add({
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
 })
 
--- insert comments {{{2
-local function insert_comment(lhs, text)
-  local above = lhs:sub(-1) == lhs:sub(-1):upper()
-  local dir = above and 'above' or 'below'
-  local prefix = above and 'O' or 'o'
-  local cmd = string.format('%s<Esc>Vc%s¿<Esc>:normal gcc<CR>A<BS>', prefix, text and text .. ': ' or '')
-  local description = ('Insert %s (%s)'):format(text ~= '' and text or 'comment', dir)
-
-  return { lhs, cmd, desc = description, silent = true }
-end
-
--- vim.keymap.del('n', 'gc')
--- wk.add({
---   { 'gc', group = 'comments' },
---   insert_comment('gco', ''),
---   insert_comment('gcO', ''),
---   insert_comment('gct', 'TODO'),
---   insert_comment('gcT', 'TODO'),
---   insert_comment('gcf', 'FIXME'),
---   insert_comment('gcF', 'FIXME'),
---   insert_comment('gch', 'HACK'),
---   insert_comment('gcH', 'HACK'),
---   insert_comment('gcb', 'BUG'),
---   insert_comment('gcB', 'BUG'),
--- })
-
 -- nvim {{{1
+-- debug/health {{{2
+local function command(lhs, cmd)
+  return { lhs, '<Cmd>' .. cmd .. '<CR>' }
+end
 -- stylua: ignore
 wk.add({
 icon = { icon = ' ', color = 'green' },
   command('cz',  'Chezmoi'),
-  command('<leader>S',  'Scripts'),
-  command('<leader>r',  'Restart'),
-  command('<leader>R',  'restart!'),
-  command('<leader>z',  'Zoxide'),
     -- icon = { icon = '󰄻 ' },
-  { '<leader>D', function() require('nvim.util.debug').insert() end, desc = 'Insert Debug Print' },
 })
 
 -- snacks {{{1
@@ -89,8 +43,6 @@ local function fu(lhs, fn, desc, mode)
 end
 
 wk.add({
-  { '<leader>a', icon = { icon = ' ', color = 'azure' }, desc = 'Select All' },
-
   fu(',,', Snacks.terminal.toggle, 'Snacks Terminal', { 'n', 't' }),
   fu('<leader>.', Snacks.scratch, 'Toggle Scratch Buffer'),
   fu('<leader>>', Snacks.scratch.select, 'Select Scratch Buffer'),

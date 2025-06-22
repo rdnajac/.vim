@@ -57,6 +57,9 @@ return {
       scope = { enabled = true },
       scroll = { enabled = true },
       statuscolumn = { enabled = false },
+      styles = {
+        lazygit = { height = 0, width = 0 },
+      },
       terminal = {
         start_insert = true,
         auto_insert = false,

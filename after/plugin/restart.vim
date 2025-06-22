@@ -1,16 +1,14 @@
 if has('nvim')
-  let s:sesh = fnameescape(fnamemodify($MYVIMRC, ':h') . '/Session.vim')
-
-  augroup RestoreSession
+  augroup restoresession
     autocmd!
-    autocmd VimEnter * if filereadable(s:sesh) |
-	  \ execute 'source ' . s:sesh | call delete(s:sesh) |
+    autocmd VimEnter * if filereadable(v:this_session) |
+	  \ execute 'source ' . v:this_session | call delete(v:this_session) |
 	  \ if filereadable(expand('%')) |
 	  \   call timer_start(1, { -> execute('edit') }) |
 	  \ endif |
 	  \ endif
   augroup END
 
-  command! Restart execute 'mksession! ' . s:sesh | restart
+  command! Restart mksession! | restart
   command! Ree Restart
 endif

@@ -78,6 +78,13 @@ augroup vimrc " {{{2
   au BufWritePost $MYVIMRC nested source $MYVIMRC | echom 'vimrc reloaded'
 augroup END
 
+augroup SmartCursorline " {{{2
+  au!
+  autocmd InsertLeave,WinEnter * set cursorline
+  autocmd InsertEnter,WinLeave * set nocursorline
+augroup END
+
+
 augroup FileTypeSettings " {{{2
   au!
   au FileType sh,zsh           setl sw=8 sts=8 noet wrap
@@ -168,9 +175,12 @@ vmap <C-s> :sort<CR>
 nnoremap <leader><Space> viW
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>Q <Cmd>qa<CR>
+nnoremap <leader>S <Cmd>Scriptnames<CR>
+nnoremap <leader>R :Restart<CR>
+nnoremap <leader>r <Cmd>restart!<CR>
+nnoremap <leader>z <Cmd>Zoxide<CR>
 
 nnoremap <leader>m <Cmd>messages<CR>
-" nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zvzz
 nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zvzz
 nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zvzz
@@ -192,14 +202,15 @@ nnoremap <leader>fT :call <SID>edit('lua/lazy/lang/', '.lua')<CR>
 nnoremap <leader>fs :call <SID>edit('snippets/', '.json')<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
+
 " available key pairs in normal mode {{{
 " https://gist.github.com/romainl/1f93db9dc976ba851bbb
 nnoremap cdc <Cmd>CdSmart<CR>
 nnoremap cdb <Cmd>cd %:p:h<BAR>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<BAR>pwd<CR>
 
-nnoremap gb viqzy:!open https://github.com/<C-R>z<CR>
-xnoremap gb zy:!open https://github.com/<C-R>z<CR>
+nmap gb viqy:!open https://github.com/<C-R>0<CR>
+xnoremap gb y:!open https://github.com/<C-R>0<CR>
 
 " splitjoin: gJ and gS
 " vim-surround: cs, ds, and ys
@@ -350,7 +361,8 @@ let g:vim_plugins = {
       \ 'tpope/vim-unimpaired'      : 0,
       \ 'tpope/vim-vinegar'         : 0,
       \ 'vuciv/golf'                : 0,
-      \ 'AndrewRadev/splitjoin.vim' : 1
+      \ 'AndrewRadev/splitjoin.vim' : 1,
+      \ 'Konfekt/FastFold'          : 0
       \ }
 
 if has('nvim')
