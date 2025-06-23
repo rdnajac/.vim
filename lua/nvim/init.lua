@@ -40,8 +40,7 @@ LazyVim.on_very_lazy(function()
     require('nvim.autocmds')
   end
   require('nvim.keymaps')
-  require('nvim.options').setup()
-  require('munchies')
+  require('nvim.options')
 end)
 
 require('nvim.hacks')

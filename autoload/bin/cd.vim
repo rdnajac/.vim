@@ -1,4 +1,4 @@
-function! cd#smart() abort
+function! bin#cd#smart() abort
   let l:dir = expand('%:p:h')
   if l:dir ==# getcwd()
     if has('nvim')

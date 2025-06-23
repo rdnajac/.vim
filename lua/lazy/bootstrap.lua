@@ -11,7 +11,7 @@ require('lazy').setup({
   spec = {
     { import = 'lazy.spec' },
     { import = 'lazy.lang' },
-    { import = 'lazy.xtra.formatting' },
+    -- { import = 'lazy.xtra.formatting' },
   },
   profiling = { loader = false, require = false },
   rocks = { enabled = false },
@@ -32,7 +32,7 @@ require('lazy').setup({
       -- paths = { { vim.fn.stdpath('config') .. '/queries' } },
       disabled_plugins = {
         'gzip',
-        -- 'matchit',
+        'matchit',
         -- 'matchparen',
         'netrwPlugin',
         'tarPlugin',

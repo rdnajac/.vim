@@ -1,7 +1,7 @@
 function! quit#buffer(bang) abort
   let l:bufs = filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
 
-  if len(l:bufs) > 1
+  if len(l:bufs) <= 1
     quit!
   else
     if has('nvim')

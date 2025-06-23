@@ -29,8 +29,23 @@ return {
     branch = 'main',
     build = ':TSUpdate',
     config = function()
-      local ensure_installed = require('nvim.treesitter').parsers
-      require('nvim-treesitter').install(ensure_installed)
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'TSUpdate',
+        callback = function()
+          -- Use custom parser that highlights strings in `backticks` in comments
+          require('nvim-treesitter.parsers').comment = {
+            install_info = {
+              url = 'https://github.com/rdnajac/tree-sitter-comment',
+              generate = true,
+              queries = 'queries/neovim',
+            },
+          }
+        end,
+      })
+      LazyVim.on_very_lazy(function()
+        local ensure_installed = require('nvim.treesitter').parsers
+        require('nvim-treesitter').install(ensure_installed)
+      end)
     end,
     keys = function()
       local sel = require('nvim.treesitter.selection')

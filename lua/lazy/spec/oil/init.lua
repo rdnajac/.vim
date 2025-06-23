@@ -31,6 +31,7 @@ return {
         padding = 2, -- default = `2`
         -- border = 'none', -- default - `rounded`
         win_options = {
+          -- no line numbers
           winblend = 0,
         },
         get_win_title = nil,

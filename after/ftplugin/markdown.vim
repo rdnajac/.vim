@@ -1,4 +1,3 @@
-" after/ftplugin/markdown.vim
 let g:markdown_fenced_languages = ['sh', 'cpp', 'python', 'vim', 'lua', 'r']
 
 if executable('prettier')
@@ -6,20 +5,13 @@ if executable('prettier')
 endif
 
 setlocal formatoptions+=ro
-
-setlocal textwidth=80
 setlocal noautoindent
-setlocal conceallevel=1
+setlocal textwidth=80
 
 " treat quoted text as comments for easy toggling
 setlocal commentstring=>\ %s
 
-
-hi RenderMarkdownCode guibg=NONE
 nmap <leader>k v:lua require('nvim.util.link').linkify()
-
-" make selection **bold**
-vmap <buffer> <C-b> S*vi*S*
 
 " Insert an octothorpe at the beginning of the line that already has text
 nnoremap <buffer> <localleader>h ^i#<Space><Esc>

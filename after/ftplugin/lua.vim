@@ -1,8 +1,10 @@
 setlocal expandtab
+setlocal foldmethod=indent
+
 " setlocal formatprg=stylua\ --search-parent-directories\ -
 let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
 
-" simple auto-braackets
+" simple auto-brackets
 " inoremap <buffer> ( ()<Left>
 " inoremap <buffer> ' ''<Left>
 inoremap <buffer> {<SPACE> {},<LEFT><LEFT><SPACE><LEFT><SPACE>
@@ -29,11 +31,8 @@ nmap <leader>cm ^v2f<Space>cM.<Esc>
 " M transform
 nmap <leader>cM ^v2f<Space>cM.<Esc>
 
+
 if has ('nvim')
-  lua vim.api.nvim_set_hl(0, 'LspReferenceText', {})
-  setlocal foldmethod=expr
   call fold#text()
-  setlocal foldexpr=v:lua.require('nvim.treesitter.fold').expr()
-  setlocal foldlevel=1
-  " lua vim.treesitter.start()
+  lua vim.api.nvim_set_hl(0, 'LspReferenceText', {})
 endif

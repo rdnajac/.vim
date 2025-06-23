@@ -1,65 +1,64 @@
-local group = vim.api.nvim_create_augroup('my_autocmds', { clear = true })
+local nvimrc = vim.api.nvim_create_augroup('nvimrc', { clear = true })
 
---- @param event string|string[]
---- @param pattern string|string[]
---- @param callback function
---- @param desc? string
-local au = function(event, pattern, callback, desc)
-  vim.api.nvim_create_autocmd(event, { group = group, pattern = pattern, callback = callback })
-end
-
-au('TextYankPost', '*', function()
-  vim.hl.on_yank()
-end)
-
-au('FileType', { 'lua', 'vim' }, function()
-  -- vim.opt.formatoptions:remove({ 'c' })
-  vim.opt.formatoptions:remove({ 'r', 'o' })
-end)
-
-au('FileType', { 'help', 'man', 'qf' }, function(ev)
-  vim.bo[ev.buf].buflisted = false
-  vim.schedule(function()
-    if Snacks.util.is_transparent() then
-      Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
-    end
-    vim.keymap.set('n', 'q', function()
-      vim.cmd('close')
-      pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
-    end, {
-      buffer = ev.buf,
-      silent = true,
-    })
-  end)
-end)
-
-au('FileType', { 'kitty', 'ghostty' }, function(event)
-  vim.treesitter.language.register('bash', event.match)
-  vim.treesitter.start(0, 'bash')
-  vim.cmd('setlocal commentstring=#%s')
-end, 'Use bash parser for kitty and ghostty configs')
-
-au('FileType', { 'help', 'man' }, function() end)
-
--- Auto-insert LSP template for new files in ~/.config/nvim/lsp/*.lua
-au('BufNewFile', 'lsp/*.lua', function()
-  local template = vim.fn.stdpath('config') .. '/templates/lsp.lua'
-  if vim.fn.filereadable(template) == 1 then
-    vim.cmd('0r ' .. template)
-  end
-end, 'Insert LSP template')
-
--- TODO: move this
-local ooze_group = vim.api.nvim_create_augroup('ooze', { clear = true })
-vim.api.nvim_create_autocmd('TermOpen', {
-  group = ooze_group,
-  callback = function(args)
-    -- args.buf contains the buffer that triggered the autocmd
-    if vim.bo[args.buf].filetype == 'snacks_terminal' then
-      vim.g.ooze_channel = vim.bo[args.buf].channel
-      vim.g.ooze_buffer = vim.api.nvim_get_current_buf()
-      vim.g.ooze_send_on_enter = 1
-    end
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.hl.on_yank()
   end,
-  desc = 'Capture the job ID (`channel`) of a newly opened Snacks terminal',
+  desc = 'Briefly highlight yanked text',
+  group = nvimrc,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'lua', 'vim' },
+  callback = function()
+    -- vim.opt.formatoptions:remove({ 'c' })
+    vim.opt.formatoptions:remove({ 'r', 'o' })
+  end,
+  desc = 'Set formatoptions since nvim overrides it for Lua and Vim files',
+  group = nvimrc,
+})
+
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = { 'markdown', 'vim' },
+--   callback = function()
+--     vim.treesitter.start()
+--   end,
+--   desc = 'Start treesitter for supported files',
+--   group = nvimrc,
+-- })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'help', 'man', 'qf' },
+  callback = function(ev)
+    vim.bo[ev.buf].buflisted = false
+    vim.schedule(function()
+      if Snacks.util.is_transparent() then
+        Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
+      end
+      vim.keymap.set('n', 'q', function()
+        vim.cmd('close')
+        pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
+      end, { buffer = ev.buf, silent = true })
+    end)
+  end,
+  desc = 'Set options for auxiliary buffers',
+  group = nvimrc,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'kitty', 'ghostty' },
+  callback = function(event)
+    vim.treesitter.language.register('bash', event.match)
+    vim.treesitter.start(0, 'bash')
+    vim.cmd('setlocal commentstring=#%s')
+  end,
+  desc = 'Use bash parser for kitty and ghostty configs',
+  group = nvimrc,
+})
+
+vim.api.nvim_create_autocmd('BufNewFile', {
+  pattern = 'after/lsp/*.lua',
+  command = '0r ' .. vim.fn.stdpath('config') .. '/templates/lsp.lua',
+  desc = 'Insert config template on new lsp file',
+  group = nvimrc,
 })

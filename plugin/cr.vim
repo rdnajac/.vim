@@ -1,5 +1,3 @@
-" functions and mappings for the <CR> key
-
 function! L() abort
   let l:line = getline('.')
   if &ft ==# 'lua'

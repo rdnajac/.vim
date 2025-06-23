@@ -23,11 +23,11 @@ return {
     on_highlights = function(hl, colors)
       hl['StatusLine']          = { bg   = 'NONE' }
       hl['StatusLineNC']        = { bg   = 'NONE' }
-      hl['Tabline']             = { bg   = 'NONE' }
-      hl['TabLineFill']         = { bg   = 'NONE' }
-      hl['TabLineSel']          = { bg   = 'NONE' }
-      hl['Winbar']              = { bg   = 'NONE' }
-      hl['WinbarNC']            = { bg   = 'NONE' }
+      -- hl['Tabline']             = { bg   = 'NONE' }
+      -- hl['TabLineFill']         = { bg   = 'NONE' }
+      -- hl['TabLineSel']          = { bg   = 'NONE' }
+      -- hl['Winbar']              = { bg   = 'NONE' }
+      -- hl['WinbarNC']            = { bg   = 'NONE' }
       hl['Folded']              = { fg   = colors.blue }
       -- hl['Special']          = { fg   = 'NONE', bold    = true }
 

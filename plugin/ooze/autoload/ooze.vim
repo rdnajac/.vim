@@ -67,8 +67,7 @@ function! ooze#runfile() abort
   call s:ooze(l:file)
 endfunction
 
-
-function! s:CR() abort
+function! ooze#cr() abort
   if v:lua.Snacks.util.var(0, 'ooze_send_on_enter', 0) == 1
     call ooze#sendline()
     call ooze#linefeed()

@@ -1,11 +1,11 @@
--- vim: fdm=marker fdl=2
+-- vim:fdm=marker
 local wk = require('which-key')
 
-vim.keymap.set({ 'n', 'v' }, '<leader>dr', function()
-  Snacks.debug.run()
-end)
+-- stylua: ignore start
+vim.keymap.set({ 'n', 'v' }, '<leader>dr', function() Snacks.debug.run() end)
+vim.keymap.set({ 'n', 't' }, ',,', function() Snacks.terminal.toggle() end)
+-- stylua: ignore end
 
--- edit config files  {{{2
 local p = vim.fn.stdpath('config') .. '/lua/'
 local function config(lhs, mod)
   return { lhs, '<Cmd>edit ' .. p .. mod .. '.lua<CR>', desc = mod }
@@ -19,83 +19,7 @@ wk.add({
   config('\\o', 'nvim/options'),
   config('\\l', 'lazy/spec/init'),
   config('\\b', 'lazy/bootstrap.lua'),
-  config('\\m', 'munchies/init.lua'),
-  config('\\u', 'util/init.lua'),
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
-})
-
--- nvim {{{1
--- debug/health {{{2
-local function command(lhs, cmd)
-  return { lhs, '<Cmd>' .. cmd .. '<CR>' }
-end
--- stylua: ignore
-wk.add({
-icon = { icon = ' ', color = 'green' },
-  command('cz',  'Chezmoi'),
-    -- icon = { icon = '󰄻 ' },
-})
-
--- snacks {{{1
--- stylua: ignore
-local function fu(lhs, fn, desc, mode)
-  return { lhs, function() fn() end, desc = desc, mode = mode, }
-end
-
-wk.add({
-  fu(',,', Snacks.terminal.toggle, 'Snacks Terminal', { 'n', 't' }),
-  fu('<leader>.', Snacks.scratch, 'Toggle Scratch Buffer'),
-  fu('<leader>>', Snacks.scratch.select, 'Select Scratch Buffer'),
-  fu('<leader>,', Snacks.picker.buffers, 'Buffers'),
-  fu('<leader>/', Snacks.picker.grep, 'Grep (Root Dir)'),
-  fu('<leader>F', Snacks.picker.smart, 'Smart Find Files'),
-
-  fu('<leader>bd', Snacks.bufdelete, 'Delete Buffer'),
-  fu('<leader>h', Snacks.picker.help, 'Help'),
-
-  { '<leader>f', group = 'file/find' },
-  fu('<leader>fC', Snacks.rename.rename_file, 'Change (rename) file on disk'),
-  fu('<leader>ff', Snacks.picker.files, 'Find Files'),
-  fu('<leader>fr', Snacks.picker.recent, 'Find Recent'),
-
-  { '<leader>g', group = 'git' },
-  fu('<leader>gb', Snacks.picker.git_log_line, 'Git Blame Line'),
-  fu('<leader>gB', Snacks.gitbrowse, 'Git Browse (open)'),
-  fu('<leader>gd', Snacks.picker.git_diff, 'Git Diff (hunks)'),
-  fu('<leader>gs', Snacks.picker.git_status, 'Git Status'),
-  fu('<leader>gS', Snacks.picker.git_stash, 'Git Stash'),
-  { '<leader>ga', ':!git add %<CR>', desc = 'Git Add (file)', mode = 'n' },
-  fu('<leader>gg', Snacks.lazygit, 'Lazygit (cwd)', 'n'),
-  fu('<leader>gf', Snacks.picker.git_log_file, 'Git Current File History', 'n'),
-  fu('<leader>gl', Snacks.picker.git_log, 'Git Log (cwd)', 'n'),
-
-  { '<leader>l', '<Cmd>Lazy<CR>', desc = 'Lazy' },
-  fu('<leader>n', Snacks.picker.notifications, 'Notification History'),
-
-  { '<leader>p', group = 'Pickers', icon = { icon = ' ' } },
-  fu('<leader>P', Snacks.picker, 'Pickers'),
-  fu('<leader>p"', Snacks.picker.registers, 'Registers'),
-  fu('<leader>p/', Snacks.picker.search_history, 'Search History'),
-  fu('<leader>pD', Snacks.picker.diagnostics_buffer, 'Buffer Diagnostics'),
-  fu('<leader>pa', Snacks.picker.autocmds, 'Autocmds'),
-  fu('<leader>pc', Snacks.picker.commands, 'Commands'),
-  fu('<leader>p:', Snacks.picker.command_history, 'Command History'),
-  fu('<leader>pd', Snacks.picker.diagnostics, 'Diagnostics'),
-  fu('<leader>ph', Snacks.picker.highlights, 'Highlights'),
-  fu('<leader>pi', Snacks.picker.icons, 'Icons'),
-  fu('<leader>pj', Snacks.picker.jumps, 'Jumps'),
-  fu('<leader>pk', Snacks.picker.keymaps, 'Keymaps'),
-  fu('<leader>pp', Snacks.picker.resume, 'Resume'),
-  fu('<leader>pq', Snacks.picker.qflist, 'Quickfix List'),
-
-  { '<leader>s', group = 'search/grep' },
-  fu('<leader>sa', Snacks.picker.autocmds, 'Autocmds'),
-  fu('<leader>sC', Snacks.picker.commands, 'Commands'),
-  fu('<leader>sh', Snacks.picker.help, 'Help Pages'),
-  fu('<leader>sH', Snacks.picker.highlights, 'Highlights'),
-  fu('<leader>si', Snacks.picker.icons, 'Icons'),
-  fu('<leader>sk', Snacks.picker.keymaps, 'Keymaps'),
-  fu('<leader>su', Snacks.picker.undo, 'Undotree'),
 })
 
 -- dual pickers {{{2
@@ -121,11 +45,8 @@ wk.add({
   { '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = 'Buffers (all)', },
   { '<leader>sb', function() Snacks.picker.lines() end, desc = 'Buffer Lines', },
   { '<leader>sB', function() Snacks.picker.grep_buffers() end, desc = 'Grep Open Buffers', },
-  { '<leader>fp', function() require('munchies.picker.plugins').files() end, desc = 'Lazy Plugins', },
-  { '<leader>sp', function() require('munchies.picker.plugins').grep() end, desc = 'Lazy Plugins', },
 })
 
--- snacks profiler {{{2
 wk.add({
   { '<leader>dp', group = 'profiler' },
   -- stylua: ignore
@@ -133,9 +54,7 @@ wk.add({
 })
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
--- }}}1
 
--- ui {{{2
 vim.keymap.set({ 'i', 'n', 's' }, '<esc>', function()
   vim.cmd('noh')
   LazyVim.cmp.actions.snippet_stop()
@@ -152,19 +71,14 @@ wk.add({
   { '<leader>uz', function() Snacks.zen() end, desc = 'Zen Mode', icon = { icon = ' ', color = 'blue' }, },
 })
 
--- snacks toggles {{{3
 Snacks.toggle.animate():map('<leader>ua')
--- Snacks.toggle.option('showtabline', {
---   off = 0,
---   on = vim.o.showtabline > 0 and vim.o.showtabline or 2,
---   name = 'Tabline',
--- }):map('<leader>uA')
--- stylua: ignore
-Snacks.toggle.option('conceallevel', {
-  off = 0,
-  on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2,
-  name = 'Conceal Level',
-}):map('<leader>uc')
+Snacks.toggle
+  .option('conceallevel', {
+    off = 0,
+    on = vim.o.conceallevel > 0 and vim.o.conceallevel or 2,
+    name = 'Conceal Level',
+  })
+  :map('<leader>uc')
 Snacks.toggle.diagnostics():map('<leader>ud')
 Snacks.toggle.dim():map('<leader>uD')
 Snacks.toggle.treesitter():map('<leader>ut')
@@ -173,7 +87,6 @@ Snacks.toggle.scroll():map('<leader>us')
 Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
 
--- Custom toggles
-require('munchies.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
-require('munchies.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
-require('munchies.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
+require('nvim.util.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
+require('nvim.util.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
+require('nvim.util.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })

@@ -1,12 +1,4 @@
--- vim: fdl=1
 local M = {}
-
-M.setup = function()
-  M.options()
-  M.diagnostic()
-  M.lsp()
-  M.ui()
-end
 
 M.options = function()
   vim.opt.backup = true
@@ -14,12 +6,12 @@ M.options = function()
   vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
   vim.opt.cmdheight = 0
   -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
+  vim.opt.foldexpr = 'v:lua.require("nvim.treesitter.fold").expr()'
+  vim.opt.jumpoptions = 'view,stack'
   vim.opt.mousescroll = 'hor:0'
   vim.opt.pumblend = 0
   vim.opt.smoothscroll = true
   vim.opt.winborder = 'rounded'
-
-  vim.opt.jumpoptions = 'view,stack'
 
   -- HACK: don't show lualine on dashboard
   if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
@@ -28,6 +20,7 @@ M.options = function()
 end
 
 local icons = LazyVim.config.icons
+
 M.diagnostic = function()
   vim.diagnostic.config({
     underline = false,
@@ -85,8 +78,8 @@ M.lsp = function()
       { 'grr', function() Snacks.picker.lsp_references() end, desc = 'References', buffer = bufnr, nowait = true, },
       { 'gd',  function() Snacks.picker.lsp_definitions() end,       desc = 'Goto Definition', buffer = bufnr },
       { 'gD',  function() Snacks.picker.lsp_declarations() end,      desc = 'Goto Declaration', buffer = bufnr },
-      { 'gI',  function() Snacks.picker.lsp_implementations() end,   desc = 'Goto Implementation', buffer = bufnr },
-      { 'gy',  function() Snacks.picker.lsp_type_definitions() end,  desc = 'Goto T[y]pe Definition', buffer = bufnr },
+      { 'gri',  function() Snacks.picker.lsp_implementations() end,   desc = 'Goto Implementation', buffer = bufnr },
+      { 'gry',  function() Snacks.picker.lsp_type_definitions() end,  desc = 'Goto T[y]pe Definition', buffer = bufnr },
       { 'grs', function() Snacks.picker.lsp_symbols() end,           desc = 'LSP Symbols', buffer = bufnr },
       { 'grw', function() Snacks.picker.lsp_workspace_symbols() end, desc = 'LSP Workspace Symbols', buffer = bufnr },
     })
@@ -96,16 +89,13 @@ M.lsp = function()
   vim.lsp.enable(_G.lang_spec.lsps)
 end
 
-M.ui = function()
-  -- XXX: experimental!
-  if vim.fn.has('nvim-0.12') == 1 then
-    require('vim._extui').enable({
-      -- msg = {
-      --   target = 'cmd',
-      --   timeout = 4000,
-      -- },
-    })
-  end
+M.options()
+M.diagnostic()
+M.lsp()
+
+-- XXX: experimental!
+if vim.fn.has('nvim-0.12') == 1 then
+  require('vim._extui').enable({})
 end
 
 return M

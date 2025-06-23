@@ -38,8 +38,10 @@ endfunction
 " Autocommands for known filetypes
 augroup MyKeywordprgSetup
   autocmd!
-  autocmd FileType kitty       call UseMyKeywordprg('kitty')
-  autocmd FileType tmux        call UseMyKeywordprg('tmux')
-  autocmd FileType sshconfig   call UseMyKeywordprg('ssh')
-  autocmd BufRead,BufNewFile *alacritty*.toml,*alacritty*.yml call UseMyKeywordprg('5 alacritty')
+  autocmd FileType vim,lua      setlocal keywordprg=:help
+  autocmd FileType r,rmd,quarto setlocal keywordprg=:Rhelp
+  autocmd FileType kitty        call UseMyKeywordprg('kitty')
+  autocmd FileType tmux         call UseMyKeywordprg('tmux')
+  autocmd FileType sshconfig    call UseMyKeywordprg('ssh')
+  autocmd BufRead,BufNewFile *alacritty.*ml call UseMyKeywordprg('5 alacritty')
 augroup END
