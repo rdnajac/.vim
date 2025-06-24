@@ -12,37 +12,9 @@ return {
     require('mini.diff').setup({
       view = {
         style = 'number',
-        signs = {
-          add = '▎',
-          change = '▎',
-          delete = '',
-        },
+        -- signs = { add = '▎', change = '▎', delete = '' },
       },
     })
-
-    local ai = require('mini.ai')
-    local mini_ai_opts = {
-      n_lines = 500,
-      custom_textobjects = {
-        c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
-        d = { '%f[%d]%d+' }, -- digits
-        e = { -- Word with case
-          { '%u[%l%d]+%f[^%l%d]', '%f[%S][%l%d]+%f[^%l%d]', '%f[%P][%l%d]+%f[^%l%d]', '^[%l%d]+%f[^%l%d]' },
-          '^().*()$',
-        },
-        f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
-        g = LazyVim.mini.ai_buffer, -- buffer
-        o = ai.gen_spec.treesitter({ -- code block
-          a = { '@block.outer', '@conditional.outer', '@loop.outer' },
-          i = { '@block.inner', '@conditional.inner', '@loop.inner' },
-        }),
-        u = ai.gen_spec.function_call(), -- u for "Usage"
-        U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
-      },
-    }
-    require('mini.ai').setup(mini_ai_opts)
-    require('lazy.spec.mini.ai_whichkey').register(mini_ai_opts)
-
     require('mini.icons').setup({
       file = {
         ['.keep'] = { glyph = '󰊢', hl = 'MiniIconsGrey' },
@@ -65,32 +37,5 @@ return {
         dotenv = { glyph = '', hl = 'MiniIconsYellow' },
       },
     })
-
-    Snacks.toggle({
-      name = 'Mini Diff Signs',
-      get = function()
-        return vim.g.minidiff_disable ~= true
-      end,
-      set = function(state)
-        vim.g.minidiff_disable = not state
-        if state then
-          require('mini.diff').enable(0)
-        else
-          require('mini.diff').disable(0)
-        end
-        vim.defer_fn(function()
-          vim.cmd([[redraw!]])
-        end, 200)
-      end,
-    }):map('<leader>uG')
   end,
-  keys = {
-    {
-      '<leader>go',
-      function()
-        require('mini.diff').toggle_overlay(0)
-      end,
-      desc = 'Toggle mini.diff overlay',
-    },
-  },
 }
