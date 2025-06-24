@@ -25,29 +25,38 @@ function! format#whitespace() abort
   endif
 endfunction
 
+function! format#equalprg() abort
+  normal! gg=G
+  retab
+  if !&binary && &filetype != 'diff'
+    call format#whitespace()
+  endif
+endfunction
+
+function! format#gq() abort
+  normal! gggqG
+  if v:shell_error > 0
+    silent undo
+    redraw
+    throw 'Formatter exited with status ' . v:shell_error
+  endif
+endfunction
+
 function! format#buffer() abort
+  if !&modified
+    return
+  endif
+
   let l:winview = winsaveview()
   let l:formatter = !empty(&formatexpr) ? &formatexpr : &formatprg
-  write
-
   try
     if empty(l:formatter) || &ft == 'vim'
-      echomsg 'Running indent, retab, and cleanup...'
-      normal! gg=G
-      retab
-      if !&binary && &filetype != 'diff'
-	call format#whitespace()
-      endif
+      " call print#msg('Running indent, retab, and cleanup...')
+      call format#equalprg()
     else
-      normal! gggqG
-      if v:shell_error > 0
-	silent undo
-	redraw
-	throw 'Formatter exited with status ' . v:shell_error
-      endif
+      " call print#msg(l:formatter)
+      call format#gq()
     endif
-    write
-    " echom 'Buffer formatted with "' . l:formatter . '" and saved!'
   catch
     echohl ErrorMsg
     echomsg 'Error: ' . v:exception
