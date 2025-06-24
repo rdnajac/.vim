@@ -64,8 +64,8 @@ set fillchars+=foldclose:▸,
 set fillchars+=foldopen:▾,
 set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
-set foldlevel=1
-" set foldlevelstart=99
+" set foldlevel=1
+set foldlevelstart=99
 set foldminlines=3
 set foldopen+=insert,jump
 set foldtext=fold#text()
@@ -78,10 +78,11 @@ augroup vimrc_fold
 augroup END
 
 " column {{{3
+" TODO: if nonu, set signcolumn=yes
 " set number signcolumn=number
 set numberwidth=3
 set signcolumn=yes
-" TOOD: if nonu, set signcolumn=yes
+" }}}1
 
 " § autocmds {{{1
 augroup vimrc " {{{2
@@ -105,8 +106,8 @@ augroup vimrc " {{{2
   au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
 
   " no cursorline in insert mode
-  au InsertLeave,WinEnter * set cursorline
-  au InsertEnter,WinLeave * set nocursorline
+  au InsertLeave,WinEnter * setlocal cursorline
+  au InsertEnter,WinLeave * setlocal nocursorline
 
   " relative numbers in visual mode only if number is already set
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
@@ -117,8 +118,8 @@ augroup END
 augroup vimrc_filetype " {{{2
   " for when a ftplugin file is not warranted
   au!
-  au FileType json,jsonc,json5     setl conceallevel=0
-  au FileType tmux,sshconfig,mason setl iskeyword+=-
+  au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
+  au FileType tmux,sshconfig,mason setlocal iskeyword+=-
 augroup END
 
 augroup SetLocalPath " {{{2
@@ -142,8 +143,6 @@ command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
 command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
-command! InstallTools lua require('nvim.util.installer').mason_install()
-
 command! -bang Quit call quit#buffer(<q-bang>)
 nnoremap <leader>q <Cmd>Quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
@@ -155,33 +154,40 @@ command! Format call format#buffer()
 nmap zq <Cmd>Format<CR>
 
 " vim commands for Snacks functions
-command! Autocmds lua Snacks.picker.autocmds({confirm = 'edit'})
+command! Autocmds
 command! Keymaps lua Snacks.picker.keymaps({confirm = 'edit', layout = {preset = 'mylayout'}})
 command! Highlights lua Snacks.picker.highlights()
-command! ToggleSnacksTerm lua Snacks.terminal.toggle()
-command! Chezmoi lua require('munchies.picker.chezmoi')()
-command! Scripts lua require('munchies.picker.scriptnames')()
-command! PluginGrep lua require('munchies.picker.plugins').grep()
-command! PluginFiles lua require('munchies.picker.plugins').files()
-command! -bang Zoxide lua require('munchies.picker.zoxide').pick('<bang>')
-
+command! Terminal lua Snacks.terminal.toggle()
+command! Chezmoi lua require('lazy.spec.snacks.picker.chezmoi')()
+command! Scripts lua require('lazy.spec.snacks.picker.scriptnames')()
+command! PluginGrep lua require('lazy.spec.snacks.picker.plugins').grep()
+command! PluginFiles lua require('lazy.spec.snacks.picker.plugins').files()
+command! -bang Zoxide lua require('lazy.spec.snacks.picker.zoxide').pick('<bang>')
+command! Help lua Snacks.picker.help()
 command! Lazygit :lua Snacks.Lazygit()
+command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
+
+
+" }}}1
 
 " § keymaps {{{1
 nnoremap <leader><Space> viW
-nnoremap <leader>E <Cmd>edit!<CR>
-nnoremap <leader>K <Cmd>norm! K<CR>
-nnoremap <leader>R <Cmd>restart!<CR>
-nnoremap <leader>S <Cmd>Scriptnames<CR>
-nnoremap <leader>i <Cmd>help index<CR>
-nnoremap <leader>m <Cmd>messages<CR>
-nnoremap <leader>r :Restart<CR>
-nnoremap <leader>t <Cmd>edit #<CR>
-nnoremap <leader>w <Cmd>write!<CR>
-nnoremap <leader>z <Cmd>Zoxide<CR>
-nnoremap <leader>cz <Cmd>Chezmoi<CR>
-nnoremap <leader>fp <Cmd>PluginFiles<CR>
-nnoremap <leader>sp <Cmd>PluginGrep<CR>
+nnoremap <leader>E  :edit!<CR>
+nnoremap <leader>K  :norm! K<CR>
+nnoremap <leader>R  :restart!<CR>
+nnoremap <leader>S  :Scriptnames<CR>
+nnoremap <leader>. :Scratch<CR>
+nnoremap <leader>> :Scratch!<CR>
+nnoremap <leader>i  :help  index<CR>
+nnoremap <leader>m  :messages<CR>
+nnoremap <leader>h  :Help<CR>
+nnoremap <leader>r  :Restart<CR>
+nnoremap <leader>t  :edit  #<CR>
+nnoremap <leader>w  :write!<CR>
+nnoremap <leader>z  :Zoxide<CR>
+nnoremap <leader>cz :Chezmoi<CR>
+nnoremap <leader>fp :PluginFiles<CR>
+nnoremap <leader>sp :PluginGrep<CR>
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
 " nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
@@ -203,14 +209,11 @@ nnoremap <leader>fs :call <SID>edit('snippets/', '.json')<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
-nnoremap <leader>. :lua Snacks.scratch()<CR>
-nnoremap <leader>> :lua Snacks.scratch.select()<CR>
 nnoremap <leader>, :lua Snacks.picker.buffers()<CR>
 nnoremap <leader>/ :lua Snacks.picker.grep()<CR>
 nnoremap <leader>F :lua Snacks.picker.smart()<CR>
 
 nnoremap <leader>bd :lua Snacks.bufdelete()<CR>
-nnoremap <leader>h :lua Snacks.picker.help()<CR>
 
 nnoremap <leader>fC :lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff :lua Snacks.picker.files()<CR>
@@ -281,7 +284,8 @@ nnoremap dy "_dd
 nmap vv Vgc
 
 " gb gc gl gs gy
-nmap gb viqy:!open https://github.com/<C-R>0<CR>
+" nmap gb viqy:!open https://github.com/<C-R>0<CR>
+nmap gb vi'y:!open https://github.com/<C-R>0<CR>
 xnoremap gb y:!open https://github.com/<C-R>0<CR>
 nmap gy "xyygcc"xp
 
@@ -396,6 +400,7 @@ command! Wqa wqa!
 
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
+" }}}1
 
 " § plugins {{{1
 " key = vimscript plugin, value = also enabled in nvim
@@ -443,21 +448,14 @@ else
 endif
 
 " global variables {{{2
-
 let g:copilot_workspace_folders = ['~/GitHub', '~/.local/share/chezmoi/']
-let g:matchup_delim_noskips = 2
 
 " ALE globals {{{3
 let g:ale_fixers = {
       \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-      \   'lua': ['stylua'],
       \}
 let g:ale_fix_on_save = 0
 let g:ale_completion_enabled = 0
-let g:ale_linters = {
-      \   'lua': ['lua_language_server'],
-      \}
 let g:ale_linters_explicit = 1
 let g:ale_virtualtext_cursor = 'current'
 " let g:ale_set_highlights = 0
-"  }}1

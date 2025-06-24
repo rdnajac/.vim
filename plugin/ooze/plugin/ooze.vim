@@ -8,12 +8,12 @@ augroup ooze
   au TermOpen * if &ft ==# 'snacks_terminal' | let g:ooze_channel = &channel | endif
 augroup END
 
-" let g:ooze_send_on_enter = 1
+let g:ooze_send_on_enter = 1
 
 nnoremap <silent><expr> <CR> ooze#cr()
 
 command! -range=% OozeVisual call ooze#visual()
 command!          OozeRunFile call ooze#runfile()
 
-vnoremap <silent> <CR> :OozeVisual<CR>
-nnoremap <silent> ,<CR> :RunFile<CR>
+vnoremap <silent> <CR>   :OozeVisual<CR>
+nnoremap <silent> <M-CR> :OozeRunFile<CR>

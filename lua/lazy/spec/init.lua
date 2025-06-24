@@ -8,9 +8,9 @@ return {
     config = function()
       _G.LazyVim = require('lazyvim.util')
       LazyVim.config = require('lazy.config')
-      LazyVim.track('colorscheme')
+      -- LazyVim.track('colorscheme')
       require('tokyonight').load()
-      LazyVim.track()
+      -- LazyVim.track()
       -- LazyVim.on_very_lazy(function()
       --   LazyVim.format.setup()
       --   LazyVim.root.setup()
@@ -18,150 +18,12 @@ return {
     end,
   },
   {
-    'folke/snacks.nvim',
-    priority = 1000,
-    ---@module "snacks"
-    ---@type snacks.Config
-    opts = {
-      bigfile = { enabled = true },
-      -- dashboard = require('lazy.dashboard').config,
-      dashboard = { enabled = false },
-      explorer = { enabled = false },
-      image = { enabled = true },
-      indent = { indent = { only_current = true, only_scope = true } },
-      input = { enabled = true },
-      notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
-      ---@type snacks.picker.Config
-      picker = {
-        layout = { preset = 'ivy' },
-        layouts = {
-          ---@type snacks.picker.layout.Config
-          mylayout = {
-            reverse = true,
-            layout = {
-              box = 'vertical',
-              backdrop = false,
-              height = 0.4,
-              row = vim.o.lines - math.floor(0.4 * vim.o.lines),
-              {
-                win = 'list',
-                border = 'rounded',
-                -- TODO: set titles in picker calls
-                title = '{title} {live} {flags}',
-                title_pos = 'left',
-              },
-              {
-                win = 'input',
-                height = 1,
-              },
-            },
-          },
-        },
-        sources = {
-          commands = {
-            confirm = function(picker, item)
-              picker:close()
-              if item.command then
-                local sid = item.command.script_id
-                if sid and sid ~= 0 then
-                  local src
-                  for line in vim.fn.execute('scriptnames'):gmatch('[^\r\n]+') do
-                    local id, path = line:match('^%s*(%d+):%s+(.+)$')
-                    if tonumber(id) == sid then
-                      src = path
-                      break
-                    end
-                  end
-                  if src then
-                    vim.cmd('edit ' .. src)
-                    vim.fn.search('\\<' .. item.cmd .. '\\>', 'w')
-                  end
-                end
-              end
-            end,
-          },
-          notifications = { layout = { preset = 'ivy' } },
-          pickers = { layout = { preset = 'ivy' } },
-          undo = {
-            layout = { preset = 'ivy' },
-            -- FIXME: what does this readlly do?
-            select = 'copy',
-          },
-          files = {
-            follow = true,
-            hidden = false,
-            ignored = false,
-          },
-          recent = {
-            filter = {
-              paths = {
-                [vim.fn.stdpath('data')] = true,
-                [vim.fn.stdpath('cache')] = false,
-                [vim.fn.stdpath('state')] = false,
-              },
-            },
-          },
-          grep = {
-            config = function(opts)
-              local cwd = opts.cwd or vim.loop.cwd()
-              opts.title = '󰱽 Grep (' .. vim.fn.fnamemodify(cwd, ':~') .. ')'
-              return opts
-            end,
-            follow = true,
-            ignored = false,
-          },
-          icons = {
-            layout = {
-              layout = {
-                reverse = true,
-                relative = 'cursor',
-                row = 1,
-                width = 0.3,
-                min_width = 48,
-                height = 0.3,
-                border = 'none',
-                box = 'vertical',
-                { win = 'input', height = 1, border = 'rounded' },
-                { win = 'list', border = 'rounded' },
-              },
-            },
-          },
-        },
-        win = {
-          input = {
-            keys = {
-              ['<Esc>'] = { 'close', mode = { 'i', 'n' } },
-              ['<a-z>'] = {
-                function(self)
-                  require('munchies.picker.zoxide').cd_and_resume_picking(self)
-                end,
-                mode = { 'i', 'n' },
-              },
-            },
-          },
-          preview = { minimal = true },
-        },
-      },
-      quickfile = { enabled = true },
-      scope = { enabled = true },
-      scroll = { enabled = true },
-      statuscolumn = { enabled = false },
-      styles = {
-        lazygit = { height = 0, width = 0 },
-      },
-      terminal = {
-        start_insert = true,
-        auto_insert = false,
-        auto_close = true,
-        win = { wo = { winbar = '', winhighlight = 'Normal:SpecialWindow' } },
-      },
-      words = { enabled = true },
-    },
-  },
-  {
     'folke/which-key.nvim',
     ---@class wk_opts
     opts = {
+      defer = function(ctx)
+        return vim.list_contains({ 'v', 'V', '\22' }, ctx.mode)
+      end,
       keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
       preset = 'helix',
       show_help = false,
