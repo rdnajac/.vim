@@ -34,5 +34,4 @@ nmap <leader>cM ^v2f<Space>cM.<Esc>
 
 if has ('nvim')
   call fold#text()
-  lua vim.api.nvim_set_hl(0, 'LspReferenceText', {})
 endif

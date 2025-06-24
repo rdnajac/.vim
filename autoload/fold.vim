@@ -1,5 +1,5 @@
 function! fold#text()
-  let s:foldchar = '—'
+  let s:foldchar = '.'
   let line1 = getline(v:foldstart)
   let indent = matchstr(line1, '^\s*')
   if line1 =~ '^\s*{'
@@ -10,7 +10,7 @@ function! fold#text()
   endif
   let lines_count = v:foldend - v:foldstart + 1
   let lines_count_text = '|' . printf("%10s", lines_count . ' lines') . ' |'
-  let pre = line
+  let pre = line .. ' '
   let post = lines_count_text
   let width = 80
   let fill = repeat(s:foldchar, max([0, width - strdisplaywidth(pre . post)]))

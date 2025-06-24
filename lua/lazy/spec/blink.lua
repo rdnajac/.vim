@@ -38,7 +38,8 @@ return {
             components = {
               kind_icon = {
                 text = function(ctx)
-                  return LazyVim.config.icons.kinds[ctx.kind] or ''
+                  local kind_icons = require('snacks.picker.config.defaults').defaults.icons.kinds
+                  return kind_icons[ctx.kind] or ''
                 end,
               },
             },

@@ -29,7 +29,6 @@ require('lazy').setup({
   change_detection = { notify = false },
   performance = {
     rtp = {
-      -- paths = { { vim.fn.stdpath('config') .. '/queries' } },
       disabled_plugins = {
         'gzip',
         'matchit',

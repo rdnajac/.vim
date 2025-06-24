@@ -1,10 +1,12 @@
 local lib = require('nvim.util.navic.lib')
 local M = {}
 
+local icons = require('lazy.config').icons
+
 local config = {
-  icons = LazyVim.config.icons.kinds,
+  icons = icons.kinds,
   depth_limit = 0,
-  depth_limit_indicator = LazyVim.config.icons.misc.dots,
+  depth_limit_indicator = icons.misc.dots,
   lazy_update_context = false,
   separator = ' ',
 }
@@ -156,12 +158,6 @@ function M.attach(client, bufnr)
   vim.b[bufnr].navic_awaiting_lsp_response = true
   lib.request_symbol(bufnr, lsp_callback, client)
 end
-
-local t = {
-  {
-    'LazyVim/LazyVim',
-  },
-}
 
 print(M.get_location({}))
 

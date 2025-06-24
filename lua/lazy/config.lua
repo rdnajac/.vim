@@ -25,4 +25,24 @@ return {
       rounded = { left = '', right = '' },
     },
   },
+  emojis = {
+    -- stylua: ignore
+    lazu_ui = {
+      -- cmd     = '⌘',
+      cmd     = '🖥️',
+      config  = '🛠',
+      event   = '📅',
+      ft      = '📂',
+      -- init    = '⚙',
+      init    = '🏁',
+      keys    = '🗝',
+      plugin  = '🔌',
+      runtime = '💻',
+      require = '🌙',
+      source  = '📄',
+      start   = '🚀',
+      task    = '📌',
+      lazy    = '💤 ',
+    },
+  },
 }
