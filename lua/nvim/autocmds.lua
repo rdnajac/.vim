@@ -13,8 +13,11 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     -- vim.opt.formatoptions:remove({ 'c' })
     vim.opt.formatoptions:remove({ 'r', 'o' })
+    Snacks.util.set_hl({
+      LspReferenceText = {},
+      LspReferenceWrite = {},
+    })
   end,
-  desc = 'Set formatoptions since nvim overrides it for Lua and Vim files',
   group = nvimrc,
 })
 

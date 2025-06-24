@@ -26,23 +26,23 @@ vim.api.nvim_create_autocmd('User', {
   desc = 'Delete buffer on Oil delete',
 })
 
-vim.api.nvim_create_autocmd('User', {
-  group = myoilautocmds,
-  pattern = 'OilEnter',
-  callback = function(ev)
-    local oil = require('oil')
-    if vim.api.nvim_get_current_buf() == ev.data.buf and oil.get_cursor_entry() then
-      vim.defer_fn(function()
-        oil.open_preview(nil, function(err)
-          if not err then
-            vim.cmd.wincmd({ args = { '|' }, count = 30 })
-          end
-        end)
-      end, 0)
-    end
-  end,
-})
-
+-- vim.api.nvim_create_autocmd('User', {
+--   group = myoilautocmds,
+--   pattern = 'OilEnter',
+--   callback = function(ev)
+--     local oil = require('oil')
+--     if vim.api.nvim_get_current_buf() == ev.data.buf and oil.get_cursor_entry() then
+--       vim.defer_fn(function()
+--         oil.open_preview(nil, function(err)
+--           if not err then
+--             vim.cmd.wincmd({ args = { '|' }, count = 30 })
+--           end
+--         end)
+--       end, 0)
+--     end
+--   end,
+-- })
+--
 vim.api.nvim_create_autocmd('BufEnter', {
   group = myoilautocmds,
   pattern = 'oil://*',

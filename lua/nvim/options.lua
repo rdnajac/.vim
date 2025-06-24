@@ -67,6 +67,7 @@ M.lsp = function()
         })
 
         client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.semanticTokensProvider = nil
 
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
 

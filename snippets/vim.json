@@ -1,18 +1,28 @@
 {
   "if_exists_equals": {
-    "prefix": "ifee",
+    "prefix": "ifeg",
     "body": ["if !exists('g:${1}')", "let g:${1} = ${2:1}", "endif"],
     "description": "Global variable declaration"
   },
 
   "ifef": {
-    "prefix": "ifef",
+    "prefix": "ifneg",
     "body": ["if !exists('g:${1}')", "  finish", "endif"],
     "description": "Global variable declaration"
   },
 
+  "if_exists_nvim": {
+    "prefix": "ifnv",
+    "body": ["if exists('nvim')", "  ${0}", "endif"]
+  },
+
+  "ifnnv": {
+    "prefix": "ifnnv",
+    "body": ["if !exists('nvim')", "  ${0}", "endif"]
+  },
+
   "command": {
-    "prefix": "<Cmd>",
+    "prefix": ["cmd", "<Cmd>"],
     "body": "<Cmd>${0}<CR>",
     "description": "Command call."
   }

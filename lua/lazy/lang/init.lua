@@ -22,6 +22,46 @@ _G.langsetup = setmetatable({}, {
   end,
 })
 
+local function mason_install()
+  local tools = lang_spec.tools
+  local total = #tools
+  local completed = 0
+
+  local function done()
+    completed = completed + 1
+    if completed == total then
+      Snacks.notify.info('All tools checked.')
+    end
+  end
+
+  for _, tool in ipairs(tools) do
+    local ok, pkg = pcall(require('mason-registry').get_package, tool)
+    if not ok then
+      Snacks.notify.error('Tool not found in mason registry: ' .. tool)
+      done()
+    else
+      if pkg:is_installed() then
+        done()
+        goto continue
+      end
+
+      Snacks.notify.warn('Installing ' .. tool)
+
+      pkg:once('install:success', function()
+        Snacks.notify.info(tool .. ' installed successfully')
+        done()
+      end)
+      pkg:once('install:failed', function()
+        Snacks.notify.error(tool .. ' installation failed')
+        done()
+      end)
+
+      pkg:install()
+    end
+    ::continue::
+  end
+end
+
 return {
   {
     'nvim-treesitter/nvim-treesitter',
@@ -64,6 +104,11 @@ return {
   },
   {
     'mason-org/mason.nvim',
+    init = function()
+      vim.api.nvim_create_user_command('InstallTools', function()
+        mason_install()
+      end, { desc = 'Install tools from mason.nvim' })
+    end,
     build = ':MasonUpdate',
     lazy = false,
     opts = {
