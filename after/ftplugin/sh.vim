@@ -2,9 +2,7 @@ if !exists('g:shellharden')
   let g:shellharden = 1
 endif
 
-setlocal formatexpr=
 if executable('shfmt')
-  setlocal formatprg=shfmt\ -bn\ -sr
   let &l:formatprg = 'shfmt -bn -sr'
   if executable('shellharden')
     " pipe the formatprg output to shellharden if shellharden is enabled

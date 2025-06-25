@@ -1,6 +1,7 @@
 return {
   {
     'folke/persistence.nvim',
+    enabled = false,
     init = function()
       require('which-key').add({ { '<leader>p', group = 'Persistence', icon = ' ' } })
     end,

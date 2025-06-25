@@ -1,8 +1,7 @@
 setlocal expandtab
 setlocal foldmethod=indent
 
-" setlocal formatprg=stylua\ --search-parent-directories\ -
-let &l:formatprg = 'sh -c "cd ' . fnameescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
+let &l:formatprg = 'sh -c "cd ' . shellescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
 
 " simple auto-brackets
 " inoremap <buffer> ( ()<Left>
@@ -30,7 +29,6 @@ nmap <leader>cm ^v2f<Space>cM.<Es\ac>
 
 " M transform
 nmap <leader>cM ^v2f<Space>cM.<Esc>
-
 
 if has ('nvim')
   call fold#text()

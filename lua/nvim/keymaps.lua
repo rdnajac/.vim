@@ -18,7 +18,7 @@ wk.add({
   config('\\k', 'nvim/keymaps'),
   config('\\o', 'nvim/options'),
   config('\\l', 'lazy/spec/init'),
-  config('\\b', 'lazy/bootstrap.lua'),
+  config('\\b', 'lazy/bootstrap'),
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
 })
 

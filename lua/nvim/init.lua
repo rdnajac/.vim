@@ -7,6 +7,7 @@ _G.dd = function(...)
     return Snacks.debug.inspect(...)
   end)(...)
 end
+
 _G.bt = function()
   Snacks.debug.backtrace()
 end

@@ -39,9 +39,10 @@ set updatetime=69
 set undofile undolevels=10000
 set whichwrap+=<,>,[,],h,l
 
-set completeopt=menu,preview,preinsert,longest
-" set completeopt=menu,preview,longest
-set wildmode=longest:full,full
+set completeopt=menu,preview,longest
+if has('nvim') || has('patch-9.1.1337')
+  set completeopt+=preinsert
+endif
 
 " indentation {{{3
 set breakindent
@@ -115,6 +116,17 @@ augroup vimrc " {{{2
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 augroup END
 
+augroup Obsess
+  autocmd!
+  autocmd VimEnter * if argc() == 0 && filereadable('Session.vim') |
+	\   silent! source Session.vim |
+	\   if filereadable(expand('%')) |
+	\     call timer_start(1, { -> execute('edit') }) |
+	\   endif |
+	\   Obsession |
+	\ endif
+augroup END
+
 augroup vimrc_filetype " {{{2
   " for when a ftplugin file is not warranted
   au!
@@ -151,7 +163,8 @@ command! CleanWhitespace call format#whitespace()
 nnoremap <leader>fw <cmd>CleanWhitespace<CR>
 
 command! Format call format#buffer()
-nmap zq <Cmd>Format<CR>
+" nmap zq <Cmd>Format<CR>
+nmap zq gggqG
 
 " vim commands for Snacks functions
 command! Autocmds lua Snacks.picker.autocmds()
@@ -177,13 +190,13 @@ nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
 nnoremap <leader>K  <Cmd>norm! K<CR>
 nnoremap <leader>R  <Cmd>restart!<CR>
+nnoremap <leader>r  <Cmd>Obsession <Bar> restart<CR>
 nnoremap <leader>S  <Cmd>Scriptnames<CR>
 nnoremap <leader>.  <Cmd>Scratch<CR>
 nnoremap <leader>>  <Cmd>Scratch!<CR>
 nnoremap <leader>i  <Cmd>help  index<CR>
 nnoremap <leader>m  <Cmd>messages<CR>
 nnoremap <leader>h  <Cmd>Help<CR>
-nnoremap <leader>r  <Cmd>Restart<CR>
 nnoremap <leader>t  <Cmd>edit  #<CR>
 nnoremap <leader>w  <Cmd>write!<CR>
 nnoremap <leader>z  <Cmd>Zoxide<CR>
@@ -420,7 +433,8 @@ let g:vim_plugins = {
       \ 'tpope/vim-endwise'         : 0,
       \ 'tpope/vim-fugitive'        : 1,
       \ 'tpope/vim-repeat'          : 1,
-      \ 'tpope/vim-obsession'       : 0,
+      \ 'tpope/vim-obsession'       : 1,
+      \ 'tpope/vim-rsi'             : 1,
       \ 'tpope/vim-scriptease'      : 1,
       \ 'tpope/vim-sensible'        : 0,
       \ 'tpope/vim-speeddating'     : 0,
@@ -439,8 +453,6 @@ if has('nvim')
     command! LazyHealth Lazy! load all | checkhealth
     let g:loaded_nvim = 1
   endif
-  let g:ale_disable_lsp = 1
-  let g:ale_use_neovim_diagnostics_api = 1
 else
   call plug#begin()
   for [plugin, _] in items(g:vim_plugins)
@@ -453,12 +465,7 @@ endif
 " global variables {{{2
 let g:copilot_workspace_folders = ['~/GitHub', '~/.local/share/chezmoi/']
 
-" ALE globals {{{3
-let g:ale_fixers = {
-      \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-      \}
-let g:ale_fix_on_save = 0
-let g:ale_completion_enabled = 0
-let g:ale_linters_explicit = 1
-let g:ale_virtualtext_cursor = 'current'
-" let g:ale_set_highlights = 0
+
+"statusline
+set statusline=
+set statusline+=%S
