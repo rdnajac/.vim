@@ -1,77 +1,76 @@
--- originally generated from `require('lualine.themes.auto')`
--- with tokyonight.nvim as current colorscheme
-local color = _G.modemap
--- local black = ''#16161e'
-local black = '#000000'
-local grey = '#3b4261'
-
-M = {}
-
-for mode, col in pairs(color) do
-  M[mode] = {
-    a = { bg = col, fg = black, gui = 'bold' },
-    b = { bg = grey, fg = col, gui = 'bold' },
-    c = { bg = 'NONE', fg = col },
-    z = { bg = 'NONE', fg = col, gui = 'bold' },
-  }
+-- Override lualine's highlight group generator with fixed chromatophore name
+package.preload['lualine.highlight'] = function()
+  local mod = dofile(vim.api.nvim_get_runtime_file('lua/lualine/highlight.lua', false)[1])
+  mod.create_component_highlight_group = function(_, _, options, _)
+    return {
+      name = 'lualine_' .. options.self.section .. '_chromatophore',
+      fn = nil,
+      no_mode = true,
+      link = false,
+      section = options.self.section,
+      options = options,
+      no_default = true,
+    }
+  end
+  return mod
 end
 
-M.normal.x = { bg = color.normal, fg = 'NONE' }
-M.normal.y = { bg = grey, fg = color.normal, gui = 'bold' }
-M.normal.z = { fg = color.normal, bg = 'NONE', gui = 'bold' }
+---@return string
+function _G.current_mode_key()
+  return _G.ModeLowerKey[require('lualine.utils.mode').get_mode()]
+end
 
-M.inactive = {
-  a = { bg = 'NONE', fg = color.insert, gui = 'bold' },
-  -- b = { bg = '#16161e', fg = grey, gui = 'bold' },
-  -- c = { bg = 'NONE', fg = grey },
-  z = { fg = color.insert, bg = 'NONE', gui = 'bold' },
-}
+---@return string
+function _G.current_mode_color()
+  return _G.ModeColor[_G.ModeLowerKey[require('lualine.utils.mode').get_mode()]]
+end
 
--- Map Vim modes to your color keys
-local mode_map = {
-  n = 'normal',
-  i = 'insert',
-  v = 'visual',
-  V = 'visual',
-  [''] = 'visual',
-  c = 'command',
-  r = 'replace',
-  R = 'replace',
-  t = 'terminal',
-}
+local visual_modes = { 'v', 'V', '\22' }
 
-local hl_strings = function()
-  local mode = vim.fn.mode()
-  local key = mode_map[mode] or 'normal'
-  local fg = color[key] or color.normal
-
+local update_chromatophore_base = function()
+  local mode_color = _G.current_mode_color()
+  local black = '#000000'
+  local grey = '#3b4261'
   Snacks.util.set_hl({
-    String = { fg = fg },
+    ChromatophoreBase = { fg = mode_color, bg = 'NONE' },
+    String = { link = 'ChromatophoreBase' },
+    lualine_a_chromatophore = { fg = black, bg = mode_color, bold = true },
+    lualine_b_chromatophore = { fg = mode_color, bg = grey, bold = true },
+    lualine_c_chromatophore = { fg = mode_color, bg = 'NONE' },
+    lualine_x_chromatophore = { fg = mode_color, bg = 'NONE' },
+    lualine_y_chromatophore = { bg = mode_color, fg = 'NONE' },
+    lualine_z_chromatophore = { fg = mode_color, bg = 'NONE' },
   }, { default = false })
 
   Snacks.util.winhl({ String = 'String' })
 end
 
-local visual_modes = { 'v', 'V', '\22' }
+update_chromatophore_base()
 
--- ModeChanged for all modes except Visual
 vim.api.nvim_create_autocmd('ModeChanged', {
   callback = function()
     if not vim.tbl_contains(visual_modes, vim.fn.mode()) then
-      hl_strings()
+      update_chromatophore_base()
     end
   end,
-  desc = 'Sync String highlight color with current mode (excluding visual)',
 })
 
--- Separate key-based handler for visual modes
-local visual_refresh = function()
-  Snacks.util.set_hl({ String = { fg = color.visual } })
-  require('lualine').refresh()
-end
-
 for _, key in ipairs(visual_modes) do
-  Snacks.util.on_key(key, visual_refresh)
+  Snacks.util.on_key(key, function()
+    if vim.tbl_contains(visual_modes, vim.fn.mode()) then
+      update_chromatophore_base()
+    end
+  end)
 end
 
-return M
+-- return dummy theme
+return {
+  normal = {
+    a = { fg = 'NONE' },
+    b = { fg = 'NONE' },
+    c = { fg = 'NONE' },
+    x = { fg = 'NONE' },
+    y = { fg = 'NONE' },
+    z = { fg = 'NONE' },
+  },
+}

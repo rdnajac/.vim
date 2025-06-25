@@ -12,7 +12,7 @@ end
 
 ---@type snacks.picker.sources.Config|{}|table<string, snacks.picker.Config|{}>
 M.sources = {
-
+  keymaps = { confirm = 'edit', layout = { preset = 'mylayout' } },
   notifications = { layout = { preset = 'ivy' } },
   pickers = { layout = { preset = 'ivy' } },
   undo = { layout = { preset = 'ivy' } },

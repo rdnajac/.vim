@@ -26,7 +26,7 @@ inoremap <buffer> \vc vim.cmd([[<c-g>u]])<Left><Left><Left><CR><CR><esc>hi<Space
 nmap <leader>cl ^wdwf(i<Space>=<Space><Esc>px
 
 " local to M transform
-nmap <leader>cm ^v2f<Space>cM.<Esc>
+nmap <leader>cm ^v2f<Space>cM.<Es\ac>
 
 " M transform
 nmap <leader>cM ^v2f<Space>cM.<Esc>

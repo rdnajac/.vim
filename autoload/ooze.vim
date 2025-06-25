@@ -28,8 +28,8 @@ function! ooze#linefeed() abort
     let curline = substitute(getline(i + 1), '^\s*', '', '')
     if strlen(curline) > 0
       if !(exists('g:ooze_skip_comments') && g:ooze_skip_comments && curline =~ '^#')
-        call cursor(i + 1, 1)
-        return
+	call cursor(i + 1, 1)
+	return
       endif
     endif
     let i += 1
@@ -75,4 +75,18 @@ function! ooze#cr() abort
   else
     return "\<CR>"
   endif
+endfunction
+
+function! ooze#operator(type) abort
+  let [l1, c1] = getpos("'[")[1:2]
+  let [l2, c2] = getpos("']")[1:2]
+  let lines = getline(l1, l2)
+
+  if a:type ==# 'v' || a:type ==# 'char'
+    let lines[-1] = lines[-1][: c2 - 1]
+    let lines[0] = lines[0][c1 - 1 :]
+  endif
+
+  call chansend(g:ooze_channel, join(lines, "\n") . "\n")
+  if g:ooze_auto_scroll | call s:scroll() | endif
 endfunction

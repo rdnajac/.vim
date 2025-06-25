@@ -17,3 +17,5 @@ command!          OozeRunFile call ooze#runfile()
 
 vnoremap <silent> <CR>   :OozeVisual<CR>
 nnoremap <silent> <M-CR> :OozeRunFile<CR>
+
+nmap <silent> dx m':set opfunc=ooze#operator<CR>g@

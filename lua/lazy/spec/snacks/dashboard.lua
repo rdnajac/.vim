@@ -6,7 +6,6 @@ local M = {}
 M.config = {
   sections = {
     { section = 'header' },
-    { section = 'startup', padding = 1 },
     { section = 'keys' },
     {
       section = 'terminal',
@@ -14,8 +13,9 @@ M.config = {
       width = 69,
       cmd = 'cowsay ' .. str .. ' | lolcat',
       opts = { win_opts = { border = 'none' } },
-      indent = 28,
+      indent = 8,
     },
+    { section = 'startup', padding = 1 },
   },
   preset = {
     header = [[

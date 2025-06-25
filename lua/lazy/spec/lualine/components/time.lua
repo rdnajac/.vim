@@ -3,17 +3,9 @@ local M = {}
 M.clock = {
   {
     function()
-      return '🭄'
-    end,
-    color = { gui = 'bold' },
-    padding = { left = 0, right = 0 },
-  },
-  {
-    function()
       return '  ' .. os.date('%T')
     end,
     separator = { left = ' ' },
-    color = { gui = 'reverse,bold' },
   },
 }
 

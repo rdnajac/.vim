@@ -30,13 +30,13 @@ return {
       sort = { 'order', 'alphanum', 'case', 'mod' },
       spec = {
         {
-          {
-            mode = { 'n', 'v' },
-            { '[', group = 'prev' },
-            { ']', group = 'next' },
-            { 'g', group = 'goto' },
-            { 'z', group = 'fold' },
-          },
+          -- {
+          --   mode = { 'n', 'v' },
+          --   { '[', group = 'prev' },
+          --   { ']', group = 'next' },
+          --   { 'g', group = 'goto' },
+          --   { 'z', group = 'fold' },
+          -- },
 
           mode = { 'n' },
           {

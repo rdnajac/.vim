@@ -154,8 +154,9 @@ command! Format call format#buffer()
 nmap zq <Cmd>Format<CR>
 
 " vim commands for Snacks functions
-command! Autocmds
-command! Keymaps lua Snacks.picker.keymaps({confirm = 'edit', layout = {preset = 'mylayout'}})
+command! Autocmds lua Snacks.picker.autocmds()
+command! Explorer lua Snacks.picker.explorer()
+command! Keymaps lua Snacks.picker.keymaps()
 command! Highlights lua Snacks.picker.highlights()
 command! Terminal lua Snacks.terminal.toggle()
 command! Chezmoi lua require('lazy.spec.snacks.picker.chezmoi')()
@@ -165,29 +166,30 @@ command! PluginFiles lua require('lazy.spec.snacks.picker.plugins').files()
 command! -bang Zoxide lua require('lazy.spec.snacks.picker.zoxide').pick('<bang>')
 command! Help lua Snacks.picker.help()
 command! Lazygit :lua Snacks.Lazygit()
+command! Config :lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
 command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
-
 
 " }}}1
 
 " § keymaps {{{1
 nnoremap <leader><Space> viW
-nnoremap <leader>E  :edit!<CR>
-nnoremap <leader>K  :norm! K<CR>
-nnoremap <leader>R  :restart!<CR>
-nnoremap <leader>S  :Scriptnames<CR>
-nnoremap <leader>. :Scratch<CR>
-nnoremap <leader>> :Scratch!<CR>
-nnoremap <leader>i  :help  index<CR>
-nnoremap <leader>m  :messages<CR>
-nnoremap <leader>h  :Help<CR>
-nnoremap <leader>r  :Restart<CR>
-nnoremap <leader>t  :edit  #<CR>
-nnoremap <leader>w  :write!<CR>
-nnoremap <leader>z  :Zoxide<CR>
-nnoremap <leader>cz :Chezmoi<CR>
-nnoremap <leader>fp :PluginFiles<CR>
-nnoremap <leader>sp :PluginGrep<CR>
+nnoremap <leader>E  <Cmd>edit!<CR>
+nnoremap <leader>e  <Cmd>Explore<CR>
+nnoremap <leader>K  <Cmd>norm! K<CR>
+nnoremap <leader>R  <Cmd>restart!<CR>
+nnoremap <leader>S  <Cmd>Scriptnames<CR>
+nnoremap <leader>.  <Cmd>Scratch<CR>
+nnoremap <leader>>  <Cmd>Scratch!<CR>
+nnoremap <leader>i  <Cmd>help  index<CR>
+nnoremap <leader>m  <Cmd>messages<CR>
+nnoremap <leader>h  <Cmd>Help<CR>
+nnoremap <leader>r  <Cmd>Restart<CR>
+nnoremap <leader>t  <Cmd>edit  #<CR>
+nnoremap <leader>w  <Cmd>write!<CR>
+nnoremap <leader>z  <Cmd>Zoxide<CR>
+nnoremap <leader>cz <Cmd>Chezmoi<CR>
+nnoremap <leader>fp <Cmd>PluginFiles<CR>
+nnoremap <leader>sp <Cmd>PluginGrep<CR>
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
 " nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
@@ -273,21 +275,22 @@ nnoremap cdc <Cmd>call bin#cd#smart()<CR>
 nnoremap cdb <Cmd>cd %:p:h<BAR>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<BAR>pwd<CR>
 
-" dc dm dq dr ds du dx dy dz
+" dc dm dq dr ds du dx `dy` dz
 " vnoremap <silent> dy "_dP
 nnoremap dy "_dd
 
 " yc yd ym yo yp yq yr ys yu yx yz
 " vnoremap <silent> yp p"_d
 
-" vm vo vq vv vz
+" vm vo vq `vv` vz
 nmap vv Vgc
 
-" gb gc gl gs gy
+" `gb` `gc` gl `gs` `gy`
 " nmap gb viqy:!open https://github.com/<C-R>0<CR>
 nmap gb vi'y:!open https://github.com/<C-R>0<CR>
 xnoremap gb y:!open https://github.com/<C-R>0<CR>
 nmap gy "xyygcc"xp
+nmap gl <Cmd>Config<CR>
 
 " buffers {{{2
 nnoremap <silent> <Tab>         :bnext<CR>

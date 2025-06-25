@@ -1,8 +1,43 @@
-local M = {}
-
-M = {
+return {
   'folke/tokyonight.nvim',
   -- dev = true,
+  init = function()
+    ---@type table<string, string>
+    _G.ModeLowerKey = setmetatable({
+      NORMAL = 'normal',
+      INSERT = 'insert',
+      VISUAL = 'visual',
+      ['V-LINE'] = 'visual',
+      ['V-BLOCK'] = 'visual',
+      SELECT = 'visual',
+      ['S-LINE'] = 'visual',
+      ['S-BLOCK'] = 'visual',
+      REPLACE = 'replace',
+      ['V-REPLACE'] = 'replace',
+      COMMAND = 'command',
+      EX = 'command',
+      CONFIRM = 'command',
+      SHELL = 'shell',
+      TERMINAL = 'terminal',
+      O_PENDING = 'pending',
+      MORE = 'more',
+    }, {
+      __index = function()
+        return 'normal'
+      end,
+    })
+
+    ---@type table<string, string>
+    _G.ModeColor = {
+      normal = '#a4daff',
+      insert = '#14aeff',
+      visual = '#f7768e',
+      replace = '#ff007c',
+      command = '#39ff14',
+      terminal = '#BB9AF7',
+      pending = '#39ff14',
+    }
+  end,
   ---@class tokyonight.Config
   opts = {
     style = 'night',
@@ -27,7 +62,7 @@ M = {
       hl['StatusLine'] = { bg = 'NONE' }
       hl['StatusLineNC'] = { bg = 'NONE' }
       -- hl['Tabline']             = { bg   = 'NONE' }
-      -- hl['TabLineFill']         = { bg   = 'NONE' }
+      hl['TabLineFill'] = { bg = 'NONE' }
       -- hl['TabLineSel']          = { bg   = 'NONE' }
       hl['Winbar'] = { bg = 'NONE' }
       -- hl['WinbarNC']            = { bg   = 'NONE' }
@@ -47,18 +82,8 @@ M = {
       hl['SnacksPickerTitle'] = { bold = true, fg = colors.green }
       hl['@property'] = { fg = '#FFFFFF' }
       hl['@variable'] = { fg = '#E0AF68' }
+      hl['@keyword'] = { fg = colors.red }
       -- hl['@variable'] = { fg = '#E0AF68' }
     end,
   },
 }
-
-_G.modemap = {
-  command = '#39ff14',
-  normal = '#BB9AF7',
-  insert = '#14aeff',
-  visual = '#f7768e',
-  terminal = '#73daca',
-  replace = '#ff007c',
-}
-
-return M
