@@ -2,7 +2,7 @@
 " - expands [{()}] 'correctly'
 " - expands <tag>|</tag> 'correctly'
 " - removes empty comment marker
-function! cr#ICR()
+function! autoclose#cr()
   " specific case: beware of the cmdline window
   if &buftype ==# "quickfix" || &buftype ==# "nofile"
     return "\<CR>"
@@ -64,5 +64,4 @@ function! s:TagExpander(next)
   endif
 endfunction
 
-inoremap <expr> <CR> icr#ICR()
-
+" inoremap <expr> <CR> autoclose#cr()
