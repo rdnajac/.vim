@@ -21,15 +21,6 @@ vim.api.nvim_create_autocmd('FileType', {
   group = nvimrc,
 })
 
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = { 'markdown', 'vim' },
---   callback = function()
---     vim.treesitter.start()
---   end,
---   desc = 'Start treesitter for supported files',
---   group = nvimrc,
--- })
-
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'help', 'man', 'qf' },
   callback = function(ev)
