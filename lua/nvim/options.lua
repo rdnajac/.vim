@@ -4,19 +4,13 @@ M.options = function()
   vim.opt.backup = true
   vim.opt.backupdir = vim.fn.stdpath('state') .. '/backup//'
   vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
-  vim.opt.cmdheight = 0
   -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
   vim.opt.foldexpr = 'v:lua.require("nvim.treesitter.fold").expr()'
   vim.opt.jumpoptions = 'view,stack'
   vim.opt.mousescroll = 'hor:0'
   vim.opt.pumblend = 0
   vim.opt.smoothscroll = true
-  vim.opt.winborder = 'rounded'
-
-  -- HACK: don't show lualine on dashboard
-  if vim.fn.argc(-1) == 0 and vim.bo.filetype == 'snacks_dashboard' then
-    vim.opt.laststatus = 0
-  end
+  vim.opt.laststatus = 3
 end
 
 local icons = LazyVim.config.icons
@@ -45,7 +39,7 @@ end
 M.lsp = function()
   -- Refer to `:h vim.lsp.config()` for more information.
   vim.lsp.config('*', {
-    capabilities = require('blink.cmp').get_lsp_capabilities(),
+    -- capabilities = require('blink.cmp').get_lsp_capabilities(),
 
     ---@param client vim.lsp.Client
     ---@param bufnr integer
@@ -93,10 +87,5 @@ end
 M.options()
 M.diagnostic()
 M.lsp()
-
--- XXX: experimental!
-if vim.fn.has('nvim-0.12') == 1 then
-  require('vim._extui').enable({})
-end
 
 return M

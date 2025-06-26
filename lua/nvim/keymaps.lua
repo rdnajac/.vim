@@ -1,28 +1,6 @@
 -- vim:fdm=marker
 local wk = require('which-key')
 
--- stylua: ignore start
-vim.keymap.set({ 'n', 'v' }, '<leader>dr', function() Snacks.debug.run() end)
-vim.keymap.set({ 'n', 't' }, ',,', function() Snacks.terminal.toggle() end)
--- stylua: ignore end
-
-local p = vim.fn.stdpath('config') .. '/lua/'
-local function config(lhs, mod)
-  return { lhs, '<Cmd>edit ' .. p .. mod .. '.lua<CR>', desc = mod }
-end
-
--- stylua: ignore
-wk.add({
-  config('\\a', 'nvim/autocmds'),
-  config('\\i', 'nvim/init'),
-  config('\\k', 'nvim/keymaps'),
-  config('\\o', 'nvim/options'),
-  config('\\l', 'lazy/spec/init'),
-  config('\\b', 'lazy/bootstrap'),
-  { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
-})
-
--- dual pickers {{{2
 local function map_pickers(key, path, desc)
   local opts = { cwd = path, matcher = { frecency = true } }
 -- stylua: ignore
@@ -45,13 +23,15 @@ wk.add({
   { '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = 'Buffers (all)', },
   { '<leader>sb', function() Snacks.picker.lines() end, desc = 'Buffer Lines', },
   { '<leader>sB', function() Snacks.picker.grep_buffers() end, desc = 'Grep Open Buffers', },
+  { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
+
+  { '<leader>dp', group = 'profiler' },
+  { '<leader>dps', function() Snacks.profiler.scratch() end, desc = 'Profiler Scratch Buffer' } ,
+  { '<leader>dr', function() Snacks.profiler.scratch() end, mode = { 'n', 'v' }} ,
+  { ',,', function() Snacks.terminal.toggle() end, mode = { 'n', 't' }} ,
 })
 
-wk.add({
-  { '<leader>dp', group = 'profiler' },
-  -- stylua: ignore
-  { '<leader>dps', function() Snacks.profiler.scratch() end, desc = 'Profiler Scratch Buffer' } ,
-})
+wk.add({})
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
 
@@ -87,6 +67,6 @@ Snacks.toggle.scroll():map('<leader>us')
 Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
 
-require('nvim.util.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
-require('nvim.util.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
-require('nvim.util.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
+require('lazy.spec.snacks.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
+require('lazy.spec.snacks.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
+require('lazy.spec.snacks.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })

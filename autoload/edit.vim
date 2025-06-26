@@ -1,12 +1,13 @@
-" check if there is an edit.vim file in the runtime path
 function! s:vsplit(path) abort
   let layout = winlayout()
-  let cmd = 'vsplit'
-  if layout[0] ==# 'row' && len(layout[1]) > 1
+  let cmd = ''
+  if empty(bufname())
+    let cmd = 'edit'
+  elseif layout[0] ==# 'row' && len(layout[1]) > 1
     let rightwin = win_id2win(layout[1][1][1])
-    if rightwin > 0
-      let cmd = rightwin . 'wincmd w | edit'
-    endif
+    let cmd = rightwin > 0 ? rightwin . 'wincmd w | edit' : 'vsplit'
+  else
+    let cmd = 'vsplit'
   endif
   execute cmd . ' ' . a:path
   normal! zvzz

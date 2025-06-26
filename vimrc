@@ -4,10 +4,8 @@ scriptencoding=utf-8
 " § settings {{{1
 let g:mapleader = ' '
 let g:maplocalleader = '\'
-" housekeeping {{{2
-let s:VIMHOME = expand('$HOME/.config/vim//')
-let g:plug_home = s:VIMHOME . './plugged//'
-let &spellfile = s:VIMHOME . '.spell/en.utf-8.add'
+let g:VIMDIR = fnamemodify($MYVIMRC, ':p:h')
+let &spellfile = g:VIMDIR . '.spell/en.utf-8.add'
 " let &undodir     = s:VIMHOME . '.undo//'
 " let &viminfofile = s:VIMHOME . '.viminfo'
 " let &verbosefile = s:VIMHOME . '.vimlog.txt'
@@ -66,7 +64,7 @@ set fillchars+=foldopen:▾,
 set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
 " set foldlevel=1
-set foldlevelstart=99
+" set foldlevelstart=99
 set foldminlines=3
 set foldopen+=insert,jump
 set foldtext=fold#text()
@@ -114,17 +112,6 @@ augroup vimrc " {{{2
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-augroup END
-
-augroup Obsess
-  autocmd!
-  autocmd VimEnter * if argc() == 0 && filereadable('Session.vim') |
-	\   silent! source Session.vim |
-	\   if filereadable(expand('%')) |
-	\     call timer_start(1, { -> execute('edit') }) |
-	\   endif |
-	\   Obsession! |
-	\ endif
 augroup END
 
 augroup vimrc_filetype " {{{2
@@ -181,7 +168,7 @@ nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
 nnoremap <leader>K  <Cmd>norm! K<CR>
 nnoremap <leader>R  <Cmd>restart!<CR>
-nnoremap <leader>r  <Cmd>Obsession <Bar> restart<CR>
+nnoremap <leader>r  <Cmd>restart<CR>
 nnoremap <leader>S  <Cmd>Scriptnames<CR>
 nnoremap <leader>.  <Cmd>Scratch<CR>
 nnoremap <leader>>  <Cmd>Scratch!<CR>
@@ -280,8 +267,8 @@ vmap <C-s> :sort<CR>
 
 " available key pairs in normal mode {{{2
 " https://gist.github.com/romainl/1f93db9dc976ba851bbb
-" `splitjoin`: gJ and gS
-" `vim-surround`: cs, ds, and ys
+" `splitjoin`: `gJ` and `gS`
+" `vim-surround`: `cs`, `ds`, and `ys`
 
 " cd cm co cp cq cr cs cu cx cy cz
 nnoremap cdc <Cmd>call bin#cd#smart()<CR>
@@ -305,9 +292,13 @@ xnoremap gb y:!open https://github.com/<C-R>0<CR>
 nmap gy "xyygcc"xp
 nmap gl <Cmd>Config<CR>
 
-nmap gsa yss
-nmap gsc cs
-nmap gsd ds
+" `surround` {{{2
+vmap `  S`
+vmap '  S'
+vmap "  S"
+vmap b  Sb
+nmap S  viWS
+" nmap yss ys
 
 " `zq` ZA ... ZP, `ZQ` ... `ZZ`
 nmap zq gggqG
@@ -394,14 +385,6 @@ nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 inoremap \sec §
 iabbrev n- –
 iabbrev m- —
-
-" `surround` {{{2
-vmap `  S`
-vmap '  S'
-vmap "  S"
-vmap b  Sb
-nmap S  viWS
-" nmap yss ys
 
 " cmdline {{{2
 nnoremap ; :
@@ -516,3 +499,4 @@ xmap ga <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 " vim:set fdl=2
+

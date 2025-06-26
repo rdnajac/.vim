@@ -21,13 +21,16 @@ return {
     'folke/which-key.nvim',
     ---@class wk_opts
     opts = {
-      defer = function(ctx)
-        return vim.list_contains({ 'v', 'V', '\22' }, ctx.mode)
+      defer = function(_)
+        return
       end,
       keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
       preset = 'helix',
       show_help = false,
       sort = { 'order', 'alphanum', 'case', 'mod' },
+  triggers = {
+    { '<leader>', mode = { 'n', 'v' } },
+  },
       spec = {
         {
           -- {

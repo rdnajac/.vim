@@ -25,7 +25,7 @@ function! format#clean_whitespace() abort
   endif
 endfunction
 
-function! s:equalprg() abort
+function! format#equalprg() abort
   normal! gg=G
   retab
   if !&binary && &filetype != 'diff'
@@ -34,4 +34,3 @@ function! s:equalprg() abort
     call s:strip_trailing_newlines()
   endif
 endfunction
-
