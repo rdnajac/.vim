@@ -30,7 +30,7 @@ set scrolloff=8
 set shortmess+=aAcCI
 set shortmess-=o
 set showmatch
-set showtabline=2
+" set showtabline=2
 set splitbelow splitright
 set splitkeep=screen
 set termguicolors
@@ -80,9 +80,9 @@ augroup END
 
 " column {{{3
 " TODO: if nonu, set signcolumn=yes
-" set number signcolumn=number
-set numberwidth=3
-set signcolumn=yes
+set number signcolumn=number
+set numberwidth=4
+" set signcolumn=yes
 " }}}1
 
 " § autocmds {{{1
@@ -123,7 +123,7 @@ augroup Obsess
 	\   if filereadable(expand('%')) |
 	\     call timer_start(1, { -> execute('edit') }) |
 	\   endif |
-	\   Obsession |
+	\   Obsession! |
 	\ endif
 augroup END
 
@@ -151,24 +151,16 @@ augroup END
 " }}}1
 
 " § commands {{{1
-command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
-command! -bar -bang          Delete call bin#delete#delete(<bang>0)
-command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
-
 command! -bang Quit call quit#buffer(<q-bang>)
+command! CleanWhitespace call format#clean_whitespace()
+command! Format call format#buffer()
+
 nnoremap <leader>q <Cmd>Quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
-
-command! CleanWhitespace call format#whitespace()
-nnoremap <leader>fw <cmd>CleanWhitespace<CR>
-
-command! Format call format#buffer()
-" nmap zq <Cmd>Format<CR>
-nmap zq gggqG
+nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
 
 " vim commands for Snacks functions
-command! Autocmds lua Snacks.picker.autocmds()
-command! Explorer lua Snacks.picker.explorer()
+command! Explorer lua Snacks.picker.explorer({cwd = vim.cmd.pwd()})
 command! Keymaps lua Snacks.picker.keymaps()
 command! Highlights lua Snacks.picker.highlights()
 command! Terminal lua Snacks.terminal.toggle()
@@ -181,7 +173,6 @@ command! Help lua Snacks.picker.help()
 command! Lazygit :lua Snacks.Lazygit()
 command! Config :lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
 command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
-
 " }}}1
 
 " § keymaps {{{1
@@ -194,39 +185,45 @@ nnoremap <leader>r  <Cmd>Obsession <Bar> restart<CR>
 nnoremap <leader>S  <Cmd>Scriptnames<CR>
 nnoremap <leader>.  <Cmd>Scratch<CR>
 nnoremap <leader>>  <Cmd>Scratch!<CR>
-nnoremap <leader>i  <Cmd>help  index<CR>
+nnoremap <leader>i  <Cmd>help index<CR>
 nnoremap <leader>m  <Cmd>messages<CR>
 nnoremap <leader>h  <Cmd>Help<CR>
-nnoremap <leader>t  <Cmd>edit  #<CR>
+nnoremap <leader>t  <Cmd>edit #<CR>
 nnoremap <leader>w  <Cmd>write!<CR>
 nnoremap <leader>z  <Cmd>Zoxide<CR>
 nnoremap <leader>cz <Cmd>Chezmoi<CR>
 nnoremap <leader>fp <Cmd>PluginFiles<CR>
 nnoremap <leader>sp <Cmd>PluginGrep<CR>
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
-" nnoremap <leader>M  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+" nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
-nnoremap <leader>va <Cmd>edit +/§\ autocmds $MYVIMRC<CR>zvzz
-nnoremap <leader>vc <Cmd>edit +/§\ commands $MYVIMRC<CR>zvzz
-nnoremap <leader>vk <Cmd>edit +/§\ keymaps $MYVIMRC<CR>zvzz
-nnoremap <leader>vp <Cmd>edit +/§\ plugins $MYVIMRC<CR>zvzz
-nnoremap <leader>vs <Cmd>edit +/§\ settings $MYVIMRC<CR>zvzz
-nnoremap <leader>vv <Cmd>edit $MYVIMRC<CR>
-
-function! s:edit(relpath, ext)
-  let suffix = empty(&filetype) ? '' : &filetype . a:ext
-  execute 'edit ' . fnamemodify($MYVIMRC, ':p:h') . '/' . a:relpath . suffix
-endfunction
-
-nnoremap <leader>ft :call <SID>edit('after/ftplugin/', '.vim')<CR>
-nnoremap <leader>fT :call <SID>edit('lua/lazy/lang/', '.lua')<CR>
-nnoremap <leader>fs :call <SID>edit('snippets/', '.json')<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
-nnoremap <leader>, :lua Snacks.picker.buffers()<CR>
-nnoremap <leader>/ :lua Snacks.picker.grep()<CR>
-nnoremap <leader>F :lua Snacks.picker.smart()<CR>
+nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
+nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
+
+nnoremap <leader>va <Cmd>vsplit +/§\ autocmds $MYVIMRC<CR>zvzz
+nnoremap <leader>vc <Cmd>vsplit +/§\ commands $MYVIMRC<CR>zvzz
+nnoremap <leader>vk <Cmd>vsplit +/§\ keymaps $MYVIMRC<CR>zvzz
+nnoremap <leader>vp <Cmd>vsplit +/§\ plugins $MYVIMRC<CR>zvzz
+nnoremap <leader>vs <Cmd>vsplit +/§\ settings $MYVIMRC<CR>zvzz
+nnoremap <leader>va <Cmd>call edit#vimrc('+/§\ autocmds')<CR>
+nnoremap <leader>vc <Cmd>call edit#vimrc('+/§\ commands')<CR>
+nnoremap <leader>vk <Cmd>call edit#vimrc('+/§\ keymaps')<CR>
+nnoremap <leader>vp <Cmd>call edit#vimrc('+/§\ plugins')<CR>
+nnoremap <leader>vs <Cmd>call edit#vimrc('+/§\ settings')<CR>
+
+
+nnoremap <leader>v <Cmd>call edit#vimrc()<CR>
+nnoremap <BSlash>a <Cmd>call edit#module('nvim/autocmds')<CR>
+nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
+nnoremap <BSlash>k <Cmd>call edit#module('nvim/keymaps')<CR>
+nnoremap <BSlash>o <Cmd>call edit#module('nvim/options')<CR>
+nnoremap <BSlash>h <Cmd>call edit#module('nvim/hacks')<CR>
+nnoremap <BSlash>l <Cmd>call edit#module('lazy/spec/init')<CR>
+nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
 
 nnoremap <leader>bd :lua Snacks.bufdelete()<CR>
 
@@ -234,41 +231,44 @@ nnoremap <leader>fC :lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff :lua Snacks.picker.files()<CR>
 nnoremap <leader>fr :lua Snacks.picker.recent()<CR>
 
-nnoremap <leader>gb :lua Snacks.picker.git_log_line()<CR>
-nnoremap <leader>gB :lua Snacks.gitbrowse()<CR>
-nnoremap <leader>gd :lua Snacks.picker.git_diff()<CR>
-nnoremap <leader>gs :lua Snacks.picker.git_status()<CR>
-nnoremap <leader>gS :lua Snacks.picker.git_stash()<CR>
-nnoremap <leader>ga :!git add %<CR>
-nnoremap <leader>gg :lua Snacks.lazygit()<CR>
-nnoremap <leader>gf :lua Snacks.picker.git_log_file()<CR>
-nnoremap <leader>gl :lua Snacks.picker.git_log()<CR>
+nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
+nnoremap <leader>gB <Cmd>lua Snacks.gitbrowse()<CR>
+nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
+nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
+nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
+nnoremap <leader>ga <Cmd>!git add %<CR>
+nnoremap <leader>gg <Cmd>lua Snacks.lazygit()<CR>
+nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
+nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 
 nnoremap <leader>l <Cmd>Lazy<CR>
 nnoremap <leader>n :lua Snacks.picker.notifications()<CR>
 
-nnoremap <leader>P :lua Snacks.picker()<CR>
-nnoremap <leader>p" :lua Snacks.picker.registers()<CR>
-nnoremap <leader>p/ :lua Snacks.picker.search_history()<CR>
-nnoremap <leader>pD :lua Snacks.picker.diagnostics_buffer()<CR>
-nnoremap <leader>pa :lua Snacks.picker.autocmds()<CR>
-nnoremap <leader>pc :lua Snacks.picker.commands()<CR>
-nnoremap <leader>p: :lua Snacks.picker.command_history()<CR>
-nnoremap <leader>pd :lua Snacks.picker.diagnostics()<CR>
-nnoremap <leader>ph :lua Snacks.picker.highlights()<CR>
-nnoremap <leader>pi :lua Snacks.picker.icons()<CR>
-nnoremap <leader>pj :lua Snacks.picker.jumps()<CR>
-nnoremap <leader>pk :lua Snacks.picker.keymaps()<CR>
-nnoremap <leader>pp :lua Snacks.picker.resume()<CR>
-nnoremap <leader>pq :lua Snacks.picker.qflist()<CR>
+nnoremap <leader>P  <Cmd>lua Snacks.picker()<CR>
+nnoremap <leader>p" <Cmd>lua Snacks.picker.registers()<CR>
+nnoremap <leader>p/ <Cmd>lua Snacks.picker.search_history()<CR>
+nnoremap <leader>pD <Cmd>lua Snacks.picker.diagnostics_buffer()<CR>
 
-nnoremap <leader>sa :lua Snacks.picker.autocmds()<CR>
-nnoremap <leader>sC :lua Snacks.picker.commands()<CR>
-nnoremap <leader>sh :lua Snacks.picker.help()<CR>
-nnoremap <leader>sH :lua Snacks.picker.highlights()<CR>
-nnoremap <leader>si :lua Snacks.picker.icons()<CR>
-nnoremap <leader>sk :lua Snacks.picker.keymaps()<CR>
-nnoremap <leader>su :lua Snacks.picker.undo()<CR>
+command! Autocmds lua Snacks.picker.autocmds()
+nnoremap <leader>pa <Cmd>lua Snacks.picker.autocmds()<CR>
+
+nnoremap <leader>pc <Cmd>lua Snacks.picker.commands()<CR>
+nnoremap <leader>p: <Cmd>lua Snacks.picker.command_history()<CR>
+nnoremap <leader>pd <Cmd>lua Snacks.picker.diagnostics()<CR>
+nnoremap <leader>ph <Cmd>lua Snacks.picker.highlights()<CR>
+nnoremap <leader>pi <Cmd>lua Snacks.picker.icons()<CR>
+nnoremap <leader>pj <Cmd>lua Snacks.picker.jumps()<CR>
+nnoremap <leader>pk <Cmd>lua Snacks.picker.keymaps()<CR>
+nnoremap <leader>pp <Cmd>lua Snacks.picker.resume()<CR>
+nnoremap <leader>pq <Cmd>lua Snacks.picker.qflist()<CR>
+nnoremap <leader>sa <Cmd>lua Snacks.picker.autocmds()<CR>
+nnoremap <leader>sC <Cmd>lua Snacks.picker.commands()<CR>
+nnoremap <leader>sh <Cmd>lua Snacks.picker.help()<CR>
+nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
+nnoremap <leader>sH <Cmd>lua Snacks.picker.highlights()<CR>
+nnoremap <leader>si <Cmd>lua Snacks.picker.icons()<CR>
+nnoremap <leader>sk <Cmd>lua Snacks.picker.keymaps()<CR>
+nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
 
 " XXX: conflicts
 nnoremap ` ~
@@ -299,11 +299,18 @@ nnoremap dy "_dd
 nmap vv Vgc
 
 " `gb` `gc` gl `gs` `gy`
-" nmap gb viqy:!open https://github.com/<C-R>0<CR>
+" TODO: use different register
 nmap gb vi'y:!open https://github.com/<C-R>0<CR>
 xnoremap gb y:!open https://github.com/<C-R>0<CR>
 nmap gy "xyygcc"xp
 nmap gl <Cmd>Config<CR>
+
+nmap gsa yss
+nmap gsc cs
+nmap gsd ds
+
+" `zq` ZA ... ZP, `ZQ` ... `ZZ`
+nmap zq gggqG
 
 " buffers {{{2
 nnoremap <silent> <Tab>         :bnext<CR>
@@ -346,7 +353,6 @@ nnoremap *  *zzzv
 nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
-
 
 " better indenting {{{2
 vnoremap < <gv
@@ -402,7 +408,9 @@ nnoremap ; :
 
 cnoreabbrev <expr> %% expand('%:p:h')
 cnoreabbrev !! !./%
+cnoreabbrev scp !./%
 cnoreabbrev ?? verbose set?<Left>
+cnoreabbrev <expr> scp getcmdtype() == ':' && getcmdline() =~ '^scp' ? '!scp %' : 'scp'
 cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
 cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
 cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
@@ -426,7 +434,7 @@ let g:vim_plugins = {
       \ 'lervag/vimtex'             : 0,
       \ '~/GitHub/rdnajac/src/fzf/' : 0,
       \ 'junegunn/fzf.vim'          : 0,
-      \ 'junegunn/vim-easy-align'   : 0,
+      \ 'junegunn/vim-easy-align'   : 1,
       \ 'tpope/vim-abolish'         : 1,
       \ 'tpope/vim-apathy'          : 1,
       \ 'tpope/vim-commentary'      : 0,
@@ -465,7 +473,46 @@ endif
 " global variables {{{2
 let g:copilot_workspace_folders = ['~/GitHub', '~/.local/share/chezmoi/']
 
+function! PrettyPath() abort
+  let ret = ''
+  " if exists('*luaeval')
+  let l:prefix = luaeval('require("lazy.spec.ui.lualine.components.path").prefix[1]()')
+  let l:suffix = luaeval('require("lazy.spec.ui.lualine.components.path").suffix[1]()')
+  let l:mod = luaeval('require("lazy.spec.ui.lualine.components.path").modified[1]()')
+  let ret .= '%#lualine_a_chromatophore#'
+  let ret .= ' '
+  let ret .= l:prefix
+  let ret .= '%#lualine_ab_chromatophore#'
+  let ret .= '🭛'
+  let ret .= '%#lualine_b_chromatophore#'
+  let ret .= l:suffix
+  return ret
+endfunction
 
-"statusline
-set statusline=
-set statusline+=%S
+function! MyStatusLine() abort
+  let l:statusline = ''
+  let l:statusline .= PrettyPath()
+  let l:statusline .= &ro ? ' ' : ''
+  let l:statusline .= &ft ==# 'help' ? '%h' : ''
+  let l:statusline .= &mod ? '  ' : ''
+
+  " let l:statusline .= '%='
+  " let l:statusline .= '%k'
+  " let l:statusline .= '%S'
+  " let l:statusline .= ' [%2v,%P]'
+  return l:statusline
+endfunction
+
+set showcmdloc=statusline
+" set statusline=%!MyStatusLine()
+" set winbar=%!MyStatusLine()
+" set tabline=%!MyStatusLine()
+" set statusline=%!MyStatusLine()
+" set laststatus=0
+
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" vim:set fdl=2

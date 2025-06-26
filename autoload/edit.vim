@@ -1,6 +1,48 @@
-function! s:edit_config(file) abort
-  let l:target = expand('~/.config/' . a:file)
-    " let l:edit = 'ChezmoiEdit'
-    let l:edit = 'edit'
-  execute printf('%s %s', l:edit, fnameescape(l:target))
+" check if there is an edit.vim file in the runtime path
+function! s:vsplit(path) abort
+  let layout = winlayout()
+  let cmd = 'vsplit'
+  if layout[0] ==# 'row' && len(layout[1]) > 1
+    let rightwin = win_id2win(layout[1][1][1])
+    if rightwin > 0
+      let cmd = rightwin . 'wincmd w | edit'
+    endif
+  endif
+  execute cmd . ' ' . a:path
+  normal! zvzz
+endfunction
+
+function! s:edit_if_readable(file) abort
+  if filereadable(a:file)
+    call s:vsplit(a:file)
+  else
+    echoerr 'File not found: ' . a:file
+  endif
+endfunction
+
+function! edit#vimrc(...) abort
+  let cmd = (a:0 && !empty(a:1)) ? a:1 : ''
+  call s:vsplit((!empty(cmd) ? cmd . ' ' : '') . $MYVIMRC)
+endfunction
+
+let s:vimdir = fnamemodify($MYVIMRC, ':p:h')
+function! edit#filetype(dir, ext) abort
+  let file = &filetype !=# '' ? s:vimdir . '/' . a:dir . &filetype . a:ext : s:vimdir . '/' . a:dir
+  call s:vsplit(file)
+endfunction
+
+function! edit#module(name) abort
+  call s:vsplit(stdpath('config'). '/lua/' . a:name . '.lua')
+endfunction
+
+function! edit#ch() abort
+  let file = expand('%:p')
+  let base = fnamemodify(file, ':t')
+  let dir = fnamemodify(file, ':h')
+  for swap in [['autoload', 'plugin'], ['plugin', 'autoload']]
+    if fnamemodify(dir, ':t') ==# swap[0]
+      let alt = fnamemodify(dir, ':h') . '/' . swap[1] . '/' . base
+      call s:edit_if_readable(alt)
+    endif
+  endfor
 endfunction

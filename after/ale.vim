@@ -3,8 +3,6 @@ if has('nvim')
   let g:ale_use_neovim_diagnostics_api = 1
 endif
 
-
-" ALE globals {{{3
 let g:ale_fixers = {
       \   '*': ['remove_trailing_lines', 'trim_whitespace'],
       \}
