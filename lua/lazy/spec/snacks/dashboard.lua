@@ -1,3 +1,11 @@
+local header = [[
+      ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
+      ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
+      ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
+      ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
+      ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
+      ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
+]]
 local str = [["The computing scientist's main challenge is not to get confused by the complexities of his own making."]]
 local M = {}
 ---@module "snacks"
@@ -6,26 +14,25 @@ local M = {}
 M.config = {
   sections = {
     { section = 'header' },
+    --     {
+    --       section = 'terminal',
+    --       padding = 1,
+    --       cmd = [[sh -c 'cat <<EOF | lolcat
+    -- ]] .. header .. [[
+    -- EOF']],
+    --     },
     { section = 'keys' },
     {
       section = 'terminal',
       padding = 1,
+      indent = 8,
       width = 69,
       cmd = 'cowsay ' .. str .. ' | lolcat',
-      opts = { win_opts = { border = 'none' } },
-      indent = 8,
     },
     { section = 'startup', padding = 1 },
   },
   preset = {
-    header = [[
-          ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
-          ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
-          ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
-          ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
-          ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
-          ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
-    ]],
+    header = header,
     keys = {
       { icon = ' ', title = 'Recent Files' },
       -- TODO: add resture session button/function/command

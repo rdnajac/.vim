@@ -29,7 +29,7 @@ return {
 
     ---@type table<string, string>
     _G.ModeColor = {
-      normal = '#a4daff',
+      normal = '#9ece6a',
       insert = '#14aeff',
       visual = '#f7768e',
       replace = '#ff007c',
@@ -38,6 +38,7 @@ return {
       pending = '#39ff14',
     }
   end,
+
   ---@class tokyonight.Config
   opts = {
     style = 'night',
@@ -59,6 +60,7 @@ return {
     on_highlights = function(hl, colors)
       hl['String'] = { fg = '#BB9AF7' }
       hl['Statement'] = { fg = colors.red }
+      -- hl['CmdLine'] = { bg = '#3b4261' }
       hl['StatusLine'] = { bg = 'NONE' }
       hl['StatusLineNC'] = { bg = 'NONE' }
       -- hl['Tabline']             = { bg   = 'NONE' }
@@ -80,9 +82,9 @@ return {
       hl['RenderMarkdownCode'] = { bg = 'NONE' }
 
       hl['SnacksPickerTitle'] = { bold = true, fg = colors.green }
-      hl['@property'] = { fg = '#FFFFFF' }
-      hl['@variable'] = { fg = '#E0AF68' }
-      hl['@keyword'] = { fg = colors.red }
+      -- hl['@property'] = { fg = '#FFFFFF' }
+      -- hl['@variable'] = { fg = '#E0AF68' }
+      -- hl['@keyword'] = { fg = colors.red }
       -- hl['@variable'] = { fg = '#E0AF68' }
     end,
   },

@@ -5,8 +5,8 @@ return {
   ---@type snacks.Config
   opts = {
     bigfile = { enabled = true },
-    dashboard = require('lazy.spec.snacks.dashboard').config,
-    -- dashboard = { enabled = false },
+    -- dashboard = require('lazy.spec.snacks.dashboard').config,
+    dashboard = { enabled = false },
     -- explorer = { enabled = false },
     explorer = { replace_netrw = false },
     image = { enabled = true },

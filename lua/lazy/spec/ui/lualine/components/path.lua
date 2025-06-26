@@ -51,7 +51,7 @@ M.prefix = {
     local icon = '󱉭 '
     local root = find_git_root()
     if root == '' or vim.api.nvim_buf_get_name(0) == '' then
-      return icon .. vim.fn.getcwd()
+      return icon
     end
     local cwd = normalize(vim.fn.getcwd())
     local rel = cwd:find(root, 1, true) == 1 and cwd:sub(#root + 2) or ''
@@ -88,7 +88,6 @@ M.suffix = {
     end
     return out
   end,
-  separator = { right = '🭛' },
   cond = function()
     return not vim.api.nvim_buf_get_name(0):match('^oil://')
   end,
@@ -100,15 +99,14 @@ M.modified = {
     if vim.bo.modified or vim.bo.readonly then
       out = ' '
       if vim.bo.modified then
-        out = out .. ''
+        out = out .. ' '
       end
       if vim.bo.readonly then
-        out = out .. ''
+        out = out .. ' '
       end
     end
     return out
   end,
-  separator = { right = '' },
 }
 
 return M

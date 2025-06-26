@@ -1,6 +1,7 @@
 return {
   {
     'nvim-lualine/lualine.nvim',
+    enabled = false,
     event = { 'LazyFile', 'VeryLazy' },
     opts = function()
       local x = require('lazy.spec.lualine.extensions')
@@ -15,7 +16,7 @@ return {
       local opts = {
         options = {
           theme = require('lazy.spec.lualine.theme'),
-          globalstatus = true,
+          -- globalstatus = true,
           always_show_tabline = true,
           disabled_filetypes = {
             statusline = { 'help', 'man', 'snacks_dashboard' },
@@ -25,7 +26,8 @@ return {
           section_separators = {},
           component_separators = { left = '', right = '' },
         },
-        sections = require('lazy.spec.lualine.statusline'),
+        -- sections = require('lazy.spec.lualine.statusline'),
+        -- sections = {},
         tabline = {
           lualine_a = { require('lazy.spec.lualine.components.path').prefix },
           lualine_b = {

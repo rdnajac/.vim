@@ -52,15 +52,16 @@ M.sources = {
       },
     },
   },
-  recent = {
-    filter = {
-      paths = {
-        [vim.fn.stdpath('data')] = true,
-        [vim.fn.stdpath('cache')] = false,
-        [vim.fn.stdpath('state')] = false,
-      },
-    },
-  },
+  -- recent = {
+  --   filter = {
+  --     paths = {
+  --       [vim.fn.stdpath('config')] = true,
+  --       [vim.fn.stdpath('data')] = true,
+  --       [vim.fn.stdpath('cache')] = false,
+  --       [vim.fn.stdpath('state')] = false,
+  --     },
+  --   },
+  -- },
   grep = {
     config = function(opts)
       local cwd = opts.cwd or vim.loop.cwd()
