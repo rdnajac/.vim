@@ -16,7 +16,4 @@ M.expr = function()
   return vim.b[buf].ts_folds and vim.treesitter.foldexpr() or '0'
 end
 
--- vim.opt.foldmethod = "expr"
--- vim.opt.foldexpr = "v:lua.my_foldexpr()"
-
 return M

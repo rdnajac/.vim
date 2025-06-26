@@ -1,8 +1,4 @@
--- Incremental selection
-
-local M = {}
-
-M.parsers = {
+return {
   -- 'asm',
   'bash',
   -- 'bibtex',
@@ -42,5 +38,3 @@ M.parsers = {
   'xml',
   'yaml',
 }
-
-return M

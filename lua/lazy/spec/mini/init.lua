@@ -8,7 +8,7 @@ return {
     end
   end,
   config = function()
-    require('mini.align').setup({})
+    require('lazy.spec.mini.ai')
     require('mini.diff').setup({
       view = {
         style = 'number',
