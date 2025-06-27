@@ -1,4 +1,4 @@
-local lib = require('nvim.util.navic.lib')
+local lib = require('nvim.ui.navic.lib')
 local M = {}
 
 local icons = require('lazy.config').icons

@@ -1,5 +1,5 @@
-local navic = require('nvim.util.navic')
-local navic_lib = require('nvim.util.navic.lib')
+local navic = require('nvim.ui.navic')
+local navic_lib = require('nvim.ui.navic.lib')
 
 local M = require('lualine.component'):extend()
 local utils = require('lualine.utils.utils')

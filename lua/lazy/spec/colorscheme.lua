@@ -1,44 +1,6 @@
 return {
   'folke/tokyonight.nvim',
   -- dev = true,
-  init = function()
-    ---@type table<string, string>
-    _G.ModeLowerKey = setmetatable({
-      NORMAL = 'normal',
-      INSERT = 'insert',
-      VISUAL = 'visual',
-      ['V-LINE'] = 'visual',
-      ['V-BLOCK'] = 'visual',
-      SELECT = 'visual',
-      ['S-LINE'] = 'visual',
-      ['S-BLOCK'] = 'visual',
-      REPLACE = 'replace',
-      ['V-REPLACE'] = 'replace',
-      COMMAND = 'command',
-      EX = 'command',
-      CONFIRM = 'command',
-      SHELL = 'shell',
-      TERMINAL = 'terminal',
-      O_PENDING = 'pending',
-      MORE = 'more',
-    }, {
-      __index = function()
-        return 'normal'
-      end,
-    })
-
-    ---@type table<string, string>
-    _G.ModeColor = {
-      normal = '#9ece6a',
-      insert = '#14aeff',
-      visual = '#f7768e',
-      replace = '#ff007c',
-      command = '#39ff14',
-      terminal = '#BB9AF7',
-      pending = '#39ff14',
-    }
-  end,
-
   ---@class tokyonight.Config
   opts = {
     style = 'night',

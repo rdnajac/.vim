@@ -14,7 +14,7 @@ let &spellfile = g:VIMDIR . '.spell/en.utf-8.add'
 set autowrite
 " set backup
 " set confirm
-set fillchars+=diff:╱,
+set fillchars+=diff:╱
 set fillchars+=eob:\ ,
 set fillchars+=stl:\ ,
 set formatoptions-=or
@@ -112,29 +112,11 @@ augroup vimrc " {{{2
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-augroup END
 
-augroup vimrc_filetype " {{{2
   " for when a ftplugin file is not warranted
-  au!
   au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
-  au FileType tmux,sshconfig,mason setlocal iskeyword+=-
 augroup END
 
-augroup SetLocalPath " {{{2
-  " TODO: move to local apathy plugin
-  autocmd!
-  let s:default_path = escape(&path, '\ ') " store default value of 'path'
-
-  " Always add the current file's directory to the path and tags list if not
-  " already there. Add it to the beginning to speed up searches.
-  autocmd BufRead *
-	\ let s:tempPath = escape(escape(expand("%:p:h"), ' '), '\ ') |
-	\ exec "set path-=" . s:tempPath |
-	\ exec "set path-=" . s:default_path |
-	\ exec "set path^=" . s:tempPath |
-	\ exec "set path^=" . s:default_path
-augroup END
 " }}}1
 
 " § commands {{{1
@@ -214,6 +196,9 @@ nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
 
 nnoremap <leader>bd :lua Snacks.bufdelete()<CR>
 
+nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
+nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
+
 nnoremap <leader>fC :lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff :lua Snacks.picker.files()<CR>
 nnoremap <leader>fr :lua Snacks.picker.recent()<CR>
@@ -251,11 +236,20 @@ nnoremap <leader>pq <Cmd>lua Snacks.picker.qflist()<CR>
 nnoremap <leader>sa <Cmd>lua Snacks.picker.autocmds()<CR>
 nnoremap <leader>sC <Cmd>lua Snacks.picker.commands()<CR>
 nnoremap <leader>sh <Cmd>lua Snacks.picker.help()<CR>
-nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
 nnoremap <leader>sH <Cmd>lua Snacks.picker.highlights()<CR>
 nnoremap <leader>si <Cmd>lua Snacks.picker.icons()<CR>
 nnoremap <leader>sk <Cmd>lua Snacks.picker.keymaps()<CR>
 nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
+
+" debug
+nnoremap <leader>da <Cmd>ALEInfo<CR>
+nnoremap <leader>db <Cmd>Blink status<CR>
+nnoremap <leader>dc <Cmd>lua=vim.lsp.get_clients()[1].server_capabilities<CR>
+nnoremap <leader>dd <Cmd>LazyDev debug<CR>
+nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
+nnoremap <leader>dh <Cmd>LazyHealth<CR>
+nnoremap <leader>dS <Cmd>lua=require('snacks').meta.get()<CR>
+nnoremap <leader>dw <Cmd>lua=vim.lsp.buf.list_workspace_folders()<CR>
 
 " XXX: conflicts
 nnoremap ` ~

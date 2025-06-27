@@ -15,7 +15,7 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.opt.formatoptions:remove({ 'r', 'o' })
     Snacks.util.set_hl({
       LspReferenceText = {},
-      LspReferenceWrite = {},
+      -- LspReferenceWrite = {},
     })
   end,
   group = nvimrc,

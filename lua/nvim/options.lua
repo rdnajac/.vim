@@ -1,8 +1,6 @@
 local M = {}
 
 M.options = function()
-  vim.opt.backup = true
-  vim.opt.backupdir = vim.fn.stdpath('state') .. '/backup//'
   vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
   -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
   vim.opt.foldexpr = 'v:lua.require("nvim.treesitter.fold").expr()'
@@ -10,42 +8,19 @@ M.options = function()
   vim.opt.mousescroll = 'hor:0'
   vim.opt.pumblend = 0
   vim.opt.smoothscroll = true
-  vim.opt.laststatus = 3
-end
-
-local icons = LazyVim.config.icons
-
-M.diagnostic = function()
-  vim.diagnostic.config({
-    underline = false,
-    severity_sort = true,
-    signs = {
-      text = {
-        [vim.diagnostic.severity.ERROR] = icons.diagnostics.error,
-        [vim.diagnostic.severity.WARN] = icons.diagnostics.warn,
-        [vim.diagnostic.severity.HINT] = icons.diagnostics.hint,
-        [vim.diagnostic.severity.INFO] = icons.diagnostics.info,
-      },
-      numhl = {
-        [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
-        [vim.diagnostic.severity.WARN] = 'DiagnosticWarn',
-        [vim.diagnostic.severity.INFO] = 'DiagnosticInfo',
-        [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
-      },
-    },
-  })
 end
 
 M.lsp = function()
   -- Refer to `:h vim.lsp.config()` for more information.
   vim.lsp.config('*', {
+    -- ~/.local/share/nvim/lazy/blink.cmp/plugin/blink-cmp.lua
     -- capabilities = require('blink.cmp').get_lsp_capabilities(),
 
     ---@param client vim.lsp.Client
     ---@param bufnr integer
     on_attach = function(client, bufnr)
       if client:supports_method('textDocument/documentSymbol') then
-        require('nvim.util.navic').attach(client, bufnr)
+        require('nvim.ui.navic').attach(client, bufnr)
       end
 
       if client:supports_method('textDocument/inlayHint') then
@@ -85,7 +60,6 @@ M.lsp = function()
 end
 
 M.options()
-M.diagnostic()
 M.lsp()
 
 return M

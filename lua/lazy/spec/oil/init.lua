@@ -10,7 +10,7 @@ return {
     { '_', '<Cmd>Oil --float<CR>' },
   },
   opts = function()
-    require('lazy.spec.oil.au')
+    require('lazy.spec.oil.autocmds')
 
     local refresh = require('oil.actions').refresh
     local orig_refresh = refresh.callback

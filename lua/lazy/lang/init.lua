@@ -83,7 +83,7 @@ return {
         end,
       })
       LazyVim.on_very_lazy(function()
-        local ensure_installed = require('nvim.treesitter').parsers
+        local ensure_installed = require('nvim.treesitter.parsers')
         require('nvim-treesitter').install(ensure_installed)
       end)
     end,

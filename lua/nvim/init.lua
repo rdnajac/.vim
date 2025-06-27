@@ -27,6 +27,7 @@ if vim.env.PROF then
   require('snacks').profiler.startup(profiler)
 end
 
+require('nvim.ui')
 require('lazy.bootstrap')
 
 -- autocmds can be loaded lazily when not opening a file
@@ -42,6 +43,5 @@ LazyVim.on_very_lazy(function()
   end
   require('nvim.keymaps')
   require('nvim.options')
+  require('nvim.diagnostic')
 end)
-
-require('nvim.hacks')

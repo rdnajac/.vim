@@ -1,21 +1,39 @@
--- Override lualine's highlight group generator with fixed chromatophore name
--- package.preload['lualine.highlight'] = function()
---   local mod = dofile(vim.api.nvim_get_runtime_file('lua/lualine/highlight.lua', false)[1])
---   mod.create_component_highlight_group = function(_, _, options, _)
---     return {
---       name = 'lualine_' .. options.self.section .. '_chromatophore',
---       fn = nil,
---       no_mode = true,
---       link = false,
---       section = options.self.section,
---       options = options,
---       no_default = true,
---     }
---   end
---   return mod
--- end
+local get_mode = require('nvim.mode').get_mode
 
-local get_mode = require('lazy.spec.ui.lualine.mode').get_mode
+    ---@type table<string, string>
+    _G.ModeColor = {
+      normal = '#9ece6a',
+      insert = '#14aeff',
+      visual = '#f7768e',
+      replace = '#ff007c',
+      command = '#39ff14',
+      terminal = '#BB9AF7',
+      pending = '#39ff14',
+    }
+    ---@type table<string, string>
+    _G.ModeLowerKey = setmetatable({
+      NORMAL = 'normal',
+      INSERT = 'insert',
+      VISUAL = 'visual',
+      ['V-LINE'] = 'visual',
+      ['V-BLOCK'] = 'visual',
+      SELECT = 'visual',
+      ['S-LINE'] = 'visual',
+      ['S-BLOCK'] = 'visual',
+      REPLACE = 'replace',
+      ['V-REPLACE'] = 'replace',
+      COMMAND = 'command',
+      EX = 'command',
+      CONFIRM = 'command',
+      SHELL = 'shell',
+      TERMINAL = 'terminal',
+      O_PENDING = 'pending',
+      MORE = 'more',
+    }, {
+      __index = function()
+        return 'normal'
+      end,
+    })
 
 ---@return string
 function _G.current_mode_color()
@@ -64,28 +82,3 @@ for _, key in ipairs(visual_modes) do
   end)
 end
 
--- vim.api.nvim_create_autocmd('CmdlineEnter', {
---   group = vim.api.nvim_create_augroup('LualineChromatophore', { clear = true }),
---   callback = function()
---     vim.api.nvim_set_hl(0, 'Normal', { link = 'lualine_b_chromatophore' })
---   end,
--- })
---
--- vim.api.nvim_create_autocmd('CmdlineLeave', {
---   group = 'LualineChromatophore',
---   callback = function()
---     vim.api.nvim_set_hl(0, 'Normal', { fg = '#c0caf5', bg = 'NONE' })
---   end,
--- })
-
--- return dummy theme
-return {
-  normal = {
-    a = { fg = 'NONE' },
-    b = { fg = 'NONE' },
-    c = { fg = 'NONE' },
-    x = { fg = 'NONE' },
-    y = { fg = 'NONE' },
-    z = { fg = 'NONE' },
-  },
-}
