@@ -1,11 +1,3 @@
-local lazynvim = lazypath .. '/lazy.nvim'
-
-if not vim.uv.fs_stat(lazynvim) then
-  load(vim.fn.system('curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua'))()
-else
-  vim.opt.rtp:prepend(lazynvim)
-end
-
 ---@type LazyConfig
 require('lazy').setup({
   spec = {
@@ -43,3 +35,4 @@ require('lazy').setup({
     },
   },
 })
+

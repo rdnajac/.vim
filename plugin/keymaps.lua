@@ -44,9 +44,9 @@ end
 wk.add({
   map_pickers('c', vim.fn.stdpath('config'), 'Config Files'),
   map_pickers('G', vim.fn.expand('~/GitHub/'), 'GitHub Repos'),
-  map_pickers('P', lazypath, 'Plugins'),
-  map_pickers('L', lazypath .. '/LazyVim', 'LazyVim'),
-  map_pickers('S', lazypath .. '/snacks.nvim', 'Snacks'),
+  map_pickers('P', vim.g.lazypath, 'Plugins'),
+  map_pickers('L', vim.g.lazypath .. '/LazyVim', 'LazyVim'),
+  map_pickers('S', vim.g.lazypath .. '/snacks.nvim', 'Snacks'),
   map_pickers('v', vim.fn.expand('$VIMRUNTIME'), '$VIMRUNTIME'),
   map_pickers('V', vim.fn.expand('$VIM'), '$VIM'),
   { '<leader>fb', function() Snacks.picker.buffers() end, desc = 'Buffers', },
@@ -66,7 +66,7 @@ Snacks.toggle.profiler_highlights():map('<leader>dph')
 
 vim.keymap.set({ 'i', 'n', 's' }, '<esc>', function()
   vim.cmd('noh')
-  LazyVim.cmp.actions.snippet_stop()
+  -- LazyVim.cmp.actions.snippet_stop()
   return '<Esc>'
 end, { expr = true, desc = 'Escape and Clear hlsearch' })
 

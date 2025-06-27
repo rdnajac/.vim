@@ -38,7 +38,7 @@ return {
             components = {
               kind_icon = {
                 text = function(ctx)
-                  local kind_icons = require('snacks.picker.config.defaults').defaults.icons.kinds
+                  local kind_icons = require('nvim.ui.icons').kinds
                   return kind_icons[ctx.kind] or ''
                 end,
               },

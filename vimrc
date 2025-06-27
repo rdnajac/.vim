@@ -1,10 +1,11 @@
 " vimrc
 scriptencoding=utf-8
 
-" § settings {{{1
+" Section: settings {{{1
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 let g:VIMDIR = fnamemodify($MYVIMRC, ':p:h')
+let g:plug_home = g:VIMDIR . '.plugged/'
 let &spellfile = g:VIMDIR . '.spell/en.utf-8.add'
 " let &undodir     = s:VIMHOME . '.undo//'
 " let &viminfofile = s:VIMHOME . '.viminfo'
@@ -12,6 +13,7 @@ let &spellfile = g:VIMDIR . '.spell/en.utf-8.add'
 
 " options {{{2
 set autowrite
+set autowriteall
 " set backup
 " set confirm
 set fillchars+=diff:╱
@@ -83,10 +85,11 @@ set numberwidth=4
 " set signcolumn=yes
 " }}}1
 
-" § autocmds {{{1
-augroup vimrc " {{{2
+" Section: autocmds {{{2
+augroup vimrc
   au!
   au BufWritePost $MYVIMRC nested source $MYVIMRC | echom 'vimrc reloaded'
+  au VimEnter * nested call sesh#restore()
 
   " restore cursor position (and open any folds) when opening a file
   " au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
@@ -115,14 +118,23 @@ augroup vimrc " {{{2
 
   " for when a ftplugin file is not warranted
   au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
+
+  au VimEnter * if filereadable(get(g:, 'this_session', '')) |
+	\ execute 'silent! source ' . fnameescape(g:this_session) |
+	\ endif
 augroup END
 
 " }}}1
 
-" § commands {{{1
+" Section: commands {{{1
+command! Restart Obsession | restart
 command! -bang Quit call quit#buffer(<q-bang>)
 command! CleanWhitespace call format#clean_whitespace()
 command! Format call format#buffer()
+
+command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
+command! -bar -bang          Delete call bin#delete#delete(<bang>0)
+command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 nnoremap <leader>q <Cmd>Quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
@@ -144,13 +156,13 @@ command! Config :lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
 command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
 " }}}1
 
-" § keymaps {{{1
+" Section: keymaps {{{1
 nnoremap <leader><Space> viW
 nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
 nnoremap <leader>K  <Cmd>norm! K<CR>
 nnoremap <leader>R  <Cmd>restart!<CR>
-nnoremap <leader>r  <Cmd>restart<CR>
+nnoremap <leader>r  <Cmd>Restart<CR>
 nnoremap <leader>S  <Cmd>Scriptnames<CR>
 nnoremap <leader>.  <Cmd>Scratch<CR>
 nnoremap <leader>>  <Cmd>Scratch!<CR>
@@ -173,35 +185,30 @@ nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
 nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
 
-nnoremap <leader>va <Cmd>vsplit +/§\ autocmds $MYVIMRC<CR>zvzz
-nnoremap <leader>vc <Cmd>vsplit +/§\ commands $MYVIMRC<CR>zvzz
-nnoremap <leader>vk <Cmd>vsplit +/§\ keymaps $MYVIMRC<CR>zvzz
-nnoremap <leader>vp <Cmd>vsplit +/§\ plugins $MYVIMRC<CR>zvzz
-nnoremap <leader>vs <Cmd>vsplit +/§\ settings $MYVIMRC<CR>zvzz
-nnoremap <leader>va <Cmd>call edit#vimrc('+/§\ autocmds')<CR>
-nnoremap <leader>vc <Cmd>call edit#vimrc('+/§\ commands')<CR>
-nnoremap <leader>vk <Cmd>call edit#vimrc('+/§\ keymaps')<CR>
-nnoremap <leader>vp <Cmd>call edit#vimrc('+/§\ plugins')<CR>
-nnoremap <leader>vs <Cmd>call edit#vimrc('+/§\ settings')<CR>
-
+nnoremap <leader>va <Cmd>vsplit +/Section:\ autocmds $MYVIMRC<CR>zvzz
+nnoremap <leader>vc <Cmd>vsplit +/Section:\ commands $MYVIMRC<CR>zvzz
+nnoremap <leader>vk <Cmd>vsplit +/Section:\ keymaps $MYVIMRC<CR>zvzz
+nnoremap <leader>vp <Cmd>vsplit +/Section:\ plugins $MYVIMRC<CR>zvzz
+nnoremap <leader>vs <Cmd>vsplit +/Section:\ settings $MYVIMRC<CR>zvzz
+nnoremap <leader>va <Cmd>call edit#vimrc('+/Section:\ autocmds')<CR>
+nnoremap <leader>vc <Cmd>call edit#vimrc('+/Section:\ commands')<CR>
+nnoremap <leader>vk <Cmd>call edit#vimrc('+/Section:\ keymaps')<CR>
+nnoremap <leader>vp <Cmd>call edit#vimrc('+/Section:\ plugins')<CR>
+nnoremap <leader>vs <Cmd>call edit#vimrc('+/Section:\ settings')<CR>
 
 nnoremap <leader>v <Cmd>call edit#vimrc()<CR>
-nnoremap <BSlash>a <Cmd>call edit#module('nvim/autocmds')<CR>
 nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
-nnoremap <BSlash>k <Cmd>call edit#module('nvim/keymaps')<CR>
-nnoremap <BSlash>o <Cmd>call edit#module('nvim/options')<CR>
-nnoremap <BSlash>h <Cmd>call edit#module('nvim/hacks')<CR>
 nnoremap <BSlash>l <Cmd>call edit#module('lazy/spec/init')<CR>
 nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
 
-nnoremap <leader>bd :lua Snacks.bufdelete()<CR>
 
 nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
 nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
+nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 
-nnoremap <leader>fC :lua Snacks.rename.rename_file()<CR>
-nnoremap <leader>ff :lua Snacks.picker.files()<CR>
-nnoremap <leader>fr :lua Snacks.picker.recent()<CR>
+nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
+nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
+nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
 
 nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
 nnoremap <leader>gB <Cmd>lua Snacks.gitbrowse()<CR>
@@ -376,7 +383,7 @@ nmap yow :set wrap!<BAR>set wrap?<CR>
 nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 
 " insert special chars {{{2
-inoremap \sec §
+inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
@@ -403,7 +410,7 @@ cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 " }}}1
 
-" § plugins {{{1
+" Section: plugins {{{1
 " key = vimscript plugin, value = also enabled in nvim
 let g:vim_plugins = {
       \ 'dense-analysis/ale'        : 0,
@@ -412,21 +419,25 @@ let g:vim_plugins = {
       \ '~/GitHub/rdnajac/src/fzf/' : 0,
       \ 'junegunn/fzf.vim'          : 0,
       \ 'junegunn/vim-easy-align'   : 1,
+      \ 'tpope/vim-commentary'      : 0,
+      \ 'tpope/vim-speeddating'     : 0,
+      \ 'tpope/vim-vinegar'         : 0,
       \ 'tpope/vim-abolish'         : 1,
       \ 'tpope/vim-apathy'          : 1,
-      \ 'tpope/vim-commentary'      : 0,
-      \ 'tpope/vim-endwise'         : 0,
+      \ 'tpope/vim-capslock'        : 1,
+      \ 'tpope/vim-characterize'    : 1,
+      \ 'tpope/vim-endwise'         : 1,
+      \ 'tpope/vim-eunuch'          : 1,
+      \ 'tpope/vim-git'             : 1,
       \ 'tpope/vim-fugitive'        : 1,
       \ 'tpope/vim-repeat'          : 1,
       \ 'tpope/vim-obsession'       : 1,
       \ 'tpope/vim-rsi'             : 1,
       \ 'tpope/vim-scriptease'      : 1,
-      \ 'tpope/vim-sensible'        : 0,
-      \ 'tpope/vim-speeddating'     : 0,
+      \ 'tpope/vim-sensible'        : 1,
       \ 'tpope/vim-surround'        : 1,
-      \ 'tpope/vim-tbone'           : 0,
-      \ 'tpope/vim-unimpaired'      : 0,
-      \ 'tpope/vim-vinegar'         : 0,
+      \ 'tpope/vim-tbone'           : 1,
+      \ 'tpope/vim-unimpaired'      : 1,
       \ 'vuciv/golf'                : 0,
       \ 'AndrewRadev/splitjoin.vim' : 1,
       \ 'Konfekt/FastFold'          : 0
@@ -435,7 +446,6 @@ let g:vim_plugins = {
 if has('nvim')
   if !exists('g:loaded_nvim')
     lua require('nvim')
-    command! LazyHealth Lazy! load all | checkhealth
     let g:loaded_nvim = 1
   endif
 else
@@ -487,10 +497,6 @@ set showcmdloc=statusline
 " set statusline=%!MyStatusLine()
 " set laststatus=0
 
-" Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
-
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
 " vim:set fdl=2
-

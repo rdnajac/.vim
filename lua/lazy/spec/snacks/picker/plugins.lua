@@ -3,7 +3,7 @@ local M = {}
 local lazy_plugin_dirs = function()
   local items = {}
 
-  for _, dir in ipairs(vim.fn.glob(lazypath .. '/*', true, true)) do
+  for _, dir in ipairs(vim.fn.glob(vim.g.lazypath .. '/*', true, true)) do
     if vim.fn.isdirectory(dir) == 1 then
       table.insert(items, {
         text = vim.fn.fnamemodify(dir, ':t'),

@@ -22,10 +22,13 @@ function! s:edit_if_readable(file) abort
 endfunction
 
 function! edit#vimrc(...) abort
-  let cmd = (a:0 && !empty(a:1)) ? a:1 : ''
-  call s:vsplit((!empty(cmd) ? cmd . ' ' : '') . $MYVIMRC)
+let l:cmd = ((a:0 && !empty(a:1)) ? a:1 . ' ' : '') . $MYVIMRC
+  if fnamemodify(bufname('%'), ':p') ==# $MYVIMRC
+    execute 'edit ' . l:cmd
+  else
+    call s:vsplit(l:cmd)
+  endif
 endfunction
-
 let s:vimdir = fnamemodify($MYVIMRC, ':p:h')
 function! edit#filetype(dir, ext) abort
   let file = &filetype !=# '' ? s:vimdir . '/' . a:dir . &filetype . a:ext : s:vimdir . '/' . a:dir

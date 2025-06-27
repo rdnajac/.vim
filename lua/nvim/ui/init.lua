@@ -1,5 +1,4 @@
 -- make our these settings load before `UIEnter`
--- require('nvim.ui.chromatophore')
 
 if vim.fn.argc(-1) == 0 then
   vim.opt.winborder = 'none'
@@ -40,4 +39,5 @@ vim.api.nvim_create_autocmd('CmdlineEnter', {
   command = 'set laststatus=0',
 })
 
+require('nvim.ui.chromatophore') -- XXX: experimental!
 require('vim._extui').enable({}) -- XXX: experimental!

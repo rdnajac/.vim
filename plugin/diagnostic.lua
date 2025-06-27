@@ -1,5 +1,5 @@
 -- local icons = LazyVim.config.icons
-local icons = require('lazy.config').icons
+local icons = require('nvim.ui.icons')
 
 vim.diagnostic.config({
   underline = false,

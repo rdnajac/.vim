@@ -1,47 +1,24 @@
 vim.loader.enable() -- XXX: experimental!
 
-_G.lazypath = vim.fn.stdpath('data') .. '/lazy'
+vim.g.lazypath = vim.fn.stdpath('data') .. '/lazy'
+local lazynvim = vim.g.lazypath .. '/lazy.nvim'
 
-_G.dd = function(...)
-  return (function(...)
-    return Snacks.debug.inspect(...)
-  end)(...)
-end
-
-_G.bt = function()
-  Snacks.debug.backtrace()
-end
-vim.print = _G.dd
-
--- optional profiling with `PROF=1 nvim`
-if vim.env.PROF then
-  vim.opt.rtp:append(lazypath .. '/snacks.nvim')
-  ---@type snacks.profiler.Config
-  local profiler = {
-    startup = {
-      -- event = 'VeryLazy',
-      -- event = 'UIEnter',
-    },
-    presets = { startup = { min_time = 0, sort = false } },
-  }
-  require('snacks').profiler.startup(profiler)
+if not vim.uv.fs_stat(lazynvim) then
+  load(vim.fn.system('curl -s https://raw.githubusercontent.com/folke/lazy.nvim/main/bootstrap.lua'))()
+else
+  vim.opt.rtp:prepend(lazynvim)
 end
 
 require('nvim.ui')
 require('lazy.bootstrap')
 
--- autocmds can be loaded lazily when not opening a file
-local lazy = vim.fn.argc(-1) == 0
-
-if not lazy then
-  require('nvim.autocmds')
-end
-
 LazyVim.on_very_lazy(function()
-  if lazy then
-    require('nvim.autocmds')
-  end
-  require('nvim.keymaps')
-  require('nvim.options')
-  require('nvim.diagnostic')
+  vim.cmd([[command! LazyHealth Lazy! load all | checkhealth]])
+  vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
+  -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
+  vim.opt.foldexpr = 'v:lua.require("nvim.treesitter.fold").expr()'
+  vim.opt.jumpoptions = 'view,stack'
+  vim.opt.mousescroll = 'hor:0'
+  vim.opt.pumblend = 0
+  vim.opt.smoothscroll = true
 end)

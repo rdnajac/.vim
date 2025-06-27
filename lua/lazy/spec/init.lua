@@ -2,6 +2,10 @@ require('lazy.file')
 
 return {
   {
+    'folke/tokyonight.nvim',
+    -- dev = true,
+  },
+  {
     'LazyVim/LazyVim',
     priority = 9999,
     -- HACK: override the default LazyVim config entirely
@@ -9,7 +13,7 @@ return {
       _G.LazyVim = require('lazyvim.util')
       LazyVim.config = require('lazy.config')
       -- LazyVim.track('colorscheme')
-      require('tokyonight').load()
+      require('tokyonight').load(require('nvim.ui.tokyonight'))
       -- LazyVim.track()
       -- LazyVim.on_very_lazy(function()
       --   LazyVim.format.setup()
@@ -28,9 +32,9 @@ return {
       preset = 'helix',
       show_help = false,
       sort = { 'order', 'alphanum', 'case', 'mod' },
-  triggers = {
-    { '<leader>', mode = { 'n', 'v' } },
-  },
+      triggers = {
+        { '<leader>', mode = { 'n', 'v' } },
+      },
       spec = {
         {
           -- {

@@ -1,12 +1,6 @@
 return {
   icons = {
     -- ft = { octo = ' ' },
-    diagnostics = {
-      error = '🔥',
-      warn = '💩',
-      hint = '🧠',
-      info = '👾',
-    },
     git = {
       added = ' ',
       modified = ' ',

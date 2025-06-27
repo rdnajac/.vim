@@ -4,7 +4,7 @@ M.active = {
   lualine_a = {
     {
       'diagnostics',
-      symbols = LazyVim.config.icons.diagnostics,
+      symbols = require('nvim.ui.icons').diagnostics,
       always_visible = true,
       color = { bg = '#3b4261' },
       -- separator = { right = '🭛' },
