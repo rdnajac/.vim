@@ -8,7 +8,7 @@ return {
     iskeyword = '@,48-57,_,192-255,-#',
     vimruntime = '',
     runtimepath = '',
-    diagnostic = { enable = true },
+    diagnostic = { enable = false },
     indexes = {
       runtimepath = true,
       gap = 100,

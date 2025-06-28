@@ -1,4 +1,4 @@
-langsetup({ { 'vim-language-server', 'vimls' } })
+langsetup({ { 'vim-language-server', 'vimls' }, 'vint' })
 
 return {
   -- iterate over the plugins defined in vim.g.vim_plugins
