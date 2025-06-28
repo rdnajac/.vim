@@ -12,6 +12,44 @@ end
 
 ---@type snacks.picker.sources.Config|{}|table<string, snacks.picker.Config|{}>
 M.sources = {
+  explorer = {
+    cwd = vim.fn.getcwd(),
+    ignored = true,
+    win = {
+      list = {
+        keys = {
+          ['<BS>'] = 'explorer_up',
+          ['l'] = 'confirm',
+          ['h'] = 'explorer_close', -- close directory
+          ['a'] = 'explorer_add',
+          ['d'] = 'explorer_del',
+          ['r'] = 'explorer_rename',
+          ['c'] = 'explorer_copy',
+          ['m'] = 'explorer_move',
+          ['o'] = 'explorer_open', -- open with system application
+          ['P'] = 'toggle_preview',
+          ['y'] = { 'explorer_yank', mode = { 'n', 'x' } },
+          ['p'] = 'explorer_paste',
+          ['u'] = 'explorer_update',
+          ['<c-c>'] = 'tcd',
+          ['<leader>/'] = 'picker_grep',
+          ['<c-t>'] = 'terminal',
+          ['.'] = 'explorer_focus',
+          ['I'] = 'toggle_ignored',
+          ['H'] = 'toggle_hidden',
+          ['Z'] = 'explorer_close_all',
+          [']g'] = 'explorer_git_next',
+          ['[g'] = 'explorer_git_prev',
+          [']d'] = 'explorer_diagnostic_next',
+          ['[d'] = 'explorer_diagnostic_prev',
+          [']w'] = 'explorer_warn_next',
+          ['[w'] = 'explorer_warn_prev',
+          [']e'] = 'explorer_error_next',
+          ['[e'] = 'explorer_error_prev',
+        },
+      },
+    },
+  },
   keymaps = { confirm = 'edit', layout = { preset = 'mylayout' } },
   notifications = { layout = { preset = 'ivy' } },
   pickers = { layout = { preset = 'ivy' } },
@@ -44,24 +82,7 @@ M.sources = {
     ignored = false,
     -- stylua: ignore
     actions = { toggle = function(self) toggle(self) end, },
-    win = {
-      input = {
-        keys = {
-          ['<a-t>'] = { 'toggle', mode = { 'n', 'i' }, desc = 'Toggle Files/Grep' },
-        },
-      },
-    },
   },
-  -- recent = {
-  --   filter = {
-  --     paths = {
-  --       [vim.fn.stdpath('config')] = true,
-  --       [vim.fn.stdpath('data')] = true,
-  --       [vim.fn.stdpath('cache')] = false,
-  --       [vim.fn.stdpath('state')] = false,
-  --     },
-  --   },
-  -- },
   grep = {
     config = function(opts)
       local cwd = opts.cwd or vim.loop.cwd()
@@ -72,13 +93,6 @@ M.sources = {
     ignored = false,
     -- stylua: ignore
     actions = { toggle = function(self) toggle(self) end, },
-    win = {
-      input = {
-        keys = {
-          ['<a-t>'] = { 'toggle', mode = { 'n', 'i' }, desc = 'Toggle Files/Grep' },
-        },
-      },
-    },
   },
   icons = {
     layout = {
@@ -97,5 +111,4 @@ M.sources = {
     },
   },
 }
-
 return M
