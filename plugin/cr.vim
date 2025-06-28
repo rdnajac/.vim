@@ -12,7 +12,7 @@ endfunction
 
 function! s:SourceMsg() abort
   execute 'source %'
-  echom expand('%') . ' sourced!'
+  echom 'sourced `' . expand('%') . '`!'
 endfunction
 
 augroup MapCR

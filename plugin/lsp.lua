@@ -23,7 +23,7 @@ vim.lsp.config('*', {
       })
 
       client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.semanticTokensProvider = nil
+      -- client.server_capabilities.semanticTokensProvider = nil
 
       vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
 
@@ -35,8 +35,8 @@ vim.lsp.config('*', {
       { 'grr', function() Snacks.picker.lsp_references() end, desc = 'References', buffer = bufnr, nowait = true, },
       { 'gd',  function() Snacks.picker.lsp_definitions() end,       desc = 'Goto Definition', buffer = bufnr },
       { 'gD',  function() Snacks.picker.lsp_declarations() end,      desc = 'Goto Declaration', buffer = bufnr },
-      { 'gri',  function() Snacks.picker.lsp_implementations() end,   desc = 'Goto Implementation', buffer = bufnr },
-      { 'gry',  function() Snacks.picker.lsp_type_definitions() end,  desc = 'Goto T[y]pe Definition', buffer = bufnr },
+      { 'gri', function() Snacks.picker.lsp_implementations() end,   desc = 'Goto Implementation', buffer = bufnr },
+      { 'gry', function() Snacks.picker.lsp_type_definitions() end,  desc = 'Goto T[y]pe Definition', buffer = bufnr },
       { 'grs', function() Snacks.picker.lsp_symbols() end,           desc = 'LSP Symbols', buffer = bufnr },
       { 'grw', function() Snacks.picker.lsp_workspace_symbols() end, desc = 'LSP Workspace Symbols', buffer = bufnr },
     })

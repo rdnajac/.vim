@@ -1,58 +1,48 @@
-local nvimrc = vim.api.nvim_create_augroup('nvimrc', { clear = true })
+local aug = vim.api.nvim_create_augroup('nvimrc', { clear = true })
 
-vim.api.nvim_create_autocmd('TextYankPost', {
-  callback = function()
-    vim.hl.on_yank()
-  end,
-  desc = 'Briefly highlight yanked text',
-  group = nvimrc,
-})
+local au = function(ev, pattern, cb)
+  vim.api.nvim_create_autocmd(ev, {
+    pattern = pattern,
+    group = aug,
+    callback = cb,
+  })
+end
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'lua', 'vim' },
-  callback = function()
-    -- vim.opt.formatoptions:remove({ 'c' })
-    vim.opt.formatoptions:remove({ 'r', 'o' })
-    Snacks.util.set_hl({
-      -- LspReferenceText = {},
-      -- LspReferenceWrite = {},
-    })
-  end,
-  group = nvimrc,
-})
+au('TextYankPost', '*', function()
+  vim.highlight.on_yank()
+end)
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'help', 'man', 'qf' },
-  callback = function(ev)
-    vim.bo[ev.buf].buflisted = false
-    vim.schedule(function()
-      if Snacks.util.is_transparent() then
-        Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
-      end
-      vim.keymap.set('n', 'q', function()
-        vim.cmd('close')
-        pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
-      end, { buffer = ev.buf, silent = true })
-    end)
-  end,
-  desc = 'Set options for auxiliary buffers',
-  group = nvimrc,
-})
+au('FileType', { 'help', 'man', 'qf' }, function(ev)
+  vim.bo[ev.buf].buflisted = false
+  vim.schedule(function()
+    vim.keymap.set('n', 'q', function()
+      vim.cmd('close')
+      pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
+    end, { buffer = ev.buf, silent = true, desc = 'Quit buffer', })
+    -- if Snacks.util.is_transparent() then
+    --   Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
+    -- end
+  end)
+end)
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'kitty', 'ghostty' },
-  callback = function(event)
-    vim.treesitter.language.register('bash', event.match)
-    vim.treesitter.start(0, 'bash')
-    vim.cmd('setlocal commentstring=#%s')
-  end,
-  desc = 'Use bash parser for kitty and ghostty configs',
-  group = nvimrc,
-})
+au('FileType', { 'kitty', 'ghostty' }, function(ev)
+  vim.treesitter.language.register('bash', ev.match)
+  vim.treesitter.start(0, 'bash')
+  vim.cmd('setlocal commentstring=#%s')
+end)
 
 vim.api.nvim_create_autocmd('BufNewFile', {
   pattern = 'after/lsp/*.lua',
   command = '0r ' .. vim.fn.stdpath('config') .. '/templates/lsp.lua',
-  desc = 'Insert config template on new lsp file',
-  group = nvimrc,
+  group = aug,
+})
+
+vim.api.nvim_create_autocmd('CmdlineEnter', {
+  command = 'set laststatus=0',
+  group = aug,
+})
+
+vim.api.nvim_create_autocmd('CmdlineLeave', {
+  command = 'set laststatus=3',
+  group = aug,
 })

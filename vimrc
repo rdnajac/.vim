@@ -12,6 +12,7 @@ let &spellfile = g:VIMDIR . '.spell/en.utf-8.add'
 " let &verbosefile = s:VIMHOME . '.vimlog.txt'
 
 " options {{{2
+set startofline
 set autowrite
 set autowriteall
 " set backup
@@ -71,26 +72,36 @@ set foldminlines=3
 set foldopen+=insert,jump
 set foldtext=fold#text()
 
+" better search if auto pausing folds
+" set foldopen-=search
+" nnoremap <silent> / zn/
+
 augroup vimrc_fold
   au!
+  " auto_pause_folds
+  " au CmdlineLeave /,\? call fold#pause()
+  " au CursorMoved,CursorMovedI * call fold#unpause()
   au FileType lua setlocal foldmethod=indent
   au FileType tex setlocal foldmethod=syntax
   au FileType vim setlocal foldmethod=marker
 augroup END
+
+nnoremap <expr> h fold#aware_h()
 
 " column {{{3
 " TODO: if nonu, set signcolumn=yes
 set number signcolumn=number
 set numberwidth=4
 " set signcolumn=yes
-" }}}1
+
 
 " Section: autocmds {{{2
 augroup vimrc
   au!
   au BufWritePost $MYVIMRC nested source $MYVIMRC | echom 'vimrc reloaded'
-  au VimEnter * nested call sesh#restore()
+  au VimEnter * nested call sesh#restore() 
 
+  au WinNew * if bufname('') ==# '' && &bt ==# '' && &ft  | exe 'e #' | endif
   " restore cursor position (and open any folds) when opening a file
   " au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
   au BufWinEnter * exe "silent! normal! g`\"zv"
@@ -118,43 +129,19 @@ augroup vimrc
 
   " for when a ftplugin file is not warranted
   au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
-
-  au VimEnter * if filereadable(get(g:, 'this_session', '')) |
-	\ execute 'silent! source ' . fnameescape(g:this_session) |
-	\ endif
 augroup END
 
-" }}}1
-
 " Section: commands {{{1
-command! Restart Obsession | restart
+command! Restart execute 'Obsession ' . g:VIMDIR | restart
 command! -bang Quit call quit#buffer(<q-bang>)
 command! CleanWhitespace call format#clean_whitespace()
 command! Format call format#buffer()
 
-command! -bar -bang -nargs=+ Chmod execute bin#chmod#chmod(<bang>0, <f-args>)
-command! -bar -bang          Delete call bin#delete#delete(<bang>0)
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 nnoremap <leader>q <Cmd>Quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
 nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
-
-" vim commands for Snacks functions
-command! Explorer lua Snacks.picker.explorer({cwd = vim.cmd.pwd()})
-command! Keymaps lua Snacks.picker.keymaps()
-command! Highlights lua Snacks.picker.highlights()
-command! Terminal lua Snacks.terminal.toggle()
-command! Chezmoi lua require('lazy.spec.snacks.picker.chezmoi')()
-command! Scripts lua require('lazy.spec.snacks.picker.scriptnames')()
-command! PluginGrep lua require('lazy.spec.snacks.picker.plugins').grep()
-command! PluginFiles lua require('lazy.spec.snacks.picker.plugins').files()
-command! -bang Zoxide lua require('lazy.spec.snacks.picker.zoxide').pick('<bang>')
-command! Help lua Snacks.picker.help()
-command! Lazygit :lua Snacks.Lazygit()
-command! Config :lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
-command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
-" }}}1
 
 " Section: keymaps {{{1
 nnoremap <leader><Space> viW
@@ -179,6 +166,7 @@ nnoremap <leader>sp <Cmd>PluginGrep<CR>
 " nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
+" nnoremap <leader>fD <Cmd>Rm!<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
@@ -201,9 +189,8 @@ nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
 nnoremap <BSlash>l <Cmd>call edit#module('lazy/spec/init')<CR>
 nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
 
-
-nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
-nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
+nnoremap <leader>/  <Cmd>lua Snacks.picker.grep()<CR>
+nnoremap <leader>,  <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 
 nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
@@ -221,14 +208,13 @@ nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
 nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 
 nnoremap <leader>l <Cmd>Lazy<CR>
-nnoremap <leader>n :lua Snacks.picker.notifications()<CR>
 
 nnoremap <leader>P  <Cmd>lua Snacks.picker()<CR>
+nnoremap <leader>n  <Cmd>lua Snacks.picker.notifications()<CR>
 nnoremap <leader>p" <Cmd>lua Snacks.picker.registers()<CR>
 nnoremap <leader>p/ <Cmd>lua Snacks.picker.search_history()<CR>
 nnoremap <leader>pD <Cmd>lua Snacks.picker.diagnostics_buffer()<CR>
 
-command! Autocmds lua Snacks.picker.autocmds()
 nnoremap <leader>pa <Cmd>lua Snacks.picker.autocmds()<CR>
 
 nnoremap <leader>pc <Cmd>lua Snacks.picker.commands()<CR>
@@ -258,7 +244,7 @@ nnoremap <leader>dh <Cmd>LazyHealth<CR>
 nnoremap <leader>dS <Cmd>lua=require('snacks').meta.get()<CR>
 nnoremap <leader>dw <Cmd>lua=vim.lsp.buf.list_workspace_folders()<CR>
 
-" XXX: conflicts
+" XXX: potential conflicts
 nnoremap ` ~
 nnoremap <BS> <C-o>
 
@@ -408,12 +394,12 @@ command! Wqa wqa!
 
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
-" }}}1
+
 
 " Section: plugins {{{1
 " key = vimscript plugin, value = also enabled in nvim
 let g:vim_plugins = {
-      \ 'dense-analysis/ale'        : 0,
+      \ 'dense-analysis/ale'        : 1,
       \ 'github/copilot.vim'        : 0,
       \ 'lervag/vimtex'             : 0,
       \ '~/GitHub/rdnajac/src/fzf/' : 0,
@@ -457,45 +443,7 @@ else
   set clipboard=unnamedplus
 endif
 
-" global variables {{{2
-let g:copilot_workspace_folders = ['~/GitHub', '~/.local/share/chezmoi/']
-
-function! PrettyPath() abort
-  let ret = ''
-  " if exists('*luaeval')
-  let l:prefix = luaeval('require("lazy.spec.ui.lualine.components.path").prefix[1]()')
-  let l:suffix = luaeval('require("lazy.spec.ui.lualine.components.path").suffix[1]()')
-  let l:mod = luaeval('require("lazy.spec.ui.lualine.components.path").modified[1]()')
-  let ret .= '%#lualine_a_chromatophore#'
-  let ret .= ' '
-  let ret .= l:prefix
-  let ret .= '%#lualine_ab_chromatophore#'
-  let ret .= '🭛'
-  let ret .= '%#lualine_b_chromatophore#'
-  let ret .= l:suffix
-  return ret
-endfunction
-
-function! MyStatusLine() abort
-  let l:statusline = ''
-  let l:statusline .= PrettyPath()
-  let l:statusline .= &ro ? ' ' : ''
-  let l:statusline .= &ft ==# 'help' ? '%h' : ''
-  let l:statusline .= &mod ? '  ' : ''
-
-  " let l:statusline .= '%='
-  " let l:statusline .= '%k'
-  " let l:statusline .= '%S'
-  " let l:statusline .= ' [%2v,%P]'
-  return l:statusline
-endfunction
-
-set showcmdloc=statusline
-" set statusline=%!MyStatusLine()
-" set winbar=%!MyStatusLine()
-" set tabline=%!MyStatusLine()
-" set statusline=%!MyStatusLine()
-" set laststatus=0
+" let g:obsession_no_bufenter = 1
 
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)

@@ -9,8 +9,14 @@ else
   vim.opt.rtp:prepend(lazynvim)
 end
 
-require('nvim.ui')
+vim.opt.winborder = 'rounded'
+vim.opt.laststatus = 3
+vim.opt.cmdheight = 0
+
 require('lazy.bootstrap')
+
+require('vim._extui').enable({}) -- XXX: experimental!
+require('nvim.ui.chromatophore') -- XXX: experimental!
 
 LazyVim.on_very_lazy(function()
   vim.cmd([[command! LazyHealth Lazy! load all | checkhealth]])
@@ -22,3 +28,4 @@ LazyVim.on_very_lazy(function()
   vim.opt.pumblend = 0
   vim.opt.smoothscroll = true
 end)
+

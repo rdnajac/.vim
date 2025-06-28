@@ -24,3 +24,5 @@ if vim.env.PROF then
   }
   require('snacks').profiler.startup(profiler)
 end
+
+require('lazy.spec.snacks.commands')

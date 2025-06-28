@@ -1,4 +1,5 @@
 require('lazy.file')
+    ---@class wk_opts
 
 return {
   {
@@ -23,28 +24,21 @@ return {
   },
   {
     'folke/which-key.nvim',
-    ---@class wk_opts
     opts = {
-      defer = function(_)
-        return
-      end,
       keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
       preset = 'helix',
       show_help = false,
       sort = { 'order', 'alphanum', 'case', 'mod' },
-      triggers = {
-        { '<leader>', mode = { 'n', 'v' } },
-      },
+      -- triggers = { { '<leader>', mode = { 'n', 'v' } }, },
       spec = {
         {
-          -- {
-          --   mode = { 'n', 'v' },
-          --   { '[', group = 'prev' },
-          --   { ']', group = 'next' },
-          --   { 'g', group = 'goto' },
-          --   { 'z', group = 'fold' },
-          -- },
-
+          {
+            mode = { 'n', 'v' },
+            { '[', group = 'prev' },
+            { ']', group = 'next' },
+            { 'g', group = 'goto' },
+            { 'z', group = 'fold' },
+          },
           mode = { 'n' },
           {
             '<leader>b',
@@ -114,6 +108,7 @@ return {
     event = 'BufWinEnter',
     init = function()
       vim.g.copilot_no_maps = true
+      vim.g.copilot_workspace_folders = {'~/GitHub', '~/.local/share/chezmoi/'}
       vim.deprecate = function() end -- HACK: remove this once plugin is updated
     end,
     config = function()

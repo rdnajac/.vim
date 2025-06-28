@@ -17,7 +17,6 @@ require('lazy').setup({
     border = 'rounded',
     -- stylua: ignore
     custom_keys = { ['<localleader>d'] = function(plugin) dd(plugin) end },
-    -- icons = require('lazy.emojis').ui,
   },
   change_detection = { notify = false },
   performance = {

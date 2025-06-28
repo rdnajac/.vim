@@ -28,7 +28,7 @@ return {
     hl['Winbar'] = { bg = 'NONE' }
     -- hl['WinbarNC']            = { bg   = 'NONE' }
     hl['Folded'] = { fg = colors.blue }
-    -- hl['Special']          = { fg   = 'NONE', bold    = true }
+    hl['Special'] = { fg = colors.red, bold = true }
 
     hl['SpecialWindow'] = { bg = '#1f2335' }
 
