@@ -18,7 +18,7 @@ au('FileType', { 'help', 'man', 'qf' }, function(ev)
     vim.keymap.set('n', 'q', function()
       vim.cmd('close')
       pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
-    end, { buffer = ev.buf, silent = true, desc = 'Quit buffer', })
+    end, { buffer = ev.buf, silent = true, desc = 'Quit buffer' })
     -- if Snacks.util.is_transparent() then
     --   Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
     -- end

@@ -4,7 +4,10 @@ function! MyFormatExpr() abort
   " let view = winsaveview()
   if empty(&formatprg)
     " NOTE: this work on the entire buffer, not just the range
-    call format#equalprg()
+    normal! gg=G
+    retab
+    %s/\s\+$//e
+    %s/\n\+\%$//e
   else
     let lines = getline(start, end)
     let output = systemlist(expandcmd(&formatprg), lines)
@@ -12,7 +15,7 @@ function! MyFormatExpr() abort
       call setline(start, output)
     endif
   endif
-  %s/\n\+\%$//e
+  " %s/\n\+\%$//e
   " call winrestview(view)
   return 0
 endfunction
@@ -25,7 +28,6 @@ function! GQ(type, ...)
   unlet w:gqview
 endfunction
 nmap <silent> gq :let w:gqview = winsaveview()<CR>:set opfunc=GQ<CR>g@
-
 
 " augroup AutoFormat
 "   autocmd!

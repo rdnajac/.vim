@@ -3,6 +3,7 @@ local git_status_cache = git_status.new()
 
 return {
   'stevearc/oil.nvim',
+  dependencies = { 'refractalize/oil-git-status.nvim' },
   enabled = true,
   lazy = false,
   keys = {
@@ -11,6 +12,9 @@ return {
   },
   opts = function()
     require('lazy.spec.oil.autocmds')
+    -- LazyVim.on_very_lazy(function()
+    --   require('lazy.spec.oil.git_extmarks')
+    -- end)
 
     local refresh = require('oil.actions').refresh
     local orig_refresh = refresh.callback
@@ -32,6 +36,7 @@ return {
         -- border = 'none', -- default - `rounded`
         win_options = {
           -- no line numbers
+          signcolumn = 'yes:2',
           winblend = 0,
         },
         get_win_title = nil,

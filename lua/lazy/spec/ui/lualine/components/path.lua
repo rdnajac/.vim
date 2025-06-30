@@ -25,26 +25,24 @@ local function split_path(path)
   return vim.split(path, '/', { plain = true })
 end
 
+
 local function relative_parts(path, base)
-  if path == base then
-    return {}
-  end
   local p, b = split_path(path), split_path(base)
   local i = 1
-  while p[i] and b[i] and p[i] == b[i] do
+  local max = math.min(#p, #b)
+  while i <= max and p[i] == b[i] do
     i = i + 1
   end
-  local parts = {}
-  if i <= #b then
-    for _ = i, #b do
-      table.insert(parts, '..')
-    end
+  local out = {}
+  for _ = i, #b do
+    table.insert(out, '..')
   end
   for j = i, #p do
-    table.insert(parts, p[j])
+    table.insert(out, p[j])
   end
-  return parts
+  return out
 end
+
 
 M.prefix = {
   function()
@@ -78,10 +76,6 @@ M.suffix = {
     local rel_cwd = cwd:sub(#root + 2)
     local parts = relative_parts(rel_path, rel_cwd)
     local out = table.concat(parts, '/')
-
-    if out:sub(1, 3) == '../' then
-      out = out:gsub('^%./+', ''):gsub('^%../+', '')
-    end
 
     if #parts == 0 then
       out = './'

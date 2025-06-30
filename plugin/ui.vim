@@ -1,3 +1,5 @@
+scriptencoding=utf-8
+
 function! PrettyPath() abort
   let l:line = ''
   let l:prefix = luaeval('require("lazy.spec.ui.lualine.components.path").prefix[1]()')
@@ -15,6 +17,7 @@ function! MyStatusLine() abort
   let l:line = ''
   let l:line .= '%<'
   let l:line .= PrettyPath()
+  let l:line .= ' '
   let l:line .= &ro ? '  ' : ''
   let l:line .= &ft ==# 'help' ? '%h' : ''
   let l:line .= &mod ? '  ' : ''
@@ -30,7 +33,20 @@ function! MyTabLine() abort
   return l:line
 endfunction
 
-set tabline=%!MyTabLine()
-set showtabline=2
 set showcmdloc=statusline
-set statusline=%!MyStatusLine()
+
+" set statusline=
+
+set tabline=%!MyTabLine()
+" set showtabline=2
+
+" set winbar=
+
+" export the statusline
+function! TmuxLeft() abort
+  return luaeval("require('nvim.ui.tmuxline')(vim.fn['MyStatusLine']())")
+endfunction
+
+function! TmuxRight() abort
+  return luaeval("require('nvim.ui.tmuxline')(vim.fn['MyTabline']())")
+endfunction

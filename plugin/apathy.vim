@@ -1,4 +1,4 @@
-augroup SetLocalPath " {{{2
+augroup SetLocalPath
   " TODO: move to local apathy plugin
   autocmd!
   let s:default_path = escape(&path, '\ ') " store default value of 'path'

@@ -42,25 +42,25 @@ end
 
 local function chromatophore_refresh()
   local mode_color = current_mode_color()
-  local black = "#000000"
-  local grey = "#3b4261"
+  local black = '#000000'
+  local grey = '#3b4261'
 
   Snacks.util.set_hl({
-    Chromatophore = { fg = mode_color, bg = "NONE" },
-    String = { link = "Chromatophore" },
+    Chromatophore = { fg = mode_color, bg = 'NONE' },
+    String = { link = 'Chromatophore' },
 
-    Chromatophore_a  = { fg = black, bg = mode_color, bold = true },
+    Chromatophore_a = { fg = black, bg = mode_color, bold = true },
     Chromatophore_ab = { fg = mode_color, bg = grey },
-    Chromatophore_b  = { fg = mode_color, bg = grey, bold = true },
-    Chromatophore_c  = { fg = mode_color, bg = "NONE" },
-    Chromatophore_z  = { fg = mode_color, bg = "NONE", bold = true },
+    Chromatophore_b = { fg = mode_color, bg = grey, bold = true },
+    Chromatophore_c = { fg = mode_color, bg = 'NONE' },
+    Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
   })
 
-  Snacks.util.winhl({ String = "String" })
+  Snacks.util.winhl({ String = 'String' })
 end
 
-vim.api.nvim_create_autocmd("ModeChanged", {
-  group = vim.api.nvim_create_augroup("Chromatophore", { clear = true }),
+vim.api.nvim_create_autocmd('ModeChanged', {
+  group = vim.api.nvim_create_augroup('Chromatophore', { clear = true }),
   callback = chromatophore_refresh,
 })
 

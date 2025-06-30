@@ -6,7 +6,7 @@ local function insert_comment(lhs, tag)
   local dir = above and 'above' or 'below'
   local prefix = above and 'O' or 'o'
   local content = tag ~= '' and tag .. ': ' or ''
-  local cmd = string.format("%s<Esc>Vc%s¿<Esc>:normal gcc<CR>A<BS>", prefix, content)
+  local cmd = string.format('%s<Esc>Vc%s¿<Esc>:normal gcc<CR>A<BS>', prefix, content)
   local desc = ('Insert %s comment (%s)'):format(tag ~= '' and tag or 'plain', dir)
   return { lhs, cmd, desc = desc, silent = true }
 end

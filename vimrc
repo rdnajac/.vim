@@ -24,7 +24,6 @@ set formatoptions-=or
 set ignorecase smartcase
 set list listchars=trail:¿,tab:→\ "
 set mouse=a
-set noruler
 set pumheight=10
 set report=0
 set scrolloff=8
@@ -42,7 +41,7 @@ set whichwrap+=<,>,[,],h,l
 
 set completeopt=menu,preview,longest
 if has('nvim') || has('patch-9.1.1337')
-  set completeopt+=preinsert
+  " set completeopt+=preinsert
 endif
 
 " indentation {{{3
@@ -92,43 +91,43 @@ nnoremap <expr> h fold#aware_h()
 " TODO: if nonu, set signcolumn=yes
 set number signcolumn=number
 set numberwidth=4
-" set signcolumn=yes
+set signcolumn=auto
 
 
 " Section: autocmds {{{2
 augroup vimrc
   au!
   au BufWritePost $MYVIMRC nested source $MYVIMRC | echom 'vimrc reloaded'
-  au VimEnter * nested call sesh#restore() 
+  au VimEnter * nested call sesh#restore()
 
-  au WinNew * if bufname('') ==# '' && &bt ==# '' && &ft  | exe 'e #' | endif
-  " restore cursor position (and open any folds) when opening a file
-  " au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
-  au BufWinEnter * exe "silent! normal! g`\"zv"
+  " au WinNew * if bufname('') ==# '' && &bt ==# '' && &ft  | exe 'e #' | endif
+" restore cursor position (and open any folds) when opening a file
+" au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
+au BufWinEnter * exe "silent! normal! g`\"zv"
 
-  " automatically create directories for new files
-  au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
+" automatically create directories for new files
+au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
 
-  " immediately quit the command line window
-  au CmdwinEnter * quit
+" immediately quit the command line window
+au CmdwinEnter * quit
 
-  " automatically reload files that have been changed outside of Vim
-  au FocusGained * if &buftype !=# 'nofile' | checktime | endif
+" automatically reload files that have been changed outside of Vim
+au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
-  " automatically resize splits when the window is resized
-  au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
+" automatically resize splits when the window is resized
+au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
 
-  " no cursorline in insert mode
-  au InsertLeave,WinEnter * setlocal cursorline
-  au InsertEnter,WinLeave * setlocal nocursorline
+" no cursorline in insert mode
+au InsertLeave,WinEnter * setlocal cursorline
+au InsertEnter,WinLeave * setlocal nocursorline
 
-  " relative numbers in visual mode only if number is already set
-  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+" relative numbers in visual mode only if number is already set
+au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 
-  " for when a ftplugin file is not warranted
-  au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
+" for when a ftplugin file is not warranted
+au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
 augroup END
 
 " Section: commands {{{1
@@ -142,6 +141,21 @@ command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-
 nnoremap <leader>q <Cmd>Quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
 nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
+
+command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
+command! -bang Zoxide lua require('lazy.spec.snacks.picker.zoxide').pick('<bang>')
+command! Autocmds lua Snacks.picker.autocmds()
+command! Chezmoi lua require('lazy.spec.snacks.picker.chezmoi')()
+command! Config lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
+command! Explorer lua Snacks.picker.explorer()
+command! Help lua Snacks.picker.help()
+command! Highlights lua Snacks.picker.highlights()
+command! Keymaps lua Snacks.picker.keymaps()
+command! Lazygit lua Snacks.Lazygit()
+command! PluginFiles lua require('lazy.spec.snacks.picker.plugins').files()
+command! PluginGrep lua require('lazy.spec.snacks.picker.plugins').grep()
+command! Scripts lua require('lazy.spec.snacks.picker.scriptnames')()
+command! Terminal lua Snacks.terminal.toggle()
 
 " Section: keymaps {{{1
 nnoremap <leader><Space> viW
@@ -213,10 +227,7 @@ nnoremap <leader>P  <Cmd>lua Snacks.picker()<CR>
 nnoremap <leader>n  <Cmd>lua Snacks.picker.notifications()<CR>
 nnoremap <leader>p" <Cmd>lua Snacks.picker.registers()<CR>
 nnoremap <leader>p/ <Cmd>lua Snacks.picker.search_history()<CR>
-nnoremap <leader>pD <Cmd>lua Snacks.picker.diagnostics_buffer()<CR>
-
 nnoremap <leader>pa <Cmd>lua Snacks.picker.autocmds()<CR>
-
 nnoremap <leader>pc <Cmd>lua Snacks.picker.commands()<CR>
 nnoremap <leader>p: <Cmd>lua Snacks.picker.command_history()<CR>
 nnoremap <leader>pd <Cmd>lua Snacks.picker.diagnostics()<CR>
@@ -252,30 +263,37 @@ nnoremap <BS> <C-o>
 nmap <C-c> ciw
 vmap <C-s> :sort<CR>
 
+" yank/delete everything
+nnoremap yY <Cmd>%y<CR>
+nnoremap dD <Cmd>%d<CR>
+
 " available key pairs in normal mode {{{2
 " https://gist.github.com/romainl/1f93db9dc976ba851bbb
 " `splitjoin`: `gJ` and `gS`
 " `vim-surround`: `cs`, `ds`, and `ys`
 
-" cd cm co cp cq cr cs cu cx cy cz
+" cd cm co cp cq cr `cs` cu cx cy cz
 nnoremap cdc <Cmd>call bin#cd#smart()<CR>
 nnoremap cdb <Cmd>cd %:p:h<BAR>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<BAR>pwd<CR>
 
-" dc dm dq dr ds du dx `dy` dz
+" dc dm dq dr `ds` du dx `dy` dz
 " vnoremap <silent> dy "_dP
 nnoremap dy "_dd
 
-" yc yd ym yo yp yq yr ys yu yx yz
+" yc yd ym yo `yp` yq yr `ys` yu yx yz
 " vnoremap <silent> yp p"_d
+
+" yank path
+nnoremap yp <Cmd>let @*=expand('%:p')<CR>
 
 " vm vo vq `vv` vz
 nmap vv Vgc
 
-" `gb` `gc` gl `gs` `gy`
-" TODO: use different register
-nmap gb vi'y:!open https://github.com/<C-R>0<CR>
-xnoremap gb y:!open https://github.com/<C-R>0<CR>
+" `gb` `gc` `gl` `gs` `gy`
+nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
+xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
+
 nmap gy "xyygcc"xp
 nmap gl <Cmd>Config<CR>
 
@@ -288,7 +306,8 @@ nmap S  viWS
 " nmap yss ys
 
 " `zq` ZA ... ZP, `ZQ` ... `ZZ`
-nmap zq gggqG
+nnoremap zq mzgggqG'z
+
 
 " buffers {{{2
 nnoremap <silent> <Tab>         :bnext<CR>
@@ -352,6 +371,10 @@ inoremap <silent> <Bslash>n <C-x><C-n>
 inoremap <silent> <Bslash>t <C-x><C-]>
 inoremap <silent> <Bslash>u <C-x><C-u>
 
+" add chars to EOL {{{2
+nnoremap <Bslash>, mzA,<Esc>;`z
+nnoremap <Bslash>; mzA;<Esc>;`z
+
 " unimpaired {{{2
 " exchange lines
 nnoremap ]e :execute 'move .+' . v:count1<CR>==
@@ -385,7 +408,6 @@ cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? '
 cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
 cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
 cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
-
 
 command! E e!
 command! W w!
@@ -441,10 +463,12 @@ else
   endfor
   call plug#end()
   set clipboard=unnamedplus
+  color scheme
 endif
 
 " let g:obsession_no_bufenter = 1
 
 xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
+
 " vim:set fdl=2

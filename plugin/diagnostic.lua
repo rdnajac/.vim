@@ -3,6 +3,7 @@ local icons = require('nvim.ui.icons')
 
 ---@type vim.diagnostic.Opts
 vim.diagnostic.config({
+  float = { source = true },
   underline = false,
   virtual_text = false,
   severity_sort = true,
@@ -21,10 +22,3 @@ vim.diagnostic.config({
     },
   },
 })
-
-vim.keymap.set('n', 'ds', function()
-  vim.diagnostic.open_float({
-    source = true,
-    header = '',
-  })
-end, { desc = 'Show diagnostics' })

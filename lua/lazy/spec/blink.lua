@@ -26,11 +26,14 @@ return {
     ---@module "blink.cmp"
     ---@type blink.cmp.Config
     return {
-      fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
+      -- fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
       signature = { enabled = true },
       cmdline = { enabled = false },
       completion = {
+        accept = { auto_brackets = { enabled = true } },
         documentation = { auto_show = true, auto_show_delay_ms = 200 },
+        list = { selection = { preselect = false, auto_insert = true } },
+
         menu = {
           auto_show = true,
           draw = {
@@ -86,20 +89,16 @@ return {
           end,
           'fallback',
         },
-        ['<M-j>'] = {
-          function(cmp)
-            cmp.show({ providers = { 'copilot' } })
-          end,
-        },
       },
       sources = {
-        default = { 'lsp', 'snippets', 'path', 'emoji', 'copilot' },
+        default = { 'lsp', 'snippets', 'path', 'emoji' },
         per_filetype = {
           lua = { inherit_defaults = true, 'lazydev' },
           sh = { inherit_defaults = true, 'tmux', 'env' },
+          vim = { inherit_defaults = true, 'env' },
           oil = {},
         },
-        -- min_keyword_length = 3,
+        min_keyword_length = 3,
         providers = {
           path = {
             score_offset = 100,

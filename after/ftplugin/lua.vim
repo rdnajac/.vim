@@ -34,6 +34,6 @@ nmap <leader>cM ^v2f<Space>cM.<Esc>
 
 if has ('nvim')
   call fold#text()
-  lua Snacks.utils.highlight('LspReferenceText', { link = NONE })
+  lua Snacks.util.set_hl({ LspReferenceText = { link = "NONE" } })
 endif
 

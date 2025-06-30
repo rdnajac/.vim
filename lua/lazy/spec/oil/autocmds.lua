@@ -46,21 +46,8 @@ vim.api.nvim_create_autocmd('User', {
 vim.api.nvim_create_autocmd('BufEnter', {
   group = myoilautocmds,
   pattern = 'oil://*',
-  callback = function(ev)
-    local oil = require('oil')
-    local dir = oil.get_current_dir(ev.buf)
-    if dir and vim.fn.isdirectory(dir) == 1 then
-      vim.cmd.lcd(dir)
-    end
-  end,
-  desc = 'Sync lcd with Oil directory on buffer enter',
-})
-
-vim.api.nvim_create_autocmd('BufLeave', {
-  group = myoilautocmds,
-  pattern = 'oil://*',
   callback = function()
-    vim.cmd.lcd(vim.fn.getcwd(-1, -1))
+    require('oil.actions').cd.callback()
   end,
-  desc = 'Restore lcd to CWD on leaving Oil buffer',
+  desc = 'Sync cd with Oil directory on buffer enter',
 })

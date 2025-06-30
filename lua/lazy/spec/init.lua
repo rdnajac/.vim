@@ -1,5 +1,4 @@
 require('lazy.file')
-    ---@class wk_opts
 
 return {
   {
@@ -107,21 +106,27 @@ return {
     cmd = 'Copilot',
     event = 'BufWinEnter',
     init = function()
-      vim.g.copilot_no_maps = true
-      vim.g.copilot_workspace_folders = {'~/GitHub', '~/.local/share/chezmoi/'}
       vim.deprecate = function() end -- HACK: remove this once plugin is updated
-    end,
-    config = function()
-      -- Block the normal Copilot suggestions
-      vim.api.nvim_create_augroup('github_copilot', { clear = true })
-      vim.api.nvim_create_autocmd({ 'FileType', 'BufUnload' }, {
-        group = 'github_copilot',
-        callback = function(args)
-          vim.fn['copilot#On' .. args.event]()
-        end,
+      -- vim.g.copilot_no_maps = true
+      vim.g.copilot_workspace_folders = { '~/GitHub', '~/.local/share/chezmoi/' }
+
+      vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
+        expr = true,
+        replace_keycodes = false,
       })
-      vim.fn['copilot#OnFileType']()
+      vim.g.copilot_no_tab_map = true
     end,
+    -- config = function()
+    --   -- Block the normal Copilot suggestions
+    --   vim.api.nvim_create_augroup('github_copilot', { clear = true })
+    --   vim.api.nvim_create_autocmd({ 'FileType', 'BufUnload' }, {
+    --     group = 'github_copilot',
+    --     callback = function(args)
+    --       vim.fn['copilot#On' .. args.event]()
+    --     end,
+    --   })
+    --   vim.fn['copilot#OnFileType']()
+    -- end,
   },
   {
     'nvim-lua/plenary.nvim',

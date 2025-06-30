@@ -86,11 +86,11 @@ return {
             -- <M-f>                   Go forwards one word.
             ['<a-f>'] = { 'toggle_follow', mode = { 'n' } },
             -- <C-a>                   Go to beginning of line.
-            ['<c-a>'] = { 'select_all', mode = { 'n'} },
+            ['<c-a>'] = { 'select_all', mode = { 'n' } },
             -- <C-b>                   Go backwards one character.  On a blank line, kill it
             ['<c-b>'] = { 'preview_scroll_up', mode = { 'n' } },
             -- <C-d>                   Delete character in front of cursor.  Falls back to
-            ['<c-d>'] = { 'list_scroll_down', mode = {  'n' } },
+            ['<c-d>'] = { 'list_scroll_down', mode = { 'n' } },
           },
         },
         preview = { minimal = true },

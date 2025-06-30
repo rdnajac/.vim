@@ -7,6 +7,8 @@ let b:ale_linters = ['vint']
 
 nnoremap <leader>ch <Cmd>call edit#ch()<CR>
 
+inoremap \enc scriptencoding=utf-8
+
 if has('nvim')
   lua vim.treesitter.start()
 endif

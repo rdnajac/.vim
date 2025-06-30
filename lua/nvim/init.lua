@@ -19,7 +19,6 @@ require('vim._extui').enable({}) -- XXX: experimental!
 require('nvim.ui.chromatophore') -- XXX: experimental!
 
 LazyVim.on_very_lazy(function()
-  vim.cmd([[command! LazyHealth Lazy! load all | checkhealth]])
   vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
   -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
   vim.opt.foldexpr = 'v:lua.require("nvim.treesitter.fold").expr()'
@@ -27,5 +26,11 @@ LazyVim.on_very_lazy(function()
   vim.opt.mousescroll = 'hor:0'
   vim.opt.pumblend = 0
   vim.opt.smoothscroll = true
-end)
 
+  vim.cmd([[
+  command! LazyHealth Lazy! load all | checkhealth
+
+  aunmenu PopUp
+  autocmd! nvim.popupmenu
+  ]])
+end)
