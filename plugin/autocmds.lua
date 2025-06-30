@@ -12,7 +12,8 @@ au('TextYankPost', '*', function()
   vim.highlight.on_yank()
 end)
 
-au('FileType', { 'help', 'man', 'qf' }, function(ev)
+-- au('FileType', { 'help', 'man', 'qf' }, function(ev)
+au('FileType', { 'help', 'man', }, function(ev)
   vim.bo[ev.buf].buflisted = false
   vim.schedule(function()
     vim.keymap.set('n', 'q', function()
@@ -22,6 +23,7 @@ au('FileType', { 'help', 'man', 'qf' }, function(ev)
     -- if Snacks.util.is_transparent() then
     --   Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
     -- end
+    vim.cmd('wincmd L')
   end)
 end)
 

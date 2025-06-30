@@ -56,7 +56,8 @@ local function chromatophore_refresh()
     Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
   })
 
-  Snacks.util.winhl({ String = 'String' })
+  -- HACK: refresh tmux
+  vim.fn.jobstart({ 'tmux', 'refresh-client', '-S' }, { detach = true })
 end
 
 vim.api.nvim_create_autocmd('ModeChanged', {
