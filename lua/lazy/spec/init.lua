@@ -71,8 +71,15 @@ return {
             icon = { icon = '󰢱 ', color = 'blue' },
             { '<leader>fT', desc = 'filetype plugin (.lua)' },
           },
-          -- better descriptions
+
+          -- groups
+          { 'co', group = 'comment below' },
+          { 'cO', group = 'comment above' },
+
+          { '<leader>dp', group = 'profiler' },
           -- { '<localleader>l', group = 'vimtex' },
+
+          -- descriptions
           { 'gx', desc = 'Open with system app' },
         },
         { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
@@ -128,10 +135,8 @@ return {
     --   vim.fn['copilot#OnFileType']()
     -- end,
   },
-  {
-    'nvim-lua/plenary.nvim',
-    lazy = true,
-  },
+  { 'nvim-lua/plenary.nvim', lazy = true, },
   -- TODO: copy this
-  { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
+  -- { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
 }
+-- vim:fdl=1

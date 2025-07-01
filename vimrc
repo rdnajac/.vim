@@ -66,7 +66,7 @@ set fillchars+=foldopen:▾,
 set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
 set foldlevel=1
-set foldlevelstart=99
+" set foldlevelstart=99
 set foldminlines=3
 set foldopen+=insert,jump
 set foldtext=fold#text()
@@ -157,7 +157,9 @@ command! PluginGrep lua require('lazy.spec.snacks.picker.plugins').grep()
 command! Scripts lua require('lazy.spec.snacks.picker.scriptnames')()
 command! Terminal lua Snacks.terminal.toggle()
 
-" Section: keymaps {{{o
+" Section: keymaps {{{1
+
+
 nnoremap <leader><Space> viW
 nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
@@ -176,34 +178,43 @@ nnoremap <leader>z  <Cmd>Zoxide<CR>
 nnoremap <leader>cz <Cmd>Chezmoi<CR>
 nnoremap <leader>fp <Cmd>PluginFiles<CR>
 nnoremap <leader>sp <Cmd>PluginGrep<CR>
+nnoremap <leader>/  <Cmd>lua Snacks.picker.grep()<CR>
+nnoremap <leader>,  <Cmd>lua Snacks.picker.buffers()<CR>
+nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
+nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
 " nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+
+" code {{{2
+
+" debug {{{2
 
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 " nnoremap <leader>fD <Cmd>Rm!<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
+" vim settings {{{2
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 nnoremap <leader>va <Cmd>call edit#vimrc('+/Section:\ autocmds')<CR>
 nnoremap <leader>vc <Cmd>call edit#vimrc('+/Section:\ commands')<CR>
 nnoremap <leader>vk <Cmd>call edit#vimrc('+/Section:\ keymaps')<CR>
 nnoremap <leader>vp <Cmd>call edit#vimrc('+/Section:\ plugins')<CR>
 nnoremap <leader>vs <Cmd>call edit#vimrc('+/Section:\ settings')<CR>
-nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
-nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
-nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
+
+" nvim settings {{{2
 nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
 nnoremap <BSlash>l <Cmd>call edit#module('lazy/spec/init')<CR>
 nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
 
-nnoremap <leader>/  <Cmd>lua Snacks.picker.grep()<CR>
-nnoremap <leader>,  <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
-
 " find/files {{{2
+nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
+nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
 nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
 nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
+
+
 
 " git {{{2
 nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
@@ -303,7 +314,6 @@ nnoremap zq mzgggqG'z
 nnoremap <silent> <Tab>         :bnext<CR>
 nnoremap <silent> <S-Tab>       :bprev<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
-nnoremap <silent> <leader>bD    :bd<CR>
 
 " Close buffer
 map <silent> <C-q> <Cmd>bd<CR>
@@ -347,7 +357,7 @@ vnoremap > >gv
 nnoremap > V`]>
 nnoremap < V`]<
 
-" insert mode undo breakpoints {{{2
+" insert mode Undo breakpoints {{{2
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
@@ -385,6 +395,20 @@ nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
+
+" insert comment {{{2
+function! s:map_insert_comment(lhs, tag) abort
+  execute 'nnoremap cO' . a:lhs ':call comment#above("' . a:tag . '")<CR>'
+  execute 'nnoremap co' . a:lhs ':call comment#below("' . a:tag . '")<CR>'
+endfunction
+
+call s:map_insert_comment('o', '')
+call s:map_insert_comment('t', 'TODO')
+call s:map_insert_comment('f', 'FIXME')
+call s:map_insert_comment('h', 'HACK')
+call s:map_insert_comment('b', 'BUG')
+call s:map_insert_comment('p', 'PERF')
+call s:map_insert_comment('x', 'XXX')
 
 " cmdline {{{2
 nnoremap ; :
@@ -438,8 +462,9 @@ let g:vim_plugins = {
       \ 'tpope/vim-unimpaired'      : 1,
       \ 'vuciv/golf'                : 0,
       \ 'AndrewRadev/splitjoin.vim' : 1,
+      \ 'AndrewRadev/dsf.vim'       : 1,
       \ 'Konfekt/FastFold'          : 0
-      \ }
+      \ } 
 
 if has('nvim')
   if !exists('g:loaded_nvim')

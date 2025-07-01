@@ -50,7 +50,13 @@ M.sources = {
       },
     },
   },
-  keymaps = { confirm = 'edit', layout = { preset = 'mylayout' } },
+  keymaps = {
+    confirm = function(picker, item)
+      picker:close()
+      vim.cmd('edit ' .. item.file)
+    end,
+    layout = { preset = 'mylayout' },
+  },
   notifications = { layout = { preset = 'ivy' } },
   pickers = { layout = { preset = 'ivy' } },
   undo = { layout = { preset = 'ivy' } },

@@ -10,6 +10,7 @@ return {
   config = function()
     require('lazy.spec.mini.ai')
     require('lazy.spec.mini.icons')
+    require('lazy.spec.mini.hipatterns')
     require('mini.diff').setup({
       view = {
         style = 'number',

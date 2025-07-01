@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd('BufEnter', {
   group = myoilautocmds,
   pattern = 'oil://*',
   callback = function()
-    require('oil.actions').cd.callback()
+    require('oil.actions').cd.callback({silent = true})
   end,
   desc = 'Sync cd with Oil directory on buffer enter',
 })

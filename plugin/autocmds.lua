@@ -23,7 +23,7 @@ au('FileType', { 'help', 'man', }, function(ev)
     -- if Snacks.util.is_transparent() then
     --   Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
     -- end
-    vim.cmd('wincmd L')
+    -- vim.cmd('wincmd L')
   end)
 end)
 

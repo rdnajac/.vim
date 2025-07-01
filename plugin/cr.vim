@@ -19,6 +19,8 @@ augroup MapCR
   autocmd!
   autocmd FileType vim,lua nnoremap <buffer> <silent> <CR> <CMD>call <SID>execute_line()<CR>
   autocmd FileType vim,lua nnoremap <buffer> <silent> <M-CR> <CMD>call <SID>source_file()<CR>
+  autocmd FileType     lua nnoremap <buffer> <silent> <leader><CR> <CMD>lua Snacks.debug.run()<CR>
+  autocmd FileType     lua vnoremap <buffer> <silent> <leader><CR> :lua Snacks.debug.run()<CR>
 augroup END
 
 " TODO: ooze send

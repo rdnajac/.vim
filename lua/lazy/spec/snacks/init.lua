@@ -1,6 +1,17 @@
 return {
   'folke/snacks.nvim',
   priority = 1000,
+  -- stylua: ignore
+  init = function()
+    require('lazy.very').on_very_lazy(function()
+      require('lazy.spec.snacks.keymaps')
+    end)
+  end,
+  -- stylua: ignore
+  keys = {
+    { mode = { 'n', 't' }, ',,', function() Snacks.terminal.toggle() end },
+    { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
+  },
   ---@module "snacks"
   ---@type snacks.Config
   opts = {
