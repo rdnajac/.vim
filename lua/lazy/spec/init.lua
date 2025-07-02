@@ -136,7 +136,5 @@ return {
     -- end,
   },
   { 'nvim-lua/plenary.nvim', lazy = true, },
-  -- TODO: copy this
-  -- { import = 'lazyvim.plugins.extras.util.mini-hipatterns' },
 }
 -- vim:fdl=1

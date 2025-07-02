@@ -24,7 +24,7 @@ function! MyStatusLine() abort
   return l:line
 endfunction
 
-function! MyTabLine() abort
+function! MyTabline() abort
   let l:line = ''
   let l:line .= '%='
   let l:line .= '%#Chromatophore_z#'
@@ -37,7 +37,7 @@ set showcmdloc=statusline
 
 " set statusline=
 
-set tabline=%!MyTabLine()
+set tabline=%!MyTabline()
 " set showtabline=2
 
 " set winbar=

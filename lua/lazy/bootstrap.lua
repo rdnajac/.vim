@@ -3,6 +3,7 @@ require('lazy').setup({
   spec = {
     { import = 'lazy.spec' },
     { import = 'lazy.lang' },
+    { import = 'lazy.ui' },
     -- { import = 'lazy.xtra.formatting' },
     { import = 'lazy.xtra.util' },
   },

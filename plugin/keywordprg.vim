@@ -2,7 +2,7 @@
 " MyKeywordprg.vim - Contextual :Man lookup for keywords under cursor
 " Maintainer: me
 " License:    MIT
-" Version:    1.1
+" Version:    1.2
 "=============================================================================
 
 if exists('g:loaded_mykeywordprg')
@@ -13,7 +13,7 @@ let g:loaded_mykeywordprg = 1
 command! -nargs=* ManLookup call s:ManLookup(<f-args>)
 
 function! s:ManLookup(...) abort
-  echomsg 'ManLookup called with args: ' . string(a:000)
+  " echomsg 'ManLookup called with args: ' . string(a:000)
   let l:page = get(b:, 'manpage', '')
   if empty(l:page)
     echohl ErrorMsg
@@ -27,10 +27,16 @@ function! s:ManLookup(...) abort
   call search('\<' . l:key . '\>')
 endfunction
 
+function! s:KeywordSetup(page) abort
+  let b:manpage = a:page
+  setlocal keywordprg=:ManLookup
+  setlocal iskeyword+=-
+endfunction
+
 augroup ManLookupSetup
   autocmd!
-  autocmd FileType kitty        let b:manpage = 'kitty'      | setlocal keywordprg=:ManLookup
-  autocmd FileType tmux         let b:manpage = 'tmux'       | setlocal keywordprg=:ManLookup
-  autocmd FileType sshconfig    let b:manpage = 'ssh'        | setlocal keywordprg=:ManLookup
-  autocmd BufRead,BufNewFile *alacritty.*ml let b:manpage = '5 alacritty' | setl keykp=:ManLookup
+  autocmd FileType kitty         call s:KeywordSetup('kitty')
+  autocmd FileType tmux          call s:KeywordSetup('tmux')
+  autocmd FileType sshconfig     call s:KeywordSetup('ssh')
+  autocmd BufRead,BufNewFile *alacritty.*ml call s:KeywordSetup('5 alacritty')
 augroup END

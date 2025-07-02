@@ -12,17 +12,18 @@ au('TextYankPost', '*', function()
   vim.highlight.on_yank()
 end)
 
--- au('FileType', { 'help', 'man', 'qf' }, function(ev)
-au('FileType', { 'help', 'man', }, function(ev)
+au('FileType', { 'help', 'man', 'qf' }, function(ev)
   vim.bo[ev.buf].buflisted = false
   vim.schedule(function()
+    -- `q` to quit from normal mode
     vim.keymap.set('n', 'q', function()
       vim.cmd('close')
       pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
     end, { buffer = ev.buf, silent = true, desc = 'Quit buffer' })
-    -- if Snacks.util.is_transparent() then
-    --   Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
-    -- end
+    -- highlight the windows a different color
+    if Snacks.util.is_transparent() then
+      Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
+    end
     -- vim.cmd('wincmd L')
   end)
 end)

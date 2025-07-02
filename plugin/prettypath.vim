@@ -2,6 +2,15 @@ function! s:isGitDir() abort
   return FugitiveIsGitDir()
 endfunction
 
+function! s:gitRoot() abort
+  if !s:isGitDir()
+    return ''
+  endif
+  return fnamemodify(FugitiveGitDir(), ':p:h:h')
+endfunction
+
+" echo 'Git root: ' . s:gitRoot()
+
 function! s:normalize(path) abort
   let home = expand('~')
   if a:path[0] ==# '~'

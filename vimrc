@@ -463,8 +463,9 @@ let g:vim_plugins = {
       \ 'vuciv/golf'                : 0,
       \ 'AndrewRadev/splitjoin.vim' : 1,
       \ 'AndrewRadev/dsf.vim'       : 1,
-      \ 'Konfekt/FastFold'          : 0
-      \ } 
+      \ 'Konfekt/FastFold'          : 0,
+      \ 'kana/vim-textobj-user'     : 1
+      \ }
 
 if has('nvim')
   if !exists('g:loaded_nvim')
