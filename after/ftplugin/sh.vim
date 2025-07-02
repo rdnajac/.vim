@@ -17,7 +17,3 @@ if executable('shfmt')
     let &l:formatprg .= ' --simplify'
   endif
 endif
-
-if has('nvim')
-  lua vim.treesitter.start()
-endif

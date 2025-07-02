@@ -23,17 +23,10 @@ inoremap <buffer> \sie --<SPACE>stylua:<SPACE>ignore<SPACE>end
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> \vc vim.cmd([[<c-g>u]])<Left><Left><Left><CR><CR><esc>hi<Space><Space>
 
+" WIP...
 " local function transform
 nmap <leader>cl ^wdwf(i<Space>=<Space><Esc>px
-
 " local to M transform
 nmap <leader>cm ^v2f<Space>cM.<Es\ac>
-
 " M transform
 nmap <leader>cM ^v2f<Space>cM.<Esc>
-
-if has ('nvim')
-  call fold#text()
-  lua Snacks.util.set_hl({ LspReferenceText = { link = "NONE" } })
-endif
-

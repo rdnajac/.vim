@@ -2,9 +2,9 @@ scriptencoding=utf-8
 
 function! PrettyPath() abort
   let l:line = ''
-  let l:prefix = luaeval('require("lazy.spec.ui.lualine.components.path").prefix[1]()')
-  let l:suffix = luaeval('require("lazy.spec.ui.lualine.components.path").suffix[1]()')
-  let l:mod = luaeval('require("lazy.spec.ui.lualine.components.path").modified[1]()')
+  let l:prefix = luaeval('require("lazy.ui.lualine.components.path").prefix[1]()')
+  let l:suffix = luaeval('require("lazy.ui.lualine.components.path").suffix[1]()')
+  let l:mod = luaeval('require("lazy.ui.lualine.components.path").modified[1]()')
   let l:line .= '%#Chromatophore_a# '
   let l:line .= l:prefix
   let l:line .= '%#Chromatophore_ab#🭛'
@@ -34,7 +34,6 @@ function! MyTabline() abort
 endfunction
 
 set showcmdloc=statusline
-
 " set statusline=
 
 set tabline=%!MyTabline()

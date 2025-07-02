@@ -12,6 +12,11 @@ au('TextYankPost', '*', function()
   vim.highlight.on_yank()
 end)
 
+au('FileType', { 'lua' }, function()
+  vim.cmd([[call fold#text()]]) -- HACK: this is not automatically loaded in nvim
+  Snacks.util.set_hl({ LspReferenceText = { link = "NONE" } })
+end)
+
 au('FileType', { 'help', 'man', 'qf' }, function(ev)
   vim.bo[ev.buf].buflisted = false
   vim.schedule(function()

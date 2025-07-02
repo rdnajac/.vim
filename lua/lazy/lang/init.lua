@@ -69,8 +69,21 @@ return {
     branch = 'main',
     build = ':TSUpdate',
     config = function()
+      local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
+
+      local filetypes = { 'vim', 'sh', 'tex', 'markdown',  }
+
+      vim.api.nvim_create_autocmd('FileType', {
+        group = aug,
+        pattern = filetypes,
+        callback = function()
+          vim.treesitter.start()
+        end,
+      })
+
       vim.api.nvim_create_autocmd('User', {
         pattern = 'TSUpdate',
+        group = aug,
         callback = function()
           -- Use custom parser that highlights strings in `backticks` in comments
           require('nvim-treesitter.parsers').comment = {
@@ -82,6 +95,8 @@ return {
           }
         end,
       })
+
+      -- XXX: deprecated, don't use LazyVim
       LazyVim.on_very_lazy(function()
         local ensure_installed = require('nvim.treesitter.parsers')
         require('nvim-treesitter').install(ensure_installed)

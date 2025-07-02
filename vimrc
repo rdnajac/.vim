@@ -70,6 +70,7 @@ set foldlevel=1
 set foldminlines=3
 set foldopen+=insert,jump
 set foldtext=fold#text()
+set foldmethod=marker
 
 " better search if auto pausing folds
 " set foldopen-=search
@@ -81,8 +82,6 @@ augroup vimrc_fold
   " au CmdlineLeave /,\? call fold#pause()
   " au CursorMoved,CursorMovedI * call fold#unpause()
   au FileType lua setlocal foldmethod=indent
-  au FileType tex setlocal foldmethod=syntax
-  au FileType vim setlocal foldmethod=marker
 augroup END
 
 nnoremap <expr> h fold#aware_h()

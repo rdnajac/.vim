@@ -16,6 +16,8 @@ vim.opt.cmdheight = 0
 require('lazy.bootstrap')
 
 require('vim._extui').enable({}) -- XXX: experimental!
+
+-- TODO: move this to a proper plugin
 require('nvim.ui.chromatophore') -- XXX: experimental!
 
 LazyVim.on_very_lazy(function()
