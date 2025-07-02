@@ -11,11 +11,6 @@ return {
     require('lazy.spec.mini.ai')
     require('lazy.spec.mini.icons')
     require('lazy.spec.mini.hipatterns')
-    require('mini.diff').setup({
-      view = {
-        style = 'number',
-        -- signs = { add = '▎', change = '▎', delete = '' },
-      },
-    })
+    require('mini.diff').setup({ view = { style = 'number', signs = { add = '▎', change = '▎', delete = '' } } })
   end,
 }

@@ -1,3 +1,33 @@
+local objects = {
+  { ' ', desc = 'whitespace' },
+  { '"', desc = '" string' },
+  { "'", desc = "' string" },
+  { '(', desc = '() block' },
+  { ')', desc = '() block with ws' },
+  { '<', desc = '<> block' },
+  { '>', desc = '<> block with ws' },
+  { '?', desc = 'user prompt' },
+  { '[', desc = '[] block' },
+  { ']', desc = '[] block with ws' },
+  { '_', desc = 'underscore' },
+  { '`', desc = '` string' },
+  { 'a', desc = 'argument' },
+  { 'b', desc = ')]} block' },
+  { 'c', desc = 'class' },
+  { 'd', desc = 'digit(s)' },
+  { 'e', desc = 'CamelCase / snake_case' },
+  { 'f', desc = 'function' },
+  { 'g', desc = 'entire file' },
+  { 'i', desc = 'indent' },
+  { 'o', desc = 'block, conditional, loop' },
+  { 'q', desc = 'quote `"\'' },
+  { 't', desc = 'tag' },
+  { 'u', desc = 'use/call' },
+  { 'U', desc = 'use/call without dot' },
+  { '{', desc = '{} block' },
+  { '}', desc = '{} with ws' },
+}
+
 -- taken from MiniExtra.gen_ai_spec.buffer
 local function ai_buffer(ai_type)
   local start_line, end_line = 1, vim.fn.line('$')
@@ -37,4 +67,32 @@ local mini_ai_opts = {
 }
 
 require('mini.ai').setup(mini_ai_opts)
-require('lazy.spec.mini.ai_whichkey').register(mini_ai_opts)
+
+---@type table<string, string>
+local mappings = {
+  around = 'a',
+  inside = 'i',
+  around_next = 'an',
+  inside_next = 'in',
+  around_last = 'al',
+  inside_last = 'il',
+}
+mappings.goto_left = nil
+mappings.goto_right = nil
+
+---@type wk.Spec[]
+local ret = { mode = { 'o', 'x' } }
+
+for name, prefix in pairs(mappings) do
+  name = name:gsub('^around_', ''):gsub('^inside_', '')
+  ret[#ret + 1] = { prefix, group = name }
+  for _, obj in ipairs(objects) do
+    local desc = obj.desc
+    if prefix:sub(1, 1) == 'i' then
+      desc = desc:gsub(' with ws', '')
+    end
+    ret[#ret + 1] = { prefix .. obj[1], desc = obj.desc }
+  end
+end
+
+require('which-key').add(ret, { notify = false })
