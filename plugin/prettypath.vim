@@ -1,42 +1,16 @@
-function! s:isGitDir() abort
-  return FugitiveIsGitDir()
-endfunction
-
-function! s:gitRoot() abort
-  if !s:isGitDir()
-    return ''
+function! GitRelative(path, file) abort
+  let l:git = finddir('.git', a:path . ';')
+  if empty(l:git)
+    return ['', a:file]
   endif
-  return fnamemodify(FugitiveGitDir(), ':p:h:h')
+  let l:root = fnamemodify(l:git, ':h')
+  let l:rel  = substitute(a:file, '^' . escape(l:root, '/\'), '', '')
+  let l:rel  = substitute(l:rel, '^/', '', '')
+  return [l:root, l:rel]
 endfunction
 
-" echo 'Git root: ' . s:gitRoot()
+" (luaeval("require('oil').get_current_dir()"))
 
-function! s:normalize(path) abort
-  let home = expand('~')
-  if a:path[0] ==# '~'
-    let path = home . a:path[1:]
-  else
-    let path = a:path
-  endif
-  let path = substitute(path, '/\+', '/', 'g')
-  return path =~# '/$' ? path[:-2] : path
-endfunction
-
-" echom s:normalize('~')
-
-function! s:getBufPath() abort
-  let name = expand('%:p')
-  if name =~# '^oil://'
-    return s:Normalize(luaeval("require('oil').get_current_dir()"))
-  endif
-  return s:Normalize(name)
-endfunction
-
-function! s:findGitRoot() abort
-  let path = s:GetBufPath()
-  let git_dir = luaeval("vim.fs.find('.git', { path = _A[1], upward = true })[1]", [path])
-  return empty(git_dir) ? '' : s:Normalize(fnamemodify(git_dir, ':h'))
-endfunction
 
 function! s:SplitPath(path) abort
   return split(a:path, '/')

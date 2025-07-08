@@ -20,6 +20,9 @@ require('vim._extui').enable({}) -- XXX: experimental!
 -- TODO: move this to a proper plugin
 require('nvim.ui.chromatophore') -- XXX: experimental!
 
+require('nvim.autocmds')
+
+
 LazyVim.on_very_lazy(function()
   vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
   -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
@@ -28,6 +31,8 @@ LazyVim.on_very_lazy(function()
   vim.opt.mousescroll = 'hor:0'
   vim.opt.pumblend = 0
   vim.opt.smoothscroll = true
+  require('nvim.diagnostic')
+  require('nvim.lsp')
 
   vim.cmd([[
   command! LazyHealth Lazy! load all | checkhealth

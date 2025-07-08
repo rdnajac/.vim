@@ -19,18 +19,19 @@ function! s:ooze(text) abort
     let text = a:text . s:newline
   endif
   call chansend(g:ooze_channel, text)
-  if g:ooze_auto_scroll | call s:scroll() | endif
+  " if g:ooze_auto_scroll | call s:scroll() | endif
+call s:scroll()
 endfunction
 
 function! ooze#linefeed() abort
-  let i = line(".")
-  while i < line("$")
+  let i = line('.')
+  while i < line('$')
     let curline = substitute(getline(i + 1), '^\s*', '', '')
     if strlen(curline) > 0
-      if !(exists('g:ooze_skip_comments') && g:ooze_skip_comments && curline =~ '^#')
-	call cursor(i + 1, 1)
-	return
-      endif
+      " if !(exists('g:ooze_skip_comments') && g:ooze_skip_comments && curline =~ '^#')
+      call cursor(i + 1, 1)
+      return
+      " endif
     endif
     let i += 1
   endwhile

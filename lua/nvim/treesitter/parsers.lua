@@ -2,7 +2,7 @@ return {
   -- 'asm',
   'bash',
   -- 'bibtex',
-  'csv',
+  -- 'csv',
   'cmake',
   'cpp',
   'cuda',

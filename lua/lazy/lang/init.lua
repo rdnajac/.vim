@@ -71,7 +71,7 @@ return {
     config = function()
       local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 
-      local filetypes = { 'vim', 'sh', 'tex', 'markdown',  }
+      local filetypes = { 'vim', 'sh', 'tex', 'markdown', 'python' }
 
       vim.api.nvim_create_autocmd('FileType', {
         group = aug,

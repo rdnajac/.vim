@@ -28,6 +28,7 @@ return {
       preset = 'helix',
       show_help = false,
       sort = { 'order', 'alphanum', 'case', 'mod' },
+      -- triggers = { { ',', mode = { 'i' } } },
       -- triggers = { { '<leader>', mode = { 'n', 'v' } }, },
       spec = {
         {
@@ -83,8 +84,20 @@ return {
           { 'gx', desc = 'Open with system app' },
         },
         { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
+        {
+          mode = { 'i' },
+          { ',', group = 'completion' },
+          { ',o', '<C-x><C-o>', desc = 'Omni completion' },
+          { ',f', '<C-x><C-f>', desc = 'File name completion' },
+          { ',i', '<C-x><C-i>', desc = 'Keyword completion from current and included files' },
+          { ',l', '<C-x><C-l>', desc = 'Line completion' },
+          { ',n', '<C-x><C-n>', desc = 'Keyword completion from current file' },
+          { ',t', '<C-x><C-]>', desc = 'Tag completion' },
+          { ',u', '<C-x><C-u>', desc = 'User-defined completion' },
+        },
       },
     },
+
   },
   -- §: todo-comments
   -- Section:
@@ -100,12 +113,35 @@ return {
         },
       },
     },
-    -- stylua: ignore
     keys = {
-      { ']t', function() require('todo-comments').jump_next() end, desc = 'Next Todo Comment', },
-      { '[t', function() require('todo-comments').jump_prtv() end, desc = 'Previous Todo Comment', },
-      { "<leader>st", function() Snacks.picker.todo_comments() end, desc = "Todo" },
-      { "<leader>sT", function () Snacks.picker.todo_comments({ keywords = { "TODO", "FIX", "FIXME" } }) end, desc = "Todo/Fix/Fixme" },
+      {
+        ']t',
+        function()
+          require('todo-comments').jump_next()
+        end,
+        desc = 'Next Todo Comment',
+      },
+      {
+        '[t',
+        function()
+          require('todo-comments').jump_prtv()
+        end,
+        desc = 'Previous Todo Comment',
+      },
+      {
+        '<leader>st',
+        function()
+          Snacks.picker.todo_comments()
+        end,
+        desc = 'Todo',
+      },
+      {
+        '<leader>sT',
+        function()
+          Snacks.picker.todo_comments({ keywords = { 'TODO', 'FIX', 'FIXME' } })
+        end,
+        desc = 'Todo/Fix/Fixme',
+      },
     },
   },
   {
@@ -135,6 +171,6 @@ return {
     --   vim.fn['copilot#OnFileType']()
     -- end,
   },
-  { 'nvim-lua/plenary.nvim', lazy = true, },
+  { 'nvim-lua/plenary.nvim', lazy = true },
 }
 -- vim:fdl=1

@@ -109,6 +109,9 @@ return {
     },
     quickfile = { enabled = true },
     scope = { enabled = true },
+    -- TODO: set <CR> keymap to open a terminal in the current directory
+    -- or to execute the scipt in the terminal
+    -- scratch
     scroll = { enabled = true },
     statuscolumn = { enabled = false },
     styles = {
