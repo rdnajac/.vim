@@ -9,7 +9,7 @@ return {
       return { name }
     end,
     vim.tbl_filter(function(name)
-      return vim.g.vim_plugins[name] == 1
-    end, vim.tbl_keys(vim.g.vim_plugins))
+      return vim.g.plugins[name] > 1
+    end, vim.tbl_keys(vim.g.plugins))
   )),
 }

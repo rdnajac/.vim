@@ -44,4 +44,5 @@ vim.lsp.config('*', {
   end,
 })
 
-vim.lsp.enable(_G.lang_spec.lsps)
+-- FIXME: ¿
+-- vim.lsp.enable(_G.lang_spec.lsps)

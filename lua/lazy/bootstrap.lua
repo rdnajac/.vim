@@ -1,4 +1,8 @@
 ---@type LazyConfig
+vim.g.lazypath = vim.fn.stdpath('data') .. '/lazy'
+local lazynvim = vim.g.lazypath .. '/lazy.nvim'
+vim.opt.rtp:prepend(lazynvim)
+
 require('lazy').setup({
   spec = {
     { import = 'lazy.spec' },

@@ -99,33 +99,34 @@ augroup vimrc
   au VimEnter * nested call sesh#restore()
 
   " au WinNew * if bufname('') ==# '' && &bt ==# '' && &ft  | exe 'e #' | endif
-" restore cursor position (and open any folds) when opening a file
-" au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
-au BufWinEnter * exe "silent! normal! g`\"zv"
+  " restore cursor position (and open any folds) when opening a file
+  " au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
+  au BufWinEnter * exe "silent! normal! g`\"zv"
 
-" automatically create directories for new files
-au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
+  " automatically create directories for new files
+  " BUG: oil
+  " au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
 
-" immediately quit the command line window
-au CmdwinEnter * quit
+  " immediately quit the command line window
+  au CmdwinEnter * quit
 
-" automatically reload files that have been changed outside of Vim
-au FocusGained * if &buftype !=# 'nofile' | checktime | endif
+  " automatically reload files that have been changed outside of Vim
+  au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
-" automatically resize splits when the window is resized
-au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
+  " automatically resize splits when the window is resized
+  au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
 
-" no cursorline in insert mode
-au InsertLeave,WinEnter * setlocal cursorline
-au InsertEnter,WinLeave * setlocal nocursorline
+  " no cursorline in insert mode
+  au InsertLeave,WinEnter * setlocal cursorline
+  au InsertEnter,WinLeave * setlocal nocursorline
 
-" relative numbers in visual mode only if number is already set
-au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  " relative numbers in visual mode only if number is already set
+  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 
-" for when a ftplugin file is not warranted
-au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
+  " for when a ftplugin file is not warranted
+  au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
 augroup END
 
 " Section: commands {{{1
@@ -430,60 +431,55 @@ command! Wqa wqa!
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 
-
 " Section: plugins {{{1
-" key = vimscript plugin, value = also enabled in nvim
-let g:vim_plugins = {
-      \ 'dense-analysis/ale'        : 1,
-      \ 'github/copilot.vim'        : 0,
-      \ 'lervag/vimtex'             : 0,
-      \ '~/GitHub/rdnajac/src/fzf/' : 0,
-      \ 'junegunn/fzf.vim'          : 0,
-      \ 'junegunn/vim-easy-align'   : 1,
-      \ 'tpope/vim-commentary'      : 0,
-      \ 'tpope/vim-speeddating'     : 0,
-      \ 'tpope/vim-vinegar'         : 0,
-      \ 'tpope/vim-abolish'         : 1,
-      \ 'tpope/vim-apathy'          : 1,
-      \ 'tpope/vim-capslock'        : 1,
-      \ 'tpope/vim-characterize'    : 1,
-      \ 'tpope/vim-endwise'         : 1,
-      \ 'tpope/vim-eunuch'          : 1,
-      \ 'tpope/vim-git'             : 1,
-      \ 'tpope/vim-fugitive'        : 1,
-      \ 'tpope/vim-repeat'          : 1,
-      \ 'tpope/vim-obsession'       : 1,
-      \ 'tpope/vim-rsi'             : 1,
-      \ 'tpope/vim-scriptease'      : 1,
-      \ 'tpope/vim-sensible'        : 1,
-      \ 'tpope/vim-surround'        : 1,
-      \ 'tpope/vim-tbone'           : 1,
-      \ 'tpope/vim-unimpaired'      : 1,
-      \ 'vuciv/golf'                : 0,
-      \ 'AndrewRadev/splitjoin.vim' : 1,
-      \ 'AndrewRadev/dsf.vim'       : 1,
-      \ 'Konfekt/FastFold'          : 0,
-      \ 'kana/vim-textobj-user'     : 1
-      \ }
+call plug#begin()
+Plug 'dense-analysis/ale'
+Plug 'github/copilot.vim'
+Plug 'lervag/vimtex'
+" Plug '~/GitHub/rdnajac/src/fzf/'
+" Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-easy-align'
+" Plug 'tpope/vim-commentary'
+" Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-apathy'
+Plug 'tpope/vim-capslock'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-unimpaired'
+" Plug 'vuciv/golf'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'AndrewRadev/dsf.vim'
+" Plug 'Konfekt/FastFold'
+" Plug 'kana/vim-textobj-user'
+call plug#end()
 
 if has('nvim')
-  if !exists('g:loaded_nvim')
-    lua require('nvim')
-    let g:loaded_nvim = 1
-  endif
+  " if !exists('g:loaded_nvim')
+  let g:loaded_netrwPlugin = 1
+  let g:loaded_tutor_mode_plugin = 1
+  let g:loaded_2html_plugin = 1
+  let g:loaded_zipPlugin = 1
+  let g:loaded_tarPlugin = 1
+  let g:loaded_gzip = 1
+  lua require('nvim')
+  " let g:loaded_nvim = 1
 else
-  call plug#begin()
-  for [plugin, _] in items(g:vim_plugins)
-    execute 'Plug' string(plugin)
-  endfor
-  call plug#end()
   set clipboard=unnamedplus
   color scheme
+  xmap ga <Plug>(EasyAlign)
+  nmap ga <Plug>(EasyAlign)
 endif
-
-" let g:obsession_no_bufenter = 1
-
-xmap ga <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
 
 " vim:set fdl=2

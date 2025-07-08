@@ -2,6 +2,12 @@
 -- TODO: move to snacks plugin spec
 local wk = require('which-key')
 
+-- stylua: ignore
+wk.add({
+  { mode = { 'n', 't' }, ',,', function() Snacks.terminal.toggle() end },
+  { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
+})
+
 local function map_pickers(key, path, desc)
   local opts = { cwd = path, matcher = { frecency = true } }
 -- stylua: ignore
@@ -16,9 +22,11 @@ wk.add({
   -- frequently used pickers
   map_pickers('c', vim.fn.stdpath('config'), 'Config Files'),
   map_pickers('G', vim.fn.expand('~/GitHub/'), 'GitHub Repos'),
-  map_pickers('P', vim.g.lazypath, 'Plugins'),
-  map_pickers('L', vim.g.lazypath .. '/LazyVim', 'LazyVim'),
-  map_pickers('S', vim.g.lazypath .. '/snacks.nvim', 'Snacks'),
+  map_pickers('p', vim.g.plug_home, 'Plugins'),
+  map_pickers('P', vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+, 'Plugins'),
+  -- map_pickers('L', vim.g.lazypath .. '/LazyVim', 'LazyVim'),
+  -- map_pickers('S', vim.g.lazypath .. '/snacks.nvim', 'Snacks'),
   map_pickers('v', vim.fn.expand('$VIMRUNTIME'), '$VIMRUNTIME'),
   map_pickers('V', vim.fn.expand('$VIM'), '$VIM'),
   -- buffers
