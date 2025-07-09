@@ -30,7 +30,6 @@ set scrolloff=8
 set shortmess+=aAcCI
 set shortmess-=o
 set showmatch
-" set showtabline=2
 set splitbelow splitright
 set splitkeep=screen
 set termguicolors
@@ -70,7 +69,8 @@ set foldlevel=1
 set foldminlines=3
 set foldopen+=insert,jump
 set foldtext=fold#text()
-set foldmethod=marker
+" set foldcolumn=1
+" set foldmethod=marker
 
 " better search if auto pausing folds
 " set foldopen-=search
@@ -82,6 +82,8 @@ augroup vimrc_fold
   " au CmdlineLeave /,\? call fold#pause()
   " au CursorMoved,CursorMovedI * call fold#unpause()
   au FileType lua setlocal foldmethod=indent
+  au FileType sh setlocal foldmethod=expr
+  au FileType vim setlocal foldmethod=marker
 augroup END
 
 nnoremap <expr> h fold#aware_h()
@@ -157,9 +159,8 @@ command! Scripts lua require('lazy.spec.snacks.picker.scriptnames')()
 command! Terminal lua Snacks.terminal.toggle()
 
 " Section: keymaps {{{1
-
-
 nnoremap <leader><Space> viW
+
 nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
 nnoremap <leader>K  <Cmd>norm! K<CR>
