@@ -1,20 +1,27 @@
-function! fold#text()
+function! fold#text() abort
   let s:foldchar = '.'
-  let line1 = getline(v:foldstart)
-  let indent = matchstr(line1, '^\s*')
-  if line1 =~ '^\s*{'
-    let next = getline(v:foldstart + 1)
-    let line = indent . substitute(next, '^\s*', '{ ', '')
-  else
-    let line = substitute(line1, '\s*"\?\s*{{{\d*\s*$', '', '')
-  endif
-  let lines_count = v:foldend - v:foldstart + 1
-  let lines_count_text = '|' . printf("%10s", lines_count . ' lines') . ' |'
-  let pre = line .. ' '
-  let post = lines_count_text
-  let width = 80
-  let fill = repeat(s:foldchar, max([0, width - strdisplaywidth(pre . post)]))
-  return pre . fill . post
+  let l:line1 = getline(v:foldstart)
+
+  function! s:CleanLine(line) abort
+    return substitute(a:line, '\s*"\?\s*{{{\d*\s*$', '', '')
+  endfunction
+
+  function! s:FoldHeader(line1) abort
+    if a:line1 =~# '^\s*{'
+      let l:next = getline(v:foldstart + 1)
+      let l:indent = matchstr(a:line1, '^\s*')
+      return l:indent . substitute(l:next, '^\s*', '{ ', '')
+    endif
+    return s:CleanLine(a:line1)
+  endfunction
+
+  let l:line = s:FoldHeader(l:line1)
+  let l:lines_count = v:foldend - v:foldstart + 1
+  let l:post = '|' . printf('%10s', l:lines_count . ' lines') . ' |'
+  let l:pre = l:line . ' '
+  let l:fill = repeat(s:foldchar, max([0, 78 - strdisplaywidth(l:pre . l:post)]))
+
+  return l:pre . l:fill . l:post
 endfunction
 
 function! fold#aware_h() abort
@@ -68,4 +75,4 @@ if not (searchConfirmed or vim.fn.mode() == 'n') then
     vim.cmd.normal('zv') -- after closing folds, keep the *current* fold open
     end
     end, vim.api.nvim_create_namespace('auto_pause_folds'))
-EOF
+    EOF
