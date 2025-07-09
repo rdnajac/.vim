@@ -6,6 +6,10 @@ function format#normalize_quotes() abort
   %s/[“”]/"/ge
 endfunction
 
+function format#delete_blank_lines() abort
+  g/^$/d
+endfunction
+
 function s:strip_trailing_whitespace() abort
   %s/\s\+$//e
 endfunction

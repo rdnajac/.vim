@@ -5,8 +5,7 @@ require('lazy.spec.snacks.keymaps')
 ---@type snacks.Config
 M.opts = {
   bigfile = { enabled = true },
-  -- dashboard = require('lazy.spec.snacks.dashboard').config,
-  dashboard = { enabled = false },
+  dashboard = require('lazy.spec.snacks.dashboard').config,
   -- explorer = { enabled = false },
   explorer = { replace_netrw = false },
   image = { enabled = true },
@@ -31,6 +30,11 @@ M.opts = {
             -- TODO: set titles in picker calls
             title = '{title} {live} {flags}',
             title_pos = 'left',
+          },
+          {
+            win = 'input',
+            height = 1,
+          },
           },
           {
             win = 'input',

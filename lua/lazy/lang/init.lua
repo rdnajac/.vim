@@ -22,6 +22,13 @@ _G.langsetup = setmetatable({}, {
   end,
 })
 
+langsetup({
+  { 'bash-language-server', 'bash-language-server' },
+  'shfmt',
+  'shellcheck',
+  'shellharden',
+})
+
 local function mason_install()
   local tools = lang_spec.tools
   local total = #tools

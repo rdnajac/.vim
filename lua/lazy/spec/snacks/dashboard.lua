@@ -14,14 +14,8 @@ local M = {}
 M.config = {
   sections = {
     { section = 'header' },
-    --     {
-    --       section = 'terminal',
-    --       padding = 1,
-    --       cmd = [[sh -c 'cat <<EOF | lolcat
-    -- ]] .. header .. [[
-    -- EOF']],
-    --     },
     { section = 'keys' },
+    -- TODO: add vim fortune
     {
       section = 'terminal',
       padding = 1,
@@ -69,5 +63,7 @@ M.config = {
     end,
   },
 }
+
+require('nvim.ui.dashboard_hacks')
 
 return M
