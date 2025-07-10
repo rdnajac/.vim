@@ -11,7 +11,7 @@ end
 
 vim.print = _G.dd
 
--- Snacks.profiler
+-- Snacks.profiler {{{
 if vim.env.PROF then
   vim.opt.rtp:append(vim.g.lazypath .. '/snacks.nvim')
   ---@type snacks.profiler.Config
@@ -24,3 +24,4 @@ if vim.env.PROF then
   }
   require('snacks').profiler.startup(profiler)
 end
+-- vim:fdm=marker:fdl=0

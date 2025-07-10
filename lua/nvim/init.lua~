@@ -3,13 +3,13 @@ vim.opt.backupdir:remove('.')
 vim.opt.laststatus = 3
 vim.opt.cmdheight = 0
 
+require('nvim.munchies')
 require('vim._extui').enable({})
 require('nvim.ui.chromatophore')
 require('nvim.autocmds')
 require('nvim.treesitter')
 
 Lazy(function()
-  dd('Lazy opts')
   vim.opt.clipboard = vim.env.SSH_TTY and '' or 'unnamedplus'
   -- vim.opt.formatexpr = "v:lua.require'lazyvim.util'.format.formatexpr()"
   vim.opt.foldexpr = 'v:lua.require("nvim.treesitter.fold").expr()'
@@ -19,7 +19,7 @@ Lazy(function()
   vim.opt.smoothscroll = true
   require('nvim.diagnostic')
   require('nvim.lsp')
-  require('plugins.which-key')
+  require('nvim.keymaps')
 
   vim.cmd([[ aunmenu PopUp | autocmd! nvim.popupmenu ]])
 end)

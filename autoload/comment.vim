@@ -1,3 +1,4 @@
+" FIXME: ¿
 function! s:insert_comment(tag, above) abort
   let prefix = a:above ? 'O' : 'o'
   let content = a:tag !=# '' ? a:tag . ': ' : ''

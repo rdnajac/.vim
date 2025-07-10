@@ -1,4 +1,4 @@
-local header = [[
+local lazyvim = [[
       ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
       ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
       ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
@@ -6,10 +6,11 @@ local header = [[
       ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
       ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
 ]]
-local str = [["The computing scientist's main challenge is not to get confused by the complexities of his own making."]]
+local str = [["The computing scientist's main challenge is not to get 
+confused by the complexities of his own making."]]
 local M = {}
----@module "snacks"
 
+---@module "snacks"
 ---@class snacks.dashboard.Config
 M.config = {
   sections = {
@@ -21,12 +22,15 @@ M.config = {
       padding = 1,
       indent = 8,
       width = 69,
-      cmd = 'cowsay ' .. str .. ' | lolcat',
+      -- cmd = 'cowsay ' .. str .. ' | lolcat',
+      cmd = vim.fn.shellescape(vim.fn.stdpath('config') .. '/fortunes/learn-something')
+        .. ' | cowsay | lolcat #'
+        .. os.time(),
     },
-    { section = 'startup', padding = 1 },
+    -- { section = 'startup', padding = 1 },
   },
   preset = {
-    header = header,
+    header = vim.env.LAZY and lazyvim or str,
     keys = {
       { icon = ' ', title = 'Recent Files' },
       -- TODO: add resture session button/function/command
@@ -40,7 +44,8 @@ M.config = {
   },
   formats = {
     key = function(item)
-      local sep = LazyVim.config.separators.section.rounded
+      local sep = require('lazy.config').separators.section.rounded
+      -- local sep = LazyVim.config.separators.section.rounded
       return {
         { sep.right, hl = 'special' },
         { item.key, hl = 'key' },

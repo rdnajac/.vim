@@ -67,7 +67,17 @@ M.opts = function()
       ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
       ['<Up>'] = { 'select_prev', 'fallback' },
       ['<Down>'] = { 'select_next', 'fallback' },
-      ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+      ['<C-p>'] = {
+        function(cmp)
+          if cmp.is_menu_visible() then
+            return cmp.select_prev()
+          else
+            -- return '<C-o>p'
+            vim.cmd('normal! p')
+          end
+        end,
+        'fallback_to_mappings',
+      },
       ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
       ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
       ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },

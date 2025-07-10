@@ -4,7 +4,8 @@ My (n)vim configuration.
 
 ## TODO
 
-- [ ] `vim-matchup` breaks on a commented 'if'
+- [ ] `:bufdo if &modifiable | %s/\<foo\>/bar/ge | update | endif`
+
 
 ## neovim
 
@@ -26,7 +27,7 @@ cd  .. && ls
 
 ## Plugins
 
-Use [`lazy.nvim`](https://lazy.folke.io/) to manage plugins
+Use [`lazy.nvimnvim`](https://lazy.folke.io/) to manage plugins
 and spend hours optimizing for milliseconds.
 
 ### Snacks

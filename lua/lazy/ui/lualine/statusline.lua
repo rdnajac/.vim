@@ -55,6 +55,6 @@ return {
         return #clients > 0
       end,
     },
-    { require('lazy.spec.lualine.components.lsp_status') },
+    { require('spec.lualine.components.lsp_status') },
   },
 }

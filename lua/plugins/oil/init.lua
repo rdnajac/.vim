@@ -1,9 +1,9 @@
-local git_status = require('lazy.spec.oil.git_status')
+local git_status = require('plugins.oil.git_status')
 local git_status_cache = git_status.new()
 
 local M = { 'stevearc/oil.nvim' }
 
-M.dependencies = { 'refractalize/oil-git-status.nvim' }
+-- M.dependencies = { 'refractalize/oil-git-status.nvim' }
 
 M.opts = function()
   vim.keymap.set('n', '-', function()
@@ -14,9 +14,9 @@ M.opts = function()
     require('oil').open()
   end, { desc = 'Open Oil in current window' })
 
-  require('lazy.spec.oil.autocmds')
+  require('plugins.oil.autocmds')
   -- LazyVim.on_very_lazy(function()
-  --   require('lazy.spec.oil.git_extmarks')
+  --   require('plugins.oil.git_extmarks')
   -- end)
 
   local refresh = require('oil.actions').refresh
@@ -32,7 +32,7 @@ M.opts = function()
     -- skip_confirm_for_simple_edits = true,
     constrain_cursor = 'name',
     watch_for_changes = true,
-    keymaps = require('lazy.spec.oil.keymaps'),
+    keymaps = require('plugins.oil.keymaps'),
 
     float = {
       padding = 2, -- default = `2`
@@ -70,6 +70,11 @@ M.opts = function()
       end,
     },
   }
+end
+
+-- require('oil').setup(require('plugins.oil').opts())
+M.config = function()
+  require('oil').setup(M.opts())
 end
 
 return M

@@ -9,7 +9,7 @@ wk.add({
 })
 
 local function map_pickers(key, path, desc)
-  local opts = { cwd = path, matcher = { frecency = true } }
+  local opts = { cwd = path, matcher = { frecency = true }, title = desc }
 -- stylua: ignore
   return {
     { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc, },
@@ -19,12 +19,12 @@ end
 
 -- stylua: ignore
 wk.add({
-  -- frequently used pickers
+  -- frequently used pickerss
   map_pickers('c', vim.fn.stdpath('config'), 'Config Files'),
+  map_pickers('.', os.getenv('HOME') .. '/.local/share/chezmoi', 'Dotfiles'),
   map_pickers('G', vim.fn.expand('~/GitHub/'), 'GitHub Repos'),
-  map_pickers('p', vim.g.plug_home, 'Plugins'),
-  map_pickers('P', vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
-, 'Plugins'),
+  map_pickers('p', vim.g.plug_home, 'Vim Plugins'),
+  map_pickers('P', vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt') , 'Nvim Plugins'),
   -- map_pickers('L', vim.g.lazypath .. '/LazyVim', 'LazyVim'),
   -- map_pickers('S', vim.g.lazypath .. '/snacks.nvim', 'Snacks'),
   map_pickers('v', vim.fn.expand('$VIMRUNTIME'), '$VIMRUNTIME'),
@@ -70,6 +70,6 @@ Snacks.toggle.scroll():map('<leader>us')
 Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
 
-require('lazy.spec.snacks.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
-require('lazy.spec.snacks.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
-require('lazy.spec.snacks.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
+require('plugins.snacks.toggle').translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
+require('plugins.snacks.toggle').virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
+require('plugins.snacks.toggle').color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })

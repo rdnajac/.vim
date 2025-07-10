@@ -25,7 +25,6 @@ local function split_path(path)
   return vim.split(path, '/', { plain = true })
 end
 
-
 local function relative_parts(path, base)
   local p, b = split_path(path), split_path(base)
   local i = 1
@@ -42,7 +41,6 @@ local function relative_parts(path, base)
   end
   return out
 end
-
 
 M.prefix = {
   function()

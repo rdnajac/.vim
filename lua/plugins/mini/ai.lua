@@ -28,7 +28,7 @@ local objects = {
   { '}', desc = '{} with ws' },
 }
 
--- taken from MiniExtra.gen_ai_spec.buffer
+-- taken from MiniExtra.gen_ai_plugins.buffer
 local function ai_buffer(ai_type)
   local start_line, end_line = 1, vim.fn.line('$')
   if ai_type == 'i' then
@@ -49,20 +49,20 @@ local ai = require('mini.ai')
 local mini_ai_opts = {
   n_lines = 500,
   custom_textobjects = {
-    c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }),
+    c = ai.gen_plugins.treesitter({ a = '@class.outer', i = '@class.inner' }),
     d = { '%f[%d]%d+' }, -- digits
     e = { -- Word with case
       { '%u[%l%d]+%f[^%l%d]', '%f[%S][%l%d]+%f[^%l%d]', '%f[%P][%l%d]+%f[^%l%d]', '^[%l%d]+%f[^%l%d]' },
       '^().*()$',
     },
-    f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
+    f = ai.gen_plugins.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
     g = ai_buffer,
-    o = ai.gen_spec.treesitter({ -- code block
+    o = ai.gen_plugins.treesitter({ -- code block
       a = { '@block.outer', '@conditional.outer', '@loop.outer' },
       i = { '@block.inner', '@conditional.inner', '@loop.inner' },
     }),
-    u = ai.gen_spec.function_call(), -- u for "Usage"
-    U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
+    u = ai.gen_plugins.function_call(), -- u for "Usage"
+    U = ai.gen_plugins.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
   },
 }
 

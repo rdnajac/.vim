@@ -6,7 +6,7 @@ local default_options = {
   symbols = {
     -- Use standard unicode characters for the spinner and done symbols:
     spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' },
-    done = require('lazy.spec.lualine.components.filetype_icon'),
+    done = require('spec.lualine.components.filetype_icon'),
     separator = ' ',
   },
   ignore_lsp = { 'GitHub Copilot' },

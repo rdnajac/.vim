@@ -1,5 +1,7 @@
 local M = { 'monaqa/dial.nvim' }
 
+M.event = 'BufWinEnter'
+
 ---@param increment boolean
 ---@param g? boolean
 function M.dial(increment, g)
@@ -11,10 +13,18 @@ function M.dial(increment, g)
 end
 
 M.keymaps = function()
-  vim.keymap.set({ 'n', 'v' }, '<C-a>', function() return M.dial(true) end, { expr = true, desc = 'Increment' })
-  vim.keymap.set({ 'n', 'v' }, '<C-x>', function() return M.dial(false) end, { expr = true, desc = 'Decrement' })
-  vim.keymap.set({ 'n', 'v' }, 'g<C-a>', function() return M.dial(true, true) end, { expr = true, desc = 'Increment' })
-  vim.keymap.set({ 'n', 'v' }, 'g<C-x>', function() return M.dial(false, true) end, { expr = true, desc = 'Decrement' })
+  vim.keymap.set({ 'n', 'v' }, '<C-a>', function()
+    return M.dial(true)
+  end, { expr = true, desc = 'Increment' })
+  vim.keymap.set({ 'n', 'v' }, '<C-x>', function()
+    return M.dial(false)
+  end, { expr = true, desc = 'Decrement' })
+  vim.keymap.set({ 'n', 'v' }, 'g<C-a>', function()
+    return M.dial(true, true)
+  end, { expr = true, desc = 'Increment' })
+  vim.keymap.set({ 'n', 'v' }, 'g<C-x>', function()
+    return M.dial(false, true)
+  end, { expr = true, desc = 'Decrement' })
 end
 
 M.opts = function()
@@ -40,17 +50,33 @@ M.opts = function()
         augend.integer.alias.hex,
         augend.date.alias['%Y/%m/%d'],
         augend.constant.alias.en_weekday_full,
-        new_dial({ 'January','February','March','April','May','June','July','August','September','October','November','December' }, true),
-        new_dial({ 'first','second','third','fourth','fifth','sixth','seventh','eighth','ninth','tenth' }, false),
+        new_dial({
+          'January',
+          'February',
+          'March',
+          'April',
+          'May',
+          'June',
+          'July',
+          'August',
+          'September',
+          'October',
+          'November',
+          'December',
+        }, true),
+        new_dial(
+          { 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth' },
+          false
+        ),
         augend.constant.alias.bool,
-        new_dial({ 'True','False' }, true),
-        new_dial({ 'and','or' }, true),
-        new_dial({ '&&','||' }, false),
-        new_dial({ 'top','middle','bottom' }, true),
-        new_dial({ 'left','center','right' }, true),
-        new_dial({ 'start','end' }, true),
-        new_dial({ 'rows','cols' }, true),
-        new_dial({ 'human','mouse' }, true),
+        new_dial({ 'True', 'False' }, true),
+        new_dial({ 'and', 'or' }, true),
+        new_dial({ '&&', '||' }, false),
+        new_dial({ 'top', 'middle', 'bottom' }, true),
+        new_dial({ 'left', 'center', 'right' }, true),
+        new_dial({ 'start', 'end' }, true),
+        new_dial({ 'rows', 'cols' }, true),
+        new_dial({ 'human', 'mouse' }, true),
       },
       json = { augend.semver.alias.semver },
       css = {
@@ -72,7 +98,7 @@ M.opts = function()
   return opts
 end
 
-M.init = function()
+M.config = function()
   local opts = M.opts()
   local default = opts.groups.default
 
@@ -84,6 +110,7 @@ M.init = function()
 
   require('dial.config').augends:register_group(opts.groups)
   vim.g.dials_by_ft = opts.dials_by_ft
+  M.keymaps()
 end
 
 return M

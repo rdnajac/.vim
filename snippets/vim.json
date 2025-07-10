@@ -25,5 +25,11 @@
     "prefix": ["cmd", "<Cmd>"],
     "body": "<Cmd>${0}<CR>",
     "description": "Command call."
+  },
+
+  "plug": {
+    "prefix": "Plug",
+    "body": "Plug '${0}'",
+    "description": "Plug invocation."
   }
 }

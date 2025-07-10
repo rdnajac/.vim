@@ -1,19 +1,25 @@
 local M = { 'folke/snacks.nvim' }
-require('lazy.spec.snacks.keymaps')
+M.priority = 1000
 
 ---@module "snacks"
 ---@type snacks.Config
 M.opts = {
   bigfile = { enabled = true },
-  dashboard = require('lazy.spec.snacks.dashboard').config,
-  -- explorer = { enabled = false },
+  dashboard = require('plugins.snacks.dashboard').config,
   explorer = { replace_netrw = false },
   image = { enabled = true },
-  indent = { indent = { only_current = true, only_scope = true } },
+  indent = {
+    enabled = true,
+    indent = { only_current = true, only_scope = true },
+  },
   input = { enabled = true },
-  notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
-  ---@type snacks.picker.Config
-  picker = {
+  notifier = {
+    enabled = false,
+    style = 'fancy',
+    date_format = '%T',
+    timeout = 4000,
+  },
+  picker = { ---@type snacks.picker.Config {{{
     layout = { preset = 'ivy' },
     layouts = {
       ---@type snacks.picker.layout.Config
@@ -35,15 +41,14 @@ M.opts = {
             win = 'input',
             height = 1,
           },
-          },
-          {
-            win = 'input',
-            height = 1,
-          },
+        },
+        {
+          win = 'input',
+          height = 1,
         },
       },
     },
-    sources = require('lazy.spec.snacks.picker._default').sources,
+    sources = require('plugins.snacks.picker._default').sources,
     win = {
       input = {
         keys = {
@@ -51,7 +56,7 @@ M.opts = {
           ['<a-j>'] = { 'toggle', mode = { 'n', 'i' }, desc = 'Toggle Files/Grep' },
           ['<a-z>'] = {
             function(self)
-              require('lazy.spec.snacks.picker.zoxide').cd_and_resume_picking(self)
+              require('plugins.snacks.picker.zoxide').cd_and_resume_picking(self)
               -- Snacks.picker.actions.cd(_, item)
               -- Snacks.picker.actions.lcd(_, item)
             end,
@@ -118,5 +123,8 @@ M.opts = {
   },
   words = { enabled = true },
 }
+
+require('snacks').setup(M.opts)
+require('plugins.snacks.keymaps')
 
 return M

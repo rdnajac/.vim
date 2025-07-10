@@ -4,7 +4,7 @@ return {
     enabled = false,
     event = { 'LazyFile', 'VeryLazy' },
     opts = function()
-      local x = require('lazy.spec.lualine.extensions')
+      local x = require('spec.lualine.extensions')
       -- PERF: we don't need this lualine require madness 🤷
       local lualine_require = require('lualine_require')
       lualine_require.require = require
@@ -15,7 +15,7 @@ return {
 
       local opts = {
         options = {
-          theme = require('lazy.spec.lualine.theme'),
+          theme = require('spec.lualine.theme'),
           -- globalstatus = true,
           always_show_tabline = true,
           disabled_filetypes = {
@@ -26,21 +26,21 @@ return {
           section_separators = {},
           component_separators = { left = '', right = '' },
         },
-        -- sections = require('lazy.spec.lualine.statusline'),
+        -- sections = require('spec.lualine.statusline'),
         -- sections = {},
         tabline = {
-          lualine_a = { require('lazy.spec.lualine.components.path').prefix },
+          lualine_a = { require('spec.lualine.components.path').prefix },
           lualine_b = {
-            require('lazy.spec.lualine.components.path').suffix,
-            require('lazy.spec.lualine.components.path').modified,
+            require('spec.lualine.components.path').suffix,
+            require('spec.lualine.components.path').modified,
           },
           -- lualine_c = {},
           lualine_x = {},
-          lualine_y = { require('lazy.spec.lualine.components.lazy_updates') },
-          lualine_z = require('lazy.spec.lualine.components.time').clock,
+          lualine_y = { require('spec.lualine.components.lazy_updates') },
+          lualine_z = require('spec.lualine.components.time').clock,
         },
-        winbar = require('lazy.spec.lualine.winbar').active,
-        inactive_winbar = require('lazy.spec.lualine.winbar').inactive,
+        winbar = require('spec.lualine.winbar').active,
+        inactive_winbar = require('spec.lualine.winbar').inactive,
 
         extensions = {
           'fugitive',

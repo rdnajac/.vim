@@ -44,5 +44,9 @@ vim.lsp.config('*', {
   end,
 })
 
--- FIXME: ¿
 -- vim.lsp.enable(_G.lang_spec.lsps)
+vim.lsp.enable({
+  'ruff',
+  'luals',
+  'vimls',
+})

@@ -1,5 +1,5 @@
 local M = {}
-local date = require('lazy.spec.lualine.components.time').date
+local date = require('spec.lualine.components.time').date
 M.active = {
   lualine_a = {
     {
@@ -16,7 +16,7 @@ M.active = {
   },
   lualine_b = {
     {
-      require('lazy.spec.lualine.components.navic'),
+      require('spec.lualine.components.navic'),
       color = { bg = 'NONE' },
     },
   },

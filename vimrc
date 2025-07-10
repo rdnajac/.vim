@@ -1,21 +1,20 @@
-" vimrc
 scriptencoding=utf-8
 
 " Section: settings {{{1
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 let g:VIMDIR = fnamemodify($MYVIMRC, ':p:h')
-let g:plug_home = g:VIMDIR . '.plugged/'
 let &spellfile = g:VIMDIR . '.spell/en.utf-8.add'
 " let &undodir     = s:VIMHOME . '.undo//'
 " let &viminfofile = s:VIMHOME . '.viminfo'
 " let &verbosefile = s:VIMHOME . '.vimlog.txt'
+let &backup = has('nvim')
+let &swapfile = has('nvim')
 
 " options {{{2
 set startofline
 set autowrite
 set autowriteall
-" set backup
 " set confirm
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
@@ -81,9 +80,9 @@ augroup vimrc_fold
   " auto_pause_folds
   " au CmdlineLeave /,\? call fold#pause()
   " au CursorMoved,CursorMovedI * call fold#unpause()
-  au FileType lua setlocal foldmethod=indent
+  au FileType lua setlocal foldmethod=indent foldlevelstart=99
   au FileType sh setlocal foldmethod=expr
-  au FileType vim setlocal foldmethod=marker
+  au FileType vim setlocal foldmethod=marker foldlevelstart=0
 augroup END
 
 nnoremap <expr> h fold#aware_h()
@@ -101,34 +100,34 @@ augroup vimrc
   au VimEnter * nested call sesh#restore()
 
   " au WinNew * if bufname('') ==# '' && &bt ==# '' && &ft  | exe 'e #' | endif
-  " restore cursor position (and open any folds) when opening a file
-  " au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
-  au BufWinEnter * exe "silent! normal! g`\"zv"
+" restore cursor position (and open any folds) when opening a file
+" au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
+au BufWinEnter * exe "silent! normal! g`\"zv"
 
-  " automatically create directories for new files
-  " BUG: oil
-  " au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
+" automatically create directories for new files
+" BUG: oil
+" au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
 
-  " immediately quit the command line window
-  au CmdwinEnter * quit
+" immediately quit the command line window
+au CmdwinEnter * quit
 
-  " automatically reload files that have been changed outside of Vim
-  au FocusGained * if &buftype !=# 'nofile' | checktime | endif
+" automatically reload files that have been changed outside of Vim
+au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
-  " automatically resize splits when the window is resized
-  au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
+" automatically resize splits when the window is resized
+au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
 
-  " no cursorline in insert mode
-  au InsertLeave,WinEnter * setlocal cursorline
-  au InsertEnter,WinLeave * setlocal nocursorline
+" no cursorline in insert mode
+au InsertLeave,WinEnter * setlocal cursorline
+au InsertEnter,WinLeave * setlocal nocursorline
 
-  " relative numbers in visual mode only if number is already set
-  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+" relative numbers in visual mode only if number is already set
+au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 
-  " for when a ftplugin file is not warranted
-  au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
+" for when a ftplugin file is not warranted
+au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
 augroup END
 
 " Section: commands {{{1
@@ -145,22 +144,23 @@ nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
 
 " munchies {{{2
 command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
-command! -bang Zoxide lua require('lazy.spec.snacks.picker.zoxide').pick('<bang>')
+command! -bang Zoxide lua require('plugins.snacks.picker.zoxide').pick('<bang>')
 command! Autocmds lua Snacks.picker.autocmds()
-command! Chezmoi lua require('lazy.spec.snacks.picker.chezmoi')()
+command! Chezmoi lua require('plugins.snacks.picker.chezmoi')()
 command! Config lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
 command! Explorer lua Snacks.picker.explorer()
 command! Help lua Snacks.picker.help()
 command! Highlights lua Snacks.picker.highlights()
 command! Keymaps lua Snacks.picker.keymaps()
 command! Lazygit lua Snacks.Lazygit()
-command! PluginFiles lua require('lazy.spec.snacks.picker.plugins').files()
-command! PluginGrep lua require('lazy.spec.snacks.picker.plugins').grep()
-command! Scripts lua require('lazy.spec.snacks.picker.scriptnames')()
+command! PluginFiles lua require('plugins.snacks.picker.plugins').files()
+command! PluginGrep lua require('plugins.snacks.picker.plugins').grep()
+command! Scripts lua require('plugins.snacks.picker.scriptnames')()
 command! Terminal lua Snacks.terminal.toggle()
 
 " Section: keymaps {{{1
 nnoremap <leader><Space> viW
+nnoremap <C-Space> viw
 
 nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
@@ -176,7 +176,6 @@ nnoremap <leader>h  <Cmd>Help<CR>
 nnoremap <leader>t  <Cmd>edit #<CR>
 nnoremap <leader>w  <Cmd>write!<CR>
 nnoremap <leader>z  <Cmd>Zoxide<CR>
-nnoremap <leader>cz <Cmd>Chezmoi<CR>
 nnoremap <leader>fp <Cmd>PluginFiles<CR>
 nnoremap <leader>sp <Cmd>PluginGrep<CR>
 nnoremap <leader>/  <Cmd>lua Snacks.picker.grep()<CR>
@@ -189,12 +188,20 @@ nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 " code {{{2
 
 " debug {{{2
+nnoremap <leader>da <Cmd>ALEInfo<CR>
+nnoremap <leader>db <Cmd>Blink status<CR>
+nnoremap <leader>dc <Cmd>lua=vim.lsp.get_clients()[1].server_capabilities<CR>
+nnoremap <leader>dd <Cmd>LazyDev debug<CR>
+nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
+nnoremap <leader>dh <Cmd>LazyHealth<CR>
+nnoremap <leader>dS <Cmd>lua=require('snacks').meta.get()<CR>
+nnoremap <leader>dw <Cmd>lua=vim.lsp.buf.list_workspace_folders()<CR>
 
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 " nnoremap <leader>fD <Cmd>Rm!<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 
-" vim settings {{{2
+" vim settings `<leader>v` {{{2
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 nnoremap <leader>va <Cmd>call edit#vimrc('+/Section:\ autocmds')<CR>
 nnoremap <leader>vc <Cmd>call edit#vimrc('+/Section:\ commands')<CR>
@@ -204,18 +211,16 @@ nnoremap <leader>vs <Cmd>call edit#vimrc('+/Section:\ settings')<CR>
 
 " nvim settings {{{2
 nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
-nnoremap <BSlash>l <Cmd>call edit#module('lazy/spec/init')<CR>
+nnoremap <BSlash>l <Cmd>call edit#module('plugins/init')<CR>
 nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
 
 " find/files {{{2
 nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
 nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
-nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
+nnoremap <leader>fm <Cmd>lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
 nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
-
-
 
 " git {{{2
 nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
@@ -241,21 +246,12 @@ nnoremap <leader>s/ <Cmd>lua Snacks.picker.search_history()<CR>
 nnoremap <leader>s: <Cmd>lua Snacks.picker.command_history()<CR>
 nnoremap <leader>sd <Cmd>lua Snacks.picker.diagnostics()<CR>
 nnoremap <leader>sj <Cmd>lua Snacks.picker.jumps()<CR>
-nnoremap <leader>pq <Cmd>lua Snacks.picker.qflist()<CR>
+nnoremap <leader>sq <Cmd>lua Snacks.picker.qflist()<CR>
 nnoremap <leader>sh <Cmd>lua Snacks.picker.help()<CR>
 nnoremap <leader>sH <Cmd>lua Snacks.picker.highlights()<CR>
 nnoremap <leader>si <Cmd>lua Snacks.picker.icons()<CR>
 nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
 
-" debug {{{2
-nnoremap <leader>da <Cmd>ALEInfo<CR>
-nnoremap <leader>db <Cmd>Blink status<CR>
-nnoremap <leader>dc <Cmd>lua=vim.lsp.get_clients()[1].server_capabilities<CR>
-nnoremap <leader>dd <Cmd>LazyDev debug<CR>
-nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
-nnoremap <leader>dh <Cmd>LazyHealth<CR>
-nnoremap <leader>dS <Cmd>lua=require('snacks').meta.get()<CR>
-nnoremap <leader>dw <Cmd>lua=vim.lsp.buf.list_workspace_folders()<CR>
 
 " XXX: potential conflicts
 nnoremap ` ~
@@ -274,10 +270,12 @@ nnoremap dD <Cmd>%d<CR>
 " `splitjoin`: `gJ` and `gS`
 " `vim-surround`: `cs`, `ds`, and `ys`
 
-" cd cm co cp cq cr `cs` cu cx cy cz
+" `cd` cm co cp `cq` cr `cs` cu cx cy cz
 nnoremap cdc <Cmd>call bin#cd#smart()<CR>
 nnoremap cdb <Cmd>cd %:p:h<BAR>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<BAR>pwd<CR>
+
+nmap <expr> cq change#quote()
 
 " dc dm dq dr `ds` du dx `dy` dz
 " vnoremap <silent> dy "_dP
@@ -392,7 +390,7 @@ nmap yos :set spell!<BAR>set wrap?<CR>
 nmap yow :set wrap!<BAR>set wrap?<CR>
 nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 
-" insert special chars {{{2
+" insert pluginsial chars {{{2
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
@@ -433,49 +431,39 @@ cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 
 " Section: plugins {{{1
+
+let g:plug_home = (has('nvim') ? stdpath('data') . '/site/pack/core' : expand('$HOME/.vim/pack')) . '/plugged'
+let g:vim_plugins = github#repos()
 call plug#begin()
-Plug 'dense-analysis/ale'
-Plug 'github/copilot.vim'
-Plug 'lervag/vimtex'
-" Plug '~/GitHub/rdnajac/src/fzf/'
-" Plug 'junegunn/fzf.vim'
-Plug 'junegunn/vim-easy-align'
-" Plug 'tpope/vim-commentary'
-" Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-apathy'
-Plug 'tpope/vim-capslock'
-Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-unimpaired'
-" Plug 'vuciv/golf'
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'AndrewRadev/dsf.vim'
-" Plug 'Konfekt/FastFold'
-" Plug 'kana/vim-textobj-user'
+
+for repo in g:vim_plugins
+  execute 'Plug ' . shellescape(repo)
+endfor
+
+if !has('nvim')
+  " Plug 'vuciv/golf'
+  Plug 'Konfekt/FastFold'
+  " Plug 'kana/vim-textobj-user'
+  " Plug '~/GitHub/rdnajac/src/fzf/'
+  " Plug 'junegunn/fzf.vim'
+  Plug 'github/copilot.vim',
+  Plug 'tpope/vim-commentary'
+  " Plug 'tpope/vim-vinegar'
+endif
 call plug#end()
 
 if has('nvim')
-  " if !exists('g:loaded_nvim')
-  let g:loaded_netrwPlugin = 1
-  let g:loaded_tutor_mode_plugin = 1
-  let g:loaded_2html_plugin = 1
-  let g:loaded_zipPlugin = 1
-  let g:loaded_tarPlugin = 1
-  let g:loaded_gzip = 1
-  lua require('nvim')
-  " let g:loaded_nvim = 1
+  if !exists('g:loaded_nvim')
+    let g:loaded_netrwPlugin = 1
+    let g:loaded_tutor_mode_plugin = 1
+    let g:loaded_2html_plugin = 1
+    let g:loaded_zipPlugin = 1
+    let g:loaded_tarPlugin = 1
+    let g:loaded_gzip = 1
+    let g:loaded_nvim = 1
+    lua require('init')
+    lua require('nvim')
+  endif
 else
   set clipboard=unnamedplus
   color scheme
