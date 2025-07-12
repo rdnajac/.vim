@@ -11,7 +11,7 @@ setlocal textwidth=80
 " treat quoted text as comments for easy toggling
 setlocal commentstring=>\ %s
 
-nmap <leader>k v:lua require('nvim.util.link').linkify()
+nmap <leader>k v:lua require('util.link').linkify()
 
 " Insert an octothorpe at the beginning of the line that already has text
 nnoremap <buffer> <localleader>h ^i#<Space><Esc>

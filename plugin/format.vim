@@ -20,7 +20,7 @@ function! MyFormatExpr() abort
   return 0
 endfunction
 
-set formatexpr=MyFormatExpr()
+" set formatexpr=MyFormatExpr()
 
 function! GQ(type, ...)
   normal! '[v']gq

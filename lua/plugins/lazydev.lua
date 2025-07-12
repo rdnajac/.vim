@@ -1,11 +1,5 @@
 local M = { 'folke/lazydev.nvim' }
 
-M.opts = {
-  library = {
-    { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-    { path = 'snacks.nvim', words = { 'Snacks' } },
-  },
-}
 -- HACK: fix lsp name mismatch
 -- local lazydev_path = require('lazy.core.config').spec.plugins['lazydev.nvim'].dir
 local lazydev_path = vim.fn.expand('~/.local/share/nvim/site/pack/core/opt/lazydev.nvim/')
@@ -23,6 +17,15 @@ package.preload['lazydev.lsp'] = function()
   return mod
 end
 
-require('lazydev.config').setup(M.opts)
+M.opts = {
+  library = {
+    { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+    { path = 'snacks.nvim', words = { 'Snacks' } },
+  },
+}
+
+M.config = function()
+  require('lazydev.config').setup(M.opts)
+end
 
 return M

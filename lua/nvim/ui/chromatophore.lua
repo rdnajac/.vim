@@ -1,15 +1,21 @@
-local get_mode = require('nvim.mode').get_mode
+local get_mode = require('util.mode').get_mode
+
+local colors = {
+  green = '#39ff14',
+  palegreen = '#9ece6a',
+}
 
 ---@type table<string, string>
 local ModeColor = {
-  normal = '#9ece6a',
+  normal = colors.green,
   insert = '#14aeff',
   visual = '#f7768e',
   replace = '#ff007c',
-  command = '#39ff14',
+  command = colors.palegreen,
   terminal = '#BB9AF7',
-  pending = '#39ff14',
+  pending = colors.palegreen,
 }
+
 ---@type table<string, string>
 -- stylua: ignore
 local ModeLowerKey = setmetatable({
@@ -47,6 +53,7 @@ local function chromatophore_refresh()
 
   Snacks.util.set_hl({
     Chromatophore = { fg = mode_color, bg = 'NONE' },
+    Title = { link = 'Chromatophore' },
     String = { link = 'Chromatophore' },
 
     Chromatophore_a = { fg = black, bg = mode_color, bold = true },
@@ -54,6 +61,9 @@ local function chromatophore_refresh()
     Chromatophore_b = { fg = mode_color, bg = grey, bold = true },
     Chromatophore_c = { fg = mode_color, bg = 'NONE' },
     Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
+
+    StatusLine = { link = 'Chromatophore_a' },
+    StatusLineNC = { link = 'Chromatophore_b' },
   })
 
   -- HACK: refresh tmux

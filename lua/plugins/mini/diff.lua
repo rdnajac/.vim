@@ -1,3 +1,7 @@
+require('mini.diff').setup({
+  view = { style = 'number', signs = { add = '▎', change = '▎', delete = '' } },
+})
+
 Snacks.toggle({
   name = 'Mini Diff Signs',
   get = function()
@@ -17,3 +21,4 @@ Snacks.toggle({
 }):map('<leader>uG')
 
 -- { '<leader>go', function() require('mini.diff').toggle_overlay(0) end, desc = 'Toggle mini.diff overlay' },
+-- vim.keymap.set(

@@ -114,6 +114,7 @@ M.opts = {
   statuscolumn = { enabled = false },
   styles = {
     lazygit = { height = 0, width = 0 },
+    dashboard = {border = 'none' },
   },
   terminal = {
     start_insert = true,
@@ -124,7 +125,9 @@ M.opts = {
   words = { enabled = true },
 }
 
-require('snacks').setup(M.opts)
-require('plugins.snacks.keymaps')
+M.config = function()
+  require('snacks').setup(M.opts)
+  require('plugins.snacks.keymaps')
+end
 
 return M

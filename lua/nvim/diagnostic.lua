@@ -1,5 +1,13 @@
--- local icons = LazyVim.config.icons
-local icons = require('nvim.ui.icons')
+local icons = {
+  diagnostics = {
+    error = ' ',
+    warn = ' ',
+    hint = '',
+    info = ' ',
+  }
+}
+
+
 
 ---@type vim.diagnostic.Opts
 vim.diagnostic.config({
@@ -15,7 +23,7 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.INFO] = icons.diagnostics.info,
     },
     numhl = {
-      [vim.diagnostic.severity.ERROR] = 'DiagnosticError',
+      [vim.diagnostic.severity.ERROR] = 'Statement',
       [vim.diagnostic.severity.WARN] = 'DiagnosticWarn',
       [vim.diagnostic.severity.INFO] = 'DiagnosticInfo',
       [vim.diagnostic.severity.HINT] = 'DiagnosticHint',

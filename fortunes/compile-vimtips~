@@ -1,3 +1,0 @@
-#!/bin/sh
-# Compile fortunes from a text file into a binary format
-strfile -c % ./vimtips vimtips.dat

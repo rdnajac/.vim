@@ -1,14 +1,14 @@
 setlocal expandtab
-setlocal formatoptions -=ro
+setlocal formatoptions-=ro
 
 let &l:formatprg = 'sh -c "cd ' . shellescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
 
 " simple auto-brackets
 " inoremap <buffer> ( ()<Left>
 " inoremap <buffer> ' ''<Left>
-inoremap <buffer> {<SPACE> {},<LEFT><LEFT><SPACE><LEFT><SPACE>
-inoremap <buffer> {<CR> {<CR>},<C-c>O
-inoremap <buffer> {, {<CR>},<C-c>O
+inoremap <buffer> {<SPACE> {}<LEFT><LEFT><SPACE><LEFT><SPACE>
+" inoremap <buffer> {<CR> {<CR>}<C-c>O
+" inoremap <buffer> {, {<CR>},<C-c>O
 
 inoremap <buffer> [[<CR> ([[<CR><CR>]])<UP>
 

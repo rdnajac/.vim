@@ -1,5 +1,6 @@
 scriptencoding=utf-8
 
+" TODO: autoload
 function! PrettyPath() abort
   let l:line = ''
   let l:prefix = luaeval('require("lazy.ui.lualine.components.path").prefix[1]()')
@@ -32,14 +33,6 @@ function! MyTabline() abort
   let l:line .= '%#Normal#'
   return l:line
 endfunction
-
-set showcmdloc=statusline
-" set statusline=
-
-set tabline=%!MyTabline()
-" set showtabline=2
-
-" set winbar=
 
 " export the statusline
 function! TmuxLeft() abort

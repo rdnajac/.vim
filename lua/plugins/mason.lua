@@ -1,6 +1,10 @@
 local M = { 'mason-org/mason.nvim' }
 
+-- FIXME:
+M.tools = { }
+
 M.install = function()
+  -- FIXME:
   local tools = lang_spec.tools
   local total = #tools
   local completed = 0
@@ -38,6 +42,11 @@ M.install = function()
     end
     ::continue::
   end
+end
+
+M.config = function()
+require('mason').setup({})
+-- TODO:
 end
 
 return M

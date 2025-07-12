@@ -42,7 +42,8 @@ M.opts = function()
           components = {
             kind_icon = {
               text = function(ctx)
-                local kind_icons = require('nvim.ui.icons').kinds
+                -- local kind_icons = require('nvim.ui.icons').kinds
+                local kind_icons = require('snacks.picker.config.defaults').defaults.icons.kinds
                 return kind_icons[ctx.kind] or ''
               end,
             },
@@ -101,11 +102,11 @@ M.opts = function()
       },
     },
     sources = {
-      default = { 'lsp', 'snippets', 'path', 'emoji' },
+      default = { 'lsp', 'snippets', 'path' },
       per_filetype = {
         lua = { inherit_defaults = true, 'lazydev' },
-        sh = { inherit_defaults = true, 'tmux', 'env' },
-        vim = { inherit_defaults = true, 'env' },
+        -- sh = { inherit_defaults = true,  'env' },
+        -- vim = { inherit_defaults = true, 'env' },
         oil = {},
       },
       min_keyword_length = 3,
@@ -126,13 +127,13 @@ M.opts = function()
             return ctx.trigger.initial_kind ~= 'trigger_character'
           end,
         },
-        copilot = {
-          name = 'copilot',
-          module = 'blink-copilot',
-          -- score_offset = 10,
-          async = true,
-          opts = { max_completions = 5 },
-        },
+        -- copilot = {
+        --   name = 'copilot',
+        --   module = 'blink-copilot',
+        --   -- score_offset = 10,
+        --   async = true,
+        --   opts = { max_completions = 5 },
+        -- },
         lsp = {
           score_offset = 1,
           transform_items = function(_, items)
@@ -142,30 +143,30 @@ M.opts = function()
             end, items)
           end,
         },
-        tmux = {
-          name = 'tmux',
-          module = 'blink-cmp-tmux',
-          score_offset = -1,
-          opts = {
-            all_panes = true,
-            capture_history = true,
-          },
-        },
-        env = {
-          name = 'env',
-          module = 'blink-cmp-env',
-          score_offset = -5,
-          opts = {
-            item_kind = require('blink.cmp.types').CompletionItemKind.Variable,
-            show_braces = false,
-            show_documentation_window = true,
-          },
-        },
-        emoji = {
-          module = 'blink-emoji',
-          name = 'emoji',
-          score_offset = 20,
-        },
+        -- tmux = {
+        --   name = 'tmux',
+        --   module = 'blink-cmp-tmux',
+        --   score_offset = -1,
+        --   opts = {
+        --     all_panes = true,
+        --     capture_history = true,
+        --   },
+        -- },
+        -- env = {
+        --   name = 'env',
+        --   module = 'blink-cmp-env',
+        --   score_offset = -5,
+        --   opts = {
+        --     item_kind = require('blink.cmp.types').CompletionItemKind.Variable,
+        --     show_braces = false,
+        --     show_documentation_window = true,
+        --   },
+        -- },
+        -- emoji = {
+        --   module = 'blink-emoji',
+        --   name = 'emoji',
+        --   score_offset = 20,
+        -- },
         lazydev = {
           name = 'LazyDev',
           module = 'lazydev.integrations.blink',
@@ -174,6 +175,10 @@ M.opts = function()
       },
     },
   }
+end
+
+M.config = function()
+  require('blink.cmp').setup(M.opts())
 end
 
 return M

@@ -8,12 +8,12 @@ wk.add({
   { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
 })
 
-local function map_pickers(key, path, desc)
-  local opts = { cwd = path, matcher = { frecency = true }, title = desc }
--- stylua: ignore
+local function map_pickers(key, path, desc, extra_opts)
+  local defaults = { cwd = path, matcher = { frecency = true }, title = desc }
+  local opts = vim.tbl_extend("force", defaults, extra_opts or {})
   return {
-    { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc, },
-    { '<leader>s' .. key, function() Snacks.picker.grep(opts) end, desc = desc, },
+    { "<leader>f" .. key, function() Snacks.picker.files(opts) end, desc = desc },
+    { "<leader>s" .. key, function() Snacks.picker.grep(opts) end, desc = desc },
   }
 end
 
@@ -24,7 +24,7 @@ wk.add({
   map_pickers('.', os.getenv('HOME') .. '/.local/share/chezmoi', 'Dotfiles'),
   map_pickers('G', vim.fn.expand('~/GitHub/'), 'GitHub Repos'),
   map_pickers('p', vim.g.plug_home, 'Vim Plugins'),
-  map_pickers('P', vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt') , 'Nvim Plugins'),
+  map_pickers('P', vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt') , 'Nvim Plugins', {ft = 'lua'}),
   -- map_pickers('L', vim.g.lazypath .. '/LazyVim', 'LazyVim'),
   -- map_pickers('S', vim.g.lazypath .. '/snacks.nvim', 'Snacks'),
   map_pickers('v', vim.fn.expand('$VIMRUNTIME'), '$VIMRUNTIME'),

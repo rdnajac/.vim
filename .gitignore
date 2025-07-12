@@ -5,6 +5,6 @@
 **vim/pack
 **/*netrwhist
 pack
-plugged
+**/*plugged
 **/*repro
 Session.vim

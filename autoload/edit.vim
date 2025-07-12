@@ -1,3 +1,5 @@
+" TODO: see `:h drop`
+" TODO: close floating window
 function! s:vsplit(path) abort
   let layout = winlayout()
   let cmd = ''
@@ -10,6 +12,11 @@ function! s:vsplit(path) abort
     let cmd = 'vsplit'
   endif
   execute cmd . ' ' . a:path
+  normal! zvzz
+endfunction
+
+function! s:vsplit(path) abort
+  execute 'drop ' . a:path
   normal! zvzz
 endfunction
 

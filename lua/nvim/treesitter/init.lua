@@ -9,6 +9,16 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'kitty', 'ghostty', 'zsh' },
+  group = aug,
+  callback = function(ev)
+    vim.treesitter.language.register('bash', ev.match)
+    vim.treesitter.start(0, 'bash')
+    vim.cmd([[setlocal commentstring=#\ %s]])
+  end,
+})
+
 vim.api.nvim_create_autocmd('User', {
   pattern = 'TSUpdate',
   group = aug,
@@ -25,7 +35,10 @@ vim.api.nvim_create_autocmd('User', {
 })
 
 local sel = require('nvim.treesitter.selection')
-
 vim.keymap.set('n', '<C-Space>', sel.start, { desc = 'Start selection' })
 vim.keymap.set('x', '<C-Space>', sel.increment, { desc = 'Increment selection' })
 vim.keymap.set('x', '<BS>', sel.decrement, { desc = 'Decrement selection' })
+
+require('nvim-treesitter').install(require('nvim.treesitter.parsers'))
+
+require('ts-comments').setup({})

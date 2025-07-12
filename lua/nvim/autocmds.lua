@@ -33,24 +33,23 @@ au('FileType', { 'help', 'man', 'qf' }, function(ev)
   end)
 end)
 
-au('FileType', { 'kitty', 'ghostty' }, function(ev)
-  vim.treesitter.language.register('bash', ev.match)
-  vim.treesitter.start(0, 'bash')
-  vim.cmd('setlocal commentstring=#%s')
-end)
-
 vim.api.nvim_create_autocmd('BufNewFile', {
   pattern = 'after/lsp/*.lua',
   command = '0r ' .. vim.fn.stdpath('config') .. '/templates/lsp.lua',
   group = aug,
 })
 
-vim.api.nvim_create_autocmd('CmdlineEnter', {
-  command = 'set laststatus=0',
+vim.api.nvim_create_autocmd("CmdlineEnter", {
   group = aug,
+  callback = function()
+    vim.b.lastlaststatus = vim.o.laststatus
+    vim.o.laststatus = 0
+  end,
 })
 
-vim.api.nvim_create_autocmd('CmdlineLeave', {
-  command = 'set laststatus=3',
+vim.api.nvim_create_autocmd("CmdlineLeave", {
   group = aug,
+  callback = function()
+    vim.o.laststatus = vim.b.lastlaststatus or 2
+  end,
 })

@@ -36,6 +36,7 @@ set timeoutlen=420
 set updatetime=69
 set undofile undolevels=10000
 set whichwrap+=<,>,[,],h,l
+set lazyredraw
 
 set completeopt=menu,preview,longest
 if has('nvim') || has('patch-9.1.1337')
@@ -57,7 +58,24 @@ augroup vimrc_indent
   au FileType cpp,cuda,python setlocal sw=4 sts=4
 augroup END
 
-" folding {{{3
+" Section: ui {{{1
+
+" columns {{{2
+" set foldcolumn=1
+set number
+set numberwidth=4
+set signcolumn=number
+
+" lines {{{2
+set showcmdloc=statusline
+" set statusline=
+set laststatus=0
+set noruler
+set tabline=%!MyTabline()
+" set showtabline=2
+" set winbar=
+
+" folding {{{2
 set fillchars+=fold:\ ,
 set fillchars+=foldclose:▸,
 set fillchars+=foldopen:▾,
@@ -68,7 +86,6 @@ set foldlevel=1
 set foldminlines=3
 set foldopen+=insert,jump
 set foldtext=fold#text()
-" set foldcolumn=1
 " set foldmethod=marker
 
 " better search if auto pausing folds
@@ -86,12 +103,6 @@ augroup vimrc_fold
 augroup END
 
 nnoremap <expr> h fold#aware_h()
-
-" column {{{3
-" TODO: if nonu, set signcolumn=yes
-set number signcolumn=number
-set numberwidth=4
-set signcolumn=auto
 
 " Section: autocmds {{{1
 augroup vimrc
@@ -138,10 +149,6 @@ command! Format call format#buffer()
 
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
-nnoremap <leader>q <Cmd>Quit<CR>
-nnoremap <leader>Q <Cmd>Quit!<CR>
-nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
-
 " munchies {{{2
 command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
 command! -bang Zoxide lua require('plugins.snacks.picker.zoxide').pick('<bang>')
@@ -159,16 +166,19 @@ command! Scripts lua require('plugins.snacks.picker.scriptnames')()
 command! Terminal lua Snacks.terminal.toggle()
 
 " Section: keymaps {{{1
+
 nnoremap <leader><Space> viW
 nnoremap <C-Space> viw
 
 nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
-nnoremap <leader>K  <Cmd>norm! K<CR>
+nnoremap <leader>K  <Cmd>norm K<CR>
 nnoremap <leader>R  <Cmd>restart!<CR>
 nnoremap <leader>r  <Cmd>Restart<CR>
 nnoremap <leader>S  <Cmd>Scriptnames<CR>
 nnoremap <leader>.  <Cmd>Scratch<CR>
+nnoremap <leader>q  <Cmd>Quit<CR>
+nnoremap <leader>Q  <Cmd>Quit!<CR>
 nnoremap <leader>>  <Cmd>Scratch!<CR>
 nnoremap <leader>i  <Cmd>help index<CR>
 nnoremap <leader>m  <Cmd>messages<CR>
@@ -200,6 +210,7 @@ nnoremap <leader>dw <Cmd>lua=vim.lsp.buf.list_workspace_folders()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
 " nnoremap <leader>fD <Cmd>Rm!<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
+nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
 
 " vim settings `<leader>v` {{{2
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
@@ -210,7 +221,7 @@ nnoremap <leader>vp <Cmd>call edit#vimrc('+/Section:\ plugins')<CR>
 nnoremap <leader>vs <Cmd>call edit#vimrc('+/Section:\ settings')<CR>
 
 " nvim settings {{{2
-nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
+nnoremap <BSlash>i <Cmd>call edit#module('init')<CR>
 nnoremap <BSlash>l <Cmd>call edit#module('plugins/init')<CR>
 nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
 
@@ -432,24 +443,15 @@ cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 
 " Section: plugins {{{1
 
-let g:plug_home = (has('nvim') ? stdpath('data') . '/site/pack/core' : expand('$HOME/.vim/pack')) . '/plugged'
-let g:vim_plugins = github#repos()
+" let g:plug_home = (has('nvim') ? stdpath('data') . '/site/pack/core' : expand('$HOME/.vim/pack')) . '/plugged'
+let g:plug_home = g:VIMDIR . '/.plugged'
+let g:vim_plugins = github#repos
 call plug#begin()
-
-for repo in g:vim_plugins
-  execute 'Plug ' . shellescape(repo)
+for [repo, enabled] in items(g:vim_plugins)
+  if enabled
+execute "Plug '" . repo . "'"
+  endif
 endfor
-
-if !has('nvim')
-  " Plug 'vuciv/golf'
-  Plug 'Konfekt/FastFold'
-  " Plug 'kana/vim-textobj-user'
-  " Plug '~/GitHub/rdnajac/src/fzf/'
-  " Plug 'junegunn/fzf.vim'
-  Plug 'github/copilot.vim',
-  Plug 'tpope/vim-commentary'
-  " Plug 'tpope/vim-vinegar'
-endif
 call plug#end()
 
 if has('nvim')
@@ -460,13 +462,12 @@ if has('nvim')
     let g:loaded_zipPlugin = 1
     let g:loaded_tarPlugin = 1
     let g:loaded_gzip = 1
-    let g:loaded_nvim = 1
     lua require('init')
-    lua require('nvim')
+    let g:loaded_nvim = 1
   endif
 else
-  set clipboard=unnamedplus
   color scheme
+  set clipboard=unnamedplus
   xmap ga <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
 endif

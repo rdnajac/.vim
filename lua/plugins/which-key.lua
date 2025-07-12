@@ -75,4 +75,8 @@ M.opts = {
   },
 }
 
-require('which-key').setup(M.opts)
+M.config = function()
+  require('which-key').setup(M.opts)
+end
+
+return M

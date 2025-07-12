@@ -1,45 +1,24 @@
-local lazyvim = [[
-      ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
-      ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
-      ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
-      ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
-      ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
-      ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
-]]
-local str = [["The computing scientist's main challenge is not to get 
-confused by the complexities of his own making."]]
 local M = {}
 
 ---@module "snacks"
 ---@class snacks.dashboard.Config
 M.config = {
-  sections = {
-    { section = 'header' },
-    { section = 'keys' },
-    -- TODO: add vim fortune
-    {
-      section = 'terminal',
-      padding = 1,
-      indent = 8,
-      width = 69,
-      -- cmd = 'cowsay ' .. str .. ' | lolcat',
-      cmd = vim.fn.shellescape(vim.fn.stdpath('config') .. '/fortunes/learn-something')
-        .. ' | cowsay | lolcat #'
-        .. os.time(),
-    },
-    -- { section = 'startup', padding = 1 },
-  },
   preset = {
-    header = vim.env.LAZY and lazyvim or str,
     keys = {
-      { icon = ' ', title = 'Recent Files' },
-      -- TODO: add resture session button/function/command
-      -- { section = 'recent_files', indent = 2, gap = 0 },
-      { icon = '󰒲 ', key = 'l', desc = 'Lazy', action = ':Lazy' },
-      { icon = ' ', key = 'h', desc = 'Health', action = ':LazyHealth' },
+      { icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, gap = 0 },
       { icon = ' ', key = 'g', desc = 'Lazygit', action = ':Lazygit' },
       { icon = '󱌣 ', key = 'm', desc = 'Mason', action = ':Mason' },
       { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
+    },
+  },
+  sections = {
+    { section = 'header', highlight = 'Chromatophore' },
+    { section = 'keys' },
+    {
+      section = 'terminal',
+      -- width = 69,
+      cmd = '~/.vim/scripts/da.sh',
+      height = 13,
     },
   },
   formats = {
@@ -69,6 +48,35 @@ M.config = {
   },
 }
 
-require('nvim.ui.dashboard_hacks')
+-- Snacks.config.style('dashboard', { wo = { border = false } })
 
+-- local aug = vim.api.nvim_create_augroup('SnacksDashboardToggle', { clear = true })
+-- vim.api.nvim_create_autocmd('User', {
+--   group   = aug,
+--   pattern = 'SnacksDashboardOpened',
+--   once    = true,
+--   callback = function()
+--     local orig_border     = vim.o.winborder
+--     local orig_laststatus = vim.o.laststatus
+--
+--     vim.g._saved_winborder    = orig_border
+--     vim.g._saved_laststatus   = orig_laststatus
+--     vim.o.winborder           = 'none'
+--     vim.o.laststatus          = 0
+--
+--     local buf = vim.api.nvim_get_current_buf()
+--     vim.api.nvim_create_autocmd({'BufUnload','BufWipeout'}, {
+--       group   = aug,
+--       buffer  = buf,
+--       once    = true,
+--       callback = function()
+--         vim.o.winborder  = vim.g._saved_winborder
+--         vim.o.laststatus = vim.g._saved_laststatus
+--         vim.g._saved_winborder  = nil
+--         vim.g._saved_laststatus = nil
+--       end,
+--     })
+--   end,
+-- })
+--
 return M

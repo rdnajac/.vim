@@ -22,9 +22,10 @@ function! s:ManLookup(...) abort
     return
   endif
   let l:key = a:0 ? a:1 : expand('<cWORD>')
-  echomsg 'Looking up "' . l:key . '" in man page: ' . l:page
+  " echomsg 'Looking up "' . l:key . '" in man page: ' . l:page
   execute 'Man ' . l:page
-  call search('\<' . l:key . '\>')
+  " call search('\<' . l:key . '\>')
+  call search( l:key )
 endfunction
 
 function! s:KeywordSetup(page) abort
@@ -38,5 +39,6 @@ augroup ManLookupSetup
   autocmd FileType kitty         call s:KeywordSetup('kitty')
   autocmd FileType tmux          call s:KeywordSetup('tmux')
   autocmd FileType sshconfig     call s:KeywordSetup('ssh')
+  autocmd FileType ghostty     call s:KeywordSetup('ghostty')
   autocmd BufRead,BufNewFile *alacritty.*ml call s:KeywordSetup('5 alacritty')
 augroup END
