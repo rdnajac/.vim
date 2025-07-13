@@ -1,7 +1,7 @@
 local M = { 'mason-org/mason.nvim' }
 
 -- FIXME:
-M.tools = { }
+M.tools = {}
 
 M.install = function()
   -- FIXME:
@@ -45,8 +45,8 @@ M.install = function()
 end
 
 M.config = function()
-require('mason').setup({})
--- TODO:
+  require('mason').setup({})
+  -- TODO:
 end
 
 return M

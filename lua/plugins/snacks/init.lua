@@ -114,13 +114,13 @@ M.opts = {
   statuscolumn = { enabled = false },
   styles = {
     lazygit = { height = 0, width = 0 },
-    dashboard = {border = 'none' },
+    dashboard = { border = 'none' },
   },
   terminal = {
     start_insert = true,
-    auto_insert = false,
+    auto_insert = true,
     auto_close = true,
-    win = { wo = { winbar = '', winhighlight = 'Normal:SpecialWindow' } },
+    -- win = { wo = { winbar = '', winhighlight = 'Normal:SpecialWindow' } },
   },
   words = { enabled = true },
 }

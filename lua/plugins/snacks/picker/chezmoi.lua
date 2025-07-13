@@ -26,16 +26,16 @@ function M.pick()
   -- Snacks.picker.pick({
   Snacks.picker.files({
     title = 'Chezmoi Files',
-    cwd = os.getenv('HOME') .. '/.local/share/chezmoi',
-    hidden = true,
-    -- items = chezmoi_items(),
-    -- confirm = function(picker, item)
-    --   picker:close()
-    --   require('chezmoi.commands').edit({
-    --     targets = { item.text },
-    --     args = { '--watch' },
-    --   })
-    -- end,
+    -- cwd = os.getenv('HOME') .. '/.local/share/chezmoi',
+    -- hidden = true,
+    items = chezmoi_items(),
+    confirm = function(picker, item)
+      picker:close()
+      require('chezmoi.commands').edit({
+        targets = { item.text },
+        args = { '--watch' },
+      })
+    end,
   })
 end
 

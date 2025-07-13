@@ -69,7 +69,7 @@ set signcolumn=number
 " lines {{{2
 set showcmdloc=statusline
 " set statusline=
-set laststatus=0
+set laststatus=1
 set noruler
 set tabline=%!MyTabline()
 " set showtabline=2
@@ -145,7 +145,6 @@ augroup END
 command! Restart execute 'Obsession ' . g:VIMDIR | restart
 command! -bang Quit call quit#buffer(<q-bang>)
 command! CleanWhitespace call format#clean_whitespace()
-command! Format call format#buffer()
 
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
@@ -154,6 +153,7 @@ command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.se
 command! -bang Zoxide lua require('plugins.snacks.picker.zoxide').pick('<bang>')
 command! Autocmds lua Snacks.picker.autocmds()
 command! Chezmoi lua require('plugins.snacks.picker.chezmoi')()
+command! Commands lua Snacks.picker.commands()
 command! Config lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
 command! Explorer lua Snacks.picker.explorer()
 command! Help lua Snacks.picker.help()
@@ -214,11 +214,11 @@ nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
 
 " vim settings `<leader>v` {{{2
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
-nnoremap <leader>va <Cmd>call edit#vimrc('+/Section:\ autocmds')<CR>
-nnoremap <leader>vc <Cmd>call edit#vimrc('+/Section:\ commands')<CR>
-nnoremap <leader>vk <Cmd>call edit#vimrc('+/Section:\ keymaps')<CR>
-nnoremap <leader>vp <Cmd>call edit#vimrc('+/Section:\ plugins')<CR>
-nnoremap <leader>vs <Cmd>call edit#vimrc('+/Section:\ settings')<CR>
+nnoremap <leader>va <Cmd>call edit#vimrc('autocmds')<CR>
+nnoremap <leader>vc <Cmd>call edit#vimrc('commands')<CR>
+nnoremap <leader>vk <Cmd>call edit#vimrc('keymaps')<CR>
+nnoremap <leader>vp <Cmd>call edit#vimrc('plugins')<CR>
+nnoremap <leader>vs <Cmd>call edit#vimrc('settings')<CR>
 
 " nvim settings {{{2
 nnoremap <BSlash>i <Cmd>call edit#module('init')<CR>
@@ -262,7 +262,6 @@ nnoremap <leader>sh <Cmd>lua Snacks.picker.help()<CR>
 nnoremap <leader>sH <Cmd>lua Snacks.picker.highlights()<CR>
 nnoremap <leader>si <Cmd>lua Snacks.picker.icons()<CR>
 nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
-
 
 " XXX: potential conflicts
 nnoremap ` ~
@@ -317,7 +316,15 @@ nmap S  viWS
 " nmap yss ys
 
 " `zq` ZA ... ZP, `ZQ` ... `ZZ`
-nnoremap zq mzgggqG'z
+nmap zq gqag
+
+" text objects {{{2
+
+" Buffer pseudo-text objects
+xnoremap ig :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
+onoremap ig :<C-u>normal vig<CR>
+xnoremap ag GoggV
+onoremap ag :<C-u>normal vag<CR>
 
 
 " buffers {{{2
@@ -449,7 +456,7 @@ let g:vim_plugins = github#repos
 call plug#begin()
 for [repo, enabled] in items(g:vim_plugins)
   if enabled
-execute "Plug '" . repo . "'"
+    execute "Plug '" . repo . "'"
   endif
 endfor
 call plug#end()
@@ -467,7 +474,7 @@ if has('nvim')
   endif
 else
   color scheme
-  set clipboard=unnamedplus
+  set clipboard=unnamed
   xmap ga <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
 endif

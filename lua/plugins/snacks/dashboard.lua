@@ -23,7 +23,7 @@ M.config = {
   },
   formats = {
     key = function(item)
-      local sep = require('lazy.config').separators.section.rounded
+      local sep = require('nvim.ui.icons').separators.section.rounded
       -- local sep = LazyVim.config.separators.section.rounded
       return {
         { sep.right, hl = 'special' },
@@ -79,4 +79,13 @@ M.config = {
 --   end,
 -- })
 --
+
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'SnacksDashboardOpened',
+  once = true,
+  callback = function()
+    vim.opt.winborder = 'rounded'
+  end,
+})
+
 return M

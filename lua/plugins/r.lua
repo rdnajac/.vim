@@ -53,7 +53,7 @@ M.opts = {
 }
 
 M.config = function()
-  -- require 
+  -- require
 end
 
 return M

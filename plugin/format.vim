@@ -1,35 +1,32 @@
-function! MyFormatExpr() abort
-  let start = v:lnum
-  let end = v:lnum + v:count - 1
-  " let view = winsaveview()
-  if empty(&formatprg)
-    " NOTE: this work on the entire buffer, not just the range
-    normal! gg=G
-    retab
-    %s/\s\+$//e
-    %s/\n\+\%$//e
-  else
-    let lines = getline(start, end)
-    let output = systemlist(expandcmd(&formatprg), lines)
-    if !v:shell_error
-      call setline(start, output)
-    endif
+function! s:err_undo() abort
+  if v:shell_error > 0
+    silent undo
+    redraw
+    echomsg 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
   endif
-  " %s/\n\+\%$//e
-  " call winrestview(view)
-  return 0
 endfunction
 
-" set formatexpr=MyFormatExpr()
 
 function! GQ(type, ...)
-  normal! '[v']gq
+  if !empty(&formatprg)
+    normal! '[v']gq
+    call s:err_undo()
+  else
+    normal! '[v']=
+    call format#clean_whitespace()
+  endif
   call winrestview(w:gqview)
   unlet w:gqview
 endfunction
-nmap <silent> gq :let w:gqview = winsaveview()<CR>:set opfunc=GQ<CR>g@
+nnoremap <silent> gq :<C-U>let w:gqview = winsaveview()<CR>:set opfunc=GQ<CR>g@
 
-" augroup AutoFormat
-"   autocmd!
-"   autocmd BufWritePre *.lua,*.sh,*.vim if &modified | silent call format#buffer() | endif
-" augroup END
+function! Format() abort
+  execute 'normal gqag'
+endfunction
+" set formatexpr=<SID>format()
+
+augroup AutoFormat
+  autocmd!
+  " format with the custom text object `ag`
+  autocmd BufWritePre *.lua,*.sh,*.vim if &mod | call Format() | endif
+augroup END

@@ -5,15 +5,16 @@ local wk = require('which-key')
 -- stylua: ignore
 wk.add({
   { mode = { 'n', 't' }, ',,', function() Snacks.terminal.toggle() end },
-  { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
+  -- { '\\p', function() Snacks.picker.lazy() end, desc = 'Plugin Specs' },
 })
 
 local function map_pickers(key, path, desc, extra_opts)
   local defaults = { cwd = path, matcher = { frecency = true }, title = desc }
-  local opts = vim.tbl_extend("force", defaults, extra_opts or {})
+  local opts = vim.tbl_extend('force', defaults, extra_opts or {})
+  -- stylua: ignore
   return {
-    { "<leader>f" .. key, function() Snacks.picker.files(opts) end, desc = desc },
-    { "<leader>s" .. key, function() Snacks.picker.grep(opts) end, desc = desc },
+    { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc },
+    { '<leader>s' .. key, function() Snacks.picker.grep(opts) end, desc = desc },
   }
 end
 
