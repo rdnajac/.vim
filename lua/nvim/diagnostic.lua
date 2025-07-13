@@ -4,10 +4,8 @@ local icons = {
     warn = ' ',
     hint = '',
     info = ' ',
-  }
+  },
 }
-
-
 
 ---@type vim.diagnostic.Opts
 vim.diagnostic.config({

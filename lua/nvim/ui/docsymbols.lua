@@ -1,7 +1,7 @@
-local lib = require('nvim.ui.navic.lib')
-local M = {}
+local lib = require('util.naviclib')
+local icons = require('nvim.ui.icons')
 
-local icons = require('lazy.config').icons
+local M = {}
 
 local config = {
   icons = icons.kinds,
@@ -158,7 +158,5 @@ function M.attach(client, bufnr)
   vim.b[bufnr].navic_awaiting_lsp_response = true
   lib.request_symbol(bufnr, lsp_callback, client)
 end
-
-print(M.get_location({}))
 
 return M

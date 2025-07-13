@@ -7,7 +7,7 @@ vim.lsp.config('*', {
   ---@param bufnr integer
   on_attach = function(client, bufnr)
     if client:supports_method('textDocument/documentSymbol') then
-      require('nvim.ui.navic').attach(client, bufnr)
+      require('nvim.ui.docsymbols').attach(client, bufnr)
     end
 
     if client:supports_method('textDocument/inlayHint') then

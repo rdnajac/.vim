@@ -50,6 +50,8 @@ local function chromatophore_refresh()
   local mode_color = current_mode_color()
   local black = '#000000'
   local grey = '#3b4261'
+  -- local lightblue = '#7aa2f7'
+  local lightblue = '#16161d'
 
   Snacks.util.set_hl({
     Chromatophore = { fg = mode_color, bg = 'NONE' },
@@ -59,7 +61,8 @@ local function chromatophore_refresh()
     Chromatophore_a = { fg = black, bg = mode_color, bold = true },
     Chromatophore_ab = { fg = mode_color, bg = grey },
     Chromatophore_b = { fg = mode_color, bg = grey, bold = true },
-    Chromatophore_c = { fg = mode_color, bg = 'NONE' },
+    Chromatophore_bc = { fg = grey, bg = lightblue },
+    Chromatophore_c = { fg = mode_color, bg = lightblue },
     Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
 
     StatusLine = { link = 'Chromatophore_a' },
@@ -70,9 +73,16 @@ local function chromatophore_refresh()
   vim.fn.jobstart({ 'tmux', 'refresh-client', '-S' }, { detach = true })
 end
 
-vim.api.nvim_create_autocmd('ModeChanged', {
-  group = vim.api.nvim_create_augroup('Chromatophore', { clear = true }),
-  callback = chromatophore_refresh,
-})
-
 chromatophore_refresh()
+
+-- TODO: move to tmux section
+local events = { 'ModeChanged', 'DirChanged', 'BufEnter' }
+
+local group = vim.api.nvim_create_augroup('Chromatophore', { clear = true })
+
+for _, event in ipairs(events) do
+  vim.api.nvim_create_autocmd(event, {
+    group = group,
+    callback = chromatophore_refresh,
+  })
+end

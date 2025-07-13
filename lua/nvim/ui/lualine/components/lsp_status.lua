@@ -43,7 +43,7 @@ function M:init(options)
 
       -- Refresh Lualine to update the LSP status symbol if it changed.
       if (work == 0 and work_change > 0) or (work == 1 and work_change < 0) then
-        require('lualine').refresh()
+        require('nvim.ui.lualine.init').refresh()
       end
     end,
   })
