@@ -10,12 +10,12 @@ function format#delete_blank_lines() abort
   g/^$/d
 endfunction
 
-function s:strip_trailing_whitespace() abort
-  %s/\s\+$//e
+function! s:strip_trailing_whitespace() abort
+  keeppatterns %s/\s\+$//e
 endfunction
 
-function s:strip_trailing_newlines() abort
-  %s/\n\+\%$//e
+function! s:strip_trailing_newlines() abort
+  keeppatterns %s/\n\+\%$//e
 endfunction
 
 function! format#clean_whitespace() abort
@@ -26,15 +26,5 @@ function! format#clean_whitespace() abort
 
   if l:final_size != l:size
     echomsg 'Stripped ' . (l:size - l:final_size) . ' bytes of trailing whitespace'
-  endif
-endfunction
-
-function! format#equalprg() abort
-  normal! gg=G
-  retab
-  if !&binary && &filetype != 'diff'
-    " TODO: check for g: and b: variables
-    call s:strip_trailing_whitespace()
-    call s:strip_trailing_newlines()
   endif
 endfunction

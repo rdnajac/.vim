@@ -17,3 +17,6 @@ function! execute#withSavedState(command)
     let @/ = histget('/', -1)
   endif
 endfunction
+
+" see also `:h keepjumps`
+" see also `:h keeppatterns`
