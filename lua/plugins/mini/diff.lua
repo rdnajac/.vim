@@ -1,4 +1,6 @@
-require('mini.diff').setup({
+local diff = require('mini.diff')
+
+diff.setup({
   view = { style = 'number', signs = { add = '▎', change = '▎', delete = '' } },
 })
 
@@ -10,9 +12,9 @@ Snacks.toggle({
   set = function(state)
     vim.g.minidiff_disable = not state
     if state then
-      require('mini.diff').enable(0)
+      diff.enable(0)
     else
-      require('mini.diff').disable(0)
+      diff.disable(0)
     end
     vim.defer_fn(function()
       vim.cmd([[redraw!]])
@@ -20,5 +22,6 @@ Snacks.toggle({
   end,
 }):map('<leader>uG')
 
--- { '<leader>go', function() require('mini.diff').toggle_overlay(0) end, desc = 'Toggle mini.diff overlay' },
--- vim.keymap.set(
+vim.keymap.set('n', '<leader>go', function()
+  diff.toggle_overlay(0)
+end, { desc = 'Toggle mini.diff overlay' })
