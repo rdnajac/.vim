@@ -151,7 +151,7 @@ command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-
 
 
 " Section: keymaps {{{1
-
+nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 nnoremap <leader><Space> viW
 nnoremap <C-Space> viw
 

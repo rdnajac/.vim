@@ -6,7 +6,6 @@ function! s:err_undo() abort
   endif
 endfunction
 
-
 function! GQ(type, ...)
   if !empty(&formatprg)
     normal! '[v']gq
@@ -21,7 +20,8 @@ endfunction
 nnoremap <silent> gq :<C-U>let w:gqview = winsaveview()<CR>:set opfunc=GQ<CR>g@
 
 function! Format() abort
-  execute 'normal gqag'
+  " normal gqag
+  keepjumps normal gqag
 endfunction
 " set formatexpr=<SID>format()
 

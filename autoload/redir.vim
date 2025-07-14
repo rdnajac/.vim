@@ -1,15 +1,27 @@
 " vim/autoload/redirect.vim
-" https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
-function! redirect#output(cmd, rng, start, end) abort
+function! s:close_scratch_wins() abort
   for win in range(1, winnr('$'))
     if getwinvar(win, 'scratch')
-      execute win . 'windo close'
+      " execute win . 'windo close'
+      execute win . 'close'
     endif
   endfor
+endfunction
+
+function! s:to_scratch(output) abort
+  vnew
+  let w:scratch = 1
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+  call setline(1, a:output)
+endfunction
+
+" https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
+function! redir#original(cmd, rng, start, end) abort
+  s:close_scratch_wins()
   if a:cmd =~ '^!'
     let cmd = a:cmd =~' %'
-          \ ? matchstr(substitute(a:cmd, ' %', ' ' . shellescape(escape(expand('%:p'), '\')), ''), '^!\zs.*')
-          \ : matchstr(a:cmd, '^!\zs.*')
+	  \ ? matchstr(substitute(a:cmd, ' %', ' ' . shellescape(escape(expand('%:p'), '\')), ''), '^!\zs.*')
+	  \ : matchstr(a:cmd, '^!\zs.*')
     if a:rng == 0
       let output = systemlist(cmd)
     else
@@ -23,10 +35,22 @@ function! redirect#output(cmd, rng, start, end) abort
     redir END
     let output = split(output, "\n")
   endif
-  vnew
-  let w:scratch = 1
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
-  call setline(1, output)
+  call s:to_scratch(output)
+endfunction
+
+function! redir#prompt() abort
+  let input = input('$ ')
+  " handle `%` filename expansion
+  let cmd = expand(input)
+  if !empty(cmd)
+    call s:to_scratch(split(system(input), "\n"))
+  endif
+endfunction
+
+function! redir#execute(command) abort
+  call s:close_scratch_wins()
+  let output = split(execute(a:command, 'silent'), "\n")
+  call s:to_scratch(output)
 endfunction
 
 " This command definition includes -bar, so that it is possible to "chain" Vim commands.
