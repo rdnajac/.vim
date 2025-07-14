@@ -81,11 +81,12 @@ set fillchars+=foldclose:▸,
 set fillchars+=foldopen:▾,
 set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
-set foldlevel=1
-" set foldlevelstart=99
-set foldminlines=3
+set foldlevel=99
+set foldlevelstart=2
+set foldminlines=5
 set foldopen+=insert,jump
 set foldtext=fold#text()
+set foldtext=
 " set foldmethod=marker
 
 " better search if auto pausing folds
@@ -97,9 +98,9 @@ augroup vimrc_fold
   " auto_pause_folds
   " au CmdlineLeave /,\? call fold#pause()
   " au CursorMoved,CursorMovedI * call fold#unpause()
-  au FileType lua setlocal foldmethod=indent foldlevelstart=99
-  au FileType sh setlocal foldmethod=expr
-  au FileType vim setlocal foldmethod=marker foldlevelstart=0
+  au FileType lua setl fdm=indent
+  au FileType sh  setl fdm=expr
+  au FileType vim setl fdm=marker
 augroup END
 
 nnoremap <expr> h fold#aware_h()
@@ -148,22 +149,6 @@ command! CleanWhitespace call format#clean_whitespace()
 
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
-" munchies {{{2
-command! -bang Scratch execute 'lua require("snacks").scratch' . (<bang>0 ? '.select' : '') .. '()'
-command! -bang Zoxide lua require('plugins.snacks.picker.zoxide').pick('<bang>')
-command! Autocmds lua Snacks.picker.autocmds()
-command! Chezmoi lua require('plugins.snacks.picker.chezmoi')()
-command! Commands lua Snacks.picker.commands()
-command! Config lua Snacks.picker.files({cwd =vim.fn.stdpath('config')})
-command! Explorer lua Snacks.picker.explorer()
-command! Help lua Snacks.picker.help()
-command! Highlights lua Snacks.picker.highlights()
-command! Keymaps lua Snacks.picker.keymaps()
-command! Lazygit lua Snacks.Lazygit()
-command! PluginFiles lua require('plugins.snacks.picker.plugins').files()
-command! PluginGrep lua require('plugins.snacks.picker.plugins').grep()
-command! Scripts lua require('plugins.snacks.picker.scriptnames')()
-command! Terminal lua Snacks.terminal.toggle()
 
 " Section: keymaps {{{1
 
@@ -186,16 +171,20 @@ nnoremap <leader>h  <Cmd>Help<CR>
 nnoremap <leader>t  <Cmd>edit #<CR>
 nnoremap <leader>w  <Cmd>write!<CR>
 nnoremap <leader>z  <Cmd>Zoxide<CR>
-nnoremap <leader>fp <Cmd>PluginFiles<CR>
-nnoremap <leader>sp <Cmd>PluginGrep<CR>
 nnoremap <leader>/  <Cmd>lua Snacks.picker.grep()<CR>
 nnoremap <leader>,  <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
-" https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
-" nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+
+nnoremap <leader>fp :PluginFiles<CR>
+nnoremap <leader>sp :PluginGrep<CR>
+
+nnoremap <leader>fP :PluginFiles ~/.local/share/nvim/site/pack/core/opt<CR>
+nnoremap <leader>sP :PluginGrep ~/.local/share/nvim/site/pack/core/opt<CR>
 
 " code {{{2
+" https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
+" nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 " debug {{{2
 nnoremap <leader>da <Cmd>ALEInfo<CR>
@@ -222,8 +211,9 @@ nnoremap <leader>vs <Cmd>call edit#vimrc('settings')<CR>
 
 " nvim settings {{{2
 nnoremap <BSlash>i <Cmd>call edit#module('init')<CR>
-nnoremap <BSlash>l <Cmd>call edit#module('plugins/init')<CR>
-nnoremap <BSlash>b <Cmd>call edit#module('lazy/bootstrap')<CR>
+nnoremap <BSlash>p <Cmd>call edit#module('plugins/init')<CR>
+nnoremap <BSlash>m <Cmd>call edit#module('munchies/init')<CR>
+" nnoremap <BSlash>u <Cmd>call edit#module('utils/init')<CR>
 
 " find/files {{{2
 nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
@@ -449,16 +439,41 @@ cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 
 " Section: plugins {{{1
-
-" let g:plug_home = (has('nvim') ? stdpath('data') . '/site/pack/core' : expand('$HOME/.vim/pack')) . '/plugged'
-let g:plug_home = g:VIMDIR . '/.plugged'
-let g:vim_plugins = github#repos
 call plug#begin()
-for [repo, enabled] in items(g:vim_plugins)
-  if enabled
-    execute "Plug '" . repo . "'"
-  endif
-endfor
+Plug 'lervag/vimtex'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-apathy'
+Plug 'tpope/vim-capslock'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'AndrewRadev/dsf.vim'
+Plug 'alker0/chezmoi.vim',
+Plug 'github/copilot.vim',
+Plug 'tpope/vim-tbone',
+Plug 'AndrewRadev/splitjoin.vim'
+if !has('nvim')
+  Plug 'vuciv/golf'
+  Plug 'dense-analysis/ale'
+  Plug 'Konfekt/FastFold'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-vinegar'
+  " using mini instead
+  Plug 'junegunn/vim-easy-align'
+else
+  " Plug 'folke/tokyonight.nvim'
+  " Plug 'folke/snacks.nvim'
+  " Plug 'echasnovski/mini.nvim'
+endif
 call plug#end()
 
 if has('nvim')

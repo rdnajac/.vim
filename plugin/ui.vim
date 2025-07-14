@@ -1,7 +1,7 @@
 scriptencoding=utf-8
 
 function! s:ft_icon() abort
-  return v:lua.require('nvim.ui.lualine.components.filetype_icon')()
+  return v:lua.require('util.lualine.components.filetype_icon')()
 endfunction
 
 let s:sep = '│'
@@ -43,11 +43,11 @@ endfunction
 
 " export the statusline
 function! TmuxLeft() abort
-  return luaeval("require('nvim.ui.tmuxline')(vim.fn['MyStatusline']())")
+  return luaeval("require('util.tmuxline')(vim.fn['MyStatusline']())")
 endfunction
 
 function! TmuxRight() abort
-  return luaeval("require('nvim.ui.tmuxline')(vim.fn['MyTabline']())")
+  return luaeval("require('util.tmuxline')(vim.fn['MyTabline']())")
 endfunction
 
 " statusline=%<%f %h%w%m%r %=%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}%{% exists('b:keymap_name') ? '<'..b:keymap_name..'> ' : '' %}%{% &busy > 0 ? '◐ ' : '' %}%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rulerformat ) : '' %}

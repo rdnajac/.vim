@@ -30,3 +30,9 @@ nmap <leader>cl ^wdwf(i<Space>=<Space><Esc>px
 nmap <leader>cm ^v2f<Space>cM.<Es\ac>
 " M transform
 nmap <leader>cM ^v2f<Space>cM.<Esc>
+
+function! s:FoldText() abort
+  let indent = repeat(' ', v:foldlevel * &shiftwidth)
+  return indent . printf('--- %d lines ---', v:foldend - v:foldstart + 1)
+endfunction
+setlocal foldtext=<SID>FoldText()

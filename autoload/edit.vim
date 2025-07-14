@@ -6,12 +6,26 @@ function! s:edit(...) abort
     return
   endif
   let l:buf_p = expand(fnamemodify(l:file, ':p'))
+
+  " If open in any window in the current tab, jump there.
   for w in range(1, winnr('$'))
     if expand('#' . winbufnr(w) . ':p') ==# l:buf_p
       execute w . 'wincmd w'
       return
     endif
   endfor
+
+  " If more than one window, go to the alternate window (next one), open normally there.
+  if winnr('$') > 1
+    let l:cur = winnr()
+    let l:alt = l:cur % winnr('$') + 1
+    execute l:alt . 'wincmd w'
+    execute 'drop ' . (l:cmd != '' ? l:cmd . ' ' : '') . fnameescape(l:file)
+    normal! zvzz
+    return
+  endif
+
+  " Otherwise, open in new vertical split
   execute 'vsplit | drop ' . (l:cmd != '' ? l:cmd . ' ' : '') . fnameescape(l:file)
   normal! zvzz
 endfunction
@@ -20,10 +34,10 @@ function! edit#vimrc(...) abort
   let l:section = a:0 && !empty(a:1) ? a:1 : ''
   if fnamemodify(bufname('%'), ':p') ==# fnamemodify($MYVIMRC, ':p')
     if !empty(l:section)
-      call search('Section: ' . l:section)
+      call search(l:section)
     endif
   else
-    call s:edit(!empty(l:section) ? '+/Section: ' . l:section : '', $MYVIMRC)
+    call s:edit(!empty(l:section) ? '+/' . l:section : '', $MYVIMRC)
   endif
 endfunction
 

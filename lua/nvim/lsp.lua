@@ -7,7 +7,7 @@ vim.lsp.config('*', {
   ---@param bufnr integer
   on_attach = function(client, bufnr)
     if client:supports_method('textDocument/documentSymbol') then
-      require('nvim.ui.docsymbols').attach(client, bufnr)
+      require('util.docsymbols').attach(client, bufnr)
     end
 
     if client:supports_method('textDocument/inlayHint') then
@@ -46,7 +46,8 @@ vim.lsp.config('*', {
 
 -- vim.lsp.enable(_G.lang_spec.lsps)
 vim.lsp.enable({
-  'ruff',
+  -- 'ruff',
   'luals',
   'vimls',
+  -- 'bashls',
 })

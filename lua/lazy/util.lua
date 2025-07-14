@@ -1,23 +1,8 @@
-local LazyUtil = require('lazy.core.util')
+local lazy_file_events = { 'BufReadPost', 'BufNewFile', 'BufWritePre' }
+local Event = require('lazy.core.handler.event')
 
----@class lazyvim.util: LazyUtilCore
----@field config LazyVimConfig
----@field ui lazyvim.util.ui
----@field lsp lazyvim.util.lsp
----@field root lazyvim.util.root
----@field terminal lazyvim.util.terminal
----@field format lazyvim.util.format
----@field plugin lazyvim.util.plugin
----@field extras lazyvim.util.extras
----@field inject lazyvim.util.inject
----@field news lazyvim.util.news
----@field json lazyvim.util.json
----@field lualine lazyvim.util.lualine
----@field mini lazyvim.util.mini
----@field pick lazyvim.util.pick
----@field cmp lazyvim.util.cmp
-local M = {}
-
+Event.mappings.LazyFile = { id = 'LazyFile', event = lazy_file_events }
+Event.mappings['User LazyFile'] = Event.mappings.LazyFile
 ---@param name string
 function M.get_plugin(name)
   return require('lazy.core.config').spec.plugins[name]
@@ -75,52 +60,6 @@ function M.opts(name)
   end
   local Plugin = require('lazy.core.plugin')
   return Plugin.values(plugin, 'opts', false)
-end
-
-function M.deprecate(old, new)
-  M.warn(('`%s` is deprecated. Please use `%s` instead'):format(old, new), {
-    title = 'LazyVim',
-    once = true,
-    stacktrace = true,
-    stacklevel = 6,
-  })
-end
-
--- delay notifications till vim.notify was replaced or after 500ms
-function M.lazy_notify()
-  local notifs = {}
-  local function temp(...)
-    table.insert(notifs, vim.F.pack_len(...))
-  end
-
-  local orig = vim.notify
-  vim.notify = temp
-
-  local timer = vim.uv.new_timer()
-  local check = assert(vim.uv.new_check())
-
-  local replay = function()
-    timer:stop()
-    check:stop()
-    if vim.notify == temp then
-      vim.notify = orig -- put back the original notify if needed
-    end
-    vim.schedule(function()
-      ---@diagnostic disable-next-line: no-unknown
-      for _, notif in ipairs(notifs) do
-        vim.notify(vim.F.unpack_len(notif))
-      end
-    end)
-  end
-
-  -- wait till vim.notify has been replaced
-  check:start(function()
-    if vim.notify ~= temp then
-      replay()
-    end
-  end)
-  -- or if it took more than 500ms, then something went wrong
-  timer:start(500, 0, replay)
 end
 
 function M.is_loaded(name)
