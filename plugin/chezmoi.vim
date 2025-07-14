@@ -12,4 +12,5 @@ endfunction
 augroup chezmoi
   autocmd!
   autocmd BufWritePost ~/.local/share/chezmoi/* ! chezmoi apply --source-path "%"
+  autocmd BufWritePost ~/.bash_aliases ! chezmoi add "%"
 augroup END

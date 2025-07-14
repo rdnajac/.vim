@@ -210,8 +210,8 @@ nnoremap <leader>vp <Cmd>call edit#vimrc('plugins')<CR>
 nnoremap <leader>vs <Cmd>call edit#vimrc('settings')<CR>
 
 " nvim settings {{{2
-nnoremap <BSlash>i <Cmd>call edit#module('init')<CR>
-nnoremap <BSlash>p <Cmd>call edit#module('plugins/init')<CR>
+nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
+nnoremap <BSlash>p <Cmd>call edit#module('nvim/plugins/init')<CR>
 nnoremap <BSlash>m <Cmd>call edit#module('munchies/init')<CR>
 " nnoremap <BSlash>u <Cmd>call edit#module('utils/init')<CR>
 
@@ -298,11 +298,7 @@ nmap gy "xyygcc"xp
 nmap gl <Cmd>Config<CR>
 
 " `surround` {{{2
-vmap `  S`
-vmap '  S'
-vmap "  S"
-vmap b  Sb
-nmap S  viWS
+nmap S viWS
 " nmap yss ys
 
 " `zq` ZA ... ZP, `ZQ` ... `ZZ`
@@ -456,7 +452,7 @@ Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-Plug 'AndrewRadev/dsf.vim'
+" Plug 'AndrewRadev/dsf.vim'
 Plug 'alker0/chezmoi.vim',
 Plug 'github/copilot.vim',
 Plug 'tpope/vim-tbone',
@@ -484,7 +480,7 @@ if has('nvim')
     let g:loaded_zipPlugin = 1
     let g:loaded_tarPlugin = 1
     let g:loaded_gzip = 1
-    lua require('init')
+    lua require('nvim')
     let g:loaded_nvim = 1
   endif
 else

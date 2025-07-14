@@ -1,3 +1,5 @@
+local M = {}
+
 local icons = {
   diagnostics = {
     error = ' ',
@@ -7,6 +9,7 @@ local icons = {
   },
 }
 
+-- M.config = function()
 ---@type vim.diagnostic.Opts
 vim.diagnostic.config({
   float = { source = true },
@@ -28,3 +31,6 @@ vim.diagnostic.config({
     },
   },
 })
+-- end
+
+return M
