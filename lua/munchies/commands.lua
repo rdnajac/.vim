@@ -33,10 +33,20 @@ end, {
   complete = dir_completion,
 })
 
-vim.api.nvim_create_user_command('Chezmoi', function()
+command('Chezmoi', function()
   local chezmoi_dir = vim.g.chezmoi_dir or '~/.local/share/chezmoi'
   vim.cmd(('Files -h %s'):format(chezmoi_dir))
 end, {})
+
+command('Plugins', function(opts)
+  local opts_tbl = { bang = opts.bang }
+  require('munchies.picker.plugins').files(opts_tbl)
+end, { bang = true, nargs = '*', complete = 'file' })
+
+command('PluginsGrep', function(opts)
+  local opts_tbl = { bang = opts.bang }
+  require('munchies.picker.plugins').grep(opts_tbl)
+end, { bang = true, nargs = '*', complete = 'file' })
 
 command('Scratch', function(opts)
   if opts.bang then
@@ -74,10 +84,6 @@ command('Highlights', function()
   Snacks.picker.highlights()
 end, {})
 
-command('Lazygit', function()
-  Snacks.Lazygit()
-end, {})
-
 command('Scripts', function()
   require('munchies.picker.scriptnames')()
 end, {})
@@ -88,4 +94,8 @@ end, {})
 
 command('Keymaps', function()
   Snacks.picker.keymaps()
+end, {})
+
+command('Lazygit', function()
+  Snacks.Lazygit()
 end, {})
