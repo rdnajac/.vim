@@ -6,7 +6,7 @@ return {
       keys = {
         -- ['<Up>'] = 'explorer_up',
         -- ['<Down>'] = 'explorer_down',
-        ['<Left>'] = 'explorer_close',
+        ['<Left>'] = 'explorer_up',
         ['<Right>'] = 'confirm',
         ['<BS>'] = 'explorer_up',
         ['l'] = 'confirm',
@@ -20,7 +20,11 @@ return {
         ['r'] = 'explorer_rename',
         ['u'] = 'explorer_update',
         ['y'] = { 'explorer_yank', mode = { 'n', 'x' } },
-        --['z'] = { Snacks.picker.zoxide() },
+        -- ['z'] = {
+        --   function(self)
+        --     require('munchies.picker.zoxide').cd_and_resume_picking(self)
+        --   end,
+        -- },
         ['P'] = 'toggle_preview',
         ['<c-c>'] = 'tcd',
         ['<leader>/'] = 'picker_grep',

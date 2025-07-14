@@ -3,21 +3,12 @@ local M = {}
 ---@module "snacks"
 ---@class snacks.dashboard.Config
 M.config = {
-  preset = {
-    keys = {
-      { icon = ' ', title = 'Recent Files', section = 'recent_files', indent = 2, gap = 0 },
-      { icon = ' ', key = 'g', desc = 'Lazygit', action = ':Lazygit' },
-      { icon = '󱌣 ', key = 'm', desc = 'Mason', action = ':Mason' },
-      { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
-    },
-  },
   sections = {
     { section = 'header', highlight = 'Chromatophore' },
-    -- { section = 'keys' },
     { section = 'recent_files' },
+    { padding = 1 },
     {
       section = 'terminal',
-      -- width = 69,
       cmd = '~/.vim/scripts/da.sh',
       height = 13,
     },
@@ -25,7 +16,6 @@ M.config = {
   formats = {
     key = function(item)
       local sep = require('util.icons').separators.section.rounded
-      -- local sep = LazyVim.config.separators.section.rounded
       return {
         { sep.right, hl = 'special' },
         { item.key, hl = 'key' },
@@ -49,44 +39,21 @@ M.config = {
   },
 }
 
--- Snacks.config.style('dashboard', { wo = { border = false } })
+M.fix_winborder = function()
+  local old_winborder = vim.o.winborder
+  if old_winborder ~= 'none' then
+    vim.o.winborder = 'none'
+    vim.api.nvim_create_autocmd('User', {
+      pattern = 'SnacksDashboardOpened',
+      -- pattern = 'VimEnter',
+      once = true,
+      callback = function()
+        vim.o.winborder = old_winborder
+      end,
+    })
+  end
+end
 
--- local aug = vim.api.nvim_create_augroup('SnacksDashboardToggle', { clear = true })
--- vim.api.nvim_create_autocmd('User', {
---   group   = aug,
---   pattern = 'SnacksDashboardOpened',
---   once    = true,
---   callback = function()
---     local orig_border     = vim.o.winborder
---     local orig_laststatus = vim.o.laststatus
---
---     vim.g._saved_winborder    = orig_border
---     vim.g._saved_laststatus   = orig_laststatus
---     vim.o.winborder           = 'none'
---     vim.o.laststatus          = 0
---
---     local buf = vim.api.nvim_get_current_buf()
---     vim.api.nvim_create_autocmd({'BufUnload','BufWipeout'}, {
---       group   = aug,
---       buffer  = buf,
---       once    = true,
---       callback = function()
---         vim.o.winborder  = vim.g._saved_winborder
---         vim.o.laststatus = vim.g._saved_laststatus
---         vim.g._saved_winborder  = nil
---         vim.g._saved_laststatus = nil
---       end,
---     })
---   end,
--- })
---
+M.fix_winborder()
 
--- vim.api.nvim_create_autocmd('User', {
---   pattern = 'SnacksDashboardOpened',
---   once = true,
---   callback = function()
---     vim.opt.winborder = 'rounded'
---   end,
--- })
---
 return M
