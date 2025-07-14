@@ -13,16 +13,14 @@ M.event = 'InsertEnter'
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
-  -- fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
-  signature = { enabled = true },
   cmdline = { enabled = false },
   completion = {
     accept = { auto_brackets = { enabled = true } },
-    documentation = { auto_show = true, auto_show_delay_ms = 200 },
+    documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = 'single' } },
     list = { selection = { preselect = false, auto_insert = true } },
-
     menu = {
       auto_show = false,
+      border = 'single',
       draw = {
         treesitter = { 'lsp' },
         columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
@@ -36,6 +34,11 @@ M.opts = {
         },
       },
     },
+  },
+  -- fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
+  signature = {
+    enabled = true,
+    window = { border = 'single' },
   },
 
   keymap = {
@@ -80,6 +83,7 @@ M.opts = {
       'fallback',
     },
   },
+
   sources = {
     default = { 'lsp', 'snippets', 'path' },
     per_filetype = {

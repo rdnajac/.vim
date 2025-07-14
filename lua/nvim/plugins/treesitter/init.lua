@@ -1,5 +1,9 @@
 local M = { 'nvim-treesitter/nvim-treesitter' }
 
+M.dependencies = {
+  'folke/ts-comments.nvim',
+}
+
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 local filetypes = { 'vim', 'sh', 'tex', 'markdown', 'python' }
 
@@ -27,7 +31,7 @@ vim.keymap.set('x', '<C-Space>', sel.increment, { desc = 'Increment selection' }
 vim.keymap.set('x', '<BS>', sel.decrement, { desc = 'Decrement selection' })
 
 M.config = function()
-  vim.pack.add({ 'https://github.com/folke/ts-comments.nvim' })
+  -- also set up dependencies
   require('ts-comments').setup({})
 
   vim.api.nvim_create_autocmd('User', {

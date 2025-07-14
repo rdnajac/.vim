@@ -18,8 +18,18 @@ setmetatable(M, {
 M.specs = {}
 M.plugins = {}
 
+-- Helper function to create a plugin specification
+---@param src string URL or path to the plugin source
+---@return table spec
+local function make_spec(src)
+  if not src:match('^https?://') and not src:match('^~/') then
+    src = 'https://github.com/' .. src
+  end
+  return { src = src }
+end
+
 local function plug(name, plugin)
-  local spec = { src = 'https://github.com/' .. plugin[1] }
+  local spec = make_spec(plugin.src or plugin[1])
   if plugin.version then
     spec.version = plugin.version
   end
@@ -30,6 +40,13 @@ local function plug(name, plugin)
   table.insert(M, { plugin = plugin, spec = spec, name = name })
   table.insert(M.specs, spec)
   M.plugins[name] = plugin
+  -- assume dependencies are specified as table of strings
+  if plugin.dependencies then
+    for _, dep in ipairs(plugin.dependencies) do
+      local dep_spec = make_spec(dep)
+      table.insert(M.specs, dep_spec)
+    end
+  end
 end
 
 local this_dir = debug.getinfo(1, 'S').source:sub(2):match('(.+)/[^/]*$')
