@@ -57,14 +57,13 @@ local function chromatophore_refresh()
     Chromatophore = { fg = mode_color, bg = 'NONE' },
     Title = { link = 'Chromatophore' },
     String = { link = 'Chromatophore' },
-
+    Folded = { link = 'Chromatophore' },
     Chromatophore_a = { fg = black, bg = mode_color, bold = true },
     Chromatophore_ab = { fg = mode_color, bg = grey },
     Chromatophore_b = { fg = mode_color, bg = grey, bold = true },
     Chromatophore_bc = { fg = grey, bg = lightblue },
     Chromatophore_c = { fg = mode_color, bg = lightblue },
     Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
-
     StatusLine = { link = 'Chromatophore_a' },
     StatusLineNC = { link = 'Chromatophore_b' },
   })
@@ -86,3 +85,10 @@ for _, event in ipairs(events) do
     callback = chromatophore_refresh,
   })
 end
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'msg',
+  callback = function()
+    Snacks.util.winhl('Chromatophore:Normal')
+  end,
+})
