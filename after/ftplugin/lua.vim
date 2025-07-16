@@ -14,7 +14,9 @@ inoremap <buffer> [[<CR> ([[<CR><CR>]])<UP>
 
 inoremap <buffer> \uf ---@diagnostic disable-next-line: undefined-field
 inoremap <buffer> \mf ---@diagnostic disable-next-line: missing-fields
+inoremap <buffer> \at ---@diagnostic disable-next-line: assign-type-mismatch
 inoremap <buffer> \ul ---@diagnostic disable-next-line: unused-local
+
 
 inoremap <buffer> \si  --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> \sis --<SPACE>stylua:<SPACE>ignore<SPACE>start
@@ -23,16 +25,10 @@ inoremap <buffer> \sie --<SPACE>stylua:<SPACE>ignore<SPACE>end
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> \vc vim.cmd([[<c-g>u]])<Left><Left><Left><CR><CR><esc>hi<Space><Space>
 
-" WIP...
+" WIP.. TODO: map to `cr` like with CoeRce from `vim-abolish`
 " local function transform
-nmap <leader>cl ^wdwf(i<Space>=<Space><Esc>px
+" nmap <leader>cl ^wdwf(i<Space>=<Space><Esc>px
 " local to M transform
-nmap <leader>cm ^v2f<Space>cM.<Es\ac>
+" nmap <leader>cm ^v2f<Space>cM.<Es\ac>
 " M transform
-nmap <leader>cM ^v2f<Space>cM.<Esc>
-
-function! s:FoldText() abort
-  let indent = repeat(' ', v:foldlevel * &shiftwidth)
-  return indent . printf('--- %d lines ---', v:foldend - v:foldstart + 1)
-endfunction
-setlocal foldtext=<SID>FoldText()
+" nmap <leader>cM ^v2f<Space>cM.<Esc>

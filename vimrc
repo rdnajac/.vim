@@ -3,19 +3,32 @@ scriptencoding=utf-8
 " Section: settings {{{1
 let g:mapleader = ' '
 let g:maplocalleader = '\'
-let g:VIMDIR = fnamemodify($MYVIMRC, ':p:h')
-let &spellfile = g:VIMDIR . '.spell/en.utf-8.add'
-" let &undodir     = s:VIMHOME . '.undo//'
-" let &viminfofile = s:VIMHOME . '.viminfo'
-" let &verbosefile = s:VIMHOME . '.vimlog.txt'
-let &backup = has('nvim')
-let &swapfile = has('nvim')
 
-" options {{{2
-set startofline
+" file system {{{2
+let g:VIMHOME = fnamemodify($MYVIMRC, ':p:h')
+" silent !mkdir -p ~/.vim/tmp >/dev/null 2>&1
+let &spellfile = g:VIMHOME . '.spell/en.utf-8.add'
+if has('nvim')
+  set backup
+  set backupext=.bak
+  let &backupdir = stdpath('state') . '/backup//'
+  let &backupskip .= ',' . escape(expand('$HOME/.cache/*'), '\')
+  let &backupskip .= ',' . escape(expand('$HOME/.local/*'), '\')
+  set undofile
+else
+  let &viminfofile = s:VIMHOME . '.viminfo'
+  " let &verbosefile = s:VIMHOME . '.vimlog.txt'
+  " some settings are default in nvim
+  set autoread
+endif
 set autowrite
 set autowriteall
+" XXX: do I want this?
+set noswapfile
+
+" options {{{2
 " set confirm
+set startofline
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
 set fillchars+=stl:\ ,
@@ -34,13 +47,12 @@ set splitkeep=screen
 set termguicolors
 set timeoutlen=420
 set updatetime=69
-set undofile undolevels=10000
 set whichwrap+=<,>,[,],h,l
-set lazyredraw
 
 set completeopt=menu,preview,longest
+" TODO: this check if this works on the default version in GitHub Codespaces
 if has('nvim') || has('patch-9.1.1337')
-  " set completeopt+=preinsert
+  set completeopt+=preinsert
 endif
 
 " indentation {{{3
@@ -48,7 +60,8 @@ set breakindent
 set linebreak
 set nowrap
 set shiftround
-" don't change shiftwidth or tabstop! instead, use sw and sts
+" don't change shiftwidth or tabstop!
+" instead, use `sw` and `sts`
 set shiftwidth=2
 set softtabstop=2
 
@@ -59,6 +72,7 @@ augroup vimrc_indent
 augroup END
 
 " Section: ui {{{1
+set lazyredraw
 
 " columns {{{2
 " set foldcolumn=1
@@ -86,12 +100,7 @@ set foldlevelstart=2
 set foldminlines=5
 set foldopen+=insert,jump
 set foldtext=fold#text()
-set foldtext=
 " set foldmethod=marker
-
-" better search if auto pausing folds
-" set foldopen-=search
-" nnoremap <silent> / zn/
 
 augroup vimrc_fold
   au!
@@ -104,6 +113,10 @@ augroup vimrc_fold
 augroup END
 
 nnoremap <expr> h fold#aware_h()
+
+" better search if auto pausing folds
+" set foldopen-=search
+" nnoremap <silent> / zn/
 
 " Section: autocmds {{{1
 augroup vimrc
@@ -143,17 +156,15 @@ au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
 augroup END
 
 " Section: commands {{{1
-command! Restart execute 'Obsession ' . g:VIMDIR | restart
+command! Restart execute 'Obsession ' . g:VIMHOME | restart
 command! -bang Quit call quit#buffer(<q-bang>)
 command! CleanWhitespace call format#clean_whitespace()
 
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
-
 " Section: keymaps {{{1
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 nnoremap <leader><Space> viW
-nnoremap <C-Space> viw
 
 nnoremap <leader>E  <Cmd>edit!<CR>
 nnoremap <leader>e  <Cmd>Explore<CR>
@@ -176,11 +187,11 @@ nnoremap <leader>,  <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 
-nnoremap <leader>fp :PluginFiles<CR>
-nnoremap <leader>sp :PluginGrep<CR>
+nnoremap <leader>fp :FindPlugin<CR>
+nnoremap <leader>sp :GrepPlugin<CR>
+nnoremap <leader>fP :FindPlugin!<CR>
+nnoremap <leader>sP :GrepPlugin!<CR>
 
-nnoremap <leader>fP :PluginFiles ~/.local/share/nvim/site/pack/core/opt<CR>
-nnoremap <leader>sP :PluginGrep ~/.local/share/nvim/site/pack/core/opt<CR>
 
 " code {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
@@ -274,6 +285,7 @@ nnoremap dD <Cmd>%d<CR>
 nnoremap cdc <Cmd>call bin#cd#smart()<CR>
 nnoremap cdb <Cmd>cd %:p:h<BAR>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<BAR>pwd<CR>
+nnoremap cdr :cd <C-R>=git#root()<CR><Bar>pwd<CR>
 
 nmap <expr> cq change#quote()
 
@@ -303,6 +315,9 @@ nmap S viWS
 
 " `zq` ZA ... ZP, `ZQ` ... `ZZ`
 nmap zq gqag
+
+" requires vim-unimpaired
+nmap zJ ]ekJ
 
 " text objects {{{2
 
@@ -436,6 +451,8 @@ cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 
 " Section: plugins {{{1
 call plug#begin()
+Plug 'alker0/chezmoi.vim',
+Plug 'github/copilot.vim',
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-apathy'
@@ -449,20 +466,19 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
-" Plug 'AndrewRadev/dsf.vim'
-Plug 'alker0/chezmoi.vim',
-Plug 'github/copilot.vim',
-Plug 'tpope/vim-tbone',
 Plug 'AndrewRadev/splitjoin.vim'
+" replaced by native plugins
+" Plug 'AndrewRadev/dsf.vim'
+" Plug 'tpope/vim-tbone',
+Plug 'dense-analysis/ale'
 if !has('nvim')
-  Plug 'vuciv/golf'
-  Plug 'dense-analysis/ale'
-  Plug 'Konfekt/FastFold'
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
+  Plug 'vuciv/golf'
+  Plug 'Konfekt/FastFold'
   " using mini instead
   Plug 'junegunn/vim-easy-align'
 else
@@ -474,12 +490,12 @@ call plug#end()
 
 if has('nvim')
   if !exists('g:loaded_nvim')
-    let g:loaded_netrwPlugin = 1
-    let g:loaded_tutor_mode_plugin = 1
-    let g:loaded_2html_plugin = 1
-    let g:loaded_zipPlugin = 1
-    let g:loaded_tarPlugin = 1
+    " let g:loaded_2html_plugin = 1
     let g:loaded_gzip = 1
+    let g:loaded_netrwPlugin = 1
+    let g:loaded_tarPlugin = 1
+    let g:loaded_tutor_mode_plugin = 1
+    let g:loaded_zipPlugin = 1
     lua require('nvim')
     let g:loaded_nvim = 1
   endif

@@ -1,4 +1,19 @@
+scriptencoding utf-8
+
+function! fold#text_lua()
+  let ret = ''
+  let ret .= repeat(' ', v:foldlevel * &shiftwidth)
+  let ret .= ' '
+  " let ret .= printf('󰡏 --- %d lines ---󰡏 ', v:foldend - v:foldstart + 1)
+  let ret .= printf('󰡏  ~ %2d lines ~ ', v:foldend - v:foldstart + 1)
+
+  return ret
+endfunction
+
 function! fold#text() abort
+  if &ft ==# 'lua'
+    return fold#text_lua()
+  endif
   let s:foldchar = '.'
   let l:line1 = getline(v:foldstart)
 
@@ -23,6 +38,7 @@ function! fold#text() abort
 
   return l:pre . l:fill . l:post
 endfunction
+
 
 function! fold#aware_h() abort
   let col = virtcol('.')

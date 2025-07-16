@@ -8,12 +8,12 @@ vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
 })
 vim.g.copilot_no_tab_map = true
 
---   -- Block the normal Copilot suggestions if using blink integration
---   vim.api.nvim_create_augroup('github_copilot', { clear = true })
---   vim.api.nvim_create_autocmd({ 'FileType', 'BufUnload' }, {
---     group = 'github_copilot',
---     callback = function(args)
---       vim.fn['copilot#On' .. args.event]()
---     end,
---   })
---   vim.fn['copilot#OnFileType']()
+-- Block the normal Copilot suggestions if using blink integration
+vim.api.nvim_create_augroup('github_copilot', { clear = true })
+vim.api.nvim_create_autocmd({ 'FileType', 'BufUnload' }, {
+  group = 'github_copilot',
+  callback = function(args)
+    vim.fn['copilot#On' .. args.event]()
+  end,
+})
+vim.fn['copilot#OnFileType']()
