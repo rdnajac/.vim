@@ -1,13 +1,21 @@
 local M = { 'Saghen/blink.cmp' }
 
+-- lazy.nvim
 M.build = 'cargo build --release'
--- TODO handle these better
+
+local plugin_name = M[1]:match('.*/(.*)')
+local plugin_path = vim.fs.joinpath(pack_dir, plugin_name)
+
+M.make = '!cd ' .. plugin_path .. ' && ' .. M.build
+-- print(M, 'make command:', M.make)
+
 M.dependencies = {
   'mgalliou/blink-cmp-tmux',
   'fang2hou/blink-copilot',
   'moyiz/blink-emoji.nvim',
   'bydlw98/blink-cmp-env',
 }
+
 M.event = 'InsertEnter'
 
 ---@module "blink.cmp"
@@ -19,7 +27,7 @@ M.opts = {
     documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = 'single' } },
     list = { selection = { preselect = false, auto_insert = true } },
     menu = {
-      auto_show = false,
+      auto_show = true,
       border = 'single',
       draw = {
         treesitter = { 'lsp' },
@@ -85,7 +93,7 @@ M.opts = {
   },
 
   sources = {
-    default = { 'lsp', 'snippets', 'path' },
+    default = { 'lsp', 'snippets', 'path', 'env' },
     per_filetype = {
       lua = { inherit_defaults = true, 'lazydev' },
       -- sh = { inherit_defaults = true,  'env' },
@@ -110,13 +118,13 @@ M.opts = {
           return ctx.trigger.initial_kind ~= 'trigger_character'
         end,
       },
-      -- copilot = {
-      --   name = 'copilot',
-      --   module = 'blink-copilot',
-      --   -- score_offset = 10,
-      --   async = true,
-      --   opts = { max_completions = 5 },
-      -- },
+      copilot = {
+        name = 'copilot',
+        module = 'blink-copilot',
+        -- score_offset = 10,
+        async = true,
+        opts = { max_completions = 2 },
+      },
       lsp = {
         score_offset = 1,
         transform_items = function(_, items)
@@ -135,16 +143,18 @@ M.opts = {
       --     capture_history = true,
       --   },
       -- },
-      -- env = {
-      --   name = 'env',
-      --   module = 'blink-cmp-env',
-      --   score_offset = -5,
-      --   opts = {
-      --     item_kind = require('blink.cmp.types').CompletionItemKind.Variable,
-      --     show_braces = false,
-      --     show_documentation_window = true,
-      --   },
-      -- },
+      env = {
+        name = 'env',
+        module = 'blink-cmp-env',
+        score_offset = -5,
+        opts = {
+          item_kind = function()
+            return require('blink.cmp.types').CompletionItemKind.Variable
+          end,
+          show_braces = false,
+          show_documentation_window = true,
+        },
+      },
       -- emoji = {
       --   module = 'blink-emoji',
       --   name = 'emoji',

@@ -22,20 +22,19 @@ M.opts = {
     hl['Statement'] = { fg = colors.red }
     hl['Folded'] = { fg = colors.blue }
     hl['Special'] = { fg = colors.red, bold = true }
-    -- hl['MsgArea'] = { fg = colors.green }
+    hl['MsgArea'] = { fg = colors.green }
     hl['SpellBad'] = { bg = colors.red }
     hl['FloatBorder'] = { fg = colors.green }
     hl['SpecialWindow'] = { bg = '#1f2335' }
 
     -- TODO: move to ui
-    hl['StatusLineNC'] = { bg = 'NONE' }
-    hl['TabLineFill'] = { bg = 'NONE' }
-    hl['Winbar'] = { bg = 'NONE' }
+    -- hl['StatusLineNC'] = { bg = 'NONE' }
+    -- hl['TabLineFill'] = { bg = 'NONE' }
+    -- hl['Winbar'] = { bg = 'NONE' }
 
     -- TODO: move to snacks util color
     hl['helpSectionDelim'] = { fg = colors.green }
     hl['CopilotSuggestion'] = { bg = '#414868', fg = '#7aa2f7' }
-    hl['RenderMarkdownCode'] = { bg = 'NONE' }
     hl['SnacksPickerTitle'] = { bold = true, fg = colors.green }
   end,
 }
