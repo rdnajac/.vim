@@ -13,11 +13,17 @@ end
 
 M.start = function()
   _G.selected_nodes = {}
-  local current_node = vim.treesitter.get_node()
-  if current_node then
-    table.insert(_G.selected_nodes, current_node)
-    select_node(current_node)
+  local is_coment = function(node)
+    return vim.tbl_contains({ 'comment', 'line_comment', 'block_comment', 'comment_content' }, node:type())
   end
+  local success, node = pcall(vim.treesitter.get_node)
+  if not success or not node or is_coment(node) then
+    vim.cmd('normal! viW')
+    return
+  end
+
+  table.insert(_G.selected_nodes, node)
+  select_node(node)
 end
 
 M.increment = function()
@@ -37,6 +43,12 @@ M.decrement = function()
   if current_node then
     select_node(current_node)
   end
+end
+
+M.setup = function()
+  vim.keymap.set('n', '<C-Space>', M.start, { desc = 'Start selection' })
+  vim.keymap.set('x', '<C-Space>', M.increment, { desc = 'Increment selection' })
+  vim.keymap.set('x', '<BS>', M.decrement, { desc = 'Decrement selection' })
 end
 
 return M

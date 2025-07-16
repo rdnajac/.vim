@@ -42,8 +42,7 @@ M.config = function()
           queries = 'queries/neovim',
         },
       }
-      local parsers = require('nvim.plugins.treesitter.parsers')
-      require('nvim-treesitter').install(parsers)
+      require('nvim-treesitter').install(require('nvim.plugins.treesitter.parsers'))
     end,
   })
 end

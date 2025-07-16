@@ -1,3 +1,6 @@
+-- Table of parsers to automatically install with nvim-treesitter
+-- NOTE: They still have to be manually enabled for most filetypes
+-- see `<url>` for available parsers
 return {
   -- 'asm',
   'bash',
