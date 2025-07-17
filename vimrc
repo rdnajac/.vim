@@ -28,6 +28,7 @@ set noswapfile
 
 " options {{{2
 " set confirm
+set iskeyword-=_
 set startofline
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
@@ -44,7 +45,6 @@ set shortmess-=o
 set showmatch
 set splitbelow splitright
 set splitkeep=screen
-set termguicolors
 set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
@@ -73,6 +73,7 @@ augroup END
 
 " Section: ui {{{1
 set lazyredraw
+set termguicolors
 
 " columns {{{2
 " set foldcolumn=1
@@ -82,12 +83,12 @@ set signcolumn=number
 
 " lines {{{2
 set showcmdloc=statusline
-" set statusline=
-set laststatus=1
+set statusline=%!MyStatusline()
+let &laststatus = has('nvim') ? 3 : 2
 set noruler
-set tabline=%!MyTabline()
+" set tabline=%!MyTabline()
 " set showtabline=2
-" set winbar=
+" set winbar=%!MyWinbar()
 
 " folding {{{2
 set fillchars+=fold:\ ,
@@ -219,6 +220,7 @@ nnoremap <leader>vc <Cmd>call edit#vimrc('commands')<CR>
 nnoremap <leader>vk <Cmd>call edit#vimrc('keymaps')<CR>
 nnoremap <leader>vp <Cmd>call edit#vimrc('plugins')<CR>
 nnoremap <leader>vs <Cmd>call edit#vimrc('settings')<CR>
+nnoremap <leader>vu <Cmd>call edit#vimrc('ui')<CR>
 
 " nvim settings {{{2
 nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
@@ -316,7 +318,7 @@ nmap S viWS
 " `zq` ZA ... ZP, `ZQ` ... `ZZ`
 nmap zq gqag
 
-" requires vim-unimpaired
+" vim-unimpaired
 nmap zJ ]ekJ
 
 " text objects {{{2

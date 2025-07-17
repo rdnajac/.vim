@@ -24,8 +24,8 @@ M.opts = {
   cmdline = { enabled = false },
   completion = {
     accept = { auto_brackets = { enabled = true } },
-    documentation = { auto_show = true, auto_show_delay_ms = 200, window = { border = 'single' } },
-    list = { selection = { preselect = false, auto_insert = true } },
+    documentation = { auto_show = true, window = { border = 'single' } },
+    list = { selection = { preselect = true, auto_insert = true } },
     menu = {
       auto_show = true,
       border = 'single',
@@ -44,63 +44,34 @@ M.opts = {
     },
   },
   -- fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
-  signature = {
-    enabled = true,
-    window = { border = 'single' },
-  },
-
+  signature = { enabled = true, window = { border = 'single' } },
   keymap = {
-    ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-    ['<C-e>'] = { 'hide', 'fallback' },
+    preset = 'default',
     ['<Tab>'] = {
       function(cmp)
         if cmp.snippet_active() then
-          return cmp.accept()
-        else
+          return cmp.snippet_forward()
+        elseif cmp.is_visible() then
           return cmp.select_and_accept()
-        end
-      end,
-      'snippet_forward',
-      'fallback',
-    },
-    ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
-    ['<Up>'] = { 'select_prev', 'fallback' },
-    ['<Down>'] = { 'select_next', 'fallback' },
-    ['<C-p>'] = {
-      function(cmp)
-        if cmp.is_menu_visible() then
-          return cmp.select_prev()
         else
-          -- return '<C-o>p'
-          vim.cmd('normal! p')
+          return cmp.show()
         end
       end,
-      'fallback_to_mappings',
-    },
-    ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
-    ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
-    ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
-    ['<C-k>'] = {
-      function(cmp)
-        if cmp.is_menu_visible() then
-          return cmp.select_prev()
-        end
-      end,
-      'show_signature',
-      'hide_signature',
       'fallback',
     },
+    ['<Up>'] = { 'select_prev', 'fallback' },
+    ['<Left>'] = { 'select_prev', 'fallback' },
+    ['<Down>'] = { 'select_next', 'fallback' },
+    ['<Right>'] = { 'select_next', 'fallback' },
   },
 
   sources = {
     default = { 'lsp', 'snippets', 'path', 'env' },
     per_filetype = {
       lua = { inherit_defaults = true, 'lazydev' },
-      -- sh = { inherit_defaults = true,  'env' },
-      -- vim = { inherit_defaults = true, 'env' },
       oil = {},
     },
-    min_keyword_length = 3,
+    min_keyword_length = 5,
     providers = {
       path = {
         score_offset = 100,
@@ -118,19 +89,19 @@ M.opts = {
           return ctx.trigger.initial_kind ~= 'trigger_character'
         end,
       },
-      copilot = {
-        name = 'copilot',
-        module = 'blink-copilot',
-        -- score_offset = 10,
-        async = true,
-        opts = { max_completions = 2 },
-      },
+      -- copilot = {
+      --   name = 'copilot',
+      --   module = 'blink-copilot',
+      --   -- score_offset = 10,
+      --   async = true,
+      --   opts = { max_completions = 2 },
+      -- },
       lsp = {
         score_offset = 1,
         transform_items = function(_, items)
           return vim.tbl_filter(function(item)
             return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-            -- and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
+              and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
           end, items)
         end,
       },
@@ -154,6 +125,12 @@ M.opts = {
           show_braces = false,
           show_documentation_window = true,
         },
+        -- should_show_items = function(ctx)
+        --   local col = ctx.cursor[2]
+        --   local before = ctx.line:sub(1, col)
+        --   return before:match('%$[%w_]*$') ~= nil
+        -- end,
+        --
       },
       -- emoji = {
       --   module = 'blink-emoji',

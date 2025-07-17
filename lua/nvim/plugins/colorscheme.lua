@@ -26,6 +26,7 @@ M.opts = {
     hl['SpellBad'] = { bg = colors.red }
     hl['FloatBorder'] = { fg = colors.green }
     hl['SpecialWindow'] = { bg = '#1f2335' }
+    hl['Cmdline'] = { bg = '#000000' }
 
     -- TODO: move to ui
     -- hl['StatusLineNC'] = { bg = 'NONE' }

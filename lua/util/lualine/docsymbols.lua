@@ -1,4 +1,4 @@
-local lib = require('util.naviclib')
+local lib = require('util.lualine.naviclib')
 local icons = require('util.icons')
 
 local M = {}
@@ -8,7 +8,7 @@ local config = {
   depth_limit = 0,
   depth_limit_indicator = icons.misc.dots,
   lazy_update_context = false,
-  separator = ' ',
+  separator = '󰿟 ',
 }
 
 setmetatable(config.icons, {

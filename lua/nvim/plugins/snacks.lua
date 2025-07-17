@@ -33,7 +33,7 @@ M.opts = {
     start_insert = true,
     auto_insert = true,
     auto_close = true,
-    -- win = { wo = { winbar = '', winhighlight = 'Normal:SpecialWindow' } },
+    win = { wo = { winbar = '', winhighlight = 'Normal:SpecialWindow' } },
   },
   words = { enabled = true },
 }

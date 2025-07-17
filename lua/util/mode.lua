@@ -1,9 +1,9 @@
 -- Copyright (c) 2020-2021 hoob3rt
 -- MIT license, see LICENSE for more details.
-local Mode = {}
+local M = {}
 
 -- stylua: ignore
-Mode.map = {
+M.map = {
   ['n']      = 'NORMAL',
   ['no']     = 'O-PENDING',
   ['nov']    = 'O-PENDING',
@@ -43,12 +43,8 @@ Mode.map = {
 }
 
 ---@return string current mode name
-function Mode.get_mode()
-  local mode_code = vim.api.nvim_get_mode().mode
-  if Mode.map[mode_code] == nil then
-    return mode_code
-  end
-  return Mode.map[mode_code]
+function M.get()
+  return M.map[vim.api.nvim_get_mode().mode] or vim.api.nvim_get_mode().mode
 end
 
-return Mode
+return M

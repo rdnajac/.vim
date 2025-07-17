@@ -1,4 +1,14 @@
 {
+  "function": {
+    "prefix": "funcrion",
+    "body": [
+      "function! ${1:function_name}(${2:args})",
+      "  ${0}",
+      "endfunction"
+    ],
+    "description": "Function definition."
+  },
+
   "if_exists_equals": {
     "prefix": "ifeg",
     "body": ["if !exists('g:${1}')", "let g:${1} = ${2:1}", "endif"],

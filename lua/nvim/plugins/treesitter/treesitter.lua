@@ -5,7 +5,7 @@ M.dependencies = {
 }
 
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
-local filetypes = { 'vim', 'sh', 'tex', 'markdown', 'python' }
+local filetypes = { 'sh', 'tex', 'markdown', 'python' }
 
 vim.api.nvim_create_autocmd('FileType', {
   group = aug,
@@ -15,7 +15,7 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
-vim.api.nvim_create_autocmd('FileType', {
+vim.api.nvim_create_autocmd('filetype', {
   pattern = { 'kitty', 'ghostty', 'zsh' },
   group = aug,
   callback = function(ev)

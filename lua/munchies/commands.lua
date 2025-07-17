@@ -89,7 +89,13 @@ end, {})
 
 command('Chezmoi', function()
   local chezmoi_dir = vim.g.chezmoi_dir or '~/.local/share/chezmoi'
-  vim.cmd(('Files -h %s'):format(chezmoi_dir))
+  -- vim.cmd(('Files -h %s'):format(chezmoi_dir))
+  Snacks.picker.files({
+    cwd = chezmoi_dir,
+    hidden = true,
+    ignore = true,
+    title = 'ChezMoi',
+  })
 end, {})
 
 command('FindPlugin', function(opts)

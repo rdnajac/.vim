@@ -31,7 +31,7 @@ M.config = {
           win = 'list',
           border = 'rounded',
           -- TODO: set titles in picker calls
-          title = '{title} {live} {flags}',
+          -- title = '{title} {live} {flags}',
           title_pos = 'left',
         },
         {
@@ -104,15 +104,14 @@ M.config = {
       keys = {
         ['<Esc>'] = { 'close', mode = { 'n' } },
         ['<C-J>'] = { 'toggle', mode = { 'n', 'i' }, desc = 'Toggle Files/Grep' },
-        ['<A-Z>'] = {
-          -- change dir with zoxide and continue picking
-          function(self)
-            self:close()
+        -- change dir with zoxide and continue picking
+        ['<m-z>'] = {
+          function(picker, item)
+            picker.close()
+            picker.cd(item.file)
             Snacks.picker.zoxide({
               confirm = function(_, item)
-                vim.cmd.cd(vim.fn.fnameescape(item.file))
-                -- self:cd(item)
-                vim.cmd.pwd()
+                -- vim.cmd.cd(vim.fn.fnameescape(item.file))
                 Snacks.picker.resume({ cwd = item.file })
               end,
             })

@@ -25,7 +25,7 @@ M.on_attach = function(client, bufnr)
   client.server_capabilities.documentFormattingProvider = false
   -- client.server_capabilities.semanticTokensProvider = nil
   if client:supports_method('textDocument/documentSymbol') then
-    require('util.docsymbols').attach(client, bufnr)
+    require('util.lualine.docsymbols').attach(client, bufnr)
   end
   if client:supports_method('textDocument/inlayHint') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })

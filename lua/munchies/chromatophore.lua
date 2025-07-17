@@ -1,4 +1,4 @@
-local get_mode = require('util.mode').get_mode
+local get_mode = require('util.mode').get
 
 local colors = {
   green = '#39ff14',
@@ -63,6 +63,7 @@ local function chromatophore_refresh()
     Chromatophore_b = { fg = mode_color, bg = grey, bold = true },
     Chromatophore_bc = { fg = grey, bg = lightblue },
     Chromatophore_c = { fg = mode_color, bg = lightblue },
+    Chromatophore_y = { fg = mode_color, bg = '#000000', bold = true },
     Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
     StatusLine = { link = 'Chromatophore_a' },
     StatusLineNC = { link = 'Chromatophore_b' },
