@@ -66,21 +66,24 @@ function! edit#module(name) abort
 endfunction
 
 function! edit#ch() abort
-  let l:file = expand('%:p')
-  let l:base = fnamemodify(l:file, ':t')
-  let l:dir = fnamemodify(l:file, ':h')
-  let l:found = 0
-  for l:swap in [['autoload', 'plugin'], ['plugin', 'autoload']]
-    if fnamemodify(l:dir, ':t') ==# l:swap[0]
-      let l:alt = fnamemodify(l:dir, ':h') . '/' . l:swap[1] . '/' . l:base
-      if filereadable(l:alt)
-	call s:edit_if_readable(l:alt)
-	let l:found = 1
-	break
+  let file = expand('%:p')
+  let base = fnamemodify(file, ':t')
+  let stem = substitute(base, '\.vim$', '', '')
+  let dir = fnamemodify(file, ':h')
+
+  for [from, to] in [['autoload', 'plugin'], ['plugin', 'autoload']]
+    if fnamemodify(dir, ':t') ==# from
+      let root = fnamemodify(dir, ':h') . '/' . to . '/'
+      let alt = root . base
+      if filereadable(alt)
+	return s:edit_if_readable(alt)
+      endif
+      let match = glob(root . stem, 1, 1)
+      if !empty(match) && isdirectory(match[0])
+	return execute('edit ' . match[0])
       endif
     endif
   endfor
-  if !l:found
-    echoerr 'File not found: companion for ' . l:file
-  endif
+
+  echoerr 'File or directory not found: companion for ' . file
 endfunction
