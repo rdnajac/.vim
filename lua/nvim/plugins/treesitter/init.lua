@@ -1,5 +1,7 @@
 local M = { 'nvim-treesitter/nvim-treesitter' }
 
+M.version = 'main'
+
 M.dependencies = {
   'folke/ts-comments.nvim',
 }
@@ -30,6 +32,7 @@ M.config = function()
   -- also set up dependencies
   require('ts-comments').setup({})
 
+  ---@diagnostic disable-next-line: param-type-mismatch
   vim.api.nvim_create_autocmd('User', {
     pattern = 'TSUpdate',
     group = aug,

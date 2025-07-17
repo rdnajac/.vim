@@ -2,11 +2,6 @@
 
 My (n)vim configuration.
 
-## TODO
-
-- [ ] `:bufdo if &modifiable | %s/\<foo\>/bar/ge | update | endif`
-
-
 ## neovim
 
 ### Installation

@@ -1,110 +1,161 @@
 -- Use nvim's native package manager to clone plugins to
 -- `~/.local/share/nvim/site/pack/core/opt/` and load them
 
---- A minimal plugin spec for vim.pack.add
+--- minimal plugin spec for vim.pack.add
 ---@class PluginSpec
 ---@field src string  plugin source URL (e.g. https://github.com/user/repo)
 ---@field name? string Optional short name for the plugin
 ---@field version? string Optional version (tag, branch, etc.)
 
---- A `lazy.nvim` compatible plugin specification
+--- `lazy.nvim` compatible plugin specification
 ---@class PluginSpecMeta : PluginSpec
+---@field build? string|function Optional build command or function
 ---@field config? fun() Optional config function
 ---@field dependencies? string[] List of plugin names this depends on
--- TODO: continue adding more fields as needed
+---@field event? string Event to trigger loading (see `:h events`)
 
 -- XXX: this is subject to change in the future
 _G.pack_dir = vim.fn.stdpath('data') .. '/site/pack/core/opt/'
-
----@type PluginSpec[]
-local specs = {}
-
---- Create a minimal vim.pack spec from a plugin definition
----@param plugin table
----@return PluginSpec|nil
-local function to_spec(plugin)
-  local src = plugin.src or plugin[1]
-  if not src then
-    return nil
-  end
-
-  if not src:match('^https?://') and not src:match('^~/') then
-    src = 'https://github.com/' .. src
-  end
-
-  return { src = src, name = plugin.name, version = plugin.version }
-end
-
----@type table<string, PluginSpecMeta>
-local M = {
-  specs = specs, -- assign directly so it's not under __index
-}
-
-setmetatable(M, {
-  __index = function(t, k)
-    local mod = 'nvim.plugins.' .. k
-    local ok, plugin = pcall(require, mod)
-    if not ok then
-      error('Module not found: ' .. mod)
-    end
-
-    local name = plugin.name or k
-
-    -- avoid duplicate registration
-    if rawget(t, name) then
-      return rawget(t, name)
-    end
-
-    table.insert(specs, to_spec(plugin))
-    for _, dep in ipairs(plugin.dependencies or {}) do
-      table.insert(specs, to_spec({ dep }))
-    end
-    rawset(t, name, plugin)
-    return plugin
-  end,
-})
 
 -- plugins are available immediately after `vim.pack.add()`
 vim.pack.add({ 'https://github.com/nvim-lua/plenary.nvim' })
 
 local Path = require('plenary.path')
 local scandir = require('plenary.scandir')
+local log = require('plenary.log').new({
+  plugin = 'plugin_init',
+  -- level = 'debug',
+  use_console = true,
+  info_level = 2,
+  truncate = false,
+})
 
----@diagnostic disable-next-line: assign-type-mismatch
-local this_dir = Path.new(debug.getinfo(1, 'S').source:sub(2)):parent():absolute()
+local M = {}
 
--- Scan plugin dir for top-level *.lua and subdirs with init.lua
-for _, entry in ipairs(scandir.scan_dir(this_dir, { depth = 2, add_dirs = true })) do
-  local path = Path.new(entry):make_relative(this_dir)
-  local parts = vim.split(path, Path.path.sep)
+--- list of specs built from plugin definitions
+---@type PluginSpec[]
+M.specs = {}
 
-  local name = nil
-  if #parts == 1 and path:match('%.lua$') and path ~= 'init.lua' then
-    name = path:match('^(.-)%.lua$')
-  elseif #parts == 2 and parts[2] == 'init.lua' then
-    name = parts[1]
+--- Parse plugin object to a minimal spec
+---@param plugin PluginSpecMeta
+---@return PluginSpec?
+local function to_spec(plugin)
+  local src = plugin.src or plugin[1]
+
+  if not src then
+    log.warn('Missing plugin source in: ', vim.inspect(plugin))
+    return nil
+  end
+  if not src:match('^https?://') and not src:match('^~/') then
+    src = 'https://github.com/' .. src
+  end
+  return { src = src, name = plugin.name, version = plugin.version }
+end
+
+-- automatically convert tables in M[name] to plugin specs
+setmetatable(M, {
+  __newindex = function(t, k, v)
+    rawset(t, k, v)
+    if type(v) == 'table' and (v.src or v[1]) then
+      local spec = to_spec(v)
+      if spec then
+        log.debug('Added plugin: ', vim.inspect(spec))
+        table.insert(t.specs, spec)
+        if v.dependencies then
+          for _, dep in ipairs(v.dependencies) do
+            local ds = to_spec({ dep })
+            if ds then
+              log.debug('Added dependency: ', vim.inspect(ds))
+              table.insert(t.specs, ds)
+            end
+          end
+        end
+      end
+    end
+  end,
+})
+
+function M:init()
+  local this = Path:new(debug.getinfo(1, 'S').source:sub(2))
+  local this_dir = this:parent()
+  local lua_root = this_dir
+  while lua_root:parent() ~= lua_root do
+    if lua_root:parent().filename:match('/lua$') then
+      lua_root = lua_root:parent()
+      break
+    end
+    lua_root = lua_root:parent()
   end
 
-  if name then
-    _ = M[name] -- triggers plugin load, appends to M.specs
+  local function load(file_path)
+    local rel = Path:new(file_path):make_relative(lua_root.filename)
+    local modname = rel:gsub('%.lua$', ''):gsub(Path.path.sep, '.')
+    local ok, plugin = pcall(require, modname)
+    if ok and type(plugin) == 'table' then
+      local plugin_name = modname
+      log.debug('Loading plugin: ', plugin_name)
+      M[plugin_name] = plugin
+    else
+      vim.notify('Error loading plugin: ' .. vim.inspect(plugin), vim.log.levels.ERROR)
+    end
+  end
+
+  -- load any lua files in this directory (non-recursive)
+  scandir.scan_dir(this_dir:absolute(), {
+    depth = 1,
+    search_pattern = function(entry)
+      return entry:match('%.lua$') and not entry:match('init%.lua$')
+    end,
+    on_insert = load,
+  })
+
+  -- look for nested modules with their own init.lua
+  scandir.scan_dir(this_dir:absolute(), {
+    depth = 2,
+    only_dirs = true,
+    on_insert = function(dir)
+      if Path:new(dir):joinpath('init.lua'):exists() then
+        load(dir)
+      end
+    end,
+  })
+
+  vim.pack.add(M.specs)
+end
+
+function M:Build()
+  for _, spec in ipairs(M) do
+    if spec.build then
+      if type(spec.build) == 'string' then
+        vim.fn.system(spec.build)
+      elseif type(spec.build) == 'function' then
+        spec.build()
+      end
+    end
   end
 end
 
--- Register plugin specs with Neovim
-vim.pack.add(M.specs)
+function M:config()
+  local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
 
-local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
-
-for _, plugin in pairs(M) do
-  if plugin.event then
-    vim.api.nvim_create_autocmd(plugin.event, {
-      group = aug,
-      once = true,
-      callback = plugin.config,
-    })
-  elseif plugin.config then
-    plugin.config()
+  for _, plugin in pairs(M) do
+    if type(plugin) == 'table' and type(plugin.config) == 'function' then
+      if plugin.event then
+        vim.api.nvim_create_autocmd(plugin.event, {
+          group = aug,
+          once = true,
+          callback = plugin.config,
+        })
+      else
+        plugin.config()
+      end
+    end
   end
 end
+
+M:init()
+-- TODO: build only on first load
+-- M:Build()
+M:config()
 
 return M

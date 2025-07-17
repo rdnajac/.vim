@@ -55,7 +55,7 @@ local function chromatophore_refresh()
 
   Snacks.util.set_hl({
     Chromatophore = { fg = mode_color, bg = 'NONE' },
-    Title = { link = 'Chromatophore' },
+    SnacksDashboardHeader = { link = 'Chromatophore' },
     String = { link = 'Chromatophore' },
     Folded = { link = 'Chromatophore' },
     Chromatophore_a = { fg = black, bg = mode_color, bold = true },

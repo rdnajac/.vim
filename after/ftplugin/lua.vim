@@ -27,8 +27,12 @@ inoremap <buffer> \vc vim.cmd([[<c-g>u]])<Left><Left><Left><CR><CR><esc>hi<Space
 
 " WIP.. TODO: map to `cr` like with CoeRce from `vim-abolish`
 " local function transform
+
+" coerce local to M
+noremap crM viwb<esc>cf<space>M.<esc>
+" nmap <leader>cm ^v2f<Space>cM.<Es\ac>
+
 " nmap <leader>cl ^wdwf(i<Space>=<Space><Esc>px
 " local to M transform
-" nmap <leader>cm ^v2f<Space>cM.<Es\ac>
 " M transform
 " nmap <leader>cM ^v2f<Space>cM.<Esc>
