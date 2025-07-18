@@ -87,3 +87,25 @@ function! edit#ch() abort
 
   echoerr 'File or directory not found: companion for ' . file
 endfunction
+
+function! s:find_nearest_readme() abort
+  let l:dir = fnamemodify(expand('%:p'), ':p:h')
+  let l:home = fnamemodify('~', ':p')
+  while l:dir !=# '/' && l:dir !=# l:home
+    let l:readme = l:dir . '/README.md'
+    if filereadable(l:readme)
+      return l:readme
+    endif
+    let l:dir = fnamemodify(l:dir, ':h')
+  endwhile
+  return ''
+endfunction
+
+function! edit#readme() abort
+  let l:readme = s:find_nearest_readme()
+  if empty(l:readme)
+    echoerr 'No README.md found in parent directories.'
+    return
+  endif
+  call edit(fnameescape(l:readme))
+endfunction
