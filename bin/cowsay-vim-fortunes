@@ -2,7 +2,7 @@
 
 indent="          "
 
-fortune=~/.vim/fortunes/learn-something
+fortune=~/.vim/etc/learn-something
 
 {
 	"$fortune" | cowsay | sed "s/^/$indent/"
