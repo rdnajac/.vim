@@ -9,9 +9,8 @@ local icons = {
   },
 }
 
--- M.config = function()
 ---@type vim.diagnostic.Opts
-vim.diagnostic.config({
+M.opts = {
   float = { source = true },
   underline = false,
   virtual_text = false,
@@ -30,7 +29,10 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
     },
   },
-})
--- end
+}
+
+M.config = function()
+  vim.diagnostic.config(M.opts)
+end
 
 return M
