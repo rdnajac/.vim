@@ -12,18 +12,15 @@ command('Config', function()
   Snacks.picker.files({ cwd = vim.fn.stdpath('config') })
 end, {})
 
-vim.api.nvim_create_user_command('Zoxide', function(opts)
+vim.api.nvim_create_user_command('Zoxide', function(_)
   Snacks.picker.zoxide({
-    confirm = opts.bang and { 'edit' } or function(picker, item)
-      picker:close()
-      vim.cmd('cd ' .. vim.fn.fnameescape(item.file))
-      vim.cmd('pwd')
-    end,
+    confirm = 'edit',
+    -- confirm = function(picker, item)
+    --   picker.cd()
+    --   picker:close()
+    -- end,
   })
-end, {
-  bang = true,
-  desc = 'Zoxide to cd or edit (!)',
-})
+end, { desc = 'Zoxide to cd or edit (!)' })
 
 vim.api.nvim_create_user_command('Files', function(opts)
   local args = vim.tbl_filter(function(arg)

@@ -1,5 +1,4 @@
 local M = { 'folke/snacks.nvim' }
-M.priority = 1000
 
 ---@module "snacks"
 

@@ -49,12 +49,6 @@ set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
 
-set completeopt=menu,preview,longest
-" TODO: this check if this works on the default version in GitHub Codespaces
-if has('nvim') || has('patch-9.1.1337')
-  set completeopt+=preinsert
-endif
-
 " indentation {{{3
 set breakindent
 set linebreak
@@ -88,7 +82,7 @@ set fillchars+=foldopen:▾,
 set fillchars+=foldsep:\ ,
 set fillchars+=foldsep:│
 set foldlevel=99
-set foldlevelstart=2
+" set foldlevelstart=2
 set foldminlines=5
 set foldopen+=insert,jump
 set foldtext=fold#text()
@@ -218,6 +212,7 @@ nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#module('nvim/plugins/init')<CR>
 nnoremap <BSlash>m <Cmd>call edit#module('munchies/init')<CR>
 " nnoremap <BSlash>u <Cmd>call edit#module('utils/init')<CR>
+nnoremap <BSlash>0 <Cmd>call edit#readme()<CR>
 
 " find/files {{{2
 nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
@@ -316,10 +311,9 @@ onoremap ig :<C-u>normal vig<CR>
 xnoremap ag GoggV
 onoremap ag :<C-u>normal vag<CR>
 
-
 " buffers {{{2
-nnoremap <silent> <Tab>         :bnext<CR>
-nnoremap <silent> <S-Tab>       :bprev<CR>
+nnoremap <silent> <Tab>         :bprev<CR>
+nnoremap <silent> <S-Tab>       :bnext<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
 
 " Close buffer
@@ -435,9 +429,6 @@ command! W w!
 command! Wq wq!
 command! Wqa wqa!
 
-cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
-cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
-
 " Section: plugins {{{1
 call plug#begin()
 Plug 'alker0/chezmoi.vim',
@@ -474,6 +465,8 @@ else
   " Plug 'folke/tokyonight.nvim'
   " Plug 'folke/snacks.nvim'
   " Plug 'echasnovski/mini.nvim'
+  Plug stdpath('config') . '/pack/opt/vim-lol'
+
 endif
 call plug#end()
 
@@ -481,6 +474,7 @@ if has('nvim')
   if !exists('g:loaded_nvim')
     " let g:loaded_2html_plugin = 1
     let g:loaded_gzip = 1
+    let g:loaded_matchit = 1
     let g:loaded_netrwPlugin = 1
     let g:loaded_tarPlugin = 1
     let g:loaded_tutor_mode_plugin = 1

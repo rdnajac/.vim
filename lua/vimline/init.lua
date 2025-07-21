@@ -1,6 +1,6 @@
 local M = {}
 
--- M.indicator = require('util.lualine.indicator')
+-- M.indicator = function()
 
 M.copilot_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
@@ -42,6 +42,14 @@ end
 function M.docsymbols()
   return require('vimline.docsymbols').get_location()
 end
+
+print(M.docsymbols())
+
+function M.docsymbols_hl()
+  return require('vimline.docsymbols').get_location({ apply_hl = true })
+end
+
+print(M.docsymbols_hl())
 
 function M.mode()
   return require('util.mode').get()

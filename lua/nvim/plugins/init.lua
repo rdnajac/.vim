@@ -90,6 +90,7 @@ function M:init()
     lua_root = lua_root:parent()
   end
 
+  -- TODO: support .enabled boolean
   local function load(file_path)
     local rel = Path:new(file_path):make_relative(lua_root.filename)
     local modname = rel:gsub('%.lua$', ''):gsub(Path.path.sep, '.')

@@ -2,6 +2,7 @@ local M = { 'nvim-treesitter/nvim-treesitter' }
 
 M.version = 'main'
 
+-- TODO: copy this
 M.dependencies = {
   'folke/ts-comments.nvim',
 }
@@ -28,7 +29,6 @@ vim.api.nvim_create_autocmd('FileType', {
 
 M.config = function()
   require('nvim.plugins.treesitter.selection').setup()
-  require('ts-comments').setup({})
 
   ---@diagnostic disable-next-line: param-type-mismatch
   vim.api.nvim_create_autocmd('User', {
@@ -48,6 +48,9 @@ M.config = function()
 
   local parsers = require('nvim.plugins.treesitter.parsers')
   require('nvim-treesitter').install(parsers)
+
+  require('ts-comments').setup({})
+  -- require('nvim.treesitter.comments')
 end
 
 return M

@@ -48,6 +48,8 @@ M.opts = {
   signature = { enabled = true, window = { border = 'single' } },
   keymap = {
     preset = 'default',
+    -- stylua: ignore
+    -- ['$'] = { function(cmp) cmp.show({ providers = { 'env' } }) end },
     ['<Tab>'] = {
       function(cmp)
         if cmp.snippet_active() then
@@ -55,7 +57,7 @@ M.opts = {
         elseif cmp.is_visible() then
           return cmp.select_and_accept()
         else
-          return cmp.show()
+          -- return cmp.show()
         end
       end,
       'fallback',
@@ -67,12 +69,12 @@ M.opts = {
   },
 
   sources = {
-    default = { 'lsp', 'snippets', 'path', 'env' },
+    default = { 'lsp', 'snippets', 'path' },
     per_filetype = {
       lua = { inherit_defaults = true, 'lazydev' },
       oil = {},
     },
-    min_keyword_length = 5,
+    -- min_keyword_leng = 5,
     providers = {
       path = {
         score_offset = 100,

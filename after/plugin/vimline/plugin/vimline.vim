@@ -1,5 +1,9 @@
 scriptencoding=utf-8
 
+if !has('nvim')
+  finish
+endif
+
 function! MyTabline() abort
   let l:line = ''
   let l:line .= '%#Chromatophore_c# '
