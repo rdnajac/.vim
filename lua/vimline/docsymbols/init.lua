@@ -1,4 +1,4 @@
-local lib = require('util.lualine.docsymbols.lib')
+local lib = require('vimline.docsymbols.lib')
 local icons = require('util.icons')
 
 local M = {}

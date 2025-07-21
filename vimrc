@@ -495,5 +495,5 @@ else
   nmap ga <Plug>(EasyAlign)
 endif
 
-packadd! vimline
+ " packadd! vimline
 " vim:set fdl=2

@@ -34,13 +34,13 @@ M.treesitter_icon = function()
   local highlighter = require('vim.treesitter.highlighter')
   local buf = vim.api.nvim_get_current_buf()
   if highlighter.active[buf] then
-    return ''
+    return ' '
   end
   return ''
 end
 
 function M.docsymbols()
-  return require('util.lualine.docsymbols').get_location()
+  return require('vimline.docsymbols').get_location()
 end
 
 function M.mode()
@@ -48,7 +48,7 @@ function M.mode()
 end
 
 function M.blink()
-  return require('util.lualine.blink').source_status()
+  return require('vimline.blink').source_status()
 end
 
 return M
