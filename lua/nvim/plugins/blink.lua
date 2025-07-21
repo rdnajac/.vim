@@ -8,6 +8,7 @@ local plugin_path = vim.fs.joinpath(pack_dir, plugin_name)
 
 M.make = '!cd ' .. plugin_path .. ' && ' .. M.build
 -- print(M, 'make command:', M.make)
+-- require('nvim.plugins.blink').make()
 
 M.dependencies = {
   'mgalliou/blink-cmp-tmux',

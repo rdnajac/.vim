@@ -1,10 +1,6 @@
-*lazy-lock.json
-*lazyvim.json
 *viminfo
 *vimlog.txt
-**vim/pack
 **/*netrwhist
 pack
 **/*plugged
-**/*repro
 Session.vim

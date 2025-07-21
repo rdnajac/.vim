@@ -3,6 +3,7 @@
 " Version:      1.0
 " GetLatestVimScripts: 4472 1 :AutoInstall: obsession.vim
 
+" TODO: use stdpath("state") in nvim
 if exists("g:loaded_obsession") || v:version < 704 || &cp
   finish
 endif
@@ -29,15 +30,15 @@ function! s:dispatch(bang, file) abort
       let file = getcwd() . '/Session.vim'
     elseif isdirectory(a:file)
       let file = substitute(fnamemodify(expand(a:file), ':p'), '[\/]$', '', '')
-            \ . '/Session.vim'
+	    \ . '/Session.vim'
     else
       let file = fnamemodify(expand(a:file), ':p')
     endif
     if !a:bang
-          \ && file !~# 'Session\.vim$'
-          \ && filereadable(file)
-          \ && getfsize(file) > 0
-          \ && readfile(file, '', 1)[0] !=# 'let SessionLoad = 1'
+	  \ && file !~# 'Session\.vim$'
+	  \ && filereadable(file)
+	  \ && getfsize(file) > 0
+	  \ && readfile(file, '', 1)[0] !=# 'let SessionLoad = 1'
       return 'mksession '.fnameescape(file)
     endif
     let g:this_obsession = file
@@ -78,9 +79,9 @@ function! s:persist() abort
       call insert(body, 'let g:this_session = v:this_session', -3)
       call insert(body, 'let g:this_obsession = v:this_session', -3)
       if type(get(g:, 'obsession_append')) == type([])
-        for line in g:obsession_append
-          call insert(body, line, -3)
-        endfor
+	for line in g:obsession_append
+	  call insert(body, line, -3)
+	endfor
       endif
       call writefile(body, tmp)
       call rename(tmp, g:this_obsession)
@@ -103,9 +104,25 @@ endfunction
 augroup obsession
   autocmd!
   autocmd VimLeavePre * exe s:persist()
-  autocmd BufEnter *
-        \ if !get(g:, 'obsession_no_bufenter') |
-        \   exe s:persist() |
-        \ endif
-  autocmd User Flags call Hoist('global', 'ObsessionStatus')
+  autocmd BufEnter * if !get(g:, 'obsession_no_bufenter') | exe s:persist() | endif
+  " autocmd User Flags call Hoist('global', 'OObsessionStatus')
 augroup END
+
+function! ObsessionStatus(...) abort
+  let args = copy(a:000)
+  let numeric = !empty(v:this_session) + exists('g:this_obsession')
+  if type(get(args, 0, '')) == type(0)
+    if !remove(args, 0)
+      return ''
+    endif
+  endif
+  if empty(args)
+    let args = ['[$]', '[S]']
+  endif
+  if len(args) == 1 && numeric == 1
+    let fmt = args[0]
+  else
+    let fmt = get(args, 2-numeric, '')
+  endif
+  return substitute(fmt, '%s', get(['', 'Session', 'Obsession'], numeric), 'g')
+endfunction

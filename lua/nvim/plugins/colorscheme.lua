@@ -27,6 +27,7 @@ M.opts = {
     hl['FloatBorder'] = { fg = colors.green }
     hl['SpecialWindow'] = { bg = '#1f2335' }
     hl['Cmdline'] = { bg = '#000000' }
+    hl['WinSeparator'] = { fg = colors.green }
 
     -- TODO: move to ui
     -- hl['StatusLineNC'] = { bg = 'NONE' }

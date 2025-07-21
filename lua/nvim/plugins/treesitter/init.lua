@@ -7,11 +7,10 @@ M.dependencies = {
 }
 
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
-local filetypes = { 'vim', 'sh', 'tex', 'markdown', 'python' }
 
 vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'sh', 'tex', 'markdown', 'python' },
   group = aug,
-  pattern = filetypes,
   callback = function()
     vim.treesitter.start()
   end,
@@ -29,7 +28,6 @@ vim.api.nvim_create_autocmd('FileType', {
 
 M.config = function()
   require('nvim.plugins.treesitter.selection').setup()
-  -- also set up dependencies
   require('ts-comments').setup({})
 
   ---@diagnostic disable-next-line: param-type-mismatch
@@ -45,10 +43,11 @@ M.config = function()
           queries = 'queries/neovim',
         },
       }
-      local parsers = require('nvim.plugins.treesitter.parsers')
-      require('nvim-treesitter').install(parsers)
     end,
   })
+
+  local parsers = require('nvim.plugins.treesitter.parsers')
+  require('nvim-treesitter').install(parsers)
 end
 
 return M

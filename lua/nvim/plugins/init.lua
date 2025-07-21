@@ -17,6 +17,9 @@
 -- XXX: this is subject to change in the future
 _G.pack_dir = vim.fn.stdpath('data') .. '/site/pack/core/opt/'
 
+-- add local plugins
+-- vim.pack.add({ vim.fn.stdpath('config') .. '/dev/vim-lol' })
+
 -- plugins are available immediately after `vim.pack.add()`
 vim.pack.add({ 'https://github.com/nvim-lua/plenary.nvim' })
 
@@ -156,6 +159,17 @@ end
 M:init()
 -- TODO: build only on first load
 -- M:Build()
+
+-- Available events to hook into ~
+-- • *PackChangedPre* - before trying to change plugin's state.
+-- • *PackChanged* - after plugin's state has changed.
+--
+-- Each event populates the following |event-data| fields:
+-- • `kind` - one of "install" (install on disk), "update" (update existing
+--   plugin), "delete" (delete from disk).
+-- • `spec` - plugin's specification.
+-- • `path` - full path to plugin's directory.
+
 M:config()
 
 return M

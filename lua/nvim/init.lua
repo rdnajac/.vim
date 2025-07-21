@@ -4,6 +4,8 @@ vim.opt.winborder = 'rounded'
 vim.opt.cmdheight = 0
 require('vim._extui').enable({})
 
+require('nvim.plugins')
+
 local settings = function()
   require('nvim.autocmds')
   require('nvim.diagnostic')
@@ -32,6 +34,7 @@ end
 if vim.v.vim_did_enter == 1 then
   init()
 else
+  ---@diagnostic disable-next-line: param-type-mismatch
   vim.api.nvim_create_autocmd('VimEnter', {
     group = vim.api.nvim_create_augroup('init.lua', { clear = true }),
     once = true,
@@ -39,7 +42,6 @@ else
   })
 end
 
-require('nvim.plugins')
 -- TODO:
 -- start an instance of nvim in
 -- the background without a ui attavched
@@ -52,3 +54,5 @@ require('nvim.plugins')
 
 -- todo section of redadme
 -- nvim lua keymap to check current dir and parent dirts for a readme.md
+
+vim.opt.packpath:prepend(vim.fn.stdpath('config') .. '/dev')

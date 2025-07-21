@@ -27,6 +27,4 @@ function M.source_status()
   return table.concat(out, ' ')
 end
 
-print(M.source_status())
-
 return M

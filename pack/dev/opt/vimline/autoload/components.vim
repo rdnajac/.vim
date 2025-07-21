@@ -13,7 +13,7 @@ endfunction
 " `~/.config/nvim/lua/util/lualine/components.lua`
 " returns an icon or empty string based on the condition
 function! s:lualine_component(name) abort
-  return luaeval('require("util.lualine.components")["' .. a:name .. '_icon"]()')
+  return luaeval('require("util.lualine")["' .. a:name .. '_icon"]()')
 endfunction
 
 function ui#components#i_filetype() abort
@@ -23,6 +23,11 @@ endfunction
 
 function! ui#components#i_copilot() abort
   let l:icon = s:lualine_component('copilot')
+  return s:indicator(!empty(l:icon), s:sep . l:icon)
+endfunction
+
+function! ui#components#i_lsp() abort
+  let l:icon = s:lualine_component('lsp')
   return s:indicator(!empty(l:icon), s:sep . l:icon)
 endfunction
 
@@ -36,14 +41,18 @@ function! ui#components#i_help() abort
 endfunction
 
 function! ui#components#i_modified() abort
-  return s:indicator(&modified, s:sep . '  ')
-endfunction
+  return s:indicator(&modified, s:sep . ' ')
+endfunction󰟔
 
 function! ui#components#i_readonly() abort
-  return s:indicator(&readonly, s:sep . '  ')
+  return s:indicator(&readonly, s:sep . ' ')
 endfunction
 
 function! ui#components#i_recording() abort
   let reg = reg_recording()
   return s:indicator(!empty(reg), '󰑋 ' . reg . ' ')
+endfunction
+
+function! ui#components#blink_status() abort
+  return luaeval('require("util.lualine").blink()')
 endfunction

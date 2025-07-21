@@ -22,7 +22,7 @@ function! s:flags() abort
   let l:line .= ui#components#i_filetype()
   let l:line .= ui#components#i_copilot()
   let l:line .= ui#components#i_treesitter()
-  let l:line .= ' '
+  let l:line .= ui#components#i_lsp()
   let l:line .= ui#components#i_modified()
   let l:line .= ui#components#i_help()
   let l:line .= ui#components#i_readonly()
@@ -58,6 +58,7 @@ function MyStatusline() abort
 
   let l:line .= ui#docsymbols#line()
   let l:line .= ' %='               " Right alignment
+  let l:line .= ui#components#blink_status()
   let l:line .= '%{ exists("b:keymap_name") ? "<" .. b:keymap_name .. "> " : "" }'
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
   let l:line .= ui#components#i_recording()

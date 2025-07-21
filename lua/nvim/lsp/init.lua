@@ -5,9 +5,9 @@ M.keymaps = function(bufnr)
 
   -- stylua: ignore
   require('which-key').add({
-    icon = { icon = ' ', color = 'orange' },
-    { 'gO' },
-    { 'gr', group = 'LSP' },
+    -- icon = { icon = ' ', color = 'orange' },
+    -- { 'gO' },
+    -- { 'gr', group = 'LSP' },
     { 'grr', function() Snacks.picker.lsp_references() end, desc = 'References', buffer = bufnr, nowait = true, },
     { 'gd',  function() Snacks.picker.lsp_definitions() end,       desc = 'Goto Definition', buffer = bufnr },
     { 'gD',  function() Snacks.picker.lsp_declarations() end,      desc = 'Goto Declaration', buffer = bufnr },
@@ -24,9 +24,6 @@ M.on_attach = function(client, bufnr)
   M.keymaps()
   client.server_capabilities.documentFormattingProvider = false
   -- client.server_capabilities.semanticTokensProvider = nil
-  if client:supports_method('textDocument/documentSymbol') then
-    require('util.lualine.docsymbols').attach(client, bufnr)
-  end
   if client:supports_method('textDocument/inlayHint') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
     Snacks.toggle.inlay_hints():map('<leader>uh')
@@ -38,6 +35,11 @@ M.on_attach = function(client, bufnr)
       callback = vim.lsp.codelens.refresh,
     })
   end
+
+  -- requires plugin
+  -- if client:supports_method('textDocument/documentSymbol') then
+  --   require('util.lualine.docsymbols').attach(client, bufnr)
+  -- end
 end
 
 -- Refer to `:h vim.lsp.config()` for more information.

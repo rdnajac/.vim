@@ -1,7 +1,9 @@
 local M = {}
 
+-- M.indicator = require('util.lualine.indicator')
+
 M.copilot_icon = function()
-  for _, client in pairs(vim.lsp.get_clients({ bufnr = 0 })) do
+  for _, client in pairs(vim.lsp.get_clients()) do
     if client.name == 'GitHub Copilot' then
       return ' '
     end
@@ -19,11 +21,20 @@ M.filetype_icon = function()
     or ''
 end
 
+M.lsp_icon = function()
+  for _, client in pairs(vim.lsp.get_clients()) do
+    if client.name ~= 'GitHub Copilot' then
+      return ' '
+    end
+  end
+  return ''
+end
+
 M.treesitter_icon = function()
   local highlighter = require('vim.treesitter.highlighter')
   local buf = vim.api.nvim_get_current_buf()
   if highlighter.active[buf] then
-    return ' '
+    return ''
   end
   return ''
 end
@@ -36,26 +47,13 @@ function M.mode()
   return require('util.mode').get()
 end
 
-return M
+function M.blink()
+  return require('util.lualine.blink').source_status()
+end
 
--- local unused = {
---   { 'mode', separator = { right = '' } },
---   {
---     '%S',
---     cond = function()
---       local ok, res = pcall(vim.api.nvim_eval_statusline, '%S', {})
---       return ok and res and res.str ~= ''
---     end,
---   },
---   Snacks.profiler.status(),
+return M
 --   { require('spec.lualine.components.lsp_status') },
---   {
---     'diagnostics',
---     symbols = require('nvim.ui.icons').diagnostics,
---     always_visible = true,
---     color = { bg = '#3b4261' },
---   },
---   require('spec.lualine.components.navic'),
+--   { 'diagnostics', symbols = require('nvim.ui.icons').diagnostics, },
 --
 --   -- extensions
 --   Man = {

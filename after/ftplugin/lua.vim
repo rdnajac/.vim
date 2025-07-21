@@ -12,12 +12,6 @@ inoremap <buffer> {<SPACE> {}<LEFT><LEFT><SPACE><LEFT><SPACE>
 
 inoremap <buffer> [[<CR> ([[<CR><CR>]])<UP>
 
-inoremap <buffer> \uf ---@diagnostic disable-next-line: undefined-field
-inoremap <buffer> \mf ---@diagnostic disable-next-line: missing-fields
-inoremap <buffer> \at ---@diagnostic disable-next-line: assign-type-mismatch
-inoremap <buffer> \ul ---@diagnostic disable-next-line: unused-local
-
-
 inoremap <buffer> \si  --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> \sis --<SPACE>stylua:<SPACE>ignore<SPACE>start
 inoremap <buffer> \sie --<SPACE>stylua:<SPACE>ignore<SPACE>end

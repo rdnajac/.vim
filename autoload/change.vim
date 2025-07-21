@@ -1,15 +1,22 @@
+" chaange the closest quote to the other type (single to double or vice versa)
+"   'string'
+"   "string"
+
 function! change#quote() abort
   let line = getline('.')
-  let col = col('.')
-  let q = ''
+  let ccol = col('.') - 1
+  let len = len(line)
 
-  for i in range(col - 1, 0, -1)
-    let c = line[i - 1]
-    if c ==# '"' || c ==# "'"
-      let q = c
-      break
-    endif
+  for d in range(0, max([ccol, len - ccol - 1]))
+    for i in [ccol - d, ccol + d]
+      if i >= 0 && i < len
+	let c = line[i]
+	if c ==# '"' || c ==# "'"
+	  return 'cs' . c . (c ==# '"' ? "'" : '"')
+	endif
+      endif
+    endfor
   endfor
 
-  return q ==# '' ? '' : 'cs' . q . (q ==# '"' ? "'" : '"')
+  return ''
 endfunction

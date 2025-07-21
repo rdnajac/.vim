@@ -16,8 +16,8 @@ if has('nvim')
   let &backupskip .= ',' . escape(expand('$HOME/.local/*'), '\')
   set undofile
 else
-  let &viminfofile = s:VIMHOME . '.viminfo'
-  " let &verbosefile = s:VIMHOME . '.vimlog.txt'
+  let &viminfofile = g:VIMHOME . '.viminfo'
+  " let &verbosefile = g:VIMHOME . '.vimlog.txt'
   " some settings are default in nvim
   set autoread
 endif
@@ -81,15 +81,6 @@ set number
 set numberwidth=4
 set signcolumn=number
 
-" lines {{{2
-set showcmdloc=statusline
-set statusline=%!MyStatusline()
-let &laststatus = has('nvim') ? 3 : 2
-set noruler
-" set tabline=%!MyTabline()
-" set showtabline=2
-" set winbar=%!MyWinbar()
-
 " folding {{{2
 set fillchars+=fold:\ ,
 set fillchars+=foldclose:▸,
@@ -131,8 +122,8 @@ augroup vimrc
 au BufWinEnter * exe "silent! normal! g`\"zv"
 
 " automatically create directories for new files
-" BUG: oil
-" au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
+" BUG: this creates extra dirs for files with a scheme like `scp://`
+au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
 
 " immediately quit the command line window
 au CmdwinEnter * quit
@@ -271,8 +262,8 @@ nnoremap ` ~
 nnoremap <BS> <C-o>
 
 " control
-nmap <C-c> ciw
-vmap <C-s> :sort<CR>
+nmap  ciw
+vmap  :sort<CR>
 
 " yank/delete everything
 nnoremap yY <Cmd>%y<CR>
@@ -284,18 +275,14 @@ nnoremap dD <Cmd>%d<CR>
 " `vim-surround`: `cs`, `ds`, and `ys`
 
 " `cd` cm co cp `cq` cr `cs` cu cx cy cz
-nnoremap cdc <Cmd>call bin#cd#smart()<CR>
-nnoremap cdb <Cmd>cd %:p:h<BAR>pwd<CR>
-nnoremap cdp <Cmd>cd %:p:h:h<BAR>pwd<CR>
-nnoremap cdr :cd <C-R>=git#root()<CR><Bar>pwd<CR>
-
+" plugin/cd.vim
 nmap <expr> cq change#quote()
 
 " dc dm dq dr `ds` du dx `dy` dz
 " vnoremap <silent> dy "_dP
 nnoremap dy "_dd
 
-" yc yd ym yo `yp` yq yr `ys` yu yx yz
+" yc yd ym `yo` `yp` yq yr `ys` yu yx yz
 " vnoremap <silent> yp p"_d
 
 " yank path
@@ -308,8 +295,8 @@ nmap vv Vgc
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
 
-nmap gy "xyygcc"xp
 nmap gl <Cmd>Config<CR>
+nmap gy "xyygcc"xp
 
 " `surround` {{{2
 nmap S viWS
@@ -508,4 +495,5 @@ else
   nmap ga <Plug>(EasyAlign)
 endif
 
+packadd! vimline
 " vim:set fdl=2
