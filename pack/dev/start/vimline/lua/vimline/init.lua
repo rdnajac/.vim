@@ -59,6 +59,10 @@ function M.blink()
   return require('vimline.blink').source_status()
 end
 
+function M.lspprogress()
+  return require('vimline.lspprogress').status()
+end
+
 return M
 --   { require('spec.lualine.components.lsp_status') },
 --   { 'diagnostics', symbols = require('nvim.ui.icons').diagnostics, },

@@ -21,19 +21,26 @@ endif
 
 function MyStatusline() abort
   let l:line = ''
-  let l:line .= '%#Chromatophore_y#'
   " let line .= '%<'                " Left: truncated file path
   " let line .= '%f'                " filename
   " let line .= '%w'                " preview window flag
 
-  let l:line .= vimline#components#docsymbols()
+  " let l:line .= vimline#components#docsymbols()
   let l:line .= ' %='               " Right alignment
-  let l:line .= vimline#components#blink()
-  let l:line .= '%{ exists("b:keymap_name") ? "<" .. b:keymap_name .. "> " : "" }'
+  " let l:line .= vimline#components#lspprogress()
+  let l:line .= '%#Black#'
+  let l:line .= ''
+  let l:line .= '%#Chromatophore_y#'
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
+  let l:line .= vimline#components#blink()
+  let l:line .= ' '
   let l:line .= vimline#icons#recording()
   let l:line .= ' %S '
-  let l:line .= vimline#components#mode()
+  " let l:line .= vimline#components#mode()
+  " let l:line .= printf('%-10s', vimline#components#mode())
+  let l:line .= printf('%10s', vimline#components#mode())
+  let l:line .= '%#Black#'
+  let l:line .= ''
   return line
 endfunction
 

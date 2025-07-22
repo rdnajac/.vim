@@ -5,7 +5,8 @@ local M = { 'folke/snacks.nvim' }
 ---@type snacks.Config
 M.opts = {
   bigfile = { enabled = true },
-  dashboard = require('munchies.dashboard').config,
+  dashboard = { enabled = false },
+  -- dashboard = require('munchies.dashboard').config,
   explorer = { replace_netrw = false },
   image = { enabled = true },
   indent = {
@@ -14,7 +15,7 @@ M.opts = {
   },
   input = { enabled = true },
   notifier = {
-    enabled = true,
+    enabled = false,
     style = 'fancy',
     date_format = '%T',
     timeout = 4000,
@@ -26,7 +27,6 @@ M.opts = {
   statuscolumn = { enabled = false },
   styles = {
     lazygit = { height = 0, width = 0 },
-    dashboard = { border = 'none' },
   },
   terminal = {
     start_insert = true,

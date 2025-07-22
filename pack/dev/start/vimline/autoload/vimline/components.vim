@@ -9,3 +9,7 @@ endfunction
 function! vimline#components#blink() abort
   return luaeval('require("vimline").blink()')
 endfunction
+
+function! vimline#components#lspprogress() abort
+  return luaeval('require("vimline").lspprogress()')
+endfunction

@@ -1,12 +1,14 @@
-local M = {}
-M = {
+local ok, snacks_defaults = pcall(require, 'snacks.picker.config.defaults')
+local kinds = ok and snacks_defaults.defaults.icons.kinds or {}
+
+local M = {
+  kinds = kinds,
   ft = { octo = ' ' },
   git = {
     added = ' ',
     modified = ' ',
     removed = ' ',
   },
-  kinds = require('snacks.picker.config.defaults').defaults.icons.kinds,
   misc = { dots = '…' },
   separators = {
     component = {

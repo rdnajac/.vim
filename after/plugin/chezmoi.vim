@@ -1,4 +1,5 @@
-" let g:chezmoi#use_tmp_buffer = 1
+let g:chezmoi#use_tmp_buffer = 1
+
 let g:chezmoi#source_dir_path =
       \ exists('$CHEZMOI_SOURCE_DIR')
       \ ? expand('$CHEZMOI_SOURCE_DIR')
@@ -6,7 +7,7 @@ let g:chezmoi#source_dir_path =
 
 function s:apply()
   execute '!chezmoi apply --source-path ' . expand('%')
-  echo 'Applied chezmoi changes to ' . expand('%')
+  echom 'Applied chezmoi changes to ' . expand('%')
 endfunction
 
 augroup chezmoi

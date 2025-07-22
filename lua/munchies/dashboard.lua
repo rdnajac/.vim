@@ -17,12 +17,10 @@ M.config = {
   },
   formats = {
     key = function(item)
-      local sep = require('util.icons').separators.section.rounded
+      local sep = icons.separators.section.rounded
+        -- stylua: ignore
       return {
-        { sep.right, hl = 'special' },
-        { item.key, hl = 'key' },
-        { sep.left, hl = 'special' },
-      }
+        { sep.right, hl = 'special' }, { item.key, hl = 'key' }, { sep.left, hl = 'special' }, }
     end,
     file = function(item, ctx)
       local fname = vim.fn.fnamemodify(item.file, ':~')

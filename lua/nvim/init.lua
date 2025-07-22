@@ -3,13 +3,13 @@ vim.loader.enable()
 vim.opt.winborder = 'rounded'
 vim.opt.cmdheight = 0
 require('vim._extui').enable({})
-
 require('nvim.plugins')
+
+_G.icons = require('nvim.icons')
 
 local settings = function()
   require('nvim.autocmds')
   require('nvim.diagnostic')
-  require('nvim.lsp')
 end
 
 -- lazy-load settings if opening nvim without arguments
@@ -28,7 +28,8 @@ local init = function()
   vim.opt.mousescroll = 'hor:0'
   vim.opt.pumblend = 0
   vim.opt.smoothscroll = true
-  require('munchies')
+  -- require('munchies')
+  -- make icons globally available
 end
 
 if vim.v.vim_did_enter == 1 then
@@ -54,5 +55,3 @@ end
 
 -- todo section of redadme
 -- nvim lua keymap to check current dir and parent dirts for a readme.md
-
-vim.opt.packpath:prepend(vim.fn.stdpath('config') .. '/dev')

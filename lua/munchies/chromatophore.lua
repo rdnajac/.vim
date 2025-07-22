@@ -54,6 +54,7 @@ local function chromatophore_refresh()
   local lightblue = '#16161d'
 
   Snacks.util.set_hl({
+    Black = { fg = '#000000' },
     Chromatophore = { fg = mode_color, bg = 'NONE' },
     SnacksDashboardHeader = { link = 'Chromatophore' },
     String = { link = 'Chromatophore' },
@@ -65,8 +66,8 @@ local function chromatophore_refresh()
     Chromatophore_c = { fg = mode_color, bg = lightblue },
     Chromatophore_y = { fg = mode_color, bg = '#000000', bold = true },
     Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
-    StatusLine = { link = 'Chromatophore_a' },
-    StatusLineNC = { link = 'Chromatophore_b' },
+    -- StatusLine = { link = 'Chromatophore_a' },
+    -- StatusLineNC = { link = 'Chromatophore_b' },
   })
 
   -- HACK: refresh tmux

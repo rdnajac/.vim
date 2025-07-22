@@ -1,5 +1,6 @@
-" see `:h |cmdline-completion|.
+" see `:h |cmdline-completion|.`
 set completeopt=menu,preview,longest
+
 " TODO: this check if this works on the default version in GitHub Codespaces
 " if has('nvim') || has('patch-9.1.1337')
 " set completeopt+=preinsert

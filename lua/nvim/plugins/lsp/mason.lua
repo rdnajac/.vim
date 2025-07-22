@@ -1,12 +1,10 @@
-local M = { 'mason-org/mason.nvim' }
+local M = {}
 
 -- FIXME:
 M.tools = {}
 
 M.install = function()
-  -- FIXME:
-  local tools = lang_spec.tools
-  local total = #tools
+  local total = #M.tools
   local completed = 0
 
   local function done()
@@ -16,7 +14,7 @@ M.install = function()
     end
   end
 
-  for _, tool in ipairs(tools) do
+  for _, tool in ipairs(M.tools) do
     local ok, pkg = pcall(require('mason-registry').get_package, tool)
     if not ok then
       Snacks.notify.error('Tool not found in mason registry: ' .. tool)
@@ -42,11 +40,6 @@ M.install = function()
     end
     ::continue::
   end
-end
-
-M.config = function()
-  require('mason').setup({})
-  -- TODO: call install?
 end
 
 return M

@@ -1,6 +1,6 @@
-*viminfo
-*vimlog.txt
+**/*viminfo
+**/*vimlog.txt
 **/*netrwhist
-pack
 **/*plugged
+pack/core
 Session.vim

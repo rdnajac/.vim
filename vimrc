@@ -111,34 +111,34 @@ augroup vimrc
   au VimEnter * nested call sesh#restore()
 
   " au WinNew * if bufname('') ==# '' && &bt ==# '' && &ft  | exe 'e #' | endif
-" restore cursor position (and open any folds) when opening a file
-" au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
-au BufWinEnter * exe "silent! normal! g`\"zv"
+  " restore cursor position (and open any folds) when opening a file
+  " au BufWinEnter * let l = line("'\"") | if l >= 1 && l <= line("$") | execute "normal! g`\"zv" | endif
+  au BufWinEnter * exe "silent! normal! g`\"zv"
 
-" automatically create directories for new files
-" BUG: this creates extra dirs for files with a scheme like `scp://`
-au BufWritePre * call bin#mkdir#mkdir(expand('<afile>'))
+  " automatically create directories for new files
+  " requires `vim-eunuch`
+  au BufWritePre * Mkdir
 
-" immediately quit the command line window
-au CmdwinEnter * quit
+  " immediately quit the command line window
+  au CmdwinEnter * quit
 
-" automatically reload files that have been changed outside of Vim
-au FocusGained * if &buftype !=# 'nofile' | checktime | endif
+  " automatically reload files that have been changed outside of Vim
+  au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
-" automatically resize splits when the window is resized
-au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
+  " automatically resize splits when the window is resized
+  au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
 
-" no cursorline in insert mode
-au InsertLeave,WinEnter * setlocal cursorline
-au InsertEnter,WinLeave * setlocal nocursorline
+  " no cursorline in insert mode
+  au InsertLeave,WinEnter * setlocal cursorline
+  au InsertEnter,WinLeave * setlocal nocursorline
 
-" relative numbers in visual mode only if number is already set
-au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  " relative numbers in visual mode only if number is already set
+  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 
-" for when a ftplugin file is not warranted
-au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
+  " for when a ftplugin file is not warranted
+  au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
 augroup END
 
 " Section: commands {{{1
@@ -430,7 +430,8 @@ command! Wq wq!
 command! Wqa wqa!
 
 " Section: plugins {{{1
-call plug#begin()
+" call plug#begin()
+call plug#begin(g:VIMHOME . '/pack/plugged')
 Plug 'alker0/chezmoi.vim',
 Plug 'github/copilot.vim',
 Plug 'lervag/vimtex'
@@ -489,5 +490,4 @@ else
   nmap ga <Plug>(EasyAlign)
 endif
 
- " packadd! vimline
 " vim:set fdl=2
