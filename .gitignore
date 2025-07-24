@@ -1,6 +1,10 @@
-**/*viminfo
-**/*vimlog.txt
-**/*netrwhist
-**/*plugged
-pack/core
+# ignore vim artefacts
+.viminfo
+.vimlog.txt
+.netrwhist
 Session.vim
+
+# only track plugins in development
+pack/*
+!pack/dev/
+!pack/dev/**

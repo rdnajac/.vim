@@ -1,14 +1,7 @@
 local M = { 'Saghen/blink.cmp' }
 
--- lazy.nvim
+-- lazy.nvim build command (system)
 M.build = 'cargo build --release'
-
-local plugin_name = M[1]:match('.*/(.*)')
-local plugin_path = vim.fs.joinpath(pack_dir, plugin_name)
-
-M.make = '!cd ' .. plugin_path .. ' && ' .. M.build
--- print(M, 'make command:', M.make)
--- require('nvim.plugins.blink').make()
 
 M.dependencies = {
   'mgalliou/blink-cmp-tmux',
@@ -36,8 +29,7 @@ M.opts = {
         components = {
           kind_icon = {
             text = function(ctx)
-              local kind_icons = require('snacks.picker.config.defaults').defaults.icons.kinds
-              return kind_icons[ctx.kind] or ''
+              return require('nvim.icons').kinds[ctx.kind] or ''
             end,
           },
         },

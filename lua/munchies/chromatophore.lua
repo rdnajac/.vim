@@ -87,10 +87,3 @@ for _, event in ipairs(events) do
     callback = chromatophore_refresh,
   })
 end
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'msg',
-  callback = function()
-    Snacks.util.winhl('Chromatophore:Normal')
-  end,
-})

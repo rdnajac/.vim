@@ -56,4 +56,23 @@ M.translucency = function()
   })
 end
 
+M.setup = function()
+  Snacks.toggle.profiler():map('<leader>dpp')
+  Snacks.toggle.profiler_highlights():map('<leader>dph')
+  Snacks.toggle.animate():map('<leader>ua')
+  Snacks.toggle.diagnostics():map('<leader>ud')
+  Snacks.toggle.dim():map('<leader>uD')
+  Snacks.toggle.treesitter():map('<leader>ut')
+  Snacks.toggle.indent():map('<leader>ug')
+  Snacks.toggle.scroll():map('<leader>us')
+  Snacks.toggle.words():map('<leader>uw')
+  Snacks.toggle.zoom():map('<leader>uZ')
+
+  M.translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
+  M.virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
+  M.color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
+end
+
+M.setup()
+
 return M

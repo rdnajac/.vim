@@ -1,45 +1,36 @@
-local M = {}
+local M = { 'mason-org/mason.nvim' }
 
 -- FIXME:
 M.tools = {}
 
-M.install = function()
+function M.install()
+  local reg = require('mason-registry')
   local total = #M.tools
-  local completed = 0
-
-  local function done()
-    completed = completed + 1
-    if completed == total then
-      Snacks.notify.info('All tools checked.')
-    end
+  if total == 0 then return end
+  local done = 0
+  local function tick()
+    done = done + 1
+    if done == total then Snacks.notify.info('All tools checked.') end
   end
 
-  for _, tool in ipairs(M.tools) do
-    local ok, pkg = pcall(require('mason-registry').get_package, tool)
+  for _, name in ipairs(M.tools) do
+    local ok, pkg = pcall(reg.get_package, name)
     if not ok then
-      Snacks.notify.error('Tool not found in mason registry: ' .. tool)
-      done()
+      Snacks.notify.error('Tool not found: ' .. name)
+      tick()
     else
       if pkg:is_installed() then
-        done()
-        goto continue
+        tick()
+      else
+        Snacks.notify.warn('Installing ' .. name)
+        pkg:once('install:success', function() Snacks.notify.info(name .. ' installed') tick() end)
+        pkg:once('install:failed',  function() Snacks.notify.error(name .. ' failed')   tick() end)
+        pkg:install()
       end
-
-      Snacks.notify.warn('Installing ' .. tool)
-
-      pkg:once('install:success', function()
-        Snacks.notify.info(tool .. ' installed successfully')
-        done()
-      end)
-      pkg:once('install:failed', function()
-        Snacks.notify.error(tool .. ' installation failed')
-        done()
-      end)
-
-      pkg:install()
     end
-    ::continue::
   end
 end
+
+-- - require('mason').setup({})
 
 return M

@@ -28,5 +28,5 @@ endfunction
 augroup AutoFormat
   autocmd!
   " format with the custom text object `ag`
-  autocmd BufWritePre *.lua,*.sh,*.vim if &mod | call Format() | endif
+  " autocmd BufWritePre *.lua,*.sh,*.vim if &mod | call Format() | endif
 augroup END

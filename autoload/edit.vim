@@ -107,5 +107,5 @@ function! edit#readme() abort
     echoerr 'No README.md found in parent directories.'
     return
   endif
-  call edit(fnameescape(l:readme))
+  call s:edit(fnameescape(l:readme))
 endfunction

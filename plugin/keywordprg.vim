@@ -1,14 +1,10 @@
-" =============================================================================
-" MyKeywordprg.vim - Contextual :Man lookup for keywords under cursor
-" Maintainer: me
-" License:    MIT
-" Version:    1.2
-"=============================================================================
-
 if exists('g:loaded_mykeywordprg')
   finish
 endif
+
 let g:loaded_mykeywordprg = 1
+" Keywords are used in searching and recognizing with many commands:
+set iskeyword-=_
 
 command! -nargs=* ManLookup call s:ManLookup(<f-args>)
 
@@ -36,9 +32,10 @@ endfunction
 
 augroup ManLookupSetup
   autocmd!
-  autocmd FileType kitty         call s:KeywordSetup('kitty')
-  autocmd FileType tmux          call s:KeywordSetup('tmux')
-  autocmd FileType sshconfig     call s:KeywordSetup('ssh')
-  autocmd FileType ghostty     call s:KeywordSetup('ghostty')
+  autocmd FileType sh        setlocal keywordprg=:Man
+  autocmd FileType kitty     call s:KeywordSetup('kitty')
+  autocmd FileType tmux      call s:KeywordSetup('tmux')
+  autocmd FileType sshconfig call s:KeywordSetup('ssh')
+  autocmd FileType ghostty   call s:KeywordSetup('ghostty')
   autocmd BufRead,BufNewFile *alacritty.*ml call s:KeywordSetup('5 alacritty')
 augroup END

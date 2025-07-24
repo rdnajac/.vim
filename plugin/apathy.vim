@@ -1,4 +1,5 @@
 augroup SetLocalPath
+  " TODO: fork tpope/apathy
   " TODO: move to local apathy plugin
   autocmd!
   let s:default_path = escape(&path, '\ ') " store default value of 'path'

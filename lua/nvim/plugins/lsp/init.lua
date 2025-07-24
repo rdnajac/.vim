@@ -1,7 +1,5 @@
 local M = {}
 
-M.dependencies = { 'mason-org/mason.nvim' }
-
 M.keys = function()
   local opts = { buffer = true, nowait = true }
   -- icon = { icon = ' ', color = 'orange' },
@@ -52,7 +50,7 @@ M.on_attach = function(client, bufnr)
 end
 
 M.config = function()
-  require('mason').setup({})
+  require('nvim.plugins.lsp.diagnostic')
 
   -- Refer to `:h vim.lsp.config()` for more information.
   vim.lsp.config('*', {

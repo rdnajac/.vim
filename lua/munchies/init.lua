@@ -1,22 +1,48 @@
-local aug = vim.api.nvim_create_augroup('munchies', { clear = true })
-local au = function(ev, pattern, cb)
-  vim.api.nvim_create_autocmd(ev, {
-    pattern = pattern,
-    group = aug,
-    callback = cb,
-  })
+---@module "snacks"
+---@type snacks.Config
+local opts = {
+  bigfile = { enabled = true },
+  dashboard = { enabled = false },
+  -- dashboard = require('munchies.dashboard').config,
+  explorer = { replace_netrw = false },
+  image = { enabled = true },
+  indent = {
+    enabled = true,
+    indent = { only_current = true, only_scope = true },
+  },
+  input = { enabled = true },
+  notifier = {
+    enabled = false,
+    style = 'fancy',
+    date_format = '%T',
+    timeout = 4000,
+  },
+  picker = require('munchies.picker').config,
+  quickfile = { enabled = true },
+  scope = { enabled = true },
+  scroll = { enabled = true },
+  statuscolumn = { enabled = false },
+  styles = {
+    lazygit = { height = 0, width = 0 },
+  },
+  terminal = {
+    start_insert = true,
+    auto_insert = true,
+    auto_close = true,
+    win = { wo = { winbar = '', winhighlight = 'Normal:SpecialWindow' } },
+  },
+  words = { enabled = true },
+}
+
+local ok, Snacks = pcall(require, 'snacks')
+if not ok then
+  error('out of snacks: ' .. tostring(Snacks))
 end
 
-au('FileType', { 'lua' }, function()
-  Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
-end)
+Snacks.setup(opts)
 
-au('FileType', { 'help', 'man', 'qf' }, function(ev)
-  if Snacks.util.is_transparent() then
-    Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
-  end
-end)
-
+require('munchies.util') -- exposes global functions
 require('munchies.chromatophore')
 require('munchies.commands')
 require('munchies.keymaps')
+require('munchies.toggle')

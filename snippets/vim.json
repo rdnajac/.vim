@@ -1,8 +1,8 @@
 {
   "function": {
-    "prefix": "funcrion",
+    "prefix": "function",
     "body": [
-      "function! ${1:function_name}(${2:args})",
+      "function! ${1}(${2}) abort",
       "  ${0}",
       "endfunction"
     ],
@@ -10,13 +10,16 @@
   },
 
   "if_exists_equals": {
-    "prefix": "ifeg",
-    "body": ["if !exists('g:${1}')", "let g:${1} = ${2:1}", "endif"],
+    "prefix": "ifeq",
+    "body": [
+      "if !exists('g:${1}')",
+      "  let g:${1} = ${2:1}", 
+      "endif"],
     "description": "Global variable declaration"
   },
 
-  "ifef": {
-    "prefix": "ifneg",
+  "ifne": {
+    "prefix": "ifneq",
     "body": ["if !exists('g:${1}')", "  finish", "endif"],
     "description": "Global variable declaration"
   },

@@ -8,6 +8,7 @@ let g:maplocalleader = '\'
 let g:VIMHOME = fnamemodify($MYVIMRC, ':p:h')
 " silent !mkdir -p ~/.vim/tmp >/dev/null 2>&1
 let &spellfile = g:VIMHOME . '.spell/en.utf-8.add'
+
 if has('nvim')
   set backup
   set backupext=.bak
@@ -23,12 +24,10 @@ else
 endif
 set autowrite
 set autowriteall
-" XXX: do I want this?
-set noswapfile
+set noswapfile " XXX: do I want this?
 
 " options {{{2
 " set confirm
-set iskeyword-=_
 set startofline
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
@@ -65,17 +64,17 @@ augroup vimrc_indent
   au FileType cpp,cuda,python setlocal sw=4 sts=4
 augroup END
 
-" Section: ui {{{1
+" ui {{{2
 set lazyredraw
 set termguicolors
 
-" columns {{{2
+" columns {{{3
 " set foldcolumn=1
 set number
 set numberwidth=4
 set signcolumn=number
 
-" folding {{{2
+" folding {{{3
 set fillchars+=fold:\ ,
 set fillchars+=foldclose:▸,
 set fillchars+=foldopen:▾,
@@ -117,7 +116,7 @@ augroup vimrc
 
   " automatically create directories for new files
   " requires `vim-eunuch`
-  au BufWritePre * Mkdir
+  au BufWritePre * silent! Mkdir
 
   " immediately quit the command line window
   au CmdwinEnter * quit
@@ -140,13 +139,6 @@ augroup vimrc
   " for when a ftplugin file is not warranted
   au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
 augroup END
-
-" Section: commands {{{1
-command! Restart execute 'Obsession ' . g:VIMHOME | restart
-command! -bang Quit call quit#buffer(<q-bang>)
-command! CleanWhitespace call format#clean_whitespace()
-
-command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 " Section: keymaps {{{1
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
@@ -181,7 +173,8 @@ nnoremap <leader>sP :GrepPlugin!<CR>
 
 " code {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
-" nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <expr> <leader>M ':let @'.v:register.' = '.string(getreg(v:register))."\<CR>\<C-f>\<Left>"
 
 " debug {{{2
 nnoremap <leader>da <Cmd>ALEInfo<CR>
@@ -431,6 +424,7 @@ command! Wqa wqa!
 
 " Section: plugins {{{1
 " call plug#begin()
+" TODO: move to vim.pack
 call plug#begin(g:VIMHOME . '/pack/plugged')
 Plug 'alker0/chezmoi.vim',
 Plug 'github/copilot.vim',
@@ -449,6 +443,7 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
+" TODO: try mini.splitjoin
 Plug 'AndrewRadev/splitjoin.vim'
 " replaced by native plugins
 " Plug 'AndrewRadev/dsf.vim'
@@ -463,11 +458,7 @@ if !has('nvim')
   " using mini instead
   Plug 'junegunn/vim-easy-align'
 else
-  " Plug 'folke/tokyonight.nvim'
-  " Plug 'folke/snacks.nvim'
-  " Plug 'echasnovski/mini.nvim'
-  Plug stdpath('config') . '/pack/opt/vim-lol'
-
+  Plug 'folke/snacks.nvim'
 endif
 call plug#end()
 
@@ -488,6 +479,21 @@ else
   set clipboard=unnamed
   xmap ga <Plug>(EasyAlign)
   nmap ga <Plug>(EasyAlign)
+endif
+
+nnoremap y "+y
+vnoremap y "+y
+
+" TODO: restore plugins, don't keep commands here
+command! Restart execute 'Obsession ' . g:VIMHOME | restart
+command! -bang Quit call quit#buffer(<q-bang>)
+command! CleanWhitespace call format#clean_whitespace()
+
+command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
+
+if has('nvim')
+  command! PackUpdate lua vim.pack.update()
+  packadd! vimline
 endif
 
 " vim:set fdl=2
