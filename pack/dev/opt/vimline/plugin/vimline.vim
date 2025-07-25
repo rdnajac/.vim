@@ -25,12 +25,9 @@ function MyStatusline() abort
   let l:line .= ''
   let l:line .= '%#Chromatophore_y#'
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
-  let l:line .= vimline#components#blink()
-  let l:line .= ' '
+  let l:line .= '%S '
   let l:line .= vimline#recording()
-  let l:line .= ' %S '
-  " let l:line .= vimline#components#mode()
-  " let l:line .= printf('%-10s', vimline#components#mode())
+  let l:line .= vimline#components#blink()
   let l:line .= printf('%10s', vimline#components#mode())
   let l:line .= '%#Black#'
   let l:line .= ''
