@@ -25,8 +25,16 @@ function! Format() abort
 endfunction
 " set formatexpr=<SID>format()
 
+function! s:format_if_modified() abort
+  if &modified
+    call Format()
+  endif
+endfunction
+
 augroup AutoFormat
   autocmd!
-  " format with the custom text object `ag`
-  " autocmd BufWritePre *.lua,*.sh,*.vim if &mod | call Format() | endif
+  autocmd BufWritePre *.lua call <SID>format_if_modified()
+  autocmd BufWritePre *.vim call <SID>format_if_modified()
+  autocmd BufWritePre *.sh  call <SID>format_if_modified()
+  autocmd BufWritePre *.md  call <SID>format_if_modified()
 augroup END

@@ -17,16 +17,11 @@ nmap <leader>k v:lua require('util.link').linkify()
 nnoremap <buffer> <localleader>h ^i#<Space><Esc>
 inoremap <buffer> <localleader>h <C-o>i#<Space>
 
-inoremap <buffer> ```c ```cpp<CR><CR>```<Up>
-inoremap <buffer> ```p ```python<CR><CR>```<Up>
-inoremap <buffer> ```v ```vim<CR><CR>```<Up>
-
-ia <buffer> `c ```cpp<CR><CR>```<Up>
-
-" stdin
-inoremap <buffer> `! ```sh<CR><CR>```<Up>
-" stdout
-inoremap <buffer> `$ ```console<CR><CR>```<Up>
+inoremap <buffer> ``c ```cpp<CR><CR>```<Up>
+inoremap <buffer> ``p ```python<CR><CR>```<Up>
+inoremap <buffer> ``v ```vim<CR><CR>```<Up>
+inoremap <buffer> `!  ```sh<CR><CR>```<Up>
+inoremap <buffer> `$  ```console<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 

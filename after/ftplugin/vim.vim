@@ -1,5 +1,10 @@
 " better format automatic foldmarkers with `zf`
-setlocal commentstring=\ \"\ %s
+" setlocal commentstring=\ \"\ %s
+" better native `gcc`
+setlocal commentstring=\"\ %s
+
+" this makes editing autoloaded functions easier but might
+" integere with how the lsp <C-]> works
 setlocal iskeyword-=#
 setlocal formatoptions -=ro
 
@@ -15,3 +20,8 @@ nmap <silent><buffer> <leader>K <Plug>ScripteaseHelp
 " hover doesn't work on settings prefixed with 'no'
 " and some settings like 'showcmdloc'
 " this might be an issue with vimls itself
+if has('nvim')
+  lua vim.treesitter.start()
+  " TODO: fix colorscheme to match
+  " TODO: add syntax for things like <Cmd> if missing
+endif

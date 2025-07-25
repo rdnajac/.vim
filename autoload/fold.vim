@@ -1,13 +1,17 @@
 scriptencoding utf-8
 
 function! fold#text_lua()
-  let ret = ''
-  let ret .= repeat(' ', v:foldlevel * &shiftwidth)
-  let ret .= ' '
-  " let ret .= printf('󰡏 --- %d lines ---󰡏 ', v:foldend - v:foldstart + 1)
-  let ret .= printf('󰡏  ~ %2d lines ~ ', v:foldend - v:foldstart + 1)
+  let l:start = v:foldstart
+  let l:lines = v:foldend - l:start + 1
+  let l:open = getline(l:start)
+  let l:next = getline(l:start + 1)
 
-  return ret
+  if indent(l:start + 1) > indent(l:start)
+    let l:prefix = substitute(l:open, '{\s*$', '', '')
+    return l:prefix . '{ ~ ' . l:lines . ' lines ~ },'
+  endif
+
+  return l:open
 endfunction
 
 function! fold#text() abort
@@ -39,8 +43,7 @@ function! fold#text() abort
   return l:pre . l:fill . l:post
 endfunction
 
-
-function! fold#aware_h() abort
+function! fold#open_or_h() abort
   let col = virtcol('.')
   let indent = indent('.')
   if col <= indent + 1 && &l:foldopen =~# 'hor'
