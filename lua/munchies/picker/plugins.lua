@@ -1,6 +1,7 @@
+-- lua/my_snacks_plugins.lua
 local M = {}
 
-local vim_plug_home = vim.g.plug_home or vim.fn.stdpath('data') .. '/plugged'
+local vim_plug_home = vim.g.plug_home or (vim.fn.stdpath('data') .. '/plugged')
 local nvim_pack_path = vim.fn.stdpath('data') .. '/site/pack/core/opt'
 
 local function resolve_plugin_path(bang)
@@ -11,52 +12,60 @@ local function resolve_plugin_path(bang)
   end
 end
 
----@param plugdir string Directory path containing plugins
----@return table List of tables with fields: text, file, item
-local function items(plugdir)
-  local dirs = {}
-  for _, dir in ipairs(vim.fn.glob(plugdir .. '/*', true, true)) do
-    if vim.fn.isdirectory(dir) == 1 then
-      table.insert(dirs, {
-        text = vim.fn.fnamemodify(dir, ':t'),
-        file = dir,
-        item = dir,
-      })
+local function plugin_items(dir)
+  local result = {}
+  for _, path in ipairs(vim.fn.glob(dir .. '/*', true, true)) do
+    if vim.fn.isdirectory(path) == 1 then
+      result[#result + 1] = {
+        text = vim.fn.fnamemodify(path, ':t'),
+        file = path,
+      }
     end
   end
-  return dirs
+  return result
 end
 
---- Opens a plugin picker with a callback on selection.
----@param picker function Callback function to handle the selected plugin.
----@param bang string Optional bang character to determine the plugin path.
-local function pick_plugin(picker, bang)
+-- show a list of plugin directories, then hand off cwd+filter to `picker_fn`
+local function pick_plugin_dir(picker_fn, bang)
   Snacks.picker.pick({
-    title = 'Plugins',
-    items = items(resolve_plugin_path(bang)),
-    format = function(item)
-      return { { item.text } }
+    title = 'Choose plugin…',
+    items = plugin_items(resolve_plugin_path(bang)),
+    format = function(entry)
+      return { { entry.text } }
     end,
-    confirm = function(_, item)
-      picker(item.item)
+    confirm = function(_, entry)
+      -- only vim or lua files inside that plugin
+      local filter_fn = function(candidate)
+        return candidate.file:match('%.vim$') or candidate.file:match('%.lua$')
+      end
+      picker_fn({
+        cwd = entry.file,
+        filter = filter_fn,
+      })
     end,
   })
 end
 
---- Opens a grep picker for plugins.
---- @param opts table|nil Optional parameters passed to grep and pick_plugin.
-function M.grep(opts)
-  pick_plugin(function(dir)
-    Snacks.picker.grep(vim.tbl_extend('force', opts or {}, { cwd = dir }))
-  end, opts and opts.bang)
+-- merge the user’s own opts (e.g. bang) with what we got from pick_plugin_dir
+local function make_picker(kind, user_opts)
+  pick_plugin_dir(function(plugin_opts)
+    local merged = vim.tbl_extend('force', user_opts or {}, plugin_opts)
+    Snacks.picker[kind](merged)
+  end, user_opts and user_opts.bang)
 end
 
---- Opens a file picker for plugins.
---- @param opts table|nil Optional parameters passed to files and pick_plugin.
-function M.files(opts)
-  pick_plugin(function(dir)
-    Snacks.picker.files(vim.tbl_extend('force', opts or {}, { cwd = dir }))
-  end, opts and opts.bang)
+-- Create the two commands
+function M.setup()
+  local cmd = vim.api.nvim_create_user_command
+  cmd('FindPlugin', function(ctx)
+    make_picker('files', { bang = ctx.bang })
+  end, { bang = true, nargs = '*', complete = 'file' })
+
+  cmd('GrepPlugin', function(ctx)
+    make_picker('grep', { bang = ctx.bang })
+  end, { bang = true, nargs = '*', complete = 'file' })
 end
+
+M.setup()
 
 return M

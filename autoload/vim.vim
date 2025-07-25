@@ -18,4 +18,7 @@ let vim#home = s:findhome()
 function! vim#rc() abort
   let &viminfofile = vim#home . '.viminfo'
   let &verbosefile = vim#home . '.vimlog.txt'
+
+  " some settings are default in nvim
+  set autoread
 endfunction

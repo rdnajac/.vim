@@ -3,18 +3,6 @@ local M = {}
 ---@module "snacks"
 ---@class snacks.dashboard.Config
 M.config = {
-  sections = {
-    -- { section = 'header', highlight = 'Chromatophore' },
-    { section = 'header' },
-    { section = 'recent_files' },
-    { padding = 1 },
-    {
-      section = 'terminal',
-      -- TODO get `gf` to work with variable expansions
-      cmd = vim.fn.stdpath('config') .. '/bin/cowsay-vim-fortunes',
-      height = 13,
-    },
-  },
   formats = {
     key = function(item)
       local sep = icons.separators.section.rounded
@@ -38,28 +26,5 @@ M.config = {
     end,
   },
 }
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'snacks_dashboard',
-  callback = function()
-    local old_winborder = vim.o.winborder
-    if old_winborder ~= 'none' then
-      vim.o.winborder = 'none'
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'SnacksDashboardClosed',
-        -- pattern = 'VimEnter',
-        once = true,
-        callback = function()
-          vim.o.winborder = old_winborder
-        end,
-      })
-      vim.opt.lazyredraw = true
-      vim.schedule(function()
-        Snacks.dashboard.update()
-        vim.opt.lazyredraw = false
-      end)
-    end
-  end,
-})
 
 return M

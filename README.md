@@ -2,6 +2,10 @@
 
 My (n)vim configuration.
 
+## TODO
+
+- [ ] Who is VIMDIR? VIMHOME?
+
 ## neovim
 
 ### Installation
@@ -20,14 +24,9 @@ cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install
 cd  .. && ls
 ```
 
-## Plugins
+## Snacks
 
-Use [`lazy.nvimnvim`](https://lazy.folke.io/) to manage plugins
-and spend hours optimizing for milliseconds.
-
-### Snacks
-
-#### Image
+### Image
 
 Equation to do null hypothesis testing:
 
@@ -35,8 +34,7 @@ $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
 $$
 
-
-### netrw
+## netrw
 
 `h: netrw` provides 'ssh hints':
 
@@ -56,7 +54,7 @@ Both pages are offline...
 
 Luckily they have been cached by the Internet Archive.
 
-### Spell Checking
+## Spell Checking
 
 Download [cspell](http://streetsidesoftware.github.io/cspell/)
 dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries)
@@ -110,7 +108,6 @@ rm -rf ~/.local/state/nvim/{*.log,sessions,swap,undo}
 ## Pipes
 
 ![Vim Pipes](./assets/vim-pipes.png)
-
 
 ## Resources and references
 

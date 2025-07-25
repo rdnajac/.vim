@@ -12,6 +12,9 @@ M.dependencies = {
 
 M.event = 'InsertEnter'
 
+-- local kind = require('blink.cmp.types').CompletionItemKind
+local kind = vim.lsp.protocol.CompletionItemKind
+
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
@@ -40,8 +43,13 @@ M.opts = {
   signature = { enabled = true, window = { border = 'single' } },
   keymap = {
     preset = 'default',
-    -- stylua: ignore
-    -- ['$'] = { function(cmp) cmp.show({ providers = { 'env' } }) end },
+    -- inoremap <expr> $ if should_show_cmp_env() | lua require('blink.cmp').show() | endif return 
+    -- ['$'] = {
+    --   function(cmp)
+    --     cmp.show({ providers = { 'env' } })
+    --     vim.fn.feedkeys(Snacks.util.keycode('$'))
+    --   end,
+    -- },
     ['<Tab>'] = {
       function(cmp)
         if cmp.snippet_active() then
@@ -95,8 +103,7 @@ M.opts = {
         score_offset = 1,
         transform_items = function(_, items)
           return vim.tbl_filter(function(item)
-            return item.kind ~= require('blink.cmp.types').CompletionItemKind.Keyword
-              and item.kind ~= vim.lsp.protocol.CompletionItemKind.Snippet
+            return item.kind ~= kind.Keyword and item.kind ~= kind.Snippet
           end, items)
         end,
       },
@@ -113,13 +120,13 @@ M.opts = {
         name = 'env',
         module = 'blink-cmp-env',
         score_offset = -5,
-        opts = {
-          item_kind = function()
-            return require('blink.cmp.types').CompletionItemKind.Variable
-          end,
-          show_braces = false,
-          show_documentation_window = true,
-        },
+        -- opts = {
+        --   item_kind = function()
+        --     return require('blink.cmp.types').CompletionItemKind.Variable
+        --   end,
+        --   show_braces = false,
+        --   show_documentation_window = true,
+        -- },
         -- should_show_items = function(ctx)
         --   local col = ctx.cursor[2]
         --   local before = ctx.line:sub(1, col)

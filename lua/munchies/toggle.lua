@@ -1,18 +1,5 @@
 local M = {}
 
-M.virtual_text = function()
-  return Snacks.toggle.new({
-    id = 'virtual_text',
-    name = 'Virtual Text',
-    get = function()
-      return vim.diagnostic.config().virtual_text ~= false
-    end,
-    set = function(state)
-      vim.diagnostic.config({ virtual_text = state })
-    end,
-  })
-end
-
 M.color_column = function()
   return Snacks.toggle.new({
     id = 'color_column',
@@ -27,6 +14,19 @@ M.color_column = function()
       local tw = vim.bo.textwidth
       local col = tostring(tw ~= 0 and tw or 81)
       vim.opt_local.colorcolumn = state and col or ''
+    end,
+  })
+end
+
+M.virtual_text = function()
+  return Snacks.toggle.new({
+    id = 'virtual_text',
+    name = 'Virtual Text',
+    get = function()
+      return vim.diagnostic.config().virtual_text ~= false
+    end,
+    set = function(state)
+      vim.diagnostic.config({ virtual_text = state })
     end,
   })
 end
@@ -56,6 +56,44 @@ M.translucency = function()
   })
 end
 
+M.winborder = function()
+  local saved = nil
+
+  return Snacks.toggle.new({
+    id = 'winborder',
+    name = 'Window Border',
+    get = function()
+      return vim.o.winborder ~= '' and vim.o.winborder ~= 'none'
+    end,
+    set = function(state)
+      if not state then
+        saved = saved or vim.o.winborder
+        vim.o.winborder = 'none'
+      else
+        vim.o.winborder = saved or 'rounded'
+      end
+    end,
+  })
+end
+
+M.laststatus = function()
+  return Snacks.toggle.new({
+    id = 'laststatus',
+    name = 'Laststatus',
+    get = function()
+      return vim.o.laststatus > 0
+    end,
+    set = function(state)
+      if not state then
+        vim.b.lastlaststatus = vim.o.laststatus
+        vim.o.laststatus = 0
+      else
+        vim.o.laststatus = vim.b.lastlaststatus or 2
+      end
+    end,
+  })
+end
+
 M.setup = function()
   Snacks.toggle.profiler():map('<leader>dpp')
   Snacks.toggle.profiler_highlights():map('<leader>dph')
@@ -71,6 +109,8 @@ M.setup = function()
   M.translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })
   M.virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
   M.color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
+  M.winborder():map('<leader>uW', { desc = 'Toggle Window Border' })
+  M.laststatus():map('<leader>ul', { desc = 'Toggle Laststatus' })
 end
 
 M.setup()

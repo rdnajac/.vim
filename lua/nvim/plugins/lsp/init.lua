@@ -1,4 +1,5 @@
-local M = {}
+-- local M = {}
+local M = { 'mason-org/mason.nvim' }
 
 M.keys = function()
   local opts = { buffer = true, nowait = true }
@@ -50,7 +51,8 @@ M.on_attach = function(client, bufnr)
 end
 
 M.config = function()
-  require('nvim.plugins.lsp.diagnostic')
+  require('mason').setup({})
+  require('nvim.plugins.lsp.diagnostic').config()
 
   -- Refer to `:h vim.lsp.config()` for more information.
   vim.lsp.config('*', {

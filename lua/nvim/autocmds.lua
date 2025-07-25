@@ -29,8 +29,8 @@ au('FileType', { 'help', 'man', 'qf' }, function(ev)
       vim.cmd('close')
       pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
     end, { buffer = ev.buf, silent = true, desc = 'Quit buffer' })
+    desc = 'Ephemeral buffers'
   end)
-  desc = 'Ephemeral buffers'
 end)
 
 au('FileType', 'lua', function()

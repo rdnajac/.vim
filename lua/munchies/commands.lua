@@ -95,16 +95,6 @@ command('Chezmoi', function()
   })
 end, {})
 
-command('FindPlugin', function(opts)
-  local opts_tbl = { bang = opts.bang }
-  require('munchies.picker.plugins').files(opts_tbl)
-end, { bang = true, nargs = '*', complete = 'file' })
-
-command('GrepPlugin', function(opts)
-  local opts_tbl = { bang = opts.bang }
-  require('munchies.picker.plugins').grep(opts_tbl)
-end, { bang = true, nargs = '*', complete = 'file' })
-
 command('Scratch', function(opts)
   if opts.bang then
     Snacks.scratch.select()
@@ -139,6 +129,15 @@ end, {})
 
 command('Lazygit', function()
   Snacks.Lazygit()
+end, {})
+
+command('GrepRuntime', function()
+  Snacks.picker.pick({
+    source = 'grep',
+    finder = {
+      dirs = vim.api.nvim_list_runtime_paths(),
+    },
+  })
 end, {})
 
 --- shortcut!
