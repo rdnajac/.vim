@@ -22,7 +22,7 @@ end
 ---@param bufnr integer
 M.on_attach = function(client, bufnr)
   -- set this manually in case there is another mapping for `K`
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = true })
 
   -- set the rest of the keymaps
   for _, keymap in ipairs(M.keys()) do

@@ -1,3 +1,5 @@
+local M = {}
+
 -- FIXME:
 M.tools = {}
 
@@ -37,6 +39,18 @@ function M.install()
       end
     end
   end
+end
+
+M.list = function()
+  local reg = require('mason-registry')
+  local pkgs = reg.get_all_packages()
+  local names = {}
+  for _, pkg in ipairs(pkgs) do
+    if pkg:is_installed() then
+      table.insert(names, pkg.name)
+    end
+  end
+  return names
 end
 
 return M

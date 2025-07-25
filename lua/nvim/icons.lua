@@ -1,28 +1,18 @@
 return {
   blink_src = {
-  buffer = ' ',
-  cmdline = ' ',
-  env = '$ ',
-  lazydev = '󰒲 ',
-  lsp = ' ',
-  omni = ' ',
-  path = ' ',
-  snippets = ' '
-  -- snippets = icons.kinds.Snippet,
-},
-  diagnostics = {
-    error = ' ',
-    warn = ' ',
-    hint = '',
-    info = ' ',
+    buffer = ' ',
+    cmdline = ' ',
+    env = '$ ',
+    lazydev = '󰒲 ',
+    lsp = ' ',
+    omni = ' ',
+    path = ' ',
+    snippets = ' ',
+    -- snippets = icons.kinds.Snippet,
   },
   ft = { octo = ' ' },
-  git = {
-    added = ' ',
-    modified = ' ',
-    removed = ' ',
-  },
   -- kinds from snacks
+  -- kinds = require('snacks.picker.config.defaults'),
   misc = { dots = '…' },
   os = { -- from nvim-lualine/lualine.nvim
     unix = '', -- e712

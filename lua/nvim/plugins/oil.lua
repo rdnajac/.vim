@@ -1,6 +1,6 @@
 local M = { 'stevearc/oil.nvim' }
 
-local git_status = require('util.git_status')
+local git_status = require('nvim.util.git_status')
 local git_status_cache = git_status.new()
 local detail = 0
 

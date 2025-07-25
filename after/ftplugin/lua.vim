@@ -1,7 +1,8 @@
 setlocal expandtab
 setlocal formatoptions-=ro
 
-let &l:formatprg = 'sh -c "cd ' . shellescape(expand('%:p:h')) . ' && stylua --search-parent-directories -"'
+" -s, --search-parent-directories
+let &l:formatprg = 'stylua -s --stdin-filepath=% -'
 
 inoremap <buffer> [[<CR> ([[<CR><CR>]])<UP>
 

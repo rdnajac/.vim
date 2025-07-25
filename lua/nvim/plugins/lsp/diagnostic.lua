@@ -1,5 +1,3 @@
-local icons = require('nvim.icons')
-
 local M = {}
 
 ---@type vim.diagnostic.Opts
@@ -10,10 +8,10 @@ M.opts = {
   severity_sort = true,
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = icons.diagnostics.error,
-      [vim.diagnostic.severity.WARN] = icons.diagnostics.warn,
-      [vim.diagnostic.severity.HINT] = icons.diagnostics.hint,
-      [vim.diagnostic.severity.INFO] = icons.diagnostics.info,
+      [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
+      [vim.diagnostic.severity.WARN] = icons.diagnostics.Warn,
+      [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
+      [vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
     },
     numhl = {
       [vim.diagnostic.severity.ERROR] = 'Statement',

@@ -1,6 +1,5 @@
 local M = { 'Saghen/blink.cmp' }
 
--- lazy.nvim build command (system)
 M.build = 'cargo build --release'
 
 M.dependencies = {
@@ -11,9 +10,6 @@ M.dependencies = {
 }
 
 M.event = 'InsertEnter'
-
--- local kind = require('blink.cmp.types').CompletionItemKind
-local kind = vim.lsp.protocol.CompletionItemKind
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
@@ -28,11 +24,17 @@ M.opts = {
       border = 'single',
       draw = {
         treesitter = { 'lsp' },
-        columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
+        -- default
+        -- columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
+
+        -- indexed
+        -- columns = { { 'item_idx' }, { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
+        -- nvim-cmp style menu
+        columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
         components = {
           kind_icon = {
             text = function(ctx)
-              return require('nvim.icons').kinds[ctx.kind] or ''
+              return _G.icons.kinds[ctx.kind] or ''
             end,
           },
         },
@@ -162,6 +164,10 @@ M.config = function()
     end,
     desc = 'Keep completing path on <Tab>',
   })
+  vim.keymap.set('i', '$', function()
+    require('blink.cmp').show({ providers = { 'env' } })
+    return '$'
+  end, { expr = true, replace_keycodes = false })
 end
 
 return M

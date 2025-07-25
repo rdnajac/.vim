@@ -1,4 +1,4 @@
-local get_mode = require('util.mode').get
+local get_mode = require('nvim.util.mode').get
 
 local colors = {
   green = '#39ff14',

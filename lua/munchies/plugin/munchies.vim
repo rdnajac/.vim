@@ -1,0 +1,6 @@
+command! Autocmds lua Snacks.picker.autocmds()
+command! Explorer lua Snacks.picker.explorer()
+command! Help lua Snacks.picker.help()
+command! Highlights lua Snacks.picker.highlights()
+command! Lazygit lua Snacks.Lazygit()
+command! Terminal lua Snacks.terminal.open()

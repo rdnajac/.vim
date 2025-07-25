@@ -103,44 +103,4 @@ command('Scratch', function(opts)
   end
 end, { bang = true })
 
-command('Autocmds', function()
-  Snacks.picker.autocmds()
-end, {})
-
-command('Explorer', function()
-  Snacks.picker.explorer()
-end, {})
-
-command('Help', function()
-  Snacks.picker.help()
-end, {})
-
-command('Highlights', function()
-  Snacks.picker.highlights()
-end, {})
-
-command('Scripts', function()
-  require('munchies.picker.scriptnames')()
-end, {})
-
-command('Terminal', function()
-  Snacks.terminal.toggle()
-end, {})
-
-command('Lazygit', function()
-  Snacks.Lazygit()
-end, {})
-
-command('GrepRuntime', function()
-  Snacks.picker.pick({
-    source = 'grep',
-    finder = {
-      dirs = vim.api.nvim_list_runtime_paths(),
-    },
-  })
-end, {})
-
---- shortcut!
-vim.cmd([[
-" cnoreabbrev Z Zoxide
-]])
+-- Snacks.picker.grep({ dirs = vim.api.nvim_list_runtime_paths() })

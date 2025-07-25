@@ -37,7 +37,8 @@ M.opts = {
   end,
 }
 
-vim.cmd.packadd('tokyonight.nvim')
-require('tokyonight').load(M.opts)
+M.config = function()
+  require('tokyonight').load(M.opts)
+end
 
 return M

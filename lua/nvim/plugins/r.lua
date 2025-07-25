@@ -1,9 +1,8 @@
 local M = { 'R-nvim/R.nvim' }
 
 -- langsetup({ { 'r-languageserver', 'r_languageserver' } })
-local filetypes = { 'r', 'rmd', 'quarto' }
 
-M.ft = filetypes
+M.ft = { 'r', 'rmd', 'quarto' }
 
 M.init = function()
   vim.g.rout_follow_colorscheme = true
@@ -11,6 +10,7 @@ M.init = function()
     { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
   })
 end
+
 M.keys = { { '<localleader>R', '<Plug>RStart', ft = filetypes } }
 
 ---@type RConfigUserOpts

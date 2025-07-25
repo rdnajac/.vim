@@ -46,7 +46,7 @@ function M.docsymbols_hl()
 end
 
 function M.mode()
-  return require('util.mode').get()
+  return require('nvim.util.mode').get()
 end
 
 function M.blink()

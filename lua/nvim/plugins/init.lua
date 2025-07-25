@@ -114,7 +114,7 @@ local function import_plugins()
 end
 
 local function lazy_load()
-  local lazy = require('util.lazy')
+  local lazy = require('nvim.util.lazy')
   for name, plugin in pairs(M) do
     if plugin.config then
       lazy.config(plugin)

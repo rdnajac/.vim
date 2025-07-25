@@ -94,6 +94,7 @@ augroup vimrc
 augroup END
 
 " Section: keymaps {{{1
+nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 nnoremap <leader><Space> viW
 
@@ -115,12 +116,11 @@ nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>z <Cmd>Zoxide<CR>
 nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
-nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 
-nnoremap <leader>fp :FindPlugin<CR>
-nnoremap <leader>sp :GrepPlugin<CR>
+" nnoremap <leader>fp :FindPlugin<CR>
+" nnoremap <leader>sp :GrepPlugin<CR>
 nnoremap <leader>fP :FindPlugin!<CR>
 nnoremap <leader>sP :GrepPlugin!<CR>
 
@@ -256,8 +256,8 @@ xnoremap ag GoggV
 onoremap ag :<C-u>normal vag<CR>
 
 " buffers {{{2
-nnoremap <silent> <Tab>         :bprev<CR>
-nnoremap <silent> <S-Tab>       :bnext<CR>
+" nnoremap <silent> <Tab>         :bprev<CR>
+" nnoremap <silent> <S-Tab>       :bnext<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
 
 " Close buffer

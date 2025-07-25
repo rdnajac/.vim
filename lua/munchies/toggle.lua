@@ -116,3 +116,19 @@ end
 M.setup()
 
 return M
+
+-- -- TODO: move to vimline
+-- vim.api.nvim_create_autocmd('CmdlineEnter', {
+--   group = aug,
+--   callback = function()
+--     vim.b.lastlaststatus = vim.o.laststatus
+--     vim.o.laststatus = 0
+--   end,
+-- })
+--
+-- vim.api.nvim_create_autocmd('CmdlineLeave', {
+--   group = aug,
+--   callback = function()
+--     vim.o.laststatus = vim.b.lastlaststatus or 2
+--   end,
+-- })

@@ -4,11 +4,11 @@ local M = { 'folke/lazydev.nvim' }
 -- local lazydev_path = require('lazy.core.config').spec.plugins['lazydev.nvim'].dir
 local lazydev_path = vim.fn.expand('~/.local/share/nvim/site/pack/core/opt/lazydev.nvim/')
 
+-- HACK: correcrly identify the name of the lsp client
 package.preload['lazydev.lsp'] = function()
   local mod = dofile(lazydev_path .. '/lua/lazydev/lsp.lua')
   local orig_supports = mod.supports
   mod.supports = function(client)
-    -- correcrly identify the name of the lsp client
     if client and vim.tbl_contains({ 'luals' }, client.name) then
       return true
     end

@@ -1,5 +1,3 @@
-runtime vimrc
-
 set backup
 set backupext=.bak
 let &backupdir = stdpath('state') . '/backup//'
@@ -15,6 +13,8 @@ let g:loaded_tarPlugin = 1
 let g:loaded_tutor_mode_plugin = 1
 let g:loaded_zipPlugin = 1
 
+runtime vimrc
+
 function! s:settings()
   if !exists('$SSH_TTY') | set clipboard=unnamedplus | endif
   set jumpoptions=view,stack
@@ -23,6 +23,16 @@ function! s:settings()
   " disable the default popup menu
   aunmenu PopUp
   autocmd! nvim.popupmenu
+
+  " set up autocmds
+  augroup init_lua
+    autocmd!
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
+    autocmd BufNewFile after/lsp/*.lua
+	  \ if filereadable(stdpath('config') .. '/templates/lsp.lua') |
+	  \   execute '0r ' .. stdpath('config') .. '/templates/lsp.lua' |
+	  \ endif
+  augroup END
 endfunction
 
 if v:vim_did_enter
@@ -38,6 +48,6 @@ command! PackUpdate lua vim.pack.update()
 packadd! vimline
 
 lua require('init') -- ~/.config/nvim/lua/init.lua
-lua require('nvim') -- ~/.config/nvim/lua/nvim/init.lua
+lua require('nvim.plugins')
 
 let $MYVIMRC = fnamemodify(expand('$MYVIMRC'), ':h:p') . '/vimrc'
