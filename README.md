@@ -5,6 +5,9 @@ My (n)vim configuration.
 ## TODO
 
 - [ ] Who is VIMDIR? VIMHOME?
+- [ ] start an instance of nvim in the background without a ui attached
+- [ ] on startup, attach to ui, then try out remote plugins and eval expr
+- [ ] neovim as an http server attach to instance view the buffers (logfiles)
 
 ## neovim
 

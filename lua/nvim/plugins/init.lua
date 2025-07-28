@@ -1,133 +1,123 @@
 -- use nvim's native package manager to clone plugins and load them
-_G.PACKDIR = vim.fn.expand('~/.local/share/nvim/site/pack/core/opt/')
+local PACKDIR = vim.fn.stdpath('data') .. '/site/pack/core/opt/'
 
 ---@class PluginSpec
 ---@field src string
 ---@field name? string
 ---@field version? string
 
----@class PluginSpecMeta
----@field build? string|function
----@field config? fun()
----@field dependencies? string[]
----@field event? string|string[]
-
----@alias SpecList (string|PluginSpec)[]
+---@alias SpecList (string | PluginSpec)[]
 
 ---@type SpecList
 local specs = {}
 
----@type table<string, PluginSpecMeta>
-local M = {}
-
----@param src string
----@return boolean
-local function is_user_repo(src)
-  return (not src:match('^https?://')) and (not src:match('^~/')) and src:match('^%S+/%S+$') ~= nil
-end
-
----@param src string
----@return string
-local function plug(src)
-  return is_user_repo(src) and ('https://github.com/' .. src) or src
-end
+---@class PluginSpecMeta : PluginSpec
+---@field build? string|fun(): nil
+---@field config? fun(): nil
+---@field dependencies? (string|PluginSpecMeta)[]
+---@field event? vim.api.keyset.events|vim.api.keyset.events[]
 
 ---@param v string|PluginSpec|PluginSpecMeta
 ---@return string|PluginSpec|nil
 local function to_spec(v)
-  local x = (type(v) == 'table') and (v.spec or v) or v
-  if type(x) == 'string' then
-    return plug(x)
-  elseif type(x) == 'table' then
-    local src = x.src or x[1]
-    if type(src) ~= 'string' or src == '' then
-      return nil
-    end
-    return { src = plug(src), name = x.name, version = x.version }
+  local function normalize_src(src)
+    local is_user_repo = not src:match('^https?://') and not src:match('^~/') and src:match('^%S+/%S+$')
+    return is_user_repo and ('https://github.com/' .. src) or src
   end
-  return nil
+
+  if type(v) == 'string' then
+    return normalize_src(v)
+  end
+
+  local spec = v.spec or v
+  local src = normalize_src(spec[1] or spec.src)
+  if not src then
+    return nil
+  end
+
+  return {
+    src = src,
+    name = spec.name,
+    version = spec.version,
+  }
 end
 
----@param name string
----@param mod PluginSpecMeta
-local function add_plugin(name, mod)
-  M[name] = mod
-  local main = to_spec(mod)
-  if main then
-    specs[#specs + 1] = main
-  end
-  if type(mod.dependencies) == 'table' then
-    for _, dep in ipairs(mod.dependencies) do
-      if type(dep) == 'string' then
-        specs[#specs + 1] = plug(dep)
+---@type table<string, PluginSpecMeta>
+M = setmetatable({}, {
+  __call = function()
+    return specs
+  end,
+
+  __newindex = function(t, modname, mod)
+    local key = mod.name or modname
+    rawset(t, key, mod)
+
+    local spec = to_spec(mod)
+    if spec then
+      specs[#specs + 1] = spec
+    end
+
+    if type(mod.dependencies) == 'table' then
+      for _, dep in ipairs(mod.dependencies) do
+        local dep_spec = to_spec(dep)
+        if dep_spec then
+          specs[#specs + 1] = dep_spec
+        end
       end
     end
-  end
-end
+  end,
+})
 
-local src = debug.getinfo(1, 'S').source
-src = type(src) == 'string' and src or ''
-if src:sub(1, 1) == '@' then
-  src = src:sub(2)
-end
-
-local this = src
-local this_dir = assert(vim.fs.dirname(this), 'cannot resolve this_dir')
-local lua_root = vim.fs.root(this, function(_, path)
+-- Determine current directory and Lua root
+local this_file = debug.getinfo(1, 'S').source:sub(2) -- remove leading '@' or '='
+local this_dir = assert(vim.fs.dirname(this_file), 'could not resolve current directory')
+local lua_root = vim.fs.root(this_file, function(_, path)
   return path:match('/lua$') ~= nil
 end) or this_dir
 
----@param abs string
+-- TODO: see how lazy.nvim does this
+-- TODO: do we need the final check for leading dot?
+-- Convert an absolute path to a Lua module name
+---@param abs_path string
 ---@return string
-local function to_modname(abs)
-  local rel = abs:sub(#lua_root + 2)
-  rel = rel:gsub('%.lua$', ''):gsub('/', '.'):gsub('^%.*', '')
-  return rel
+local function to_modname(abs_path)
+  return abs_path
+    :sub(#lua_root + 2) -- +2 to remove the leading `./` or `/`
+    :gsub('%.lua$', '') -- remove .lua extension
+    :gsub('/', '.') -- replace slashes with dots
+    :gsub('^%.*', '') -- remove leading dots
 end
 
----@param file_path string
-local function load(file_path)
-  local modname = to_modname(file_path)
-  local ok, plugin = pcall(require, modname)
-  if not ok or type(plugin) ~= 'table' then
-    vim.notify('Error loading plugin ' .. modname .. ': ' .. vim.inspect(plugin), vim.log.levels.ERROR)
+-- Require and register a plugin module by absolute path
+---@param abs_path string
+local function plug(abs_path)
+  local modname = to_modname(abs_path)
+  local ok, mod = pcall(require, modname)
+  if not ok then
+    Snacks.util.error('Failed to require "' .. modname .. '": ' .. mod)
     return
   end
-  add_plugin(modname, plugin)
+  if type(mod) ~= 'table' then
+    Snacks.util.error('Module "' .. modname .. '" did not return a table')
+    return
+  end
+  M[modname] = mod -- triggers __newindex, adds to M and specs
 end
 
+-- Discover plugin files and directories in this_dir
 local function import_plugins()
   for name, type_ in vim.fs.dir(this_dir, { depth = 1 }) do
     if type_ == 'file' and name:match('%.lua$') and name ~= 'init.lua' then
-      load(vim.fs.joinpath(this_dir, name))
-    end
-  end
-
-  for rel, type_ in vim.fs.dir(this_dir, { depth = 2 }) do
-    if type_ == 'directory' then
-      local init = vim.fs.joinpath(this_dir, rel, 'init.lua')
+      plug(vim.fs.joinpath(this_dir, name))
+    elseif type_ == 'directory' then
+      local init = vim.fs.joinpath(this_dir, name, 'init.lua')
       if vim.uv.fs_stat(init) then
-        load(vim.fs.joinpath(this_dir, rel))
+        plug(vim.fs.joinpath(this_dir, name))
       end
     end
-  end
-end
-
-local function lazy_load()
-  local lazy = require('nvim.util.lazy')
-  for name, plugin in pairs(M) do
-    if plugin.config then
-      lazy.config(plugin)
-    end
-    -- TODO
-    -- if plugin.build then
-    --   lazy.build(name, plugin, M)
-    -- end
   end
 end
 
 import_plugins()
-vim.pack.add(specs)
-lazy_load()
 
 return M

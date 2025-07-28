@@ -4,7 +4,11 @@ vim.loader.enable()
 vim.o.cmdheight = 0
 vim.o.pumblend = 0
 vim.o.winborder = 'rounded'
-require('vim._extui').enable({})
+
+-- use the new extui module if available
+pcall(function()
+  require('vim._extui').enable({})
+end)
 
 require('munchies')
 -- 1. requires snacks setup
@@ -27,8 +31,38 @@ vim.print = _G.dd
 -- stylua: ignore
 _G.bt = function() Snacks.debug.backtrace() end
 
--- TODO:
--- start an instance of nvim in the background without a ui attached
--- on startup, attach to ui, then try out remote plugins and eval expr
--- TODO:
--- neovim as an http server attach to instance view the buffers (logfiles)
+local plugins = require('nvim.plugins')
+
+vim.pack.add(plugins())
+
+local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
+
+---@param ev string|string[]
+---@param callback fun(): nil
+local function lazy_load_config(ev, cb)
+  vim.api.nvim_create_autocmd(ev, {
+    group = aug,
+    once = true,
+    callback = cb,
+  })
+end
+
+local function configure_plugin(plugin)
+  if type(plugin.config) == 'function' then
+    if plugin.event then
+      -- dd('Lazy loading config for', plugin[1], 'on event', plugin.event)
+      lazy_load_config(plugin.event, plugin.config)
+    else
+      plugin.config()
+    end
+  end
+end
+
+local function do_configs()
+  for _, plugin in pairs(plugins) do
+    configure_plugin(plugin)
+  end
+end
+
+do_configs()
+-- TODO: build

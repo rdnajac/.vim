@@ -256,8 +256,8 @@ xnoremap ag GoggV
 onoremap ag :<C-u>normal vag<CR>
 
 " buffers {{{2
-" nnoremap <silent> <Tab>         :bprev<CR>
-" nnoremap <silent> <S-Tab>       :bnext<CR>
+nnoremap <silent> <Tab>         :bprev<CR>
+nnoremap <silent> <S-Tab>       :bnext<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
 
 " Close buffer

@@ -1,3 +1,7 @@
+let $MYVIMRC = fnamemodify(expand('$MYVIMRC'), ':h:p') . '/vimrc'
+" runtime $MYVIMRC
+runtime vimrc
+
 set backup
 set backupext=.bak
 let &backupdir = stdpath('state') . '/backup//'
@@ -13,7 +17,6 @@ let g:loaded_tarPlugin = 1
 let g:loaded_tutor_mode_plugin = 1
 let g:loaded_zipPlugin = 1
 
-runtime vimrc
 
 function! s:settings()
   if !exists('$SSH_TTY') | set clipboard=unnamedplus | endif
@@ -48,6 +51,3 @@ command! PackUpdate lua vim.pack.update()
 packadd! vimline
 
 lua require('init') -- ~/.config/nvim/lua/init.lua
-lua require('nvim.plugins')
-
-let $MYVIMRC = fnamemodify(expand('$MYVIMRC'), ':h:p') . '/vimrc'
