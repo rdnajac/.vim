@@ -2,13 +2,18 @@ local M = { 'nvim-treesitter/nvim-treesitter' }
 
 M.version = 'main'
 
+M.dependencies = {
+  {
+    src = 'nvim-treesitter/nvim-treesitter-textobjects',
+    version = M.version,
+  },
+  -- 'folke/ts-comments.nvim'
+}
+
 -- FIXME: TSUpdate is not available until after setup is called
 -- M.build = function()
 --   vim.cmd('TSUpdate')
 -- end
-
--- TODO: copy this
-M.dependencies = { 'folke/ts-comments.nvim' }
 
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 
