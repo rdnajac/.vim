@@ -1,5 +1,10 @@
 -- use nvim's native package manager to clone plugins and load them
-local PACKDIR = vim.fn.stdpath('data') .. '/site/pack/core/opt/'
+---Manages plugins only in a dedicated [vim.pack-directory]() (see |packages|):
+---`$XDG_DATA_HOME/nvim/site/pack/core/opt`.
+-- vim.g.PACKDIR = vim.fn.stdpath('data') .. '/site/pack/core/opt/'
+-- /Users/rdn/.local/neovim/share/nvim/runtime/lua/vim/pack.lua:198
+-- `return vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')`
+vim.g.PACKDIR = vim.fn.expand('~/.local/share/nvim/site/pack/core/opt/')
 
 ---@class PluginSpec
 ---@field src string
@@ -16,23 +21,28 @@ local specs = {}
 ---@field config? fun(): nil
 ---@field dependencies? (string|PluginSpecMeta)[]
 ---@field event? vim.api.keyset.events|vim.api.keyset.events[]
+---@field enabled? boolean|fun():boolean
 
 ---@param v string|PluginSpec|PluginSpecMeta
 ---@return string|PluginSpec|nil
 local function to_spec(v)
-  -- convert a shortform github repo string to a full URL
-  local function normalize_src(src)
-    local is_user_repo = src:match('^%S+/%S+$') and not src:match('^https?://') and not src:match('^~/')
-    return is_user_repo and ('https://github.com/' .. src) or src
+  local function is_user_repo(src)
+    return src:match('^%S+/%S+$') and not src:match('^https?://') and not src:match('^~/')
   end
 
-  local src = normalize_src(type(v) == 'string' and v or v[1] or v.src)
-  if not src then
+  local src = type(v) == 'string' and v or v[1] or v.src
+  if not src or src == '' or type(src) ~= 'string' then
     return nil
   end
-  if not v.name and not v.version then
+
+  if is_user_repo(src) then
+    src = 'https://github.com/' .. src
+  end
+
+  if type(v) == 'string' or (not v.name and not v.version) then
     return src
   end
+
   return { src = src, name = v.name, version = v.version }
 end
 
@@ -75,14 +85,23 @@ local function plug(path)
   local modname = path
     :sub(#lua_root + 2) -- +2 to remove the leading `./` or `/`
     :gsub('%.lua$', '') -- remove .lua extension
-    :gsub('/', '.') -- replace slashes with dots
-    :gsub('^%.*', '') -- remove leading dots
+  -- :gsub('/', '.') -- replace slashes with dots
+  -- :gsub('^%.*', '') -- remove leading dots
   local ok, mod = pcall(require, modname)
   if not ok then
     Snacks.notify.error('Failed to require "' .. modname .. '": ' .. mod)
     return
   end
-  M[modname] = mod -- triggers __newindex, adds to M and specs
+  if mod.enabled == false or (type(mod.enabled) == 'function' and not mod.enabled()) then
+    -- Snacks.notify.info('Skipping plugin "' .. modname .. '" due to enabled=false', { hl_group = 'Statement' })
+    return
+  end
+  -- ~/.local/neovim/share/nvim/runtime/lua/vim/pack.lua:238
+  local name = (mod.name or mod.src or mod[1])
+  if name then
+    name = name:gsub('%.git$', ''):match('[^/]+$')
+  end
+  M[name or modname] = mod
 end
 
 -- Discover plugin files and directories in this_dir
@@ -98,6 +117,8 @@ local function import_plugins()
     end
   end
 end
+
+require('nvim.util.build')
 
 import_plugins()
 
