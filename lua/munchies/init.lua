@@ -145,10 +145,6 @@ local opts = {
   scroll = { enabled = true },
   statuscolumn = { enabled = false },
   styles = {
-    dashboard = {
-      -- bo = {},
-      -- wo = { winborder = 'none', },
-    },
     lazygit = { height = 0, width = 0 },
     terminal = require('munchies.styles').terminal,
   },
@@ -163,8 +159,4 @@ local opts = {
 
 require('snacks').setup(opts)
 require('munchies.chromatophore')
-require('munchies.commands')
-require('munchies.keymaps')
-require('munchies.toggle')
-require('munchies.autocmds')
 -- vim:set fdl=2
