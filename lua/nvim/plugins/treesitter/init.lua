@@ -50,8 +50,8 @@ end
 M.config = function()
   local parsers = require('nvim.plugins.treesitter.parsers')
   require('nvim-treesitter').install(parsers)
+  require('nvim.plugins.treesitter.comments').setup()
   require('nvim.plugins.treesitter.selection').setup()
-  require('ts-comments').setup({})
 
   -- require('nvim.treesitter.comments')
   ---@diagnostic disable-next-line: param-type-mismatch
