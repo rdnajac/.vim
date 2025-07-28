@@ -20,26 +20,20 @@ local specs = {}
 ---@param v string|PluginSpec|PluginSpecMeta
 ---@return string|PluginSpec|nil
 local function to_spec(v)
+  -- convert a shortform github repo string to a full URL
   local function normalize_src(src)
-    local is_user_repo = not src:match('^https?://') and not src:match('^~/') and src:match('^%S+/%S+$')
+    local is_user_repo = src:match('^%S+/%S+$') and not src:match('^https?://') and not src:match('^~/')
     return is_user_repo and ('https://github.com/' .. src) or src
   end
 
-  if type(v) == 'string' then
-    return normalize_src(v)
-  end
-
-  local spec = v.spec or v
-  local src = normalize_src(spec[1] or spec.src)
+  local src = normalize_src(type(v) == 'string' and v or v[1] or v.src)
   if not src then
     return nil
   end
-
-  return {
-    src = src,
-    name = spec.name,
-    version = spec.version,
-  }
+  if not v.name and not v.version then
+    return src
+  end
+  return { src = src, name = v.name, version = v.version }
 end
 
 ---@type table<string, PluginSpecMeta>
@@ -75,30 +69,17 @@ local lua_root = vim.fs.root(this_file, function(_, path)
   return path:match('/lua$') ~= nil
 end) or this_dir
 
--- TODO: see how lazy.nvim does this
--- TODO: do we need the final check for leading dot?
--- Convert an absolute path to a Lua module name
----@param abs_path string
----@return string
-local function to_modname(abs_path)
-  return abs_path
+-- Require and register a plugin module by absolute path
+---@param path string
+local function plug(path)
+  local modname = path
     :sub(#lua_root + 2) -- +2 to remove the leading `./` or `/`
     :gsub('%.lua$', '') -- remove .lua extension
     :gsub('/', '.') -- replace slashes with dots
     :gsub('^%.*', '') -- remove leading dots
-end
-
--- Require and register a plugin module by absolute path
----@param abs_path string
-local function plug(abs_path)
-  local modname = to_modname(abs_path)
   local ok, mod = pcall(require, modname)
   if not ok then
-    Snacks.util.error('Failed to require "' .. modname .. '": ' .. mod)
-    return
-  end
-  if type(mod) ~= 'table' then
-    Snacks.util.error('Module "' .. modname .. '" did not return a table')
+    Snacks.notify.error('Failed to require "' .. modname .. '": ' .. mod)
     return
   end
   M[modname] = mod -- triggers __newindex, adds to M and specs

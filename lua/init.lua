@@ -31,7 +31,7 @@ vim.print = _G.dd
 -- stylua: ignore
 _G.bt = function() Snacks.debug.backtrace() end
 
-local plugins = require('nvim.plugins')
+_G.plugins = require('nvim.plugins')
 
 vim.pack.add(plugins())
 
@@ -65,4 +65,4 @@ local function do_configs()
 end
 
 do_configs()
--- TODO: build
+-- TODO: build?
