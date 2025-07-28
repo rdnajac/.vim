@@ -3,6 +3,9 @@ local source_icons = require('nvim.icons').blink_src
 local M = {}
 
 function M.source_status()
+  if not package.loaded['blink.cmp.sources.lib'] then
+    return ''
+  end
   local ok, sources = pcall(require, 'blink.cmp.sources.lib')
   if not ok then
     vim.notify('blink.cmp.sources.lib not found', vim.log.levels.ERROR)

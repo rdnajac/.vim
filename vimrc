@@ -4,7 +4,7 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 
 " silent !mkdir -p ~/.vim/tmp >/dev/null 2>&1
-let &spellfile = vim#home . '/.spell/en.utf-8.add'
+let &spellfile = vim#home() . '/.spell/en.utf-8.add'
 
 set autowrite
 set autowriteall
