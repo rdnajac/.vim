@@ -2,6 +2,11 @@ local M = { 'nvim-treesitter/nvim-treesitter' }
 
 M.version = 'main'
 
+-- FIXME: TSUpdate is not available until after setup is called
+-- M.build = function()
+--   vim.cmd('TSUpdate')
+-- end
+
 -- TODO: copy this
 M.dependencies = { 'folke/ts-comments.nvim' }
 
@@ -27,6 +32,16 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Force some file types to use `bash` treesitter (and commentstring)',
 })
 
+local register_custom_parser = function()
+  require('nvim-treesitter.parsers').comment = {
+    install_info = {
+      url = 'https://github.com/rdnajac/tree-sitter-comment',
+      generate = true,
+      queries = 'queries/neovim',
+    },
+  }
+end
+
 M.config = function()
   local parsers = require('nvim.plugins.treesitter.parsers')
   require('nvim-treesitter').install(parsers)
@@ -38,14 +53,8 @@ M.config = function()
   vim.api.nvim_create_autocmd('User', {
     pattern = 'TSUpdate',
     group = aug,
-    callback = function()
-      require('nvim-treesitter.parsers').comment = {
-        install_info = {
-          url = 'https://github.com/rdnajac/tree-sitter-comment',
-          generate = true,
-          queries = 'queries/neovim',
-        },
-      }
+    callback = function(ev)
+      register_custom_parser()
     end,
     desc = 'Install custom parser that highlights strings in `backticks` in comments',
   })

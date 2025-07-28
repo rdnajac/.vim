@@ -11,17 +11,20 @@ M.dependencies = {
 
 M.event = 'InsertEnter'
 
+local kind = vim.lsp.protocol.SymbolKind
+-- local kind = require('blink.cmp.types').CompletionItemKind
+
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
   cmdline = { enabled = false },
   completion = {
     accept = { auto_brackets = { enabled = true } },
-    documentation = { auto_show = true, window = { border = 'single' } },
+    -- documentation = { auto_show = true, window = { border = 'single' } },
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
-      auto_show = true,
-      border = 'single',
+      -- auto_show = true,
+      -- border = 'single',
       draw = {
         treesitter = { 'lsp' },
         -- default
@@ -152,18 +155,19 @@ M.opts = {
 
 M.config = function()
   require('blink.cmp').setup(M.opts)
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'BlinkCmpAccept',
-    callback = function(ev)
-      local item = ev.data.item
-      if item.kind == require('blink.cmp.types').CompletionItemKind.path then
-        vim.defer_fn(function()
-          require('blink.cmp').show()
-        end, 1)
-      end
-    end,
-    desc = 'Keep completing path on <Tab>',
-  })
+  -- XXX: THIS IS BROKEN
+  -- vim.api.nvim_create_autocmd('User', {
+  --   pattern = 'BlinkCmpAccept',
+  --   callback = function(ev)
+  --     local item = ev.data.item
+  --     if item.kind == require('blink.cmp.types').CompletionItemKind.Path then
+  --       vim.defer_fn(function()
+  --         require('blink.cmp').show()
+  --       end, 1)
+  --     end
+  --   end,
+  --   desc = 'Keep completing path on <Tab>',
+  -- })
   vim.keymap.set('i', '$', function()
     require('blink.cmp').show({ providers = { 'env' } })
     return '$'

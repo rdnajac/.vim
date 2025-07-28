@@ -1,4 +1,4 @@
-local M = {}
+local M = { 'mason-org/mason.nvim' }
 
 -- FIXME:
 M.tools = {}
@@ -51,6 +51,10 @@ M.list = function()
     end
   end
   return names
+end
+
+M.config = function()
+  require('mason').setup({})
 end
 
 return M

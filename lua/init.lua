@@ -33,12 +33,19 @@ _G.bt = function() Snacks.debug.backtrace() end
 
 _G.plugins = require('nvim.plugins')
 
-vim.pack.add(plugins())
+local pluginspecs = plugins()
+
+-- deduplicate plugins
+-- XXX: uncomment on 7/29/25
+-- if vim.list.unique then
+--   vim.list.unique(pluginspecs)
+-- end
+vim.pack.add(pluginspecs)
 
 local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
 
 ---@param ev string|string[]
----@param callback fun(): nil
+---@param cb fun(): nil
 local function lazy_load_config(ev, cb)
   vim.api.nvim_create_autocmd(ev, {
     group = aug,

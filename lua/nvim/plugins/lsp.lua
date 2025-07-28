@@ -1,11 +1,20 @@
--- local M = {}
-local M = { 'mason-org/mason.nvim' }
+local M = {}
 
+-- lsp defaults
+
+-- `grn` is mapped in Normal mode to `vim.lsp.buf.rename()`
+-- `gra` is mapped in Normal and Visual mode to `vim.lsp.buf.code_action()`
+-- `grr` is mapped in Normal mode to `vim.lsp.buf.references()`
+-- `gri` is mapped in Normal mode to `vim.lsp.buf.implementation()`
+-- `grt` is mapped in Normal mode to `vim.lsp.buf.type_definition()`
+-- `gO` is mapped in Normal mode to `vim.lsp.buf.document_symbol()`
+-- `<CTRL-S>` is mapped in Insert mode to `vim.lsp.buf.signature_help()`
+-- `an` and `in` are mapped in Visual mode to outer and inner incremental
+-- selections, respectively, using |vim.lsp.buf.selection_range()|
+
+-- override some of the default LSP keymaps with snacks
 M.keys = function()
   local opts = { buffer = true, nowait = true }
-  -- icon = { icon = ' ', color = 'orange' },
-  -- { 'gO' },
-  -- { 'gr', group = 'LSP' },
   -- stylua: ignore
   return {
     { 'grr', function() Snacks.picker.lsp_references() end,        opts },
@@ -51,9 +60,6 @@ M.on_attach = function(client, bufnr)
 end
 
 M.config = function()
-  require('mason').setup({})
-  require('nvim.plugins.lsp.diagnostic').config()
-
   -- Refer to `:h vim.lsp.config()` for more information.
   vim.lsp.config('*', {
     -- capabilities = require('blink.cmp').get_lsp_capabilities(),
