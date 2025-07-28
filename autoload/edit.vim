@@ -1,91 +1,90 @@
-function! s:edit(...) abort
-  " Accepts ([+cmd], file)
-  let l:cmd  = a:0 > 1 ? a:1 : ''
-  let l:file = a:0 > 1 ? a:2 : a:0 == 1 ? a:1 : ''
-  if empty(l:file)
-    return
-  endif
-  let l:buf_p = expand(fnamemodify(l:file, ':p'))
+function! s:edit(file, ...) abort
+  let l:extra = a:0 >= 1 ? a:1 : ''
 
-  " If open in any window in the current tab, jump there.
+  " Check if the file exists, if not prompt to create it
+  if !filereadable(a:file)
+    let l:resp = input('File not found: ' .  fnamemodify(a:file, ':~') . '. Create new file? [y/N]: ')
+    if l:resp !~? '^y'
+      return
+    endif
+  endif
+
+  " Jump to buffer if already open in current tab
   for w in range(1, winnr('$'))
-    if expand('#' . winbufnr(w) . ':p') ==# l:buf_p
+    if bufexists(winbufnr(w)) && fnamemodify(bufname(winbufnr(w)), ':p') ==# fnamemodify(a:file, ':p')
       execute w . 'wincmd w'
+      if l:extra =~# '\v(^|\s)\+\S'
+	execute matchstr(l:extra, '\v\+\S+')
+	normal! zvzz
+      endif
       return
     endif
   endfor
 
-  " If more than one window, go to the alternate window (next one), open normally there.
+  " If the file is not open, open it in a window
+  " If there is only one window, determine the layout based on window size
+  let l:layout = ''
   if winnr('$') > 1
-    let l:cur = winnr()
-    let l:alt = l:cur % winnr('$') + 1
-    execute l:alt . 'wincmd w'
-    execute 'drop ' . (l:cmd != '' ? l:cmd . ' ' : '') . fnameescape(l:file)
-    normal! zvzz
-    return
+    execute (winnr() % winnr('$') + 1) . 'wincmd w'
+  else
+    let l:layout = &columns > 80 ? 'vsplit' : &columns > 20 ? 'split' : ''
   endif
 
-  " Otherwise, open in new vertical split
-  execute 'vsplit | drop ' . (l:cmd != '' ? l:cmd . ' ' : '') . fnameescape(l:file)
+  " prepend the command with the layout if it is not empty
+  let l:cmd = (!empty(l:layout) ? l:layout . ' | ' : '') . 'drop '
+  " insert the extra command if it is not empty
+  let l:cmd .= (!empty(l:extra) ? l:extra . ' ' : '') . fnameescape(a:file)
+  " execute the command to open the file
+  " echom 'Executing: ' . l:cmd
+  execute l:cmd
+  " open and close folds and center the view
   normal! zvzz
 endfunction
 
 function! edit#vimrc(...) abort
-  let l:section = a:0 && !empty(a:1) ? a:1 : ''
-  if fnamemodify(bufname('%'), ':p') ==# fnamemodify($MYVIMRC, ':p')
-    if !empty(l:section)
-      call search(l:section)
-    endif
-  else
-    call s:edit(!empty(l:section) ? '+/' . l:section : '', $MYVIMRC)
-  endif
-endfunction
-
-let s:vimdir = fnamemodify($MYVIMRC, ':p:h')
-
-function! edit#filetype(dir, ext) abort
-  let l:file = (&filetype !=# '') ? s:vimdir . '/' . a:dir . &filetype . a:ext : s:vimdir . '/' . a:dir
-  call s:edit(l:file)
-endfunction
-
-function! s:edit_if_readable(file, ...) abort
-  if filereadable(a:file)
-    if a:0 > 0
-      call call('s:edit', [a:1, a:file])
-    else
-      call s:edit(a:file)
-    endif
-  else
-    echoerr 'File not found: ' . a:file
-  endif
+  echom 'a:000: ' . string(a:000)
+  call call('s:edit', extend([$MYVIMRC], a:000))
 endfunction
 
 function! edit#module(name) abort
+  if !has('nvim')
+    echoerr 'This function is only available in Neovim.'
+    return
+  endif
   let l:file = stdpath('config') . '/lua/' . a:name . '.lua'
-  call s:edit_if_readable(l:file)
+  call s:edit(l:file)
 endfunction
 
+" Optional parameters:
+" - a:1 = dir (default: vim#home . '/after/ftplugin')
+" - a:2 = ext (default: '.vim')
+function! edit#filetype(...) abort
+  if &filetype ==# ''
+    echoerr 'Filetype is not set.'
+    return
+  endif
+  let l:dir = vim#home() . (a:0 >= 1 ? '/' . a:1 : '/after/ftplugin')
+  let l:ext = a:0 >= 2 ? a:2 : '.vim'
+  let l:file = l:dir . '/' . &filetype . l:ext
+  call s:edit(l:file)
+endfunction
+
+" TODO: move this to vim ftplugin
+" edit the corresponding autoload or plugin file
 function! edit#ch() abort
   let file = expand('%:p')
+  if file !~# '\.vim$' | return | endif
+
   let base = fnamemodify(file, ':t')
-  let stem = substitute(base, '\.vim$', '', '')
   let dir = fnamemodify(file, ':h')
+  let tag = fnamemodify(dir, ':t')
 
-  for [from, to] in [['autoload', 'plugin'], ['plugin', 'autoload']]
-    if fnamemodify(dir, ':t') ==# from
-      let root = fnamemodify(dir, ':h') . '/' . to . '/'
-      let alt = root . base
-      if filereadable(alt)
-	return s:edit_if_readable(alt)
-      endif
-      let match = glob(root . stem, 1, 1)
-      if !empty(match) && isdirectory(match[0])
-	return execute('edit ' . match[0])
-      endif
-    endif
-  endfor
+  if index(['autoload', 'plugin'], tag) < 0 | return | endif
 
-  echoerr 'File or directory not found: companion for ' . file
+  let alt_dir = fnamemodify(dir, ':h') . '/' . (tag ==# 'autoload' ? 'plugin' : 'autoload')
+  let alt_file = alt_dir . '/' . base
+
+  call s:edit(alt_file)
 endfunction
 
 function! s:find_nearest_readme() abort
@@ -104,8 +103,7 @@ endfunction
 function! edit#readme() abort
   let l:readme = s:find_nearest_readme()
   if empty(l:readme)
-    echoerr 'No README.md found in parent directories.'
-    return
+    let l:readme = fnamemodify(expand('%:p'), ':h') . '/README.md'
   endif
-  call s:edit(fnameescape(l:readme))
+  call s:edit(l:readme)
 endfunction

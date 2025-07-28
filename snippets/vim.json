@@ -24,14 +24,14 @@
     "description": "Global variable declaration"
   },
 
-  "if_exists_nvim": {
+  "if_has_nvim": {
     "prefix": "ifnv",
-    "body": ["if exists('nvim')", "  ${0}", "endif"]
+    "body": ["if has('nvim')", "  ${0}", "endif"]
   },
 
   "ifnnv": {
     "prefix": "ifnnv",
-    "body": ["if !exists('nvim')", "  ${0}", "endif"]
+    "body": ["if !has('nvim')", "  ${0}", "endif"]
   },
 
   "command": {

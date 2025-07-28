@@ -146,24 +146,23 @@ nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
 
 " vim settings `<leader>v` {{{2
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
-nnoremap <leader>va <Cmd>call edit#vimrc('autocmds')<CR>
-nnoremap <leader>vc <Cmd>call edit#vimrc('commands')<CR>
-nnoremap <leader>vk <Cmd>call edit#vimrc('keymaps')<CR>
-nnoremap <leader>vp <Cmd>call edit#vimrc('plugins')<CR>
-nnoremap <leader>vs <Cmd>call edit#vimrc('settings')<CR>
-nnoremap <leader>vu <Cmd>call edit#vimrc('ui')<CR>
-nnoremap <leader>V <Cmd>e ~/.config/nvim/init.vim<CR>
+nnoremap <leader>va <Cmd>call edit#vimrc('+/autocmds')<CR>
+nnoremap <leader>vc <Cmd>call edit#vimrc('+/commands')<CR>
+nnoremap <leader>vk <Cmd>call edit#vimrc('+/keymaps')<CR>
+nnoremap <leader>vp <Cmd>call edit#vimrc('+/plugins')<CR>
+nnoremap <leader>vs <Cmd>call edit#vimrc('+/settings')<CR>
+nnoremap <leader>vu <Cmd>call edit#vimrc('+/ui')<CR>
 
 " nvim settings {{{2
 nnoremap <BSlash>i <Cmd>call edit#module('init')<CR>
 nnoremap <BSlash>n <Cmd>call edit#module('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#module('nvim/plugins/init')<CR>
 nnoremap <BSlash>m <Cmd>call edit#module('munchies/init')<CR>
-" nnoremap <BSlash>u <Cmd>call edit#module('utils/init')<CR>
 nnoremap <BSlash>0 <Cmd>call edit#readme()<CR>
 
 " find/files {{{2
-nnoremap <leader>ft <Cmd>call edit#filetype('after/ftplugin/', '.vim')<CR>
+nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
 nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
 nnoremap <leader>fm <Cmd>lua Snacks.rename.rename_file()<CR>
