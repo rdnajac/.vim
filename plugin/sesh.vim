@@ -3,14 +3,6 @@ if !has('nvim')
   finish
 endif
 
-function! s:restart() abort
-  " TODO: set up obsession natively
-  if exists(':Obsession')
-    execute 'Obsession ' . stdpath('state')
-  endif
-  restart
-endfunction
-
 function! s:restore() abort
   " TODO: make it work for local sessions too
   " let sesh = fnameescape(getcwd() . '/Session.vim')
@@ -21,6 +13,19 @@ function! s:restore() abort
     Obsession!
   endif
 endfunction
+
+function! s:restart() abort
+  if exists(':Obsession')
+    execute 'Obsession ' . stdpath('state')
+  endif
+  " " let sesh = fnameescape(stdpath('state') . '/Session.vim')
+  " restart echo "Hello"\013
+  restart
+endfunction
+
+" TODO: once this is merged,
+" https://github.com/neovim/neovim/pull/35045
+" add argsQ
 
 command! Restart call s:restart()
 

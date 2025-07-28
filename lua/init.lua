@@ -4,15 +4,13 @@ vim.loader.enable()
 vim.o.cmdheight = 0
 vim.o.pumblend = 0
 vim.o.winborder = 'rounded'
-
 -- use the new extui module if available
 pcall(function()
   require('vim._extui').enable({})
 end)
 
-require('munchies')
 -- 1. requires snacks setup
--- 2. registers vim commands
+require('munchies')
 
 -- make icons globally available
 local snacks = require('snacks.picker.config.defaults').defaults.icons

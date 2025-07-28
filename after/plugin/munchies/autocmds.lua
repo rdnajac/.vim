@@ -17,29 +17,39 @@ vim.api.nvim_create_autocmd('FileType', {
     end)
   end,
 })
+--
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = 'snacks_dashboard',
+--   group = aug,
+--   callback = function()
+--     local old_winborder = vim.o.winborder
+--     if old_winborder ~= 'none' then
+--       vim.o.winborder = 'none'
+--       vim.schedule(function()
+--         vim.opt.lazyredraw = true
+--         Snacks.dashboard.update()
+--         vim.opt.lazyredraw = false
+--         vim.o.winborder = old_winborder
+--       end)
+--     end
+--   end,
+-- })
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'snacks_dashboard',
-  group = aug,
+-- BUG: this still interferes with extui
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'SnacksDashboardOpened',
   callback = function()
     local old_winborder = vim.o.winborder
     if old_winborder ~= 'none' then
       vim.o.winborder = 'none'
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'SnacksDashboardClosed',
-        callback = function()
-          vim.o.winborder = old_winborder
-        end,
-        once = true,
-      })
-      vim.opt.lazyredraw = true
       vim.schedule(function()
+        vim.opt.lazyredraw = true
         Snacks.dashboard.update()
         vim.opt.lazyredraw = false
+        vim.o.winborder = old_winborder
       end)
     end
   end,
-  desc = 'Disable window border for Snacks dashboard',
 })
 
 vim.api.nvim_create_autocmd('FileType', {

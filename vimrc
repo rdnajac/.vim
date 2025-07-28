@@ -3,9 +3,6 @@ scriptencoding=utf-8
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 
-" silent !mkdir -p ~/.vim/tmp >/dev/null 2>&1
-let &spellfile = vim#home() . '/.spell/en.utf-8.add'
-
 set autowrite
 set autowriteall
 set noswapfile " XXX: do I want this?
@@ -436,3 +433,4 @@ Plug 'tpope/vim-commentary'
 call plug#end()
 
 " vim:set fdl=2
+

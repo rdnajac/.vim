@@ -1,3 +1,14 @@
+function! s:close_other_buffer() abort
+  if has('nvim')
+    if luaeval("require('snacks.util').is_float()")
+      quit
+    elseif &ft ==# 'snacks_dashboard'
+      doautocmd User SnacksDashboardClosed
+      bdelete
+    endif
+  endif
+endfunction
+
 function! s:edit(file, ...) abort
   let l:extra = a:0 >= 1 ? a:1 : ''
 
@@ -27,13 +38,18 @@ function! s:edit(file, ...) abort
   if winnr('$') > 1
     execute (winnr() % winnr('$') + 1) . 'wincmd w'
   else
-    let l:layout = &columns > 80 ? 'vsplit' : &columns > 20 ? 'split' : ''
+    if bufname('%') !=# ''
+      let l:layout = &columns > 80 ? 'vsplit' : &columns > 20 ? 'split' : ''
+    endif
   endif
 
   " prepend the command with the layout if it is not empty
   let l:cmd = (!empty(l:layout) ? l:layout . ' | ' : '') . 'drop '
   " insert the extra command if it is not empty
   let l:cmd .= (!empty(l:extra) ? l:extra . ' ' : '') . fnameescape(a:file)
+
+  " If we're focused on a floating window, close it
+  call s:close_other_buffer()
   " execute the command to open the file
   " echom 'Executing: ' . l:cmd
   execute l:cmd
@@ -42,7 +58,6 @@ function! s:edit(file, ...) abort
 endfunction
 
 function! edit#vimrc(...) abort
-  echom 'a:000: ' . string(a:000)
   call call('s:edit', extend([$MYVIMRC], a:000))
 endfunction
 
