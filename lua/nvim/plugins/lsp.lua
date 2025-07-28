@@ -1,4 +1,4 @@
-local M = {}
+local M = { 'neovim/nvim-lspconfig' }
 
 -- lsp defaults
 
@@ -61,16 +61,17 @@ end
 
 M.config = function()
   -- Refer to `:h vim.lsp.config()` for more information.
+  -- `blink.cmp` will automatically set the capabilities
   vim.lsp.config('*', {
     -- capabilities = require('blink.cmp').get_lsp_capabilities(),
     on_attach = M.on_attach,
   })
 
   vim.lsp.enable({
-    -- 'ruff',
+    'bashls',
     'luals',
+    'ruff',
     'vimls',
-    -- 'bashls',
   })
 end
 
