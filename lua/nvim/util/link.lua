@@ -5,8 +5,9 @@ end
 local M = {}
 
 M.linkify = function()
-  local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
-  vim.api.nvim_feedkeys(esc, 'x', false)
+  -- local esc = vim.api.nvim_replace_termcodes('<Esc>', true, false, true)
+  -- vim.api.nvim_feedkeys(esc, 'x', false)
+  vim.api.nvim_feedkeys(Snacks.util.keycode('<Esc>'))
 
   local start_pos = vim.fn.getpos("'<")
   local end_pos = vim.fn.getpos("'>")
