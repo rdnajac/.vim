@@ -152,6 +152,8 @@ nnoremap <leader>vs <Cmd>call edit#vimrc('+/settings')<CR>
 nnoremap <leader>vu <Cmd>call edit#vimrc('+/ui')<CR>
 
 " nvim settings {{{2
+" TODO
+nnoremap <BSlash>v <Cmd>e ~/.config/nvim/init.vim<CR>
 nnoremap <BSlash>i <Cmd>call edit#module('init')<CR>
 nnoremap <BSlash>n <Cmd>call edit#module('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#module('nvim/plugins/init')<CR>

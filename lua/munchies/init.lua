@@ -4,11 +4,9 @@ local opts = {
   bigfile = {
     enabled = true,
   },
-  -- TODO: dashboard and winborder
   dashboard = {
-    enabled = true,
+    enabled = false,
     sections = {
-      -- { section = 'header', highlight = 'Chromatophore' },
       { section = 'header' },
       { section = 'recent_files' },
       { padding = 1 },
