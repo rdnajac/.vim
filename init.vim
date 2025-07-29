@@ -26,16 +26,6 @@ function! s:settings()
   set smoothscroll
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
-
-  " set up autocmds
-  augroup init_lua
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
-    autocmd BufNewFile after/lsp/*.lua
-	  \ if filereadable(stdpath('config') .. '/templates/lsp.lua') |
-	  \   execute '0r ' .. stdpath('config') .. '/templates/lsp.lua' |
-	  \ endif
-  augroup END
 endfunction
 
 if v:vim_did_enter

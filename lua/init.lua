@@ -35,10 +35,9 @@ _G.plugins = require('nvim.plugins')
 local pluginspecs = plugins()
 
 -- deduplicate plugins
--- XXX: uncomment on 7/29/25
--- if vim.list.unique then
---   vim.list.unique(pluginspecs)
--- end
+pcall(function()
+  vim.list.unique(pluginspecs)
+end)
 vim.pack.add(pluginspecs)
 
 local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })

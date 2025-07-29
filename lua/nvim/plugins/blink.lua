@@ -80,17 +80,15 @@ M.opts = {
   },
 
   sources = {
-    -- default = { 'lsp', 'snippets', 'path' },
+    default = { 'lsp', 'snippets', 'path' },
     -- FIXME: doesn't show stop showing snippets in comments
-    default = function()
-      local default = { 'lsp', 'snippets', 'path' }
-
-      if is_in_comment() then
-        return { 'buffer', 'path' }
-      else
-        return default
-      end
-    end,
+    -- default = function()
+    --   if is_in_comment() then
+    --     return { 'buffer', 'path' }
+    --   else
+    --     return { 'lsp', 'snippets', 'path' }
+    --   end
+    -- end,
     per_filetype = {
       lua = { inherit_defaults = true, 'lazydev' },
       oil = {},
