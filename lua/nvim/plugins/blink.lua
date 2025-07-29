@@ -14,6 +14,20 @@ M.event = 'InsertEnter'
 local kind = vim.lsp.protocol.SymbolKind
 -- local kind = require('blink.cmp.types').CompletionItemKind
 
+local function is_in_comment()
+  local success, node = pcall(vim.treesitter.get_node)
+  if not success or not node then
+    return false
+  end
+  while node do
+    if vim.tbl_contains({ 'comment', 'line_comment', 'block_comment', 'comment_content' }, node:type()) then
+      return true
+    end
+    node = node:parent()
+  end
+  return false
+end
+
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
@@ -28,12 +42,11 @@ M.opts = {
       draw = {
         treesitter = { 'lsp' },
         -- default
-        -- columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
-
+        columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
         -- indexed
         -- columns = { { 'item_idx' }, { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
         -- nvim-cmp style menu
-        columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
+        -- columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
         components = {
           kind_icon = {
             text = function(ctx)
@@ -48,13 +61,6 @@ M.opts = {
   signature = { enabled = true, window = { border = 'single' } },
   keymap = {
     preset = 'default',
-    -- inoremap <expr> $ if should_show_cmp_env() | lua require('blink.cmp').show() | endif return 
-    -- ['$'] = {
-    --   function(cmp)
-    --     cmp.show({ providers = { 'env' } })
-    --     vim.fn.feedkeys(Snacks.util.keycode('$'))
-    --   end,
-    -- },
     ['<Tab>'] = {
       function(cmp)
         if cmp.snippet_active() then
@@ -62,7 +68,7 @@ M.opts = {
         elseif cmp.is_visible() then
           return cmp.select_and_accept()
         else
-          -- return cmp.show()
+          -- return cmp.show() retu
         end
       end,
       'fallback',
@@ -74,7 +80,17 @@ M.opts = {
   },
 
   sources = {
-    default = { 'lsp', 'snippets', 'path' },
+    -- default = { 'lsp', 'snippets', 'path' },
+    -- FIXME: doesn't show stop showing snippets in comments
+    default = function()
+      local default = { 'lsp', 'snippets', 'path' }
+
+      if is_in_comment() then
+        return { 'buffer', 'path' }
+      else
+        return default
+      end
+    end,
     per_filetype = {
       lua = { inherit_defaults = true, 'lazydev' },
       oil = {},
@@ -96,7 +112,13 @@ M.opts = {
         should_show_items = function(ctx)
           return ctx.trigger.initial_kind ~= 'trigger_character'
         end,
+        -- transform_items = function(_, items)
+        --   return vim.tbl_filter(function(item)
+        --     return is_in_comment()
+        --   end, items)
+        -- end,
       },
+      --
       -- copilot = {
       --   name = 'copilot',
       --   module = 'blink-copilot',
