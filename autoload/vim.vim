@@ -11,4 +11,10 @@ function! vim#rc() abort
   " some settings are default in nvim
   set autoread
   set wildoptions=pum,tagfile
+
+  " use ripgrep for searching
+  if executable('rg')
+    set grepprg=rg\ --vimgrep\ --uu
+    set grepformat=%f:%l:%c:%m
+  endif
 endfunction
