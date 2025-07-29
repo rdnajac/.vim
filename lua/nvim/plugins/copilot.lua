@@ -39,6 +39,6 @@ M.config = function()
   })
 end
 
-Snacks.util.set_hl({ CopilotSuggestion = { bg = '#414868', fg = '#7aa2f7' } })
+-- Snacks.util.set_hl({ CopilotSuggestion = { bg = '#414868', fg = '#7aa2f7' } })
 
 return M

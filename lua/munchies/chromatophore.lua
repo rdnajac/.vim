@@ -62,6 +62,7 @@ local function chromatophore_refresh()
     MsgArea = { link = 'Chromatophore' },
     FloatBorder = { link = 'Chromatophore' },
     WinSeparator = { link = 'Chromatophore' },
+    helpSectionDelim = { link = 'Chromatophore' },
     Chromatophore_a = { fg = black, bg = mode_color, bold = true },
     Chromatophore_ab = { fg = mode_color, bg = grey },
     Chromatophore_b = { fg = mode_color, bg = grey, bold = true },

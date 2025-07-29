@@ -53,7 +53,6 @@ function! s:persist() abort
     let tmp = g:this_obsession . '.' . getpid() . '.obsession~'
     try
       set sessionoptions-=blank sessionoptions-=options sessionoptions+=tabpages
-      exe s:doautocmd_user('ObsessionPre')
       execute 'mksession!' fnameescape(tmp)
       let v:this_session = g:this_obsession
       let body = readfile(tmp)
@@ -67,7 +66,6 @@ function! s:persist() abort
       call writefile(body, tmp)
       call rename(tmp, g:this_obsession)
       let g:this_session = g:this_obsession
-      exe s:doautocmd_user('Obsession')
     catch /^Vim(mksession):E11:/
       return ''
     catch
