@@ -11,6 +11,7 @@ end)
 
 -- 1. requires snacks setup
 require('munchies')
+require('nvim.colorscheme')
 
 -- make icons globally available
 local snacks = require('snacks.picker.config.defaults').defaults.icons

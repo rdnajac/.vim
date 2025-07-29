@@ -1,14 +1,3 @@
-" obsession.vim - Continuously updated session files
-" Maintainer:   Tim Pope <http://tpo.pe/>
-" Version:      1.0
-" GetLatestVimScripts: 4472 1 :AutoInstall: obsession.vim
-
-" TODO: use stdpath("state") in nvim
-if exists("g:loaded_obsession") || v:version < 704 || &cp
-  finish
-endif
-let g:loaded_obsession = 1
-
 command! -bar -bang -complete=file -nargs=? Obsession
       \ execute s:dispatch(<bang>0, <q-args>)
 
@@ -55,14 +44,6 @@ function! s:dispatch(bang, file) abort
   endtry
 endfunction
 
-function! s:doautocmd_user(arg) abort
-  if !exists('#User#' . a:arg)
-    return ''
-  else
-    return 'doautocmd <nomodeline> User ' . fnameescape(a:arg)
-  endif
-endfunction
-
 function! s:persist() abort
   if exists('g:SessionLoad')
     return ''
@@ -105,24 +86,4 @@ augroup obsession
   autocmd!
   autocmd VimLeavePre * exe s:persist()
   autocmd BufEnter * if !get(g:, 'obsession_no_bufenter') | exe s:persist() | endif
-  " autocmd User Flags call Hoist('global', 'OObsessionStatus')
 augroup END
-
-function! ObsessionStatus(...) abort
-  let args = copy(a:000)
-  let numeric = !empty(v:this_session) + exists('g:this_obsession')
-  if type(get(args, 0, '')) == type(0)
-    if !remove(args, 0)
-      return ''
-    endif
-  endif
-  if empty(args)
-    let args = ['[$]', '[S]']
-  endif
-  if len(args) == 1 && numeric == 1
-    let fmt = args[0]
-  else
-    let fmt = get(args, 2-numeric, '')
-  endif
-  return substitute(fmt, '%s', get(['', 'Session', 'Obsession'], numeric), 'g')
-endfunction

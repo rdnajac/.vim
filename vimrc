@@ -8,7 +8,7 @@ set autowriteall
 set noswapfile " XXX: do I want this?
 
 " options {{{2
-" set confirm
+" set confirM
 set startofline
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
@@ -136,10 +136,11 @@ nnoremap <leader>dh <Cmd>LazyHealth<CR>
 nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
 nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 
-nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
-" nnoremap <leader>fD <Cmd>Rm!<CR>
+" file {{{2
 nnoremap <leader>fD <Cmd>Delete!<CR>
-nnoremap <leader>fw <Cmd>CleanWhitespace<CR>
+nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
+nnoremap <leader>fn <Cmd>call file#title()<CR>
+nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " vim settings `<leader>v` {{{2
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
@@ -181,6 +182,7 @@ nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
 nnoremap <leader>P  <Cmd>lua Snacks.picker()<CR>
 nnoremap <leader>n  <Cmd>lua Snacks.picker.notifications()<CR>
+
 " search
 nnoremap <leader>s" <Cmd>lua Snacks.picker.registers()<CR>
 nnoremap <leader>s/ <Cmd>lua Snacks.picker.search_history()<CR>
@@ -337,20 +339,6 @@ inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
-" insert comment {{{2
-function! s:map_insert_comment(lhs, tag) abort
-  execute 'nnoremap cO' . a:lhs ':call comment#above("' . a:tag . '")<CR>'
-  execute 'nnoremap co' . a:lhs ':call comment#below("' . a:tag . '")<CR>'
-endfunction
-
-call s:map_insert_comment('o', '')
-call s:map_insert_comment('t', 'TODO')
-call s:map_insert_comment('f', 'FIXME')
-call s:map_insert_comment('h', 'HACK')
-call s:map_insert_comment('b', 'BUG')
-call s:map_insert_comment('p', 'PERF')
-call s:map_insert_comment('x', 'XXX')
-
 " cmdline {{{2
 nnoremap ; :
 
@@ -371,66 +359,62 @@ command! Wqa wqa!
 
 " TODO: restore plugins, don't keep commands here
 command! -bang Quit call quit#buffer(<q-bang>)
-
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
 
 if has('nvim')
   finish
 endif
-set clipboard=unnamed
 color scheme
-call plug#begin(vim#vim#home() . '/pack/plugged')
-Plug 'alker0/chezmoi.vim',
-Plug 'github/copilot.vim',
-Plug 'lervag/vimtex'
+call vim#rc()
+call plug#begin('~/.vim/pack/plugged/')
+
+" start
+Plug 'tpope/vim-git', { 'dir': '~/.vim/pack/tpope/start/vim-git' }
+Plug 'tpope/vim-fugitive', { 'dir': '~/.vim/pack/tpope/start/vim-fugitive' }
+Plug 'tpope/vim-repeat', { 'dir': '~/.vim/pack/tpope/start/vim-repeat' }
+Plug 'tpope/vim-rsi', { 'dir': '~/.vim/pack/tpope/start/vim-rsi' }
+Plug 'tpope/vim-surround', { 'dir': '~/.vim/pack/tpope/start/vim-surround' }
+Plug 'tpope/vim-scriptease', { 'dir': '~/.vim/pack/tpope/start/vim-scriptease' }
+
+" opt
+Plug 'tpope/vim-abolish', { 'dir': '~/.vim/pack/tpope/opt/vim-abolish' }
+Plug 'tpope/vim-capslock', { 'dir': '~/.vim/pack/tpope/opt/vim-capslock' }
+Plug 'tpope/vim-characterize', { 'dir': '~/.vim/pack/tpope/opt/vim-characterize' }
+Plug 'tpope/vim-dispatch', { 'dir': '~/.vim/pack/tpope/opt/vim-dispatch' }
+Plug 'tpope/vim-endwise', { 'dir': '~/.vim/pack/tpope/opt/vim-endwise' }
+Plug 'tpope/vim-unimpaired', { 'dir': '~/.vim/pack/tpope/opt/vim-unimpaired' }
 
 " dev
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-eunuch'
-
-" start
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-surround'
-
-" opt
 Plug 'tpope/vim-apathy'
-Plug 'tpope/vim-capslock'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-unimpaired'
+
+" also using in nvim
+Plug 'dense-analysis/ale'
+Plug 'lervag/vimtex'
+Plug 'github/copilot.vim'
 
 " TODO: try mini.splitjoin
 Plug 'AndrewRadev/splitjoin.vim'
 
 " replaced with native plugins
-Plug 'AndrewRadev/dsf.vim'
-Plug 'tpope/vim-tbone',
-
-" needs configureation
-Plug 'dense-analysis/ale'
+" Plug 'AndrewRadev/dsf.vim'
 
 " not used in nvim
-Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sensible' " TODO: go over this one more time
 Plug 'tpope/vim-vinegar'
 Plug 'Konfekt/FastFold'
 
 " using mini instead
 Plug 'junegunn/vim-easy-align'
-Plug 'folke/snacks.nvim'
 
 " games
 Plug 'vim/killersheep'
 Plug 'vuciv/golf'
 
+
 " try the shipped vim9 comment plugin
 Plug 'tpope/vim-commentary'
+
 call plug#end()
-
 " vim:set fdl=2
-

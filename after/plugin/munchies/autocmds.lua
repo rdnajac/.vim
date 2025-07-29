@@ -1,7 +1,7 @@
 local aug = vim.api.nvim_create_augroup('munchies', { clear = true })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'help', 'man', 'qf' },
+  pattern = { 'help', 'man', 'qf', 'nvim-pack' },
   group = aug,
   callback = function(ev)
     if Snacks.util.is_transparent() then

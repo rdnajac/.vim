@@ -13,7 +13,8 @@ M.config = function()
   require('nvim.plugins.mini.icons')
   require('nvim.plugins.mini.hipatterns')
   require('nvim.plugins.mini.diff')
-  require('nvim.plugins.mini.splitjoin')
+  -- require('nvim.plugins.mini.splitjoin')
+  vim.pack.add({ 'https://github.com/AndrewRadev/splitjoin.vim' })
 end
 
 return M

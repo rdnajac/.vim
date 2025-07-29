@@ -19,13 +19,13 @@ let g:loaded_zipPlugin = 1
 
 
 function! s:settings()
+  " don't use the clipboard over ssh
   if !exists('$SSH_TTY') | set clipboard=unnamedplus | endif
   set jumpoptions=view,stack
   set mousescroll=hor:0
   set smoothscroll
   " disable the default popup menu
-  aunmenu PopUp
-  autocmd! nvim.popupmenu
+  aunmenu PopUp | autocmd! nvim.popupmenu
 
   " set up autocmds
   augroup init_lua

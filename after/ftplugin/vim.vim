@@ -1,3 +1,4 @@
+let b:ale_linters = ['luals']
 " better format automatic foldmarkers with `zf`
 " setlocal commentstring=\ \"\ %s
 " better native `gcc`

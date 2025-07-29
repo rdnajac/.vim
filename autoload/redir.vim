@@ -15,6 +15,8 @@ function! s:to_scratch(output) abort
   call setline(1, a:output)
 endfunction
 
+" TODO: use Snacks.scratch if nvim
+
 " https://gist.github.com/romainl/eae0a260ab9c135390c30cd370c20cd7
 function! redir#original(cmd, rng, start, end) abort
   s:close_scratch_wins()

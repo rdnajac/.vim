@@ -1,4 +1,4 @@
-local M = {}
+local M = { 'dense-analysis/ale' }
 
 ---@type vim.diagnostic.Opts
 M.opts = {
@@ -22,6 +22,7 @@ M.opts = {
   },
 }
 
+-- TODO: try ALE counts
 ---Get diagnostic counts for a buffer.
 ---@param bufnr number?  Buffer number (defaults to 0)
 ---@return number errors, number warnings, number infos, number hints

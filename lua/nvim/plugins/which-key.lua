@@ -1,11 +1,11 @@
 local M = { 'folke/which-key.nvim' }
 
+---@class wk.Opts
 M.opts = {
-  keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
   preset = 'helix',
+  keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
   show_help = false,
   sort = { 'order', 'alphanum', 'case', 'mod' },
-  -- triggers = { { '<leader>', mode = { 'n', 'v' } }, },
   spec = {
     {
       {
