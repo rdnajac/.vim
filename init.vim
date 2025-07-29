@@ -1,3 +1,4 @@
+" lua require('nvim.util.pluginit')
 let $MYVIMRC = fnamemodify(expand('$MYVIMRC'), ':h:p') . '/vimrc'
 " runtime $MYVIMRC
 runtime vimrc
@@ -16,7 +17,6 @@ let g:loaded_netrwPlugin = 1
 let g:loaded_tarPlugin = 1
 let g:loaded_tutor_mode_plugin = 1
 let g:loaded_zipPlugin = 1
-
 
 function! s:settings()
   " don't use the clipboard over ssh
