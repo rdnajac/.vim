@@ -7,7 +7,6 @@ M.dependencies = {
     src = 'nvim-treesitter/nvim-treesitter-textobjects',
     version = M.version,
   },
-  -- 'folke/ts-comments.nvim'
 }
 
 -- FIXME: TSUpdate is not available until after setup is called
@@ -48,10 +47,10 @@ local register_custom_parser = function()
 end
 
 M.config = function()
-  local parsers = require('nvim.plugins.treesitter.parsers')
+  local parsers = require('plugins.treesitter.parsers')
   require('nvim-treesitter').install(parsers)
-  require('nvim.plugins.treesitter.comments').setup()
-  require('nvim.plugins.treesitter.selection').setup()
+  require('plugins.treesitter.comments').setup()
+  require('plugins.treesitter.selection').setup()
 
   -- require('nvim.treesitter.comments')
   ---@diagnostic disable-next-line: param-type-mismatch

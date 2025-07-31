@@ -1,3 +1,5 @@
+let b:ale_linters = ['lua_language_server']
+
 setlocal expandtab
 setlocal formatoptions-=ro
 

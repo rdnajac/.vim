@@ -1,10 +1,15 @@
 function! s:close_other_buffer() abort
   if has('nvim')
-    if luaeval("require('snacks.util').is_float()")
-      quit
-    elseif &ft ==# 'snacks_dashboard'
-      doautocmd User SnacksDashboardClosed
-      bdelete
+    " Check if snacks is available
+    if exists('v:lua.package') && luaeval("package.loaded['snacks'] ~= nil")
+      if luaeval("require('snacks.util').is_float()")
+	quit
+      else
+	bdelete
+	" elseif &ft ==# 'snacks_dashboard'
+	" doautocmd User SnacksDashboardClosed
+	return
+      endif
     endif
   endif
 endfunction

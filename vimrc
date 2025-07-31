@@ -8,7 +8,7 @@ set autowriteall
 set noswapfile " XXX: do I want this?
 
 " options {{{2
-" set confirM
+" set confirm
 set startofline
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
@@ -40,9 +40,9 @@ set shiftwidth=2
 set softtabstop=2
 
 augroup vimrc_indent
-  au!
-  au FileType c,sh,zsh        setlocal sw=8 sts=8
-  au FileType cpp,cuda,python setlocal sw=4 sts=4
+  autocmd!
+  autocmd FileType c,sh,zsh        setlocal shiftwidth=8 softtabstop=8
+  autocmd FileType cpp,cuda,python setlocal shiftwidth=4 softtabstop=4
 augroup END
 
 " ui {{{2
@@ -136,38 +136,14 @@ nnoremap <leader>dh <Cmd>LazyHealth<CR>
 nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
 nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 
-" file {{{2
-nnoremap <leader>fD <Cmd>Delete!<CR>
-nnoremap <leader>fR :set ft=<C-R>=&ft<CR><CR>
-nnoremap <leader>fn <Cmd>call file#title()<CR>
-nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
-
-" vim settings `<leader>v` {{{2
-nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
-nnoremap <leader>va <Cmd>call edit#vimrc('+/autocmds')<CR>
-nnoremap <leader>vc <Cmd>call edit#vimrc('+/commands')<CR>
-nnoremap <leader>vk <Cmd>call edit#vimrc('+/keymaps')<CR>
-nnoremap <leader>vp <Cmd>call edit#vimrc('+/plugins')<CR>
-nnoremap <leader>vs <Cmd>call edit#vimrc('+/settings')<CR>
-nnoremap <leader>vu <Cmd>call edit#vimrc('+/ui')<CR>
-
-" nvim settings {{{2
-" TODO
-nnoremap <BSlash>v <Cmd>e ~/.config/nvim/init.vim<CR>
-nnoremap <BSlash>i <Cmd>call edit#module('init')<CR>
-nnoremap <BSlash>n <Cmd>call edit#module('nvim/init')<CR>
-nnoremap <BSlash>p <Cmd>call edit#module('nvim/plugins/init')<CR>
-nnoremap <BSlash>m <Cmd>call edit#module('munchies/init')<CR>
-nnoremap <BSlash>0 <Cmd>call edit#readme()<CR>
-
-" find/files {{{2
-nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
-nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
-nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
-nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
+" file/find/format {{{2
 nnoremap <leader>fm <Cmd>lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
 nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
+nnoremap <leader>fD <Cmd>Delete!<CR>
+nnoremap <leader>fR <Cmd>set ft=<C-R>=&ft<CR><CR>
+nnoremap <leader>fn <Cmd>call file#title()<CR>
+nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " git {{{2
 nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
@@ -205,48 +181,37 @@ nnoremap <BS> <C-o>
 nmap  ciw
 vmap  :sort<CR>
 
-" yank/delete everything
-nnoremap yY <Cmd>%y<CR>
-nnoremap dD <Cmd>%d<CR>
-
-" available key pairs in normal mode {{{2
-" https://gist.github.com/romainl/1f93db9dc976ba851bbb
-" `splitjoin`: `gJ` and `gS`
+" key pairs in normal mode {{{2
+" `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
+" some plugins take advantage of these available key pairs already
 " `vim-surround`: `cs`, `ds`, and `ys`
+" `splitjoin`: `gJ` and `gS`
 
 " `cd` cm co cp `cq` cr `cs` cu cx cy cz
+
 " plugin/cd.vim
 nmap <expr> cq change#quote()
 
 " dc dm dq dr `ds` du dx `dy` dz
-" vnoremap <silent> dy "_dP
-nnoremap dy "_dd
-
-" yc yd ym `yo` `yp` yq yr `ys` yu yx yz
-" vnoremap <silent> yp p"_d
-
-" yank path
-nnoremap yp <Cmd>let @*=expand('%:p')<CR>
-
-" vm vo vq `vv` vz
-nmap vv Vgc
-
 " `gb` `gc` `gl` `gs` `gy`
+" vm vo vq `vv` vz
+" yc yd ym `yo` `yp` yq yr `ys` yu yx yz
+" `zq` ZA ... ZP, `ZQ` ... `ZZ`
+
+
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
-
 nmap gl <Cmd>Config<CR>
 nmap gy "xyygcc"xp
-
-" `surround` {{{2
-nmap S viWS
-" nmap yss ys
-
-" `zq` ZA ... ZP, `ZQ` ... `ZZ`
+nmap vv Vgc
 nmap zq gqag
 
-" vim-unimpaired
+" `unimpaired`
 nmap zJ ]ekJ
+
+" `surround`
+nmap S viWS
+
 
 " text objects {{{2
 " Buffer pseudo-text objects
@@ -256,8 +221,8 @@ xnoremap ag GoggV
 onoremap ag :<C-u>normal vag<CR>
 
 " buffers {{{2
-nnoremap <silent> <Tab>         :bprev<CR>
-nnoremap <silent> <S-Tab>       :bnext<CR>
+nnoremap <silent> <Tab>         :bprev!<CR>
+nnoremap <silent> <S-Tab>       :bnext!<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
 
 " Close buffer
@@ -341,34 +306,12 @@ inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
-" cmdline {{{2
-nnoremap ; :
-
-cnoreabbrev <expr> %% expand('%:p:h')
-cnoreabbrev !! !./%
-cnoreabbrev scp !./%
-cnoreabbrev ?? verbose set?<Left>
-cnoreabbrev <expr> scp getcmdtype() == ':' && getcmdline() =~ '^scp' ? '!scp %' : 'scp'
-cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
-cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'
-cnoreabbrev <expr> Snacks getcmdtype() == ':' && getcmdline() =~ '^Snacks' ? 'lua Snacks' : 'Snacks'
-cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
-
-command! E e!
-command! W w!
-command! Wq wq!
-command! Wqa wqa!
-
-" TODO: restore plugins, don't keep commands here
-command! -bang Quit call quit#buffer(<q-bang>)
-command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
-
-if has('nvim')
-  finish
-endif
-color scheme
-call vim#rc()
 call plug#begin('~/.vim/pack/plugged/')
+Plug 'lervag/vimtex'
+Plug 'alker0/chezmoi.vim'
+Plug 'AndrewRadev/dsf.vim'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'folke/tokyonight.nvim'
 
 " start
 Plug 'tpope/vim-git', { 'dir': '~/.vim/pack/tpope/start/vim-git' }
@@ -386,37 +329,49 @@ Plug 'tpope/vim-dispatch', { 'dir': '~/.vim/pack/tpope/opt/vim-dispatch' }
 Plug 'tpope/vim-endwise', { 'dir': '~/.vim/pack/tpope/opt/vim-endwise' }
 Plug 'tpope/vim-unimpaired', { 'dir': '~/.vim/pack/tpope/opt/vim-unimpaired' }
 
-" dev
-Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-apathy'
+if !has('nvim')
+  " managed by vim.pack
+  Plug 'dense-analysis/ale'
+  Plug 'github/copilot.vim'
 
-" also using in nvim
-Plug 'dense-analysis/ale'
-Plug 'lervag/vimtex'
-Plug 'github/copilot.vim'
+  " dev
+  Plug 'tpope/vim-apathy'
+  Plug 'tpope/vim-eunuch'
+  Plug 'tpope/vim-tbone'
 
-" TODO: try mini.splitjoin
-Plug 'AndrewRadev/splitjoin.vim'
+  " not used in nvim
+  Plug 'tpope/vim-sensible' " TODO: go over this one more time
+  Plug 'tpope/vim-vinegar'
+  Plug 'Konfekt/FastFold'
 
-" replaced with native plugins
-" Plug 'AndrewRadev/dsf.vim'
+  " using mini instead
+  Plug 'junegunn/vim-easy-align'
 
-" not used in nvim
-Plug 'tpope/vim-sensible' " TODO: go over this one more time
-Plug 'tpope/vim-vinegar'
-Plug 'Konfekt/FastFold'
-
-" using mini instead
-Plug 'junegunn/vim-easy-align'
+  " try the shipped vim9 comment plugin
+  Plug 'tpope/vim-commentary'
+else
+  Plug 'folke/snacks.nvim'
+endif
 
 " games
 Plug 'vim/killersheep'
 Plug 'vuciv/golf'
 
-
-" try the shipped vim9 comment plugin
-Plug 'tpope/vim-commentary'
-
 call plug#end()
-" vim:set fdl=2
+
+if !has('nvim')
+  call vim#rc()
+  color scheme
+else
+  colorscheme tokyomidnight
+  if v:vim_did_enter
+    call vim#nvim_init()
+  else
+    augroup nvim_init
+      autocmd!
+      autocmd VimEnter * call vim#nvim_init()
+    augroup END
+  endif
+  packadd! vimline
+  lua require('nvim')
+endif

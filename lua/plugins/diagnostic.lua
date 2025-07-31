@@ -1,5 +1,14 @@
 local M = { 'dense-analysis/ale' }
 
+-- local icons = _G.icons
+-- local icons = require('nvim.icons')
+local icons = require('snacks.picker.config.defaults').defaults.icons
+-- if not icons or not icons.diagnostics then
+--   error('Icons module is not loaded or does not contain diagnostics icons.')
+-- end
+
+print(icons.diagnostics)
+
 ---@type vim.diagnostic.Opts
 M.opts = {
   float = { source = true },

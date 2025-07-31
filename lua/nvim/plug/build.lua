@@ -1,17 +1,12 @@
--- TODO: build only on first load
--- M:Build()
+-- see `:h vim.pack`
+--- @alias PackEvents "PackChangedPre" | "PackChanged"
+---
+--- @class PackChangedEventData
+--- @field kind "install" | "update" | "delete"  -- The kind of change (install, update, or delete)
+--- @field spec PluginSpec  -- Plugin's specification
+--- @field path string  -- Full path to the plugin's directory
 
--- Available events to hook into ~
--- • *PackChangedPre* - before trying to change plugin's state.
--- • *PackChanged* - after plugin's state has changed.
---
--- Each event populates the following |event-data| fields:
--- • `kind` - one of "install" (install on disk), "update" (update existing
---   plugin), "delete" (delete from disk).
--- • `spec` - plugin's specification.
--- • `path` - full path to plugin's directory.
-
--- XXX: experimental module for
+-- XXX: experimental module for running tasks asynchronously
 local async = require('vim._async')
 
 --- Execute a shell command and return its output and error state.
@@ -54,19 +49,18 @@ local function notify_build(name, build, output, err)
 end
 
 vim.api.nvim_create_autocmd('PackChanged', {
-  --- @param ev { data: { kind: string, path: string, spec: { name: string } } }
+  ---@param ev { data: PackChangedEventData }
   callback = function(ev)
     if ev.data.kind ~= 'update' then
       return
     end
     local name = ev.data.spec and ev.data.spec.name
-    local build_cmd = M[name] and M[name].build
-    if not build_cmd then
-      return
+    local build = name and M[name] and M[name].build
+    if build then
+      async.run(function()
+        local output, err = run_build(build, ev.data.path)
+        notify_build(ev.data.spec.name, build, output, err)
+      end)
     end
-    async.run(function()
-      local output, err = run_build(build_cmd, ev.data.path)
-      notify_build(ev.data.spec.name, build_cmd, output, err)
-    end)
   end,
 })

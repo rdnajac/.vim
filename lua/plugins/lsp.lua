@@ -1,4 +1,5 @@
-local M = { 'neovim/nvim-lspconfig' }
+-- local M = { 'neovim/nvim-lspconfig' }
+local M = {}
 
 -- lsp defaults
 

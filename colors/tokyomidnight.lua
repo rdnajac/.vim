@@ -1,7 +1,5 @@
-local M = { 'folke/tokyonight.nvim' }
-
 ---@type tokyonight.Config
-M.opts = {
+local opts = {
   style = 'night',
   transparent = true,
   styles = {
@@ -42,7 +40,4 @@ M.opts = {
   },
 }
 
-require('tokyonight').load(M.opts)
-local colors = require('tokyonight.colors').setup()
-
-return M
+require('tokyonight').load(opts)

@@ -1,22 +1,34 @@
 local aug = vim.api.nvim_create_augroup('munchies', { clear = true })
 
 vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'lua',
+  group = aug,
+  callback = function()
+    Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
+  end,
+  desc = 'Disable LSP reference highlight in Lua files',
+})
+
+vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'help', 'man', 'qf', 'nvim-pack' },
   group = aug,
   callback = function(ev)
     if Snacks.util.is_transparent() then
-      Snacks.util.wo(0, { winhighlight = { Normal = 'SpecialWindow' } })
+      Snacks.util.wo(0, { winhighlight = Snacks.util.winhl('Normal:SpecialWindow') })
     end
-    vim.bo[ev.buf].buflisted = false
-    vim.schedule(function()
-      vim.keymap.set('n', 'q', function()
-        -- vim.cmd('close')
-        -- pcall(vim.api.nvim_buf_delete, ev.buf, { force = true })
-        Snacks.bufdelete()
-      end, { buffer = ev.buf, silent = true, desc = 'Quit buffer' })
-    end)
+    -- vim.bo[ev.buf].buflisted = false
+    vim.keymap.set('n', 'q', '<Cmd>lclose<CR><C-W>q', { buffer = true })
   end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'man' },
+  group = aug,
+  callback = function(ev)
+    vim.bo[ev.buf].buflisted = false
+  end,
+})
+
 --
 -- vim.api.nvim_create_autocmd('FileType', {
 --   pattern = 'snacks_dashboard',
@@ -51,12 +63,3 @@ vim.api.nvim_create_autocmd('FileType', {
 --     end
 --   end,
 -- })
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'lua',
-  group = aug,
-  callback = function()
-    Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
-  end,
-  desc = 'Disable LSP reference highlight in Lua files',
-})

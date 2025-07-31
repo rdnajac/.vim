@@ -69,7 +69,8 @@ local function chromatophore_refresh()
     Chromatophore_bc = { fg = grey, bg = lightblue },
     Chromatophore_c = { fg = mode_color, bg = lightblue },
     Chromatophore_y = { fg = mode_color, bg = '#000000', bold = true },
-    Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
+    -- Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
+    Chromatophore_z = { fg = mode_color, bg = '#16161d', bold = true },
     -- StatusLine = { link = 'Chromatophore_a' },
     -- StatusLineNC = { link = 'Chromatophore_b' },
   })
