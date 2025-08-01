@@ -6,6 +6,8 @@ M.specs = {}
 ---@type table<string, PlugSpec>
 M.plugins = {}
 
+local plug = require('nvim.plug')
+
 -- Path utils
 local this_source = debug.getinfo(1, 'S').source
 local this_file = vim.fn.fnamemodify(this_source:sub(2), ':p')
@@ -26,7 +28,7 @@ local function import(path, opts)
     if absolute_path ~= this_file then
       local mod = require('nvim.util.path').modname(absolute_path)
       local ok, result = pcall(function()
-        local spec, module = require('nvim.plug').load(mod)
+        local spec, module = plug.load(mod)
         return { spec = spec, module = module }
       end)
       if not ok then
@@ -41,7 +43,7 @@ local function import(path, opts)
         if module and type(module) == 'table' then
           if type(module.dependencies) == 'table' then
             for _, dep in ipairs(module.dependencies) do
-              add_spec(dep)
+              add_spec(plug.to_spec(dep))
             end
           end
         end

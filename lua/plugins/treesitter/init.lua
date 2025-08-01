@@ -10,9 +10,12 @@ M.dependencies = {
 }
 
 -- FIXME: TSUpdate is not available until after setup is called
--- M.build = function()
---   vim.cmd('TSUpdate')
--- end
+M.build = function()
+  Snacks.util.on_module('nvim-treesitter', function()
+    dd('Updating nvim-treesitter...')
+    vim.cmd('TSUpdate')
+  end)
+end
 
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 
