@@ -3,13 +3,13 @@
 ---
 --- @class PackChangedEventData
 --- @field kind "install" | "update" | "delete"  -- The kind of change (install, update, or delete)
---- @field spec PluginSpec  -- Plugin's specification
+--- @field spec PlugSpec  -- Plugin's specification
 --- @field path string  -- Full path to the plugin's directory
 
 -- XXX: experimental module for running tasks asynchronously
 local async = require('vim._async')
 
---- Execute a shell command and return its output and error state.
+--- Execute a subshell command and return its output and error state.
 --- @param cmd string
 --- @return string output, string|nil err
 local function run_cmd(cmd)
@@ -36,7 +36,7 @@ end
 
 --- @param name string
 --- @param build string|fun():string
---- @param output string
+--- @param output string|nil
 --- @param err string|nil
 local function notify_build(name, build, output, err)
   Snacks.notify.info('Building plugin ' .. name .. ' with command: ' .. tostring(build))
@@ -48,19 +48,27 @@ local function notify_build(name, build, output, err)
   end
 end
 
-vim.api.nvim_create_autocmd('PackChanged', {
-  ---@param ev { data: PackChangedEventData }
-  callback = function(ev)
-    if ev.data.kind ~= 'update' then
-      return
-    end
-    local name = ev.data.spec and ev.data.spec.name
-    local build = name and M[name] and M[name].build
-    if build then
-      async.run(function()
-        local output, err = run_build(build, ev.data.path)
-        notify_build(ev.data.spec.name, build, output, err)
-      end)
-    end
-  end,
-})
+--- Setup the autocmd to trigger build when the plugin is updated
+--- @param name string The name of the plugin to track
+--- @param build string|fun():string The build command or function to run
+local function setup_plugin_build_autocmd(name, build)
+  vim.api.nvim_create_autocmd('PackChanged', {
+    ---@param ev { data: PackChangedEventData }
+    callback = function(ev)
+      print(vim.inspect(ev.data))
+      if ev.data.kind ~= 'update' then
+        return
+      end
+      local plugin_name = ev.data.spec and ev.data.spec.name
+      if plugin_name == name then
+        print(('Running build for plugin "%s" at path "%s"'):format(plugin_name, ev.data.path))
+        async.run(function()
+          local output, err = run_build(build, ev.data.path)
+          notify_build(ev.data.spec.name, build, output, err)
+        end)
+      end
+    end,
+  })
+end
+
+return setup_plugin_build_autocmd

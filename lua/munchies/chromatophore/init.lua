@@ -1,3 +1,8 @@
+if not package.loaded['snacks'] then
+  print('no snacks')
+  return
+end
+
 local get_mode = require('nvim.util.mode').get
 
 local colors = {

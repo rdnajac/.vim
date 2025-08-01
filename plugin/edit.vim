@@ -11,3 +11,8 @@ nnoremap <BSlash>m <Cmd>call edit#module('munchies/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#module('plugins/init')<CR>
 
 nnoremap <BSlash>0 <Cmd>call edit#readme()<CR>
+
+nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('lua/lazy/lang/', '.lua')<CR>
+nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>

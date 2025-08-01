@@ -10,8 +10,7 @@
 "   One::Two.new([cursor_here])
 "   One::Two.new(Hash[cursor_here])
 "
-nnoremap <silent> dsf :call <SID>DeleteSurroundingFunctionCall()<cr>
-function! s:DeleteSurroundingFunctionCall()
+function! d#sf()
   if search('\k\+\zs[([]', 'b', line('.')) <= 0
     return
   endif

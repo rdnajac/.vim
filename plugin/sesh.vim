@@ -20,7 +20,7 @@ function! s:restart() abort
   endif
   " " let sesh = fnameescape(stdpath('state') . '/Session.vim')
   " restart echo "Hello"\013
-  restart
+  confirm restart
 endfunction
 
 " TODO: once this is merged,

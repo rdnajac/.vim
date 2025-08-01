@@ -135,9 +135,10 @@ nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
 nnoremap <leader>dh <Cmd>LazyHealth<CR>
 nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
 nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
+nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
 
 " file/find/format {{{2
-nnoremap <leader>fm <Cmd>lua Snacks.rename.rename_file()<CR>
+nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
 nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
@@ -211,6 +212,7 @@ nmap zJ ]ekJ
 
 " `surround`
 nmap S viWS
+" nnoremap <silent> dsf :call d#sf()<CR>
 
 
 " text objects {{{2
@@ -301,17 +303,17 @@ nmap yos :set spell!<BAR>set wrap?<CR>
 nmap yow :set wrap!<BAR>set wrap?<CR>
 nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 
-" insert pluginsial chars {{{2
+" insert special chars {{{2
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
 call plug#begin('~/.vim/pack/plugged/')
-Plug 'lervag/vimtex'
 Plug 'alker0/chezmoi.vim'
+Plug 'dense-analysis/ale'
+Plug 'lervag/vimtex'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'folke/tokyonight.nvim'
 
 " start
 Plug 'tpope/vim-git', { 'dir': '~/.vim/pack/tpope/start/vim-git' }
@@ -330,8 +332,7 @@ Plug 'tpope/vim-endwise', { 'dir': '~/.vim/pack/tpope/opt/vim-endwise' }
 Plug 'tpope/vim-unimpaired', { 'dir': '~/.vim/pack/tpope/opt/vim-unimpaired' }
 
 if !has('nvim')
-  " managed by vim.pack
-  Plug 'dense-analysis/ale'
+  " handled by vim.pack
   Plug 'github/copilot.vim'
 
   " dev
@@ -349,21 +350,18 @@ if !has('nvim')
 
   " try the shipped vim9 comment plugin
   Plug 'tpope/vim-commentary'
-else
-  Plug 'folke/snacks.nvim'
+
+  " incompatible with nvim
+  Plug 'vuciv/golf'
 endif
 
 " games
 Plug 'vim/killersheep'
-Plug 'vuciv/golf'
-
 call plug#end()
 
 if !has('nvim')
   call vim#rc()
-  color scheme
 else
-  colorscheme tokyomidnight
   if v:vim_did_enter
     call vim#nvim_init()
   else

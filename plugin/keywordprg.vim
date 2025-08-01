@@ -4,7 +4,7 @@ endif
 
 let g:loaded_mykeywordprg = 1
 " Keywords are used in searching and recognizing with many commands:
-set iskeyword-=_
+" set iskeyword-=_
 
 command! -nargs=* ManLookup call s:ManLookup(<f-args>)
 

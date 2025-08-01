@@ -1,14 +1,12 @@
--- Copyright (c) 2020-2021 shadmansaleh
--- MIT license, see LICENSE for more details.
+-- TODO: use this in plugin loader
 local M = {}
 
-M.sep = package.config:sub(1, 1)
-local luv = vim.uv or vim.loop
+local sep = package.config:sub(1, 1)
 
 -- Figures out full path of lualine installation
 local source = debug.getinfo(1, 'S').source
 if source:sub(1, 1) == '@' then
-  local base_start = source:find(table.concat({ 'lualine.nvim', 'lua', 'lualine_require.lua' }, M.sep))
+  local base_start = source:find(table.concat({ 'lualine.nvim', 'lua', 'lualine_require.lua' }, sep))
   if base_start then
     source = source:sub(2, base_start + #'lualine.nvim/lua')
     if source then
@@ -37,19 +35,19 @@ function M.require(module)
   if package.loaded[module] then
     return package.loaded[module]
   end
-  local pattern_dir = module:gsub('%.', M.sep)
+  local pattern_dir = module:gsub('%.', sep)
   local pattern_path = pattern_dir .. '.lua'
   if M.plugin_dir then
     local path = M.plugin_dir .. pattern_path
     assert(M.is_valid_filename(module), 'Invalid filename')
     local file_stat, dir_stat
-    file_stat = luv.fs_stat(path)
+    file_stat = vim.uv.fs_stat(path)
     if not file_stat then
       path = M.plugin_dir .. pattern_dir
-      dir_stat = luv.fs_stat(path)
+      dir_stat = vim.uv.fs_stat(path)
       if dir_stat and dir_stat.type == 'directory' then
-        path = path .. M.sep .. 'init.lua'
-        file_stat = luv.fs_stat(path)
+        path = path .. sep .. 'init.lua'
+        file_stat = vim.uv.fs_stat(path)
       end
     end
     if file_stat and file_stat.type == 'file' then
@@ -69,7 +67,7 @@ function M.require(module)
     -- put entries from user config path in front
     local user_config_path = vim.fn.stdpath('config')
     table.sort(paths, function(a, b)
-      local pattern = table.concat({ user_config_path, M.sep })
+      local pattern = table.concat({ user_config_path, sep })
       return string.match(a, pattern) or not string.match(b, pattern)
     end)
     local mod_result = dofile(paths[1])

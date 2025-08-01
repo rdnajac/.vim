@@ -3,10 +3,10 @@ local M = { 'Saghen/blink.cmp' }
 M.build = 'cargo build --release'
 
 M.dependencies = {
-  'mgalliou/blink-cmp-tmux',
-  'fang2hou/blink-copilot',
-  'moyiz/blink-emoji.nvim',
   'bydlw98/blink-cmp-env',
+  'fang2hou/blink-copilot',
+  'mgalliou/blink-cmp-tmux',
+  'moyiz/blink-emoji.nvim',
 }
 
 M.event = 'InsertEnter'
@@ -57,25 +57,12 @@ M.opts = {
       },
     },
   },
-  -- fuzzy = { sorts = { 'exact', 'score', 'sort_text' } },
   signature = { enabled = true, window = { border = 'single' } },
   keymap = {
-    preset = 'default',
-    ['<Tab>'] = {
-      function(cmp)
-        if cmp.snippet_active() then
-          return cmp.snippet_forward()
-        elseif cmp.is_visible() then
-          return cmp.select_and_accept()
-        else
-          -- return cmp.show() retu
-        end
-      end,
-      'fallback',
-    },
+    -- preset = 'default',
     ['<Up>'] = { 'select_prev', 'fallback' },
-    ['<Left>'] = { 'select_prev', 'fallback' },
     ['<Down>'] = { 'select_next', 'fallback' },
+    ['<Left>'] = { 'select_prev', 'fallback' },
     ['<Right>'] = { 'select_next', 'fallback' },
   },
 

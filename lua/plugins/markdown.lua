@@ -13,7 +13,7 @@ M.opts = {
     inline_pad = 1,
     border = 'thick',
     right_pad = 1,
-    sign = true,
+    sign = false,
     width = 'block',
   },
   heading = {

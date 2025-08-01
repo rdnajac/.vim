@@ -5,7 +5,7 @@ if !has('nvim')
 endif
 
 set showcmdloc=statusline
-set statusline=%!MyStatusline()
+"set statusline=%!MyStatusline()
 let &laststatus = has('nvim') ? 3 : 2
 " set noruler
 " set tabline=%!MyTabline()

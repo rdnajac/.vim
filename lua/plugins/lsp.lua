@@ -2,7 +2,6 @@
 local M = {}
 
 -- lsp defaults
-
 -- `grn` is mapped in Normal mode to `vim.lsp.buf.rename()`
 -- `gra` is mapped in Normal and Visual mode to `vim.lsp.buf.code_action()`
 -- `grr` is mapped in Normal mode to `vim.lsp.buf.references()`

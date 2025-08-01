@@ -16,6 +16,7 @@ end
 function M.check()
   start('My health checks')
 
+  -- TODO: dynamically add software to this list per plugin
   for _, cmd in ipairs({
     'cowsay',
     'fortune',

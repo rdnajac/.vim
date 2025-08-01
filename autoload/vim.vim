@@ -8,6 +8,8 @@ function! vim#rc() abort
   let &viminfofile = home . '.viminfo'
   let &verbosefile = home . '.vimlog.txt'
 
+  color scheme
+
   " some settings are already default in nvim
   set autoread
   set wildoptions=pum,tagfile

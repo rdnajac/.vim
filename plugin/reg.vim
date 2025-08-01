@@ -9,6 +9,15 @@ nnoremap dy "_dd
 " yank path
 nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
 
+" see `:h yankring`
+augroup yankring
+  autocmd!
+  autocmd TextYankPost * if v:event.operator ==# 'y' |
+	\ for i in range(9, 1, -1) |
+	\   call setreg(string(i), getreg(string(i - 1))) |
+	\ endfor |
+	\ endif
+augroup END
 if !has('nvim')
   set clipboard=unnamed
   packadd hlyank
