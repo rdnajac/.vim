@@ -1,6 +1,20 @@
+if exists('g:loaded_apathy')
+  finish
+endif
+let g:loaded_apathy = 1
+
+" vim sets defaults that are only useful for C/C++
+if !has('nvim')
+  setglobal define=
+  setglobal include=
+  setglobal includeexpr=
+  setglobal path=.,,
+endif
+
+" default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
+setglobal isfname+=@-@
+
 " augroup SetLocalPath
-"   " TODO: fork tpope/apathy
-"   " TODO: move to local apathy plugin
 "   autocmd!
 "   let s:default_path = escape(&path, '\ ') " store default value of 'path'
 "
@@ -22,7 +36,11 @@ function! s:set_repo_path() abort
   endif
 endfunction
 
-augroup SetRepoPath
+augroup apathy
   autocmd!
   autocmd VimEnter * call s:set_repo_path()
+  autocmd FileType ruby call apathy#ruby#setup()
+  autocmd FileType sh,zsh call apathy#sh#setup()
+  autocmd FileType javascript,javascriptreact call apathy#javascript#setup()
+  autocmd FileType typescript,typescriptreact call apathy#javascript#setup()
 augroup END
