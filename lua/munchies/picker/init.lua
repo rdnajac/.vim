@@ -4,7 +4,7 @@ local M = {}
 -- see: Snacks.picker.picker_actions()
 
 ---@param picker snacks.Picker
-local function toggle(picker)
+M.toggle = function(picker)
   local cwd = picker:cwd()
   local alt = picker.opts.source == 'files' and 'grep' or 'files'
   picker:close()

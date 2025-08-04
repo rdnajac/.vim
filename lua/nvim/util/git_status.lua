@@ -5,7 +5,7 @@ local M = {}
 
 ---@param proc { wait: fun(): { code: integer, stdout: string } }
 ---@return table<string, boolean>
-local parse_output = function(proc)
+local function parse_output(proc)
   local result = proc:wait()
   local ret = {}
   if result.code == 0 then
@@ -17,17 +17,20 @@ local parse_output = function(proc)
   return ret
 end
 
+---@param path string
+---@param cmd string[]
+local function get_files(path, cmd)
+  return parse_output(vim.system(cmd, { cwd = path, text = true }))
+end
+
 ---@return GitStatusCache
 function M.new()
   return setmetatable({}, {
     __index = function(self, path)
-      local opts = { cwd = path, text = true }
-      local ignored_cmd = { 'git', 'ls-files', '--ignored', '--exclude-standard', '--others', '--directory' }
-      local tracked_cmd = { 'git', 'ls-tree', 'HEAD', '--name-only' }
       ---@type GitStatus
       local status = {
-        ignored = parse_output(vim.system(ignored_cmd, opts)),
-        tracked = parse_output(vim.system(tracked_cmd, opts)),
+        ignored = get_files(path, { 'git', 'ls-files', '--ignored', '--exclude-standard', '--others', '--directory' }),
+        tracked = get_files(path, { 'git', 'ls-tree', 'HEAD', '--name-only' }),
       }
 
       rawset(self, path, status)
@@ -36,14 +39,4 @@ function M.new()
   })
 end
 
--- local ignored_output = function(path)
---   local git_status = M.new()
---   local status = git_status[path]
---   if not status then
---     return {}
---   end
---   return status.ignored
--- end
--- print(ignored_output(vim.fn.getcwd()))
---
 return M

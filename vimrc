@@ -1,13 +1,15 @@
 scriptencoding=utf-8
+call vim#rc()
+color scheme
 
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 
+" Section: settings {{{1
 set autowrite
 set autowriteall
 set noswapfile " XXX: do I want this?
 
-" options {{{2
 " set confirm
 set startofline
 set fillchars+=diff:╱
@@ -29,7 +31,7 @@ set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
 
-" indentation {{{3
+" indentation {{{2
 set breakindent
 set linebreak
 set nowrap
@@ -91,6 +93,43 @@ augroup vimrc
 augroup END
 
 " Section: keymaps {{{1
+" key pairs in normal mode {{{2
+" `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
+" some plugins take advantage of these available key pairs already
+" `vim-surround`: `cs`, (change s) `ds`, (delete s) and `ys` (yes s)
+" `splitjoin`: `gJ` (gJoin) and `gS` (gSplit)
+" `vim-abolish`: `cr` (CoeRce)
+
+" `cd` cm co cp `cq` cr  cu cx cy cz
+" dc dm dq dr du dx `dy` dz
+" `gb` `gc` `gl` `gs` `gy`
+" vm vo vq `vv` vz
+" yc yd ym `yo` `yp` yq yr yu yx yz
+" `zq` ZA ... ZP, `ZQ` ... `ZZ`
+
+nnoremap cd <Cmd>Zoxide<CR>
+" nnoremap cdb :cd %:p:h<CR>
+nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
+nnoremap cd- <Cmd>cd %:p:h<Bar>pwd<CR>
+nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
+nnoremap cdh <Cmd>cd<Bar>pwd<CR>
+nnoremap cdg :cd<C-R>=git#root()<CR><Bar>pwd<CR>
+nmap <expr> cq c#q()
+
+nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
+xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
+nmap gy "xyygcc"xp
+nmap vv Vgc
+nmap zq gqag
+
+" `unimpaired`
+nmap zJ ]ekJ
+
+" `surround`
+nmap S viWS
+" nnoremap <silent> dsf :call d#sf()<CR>
+
+
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 nnoremap <leader><Space> viW
@@ -182,39 +221,6 @@ nnoremap <BS> <C-o>
 nmap  ciw
 vmap  :sort<CR>
 
-" key pairs in normal mode {{{2
-" `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
-" some plugins take advantage of these available key pairs already
-" `vim-surround`: `cs`, `ds`, and `ys`
-" `splitjoin`: `gJ` and `gS`
-
-" `cd` cm co cp `cq` cr `cs` cu cx cy cz
-
-" plugin/cd.vim
-nmap <expr> cq change#quote()
-
-" dc dm dq dr `ds` du dx `dy` dz
-" `gb` `gc` `gl` `gs` `gy`
-" vm vo vq `vv` vz
-" yc yd ym `yo` `yp` yq yr `ys` yu yx yz
-" `zq` ZA ... ZP, `ZQ` ... `ZZ`
-
-
-nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
-xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
-nmap gl <Cmd>Config<CR>
-nmap gy "xyygcc"xp
-nmap vv Vgc
-nmap zq gqag
-
-" `unimpaired`
-nmap zJ ]ekJ
-
-" `surround`
-nmap S viWS
-" nnoremap <silent> dsf :call d#sf()<CR>
-
-
 " text objects {{{2
 " Buffer pseudo-text objects
 xnoremap ig :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
@@ -223,8 +229,8 @@ xnoremap ag GoggV
 onoremap ag :<C-u>normal vag<CR>
 
 " buffers {{{2
-nnoremap <silent> <Tab>         :bprev!<CR>
-nnoremap <silent> <S-Tab>       :bnext!<CR>
+nnoremap <silent> <S-Tab>         :bprev!<CR>
+nnoremap <silent> <Tab>       :bnext!<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
 
 " Close buffer
@@ -314,6 +320,7 @@ Plug 'dense-analysis/ale'
 Plug 'lervag/vimtex'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'vuciv/golf'
 
 " start
 Plug 'tpope/vim-git', { 'dir': '~/.vim/pack/tpope/start/vim-git' }
@@ -336,7 +343,6 @@ if !has('nvim')
   Plug 'github/copilot.vim'
 
   " dev
-  Plug 'tpope/vim-apathy'
   Plug 'tpope/vim-eunuch'
   Plug 'tpope/vim-tbone'
 
@@ -350,26 +356,10 @@ if !has('nvim')
 
   " try the shipped vim9 comment plugin
   Plug 'tpope/vim-commentary'
-
-  " incompatible with nvim
-  Plug 'vuciv/golf'
 endif
-
-" games
-Plug 'vim/killersheep'
 call plug#end()
 
-if !has('nvim')
-  call vim#rc()
-else
-  if v:vim_did_enter
-    call vim#nvim_init()
-  else
-    augroup nvim_init
-      autocmd!
-      autocmd VimEnter * call vim#nvim_init()
-    augroup END
-  endif
-  packadd! vimline
+if has('nvim')
   lua require('nvim')
+  packadd! vimline
 endif

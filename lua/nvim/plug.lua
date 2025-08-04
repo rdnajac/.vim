@@ -72,7 +72,7 @@ M.lazyload = function(event, config)
     callback = config,
   })
 end
-
+--
 M.build = require('nvim.build')
 
 -- vim.api.nvim_create_user_command('Plug', function(args)
@@ -84,5 +84,7 @@ vim.api.nvim_create_user_command('PackUpdate', function(opts)
   -- pass nil to update all plugins
   vim.pack.update(nil, { force = opts.bang })
 end, { bang = true })
+
+-- restart +qall! lua vim.pack.update()
 
 return M

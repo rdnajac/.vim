@@ -1,15 +1,10 @@
-let b:ale_linters = ['luals']
+let b:ale_linters = ['vint']
+
 " better format automatic foldmarkers with `zf`
 " setlocal commentstring=\ \"\ %s
-" better native `gcc`
-setlocal commentstring=\"\ %s
-
-" this makes editing autoloaded functions easier but might
-" integere with how the lsp <C-]> works
+setl commentstring=\"\ %s
 setlocal iskeyword-=#
 setlocal formatoptions -=ro
-
-let b:ale_linters = ['vint']
 
 nnoremap <leader>ch <Cmd>call edit#ch()<CR>
 

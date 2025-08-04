@@ -5,6 +5,7 @@ M.color_column = function()
     id = 'color_column',
     name = 'Color Column',
     get = function()
+      ---@diagnostic disable-next-line: undefined-field
       local cc = vim.opt_local.colorcolumn:get()
       local tw = vim.bo.textwidth
       local col = tostring(tw ~= 0 and tw or 81)

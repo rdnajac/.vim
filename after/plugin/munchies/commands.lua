@@ -9,7 +9,10 @@ end
 local command = vim.api.nvim_create_user_command
 
 command('Config', function()
-  Snacks.picker.files({ cwd = vim.fn.stdpath('config') })
+  Snacks.picker.files({ 
+    cwd = vim.fn.stdpath('config'),
+    ft = { 'lua', 'vim' } 
+  })
 end, {})
 
 vim.api.nvim_create_user_command('Zoxide', function(_)

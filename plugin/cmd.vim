@@ -20,3 +20,10 @@ command! -bang Quit call quit#buffer(<q-bang>)
 
 " TOOD: move to plugin/scp.vim
 command! -nargs=1 -complete=customlist,bin#scp#complete Scp call bin#scp#scp(<f-args>)
+
+command! -nargs=+ DiffBufs
+      \ call execute('buffer ' . split(<q-args>)[0]) |
+      \ call execute('vert sbuffer ' . split(<q-args>)[1]) |
+      \ diffthis |
+      \ wincmd p |
+      \ diffthis

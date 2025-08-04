@@ -42,11 +42,11 @@ M.opts = {
       draw = {
         treesitter = { 'lsp' },
         -- default
-        columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
+        -- columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
         -- indexed
         -- columns = { { 'item_idx' }, { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
         -- nvim-cmp style menu
-        -- columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
+        columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
         components = {
           kind_icon = {
             text = function(ctx)
@@ -59,23 +59,42 @@ M.opts = {
   },
   signature = { enabled = true, window = { border = 'single' } },
   keymap = {
-    -- preset = 'default',
     ['<Up>'] = { 'select_prev', 'fallback' },
     ['<Down>'] = { 'select_next', 'fallback' },
     ['<Left>'] = { 'select_prev', 'fallback' },
     ['<Right>'] = { 'select_next', 'fallback' },
+    ['<Tab>'] = {
+      function(cmp)
+        -- local ctx = cmp.get_context()
+        local item = cmp.get_selected_item()
+        -- if the menu is showing and its a snippet, accept and expand ot
+        if cmp.is_visible() then
+          if item and item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
+            cmp.accept()
+          else
+            cmp.select_next()
+          end
+        end
+        return ''
+      end,
+      'fallback',
+    },
   },
 
   sources = {
-    default = { 'lsp', 'snippets', 'path' },
-    -- FIXME: doesn't show stop showing snippets in comments
-    -- default = function()
-    --   if is_in_comment() then
-    --     return { 'buffer', 'path' }
-    --   else
-    --     return { 'lsp', 'snippets', 'path' }
-    --   end
-    -- end,
+    -- default = { 'lsp', 'snippets', 'path' },
+    default = function(ctx)
+      local success, node = pcall(vim.treesitter.get_node)
+      if
+        success
+        and node
+        and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment', 'comment_content' }, node:type())
+      then
+        return { 'buffer' }
+      else
+        return { 'lsp', 'path', 'snippets' }
+      end
+    end,
     per_filetype = {
       lua = { inherit_defaults = true, 'lazydev' },
       oil = {},
@@ -94,6 +113,7 @@ M.opts = {
       snippets = {
         score_offset = 100,
         opts = { friendly_snippets = false },
+        -- HIDE SNIPPETS AFTER TRIGGER CHARACTER ~
         should_show_items = function(ctx)
           return ctx.trigger.initial_kind ~= 'trigger_character'
         end,
@@ -132,19 +152,13 @@ M.opts = {
         name = 'env',
         module = 'blink-cmp-env',
         score_offset = -5,
-        -- opts = {
-        --   item_kind = function()
-        --     return require('blink.cmp.types').CompletionItemKind.Variable
-        --   end,
-        --   show_braces = false,
-        --   show_documentation_window = true,
-        -- },
-        -- should_show_items = function(ctx)
-        --   local col = ctx.cursor[2]
-        --   local before = ctx.line:sub(1, col)
-        --   return before:match('%$[%w_]*$') ~= nil
-        -- end,
-        --
+        opts = {
+          item_kind = function()
+            return require('blink.cmp.types').CompletionItemKind.Variable
+          end,
+          show_braces = false,
+          show_documentation_window = true,
+        },
       },
       -- emoji = {
       --   module = 'blink-emoji',
@@ -179,6 +193,23 @@ M.config = function()
     require('blink.cmp').show({ providers = { 'env' } })
     return '$'
   end, { expr = true, replace_keycodes = false })
+
+  --   vim.keymap.set('i', '<Tab>', function()
+  --     local cmp = require('blink.cmp')
+  --     local ctx = cmp.get_context()
+  --     local item = cmp.get_selected_item()
+  --     -- if the menu is showing and its a snippet, accept and expand ot
+  --     if cmp.is_visible() then
+  --       if item and item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
+  --         cmp.accept()
+  --       else
+  --         cmp.select_next()
+  --       end
+  --     else
+  --       return '<Tab>'
+  --     end
+  --     return ''
+  --   end, { expr = true })
 end
 
 return M

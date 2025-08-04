@@ -5,7 +5,7 @@ if !has('nvim')
 endif
 
 set showcmdloc=statusline
-"set statusline=%!MyStatusline()
+set statusline=%!MyStatusline()
 let &laststatus = has('nvim') ? 3 : 2
 " set noruler
 " set tabline=%!MyTabline()
@@ -26,7 +26,8 @@ function MyStatusline() abort
   let l:line .= '%#Chromatophore_y#'
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
   let l:line .= '%S '
-  let l:line .= vimline#recording()
+  let l:line .= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
+  " let l:line .= vimline#recording()
   let l:line .= vimline#components#blink()
   let l:line .= printf('%10s', vimline#components#mode())
   let l:line .= '%#Black#'

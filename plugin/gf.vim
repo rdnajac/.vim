@@ -1,7 +1,7 @@
 " wrap gf to not open in the floating window
 function! s:gf()
   let l:file = expand('<cfile>')
-  if l:file == ''
+  if l:file ==# ''
     return
   endif
   wincmd w

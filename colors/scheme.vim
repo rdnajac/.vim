@@ -2,6 +2,12 @@
 " Description:  vim colorscheme inspired by tokyonight
 " Author:       rdnajac
 
+if has('nvim')
+  lua vim.pack.add({'folke/tokyonight.nvim'})
+  lua require('tokyonight').load(require('munchies.tokyonight').opts)
+  finish
+endif
+
 hi clear
 if exists('syntax_on')
   syntax reset

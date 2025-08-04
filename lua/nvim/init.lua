@@ -45,3 +45,4 @@ for _, config in ipairs(start_configs) do
 end
 
 require('nvim.diagnostic')
+require('munchies.chromatophore')

@@ -1,7 +1,8 @@
+---@mod
 local M = {}
 
 M.terminal = {
-  bo = { filetype = 'terminal' },
+  bo = { filetype = 'snacks_terminal' },
   wo = {},
   keys = {
     q = 'hide',

@@ -15,15 +15,16 @@ local M = {}
 -- override some of the default LSP keymaps with snacks
 M.keys = function()
   local opts = { buffer = true, nowait = true }
+  -- TODO use which key to set these up
   -- stylua: ignore
   return {
-    { 'grr', function() Snacks.picker.lsp_references() end,        opts },
-    { 'gd',  function() Snacks.picker.lsp_definitions() end,       opts },
-    { 'gD',  function() Snacks.picker.lsp_declarations() end,      opts },
-    { 'gri', function() Snacks.picker.lsp_implementations() end,   opts },
-    { 'gry', function() Snacks.picker.lsp_type_definitions() end,  opts },
-    { 'grs', function() Snacks.picker.lsp_symbols() end,           opts },
-    { 'grw', function() Snacks.picker.lsp_workspace_symbols() end, opts },
+    { 'glr', function() Snacks.picker.lsp_references() end,        opts },
+    { 'gld', function() Snacks.picker.lsp_definitions() end,       opts },
+    { 'glD', function() Snacks.picker.lsp_declarations() end,      opts },
+    { 'gli', function() Snacks.picker.lsp_implementations() end,   opts },
+    { 'glt', function() Snacks.picker.lsp_type_definitions() end,  opts },
+    { 'gls', function() Snacks.picker.lsp_symbols() end,           opts },
+    { 'glw', function() Snacks.picker.lsp_workspace_symbols() end, opts },
   }
 end
 
