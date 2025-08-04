@@ -1,21 +1,23 @@
 local M = {}
 
 --- Converts a file path to a Lua module name.
----@param path string The file path to convert.
+---@param path? string The file path to convert.
 ---@return string
 M.modname = function(path)
-  local lua_start = path:find('/lua/')
+  local modpath = path or vim.api.nvim_buf_get_name(0)
+
+  local lua_start = modpath:find('/lua/')
   if not lua_start then
-    return path
+    Snacks.notify.warn('Path does not contain "/lua/": ' .. modpath)
+    return ''
   end
 
-  local mod_path = path:sub(lua_start + #'/lua/')
-  local ret = mod_path
+  return modpath
+    :sub(lua_start + #'/lua/')
     :gsub('%.lua$', '') -- remove '.lua' extension
     :gsub('/', '.') -- convert path to module format
     :gsub('^%.', '') -- remove leading dot
     :gsub('%.init$', '') -- optionally remove '.init' suffix for init.lua
-  return ret
 end
 
 return M

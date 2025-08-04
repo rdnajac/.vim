@@ -3,12 +3,9 @@ let b:ale_linters = ['lua_language_server']
 setlocal expandtab
 setlocal formatoptions-=ro
 
-" -s, --search-parent-directories
-let &l:formatprg = 'stylua -s --stdin-filepath=% -'
+let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
 
-inoremap <buffer> [[<CR> ([[<CR><CR>]])<UP>
-
-inoremap <buffer> \si  --<SPACE>stylua:<SPACE>ignore
+inoremap <buffer> \si --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> \ss --<SPACE>stylua:<SPACE>ignore<SPACE>start
 inoremap <buffer> \se --<SPACE>stylua:<SPACE>ignore<SPACE>end
 
@@ -16,14 +13,12 @@ inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><c-g>u<CR><CR><esc>hi<Space><Space>
 
 finish
-
 " simple auto-brackets
 inoremap <buffer> ( ()<Left>
 inoremap <buffer> ' ''<Left>
 inoremap <buffer> {<SPACE> {}<LEFT><LEFT><SPACE><LEFT><SPACE>
 inoremap <buffer> {<CR> {<CR>}<C-c>O
 inoremap <buffer> {, {<CR>},<C-c>O
-
 
 " WIP.. TODO: map to `cr` like with CoeRce from `vim-abolish`
 " local function transform
