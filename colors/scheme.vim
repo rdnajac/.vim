@@ -3,8 +3,8 @@
 " Author:       rdnajac
 
 if has('nvim')
-  lua vim.pack.add({'folke/tokyonight.nvim'})
-  lua require('tokyonight').load(require('munchies.tokyonight').opts)
+  " lua require('tokyonight').load(require('nvim.tokyonight').opts)
+  lua require('nvim.colorscheme').load()
   finish
 endif
 
@@ -67,7 +67,6 @@ endfunction
 
 " Highlighting groups for various occasions
 " =========================================
-
 " Define the background in the normal group
 call s:Highlight('Normal', s:white, s:bg, '')
 call s:Highlight('Comment', s:comment, 'NONE', 'italic')
@@ -142,10 +141,8 @@ hi! link CursorIM Cursor
 " hi! link HelpCommand Statement
 " hi! link HelpExample Statement
 
-" =============================================================================
 " Highlighting groups for language syntaxes
-" =============================================================================
-
+" =========================================
 call s:Highlight('Statement', s:red, 'NONE', '')
 call s:LinkGroups('Statement', 'Conditional', 'Repeat', 'Label', 'Operator', 'Keyword', 'Exception')
 
@@ -179,16 +176,12 @@ call s:Highlight('Added', s:green1, s:tokyonight, '')
 call s:Highlight('Changed', s:yellow, s:eigengrau, '')
 call s:Highlight('Removed', s:red, s:tokyonight, '')
 
-" =============================================================================
 " Highlighting groups for VimL
-" =============================================================================
+" ============================
 call s:Highlight('vimFuncSID', s:blue, 'NONE', '')
 
-
-" =============================================================================
 " Terminal Colors
-" =============================================================================
-
+" ===============
 let g:terminal_color_0 = s:black
 let g:terminal_color_1 = s:red
 let g:terminal_color_2 = s:green
