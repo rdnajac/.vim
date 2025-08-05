@@ -1,17 +1,12 @@
--- Lualine statuslien components that mightbe useful
-
 -- Escape `%` in str so it doesn't get picked as stl item.
----@param str string
----@return string
-local stl_escape = function(str)
-  local ret = type(str) == 'string' and str:gsub('%%', '%%%%') or str
-  return ret
+local vimlineescape = function(str)
+  return type(str) == 'string' and str:gsub('%%', '%%%%') or str
 end
 
 local M = {}
 
 M.hostname = function()
-  vim.loop.os_gethostname():gsub('%%', '%%%%') -- escape `%` for stl
+  vimlineescape(vim.loop.os_gethostname())
 end
 
 M.location = function()

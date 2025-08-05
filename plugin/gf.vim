@@ -8,7 +8,7 @@ function! s:gf()
   execute 'edit' fnameescape(l:file)
 endfunction
 
-nnoremap <buffer> gf :call <SID>gf()<CR>
+" nnoremap <buffer> gf :call <SID>gf()<CR>
 
 augroup gf
   autocmd!

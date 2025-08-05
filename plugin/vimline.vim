@@ -4,20 +4,21 @@ if !has('nvim')
   finish
 endif
 
+lua require('vimline')
+
 set showcmdloc=statusline
 set statusline=%!MyStatusline()
 let &laststatus = has('nvim') ? 3 : 2
-" set noruler
+set noruler
 " set tabline=%!MyTabline()
 " set showtabline=2
 " set winbar=%!MyWinbar()
 
 function MyStatusline() abort
   let l:line = ''
-  " let line .= '%<'                " Left: truncated file path
-  " let line .= '%f'                " filename
-  " let line .= '%w'                " preview window flag
-
+  " let l:line .= '%#Chromatophore_a# '
+  " let [l:root, l:rel_path] = git#RelativePath()
+  " let line .= l:rel_path
   " let l:line .= vimline#components#docsymbols()
   let l:line .= ' %='               " Right alignment
   " let l:line .= vimline#components#lspprogress()
@@ -29,7 +30,7 @@ function MyStatusline() abort
   let l:line .= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
   " let l:line .= vimline#recording()
   let l:line .= vimline#components#blink()
-  let l:line .= printf('%10s', vimline#components#mode())
+  " let l:line .= printf('%10s', vimline#components#mode())
   let l:line .= '%#Black#'
   let l:line .= ''
   return line

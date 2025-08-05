@@ -1,3 +1,9 @@
+scriptencoding=utf-8
+
+function! vimline#component(component) abort
+  return luaeval('require("vimline")[_A]()', a:component)
+endfunction
+
 function! vimline#recording() abort
   let rec = reg_recording()
   let reg = empty(rec) ? get(g:, 'vimline_last_reg', 'q') : rec

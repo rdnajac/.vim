@@ -1,7 +1,7 @@
 local M = {}
 
 local config = {
-  icons = require('nvim.icons').kinds,
+  icons = icons.kinds,
   depth_limit = 0,
   depth_limit_indicator = icons.misc.dots,
   lazy_update_context = false,
@@ -14,7 +14,7 @@ setmetatable(config.icons, {
   end,
 })
 
-local lib = require('vimline.docsymbols.lib')
+-- local lib = require('vimline.docsymbols.lib')
 
 for k, v in pairs(config.icons) do
   if lib.adapt_lsp_str_to_num(k) then

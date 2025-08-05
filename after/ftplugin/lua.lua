@@ -73,13 +73,14 @@ end
 
 -- stylua: ignore start
 vim.keymap.set('n', 'crf', function() modify_cur_line(fun_form) end, { buffer = true, desc = 'toggle func form' })
+-- FIXME: ¿
 vim.keymap.set('n', 'crm', function() modify_cur_line(local_M) end, { buffer = true, desc = 'toggle local<->M' })
 -- stylua: ignore end
 
 --- Yank Lua module name or require('modname') to system clipboard
 ---@param with_require boolean? If true, wrap in require(...)
 local function yank_modname(with_require)
-  local modname = require('nvim.util.path').modname()
+  local modname = require('util.path').modname(vim.fn.expand('%:p'))
   if modname == '' then
     return
   end

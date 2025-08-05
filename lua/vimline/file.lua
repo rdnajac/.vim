@@ -129,4 +129,4 @@ M.name = function(opts)
   return marks[1] and (data .. ' ' .. table.concat(marks, '')) or data
 end
 
-return filename_segment
+return M

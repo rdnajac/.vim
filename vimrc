@@ -88,6 +88,8 @@ augroup vimrc
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+
+  au VimLeave * if v:dying | echom "help im dying: " . v:dying | endif
   " }}}3
 
 augroup END
@@ -314,7 +316,7 @@ inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
-call plug#begin('~/.vim/pack/plugged/')
+call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
 Plug 'lervag/vimtex'
@@ -323,23 +325,22 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'vuciv/golf'
 
 " start
-Plug 'tpope/vim-git', { 'dir': '~/.vim/pack/tpope/start/vim-git' }
-Plug 'tpope/vim-fugitive', { 'dir': '~/.vim/pack/tpope/start/vim-fugitive' }
-Plug 'tpope/vim-repeat', { 'dir': '~/.vim/pack/tpope/start/vim-repeat' }
-Plug 'tpope/vim-rsi', { 'dir': '~/.vim/pack/tpope/start/vim-rsi' }
-Plug 'tpope/vim-surround', { 'dir': '~/.vim/pack/tpope/start/vim-surround' }
-Plug 'tpope/vim-scriptease', { 'dir': '~/.vim/pack/tpope/start/vim-scriptease' }
+Plug 'tpope/vim-git'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-scriptease'
 
 " opt
-Plug 'tpope/vim-abolish', { 'dir': '~/.vim/pack/tpope/opt/vim-abolish' }
-Plug 'tpope/vim-capslock', { 'dir': '~/.vim/pack/tpope/opt/vim-capslock' }
-Plug 'tpope/vim-characterize', { 'dir': '~/.vim/pack/tpope/opt/vim-characterize' }
-Plug 'tpope/vim-dispatch', { 'dir': '~/.vim/pack/tpope/opt/vim-dispatch' }
-Plug 'tpope/vim-endwise', { 'dir': '~/.vim/pack/tpope/opt/vim-endwise' }
-Plug 'tpope/vim-unimpaired', { 'dir': '~/.vim/pack/tpope/opt/vim-unimpaired' }
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-capslock'
+Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-unimpaired'
 
 if !has('nvim')
-  " handled by vim.pack
   Plug 'github/copilot.vim'
 
   " dev
@@ -361,5 +362,4 @@ call plug#end()
 
 if has('nvim')
   lua require('nvim')
-  packadd! vimline
 endif

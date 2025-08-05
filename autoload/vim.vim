@@ -13,7 +13,6 @@ function! vim#vim_init() abort
   let &verbosefile = home . '.vimlog.txt'
 
   " some settings are already default in nvim
-  set autoread
   set wildoptions=pum,tagfile
 
   " use ripgrep for searching
@@ -21,6 +20,8 @@ function! vim#vim_init() abort
     set grepprg=rg\ --vimgrep\ --uu
     set grepformat=%f:%l:%c:%m
   endif
+
+  call vim#sensible#setup()
 endfunction
 
 function! s:init() abort
