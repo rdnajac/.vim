@@ -1,9 +1,9 @@
 if not package.loaded['snacks'] then
-  print('no snacks')
+  vim.notify('Chromatophore requires Snacks to be loaded first.', vim.log.levels.WARN)
   return
 end
 
-local get_mode = require('nvim.util.mode').get
+local get_mode = require('util.mode').get
 
 local colors = {
   green = '#39ff14',

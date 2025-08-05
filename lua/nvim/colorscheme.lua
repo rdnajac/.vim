@@ -1,4 +1,10 @@
-local M = { 'folke/tokyonight.nvim' }
+local M = {}
+
+M.specs = {
+  -- 'catppuccin/nvim',
+  'projekt0n/github-nvim-theme',
+  'folke/tokyonight.nvim',
+}
 
 ---@type tokyonight.Config
 M.opts = {
@@ -41,6 +47,13 @@ M.opts = {
     -- kinds = false,
   },
 }
+
+M.load = function()
+  vim.pack.add(vim.tbl_map(function(s)
+    return 'https://github.com/' .. s
+  end, M.specs))
+  require('tokyonight').load(M.opts)
+end
 
 ---@param file string
 ---@param contents string
