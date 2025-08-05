@@ -1,7 +1,7 @@
 ---@module "snacks"
 ---@type snacks.picker.sources.Config|{}|table<string, snacks.picker.Config|{}>
 return {
-  explorer = require('plugins.snacks.explorer'),
+  explorer = require('munchies.config.explorer'),
   files = {
     config = function(opts)
       local cwd = opts.cwd or vim.loop.cwd()
@@ -50,5 +50,14 @@ return {
         { win = 'list', border = 'rounded' },
       },
     },
+  },
+  -- mine
+  scriptnames = {
+    title = 'Scriptnames',
+    items = require('munchies.picker.scriptnames').items(),
+    format = function(item)
+      return { { item.text } }
+    end,
+    sort = { fields = { 'idx' } },
   },
 }

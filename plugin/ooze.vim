@@ -21,8 +21,8 @@ nnoremap <silent><expr> <CR> ooze#cr()
 command! -range=% OozeVisual call ooze#visual()
 command!          OozeRunFile call ooze#runfile()
 
-nmap <silent> <leader><CR> <Cmd>OozeRunFile<CR>
-
+" TODO: only apply keymaps once a channel is selected
+" nmap <silent> <leader><CR> <Cmd>OozeRunFile<CR>
 " vnoremap <silent> <CR>   :OozeVisual<CR>
 " nnoremap <silent> <M-CR> :OozeRunFile<CR>
 

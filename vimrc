@@ -10,7 +10,7 @@ set autowrite
 set autowriteall
 set noswapfile " XXX: do I want this?
 
-" set confirm
+set confirm
 set startofline
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
@@ -357,6 +357,8 @@ if !has('nvim')
 
   " try the shipped vim9 comment plugin
   Plug 'tpope/vim-commentary'
+else
+  Plug 'folke/snacks.nvim'
 endif
 call plug#end()
 

@@ -21,10 +21,6 @@ if has('path_extra') && (',' . &g:tags . ',') =~# ',\./tags,'
   setglobal tags-=./tags tags-=./tags; tags^=./tags;
 endif
 
-" Saving options in session and view files causes more problems than it
-" solves, so disable it.
-set sessionoptions-=options
-set viewoptions-=options
 
 " Disable a legacy behavior that can break plugin maps.
 set nolangremap

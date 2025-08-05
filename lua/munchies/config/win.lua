@@ -1,6 +1,5 @@
 ---@module 'snacks'
-
-local win = {
+return {
   preview = { minimal = true },
   input = {
     keys = {
@@ -62,4 +61,3 @@ local win = {
     },
   },
 }
-return win

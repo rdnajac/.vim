@@ -1,7 +1,5 @@
 local M = { 'folke/snacks.nvim' }
 
-M.priority = 1000
-
 ---@module "snacks"
 ---@type snacks.Config
 M.opts = {
@@ -44,10 +42,10 @@ M.opts = {
   },
   ---@type snacks.picker.Config
   picker = {
-    sources = require('plugins.snacks.pickers'),
-    layout = { preset = 'ivy' }, -- default layout for pickers
-    layouts = {},
-    win = require('munchies.picker.win'),
+    layout = { preset = 'ivy' },
+    layouts = require('munchies.config.layouts'),
+    sources = require('munchies.config.pickers'),
+    win = require('munchies.config.win'),
   },
   quickfile = { enabled = true },
   scope = { enabled = true },
@@ -73,7 +71,7 @@ M.opts = {
   statuscolumn = { enabled = false },
   styles = {
     lazygit = { height = 0, width = 0 },
-    terminal = require('plugins.snacks.styles').terminal,
+    terminal = require('munchies.config.styles').terminal,
   },
   terminal = {
     start_insert = true,
@@ -84,29 +82,7 @@ M.opts = {
   words = { enabled = true },
 }
 
-M.config = function()
-  -- setup makes the global `Snacks` table available
-  require('snacks').setup(M.opts)
-
-  -- use the included icons for other plugins
-  local icons = require('snacks.picker.config.defaults').defaults.icons
-
-  -- merge with the icons from nvim.icons
-  _G.icons = vim.tbl_deep_extend('force', {}, icons, require('nvim.icons'))
-
-  -- setup debug functions
-  _G.bt = function()
-    Snacks.debug.backtrace()
-  end
-
-  _G.dd = function(...)
-    return (function(...)
-      return Snacks.debug.inspect(...)
-    end)(...)
-  end
-
-  vim.print = _G.dd
-end
+require('snacks').setup(M.opts)
 
 return M
 -- vim:fdm=indent fdl=1

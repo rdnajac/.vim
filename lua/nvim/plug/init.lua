@@ -1,10 +1,6 @@
--- use nvim's native package manager to clone plugins and load them
--- Manages plugins only in a dedicated [vim.pack-directory]() (see |packages|):
 -- `$XDG_DATA_HOME/nvim/site/pack/core/opt`.
--- vim.g.PACKDIR = vim.fn.stdpath('data') .. '/site/pack/core/opt/'
 -- /Users/rdn/.local/neovim/share/nvim/runtime/lua/vim/pack.lua:198
 -- `return vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')`
-vim.g.PACKDIR = vim.fn.expand('~/.local/share/nvim/site/pack/core/opt/')
 
 ---- Extend the `vim.pack.Spec` type with additional fields
 ---@class PlugSpec : vim.pack.Spec
@@ -17,27 +13,21 @@ vim.g.PACKDIR = vim.fn.expand('~/.local/share/nvim/site/pack/core/opt/')
 
 local M = {}
 
----@param module any
+---@param plugin PlugSpec
 ---@return boolean
-M.is_enabled = function(module)
-  if type(module) ~= 'table' then
-    return true
-  end
-  local enabled = module.enabled
-  if enabled == nil then
-    return true
-  end
+local function is_enabled(plugin)
+  local enabled = plugin.enabled
   if type(enabled) == 'function' then
     local ok, res = pcall(enabled)
     return ok and res
   end
-  return enabled
+  return enabled == nil or enabled
 end
 
 ---@param module string|vim.pack.Spec|PlugSpec
 ---@return vim.pack.Spec|nil
 M.to_spec = function(module)
-  if not M.is_enabled(module) then
+  if not is_enabled(module) then
     return nil
   end
 
@@ -55,59 +45,6 @@ M.to_spec = function(module)
     name = type(module) == 'table' and module.name or nil,
     version = type(module) == 'table' and module.version or nil,
   }
-end
-
----@param name string
----@param plugin PlugSpec
-M.build = function(name, plugin)
-  if plugin.build then
-    require('nvim.plug.build')(name, plugin.build)
-  end
-end
-
--- Autocmd setup for lazy configs
-local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
-
----@param event string|string[]
----@param config fun(): nil
-M.lazyload = function(event, config)
-  vim.api.nvim_create_autocmd(event, {
-    group = aug,
-    once = true,
-    callback = config,
-  })
-end
-
-local start_configs = {}
-
---- Queue plugin config for execution
----@param name string
----@param plugin PlugSpec
-M.config = function(name, plugin)
-  if type(plugin.config) ~= 'function' then
-    return
-  end
-
-  if plugin.event then
-    M.lazyload(plugin.event, plugin.config)
-  else
-    local entry = { name, plugin.config }
-    if plugin.priority and plugin.priority ~= 0 then
-      table.insert(start_configs, 1, entry)
-    else
-      table.insert(start_configs, entry)
-    end
-  end
-end
-
---- Execute all queued plugin configs
-M.do_configs = function()
-  for _, entry in ipairs(start_configs) do
-    local ok, err = pcall(entry[2])
-    if not ok then
-      vim.notify(('Failed to configure plugin "%s": %s'):format(entry[1], err), vim.log.levels.ERROR)
-    end
-  end
 end
 
 --- Collect valid plugin specs (with dependencies) for `vim.pack.add`
@@ -135,15 +72,60 @@ M.collect_specs = function(plugins)
   return specs
 end
 
--- vim.api.nvim_create_user_command('Plug', function(args)
---   assert(type(args.fargs) == 'table', 'Plug command requires a table argument')
---   vim.pack.add(args.fargs)
--- end, { nargs = '*', force = true })
-vim.api.nvim_create_user_command('PackUpdate', function(opts)
-  -- must pass nil to update all plugins
-  vim.pack.update(nil, { force = opts.bang })
-end, { bang = true })
+-- TODO: when to build?
+-- plug.build(name, plugin)
+---@param name string
+---@param plugin PlugSpec
+M.build = function(name, plugin)
+  if plugin.build then
+    require('nvim.plug.build')(name, plugin.build)
+  end
+end
 
+-- Autocmd setup for lazy configs
+local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
+
+---@param name string
+---@param plugin PlugSpec
+local function config(plugin)
+  if type(plugin.config) == 'function' then
+    if plugin.event then
+      vim.api.nvim_create_autocmd(plugin.event, {
+        group = aug,
+        once = true,
+        callback = plugin.config,
+      })
+    else
+      plugin.config()
+    end
+  end
+end
+
+--- Execute all queued plugin configs a la `lazy.nvim`
+---@param plugins table<string, PlugSpec>
+M.do_configs = function(plugins)
+  for name, plugin in pairs(plugins) do
+    if is_enabled(plugin) then
+      config(plugin)
+    end
+  end
+end
+
+vim.api.nvim_create_user_command('Plug', function(args)
+  if #args.fargs == 0 then
+    print(vim.inspect(vim.pack.get()))
+  else
+    vim.pack.add({ 'https://github.com/' .. args.fargs[1] })
+  end
+end, { nargs = '?', force = true })
+
+-- must pass nil to update all plugins with a bang
+vim.api.nvim_create_user_command('PlugUpdate', function(opts)
+  vim.pack.update(nil, { force = opts.bang })
+end, { bang = true, force = true })
+
+-- vim.api.nvim_create_user_command('PlugClean', function(opts)
+-- get plugins and see whats not bring used
 -- restart +qall! lua vim.pack.update()
 
 return M

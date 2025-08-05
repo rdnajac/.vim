@@ -1,6 +1,6 @@
 local M = {}
 
-local scriptnames = function()
+M.items = function()
   local ok, result = pcall(vim.api.nvim_exec2, 'scriptnames', { output = true })
   if not ok then
     return {}
@@ -23,15 +23,15 @@ local scriptnames = function()
   return items
 end
 
-M.pick = function()
-  Snacks.picker.pick({
-    title = 'Scriptnames',
-    items = scriptnames(),
-    format = function(item)
-      return { { item.text } }
-    end,
-    sort = { fields = { 'idx' } },
-  })
-end
+-- M.pick = function()
+--   Snacks.picker.pick({
+--     title = 'Scriptnames',
+--     items = reqire('munchies.picker.scriptnames').items(),
+--     format = function(item)
+--       return { { item.text } }
+--     end,
+--     sort = { fields = { 'idx' } },
+--   })
+-- end
 
-return M.pick
+return M

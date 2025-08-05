@@ -4,9 +4,6 @@
 .netrwhist
 Session.vim
 
-# only track plugins in development
 pack/
-!pack/dev/
-!pack/dev/**
-
-autoload/plug.vim
+!pack/vimfect/
+!pack/vimfect/**

@@ -11,10 +11,7 @@ pcall(function()
   require('vim._extui').enable({})
 end)
 
--- TODO: require wrapper that handles spec-loading
-require('munchies')
-local opts = require('nvim.colorscheme').opts
-_G.colors = require('tokyonight').load(opts)
+-- local opts = require('nvim.colorscheme').opts
+-- _G.colors = require('tokyonight').load(opts)
+_G.munchies = require('munchies')
 _G.plugins = require('plugins')
-
-require('munchies')
