@@ -28,15 +28,15 @@ M.opts = {
     ['gi'] = {
       desc = 'Toggle file detail view',
       callback = function()
+        local columns = {}
         detail = (detail + 1) % 3
-        local oil = require('oil')
+
         if detail == 0 then
-          oil.set_columns({ 'icon' })
+          columns = { 'icon' }
         elseif detail == 1 then
-          oil.set_columns({ 'icon', 'permissions', 'size', 'mtime' })
-        else
-          oil.set_columns({})
+          columns = { 'icon', 'permissions', 'size', 'mtime' }
         end
+        require('oil').set_columns(columns)
       end,
     },
     -- [':'] = {
@@ -49,23 +49,8 @@ M.opts = {
     --   mode = 'n',
     -- },
   },
-
-  float = {
-    padding = 2, -- default = `2`
-    -- border = 'none', -- default - `rounded`
-    win_options = {
-      -- no line numbers
-      signcolumn = 'yes:2',
-      winblend = 0,
-    },
-    get_win_title = nil,
-    -- peview_split = 'right',
-    override = function(conf)
-      conf.row = 1 -- assuming we have tabline
-      return conf
-    end,
-  },
-
+  win_options = { signcolumn = 'yes:2' },
+  float = { get_win_title = nil },
   view_options = {
     is_hidden_file = function(name, bufnr)
       local dir = require('oil').get_current_dir(bufnr)
@@ -87,45 +72,6 @@ M.opts = {
   },
 }
 
-M.autocmds = function()
-  local myoilautocmds = vim.api.nvim_create_augroup('myoilautocmds', { clear = true })
-
-  vim.api.nvim_create_autocmd('User', {
-    group = myoilautocmds,
-    pattern = 'OilActionsPost',
-    callback = function(ev)
-      if ev.data.actions.type == 'move' then
-        Snacks.rename.on_rename_file(ev.data.actions.src_url, ev.data.actions.dest_url)
-      end
-    end,
-    desc = 'Snacks rename on Oil move',
-  })
-
-  vim.api.nvim_create_autocmd('User', {
-    group = myoilautocmds,
-    pattern = 'OilActionsPre',
-    callback = function(ev)
-      -- TODO: is this loop necessary?
-      for _, action in ipairs(ev.data.actions) do
-        if action.type == 'delete' then
-          local _, path = require('oil.util').parse_url(action.url)
-          Snacks.bufdelete({ file = path, force = true })
-        end
-      end
-    end,
-    desc = 'Delete buffer on Oil delete',
-  })
-
-  vim.api.nvim_create_autocmd('BufEnter', {
-    group = myoilautocmds,
-    pattern = 'oil://*',
-    callback = function()
-      require('oil.actions').cd.callback({ silent = true })
-    end,
-    desc = 'Sync cd with Oil directory on buffer enter',
-  })
-end
-
   -- stylua: ignore
 M.keymaps = function()
   vim.keymap.set('n', '-', function() require('oil').open_float() end, { desc = 'Open Oil in float' })
@@ -144,38 +90,7 @@ end
 M.config = function()
   require('oil').setup(M.opts)
   M.git()
-  M.autocmds()
   M.keymaps()
 end
 
 return M
--- require('oil-git-status').setup({
---   show_ignored = true, -- show files that match gitignore with !!
---   symbols = { -- customize the symbols that appear in the git status columns
---     index = {
---       ['!'] = '!',
---       ['?'] = '?',
---       ['A'] = 'A',
---       ['C'] = 'C',
---       ['D'] = 'D',
---       ['M'] = 'M',
---       ['R'] = 'R',
---       ['T'] = 'T',
---       ['U'] = 'U',
---       [' '] = ' ',
---     },
---     working_tree = {
---       ['!'] = '!',
---       ['?'] = '?',
---       ['A'] = 'A',
---       ['C'] = 'C',
---       ['D'] = 'D',
---       ['M'] = 'M',
---       ['R'] = 'R',
---       ['T'] = 'T',
---       ['U'] = 'U',
---       [' '] = ' ',
---     },
---   },
--- })
---

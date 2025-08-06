@@ -19,3 +19,5 @@ end
 vim.print = _G.dd
 
 require('munchies.chromatophore')
+
+-- Snacks.util.on_module('oil', require('munchies.oil'))
