@@ -13,16 +13,6 @@
     "description": "autocmd"
   },
 
-  "function": {
-    "prefix": "function",
-    "body": ["function${1: name}($2)", "\t${0}", "end"]
-  },
-
-  "set": {
-    "prefix": "set",
-    "body": "vim.opt.${0}"
-  },
-
   "module": {
     "prefix": "local M",
     "body": [
@@ -38,7 +28,7 @@
     "body": [
       "init = function()",
       "  ${0}",
-      "end,"
+      "end"
     ],
     "description": "lazy spec init"
   },
@@ -48,7 +38,7 @@
     "body": [
       "config = function()",
       "  ${0}",
-      "end,"
+      "end"
     ],
     "description": "lazy spec config"
   },

@@ -1,15 +1,11 @@
 if exists('g:loaded_mykeywordprg')
   finish
 endif
-
 let g:loaded_mykeywordprg = 1
-" Keywords are used in searching and recognizing with many commands:
-" set iskeyword-=_
 
 command! -nargs=* ManLookup call s:ManLookup(<f-args>)
 
 function! s:ManLookup(...) abort
-  " echomsg 'ManLookup called with args: ' . string(a:000)
   let l:page = get(b:, 'manpage', '')
   if empty(l:page)
     echohl ErrorMsg
@@ -17,6 +13,7 @@ function! s:ManLookup(...) abort
     echohl None
     return
   endif
+  " TODO use cword to better match default behavior
   let l:key = a:0 ? a:1 : expand('<cWORD>')
   execute 'Man ' . l:page
   " call search('\<' . l:key . '\>')
@@ -31,7 +28,7 @@ endfunction
 
 augroup ManLookupSetup
   autocmd!
-  autocmd FileType lua        setlocal keywordprg=:help
+  autocmd FileType lua       setlocal keywordprg=:help iskeyword+=-
   autocmd FileType sh        setlocal keywordprg=:Man
   autocmd FileType kitty     call s:KeywordSetup('kitty')
   autocmd FileType tmux      call s:KeywordSetup('tmux')
