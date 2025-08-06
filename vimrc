@@ -1,6 +1,5 @@
 scriptencoding=utf-8
 call vim#rc()
-color scheme
 
 let g:mapleader = ' '
 let g:maplocalleader = '\'
@@ -364,4 +363,6 @@ call plug#end()
 
 if has('nvim')
   lua require('nvim')
+else
+  color scheme
 endif

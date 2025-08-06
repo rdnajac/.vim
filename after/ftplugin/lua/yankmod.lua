@@ -1,7 +1,7 @@
 --- Yank Lua module name or require('modname') to system clipboard
 ---@param with_require boolean? If true, wrap in require(...)
 local function yank_modname(with_require)
-  local modname = require('util.path').modname(vim.fn.expand('%:p'))
+  local modname = require('meta').modname(vim.fn.expand('%:p'))
   if modname == '' then
     return
   end

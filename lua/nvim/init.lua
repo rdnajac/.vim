@@ -11,7 +11,9 @@ pcall(function()
   require('vim._extui').enable({})
 end)
 
--- local opts = require('nvim.colorscheme').opts
--- _G.colors = require('tokyonight').load(opts)
+-- _G.colors = require('nvim.colorscheme').load()
+require('nvim.plug')
+_G.colors = require('nvim.colorscheme').config()
+--_G.colors = Plug('nvim.colorscheme')
 _G.munchies = require('munchies')
 _G.plugins = require('plugins')

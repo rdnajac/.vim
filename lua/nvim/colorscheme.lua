@@ -48,11 +48,11 @@ M.opts = {
   },
 }
 
-M.load = function()
+M.config = function()
   vim.pack.add(vim.tbl_map(function(s)
     return 'https://github.com/' .. s
   end, M.specs))
-  require('tokyonight').load(M.opts)
+  return require('tokyonight').load(M.opts)
 end
 
 ---@param file string
