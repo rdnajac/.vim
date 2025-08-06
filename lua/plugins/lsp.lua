@@ -1,5 +1,9 @@
 local M = {}
 
+M.dependencies = {
+  'b0o/SchemaStore.nvim',
+}
+
 -- lsp defaults
 -- `grn` is mapped in Normal mode to `vim.lsp.buf.rename()`
 -- `gra` is mapped in Normal and Visual mode to `vim.lsp.buf.code_action()`
@@ -41,10 +45,13 @@ M.on_attach = function(client, bufnr)
   client.server_capabilities.documentFormattingProvider = false
   -- client.server_capabilities.semanticTokensProvider = nil
 
+  -- see `:h lsp-inlay_hint`
   if client:supports_method('textDocument/inlayHint') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
     Snacks.toggle.inlay_hints():map('<leader>uh')
   end
+
+  -- see `:h lsp-codelens`
   if client:supports_method('textDocument/codeLens') then
     vim.lsp.codelens.refresh()
     vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
@@ -60,19 +67,17 @@ M.on_attach = function(client, bufnr)
 end
 
 M.config = function()
-  -- Refer to `:h vim.lsp.config()` for more information.
-  -- `blink.cmp` will automatically set the capabilities
   vim.lsp.config('*', {
-    -- capabilities = require('blink.cmp').get_lsp_capabilities(),
     on_attach = M.on_attach,
+    -- `blink.cmp` will automatically set some capabilities
+    -- capabilities = require('blink.cmp').get_lsp_capabilities(),
   })
 
-  vim.lsp.enable({
-    'bashls',
-    'luals',
-    'ruff',
-    'vimls',
-  })
+  local servers = vim.tbl_map(function(path)
+    return path:match('^.+/(.+)%.lua$')
+  end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
+
+  vim.lsp.enable(servers)
 end
 
 return M
