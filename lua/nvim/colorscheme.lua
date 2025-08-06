@@ -64,50 +64,47 @@ local function _write(file, contents)
   fd:close()
 end
 
-local extras = {
-  -- fzf = { ext = 'sh', url = 'https://github.com/junegunn/fzf', label = 'Fzf' },
-  ghostty = { ext = '', url = 'https://github.com/ghostty-org/ghostty', label = 'Ghostty' },
-  lazygit = { ext = 'yml', url = 'https://github.com/jesseduffield/lazygit', label = 'Lazygit' },
-  lua = { ext = 'lua', url = 'https://www.lua.org', label = 'Lua Table for testing' },
-  prism = { ext = 'js', url = 'https://prismjs.com', label = 'Prism' },
-  slack = { ext = 'txt', url = 'https://slack.com', label = 'Slack' },
-  spotify_player = { ext = 'toml', url = 'https://github.com/aome510/spotify-player', label = 'Spotify Player' },
-  tmux = { ext = 'tmux', url = 'https://github.com/tmux/tmux/wiki', label = 'Tmux' },
-  vim = { ext = 'vim', url = 'https://vimhelp.org/', label = 'Vim', subdir = 'colors', sep = '-' },
-}
-
-local location = {
-  spotify_player = '~/.config/spotify-player/theme.toml',
+local want = {
+  ghostty = {},
+  lazygit = {},
+  spotify_player = { location = '~/.config/spotify-player/theme.toml' },
+  lua = {},
+  vim = {},
 }
 
 M.build = function()
+  local extras = require('tokyonight.extra').extras
+  local colors, groups, opts = require('tokyonight').load(M.opts)
   local style = 'midnight'
   local style_name = ''
-  for _, extra in ipairs(vim.tbl_keys(extras)) do
-    local info = extras[extra]
-    local plugin = require('tokyonight.extra.' .. extra)
-    local colors, groups, opts = require('tokyonight').load(M.opts)
 
-    local fname
-    if location[extra] then
-      fname = vim.fn.fnamemodify(location[extra], ':p')
+  for name, user_opts in pairs(want) do
+    local info = extras[name]
+    if not info then
+      Snacks.notify.warn('tokyonight.extra: unknown extra "' .. name .. '"')
     else
-      fname = extra
-        .. (info.subdir and '/' .. info.subdir .. '/' or '')
-        .. '/tokyonight'
-        .. (info.sep or '_')
-        .. style
-        .. '.'
-        .. info.ext
-      fname = string.gsub(fname, '%.$', '') -- remove trailing dot
-      fname = vim.fn.fnamemodify('~/tokyonight/' .. fname, ':p')
-    end
+      local plugin = require('tokyonight.extra.' .. name)
+      local fname
+      if user_opts.location then
+        fname = vim.fn.fnamemodify(user_opts.location, ':p')
+      else
+        fname = name
+          .. (info.subdir and '/' .. info.subdir .. '/' or '')
+          .. '/tokyonight'
+          .. (info.sep or '_')
+          .. style
+          .. '.'
+          .. info.ext
+        fname = string.gsub(fname, '%.$', '') -- remove trailing dot
+        fname = vim.fn.fnamemodify('~/tokyonight/' .. fname, ':p')
+      end
 
-    colors['_style_name'] = 'Tokyo Night' .. style_name
-    colors['_name'] = 'tokyonight_' .. style
-    colors['_style'] = style
-    print('Writing ' .. fname)
-    _write(fname, plugin.generate(colors, groups, opts))
+      colors['_style_name'] = 'Tokyo Night' .. style_name
+      colors['_name'] = 'tokyonight_' .. style
+      colors['_style'] = style
+      print('Writing ' .. fname)
+      _write(fname, plugin.generate(colors, groups, opts))
+    end
   end
 end
 

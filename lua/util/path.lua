@@ -28,7 +28,7 @@ M.test = function()
   end
 
   -- Typical case
-  eq(M.modname('/Users/me/dev/nvim/lua/foo/bar.lua'), 'foo.bar')
+  eq(M.modname('~/dev/nvim/lua/foo/bar.lua'), 'foo.bar')
 
   -- init.lua in a submodule
   eq(M.modname('/Users/me/dev/nvim/lua/foo/init.lua'), 'foo')

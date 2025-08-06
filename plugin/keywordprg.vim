@@ -18,7 +18,6 @@ function! s:ManLookup(...) abort
     return
   endif
   let l:key = a:0 ? a:1 : expand('<cWORD>')
-  " echomsg 'Looking up "' . l:key . '" in man page: ' . l:page
   execute 'Man ' . l:page
   " call search('\<' . l:key . '\>')
   call search( l:key )
@@ -32,6 +31,7 @@ endfunction
 
 augroup ManLookupSetup
   autocmd!
+  autocmd FileType lua        setlocal keywordprg=:help
   autocmd FileType sh        setlocal keywordprg=:Man
   autocmd FileType kitty     call s:KeywordSetup('kitty')
   autocmd FileType tmux      call s:KeywordSetup('tmux')

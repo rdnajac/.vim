@@ -14,16 +14,15 @@ M.event = 'InsertEnter'
 local kind = vim.lsp.protocol.SymbolKind
 -- local kind = require('blink.cmp.types').CompletionItemKind
 
-local function is_in_comment()
+local function in_comment()
   local success, node = pcall(vim.treesitter.get_node)
-  if not success or not node then
-    return false
-  end
-  while node do
-    if vim.tbl_contains({ 'comment', 'line_comment', 'block_comment', 'comment_content' }, node:type()) then
-      return true
-    end
-    node = node:parent()
+  if success and node then
+    return vim.tbl_contains({
+      'comment',
+      'line_comment',
+      'block_comment',
+      'comment_content',
+    }, node:type())
   end
   return false
 end
@@ -31,6 +30,7 @@ end
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
+  fuzzy = { implementation = 'lua' },
   cmdline = { enabled = false },
   completion = {
     accept = { auto_brackets = { enabled = true } },
@@ -67,38 +67,43 @@ M.opts = {
       function(cmp)
         -- local ctx = cmp.get_context()
         local item = cmp.get_selected_item()
+        local type = require('blink.cmp.types').CompletionItemKind
         -- if the menu is showing and its a snippet, accept and expand ot
         if cmp.is_visible() then
-          if item and item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
-            cmp.accept()
-          else
-            cmp.select_next()
+          if item then
+            if item.kind == type.Snippet then
+              cmp.accept()
+            elseif item.kind == type.Path then
+              -- if the item is a path, accept it and show the menu again
+              cmp.accept()
+              vim.defer_fn(function()
+                cmp.show({ providers = { 'path' } })
+              end, 1)
+            else
+              cmp.select_next()
+            end
           end
         end
-        return ''
       end,
       'fallback',
     },
   },
-
   sources = {
-    -- default = { 'lsp', 'snippets', 'path' },
-    default = function(ctx)
-      local success, node = pcall(vim.treesitter.get_node)
-      if
-        success
-        and node
-        and vim.tbl_contains({ 'comment', 'line_comment', 'block_comment', 'comment_content' }, node:type())
-      then
+    default = function()
+      local defaults = { 'lsp', 'snippets', 'path' }
+
+      if in_comment() then
         return { 'buffer' }
-      else
-        return { 'lsp', 'path', 'snippets' }
       end
+      if vim.bo.filetype == 'lua' then
+        defaults = vim.list_extend({ 'lazydev' }, defaults)
+      end
+      return defaults
     end,
-    per_filetype = {
-      lua = { inherit_defaults = true, 'lazydev' },
-      oil = {},
-    },
+    -- per_filetype = {
+    --   lua = { inherit_defaults = true, 'lazydev' },
+    --   oil = {},
+    -- },
     -- min_keyword_leng = 5,
     providers = {
       path = {
@@ -124,6 +129,20 @@ M.opts = {
         -- end,
       },
       --
+      lsp = {
+        score_offset = 1,
+        transform_items = function(_, items)
+          return vim.tbl_filter(function(item)
+            -- FILTER OUT KEYWORDS AND SNIPPETS FROM LSP
+            return item.kind ~= kind.Keyword and item.kind ~= kind.Snippet
+          end, items)
+        end,
+      },
+      lazydev = {
+        name = 'LazyDev',
+        module = 'lazydev.integrations.blink',
+        score_offset = 100,
+      },
       -- copilot = {
       --   name = 'copilot',
       --   module = 'blink-copilot',
@@ -131,22 +150,10 @@ M.opts = {
       --   async = true,
       --   opts = { max_completions = 2 },
       -- },
-      lsp = {
-        score_offset = 1,
-        transform_items = function(_, items)
-          return vim.tbl_filter(function(item)
-            return item.kind ~= kind.Keyword and item.kind ~= kind.Snippet
-          end, items)
-        end,
-      },
-      -- tmux = {
-      --   name = 'tmux',
-      --   module = 'blink-cmp-tmux',
-      --   score_offset = -1,
-      --   opts = {
-      --     all_panes = true,
-      --     capture_history = true,
-      --   },
+      -- emoji = {
+      --   module = 'blink-emoji',
+      --   name = 'emoji',
+      --   score_offset = 20,
       -- },
       env = {
         name = 'env',
@@ -160,56 +167,28 @@ M.opts = {
           show_documentation_window = true,
         },
       },
-      -- emoji = {
-      --   module = 'blink-emoji',
-      --   name = 'emoji',
-      --   score_offset = 20,
+      -- tmux = {
+      --   name = 'tmux',
+      --   module = 'blink-cmp-tmux',
+      --   score_offset = -1,
+      --   opts = {
+      --     all_panes = true,
+      --     capture_history = true,
+      --   },
       -- },
-      lazydev = {
-        name = 'LazyDev',
-        module = 'lazydev.integrations.blink',
-        score_offset = 100,
-      },
     },
   },
 }
 
 M.config = function()
   require('blink.cmp').setup(M.opts)
-  -- XXX: THIS IS BROKEN
-  -- vim.api.nvim_create_autocmd('User', {
-  --   pattern = 'BlinkCmpAccept',
-  --   callback = function(ev)
-  --     local item = ev.data.item
-  --     if item.kind == require('blink.cmp.types').CompletionItemKind.Path then
-  --       vim.defer_fn(function()
-  --         require('blink.cmp').show()
-  --       end, 1)
-  --     end
-  --   end,
-  --   desc = 'Keep completing path on <Tab>',
-  -- })
+
   vim.keymap.set('i', '$', function()
     require('blink.cmp').show({ providers = { 'env' } })
     return '$'
   end, { expr = true, replace_keycodes = false })
-
-  --   vim.keymap.set('i', '<Tab>', function()
-  --     local cmp = require('blink.cmp')
-  --     local ctx = cmp.get_context()
-  --     local item = cmp.get_selected_item()
-  --     -- if the menu is showing and its a snippet, accept and expand ot
-  --     if cmp.is_visible() then
-  --       if item and item.kind == require('blink.cmp.types').CompletionItemKind.Snippet then
-  --         cmp.accept()
-  --       else
-  --         cmp.select_next()
-  --       end
-  --     else
-  --       return '<Tab>'
-  --     end
-  --     return ''
-  --   end, { expr = true })
 end
+
+-- ~/bin/
 
 return M
