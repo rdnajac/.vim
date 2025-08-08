@@ -3,7 +3,3 @@
 .vimlog.txt
 .netrwhist
 Session.vim
-
-pack/
-!pack/vimfect/
-!pack/vimfect/**

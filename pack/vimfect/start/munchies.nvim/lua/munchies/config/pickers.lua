@@ -15,7 +15,7 @@ return {
     ignored = false,
     actions = {
       toggle = function(self)
-        require('munchies.picker').toggle(self)
+        require('munchies.picker.util').toggle(self)
       end,
     },
   },
@@ -31,7 +31,7 @@ return {
     ignored = false,
     actions = {
       toggle = function(self)
-        require('munchies.picker').toggle(self)
+        require('munchies.picker.util').toggle(self)
       end,
     },
   },
