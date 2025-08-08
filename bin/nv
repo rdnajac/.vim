@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+NVIM_PIPE="${NVIM_PIPE:-${XDG_RUNTIME_DIR:-/tmp}/nvim.pipe}"
+
+resolve() {
+  realpath "$1" 2>/dev/null || readlink -f "$1" 2>/dev/null || printf '%s/%s\n' "$PWD" "$1"
+}
+
+args=()
+for a in "$@"; do
+  [[ $a == -* ]] && args+=("$a") || args+=("$(resolve "$a")")
+done
+
+if [[ -S $NVIM_PIPE ]]; then
+  exec nvim --server "$NVIM_PIPE" --remote "${args[@]}"
+elif [[ -n $NVIM ]]; then
+  exec nvim --server "$NVIM" --remote "${args[@]}"
+else
+  exec nvim --listen "$NVIM_PIPE" "${args[@]}"
+fi
