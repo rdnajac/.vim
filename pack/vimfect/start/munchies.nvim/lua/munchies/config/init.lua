@@ -1,8 +1,6 @@
-local M = { 'folke/snacks.nvim' }
-
 ---@module "snacks"
 ---@type snacks.Config
-M.opts = {
+return {
   bigfile = {
     enabled = true,
   },
@@ -23,9 +21,10 @@ M.opts = {
   explorer = {
     enabled = true,
     replace_netrw = false,
+    -- replace_netrw = vim.g.default_file_explorer == 'snacks',
   },
   image = {
-    enabled = true,
+    enabled = false,
   },
   indent = {
     enabled = true,
@@ -81,8 +80,3 @@ M.opts = {
   },
   words = { enabled = true },
 }
-
-require('snacks').setup(M.opts)
-
-return M
--- vim:fdm=indent fdl=1

@@ -328,15 +328,14 @@ Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'vuciv/golf'
 
-" start
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-scriptease'
-
-" opt
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
@@ -347,13 +346,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'bullets-vim/bullets.vim'
 
 if !has('nvim')
-
-  " dev
-  Plug 'tpope/vim-eunuch'
-  Plug 'tpope/vim-tbone'
-
-  " not used in nvim
-  Plug 'tpope/vim-sensible' " TODO: go over this one more time
+  " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   Plug 'Konfekt/FastFold'
 

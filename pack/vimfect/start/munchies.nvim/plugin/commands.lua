@@ -1,3 +1,4 @@
+-- custom completion function
 local dir_completion = function(arglead, cmdline, cursorpos)
   local matches = vim.fn.getcompletion(arglead, 'dir')
   if #matches == 0 then
@@ -6,24 +7,9 @@ local dir_completion = function(arglead, cmdline, cursorpos)
   return matches
 end
 
+-- local parse_flags_function(args)
+
 local command = vim.api.nvim_create_user_command
-
-command('Config', function()
-  Snacks.picker.files({ 
-    cwd = vim.fn.stdpath('config'),
-    ft = { 'lua', 'vim' } 
-  })
-end, {})
-
-vim.api.nvim_create_user_command('Zoxide', function(_)
-  Snacks.picker.zoxide({
-    confirm = 'edit',
-    -- confirm = function(picker, item)
-    --   picker.cd()
-    --   picker:close()
-    -- end,
-  })
-end, { desc = 'Zoxide to cd or edit (!)' })
 
 vim.api.nvim_create_user_command('Files', function(opts)
   local args = vim.tbl_filter(function(arg)
@@ -46,8 +32,25 @@ vim.api.nvim_create_user_command('Files', function(opts)
   })
 end, {
   nargs = '*',
-  complete = dir_completion,
+  complete = 'dir',
 })
+
+command('Config', function()
+  Snacks.picker.files({
+    cwd = vim.fn.stdpath('config'),
+    ft = { 'lua', 'vim' },
+  })
+end, {})
+
+vim.api.nvim_create_user_command('Zoxide', function(_)
+  Snacks.picker.zoxide({
+    confirm = 'edit',
+    -- confirm = function(picker, item)
+    --   picker.cd()
+    --   picker:close()
+    -- end,
+  })
+end, { desc = 'Zoxide to cd or edit (!)' })
 
 command('Keymaps', function()
   local opts = {

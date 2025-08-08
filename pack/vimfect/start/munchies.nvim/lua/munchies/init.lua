@@ -1,4 +1,7 @@
-require('munchies.config')
+local opts = require('munchies.config')
+
+require('snacks').setup(opts)
+
 -- use the included icons for other plugins
 local icons = require('snacks.picker.config.defaults').defaults.icons
 

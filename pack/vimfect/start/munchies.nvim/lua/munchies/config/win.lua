@@ -1,4 +1,5 @@
 ---@module 'snacks'
+---@type snacks.picker.win.Config
 return {
   preview = { minimal = true },
   input = {
