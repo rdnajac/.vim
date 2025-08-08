@@ -6,6 +6,11 @@ endif
 
 lua require('vimline')
 
+" TODO: should these be colored?
+" -- hl['StatusLineNC'] = { bg = 'NONE' }
+" -- hl['TabLineFill'] = { bg = 'NONE' }
+" -- hl['Winbar'] = { bg = 'NONE' }
+
 set showcmdloc=statusline
 set statusline=%!MyStatusline()
 let &laststatus = has('nvim') ? 3 : 2
@@ -25,6 +30,7 @@ function MyStatusline() abort
   let l:line .= '%#Black#'
   let l:line .= ''
   let l:line .= '%#Chromatophore_y#'
+  let l:line .= mode()
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
   let l:line .= '%S '
   let l:line .= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
@@ -37,8 +43,14 @@ function MyStatusline() abort
 endfunction
 
 function! MyTmuxline() abort
-  let [l:root, l:suffix] = git#RelativePath()
-  let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
+  if bufname('%') =~# '^term://'
+    " let l:prefix = getcwd()
+    let l:prefix = '󱉭 ' . $PWD . ' '
+    let l:suffix = 'channel: ' . &channel
+  else
+    let [l:root, l:suffix] = git#RelativePath()
+    let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
+  endif
   let l:line = ''
   let l:line .= '%#Chromatophore_a# '
   let l:line .= l:prefix

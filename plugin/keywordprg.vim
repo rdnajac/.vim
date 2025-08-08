@@ -29,7 +29,7 @@ endfunction
 augroup ManLookupSetup
   autocmd!
   autocmd FileType lua       setlocal keywordprg=:help iskeyword+=-
-  autocmd FileType sh        setlocal keywordprg=:Man
+  autocmd FileType sh        setlocal keywordprg=:Man  iskeyword-=_
   autocmd FileType kitty     call s:KeywordSetup('kitty')
   autocmd FileType tmux      call s:KeywordSetup('tmux')
   autocmd FileType sshconfig call s:KeywordSetup('ssh')

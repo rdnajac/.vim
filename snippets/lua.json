@@ -4,13 +4,20 @@
     "body": [
       "vim.api.nvim_create_autocmd({'${1:event}'}, {",
         "  pattern = { '${2:*}' },",
+        "  group = aug,",
         "  callback = function()",
         "    ${0}",
         "  end,",
-        "  desc = '${4:Set formatoptions since nvim overrides it}',",
+        "  desc = '${4}',",
         "})"
     ],
     "description": "autocmd"
+  },
+
+  "augroup": {
+    "prefix": "augroup",
+    "body": "local aug = vim.api.nvim_create_augroup('$0', { clear = true })",
+    "description": "Create an augroup with clear = true"
   },
 
   "module": {

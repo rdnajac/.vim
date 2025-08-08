@@ -5,16 +5,15 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 
 " Section: settings {{{1
-set autowrite
-set autowriteall
-set noswapfile " XXX: do I want this?
-
+" TODO: figure this out
+" set autowrite set autowriteall
+set noswapfile
 set confirm
+
 set startofline
 set fillchars+=diff:╱
 set fillchars+=eob:\ ,
 set fillchars+=stl:\ ,
-set formatoptions-=or
 set ignorecase smartcase
 set list listchars=trail:¿,tab:→\ "
 set mouse=a
@@ -29,6 +28,8 @@ set splitkeep=screen
 set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
+" TODO: use ftplugins to set format options
+set formatoptions-=or
 
 " indentation {{{2
 set breakindent
@@ -42,8 +43,9 @@ set softtabstop=2
 
 augroup vimrc_indent
   autocmd!
-  autocmd FileType c,sh,zsh        setlocal shiftwidth=8 softtabstop=8
+  autocmd FileType markdown,tex    setlocal shiftwidth=2 softtabstop=2
   autocmd FileType cpp,cuda,python setlocal shiftwidth=4 softtabstop=4
+  autocmd FileType c,sh,zsh        setlocal shiftwidth=8 softtabstop=8
 augroup END
 
 " ui {{{2
@@ -217,6 +219,7 @@ nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
 " XXX: potential conflicts
 nnoremap ` ~
 nnoremap <BS> <C-o>
+vnoremap <BS> d
 
 " control
 nmap  ciw
@@ -315,10 +318,12 @@ inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
+" let g:plug_home = stdpath('data') . '/site/pack/core/opt'
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
-Plug 'lervag/vimtex'
+Plug 'github/copilot.vim'
+" Plug 'lervag/vimtex'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'vuciv/golf'
@@ -339,8 +344,9 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
 
+Plug 'bullets-vim/bullets.vim'
+
 if !has('nvim')
-  Plug 'github/copilot.vim'
 
   " dev
   Plug 'tpope/vim-eunuch'

@@ -5,7 +5,7 @@ let g:tmux_navigator_preserve_zoom = 0
 let g:tmux_navigator_no_wrap = 0
 
 function s:err(msg)
-  echohl ErrorMsg | echo msg | echohl None
+  echohl ErrorMsg | echo a:msg | echohl None
 endfunction
 
 let s:pane_position_from_direction = {'h': 'Left', 'j': 'Bottom', 'k': 'Top', 'l': 'Right'}

@@ -2,7 +2,7 @@
   "snippet": {
     "prefix": "snippet",
     "body": [
-      "${1:snippet}: {",
+      "\"${1:snippet}\": {",
       "  \"prefix\": \"${1:snippet}\",",
       "  \"body\": \"${0}\",",
       "  \"description\": \"${2}\"",

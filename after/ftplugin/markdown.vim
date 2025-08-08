@@ -4,7 +4,7 @@ if executable('prettier')
   let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
 endif
 
-setlocal formatoptions+=ro
+setlocal formatoptions+=o
 setlocal noautoindent
 setlocal textwidth=80
 

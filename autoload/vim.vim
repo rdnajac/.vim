@@ -32,11 +32,6 @@ function! s:init() abort
   let &backupskip .= ',' . escape(expand('$HOME/.local/*'), '\')
   set undofile
 
-  " don't use the clipboard over ssh
-  if !exists('$SSH_TTY')
-    set clipboard=unnamedplus
-  endif
-
   " nvim-specific settings
   set jumpoptions+=view
   set mousescroll=hor:0
