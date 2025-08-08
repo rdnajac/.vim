@@ -1,5 +1,7 @@
 local M = { 'MeanderingProgrammer/render-markdown.nvim' }
 
+M.enabled = false
+
 M.event = 'BufWinEnter'
 
 M.ft = { 'markdown', 'rmd', 'quarto', 'codecompanion' }

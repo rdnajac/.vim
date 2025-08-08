@@ -67,6 +67,19 @@ M.on_attach = function(client, bufnr)
 end
 
 M.config = function()
+  vim.api.nvim_create_autocmd('LspProgress', {
+    callback = function(ev)
+      local value = ev.data.params.value
+      if value.kind == 'begin' then
+        io.stdout:write('\027]9;4;1;0\027\\')
+      elseif value.kind == 'end' then
+        io.stdout:write('\027]9;4;0\027\\')
+      elseif value.kind == 'report' then
+        io.stdout:write(string.format('\027]9;4;1;%d\027\\', value.percentage))
+      end
+    end,
+  })
+
   vim.lsp.config('*', {
     on_attach = M.on_attach,
     -- `blink.cmp` will automatically set some capabilities

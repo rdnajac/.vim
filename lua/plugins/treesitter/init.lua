@@ -34,6 +34,14 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function(ev)
     vim.treesitter.language.register('bash', ev.match)
     vim.treesitter.start(0, 'bash')
+  end,
+  desc = 'Force some file types to use `bash` treesitter (and commentstring)',
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'kitty', 'ghostty', 'ghostty.chezmoitmpl' },
+  group = aug,
+  callback = function()
     vim.cmd([[setlocal commentstring=#\ %s]])
   end,
   desc = 'Force some file types to use `bash` treesitter (and commentstring)',

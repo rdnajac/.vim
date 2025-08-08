@@ -1,12 +1,14 @@
 local M = { 'stevearc/oil.nvim' }
 
+M.enabled = vim.g.default_file_explorer == 'oil'
+
 local git_status = require('util.git_status')
 local git_status_cache = git_status.new()
 local detail = 0
 
 ---@type oil.setupOpts
 M.opts = {
-  default_file_explorer = true,
+  default_file_explorer = vim.g.default_file_explorer == 'oil',
   -- skip_confirm_for_simple_edits = true,
   constrain_cursor = 'name',
   watch_for_changes = true,

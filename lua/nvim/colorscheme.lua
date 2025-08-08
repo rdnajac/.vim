@@ -67,6 +67,7 @@ end
 local want = {
   ghostty = {},
   lazygit = {},
+  slack = {},
   spotify_player = { location = '~/.config/spotify-player/theme.toml' },
   lua = {},
   vim = {},

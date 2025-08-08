@@ -41,12 +41,13 @@ M.opts = {
       -- border = 'single',
       draw = {
         treesitter = { 'lsp' },
-        -- default
-        -- columns = { { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
-        -- indexed
-        -- columns = { { 'item_idx' }, { 'kind_icon' }, { 'label', 'label_description', gap = 1 } },
-        -- nvim-cmp style menu
-        columns = { { 'label', 'label_description', gap = 1 }, { 'kind_icon', 'kind' } },
+        columns = {
+
+          { 'kind_icon' },
+          { 'label', 'label_description', gap = 1 },
+          -- { 'source_name' },
+          -- { 'source_id' },
+        },
         components = {
           kind_icon = {
             text = function(ctx)
@@ -60,28 +61,26 @@ M.opts = {
   signature = { enabled = true, window = { border = 'single' } },
   keymap = {
     ['<Up>'] = { 'select_prev', 'fallback' },
-    ['<Down>'] = { 'select_next', 'fallback' },
     ['<Left>'] = { 'select_prev', 'fallback' },
+    ['<C-k'] = { 'select_prev', 'fallback' },
+    ['<Down>'] = { 'select_next', 'fallback' },
     ['<Right>'] = { 'select_next', 'fallback' },
+    ['<C-j>'] = { 'select_next', 'fallback' },
     ['<Tab>'] = {
       function(cmp)
-        -- local ctx = cmp.get_context()
         local item = cmp.get_selected_item()
         local type = require('blink.cmp.types').CompletionItemKind
-        -- if the menu is showing and its a snippet, accept and expand ot
-        if cmp.is_visible() then
-          if item then
-            if item.kind == type.Snippet then
-              cmp.accept()
-            elseif item.kind == type.Path then
-              -- if the item is a path, accept it and show the menu again
-              cmp.accept()
-              vim.defer_fn(function()
-                cmp.show({ providers = { 'path' } })
-              end, 1)
-            else
-              cmp.select_next()
-            end
+
+        if cmp.is_visible() and item then
+          -- if item.kind == type.Snippet then
+          if item.kind == type.Path then
+            cmp.accept()
+            vim.defer_fn(function()
+              cmp.show({ providers = { 'path' } })
+            end, 1)
+            return true
+          else
+            return cmp.accept()
           end
         end
       end,
@@ -91,10 +90,10 @@ M.opts = {
   sources = {
     default = function()
       local defaults = { 'lsp', 'snippets', 'path' }
-
       if in_comment() then
         return { 'buffer' }
       end
+      --  ui
       if vim.bo.filetype == 'lua' then
         defaults = vim.list_extend({ 'lazydev' }, defaults)
       end
