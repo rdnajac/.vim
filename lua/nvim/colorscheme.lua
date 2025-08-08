@@ -36,7 +36,7 @@ M.opts = {
   end,
   plugins = {
     all = false,
-    -- ale = true,
+    ale = vim.g.loaded_ale == 1,
     -- copilot = true,
     -- fzf = true,
     -- mini = true,

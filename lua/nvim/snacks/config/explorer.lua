@@ -1,7 +1,7 @@
 ---@module "snacks"
 ---@type snacks.picker.explorer.Config
 return {
-  cwd = vim.fn.getcwd(),
+  -- cwd = vim.fn.getcwd(),
   ignored = true,
   win = {
     list = {
@@ -11,6 +11,7 @@ return {
         ['<Left>'] = 'explorer_up',
         ['<Right>'] = 'confirm',
         ['<BS>'] = 'explorer_up',
+        ['-'] = 'explorer_up',
         ['l'] = 'confirm',
         ['h'] = 'explorer_close', -- close directory
         ['a'] = 'explorer_add',

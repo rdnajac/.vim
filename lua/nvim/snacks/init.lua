@@ -1,6 +1,8 @@
+local M = { 'folke/snacks.nvim' }
+
 ---@module "snacks"
 ---@type snacks.Config
-return {
+M.opts = {
   bigfile = {
     enabled = true,
   },
@@ -20,8 +22,8 @@ return {
   },
   explorer = {
     enabled = true,
-    replace_netrw = false,
-    -- replace_netrw = vim.g.default_file_explorer == 'snacks',
+    -- replace_netrw = false,
+    replace_netrw = vim.g.default_file_explorer == 'snacks',
   },
   image = {
     enabled = false,
@@ -34,7 +36,7 @@ return {
     enabled = true,
   },
   notifier = {
-    enabled = false,
+    enabled = true,
     style = 'fancy',
     date_format = '%T',
     timeout = 4000,
@@ -42,9 +44,19 @@ return {
   ---@type snacks.picker.Config
   picker = {
     layout = { preset = 'ivy' },
-    layouts = require('munchies.config.layouts'),
-    sources = require('munchies.config.pickers'),
-    win = require('munchies.config.win'),
+    layouts = require('nvim.snacks.config.layouts'),
+    sources = require('nvim.snacks.config.pickers'),
+    win = require('nvim.snacks.config.win'),
+    ---@class snacks.picker.debug
+    debug = {
+      scores = false, -- show scores in the list
+      leaks = true, -- show when pickers don't get garbage collected
+      explorer = true, -- show explorer debug info
+      files = true, -- show file debug info
+      grep = true, -- show file debug info
+      proc = true, -- show proc debug info
+      extmarks = false, -- show extmarks errors
+    },
   },
   quickfile = { enabled = true },
   scope = { enabled = true },
@@ -70,7 +82,7 @@ return {
   statuscolumn = { enabled = false },
   styles = {
     lazygit = { height = 0, width = 0 },
-    terminal = require('munchies.config.styles').terminal,
+    terminal = require('nvim.snacks.config.styles').terminal,
   },
   terminal = {
     start_insert = true,
@@ -80,3 +92,9 @@ return {
   },
   words = { enabled = true },
 }
+
+M.config = function()
+  require('snacks').setup(M.opts)
+end
+
+return M

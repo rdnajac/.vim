@@ -19,27 +19,6 @@ function M.new(source)
   }, M)
 end
 
-local meta = require('meta')
-
-local M = {}
-M.__index = M
-
----@param source? string
-function M.new(source)
-  source = source or meta.source()
-  assert(type(source) == 'string' and source ~= '', 'Expected a valid string path')
-
-  local stat = vim.uv.fs_stat(source)
-  assert(stat, 'Path does not exist: ' .. source)
-
-  local is_dir = stat.type == 'directory'
-
-  return setmetatable({
-    file = not is_dir and source or nil,
-    dir = is_dir and source or vim.fn.fnamemodify(source, ':h'),
-  }, M)
-end
-
 --- Load Lua modules from the same directory
 ---@param opts? vim.fs.dir.Opts
 ---@param lazy? boolean
