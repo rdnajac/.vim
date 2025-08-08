@@ -1,25 +1,17 @@
+if not vim.g.plug_home then
+  vim.g.plug_home = vim.fn.stdpath('data')
+end
 -- lua/my_snacks_plugins.lua
 local M = {}
 
-local vim_plug_home = vim.g.plug_home or (vim.fn.stdpath('data') .. '/plugged')
-local nvim_pack_path = vim.fn.stdpath('data') .. '/site/pack/core/opt'
-
-local function resolve_plugin_path(bang)
-  if bang and vim.fn.isdirectory(nvim_pack_path) == 1 then
-    return nvim_pack_path
-  else
-    return vim_plug_home
-  end
-end
-
-local function plugin_items(dir)
+local function plugins()
   local result = {}
-  for _, path in ipairs(vim.fn.glob(dir .. '/*', true, true)) do
-    if vim.fn.isdirectory(path) == 1 then
-      result[#result + 1] = {
-        text = vim.fn.fnamemodify(path, ':t'),
-        file = path,
-      }
+  for path, type in vim.fs.dir(vim.g.plug_home) do
+    if type == 'directory' then
+      table.insert(result, {
+        text = path,
+        file = vim.fs.joinpath(vim.g.plug_home, path),
+      })
     end
   end
   return result
@@ -29,19 +21,20 @@ end
 local function pick_plugin_dir(picker_fn, bang)
   Snacks.picker.pick({
     title = 'Choose plugin…',
-    items = plugin_items(resolve_plugin_path(bang)),
+    items = plugins(),
     format = function(entry)
-      return { { entry.text } }
+      return { { entry.text } } -- no icons
     end,
     confirm = function(_, entry)
       -- only vim or lua files inside that plugin
-      local filter_fn = function(candidate)
-        return candidate.file:match('%.vim$') or candidate.file:match('%.lua$')
-      end
-      picker_fn({
-        cwd = entry.file,
-        filter = filter_fn,
-      })
+      -- dd(entry)
+      -- local filter_fn = function(candidate)
+      --   return candidate.file:match('%.vim$') or candidate.file:match('%.lua$')
+      -- end
+      -- picker_fn({
+      --   cwd = entry.file,
+      --   filter = filter_fn,
+      -- })
     end,
   })
 end

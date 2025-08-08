@@ -35,6 +35,7 @@ function! s:init() abort
   " nvim-specific settings
   set jumpoptions+=view
   set mousescroll=hor:0
+  set nocdhome
   set smoothscroll
 
   " disable the default popup menu

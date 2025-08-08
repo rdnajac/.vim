@@ -80,12 +80,17 @@ endfunction
 " - a:2 = ext (default: '.vim')
 function! edit#filetype(...) abort
   if &filetype ==# ''
-    echoerr 'Filetype is not set.'
-    return
+    call vim#notify#error('filetype is empty')
   endif
   let l:dir = vim#home() . (a:0 >= 1 ? '/' . a:1 : '/after/ftplugin')
   let l:ext = a:0 >= 2 ? a:2 : '.vim'
   let l:file = l:dir . '/' . &filetype . l:ext
+  if filereadable(l:file)
+    call s:edit(l:file)
+  else
+    " try directory
+    call s:edit(fnamemodify(l:file, ':r'))
+  endif
   call s:edit(l:file)
 endfunction
 

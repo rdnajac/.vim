@@ -10,12 +10,7 @@ let g:maplocalleader = '\'
 set noswapfile
 set confirm
 
-set startofline
-set fillchars+=diff:╱
-set fillchars+=eob:\ ,
-set fillchars+=stl:\ ,
 set ignorecase smartcase
-set list listchars=trail:¿,tab:→\ "
 set mouse=a
 set pumheight=10
 set report=0
@@ -25,13 +20,14 @@ set shortmess-=o
 set showmatch
 set splitbelow splitright
 set splitkeep=screen
+set startofline
 set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
 " TODO: use ftplugins to set format options
 set formatoptions-=or
 
-" indentation {{{2
+" editing {{{2
 set breakindent
 set linebreak
 set nowrap
@@ -51,12 +47,23 @@ augroup END
 " ui {{{2
 set lazyredraw
 set termguicolors
+set fillchars= " reset
+set fillchars+=diff:╱
+set fillchars+=eob:\ ,
+set fillchars+=stl:\ ,
+set list
+set listchars= " reset
+set listchars+=trail:¿,
+set listchars+=tab:→\ ",
+set listchars+=extends:>,
+set listchars+=precedes:<,
+set listchars+=nbsp:+
 
-" columns {{{3
 " set foldcolumn=1
 set number
 set numberwidth=4
 set signcolumn=number
+" }}}1
 
 " Section: autocmds {{{1
 augroup vimrc
@@ -317,6 +324,9 @@ nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
+" }}}
+
+" Section: plugins {{{1
 
 " let g:plug_home = stdpath('data') . '/site/pack/core/opt'
 call plug#begin()
@@ -326,8 +336,6 @@ Plug 'github/copilot.vim'
 " Plug 'lervag/vimtex'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'vuciv/golf'
-
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -342,23 +350,20 @@ Plug 'tpope/vim-characterize'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
-
 Plug 'bullets-vim/bullets.vim'
+Plug 'vuciv/golf'
 
 if !has('nvim')
+  Plug 'Konfekt/FastFold'
+  Plug 'junegunn/vim-easy-align'
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
-  Plug 'Konfekt/FastFold'
-
-  " using mini instead
-  Plug 'junegunn/vim-easy-align'
-
-  " try the shipped vim9 comment plugin
-  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-commentary' " TODO: try the shipped vim9 comment plugin
 else
   Plug 'folke/snacks.nvim'
 endif
 call plug#end()
+" }}}1
 
 if has('nvim')
   lua require('nvim')

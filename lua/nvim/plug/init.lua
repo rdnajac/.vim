@@ -13,7 +13,7 @@
 
 local M = {}
 
----@param plugin PlugSpec
+---@param plugin any
 ---@return boolean
 local function is_enabled(plugin)
   local enabled = plugin.enabled
@@ -47,28 +47,36 @@ M.to_spec = function(module)
   }
 end
 
+---@param plugin string|PlugSpec
+---@return vim.pack.Spec[]
+function M.get_specs_from_module(plugin)
+  local specs = {}
+  local function add(m)
+    local spec = M.to_spec(m)
+    if spec then
+      specs[#specs + 1] = spec
+    end
+  end
+
+  add(plugin)
+
+  if type(plugin) == 'table' and plugin.dependencies then
+    for _, dep in ipairs(plugin.dependencies) do
+      add(dep)
+    end
+  end
+
+  return specs
+end
+
 --- Collect valid plugin specs (with dependencies) for `vim.pack.add`
 ---@param plugins table<string, PlugSpec>
 ---@return vim.pack.Spec[]
-M.collect_specs = function(plugins)
+function M.collect_specs(plugins)
   local specs = {}
-
-  local function add(module)
-    local spec = M.to_spec(module)
-    if spec then
-      table.insert(specs, spec)
-    end
-  end
-
   for _, plugin in pairs(plugins) do
-    add(plugin)
-    if type(plugin.dependencies) == 'table' then
-      for _, dep in ipairs(plugin.dependencies) do
-        add(dep)
-      end
-    end
+    vim.list_extend(specs, M.get_specs_from_module(plugin))
   end
-
   return specs
 end
 
@@ -85,7 +93,6 @@ end
 -- Autocmd setup for lazy configs
 local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
 
----@param name string
 ---@param plugin PlugSpec
 local function config(plugin)
   if type(plugin.config) == 'function' then
@@ -127,5 +134,16 @@ end, { bang = true, force = true })
 -- vim.api.nvim_create_user_command('PlugClean', function(opts)
 -- get plugins and see whats not bring used
 -- restart +qall! lua vim.pack.update()
+
+function Plug(modname)
+  local plugin = require('meta').safe_require(modname)
+  if not plugin then
+    return
+  end
+  local specs = M.get_specs_from_module(plugin)
+  print(vim.inspect(specs))
+  vim.pack.add(specs)
+  return plugin.config and plugin.config() or nil
+end
 
 return M
