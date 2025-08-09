@@ -1,6 +1,6 @@
 " autoload/vim/notify.vim
 function s:notify(level, msg) abort
-  if has('nvim') && luaeval("package.loaded['Snacks'] and Snacks.notify")
+  if has('nvim') && luaeval("_G.Snacks ~= nil or package.loaded['Snacks'] ~= nil")
     execute printf('lua Snacks.notify.%s([[%s]])', a:level, a:msg)
   else
     if a:level ==# 'error'

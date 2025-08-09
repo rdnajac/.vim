@@ -69,8 +69,7 @@ set signcolumn=number
 augroup vimrc
   autocmd!
   au BufWritePost $MYVIMRC nested sil! mkview | so $MYVIMRC | sil! lo | echom 'vimrc reloaded'
-  au BufWritePost */ftplugin/* call reload#ftplugin(
-	\ matchstr(expand('<afile>:p'), 'ftplugin/\zs[^/]\+'))
+  au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
   " restore cursor position
   au BufWinEnter * exe "silent! normal! g`\"zv"
@@ -125,7 +124,7 @@ nnoremap cd- <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 nnoremap cdh <Cmd>cd<Bar>pwd<CR>
 nnoremap cdg :cd<C-R>=git#root()<CR><Bar>pwd<CR>
-nmap <expr> cq c#q()
+nmap <expr> cq change#quote()
 
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>

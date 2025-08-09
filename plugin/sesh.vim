@@ -18,7 +18,7 @@ function! s:restart() abort
   let sesh = fnameescape(stdpath('state') . '/Session.vim')
   execute 'mksession! ' . sesh
   let cmd = 'silent! source ' . sesh
-  execute 'restart ' cmd
+  execute 'confirm restart ' cmd
 endfunction
 
 command! Restart call s:restart()

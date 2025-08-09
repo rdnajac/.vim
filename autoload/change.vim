@@ -1,11 +1,10 @@
-" normal mode keymaps that start with `c`
-
+" autoload/change.vim
 " change the closest quote to the other type (single to double or vice versa)
 "   'string'
 "   "string"
 
 " 'change quote'
-function! c#q() abort
+function! change#quote() abort
   let line = getline('.')
   let ccol = col('.') - 1
   let len = len(line)
