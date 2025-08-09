@@ -47,6 +47,7 @@ M.to_spec = function(module)
   }
 end
 
+-- TODO: speclist metatable that contains a list of specs
 ---@param plugin string|PlugSpec
 ---@return vim.pack.Spec[]
 function M.get_specs_from_module(plugin)
@@ -135,13 +136,13 @@ end, { bang = true, force = true })
 -- get plugins and see whats not bring used
 -- restart +qall! lua vim.pack.update()
 
-function Plug(modname)
+M.Plug = function(modname)
   local plugin = require('meta').safe_require(modname)
   if not plugin then
     return
   end
   local specs = M.get_specs_from_module(plugin)
-  print(vim.inspect(specs))
+  -- print(vim.inspect(specs))
   vim.pack.add(specs)
   return plugin.config and plugin.config() or nil
 end

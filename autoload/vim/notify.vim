@@ -1,9 +1,32 @@
-function vim#notify#error(msg) abort
-  if has('nvim')
-    call v:lua.Snacks.notify.error(a:msg)
+" autoload/vim/notify.vim
+function s:notify(level, msg) abort
+  if has('nvim') && luaeval("package.loaded['Snacks'] and Snacks.notify")
+    execute printf('lua Snacks.notify.%s([[%s]])', a:level, a:msg)
   else
-    echohl ErrorMsg
+    if a:level ==# 'error'
+      echohl ErrorMsg
+    elseif a:level ==# 'warn'
+      echohl WarningMsg
+    elseif a:level ==# 'info'
+      echohl MoreMsg
+    endif
     echom a:msg
     echohl None
   endif
+endfunction
+
+function vim#notify#(msg) abort
+  call s:notify('notify', a:msg)
+endfunction
+
+function vim#notify#warn(msg) abort
+  call s:notify('warn', a:msg)
+endfunction
+
+function vim#notify#info(msg) abort
+  call s:notify('info', a:msg)
+endfunction
+
+function vim#notify#error(msg) abort
+  call s:notify('error', a:msg)
 endfunction

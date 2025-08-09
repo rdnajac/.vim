@@ -16,20 +16,20 @@ M.opts = {
         { 'z', group = 'fold' },
       },
       mode = { 'n' },
-      {
-        '<leader>b',
-        group = 'buffer',
-        expand = function()
-          return require('which-key.extras').expand.buf()
-        end,
-      },
-      {
-        '<c-w>',
-        group = 'windows',
-        expand = function()
-          return require('which-key.extras').expand.win()
-        end,
-      },
+      -- {
+      --   '<leader>b',
+      --   group = 'buffer',
+      --   expand = function()
+      --     return require('which-key.extras').expand.buf()
+      --   end,
+      -- },
+      -- {
+      --   '<c-w>',
+      --   group = 'windows',
+      --   expand = function()
+      --     return require('which-key.extras').expand.win()
+      --   end,
+      -- },
 
       -- groups
       { 'co', group = 'comment below' },

@@ -1,3 +1,4 @@
+-- TODO: move this to meta.init[module]
 local meta = require('meta')
 
 local M = {}

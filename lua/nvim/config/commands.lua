@@ -1,4 +1,3 @@
-dd()
 local command = vim.api.nvim_create_user_command
 
 local function to_camel_case(str)
@@ -22,3 +21,13 @@ for name, picker in pairs(Snacks.picker) do
     end
   end
 end
+
+command('Scratch', function(opts)
+  if opts.bang == true then
+    Snacks.scratch.select()
+  else
+    Snacks.scratch()
+  end
+end, {
+  bang = true,
+})

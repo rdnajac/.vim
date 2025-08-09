@@ -11,13 +11,16 @@ vim.g.loaded_netrw = 1
 vim.g.default_file_explorer = 'oil'
 
 -- use the new extui module if available
-pcall(function()
-  require('vim._extui').enable({})
-end)
+local Require = require('meta').safe_require
 
-_G.colors = require('nvim.colorscheme').config()
+Require('vim._extui').enable({})
 
-require('nvim.snacks').config()
+local Plug = require('nvim.plug').Plug
+
+-- _G.colors = Plug('nvim.colorscheme')
+Plug('nvim.colorscheme')
+Plug('nvim.snacks')
+-- require('nvim.snacks').config()
 
 -- use the included icons for other plugins
 local icons = require('snacks.picker.config.defaults').defaults.icons
@@ -40,4 +43,5 @@ vim.print = _G.dd
 
 _G.plugins = require('plugins')
 require('chromatophore')
+
 require('nvim.config')

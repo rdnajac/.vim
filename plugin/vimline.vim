@@ -1,11 +1,7 @@
 scriptencoding=utf-8
-
 if !has('nvim')
   finish
 endif
-
-lua require('vimline')
-
 " TODO: should these be colored?
 " -- hl['StatusLineNC'] = { bg = 'NONE' }
 " -- hl['TabLineFill'] = { bg = 'NONE' }
@@ -18,6 +14,11 @@ set noruler
 " set tabline=%!MyTabline()
 " set showtabline=2
 " set winbar=%!MyWinbar()
+
+" global for easy debugging
+function! Luacomponent(name) abort
+  return luaeval('require("vimline.components")[_A]', a:name)()
+endfunction
 
 function MyStatusline() abort
   let l:line = ''
@@ -35,13 +36,14 @@ function MyStatusline() abort
   let l:line .= '%S '
   let l:line .= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
   " let l:line .= vimline#recording()
-  let l:line .= vimline#components#blink()
+  let l:line .= Luacomponent('blink')
   " let l:line .= printf('%10s', vimline#components#mode())
   let l:line .= '%#Black#'
   let l:line .= ''
   return line
 endfunction
 
+" TODO: write file component
 function! MyTmuxline() abort
   if bufname('%') =~# '^term://'
     " let l:prefix = getcwd()
