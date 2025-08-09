@@ -67,8 +67,10 @@ set signcolumn=number
 
 " Section: autocmds {{{1
 augroup vimrc
-  au!
+  autocmd!
   au BufWritePost $MYVIMRC nested sil! mkview | so $MYVIMRC | sil! lo | echom 'vimrc reloaded'
+  au BufWritePost */ftplugin/* call reload#ftplugin(
+	\ matchstr(expand('<afile>:p'), 'ftplugin/\zs[^/]\+'))
 
   " restore cursor position
   au BufWinEnter * exe "silent! normal! g`\"zv"
@@ -98,9 +100,8 @@ augroup vimrc
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 
   au VimLeave * if v:dying | echom "help im dying: " . v:dying | endif
-  " }}}3
-
 augroup END
+" }}}1
 
 " Section: keymaps {{{1
 " key pairs in normal mode {{{2
@@ -324,7 +325,7 @@ nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
-" }}}
+" }}}1
 
 " Section: plugins {{{1
 
@@ -370,3 +371,29 @@ if has('nvim')
 else
   color scheme
 endif
+
+function! VimRun(...) range abort
+  " If a visual range was given, use that, else use whole buffer
+  let l:start = a:firstline
+  let l:end   = a:lastline
+
+  " Get lines in range
+  let l:lines = getline(l:start, l:end)
+
+  " Build a list of results by evaluating each line
+  let l:results = []
+  for l:line in l:lines
+    if !empty(l:line)
+      try
+	call add(l:results, eval(l:line))
+      catch
+	call add(l:results, v:exception)
+      endtry
+    endif
+  endfor
+
+  " Pretty-print the list after the last line in the range
+  execute l:end . 'PP' l:results
+endfunction
+
+command! -range=% VimRun <line1>,<line2>call VimRun()

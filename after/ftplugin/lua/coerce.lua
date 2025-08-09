@@ -1,3 +1,31 @@
+-- `.`   (a dot) represents all characters.
+-- `%a`  represents all letters.
+-- `%c`  represents all control characters.
+-- `%d`  represents all digits.
+-- `%l`  represents all lowercase letters.
+-- `%p`  represents all punctuation characters.
+-- `%s`  represents all space characters.
+-- `%u`  represents all uppercase letters.
+-- `%w`  represents all alphanumeric characters.
+-- `%x`  represents all hexadecimal digits.
+-- `%z`  represents the character with representation `0`.
+-- `%x`  (where `x` is any non-alphanumeric character) represents the
+--     character `x`. This is the standard way to escape the magic
+--     characters. Any punctuation character (even the non-magic) can be
+--     preceded by a `%` when used to represent itself in a pattern.
+-- NOTE: The corresponding capital letters represent the opposite set...
+
+-- pattern items
+-- `*`  0 or more
+-- `+`  at least 1
+-- `-`  like `*` but shortest possible match
+-- `?`  0 or 1 matches
+
+-- other things to remember
+-- `^`  start of line
+-- `$`  end of line
+
+-- regex patterns for toggling function forms and scopes in Lua
 local regex = {
   local_function = '^%s*local%s+function%s+([%w_.]+)%s*%(',
   local_assign = '^%s*local%s+([%w_.]+)%s*=%s*function%s*%(',
