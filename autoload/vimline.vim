@@ -4,6 +4,10 @@ function! vimline#luacomponent(name) abort
   return luaeval('require("vimline.components")[_A]()', a:name)
 endfunction
 
+function! vimline#tmuxline(fn) abort
+  return luaeval("require('vimline.tmuxline')(vim.fn[_A]())", a:fn)
+endfunction
+
 function! vimline#recording() abort
   let rec = reg_recording()
   let reg = empty(rec) ? get(g:, 'vimline_last_reg', 'q') : rec

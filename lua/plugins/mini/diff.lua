@@ -23,5 +23,5 @@ Snacks.toggle({
 }):map('<leader>uG')
 
 vim.keymap.set('n', '<leader>go', function()
-  diff.toggle_overlay(0)
+  require('mini.diff').toggle_overlay(0)
 end, { desc = 'Toggle mini.diff overlay' })

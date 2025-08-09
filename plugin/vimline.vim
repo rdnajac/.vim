@@ -8,19 +8,14 @@ endif
 " -- hl['Winbar'] = { bg = 'NONE' }
 
 set showcmdloc=statusline
-set statusline=%!MyStatusline()
+set statusline=%!MyStatusLine()
 let &laststatus = has('nvim') ? 3 : 2
 set noruler
 " set tabline=%!MyTabline()
 " set showtabline=2
 " set winbar=%!MyWinbar()
 
-" global for easy debugging
-function! Luacomponent(name) abort
-  return luaeval('require("vimline.components")[_A]', a:name)()
-endfunction
-
-function MyStatusline() abort
+function MyStatusLine() abort
   let l:line = ''
   " let l:line .= '%#Chromatophore_a# '
   " let [l:root, l:rel_path] = git#RelativePath()
@@ -36,7 +31,7 @@ function MyStatusline() abort
   let l:line .= '%S '
   let l:line .= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
   " let l:line .= vimline#recording()
-  let l:line .= Luacomponent('blink')
+  let l:line .= vimline#luacomponent('blink')
   " let l:line .= printf('%10s', vimline#components#mode())
   let l:line .= '%#Black#'
   let l:line .= ''
@@ -44,13 +39,13 @@ function MyStatusline() abort
 endfunction
 
 " TODO: write file component
-function! MyTmuxline() abort
+function! MyTmuxLine() abort
   if bufname('%') =~# '^term://'
     " let l:prefix = getcwd()
     let l:prefix = '󱉭 ' . $PWD . ' '
     let l:suffix = 'channel: ' . &channel
   else
-    let [l:root, l:suffix] = git#RelativePath()
+    let [l:root, l:suffix] = path#relative()
     let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
   endif
   let l:line = ''
@@ -74,13 +69,13 @@ function! Clock() abort
   return l:line
 endfunction
 
-" export the statusline
+" export the tmux statusline
 function! TmuxLeft() abort
-  return luaeval("require('vimline.tmuxline')(vim.fn['MyTmuxline']())")
+  return vimline#tmuxline('MyTmuxLine')
 endfunction
 
 function! TmuxRight() abort
-  return luaeval("require('vimline.tmuxline')(vim.fn['Clock']())")
+  return vimline#tmuxline('Clock')
 endfunction
 
 augroup vimline_macro
