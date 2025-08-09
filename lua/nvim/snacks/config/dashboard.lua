@@ -1,8 +1,17 @@
-local M = {}
-
 ---@module "snacks"
 ---@class snacks.dashboard.Config
-M.config = {
+return {
+  sections = {
+    { section = 'header' },
+    { section = 'recent_files' },
+    { padding = 1 },
+    {
+      section = 'terminal',
+      -- TODO: get `gf` to work with variable expansions
+      cmd = vim.fn.stdpath('config') .. '/bin/cowsay-vim-fortunes',
+      height = 13,
+    },
+  },
   formats = {
     key = function(item)
       local sep = icons.separators.section.rounded
@@ -26,5 +35,3 @@ M.config = {
     end,
   },
 }
-
-return M

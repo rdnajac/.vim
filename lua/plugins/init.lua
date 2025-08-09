@@ -1,6 +1,6 @@
 -- automagically load plugin modules in this directory
 ---@type table<string, PlugSpec>
-local M = require('meta.module')()
+local M = require('meta').module()
 
 local plug = require('nvim.plug')
 
