@@ -1,7 +1,31 @@
 local M = {}
 
 M.sep = package.config:sub(1, 1)
-M.modname = require('meta.modname').modname
+
+local lua_segment = M.sep .. 'lua' .. M.sep
+local lua_seg_len = #lua_segment
+
+--- Converts a file path to a Lua module name.
+---@param path string
+---@return string|nil
+M.modname = function(path)
+  local lua_root = path:find(lua_segment, 1, true)
+  local is_lua_file = path:match('%.lua$')
+  local is_directory = vim.fn.isdirectory(path) == 1
+
+  if lua_root and (is_lua_file or is_directory) then
+    return (
+      path
+        :sub(lua_root + lua_seg_len) -- remove leading /lua/
+        :gsub('%.lua$', '') -- strip .lua
+        :gsub(M.sep, '.') -- convert path sep
+        :gsub('^%.', '') -- strip leading dot
+        :gsub('%.init$', '') -- strip .init
+        :gsub('%.$', '') -- strip trailing dot
+    )
+  end
+end
+
 M.source = require('meta.source').source
 M.safe_require = require('meta.require').safe
 M.lazy_require = require('meta.require').lazy

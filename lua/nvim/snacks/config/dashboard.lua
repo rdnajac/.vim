@@ -5,12 +5,12 @@ return {
     { section = 'header' },
     { section = 'recent_files' },
     { padding = 1 },
-    {
-      section = 'terminal',
-      -- TODO: get `gf` to work with variable expansions
-      cmd = vim.fn.stdpath('config') .. '/bin/cowsay-vim-fortunes',
-      height = 13,
-    },
+    -- {
+    --   section = 'terminal',
+    --   -- TODO: get `gf` to work with variable expansions
+    --   cmd = vim.fn.stdpath('config') .. '/bin/cowsay-vim-fortunes',
+    --   height = 13,
+    -- },
   },
   formats = {
     key = function(item)

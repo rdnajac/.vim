@@ -14,6 +14,10 @@ function! s:close_other_buffer() abort
   endif
 endfunction
 
+function! edit#(...) abort
+  call call('s:edit', a:000)
+endfunction
+
 function! s:edit(file, ...) abort
   let l:extra = a:0 >= 1 ? a:1 : ''
 
@@ -63,12 +67,12 @@ function! s:edit(file, ...) abort
 endfunction
 
 function! edit#vimrc(...) abort
-  call call('s:edit', extend([$MYVIMRC], a:000))
+  call call('s:edit', extend([my#vimrc()], a:000))
 endfunction
 
-function! edit#module(name) abort
+function! edit#luamod(name) abort
   if !has('nvim')
-    echoerr 'This function is only available in Neovim.'
+    vim#notify#error('This function is only available in Neovim.')
     return
   endif
   let l:file = stdpath('config') . '/lua/' . a:name . '.lua'

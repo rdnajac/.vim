@@ -1,6 +1,12 @@
 " autoload/nvim/snacks.vim
-" safely call a snack function from vimscripT
-" autoload/nvim/snacks.vim
+" safely call a snack function from vimscript
+
+if luaeval('_G.Snacks ~= nil')
+  call vim#notify#('Snacks is already loaded')
+else
+  call vim#notify#('Loading Snacks...')
+endif
+
 function! nvim#snacks#(snack, ...) abort
   if has('nvim') && luaeval("_G.Snacks ~= nil or package.loaded['Snacks'] ~= nil")
     if a:0

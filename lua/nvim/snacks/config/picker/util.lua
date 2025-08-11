@@ -4,7 +4,7 @@ local M = {}
 -- see: Snacks.picker.picker_actions()
 
 ---@param picker snacks.Picker
-M.toggle = function(picker)
+local toggle = function(picker)
   local cwd = picker:cwd()
   local alt = picker.opts.source == 'files' and 'grep' or 'files'
   picker:close()
@@ -13,6 +13,24 @@ M.toggle = function(picker)
   else
     Snacks.picker.grep({ cwd = cwd })
   end
+end
+
+M.actions = {
+  toggle = function(self)
+    toggle(self)
+  end,
+}
+
+M.config = function(opts)
+  local icon_map = {
+    grep = '󰱽',
+    files = '',
+  }
+  local icon = icon_map[opts.finder]
+  local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
+  opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
+  opts.cwd = opts.cwd or (vim.lsp.buf.list_workspace_folders()[1] or vim.fn.getcwd())
+  return opts
 end
 
 -- M.gen_toggle  = function()

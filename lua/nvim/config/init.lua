@@ -1,2 +1,4 @@
 -- automagically load plugin modules in this directory
-require('meta').module()
+vim.defer_fn(function()
+  require('meta').module()
+end, 0)

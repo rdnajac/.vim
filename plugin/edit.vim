@@ -5,9 +5,9 @@ nnoremap <leader>vk <Cmd>call edit#vimrc('+/Section:\ keymaps')<CR>
 nnoremap <leader>vp <Cmd>call edit#vimrc('+/Section:\ plugins')<CR>
 nnoremap <leader>vs <Cmd>call edit#vimrc('+/Section:\ settings')<CR>
 
-nnoremap <BSlash>i <Cmd>call edit#module('nvim/init')<CR>
-nnoremap <BSlash>m <Cmd>call edit#module('nvim/snacks/munchies/init')<CR>
-nnoremap <BSlash>p <Cmd>call edit#module('plugins/init')<CR>
+nnoremap <BSlash>i <Cmd>call edit#(stdpath('config') . '/init.lua')<CR>
+nnoremap <BSlash>m <Cmd>call edit#luamod('nvim/snacks/init')<CR>
+nnoremap <BSlash>p <Cmd>call edit#luamod('plugins/init')<CR>
 
 nnoremap <BSlash>0 <Cmd>call edit#readme()<CR>
 

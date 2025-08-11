@@ -1,5 +1,27 @@
 local command = vim.api.nvim_create_user_command
 
+command('GitBlameLine', function()
+  local line_number = vim.fn.line('.')
+  local filename = vim.api.nvim_buf_get_name(0)
+  print(vim.system({ 'git', 'blame', '-L', line_number .. ',+1', filename }):wait().stdout)
+end, { desc = 'Print the git blame for the current line' })
+
+local plug = require('nvim.plug')
+
+command('PlugClean', plug.clean, { force = true })
+command('Plug', function(args)
+  if #args.fargs == 0 then
+    print(vim.inspect(vim.pack.get()))
+  else
+    vim.pack.add({ 'https://github.com/' .. args.fargs[1] })
+  end
+end, { nargs = '?', force = true })
+
+-- must pass nil to update all plugins with a bang
+command('PlugUpdate', function(opts)
+  vim.pack.update(nil, { force = opts.bang })
+end, { bang = true, force = true })
+
 local function to_camel_case(str)
   return str
     :gsub('_%a', function(c)

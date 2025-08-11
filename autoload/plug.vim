@@ -1,5 +1,4 @@
 " ~/.vim/autoload/plug.vim
-let g:plug_home = stdpath('data') . '/site/pack/core/opt'
 let g:plugins = []
 
 function! s:plug(repo)
@@ -17,5 +16,6 @@ endfunction
 
 function! plug#end()
   delcommand Plug
-  call luaeval('vim.pack.add(_A)', g:plugins)
+  " TODO: add opts {load = false}
+  call luaeval('vim.pack.add(_A, {load = false})', g:plugins)
 endfunction

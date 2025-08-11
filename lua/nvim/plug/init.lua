@@ -119,23 +119,6 @@ M.do_configs = function(plugins)
   end
 end
 
-vim.api.nvim_create_user_command('Plug', function(args)
-  if #args.fargs == 0 then
-    print(vim.inspect(vim.pack.get()))
-  else
-    vim.pack.add({ 'https://github.com/' .. args.fargs[1] })
-  end
-end, { nargs = '?', force = true })
-
--- must pass nil to update all plugins with a bang
-vim.api.nvim_create_user_command('PlugUpdate', function(opts)
-  vim.pack.update(nil, { force = opts.bang })
-end, { bang = true, force = true })
-
--- vim.api.nvim_create_user_command('PlugClean', function(opts)
--- get plugins and see whats not bring used
--- restart +qall! lua vim.pack.update()
-
 M.Plug = function(modname)
   local plugin = require('meta').safe_require(modname)
   if not plugin then
@@ -145,6 +128,20 @@ M.Plug = function(modname)
   -- print(vim.inspect(specs))
   vim.pack.add(specs)
   return plugin.config and plugin.config() or nil
+end
+
+M.clean = function()
+  local inactive_plugins = vim.tbl_map(
+    -- get just the plugin names
+    function(plugin)
+      return plugin.spec.name
+    end,
+    -- and filter out the active plugins
+    vim.tbl_filter(function(plugin)
+      return plugin.active == false
+    end, vim.pack.get())
+  )
+  vim.pack.del(inactive_plugins)
 end
 
 return M

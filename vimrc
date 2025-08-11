@@ -68,7 +68,8 @@ set signcolumn=number
 " Section: autocmds {{{1
 augroup vimrc
   autocmd!
-  au BufWritePost $MYVIMRC nested sil! mkview | so $MYVIMRC | sil! lo | echom 'vimrc reloaded'
+  " au BufWritePost vimrc call vim#notify#info('Sourced vimrc!')
+  au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
   " restore cursor position
@@ -351,7 +352,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
 Plug 'bullets-vim/bullets.vim'
-Plug 'vuciv/golf'
+" Plug 'vuciv/golf'
 
 if !has('nvim')
   Plug 'Konfekt/FastFold'
@@ -359,40 +360,10 @@ if !has('nvim')
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   Plug 'tpope/vim-commentary' " TODO: try the shipped vim9 comment plugin
-else
-  Plug 'folke/snacks.nvim'
 endif
 call plug#end()
 " }}}1
 
-if has('nvim')
-  lua require('nvim')
-else
+if !has('nvim')
   color scheme
 endif
-
-function! VimRun(...) range abort
-  " If a visual range was given, use that, else use whole buffer
-  let l:start = a:firstline
-  let l:end   = a:lastline
-
-  " Get lines in range
-  let l:lines = getline(l:start, l:end)
-
-  " Build a list of results by evaluating each line
-  let l:results = []
-  for l:line in l:lines
-    if !empty(l:line)
-      try
-	call add(l:results, eval(l:line))
-      catch
-	call add(l:results, v:exception)
-      endtry
-    endif
-  endfor
-
-  " Pretty-print the list after the last line in the range
-  execute l:end . 'PP' l:results
-endfunction
-
-command! -range=% VimRun <line1>,<line2>call VimRun()

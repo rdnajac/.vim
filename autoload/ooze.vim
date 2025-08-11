@@ -57,7 +57,6 @@ function! s:tostring()
   endtry
 endfunction
 
-" FIXME: see clam.vim
 function! ooze#visual() range abort
   let l:lines = getline(a:firstline, a:lastline)
   call chansend(g:ooze_channel, join(l:lines, "\n") . "\n")

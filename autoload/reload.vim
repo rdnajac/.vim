@@ -19,3 +19,11 @@ function! reload#ftplugin(path) abort
   call vim#notify#info('Reloading ftplugin for ' . l:filetype)
   call execute#withSavedState('call reload#loop("' . l:filetype . '")')
 endfunction
+
+function! reload#vimscript(file) abort
+  silent! mkview
+  execute 'source' fnameescape(a:file)
+  silent! loadview
+  call vim#notify#info('Sourced ' . a:file . '!')
+endfunction
+

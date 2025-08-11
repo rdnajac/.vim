@@ -1,4 +1,5 @@
 -- meta/test.lua
+-- TODO: try mini.test
 local M = {}
 
 local modname = require('meta').modname
@@ -21,6 +22,10 @@ M.modname = function()
   -- missing /lua/ — returns nil
   eq(modname('/Users/me/dev/foo/bar.lua'), nil)
   print('All tests passed!')
+end
+
+M.run = function()
+  M.modname()
 end
 
 return M

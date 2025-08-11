@@ -31,6 +31,10 @@ function! s:format_if_modified() abort
   endif
 endfunction
 
+finish
+" BUG: undo tree is not restored properly after formatting
+" BUG: undo should not change position
+" BUG: sometimes undo tree is completely lost
 augroup AutoFormat
   autocmd!
   autocmd BufWritePre *.lua call <SID>format_if_modified()
