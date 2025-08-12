@@ -1,7 +1,5 @@
-local M = {}
-
 ---@type vim.diagnostic.Opts
-M.opts = {
+local opts = {
   float = { source = true },
   underline = false,
   virtual_text = false,
@@ -23,8 +21,4 @@ M.opts = {
   },
 }
 
-M.config = function()
-  vim.diagnostic.config(M.opts)
-end
-
-return M
+vim.diagnostic.config(opts)
