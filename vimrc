@@ -6,7 +6,7 @@ let g:maplocalleader = '\'
 
 " Section: settings {{{1
 " TODO: figure this out
-" set autowrite set autowriteall
+" set autowrite autowriteall
 set noswapfile
 set confirm
 
@@ -77,6 +77,7 @@ augroup vimrc
 
   " automatically create directories for new files
   " requires `vim-eunuch`
+  " FIXME: 
   au BufWritePre ~/ silent! Mkdir
 
   " immediately quit the command line window
@@ -85,8 +86,8 @@ augroup vimrc
   " automatically reload files that have been changed outside of Vim
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
-  " TODO move these to a separate group {{{3
-  au FileType json,jsonc,json5     setlocal conceallevel=0 expandtab
+  au FileType json,jsonc,json5 setlocal conceallevel=0 expandtab
+
   " automatically resize splits when the window is resized
   au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
 
@@ -139,7 +140,6 @@ nmap zJ ]ekJ
 " `surround`
 nmap S viWS
 " nnoremap <silent> dsf :call d#sf()<CR>
-
 
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
@@ -209,8 +209,8 @@ nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 
 " pickers {{{2
 nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
-nnoremap <leader>P  <Cmd>lua Snacks.picker()<CR>
-nnoremap <leader>n  <Cmd>lua Snacks.picker.notifications()<CR>
+nnoremap <leader>P <Cmd>lua Snacks.picker()<CR>
+nnoremap <leader>n <Cmd>lua Snacks.picker.notifications()<CR>
 
 " search
 nnoremap <leader>s" <Cmd>lua Snacks.picker.registers()<CR>
@@ -227,6 +227,7 @@ nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
 " XXX: potential conflicts
 nnoremap ` ~
 nnoremap <BS> <C-o>
+vnoremap <BS> d
 vnoremap <BS> d
 
 " control
@@ -334,7 +335,7 @@ call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
 Plug 'github/copilot.vim'
-" Plug 'lervag/vimtex'
+Plug 'lervag/vimtex'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tpope/vim-git'
@@ -352,7 +353,8 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
 Plug 'bullets-vim/bullets.vim'
-" Plug 'vuciv/golf'
+Plug 'vuciv/golf'
+Plug '~/GitHub/rdnajac/vim-lol'
 
 if !has('nvim')
   Plug 'Konfekt/FastFold'
@@ -360,10 +362,21 @@ if !has('nvim')
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   Plug 'tpope/vim-commentary' " TODO: try the shipped vim9 comment plugin
+else
+  Plug! 'folke/snacks.nvim'
 endif
 call plug#end()
 " }}}1
 
+" Section: commands {{{1
+command! -nargs=1 Info  call vim#notify#info(<q-args>)
+command! -nargs=1 Warn  call vim#notify#warn(<q-args>)
+command! -nargs=1 Error call vim#notify#error(<q-args>)
+" }}}
+
 if !has('nvim')
   color scheme
+else
+  " call v:lua.require'snacks'.debug(g:plugins)
+  " call v:lua.Snacks.debug(g:plugins)
 endif

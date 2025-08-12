@@ -4,49 +4,26 @@ local M = {}
 
 M.dashboard = require('nvim.snacks.config.dashboard')
 M.picker = require('nvim.snacks.config.picker')
+M.terminal = require('nvim.snacks.config.terminal')
+M.scratch = require('nvim.snacks.config.scratch')
 
 ---@type snacks.explorer.Config
-M.explorer = {
-  replace_netrw = vim.g.default_file_explorer == 'snacks',
-}
+M.explorer = { replace_netrw = vim.g.default_file_explorer == 'snacks' }
 
 ---@type snacks.indent.Config
-M.indent = {
-  indent = { only_current = true, only_scope = true },
-}
+M.indent = { indent = { only_current = true, only_scope = true } }
 
 ---@type snacks.notifier.Config
-M.notifier = {
-  style = 'fancy',
-  date_format = '%T',
-  timeout = 4000,
-}
+M.notifier = { style = 'fancy', date_format = '%T', timeout = 4000 }
 
----@type snacks.scratch.Config
-M.scratch = {
-  ---@type table<string, snacks.win.Config>
-  win_by_ft = {
-    vim = {
-      keys = {
-        ['source'] = {
-          '<cr>',
-          function(_)
-            vim.cmd.source('%')
-          end,
-          desc = 'Source buffer',
-          mode = { 'n', 'x' },
-        },
-      },
-    },
-  },
-}
-
+---@type table<string, snacks.win.Config>
 M.styles = {
   lazygit = { height = 0, width = 0 },
   terminal = {
     bo = { filetype = 'snacks_terminal' },
     wo = {},
     keys = {
+      up = { '<Up>', 'i<Up>', mode = { 'n' }, },
       q = 'hide',
       gf = function(self)
         local f = vim.fn.findfile(vim.fn.expand('<cfile>'), '**')
@@ -64,7 +41,6 @@ M.styles = {
         function(self)
           self.esc_timer = self.esc_timer or (vim.uv or vim.loop).new_timer()
           if self.esc_timer:is_active() then
-            dd('started')
             self.esc_timer:stop()
             vim.cmd('stopinsert')
           else
@@ -78,14 +54,6 @@ M.styles = {
       },
     },
   },
-}
-
----@type snacks.terminal.Config
-M.terminal = {
-  start_insert = true,
-  auto_insert = true,
-  auto_close = true,
-  win = { wo = { winbar = '', winhighlight = 'Normal:SpecialWindow' } },
 }
 
 return M

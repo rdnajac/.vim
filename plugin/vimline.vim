@@ -14,6 +14,11 @@ set noruler
 " set tabline=%!MyTabline()
 " set showtabline=2
 " set winbar=%!MyWinbar()
+if !has_key(environ(), 'TMUX')
+  set statusline=%!MyTmuxLine()
+else
+  set statusline=%!MyStatusLine()
+endif
 
 function MyStatusLine() abort
   let l:line = ''

@@ -17,7 +17,9 @@ Snacks.toggle({
       diff.disable(0)
     end
     vim.defer_fn(function()
-      vim.cmd([[redraw!]])
+      -- vim.cmd([[redraw!]])
+      -- vim.cmd.redraw({ bang = true })
+      Snacks.util.redraw(vim.api.nvim_get_current_win())
     end, 200)
   end,
 }):map('<leader>uG')

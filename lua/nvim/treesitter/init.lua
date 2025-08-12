@@ -20,7 +20,7 @@ end
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'sh', 'tex', 'markdown', 'python' },
+  pattern = { 'sh', 'tex', 'markdown', 'python', 'vim' },
   group = aug,
   callback = function()
     vim.treesitter.start()
@@ -58,10 +58,10 @@ local register_custom_parser = function()
 end
 
 M.config = function()
-  local parsers = require('plugins.treesitter.parsers')
+  local parsers = require('nvim.treesitter.parsers')
   require('nvim-treesitter').install(parsers)
-  require('plugins.treesitter.comments').setup()
-  require('plugins.treesitter.selection').setup()
+  require('nvim.treesitter.comments').setup()
+  require('nvim.treesitter.selection').setup()
 
   -- require('nvim.treesitter.comments')
   ---@diagnostic disable-next-line: param-type-mismatch

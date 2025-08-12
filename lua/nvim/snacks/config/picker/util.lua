@@ -33,73 +33,40 @@ M.config = function(opts)
   return opts
 end
 
--- M.gen_toggle  = function()
---   return M.toggle
--- end
--- ---@type table<string, snacks.picker.Config>
--- local reopen_state = {}
---
--- ---@param picker snacks.Picker
--- ---@param source string
--- ---@param opts? snacks.picker.Config
--- local reopen_picker = function(picker, source, opts)
---   local on_close = picker.opts.on_close
---   picker.opts.on_close = function(picker) ---@diagnostic disable-line
---     if not picker.skip_reset then
---       reopen_state = {}
---     end
---     if type(on_close) == 'function' then
---       on_close(picker)
---     end
---   end
---   local from_source = picker.opts.source
---   if from_source then
---     reopen_state[from_source] = picker.opts
---     reopen_state[from_source].pattern = picker:filter().pattern
---     reopen_state[from_source].search = picker:filter().search
---   end
---   picker.skip_reset = true
---   picker:close()
---   Snacks.picker.pick(source, vim.tbl_extend('force', reopen_state[source] or {}, opts or {}))
--- end
---
--- return {
---   'folke/snacks.nvim',
---   ---@type snacks.Config
---   opts = {
---     picker = {
---       sources = {
---         files = {
---           actions = {
---             switch_grep = function(picker)
---               reopen_picker(picker, 'grep', { search = picker:filter().pattern })
---             end,
---           },
---           win = {
---             input = {
---               keys = {
---                 ['<M-g>'] = { 'switch_grep', mode = { 'i', 'n' } },
---               },
---             },
---           },
---         },
---         grep = {
---           actions = {
---             switch_files = function(picker)
---               reopen_picker(picker, 'files', { pattern = picker:filter().search })
---             end,
---           },
---           win = {
---             input = {
---               keys = {
---                 ['<M-g>'] = { 'switch_files', mode = { 'i', 'n' } },
---               },
---             },
---           },
---         },
---       },
---     },
---   },
--- }
---
+M.win = {
+  input = {
+    keys = {
+      ['`'] = { 'toggle', mode = { 'i', 'n' } },
+    },
+  },
+}
+
+-- https://github.com/folke/snacks.nvim/discussions/2003#discussioncomment-13653042
+---@type table<string, snacks.picker.Config>
+local reopen_state = {}
+
+---@param picker snacks.Picker
+---@param source string
+---@param opts? snacks.picker.Config
+local reopen_picker = function(picker, source, opts)
+  local on_close = picker.opts.on_close
+  picker.opts.on_close = function(picker) ---@diagnostic disable-line
+    if not picker.skip_reset then
+      reopen_state = {}
+    end
+    if type(on_close) == 'function' then
+      on_close(picker)
+    end
+  end
+  local from_source = picker.opts.source
+  if from_source then
+    reopen_state[from_source] = picker.opts
+    reopen_state[from_source].pattern = picker:filter().pattern
+    reopen_state[from_source].search = picker:filter().search
+  end
+  picker.skip_reset = true
+  picker:close()
+  Snacks.picker.pick(source, vim.tbl_extend('force', reopen_state[source] or {}, opts or {}))
+end
+
 return M

@@ -6,12 +6,14 @@ set completeopt=menu,preview,longest
 " set completeopt+=preinsert
 " endif
 
+" default: `wildmode=full`
+
 " First press: longest common substring
 " Second press: cycle through full matches
 " set wildmode=longest,full
 
 " Same as above, but cycle through the first patch ('preinsert'?)
-set wildmode=longest:full,full
+" set wildmode=longest:full,full
 
 " First press: longest common substring
 " Second press: list all matches >vim

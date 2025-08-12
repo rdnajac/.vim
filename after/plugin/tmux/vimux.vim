@@ -272,7 +272,7 @@ function! s:vimuxPaneOptions() abort
 endfunction
 
 ""
-" @return a string of the form '%4', the ID of the pane or window to use,
+" return a string of the form '%4', the ID of the pane or window to use,
 "   or '' if no nearest pane or window is found.
 function! s:existingRunnerId() abort
   let runnerType = VimuxOption('VimuxRunnerType')

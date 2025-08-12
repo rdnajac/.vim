@@ -13,7 +13,6 @@ vim.o.winborder = 'rounded'
 vim.g.loaded_netrw = 1
 -- one of |netrw|snacks|oil
 vim.g.default_file_explorer = 'oil'
-
 -- use the new extui module if available
 -- local require = require('meta').safe_require
 local Plug = require('nvim.plug').Plug
@@ -23,27 +22,20 @@ require('vim._extui').enable({})
 -- _G.colors = Plug('nvim.colorscheme')
 Plug('nvim.colorscheme')
 Plug('nvim.snacks')
--- require('nvim.plug').Plug('nvim.snacks')
--- require('nvim.snacks').config()
+Plug('nvim.lsp')
+Plug('nvim.treesitter')
 
--- use the included icons for other plugins
-local icons = require('snacks.picker.config.defaults').defaults.icons
-
--- merge with the icons from nvim.icons
-_G.icons = vim.tbl_deep_extend('force', {}, icons, require('nvim.icons'))
--- setup debug functions
+_G.icons = require('nvim.icons')
 
 _G.bt = function()
   Snacks.debug.backtrace()
 end
 
 _G.ddd = function(...)
-  -- return (function(...)
-    return Snacks.debug.inspect(...)
-  -- end)(...)
+  return Snacks.debug.inspect(...)
 end
 
-vim.print = _G.dd
+vim.print = _G.ddd
 
 _G.plugins = require('plugins')
 

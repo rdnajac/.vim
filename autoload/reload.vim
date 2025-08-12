@@ -27,3 +27,12 @@ function! reload#vimscript(file) abort
   call vim#notify#info('Sourced ' . a:file . '!')
 endfunction
 
+function! reload#vim() abort
+  if exists(':Runtime')
+    let files = globpath(&rtp, '**/*.vim', 0, 1)
+    call execute#inPlace('Runtime! ' . join(files))
+    call vim#notify#info('Reloaded all scripts!')
+  else
+    call vim#notify#warn('Runtime command not available. Install vim-scriptease.')
+  endif
+endfunction

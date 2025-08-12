@@ -3,11 +3,11 @@
 return {
   sections = {
     { section = 'header' },
-    { section = 'recent_files' },
+---@param opts? {limit?:number, cwd?:string|boolean, filter?:fun(file:string):boolean?}
+    { section = 'recent_files', limit=10 },
     { padding = 1 },
     -- {
     --   section = 'terminal',
-    --   -- TODO: get `gf` to work with variable expansions
     --   cmd = vim.fn.stdpath('config') .. '/bin/cowsay-vim-fortunes',
     --   height = 13,
     -- },

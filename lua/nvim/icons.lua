@@ -1,4 +1,4 @@
-return {
+local icons = {
   blink_src = {
     buffer = ' ',
     cmdline = ' ',
@@ -11,8 +11,6 @@ return {
     -- snippets = icons.kinds.Snippet,
   },
   ft = { octo = ' ' },
-  -- kinds from snacks
-  -- kinds = require('snacks.picker.config.defaults'),
   misc = { dots = '…' },
   os = { -- from nvim-lualine/lualine.nvim
     unix = '', -- e712
@@ -30,3 +28,11 @@ return {
     },
   },
 }
+
+
+local ok, defaults = pcall(require, 'snacks.picker.config.defaults')
+if ok then
+  icons = vim.tbl_deep_extend('force', icons, defaults.defaults.icons)
+end
+
+return icons

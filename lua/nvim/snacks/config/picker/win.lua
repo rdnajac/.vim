@@ -4,7 +4,6 @@ local win = {
   input = {
     keys = {
       ['<Esc>'] = { 'close', mode = { 'n' } },
-      ['<C-J>'] = { 'toggle', mode = { 'n', 'i' }, desc = 'Toggle Files/Grep' },
       -- change dir with zoxide and continue picking
       ['<m-z>'] = {
         function(picker, item)

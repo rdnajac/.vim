@@ -7,7 +7,7 @@ M.opts = {
   },
 }
 
--- HACK: correcrly identify the name of the lsp client
+-- HACK: correctly identify the name of the lsp client
 package.preload['lazydev.lsp'] = function()
   local lazydev_path = vim.g.plug_home .. '/lazydev.nvim/'
   local mod = dofile(lazydev_path .. '/lua/lazydev/lsp.lua')

@@ -33,10 +33,12 @@ return {
     files = {
       config = require('nvim.snacks.config.picker.util').config,
       actions = require('nvim.snacks.config.picker.util').actions,
+      win = require('nvim.snacks.config.picker.util').win,
     },
     grep = {
       config = require('nvim.snacks.config.picker.util').config,
       actions = require('nvim.snacks.config.picker.util').actions,
+      win = require('nvim.snacks.config.picker.util').win,
     },
     icons = {
       layout = {

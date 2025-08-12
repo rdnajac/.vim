@@ -5,6 +5,7 @@ function s:set_clipboard() abort
     " don't use the clipboard over ssh
     if !exists('$SSH_TTY')
       set clipboard=unnamedplus
+      " Info 'Using system clipboard for yank and paste'
     endif
   endif
 endfunction

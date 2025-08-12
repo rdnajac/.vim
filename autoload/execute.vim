@@ -1,7 +1,7 @@
 " Execute a command, leaving the cursor on the current line
 function! execute#inPlace(command)
   let saved_view = winsaveview()
-  exe a:command
+  execute a:command
   call winrestview(saved_view)
 endfunction
 
@@ -16,6 +16,12 @@ function! execute#withSavedState(command)
     call histdel('/', -1)
     let @/ = histget('/', -1)
   endif
+endfunction
+
+" Execute a command with keeppatterns and optional default flags
+function! execute#s(command) abort
+  " Optional second arg: default flags for :substitute
+  execute 'keeppatterns' a:cmd . a:0 ? a:1 : ''
 endfunction
 
 " see also `:h keepjumps`
