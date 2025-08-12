@@ -8,17 +8,18 @@ local get_mode = require('util.mode').get
 local colors = {
   green = '#39ff14',
   palegreen = '#9ece6a',
+  blue = '#14aeff',
 }
 
 ---@type table<string, string>
 local ModeColor = {
-  normal = colors.green,
-  insert = '#14aeff',
+  normal = colors.palegreen,
+  insert = colors.green,
   visual = '#f7768e',
   replace = '#ff007c',
-  command = colors.palegreen,
+  command = colors.blue,
   terminal = '#BB9AF7',
-  pending = colors.palegreen,
+  pending = colors.blue,
 }
 
 ---@type table<string, string>
@@ -51,37 +52,46 @@ local function current_mode_color()
   return ModeColor[ModeLowerKey[get_mode()]]
 end
 
+-- list of groups that should be linked to Chromatophore
+local linked_groups = {
+  'FloatBorder',
+  'FloatTitle',
+  'Folded',
+  'MsgArea',
+  'SnacksDashboardHeader',
+  'String',
+  'WinSeparator',
+  'helpSectionDelim',
+}
+
+for _, group in ipairs(linked_groups) do
+  Snacks.util.set_hl({ [group] = { link = 'Chromatophore' } })
+end
+
+local black = '#000000'
+local grey = '#3b4261'
+local lightblue = '#7aa2f7'
+local eigengrau = '#16161d'
+
 local function chromatophore_refresh()
   local mode_color = current_mode_color()
-  local black = '#000000'
-  local grey = '#3b4261'
-  -- local lightblue = '#7aa2f7'
-  local lightblue = '#16161d'
 
+  -- stylua: ignore
   Snacks.util.set_hl({
-    Black = { fg = '#000000' },
-    Chromatophore = { fg = mode_color, bg = 'NONE' },
-    SnacksDashboardHeader = { link = 'Chromatophore' },
-    String = { link = 'Chromatophore' },
-    Folded = { link = 'Chromatophore' },
-    MsgArea = { link = 'Chromatophore' },
-    FloatBorder = { link = 'Chromatophore' },
-    WinSeparator = { link = 'Chromatophore' },
-    helpSectionDelim = { link = 'Chromatophore' },
-    Chromatophore_a = { fg = black, bg = mode_color, bold = true },
+    Black = { fg = black },
+    Chromatophore =    { fg = mode_color, bg = 'NONE' },
+    Chromatophore_a =  { fg = black,      bg = mode_color, bold = true },
     Chromatophore_ab = { fg = mode_color, bg = grey },
-    Chromatophore_b = { fg = mode_color, bg = grey, bold = true },
-    Chromatophore_bc = { fg = grey, bg = lightblue },
-    Chromatophore_c = { fg = mode_color, bg = lightblue },
-    Chromatophore_y = { fg = mode_color, bg = '#000000', bold = true },
-    -- Chromatophore_z = { fg = mode_color, bg = 'NONE', bold = true },
-    Chromatophore_z = { fg = mode_color, bg = '#16161d', bold = true },
+    Chromatophore_b =  { fg = mode_color, bg = grey,       bold = true },
+    Chromatophore_bc = { fg = grey,       bg = eigengrau },
+    Chromatophore_c =  { fg = mode_color, bg = eigengrau  },
+    Chromatophore_y =  { fg = mode_color, bg = black,      bold = true },
+    Chromatophore_z =  { fg = mode_color, bg = eigengrau,  bold = true },
     -- StatusLine = { link = 'Chromatophore_a' },
     -- StatusLineNC = { link = 'Chromatophore_b' },
   })
 
-  -- HACK: refresh tmux
-  vim.fn.jobstart({ 'tmux', 'refresh-client', '-S' }, { detach = true })
+  vim.system({ 'tmux', 'refresh-client', '-S' }) -- HACK: force refresh tmux
 end
 
 chromatophore_refresh()

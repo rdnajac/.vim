@@ -15,7 +15,7 @@ map_pickers('.', {cwd=os.getenv('HOME') .. '/.local/share/chezmoi', hidden=true}
 local function pick_dir(key, dir, picker_opts)
   -- local opts = vim.tbl_extend('force', { cwd = dir }, picker_opts or {})
   local opts = picker_opts or {}
- 
+
   opts.cwd = vim.fn.expand(dir)
   map_pickers(key, opts, { desc = dir })
 end
@@ -24,18 +24,19 @@ pick_dir('G', '~/GitHub/')
 pick_dir('v', '$VIMRUNTIME')
 pick_dir('V', '$VIM')
 pick_dir('p', '~/.vim/pack')
-pick_dir('P', vim.g.plug_home, { ft={'lua','vim'} })
+pick_dir('P', vim.g.plug_home, {ft={'lua','vim'}, ignored=true, hidden=false})
 
-vim.keymap.set('n', '<leader>fb', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
-vim.keymap.set('n', '<leader>fB', function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, { desc = 'Buffers (all)' })
-vim.keymap.set('n', '<leader>sb', function() Snacks.picker.lines() end, { desc = 'Buffer Lines' })
-vim.keymap.set('n', '<leader>sB', function() Snacks.picker.grep_buffers() end, { desc = 'Grep Open Buffers' })
+vim.keymap.set('n', '<leader>bb', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
+vim.keymap.set('n', '<leader>bB', function() Snacks.picker.buffers({hidden=true, nofile= true}) end, { desc = 'Buffers (all)' })
+vim.keymap.set('n', '<leader>bl', function() Snacks.picker.lines() end, { desc = 'Buffer Lines' })
+vim.keymap.set('n', '<leader>bg', function() Snacks.picker.grep_buffers() end, { desc = 'Grep Open Buffers' })
 
 vim.keymap.set('n', '<leader>uz', function() Snacks.zen() end, { desc = 'Zen Mode' })
 vim.keymap.set('n', '<leader>ui', function() vim.show_pos() end, { desc = 'Inspect Pos' })
 vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
 
 vim.keymap.set({ 'n', 't' }, '<c-\\>', function() Snacks.terminal.toggle() end)
+vim.keymap.set({ 'n', 't' }, ',,', function() Snacks.terminal.toggle() end)
 -- stylua: ignore end
 
 Snacks.toggle.profiler():map('<leader>dpp')

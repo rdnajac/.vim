@@ -1,9 +1,9 @@
 local M = {}
 
 M.specs = {
-  -- 'catppuccin/nvim',
-  'projekt0n/github-nvim-theme',
   'folke/tokyonight.nvim',
+  -- 'catppuccin/nvim',
+  -- 'projekt0n/github-nvim-theme',
 }
 
 ---@type tokyonight.Config
@@ -24,15 +24,13 @@ M.opts = {
     -- colors.red = '#f7768e'
   end,
   on_highlights = function(hl, colors)
+    hl['Cmdline'] = { bg = '#000000' }
     hl['Statement'] = { fg = colors.red }
     hl['Special'] = { fg = colors.red, bold = true }
     hl['SpellBad'] = { bg = colors.red }
     hl['SpecialWindow'] = { bg = '#1f2335' }
-    -- TODO: move to vimline?
-    -- hl['StatusLineNC'] = { bg = 'NONE' }
-    -- hl['TabLineFill'] = { bg = 'NONE' }
-    -- hl['Winbar'] = { bg = 'NONE' }
-    hl['Cmdline'] = { bg = '#000000' }
+    hl['SpecialWindow'] = { bg = '#1f2335' }
+    hl['FloatTitle'] = { fg = '#14afff', bold = true }
   end,
   plugins = {
     all = false,

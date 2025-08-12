@@ -1,25 +1,6 @@
 ---@module "snacks"
 ---@type snacks.picker.Config
 return {
-  -- layout = { preset = 'ivy' },
-  layout = { preset = 'mylayout' },
-  ---@type snacks.picker.layout.Config[]
-  layouts = {
-    -- TODO: add toggle preview
-    mylayout = {
-      reverse = true,
-      layout = {
-        box = 'vertical',
-        backdrop = false,
-        height = 0.4,
-        row = vim.o.lines - math.floor(0.4 * vim.o.lines),
-        { win = 'list', border = 'rounded', title_pos = 'left' },
-        { win = 'input', height = 1 },
-      },
-      { win = 'input', height = 1 },
-    },
-  },
-  ---@class snacks.picker.debug
   debug = {
     -- scores = true, -- show scores in the list
     -- leaks = true, -- show when pickers don't get garbage collected
@@ -29,7 +10,8 @@ return {
     -- proc = true, -- show proc debug info
     -- extmarks = true, -- show extmarks errors
   },
-  ---@type snacks.picker.sources.Config|{}|table<string, snacks.picker.Config|{}>
+  layout = { preset = 'mylayout' },
+  layouts = { mylayout = require('nvim.snacks.config.picker.layout') },
   sources = {
     explorer = require('nvim.snacks.config.explorer'),
     files = require('nvim.snacks.config.picker.util').opts_extend,
@@ -51,8 +33,6 @@ return {
       },
     },
     zoxide = { confirm = 'edit' },
-    -- mine
-    -- FIXME:
     -- scripts = {
     --   title = 'Scriptnames',
     --   items = function()

@@ -26,6 +26,7 @@ function StatusRight() abort
   " let l:line .= vimline#components#lspprogress()
   let l:line .= '%#Black#'
   let l:line .= '%#Chromatophore_y#'
+  let l:line .= vimline#luacomponent('searchcount') . ' '
   let l:line .= mode()
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
   let l:line .= '%S '
@@ -76,9 +77,17 @@ function! TmuxRight() abort
   return vimline#tmuxline('Clock')
 endfunction
 
+" Keep the recording component up to date
 augroup vimline_macro
   autocmd!
   autocmd RecordingEnter * let g:vimline_rec_reg = reg_recording()
   autocmd RecordingLeave * let g:vimline_last_reg = get(g:, 'vimline_rec_reg', '') | unlet g:vimline_rec_reg
   autocmd RecordingEnter,RecordingLeave * redrawstatus
+augroup END
+
+" Hide the statusline while in command mode
+augroup vimline_cmdline
+  autocmd!
+  autocmd CmdlineEnter * let b:lastlaststatus = &laststatus | set laststatus=0
+  autocmd CmdlineLeave * if exists('b:lastlaststatus') | let &laststatus = b:lastlaststatus | unlet b:lastlaststatus | endif
 augroup END
