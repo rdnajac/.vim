@@ -16,27 +16,23 @@ vim.g.default_file_explorer = 'oil'
 -- use the new extui module if available
 -- local require = require('meta').safe_require
 local Plug = require('plug').Plug
-
+-- TODO: use safe require here
 require('vim._extui').enable({})
 
--- _G.colors = Plug('nvim.colorscheme')
-Plug('nvim.colorscheme')
 Plug('nvim.snacks')
+
+-- stylua: ignore start
+_G.bt = function() Snacks.debug.backtrace() end
+_G.ddd = function(...) return Snacks.debug.inspect(...) end
+-- stylua: ignore end
+vim.print = _G.ddd
+
+Plug('nvim.colorscheme')
+Plug('nvim.mini')
 Plug('nvim.lsp')
 Plug('nvim.treesitter')
 
 _G.icons = require('nvim.icons')
-
-_G.bt = function()
-  Snacks.debug.backtrace()
-end
-
-_G.ddd = function(...)
-  return Snacks.debug.inspect(...)
-end
-
-vim.print = _G.ddd
-
 _G.plugins = require('plugins')
 
 require('chromatophore')

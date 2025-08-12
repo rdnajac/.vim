@@ -14,6 +14,7 @@ M.event = 'InsertEnter'
 local kind = vim.lsp.protocol.SymbolKind
 -- local kind = require('blink.cmp.types').CompletionItemKind
 
+-- TODO: move to treesitter module
 local function in_comment()
   local success, node = pcall(vim.treesitter.get_node)
   if success and node then
@@ -99,10 +100,6 @@ M.opts = {
       end
       return defaults
     end,
-    -- per_filetype = {
-    --   lua = { inherit_defaults = true, 'lazydev' },
-    --   oil = {},
-    -- },
     -- min_keyword_leng = 5,
     providers = {
       path = {
@@ -187,7 +184,5 @@ M.config = function()
     return '$'
   end, { expr = true, replace_keycodes = false })
 end
-
--- ~/bin/
 
 return M

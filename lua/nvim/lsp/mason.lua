@@ -1,5 +1,7 @@
 local M = {}
 
+-- TODO: do we have to cache this ourselves?
+-- or does mason do this internally?
 M.reg = require('mason-registry')
 
 function M.install(tools)
@@ -85,7 +87,7 @@ M.ensure_installed = function()
   return servers
 end
 
--- TODO: 
+-- TODO:
 -- M.update = function()
 --
 -- end

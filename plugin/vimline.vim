@@ -20,16 +20,11 @@ else
   set statusline=%!MyStatusLine()
 endif
 
-function MyStatusLine() abort
+function StatusRight() abort
   let l:line = ''
-  " let l:line .= '%#Chromatophore_a# '
-  " let [l:root, l:rel_path] = git#RelativePath()
-  " let line .= l:rel_path
-  " let l:line .= vimline#components#docsymbols()
   let l:line .= ' %='               " Right alignment
   " let l:line .= vimline#components#lspprogress()
-  let l:line .= '%#Black#'
-  let l:line .= ''
+  let l:line .= '%#Black#'
   let l:line .= '%#Chromatophore_y#'
   let l:line .= mode()
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
@@ -37,9 +32,7 @@ function MyStatusLine() abort
   let l:line .= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
   " let l:line .= vimline#recording()
   let l:line .= vimline#luacomponent('blink')
-  " let l:line .= printf('%10s', vimline#components#mode())
-  let l:line .= '%#Black#'
-  let l:line .= ''
+  let l:line .= '%#Black#'
   return line
 endfunction
 
@@ -62,7 +55,7 @@ function! MyTmuxLine() abort
   let l:line .= ' %#Chromatophore_bc#🭛'
   let l:line .= '%#Chromatophore_c#'
   let l:line .= vimline#flags() . ' '
-  return l:line
+  return l:line . StatusRight()
 endfunction
 
 function! Clock() abort

@@ -1,3 +1,4 @@
+ddd('ok')
 local ai = require('mini.ai')
 
 local mini_ai_opts = {
