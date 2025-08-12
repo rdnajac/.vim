@@ -1,7 +1,7 @@
 local M = {}
 
 ---@module "snacks"
--- see: Snacks.picker.picker_actions()
+-- see: `Snacks.picker.picker_actions()`
 
 ---@param picker snacks.Picker
 local toggle = function(picker)
@@ -15,32 +15,34 @@ local toggle = function(picker)
   end
 end
 
-M.actions = {
-  toggle = function(self)
-    toggle(self)
+M.opts_extend = {
+  actions = {
+    toggle = function(self)
+      toggle(self)
+    end,
+  },
+  config = function(opts)
+    local icon_map = {
+      grep = '󰱽',
+      files = '',
+    }
+    local icon = icon_map[opts.finder]
+    local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
+    opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
+    -- TODO: filter out copilot dirs in workspace and take the root
+    opts.cwd = opts.cwd or (vim.lsp.buf.list_workspace_folders()[1] or vim.fn.getcwd())
+    return opts
   end,
-}
-
-M.config = function(opts)
-  local icon_map = {
-    grep = '󰱽',
-    files = '',
-  }
-  local icon = icon_map[opts.finder]
-  local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
-  opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
-  opts.cwd = opts.cwd or (vim.lsp.buf.list_workspace_folders()[1] or vim.fn.getcwd())
-  return opts
-end
-
-M.win = {
-  input = {
-    keys = {
-      ['`'] = { 'toggle', mode = { 'i', 'n' } },
+  win = {
+    input = {
+      keys = {
+        ['`'] = { 'toggle', mode = { 'i', 'n' } },
+      },
     },
   },
 }
 
+-- TODO: test this against current implementation
 -- https://github.com/folke/snacks.nvim/discussions/2003#discussioncomment-13653042
 ---@type table<string, snacks.picker.Config>
 local reopen_state = {}

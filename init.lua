@@ -15,7 +15,7 @@ vim.g.loaded_netrw = 1
 vim.g.default_file_explorer = 'oil'
 -- use the new extui module if available
 -- local require = require('meta').safe_require
-local Plug = require('nvim.plug').Plug
+local Plug = require('plug').Plug
 
 require('vim._extui').enable({})
 

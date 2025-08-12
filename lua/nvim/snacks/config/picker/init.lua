@@ -1,9 +1,11 @@
 ---@module "snacks"
 ---@type snacks.picker.Config
 return {
-  layout = { preset = 'ivy' },
+  -- layout = { preset = 'ivy' },
+  layout = { preset = 'mylayout' },
   ---@type snacks.picker.layout.Config[]
   layouts = {
+    -- TODO: add toggle preview
     mylayout = {
       reverse = true,
       layout = {
@@ -30,16 +32,8 @@ return {
   ---@type snacks.picker.sources.Config|{}|table<string, snacks.picker.Config|{}>
   sources = {
     explorer = require('nvim.snacks.config.explorer'),
-    files = {
-      config = require('nvim.snacks.config.picker.util').config,
-      actions = require('nvim.snacks.config.picker.util').actions,
-      win = require('nvim.snacks.config.picker.util').win,
-    },
-    grep = {
-      config = require('nvim.snacks.config.picker.util').config,
-      actions = require('nvim.snacks.config.picker.util').actions,
-      win = require('nvim.snacks.config.picker.util').win,
-    },
+    files = require('nvim.snacks.config.picker.util').opts_extend,
+    grep = require('nvim.snacks.config.picker.util').opts_extend,
     icons = {
       layout = {
         layout = {
@@ -56,7 +50,7 @@ return {
         },
       },
     },
-    -- zoxide = { confirm = 'edit', },
+    zoxide = { confirm = 'edit' },
     -- mine
     -- FIXME:
     -- scripts = {

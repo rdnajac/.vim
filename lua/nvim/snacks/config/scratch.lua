@@ -1,7 +1,6 @@
 ---@type snacks.scratch.Config
 return {
   template = "local x = \nprint(x)",
-
   ---@type table<string, snacks.win.Config>
   win_by_ft = {
     vim = {
