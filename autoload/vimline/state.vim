@@ -11,3 +11,13 @@ function! vimline#state#recording() abort
   " endif
   return ret
 endfunction
+
+" ALE statusline component
+" https://github.com/dense-analysis/ale?tab=readme-ov-file#custom-statusline
+" set statusline=%{LinterStatus()w  w}
+function! vimline#state#diagnostics() abort
+  let l:counts = ale#statusline#Count(bufnr(''))
+  let l:all_errors = l:counts.error + l:counts.style_error
+  let l:non_errors = l:counts.total - l:all_errors
+  return l:counts.total == 0 ? 'OK' : printf(' %dW %dE', l:non_errors, l:all_errors)
+endfunction
