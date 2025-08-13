@@ -18,7 +18,16 @@ function vim.notify(msg, level, opts)
   vim.api.nvim_echo(chunks, true, { err = level == vim.log.levels.ERROR })
 end
 
-vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+---@type 'netrw'|'snacks'|'oil'
+vim.g.default_file_explorer = 'oil'
+
+-- disable netrw if using another file explorer
+vim.g.loaded_netrw = vim.g.default_file_explorer == 'netrw' and 1 or nil
+
+--
+if vim.is_callable(vim.pack.add) then
+  vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+end
 
 vim.cmd('runtime vimrc')
 
@@ -29,14 +38,12 @@ vim.o.cmdheight = 0
 vim.o.pumblend = 0
 vim.o.winborder = 'rounded'
 
-vim.g.loaded_netrw = 1
--- one of |netrw|snacks|oil
-vim.g.default_file_explorer = 'oil'
+local require = require('meta').safe_require
+
 -- use the new extui module if available
--- local require = require('meta').safe_require
-local Plug = require('plug').Plug
--- TODO: use safe require here
 require('vim._extui').enable({})
+
+local Plug = require('plug').Plug
 
 Plug('nvim.snacks')
 
@@ -50,9 +57,7 @@ Plug('nvim.colorscheme')
 Plug('nvim.mini')
 Plug('nvim.lsp')
 Plug('nvim.treesitter')
-require('chromatophore')
 
 _G.icons = require('nvim.icons')
 _G.plugins = require('plugins')
-
-require('nvim.config')
+_G.config = require('nvim.config')
