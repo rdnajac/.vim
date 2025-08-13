@@ -1,3 +1,15 @@
+augroup vim_on_init
+  autocmd!
+augroup END
+
+function! vim#on_init(fn) abort
+  if v:vim_did_enter
+    call call(a:fn, [])
+  else
+    execute 'autocmd vim_on_init VimEnter * call call(function(' . string(a:fn) . '), [])'
+  endif
+endfunction
+
 function! vim#home() abort
   return has('nvim') ? stdpath('config') : split(&rtp, ',')[0]
 endfunction
@@ -24,7 +36,7 @@ function! vim#vim_init() abort
   call vim#sensible#setup()
 endfunction
 
-function! s:init() abort
+function! vim#nvim_config() abort
   set backup
   set backupext=.bak
   let &backupdir = stdpath('state') . '/backup//'
@@ -43,12 +55,5 @@ function! s:init() abort
 endfunction
 
 function! vim#nvim_init() abort
-  if v:vim_did_enter
-    call s:init()
-  else
-    augroup nvim_init
-      autocmd!
-      autocmd VimEnter * call s:init()
-    augroup END
-  endif
+  call vim#on_init(function('vim#nvim_config'))
 endfunction
