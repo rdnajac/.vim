@@ -1,7 +1,4 @@
 ""
-" @section Introduction, intro
-" @stylized Vim Highlighting
-" @library
 " Set and link highlight group colors
 
 function! vim#hl#set(group, fg, bg, ...) abort

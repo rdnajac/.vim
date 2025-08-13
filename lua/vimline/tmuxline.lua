@@ -2,6 +2,17 @@
 
 -- %#Chromatophore_a# 󱉭 chezmoi/%#Chromatophore_ab#🭛%#Chromatophore_b#dot_config/tmux/bin/executable_nvim-tmux.sh
 -- becomes:
+
+-- Force a tmux refresh whenever we expect the statusline to change
+-- to keep the statusline in sync
+-- This autocmd should only be loaded on the first call to this module
+vim.api.nvim_create_autocmd({ 'ModeChanged', 'DirChanged', 'BufEnter' }, {
+  aug = vim.api.nvim_create_augroup('Tmuxline', { clear = true }),
+  callback = function()
+    vim.system({ 'tmux', 'refresh-client', '-S' })
+  end,
+})
+
 local M = function(line)
   local out = {}
   local last = {}

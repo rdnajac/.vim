@@ -45,90 +45,76 @@ let s:teal = '#1abc9c'
 let s:white = '#ffffff'
 let s:yellow = '#e0af68'
 
-" Execute the highlighting command with the given arguments
-" This function allows us to use the color names defined above
-function! s:Highlight(group, fg, bg, ...)
-  let l:attr= (len(a:000) > 0 && a:000[0] != '') ? a:000[0] : 'NONE'
-  execute 'hi ' . a:group . ' guifg=' . a:fg . ' guibg=' . a:bg . ' gui=' . l:attr. ' cterm=' . l:attr
-endfunction
-
-" Link highlight groups to the first group in the argument list
-function! s:LinkGroups(base_highlight_group, ...)
-  for element in a:000
-    exec 'hi! link' element a:base_highlight_group
-  endfor
-endfunction
-
 " Highlighting groups for various occasions
 " =========================================
 " Define the background in the normal group
-call s:Highlight('Normal', s:white, s:bg, '')
-call s:Highlight('Comment', s:comment, 'NONE', 'italic')
+call vim#hl#set('Normal', s:white, s:bg, '')
+call vim#hl#set('Comment', s:comment, 'NONE', 'italic')
 
-call s:Highlight('LineNr', s:fg_alt, s:bg, '')
+call vim#hl#set('LineNr', s:fg_alt, s:bg, '')
 " MsgArea = the command line area
-call s:Highlight('MsgArea', s:neongreen, s:bg, '')
+call vim#hl#set('MsgArea', s:neongreen, s:bg, '')
 
 hi! link SpecialKey PreProc
 " ColorColumn
-call s:Highlight('Conceal', s:dark5, s:bg, '')
-call s:Highlight('Cursor', s:fg, s:bg_alt, '')
-call s:Highlight('CursorLine', 'NONE', s:bg_alt, '')
-call s:Highlight('CursorLineNr', s:yellow, s:bg, 'bold')
-call s:Highlight('CursorColumn', s:white, s:bg_alt, '')
+call vim#hl#set('Conceal', s:dark5, s:bg, '')
+call vim#hl#set('Cursor', s:fg, s:bg_alt, '')
+call vim#hl#set('CursorLine', 'NONE', s:bg_alt, '')
+call vim#hl#set('CursorLineNr', s:yellow, s:bg, 'bold')
+call vim#hl#set('CursorColumn', s:white, s:bg_alt, '')
 " DiffAdd
 " DiffChange
 " DiffDelete
 " DiffText
-call s:Highlight('Directory', s:blue, s:bg, '')
-call s:Highlight('ErrorMsg', s:red, s:bg, '')
+call vim#hl#set('Directory', s:blue, s:bg, '')
+call vim#hl#set('ErrorMsg', s:red, s:bg, '')
 " Ignore
-call s:Highlight('FoldColumn', s:orange, s:bg, '')
-call s:Highlight('Folded', s:blue, s:bg, '')
+call vim#hl#set('FoldColumn', s:orange, s:bg, '')
+call vim#hl#set('Folded', s:blue, s:bg, '')
 hi! link CursorLineFold FoldColumn
 hi! link LineNrAbove NONE
 hi! link LineNrBelow NONE
 
-call s:Highlight('MoreMsg', s:blue, s:bg, '')
-call s:Highlight('ModeMsg', s:yellow, s:bg, '')
-call s:Highlight('Pmenu', s:fg, s:black, '')
-call s:Highlight('PmenuSel', s:yellow, 'NONE', '')
-call s:LinkGroups('Pmenu', 'PmenuExtra', 'PmenuKind')
-call s:LinkGroups('PmenuSel', 'PmenuKindSel', 'PmenuExtraSel')
+call vim#hl#set('MoreMsg', s:blue, s:bg, '')
+call vim#hl#set('ModeMsg', s:yellow, s:bg, '')
+call vim#hl#set('Pmenu', s:fg, s:black, '')
+call vim#hl#set('PmenuSel', s:yellow, 'NONE', '')
+call vim#hl#link('Pmenu', 'PmenuExtra', 'PmenuKind')
+call vim#hl#link('PmenuSel', 'PmenuKindSel', 'PmenuExtraSel')
 
-call s:Highlight('PmenuSbar', s:yellow, s:bg, '')
-call s:Highlight('PmenuThumb', s:dark5, s:bg, '')
+call vim#hl#set('PmenuSbar', s:yellow, s:bg, '')
+call vim#hl#set('PmenuThumb', s:dark5, s:bg, '')
 
-call s:Highlight('Question', s:pink, s:bg, '')
-call s:Highlight('SignColumn', s:fg_alt, s:bg, '')
+call vim#hl#set('Question', s:pink, s:bg, '')
+call vim#hl#set('SignColumn', s:fg_alt, s:bg, '')
 hi! link CursorLineSign SignColumn
 
-call s:Highlight('Search', s:bg, s:yellow, 'bold')
-call s:LinkGroups('Search', 'CurSearch', 'QuickFixLine', 'IncSearch', 'MatchParen')
+call vim#hl#set('Search', s:bg, s:yellow, 'bold')
+call vim#hl#link('Search', 'CurSearch', 'QuickFixLine', 'IncSearch', 'MatchParen')
 
-" call s:Highlight(, s:magenta, s:neongreen, 'bold')
+" call vim#hl#set(, s:magenta, s:neongreen, 'bold')
 
-call s:LinkGroups('NonText', 'EndOfBuffer')
-call s:Highlight('SpellBad', s:red, 'NONE', 'undercurl')
-call s:Highlight('SpellCap', s:yellow, 'NONE', 'undercurl')
-call s:Highlight('SpellRare', s:teal, 'NONE', 'undercurl')
-call s:Highlight('SpellLocal', s:blue2, 'NONE', 'undercurl')
-call s:Highlight('StatusLine', s:neongreen, s:black, 'reverse')
-call s:LinkGroups('StatusLine', 'StatusLineTerm', 'StatusLineNC', 'StatusLineTermNC')
-call s:Highlight('TabLine', s:fg_alt, 'NONE', '')
-call s:Highlight('TabLineSel', s:neongreen, 'NONE', 'bold')
-call s:Highlight('TabLineFill', 'NONE', s:bg, '')
+call vim#hl#link('NonText', 'EndOfBuffer')
+call vim#hl#set('SpellBad', s:red, 'NONE', 'undercurl')
+call vim#hl#set('SpellCap', s:yellow, 'NONE', 'undercurl')
+call vim#hl#set('SpellRare', s:teal, 'NONE', 'undercurl')
+call vim#hl#set('SpellLocal', s:blue2, 'NONE', 'undercurl')
+call vim#hl#set('StatusLine', s:neongreen, s:black, 'reverse')
+call vim#hl#link('StatusLine', 'StatusLineTerm', 'StatusLineNC', 'StatusLineTermNC')
+call vim#hl#set('TabLine', s:fg_alt, 'NONE', '')
+call vim#hl#set('TabLineSel', s:neongreen, 'NONE', 'bold')
+call vim#hl#set('TabLineFill', 'NONE', s:bg, '')
 
 
-call s:Highlight('Title', s:blue, s:bg, 'bold')
-call s:Highlight('ToolbarLine', s:chambray, s:bg, '')
-call s:Highlight('ToolbarButton', s:cyan, s:bg, '')
+call vim#hl#set('Title', s:blue, s:bg, 'bold')
+call vim#hl#set('ToolbarLine', s:chambray, s:bg, '')
+call vim#hl#set('ToolbarButton', s:cyan, s:bg, '')
 " this is meaningless if you turn off the vert fillchar
-call s:Highlight('VertSplit', s:yellow, s:bg, '')
-call s:Highlight('Visual', s:yellow, s:tokyonight, '')
+call vim#hl#set('VertSplit', s:yellow, s:bg, '')
+call vim#hl#set('Visual', s:yellow, s:tokyonight, '')
 " VisualNOS
-call s:Highlight('WarningMsg', s:pink, s:bg, '')
-call s:Highlight('WildMenu', s:pink, s:neongreen, '')
+call vim#hl#set('WarningMsg', s:pink, s:bg, '')
+call vim#hl#set('WildMenu', s:pink, s:neongreen, '')
 
 " extra
 hi! link CursorIM Cursor
@@ -137,42 +123,42 @@ hi! link CursorIM Cursor
 
 " Highlighting groups for language syntaxes
 " =========================================
-call s:Highlight('Statement', s:red, 'NONE', '')
-call s:LinkGroups('Statement', 'Conditional', 'Repeat', 'Label', 'Operator', 'Keyword', 'Exception')
+call vim#hl#set('Statement', s:red, 'NONE', '')
+call vim#hl#link('Statement', 'Conditional', 'Repeat', 'Label', 'Operator', 'Keyword', 'Exception')
 
-call s:Highlight('PreProc', s:blue1, 'NONE', '')
-call s:LinkGroups('PreProc', 'Define', 'Include', 'Macro', 'PreCondit')
+call vim#hl#set('PreProc', s:blue1, 'NONE', '')
+call vim#hl#link('PreProc', 'Define', 'Include', 'Macro', 'PreCondit')
 
-call s:Highlight('Constant', s:orange, 'NONE', '')
-call s:LinkGroups('Constant', 'Number', 'Boolean', 'Float')
+call vim#hl#set('Constant', s:orange, 'NONE', '')
+call vim#hl#link('Constant', 'Number', 'Boolean', 'Float')
 
-call s:Highlight('Identifier', s:magenta, 'NONE', '')
-call s:LinkGroups('Identifier', 'Function')
+call vim#hl#set('Identifier', s:magenta, 'NONE', '')
+call vim#hl#link('Identifier', 'Function')
 
-call s:Highlight('Type', s:cyan, 'NONE', '')
-call s:LinkGroups('Type', 'StorageClass', 'Structure', 'Typedef')
+call vim#hl#set('Type', s:cyan, 'NONE', '')
+call vim#hl#link('Type', 'StorageClass', 'Structure', 'Typedef')
 
-call s:Highlight('String', s:neongreen, 'NONE', '')
+call vim#hl#set('String', s:neongreen, 'NONE', '')
 
-call s:Highlight('Character', s:red, 'NONE', '')
+call vim#hl#set('Character', s:red, 'NONE', '')
 
-call s:Highlight('Delimiter', s:magenta2, 'NONE', '')
-call s:Highlight('Special', s:teal, 'NONE', '')
-call s:LinkGroups('Special', 'Tag', 'SpecialChar', 'SpecialComment', 'Debug')
+call vim#hl#set('Delimiter', s:magenta2, 'NONE', '')
+call vim#hl#set('Special', s:teal, 'NONE', '')
+call vim#hl#link('Special', 'Tag', 'SpecialChar', 'SpecialComment', 'Debug')
 
-call s:Highlight('NonText', s:chambray, s:bg, '')
+call vim#hl#set('NonText', s:chambray, s:bg, '')
 
 " Messages
-call s:Highlight('Error', 'NONE', s:red, '')
-call s:Highlight('Todo', s:black, s:yellow, 'bold')
+call vim#hl#set('Error', 'NONE', s:red, '')
+call vim#hl#set('Todo', s:black, s:yellow, 'bold')
 
-call s:Highlight('Added', s:green1, s:tokyonight, '')
-call s:Highlight('Changed', s:yellow, s:eigengrau, '')
-call s:Highlight('Removed', s:red, s:tokyonight, '')
+call vim#hl#set('Added', s:green1, s:tokyonight, '')
+call vim#hl#set('Changed', s:yellow, s:eigengrau, '')
+call vim#hl#set('Removed', s:red, s:tokyonight, '')
 
 " Highlighting groups for VimL
 " ============================
-call s:Highlight('vimFuncSID', s:blue, 'NONE', '')
+call vim#hl#set('vimFuncSID', s:blue, 'NONE', '')
 
 " Terminal Colors
 " ===============
