@@ -5,10 +5,50 @@ local icons = icons
 
 local M = {}
 
--- can be one of { unix, dos, mac }
-M.format = function()
-  local format = vim.bo.fileformat
-  return icons[format] or format
+--- Get devicon for a buffer by buffer number.
+--- @param bufnr number|nil Buffer number (defaults to current buffer)
+--- @return string icon
+M.type_icon = function(bufnr)
+  local ok, devicons = pcall(require, 'nvim-web-devicons')
+  if not ok then
+    return ''
+  end
+
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local fname = vim.api.nvim_buf_get_name(bufnr)
+  local shortname = vim.fn.fnamemodify(fname, ':t')
+  local ext = vim.fn.fnamemodify(fname, ':e')
+
+  -- Try by filename/ext
+  local icon = devicons.get_icon(shortname, ext, { default = true })
+  if icon and icon ~= '' then
+    return icon
+  end
+
+  -- Try by filetype
+  local ft = vim.bo[bufnr] and vim.bo[bufnr].filetype or ''
+  return devicons.get_icon_by_filetype(ft, { default = true }) or ''
+end
+
+--- Return file format icon ( one of { unix, dos, mac })
+--- @param bufnr? integer Optional buffer number (defaults to current buffer)
+M.format = function(bufnr)
+  local bo = vim.bo[bufnr or 0]
+  return icons[bo.fileformat] or bo.fileformat
+end
+
+--- Return modified/readonly symbols for a buffer
+--- @param bufnr? integer Optional buffer number (defaults to current buffer)
+M.modified = function(bufnr)
+  local bo = vim.bo[bufnr or 0]
+  local out = ''
+    if bo.modified then
+      out = out .. ' '
+    end
+    if bo.readonly then
+      out = out .. ' '
+    end
+  return out
 end
 
 M.size = function()

@@ -20,11 +20,6 @@ function! s:indicator(condition, icon) abort
   return a:condition ? a:icon : ''
 endfunction
 
-function vimline#icons#filetype() abort
-  let l:icon = s:lualine_component('filetype')
-  return s:indicator(!empty(l:icon), l:icon . ' ')
-endfunction
-
 function! vimline#icons#copilot() abort
   let l:icon = s:lualine_component('copilot')
   return s:indicator(!empty(l:icon), s:sep . l:icon)

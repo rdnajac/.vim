@@ -1,11 +1,13 @@
 scriptencoding=utf-8
+
 if !has('nvim')
   finish
 endif
-" TODO: should these be colored?
-" -- hl['StatusLineNC'] = { bg = 'NONE' }
-" -- hl['TabLineFill'] = { bg = 'NONE' }
-" -- hl['Winbar'] = { bg = 'NONE' }
+" TODO: set defaults for these groups
+" StatusLineNC
+" TabLineFill
+" Winbar
+" Statusline{Term}{NC}
 
 set showcmdloc=statusline
 set statusline=%!MyStatusLine()
@@ -19,6 +21,20 @@ if !has_key(environ(), 'TMUX')
 else
   set statusline=%!MyStatusLine()
 endif
+
+function! MyWinBar() abort
+  let l:winid = get(v:, 'statusline_winid', 0)
+  let l:bufnr = winbufnr(l:winid)
+  let l:file  = fnamemodify(bufname(l:bufnr), ':p')
+  let l:root  = git#root(l:file)
+
+  if !empty(l:file) && !empty(l:root)
+    return path#relative(l:file, l:root)
+  endif
+  return ''
+endfunction
+
+" set winbar=%!MyWinBar()
 
 function StatusRight() abort
   let l:line = ''
@@ -37,6 +53,7 @@ function StatusRight() abort
   return line
 endfunction
 
+
 " TODO: write file component
 function! MyTmuxLine() abort
   if bufname('%') =~# '^term://'
@@ -44,7 +61,7 @@ function! MyTmuxLine() abort
     let l:prefix = '󱉭 ' . $PWD . ' '
     let l:suffix = 'channel: ' . &channel
   else
-    let [l:root, l:suffix] = path#relative()
+    let [l:root, l:suffix] = path#relative_parts()
     let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
   endif
   let l:line = ''

@@ -1,3 +1,6 @@
+local lib = require('vimline.docsymbols.lib')
+local icons = icons 
+
 local M = {}
 
 local config = {
@@ -13,8 +16,6 @@ setmetatable(config.icons, {
     return '? '
   end,
 })
-
--- local lib = require('vimline.docsymbols.lib')
 
 for k, v in pairs(config.icons) do
   if lib.adapt_lsp_str_to_num(k) then

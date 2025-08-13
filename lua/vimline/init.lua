@@ -9,16 +9,6 @@ M.copilot_icon = function()
   return ''
 end
 
-M.filetype_icon = function()
-  local ok, devicons = pcall(require, 'nvim-web-devicons')
-  if not ok then
-    return ''
-  end
-  return devicons.get_icon(vim.fn.expand('%:t'), nil, { default = true })
-    or devicons.get_icon_by_filetype(vim.bo.filetype, { default = true })
-    or ''
-end
-
 M.lsp_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name ~= 'GitHub Copilot' then
@@ -43,6 +33,27 @@ end
 
 function M.docsymbols_hl()
   return require('vimline.docsymbols').get_location({ apply_hl = true })
+end
+
+---@param props { buf: number, win: number, focused: boolean }
+M.incline = function(props)
+  local file = require('vimline.file')
+  local bufnr = props.buf or vim.api.nvim_get_current_buf()
+  local bufname = vim.api.nvim_buf_get_name(bufnr)
+  local icon = file.type_icon(bufnr)
+  local filename = bufname ~= '' and vim.fn.fnamemodify(bufname, ':t') or '[No Name]'
+  local modified = file.modified(bufnr)
+
+  -- Always start with base highlight
+  local stl = '%#Chromatophore#'
+
+  if props.focused then
+    stl = stl .. '' .. '%#Chromatophore_a#'
+  end
+
+  stl = stl .. icon .. '  ' .. filename .. modified .. ' '
+
+  return require('incline.helpers').eval_statusline(stl)
 end
 
 return M

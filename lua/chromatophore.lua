@@ -89,21 +89,16 @@ local function chromatophore_refresh()
     Chromatophore_z =  { fg = mode_color, bg = eigengrau,  bold = true },
     -- StatusLine = { link = 'Chromatophore_a' },
     -- StatusLineNC = { link = 'Chromatophore_b' },
+    InclineNormal = { link = 'Chromatophore_a' },
+    InclineNormalNC = { link = 'Chromatophore' },
   })
-
-  vim.system({ 'tmux', 'refresh-client', '-S' }) -- HACK: force refresh tmux
+  -- TODO: check for tmux first
+  -- vim.system({ 'tmux', 'refresh-client', '-S' }) -- HACK: force refresh tmux
 end
 
 chromatophore_refresh()
 
--- TODO: move to tmux section
-local events = { 'ModeChanged', 'DirChanged', 'BufEnter' }
-
-local group = vim.api.nvim_create_augroup('Chromatophore', { clear = true })
-
-for _, event in ipairs(events) do
-  vim.api.nvim_create_autocmd(event, {
-    group = group,
+  vim.api.nvim_create_autocmd({ 'ModeChanged', 'DirChanged', 'BufEnter' }, {
+    group = vim.api.nvim_create_augroup('ChromatophoreRefresh', { clear = true }) ,
     callback = chromatophore_refresh,
   })
-end

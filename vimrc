@@ -77,7 +77,7 @@ augroup vimrc
 
   " automatically create directories for new files
   " requires `vim-eunuch`
-  " FIXME: 
+  " FIXME:
   au BufWritePre ~/ silent! Mkdir
 
   " immediately quit the command line window
@@ -105,41 +105,51 @@ augroup END
 " }}}1
 
 " Section: keymaps {{{1
+nmap  ciw
+vmap  :sort<CR>
+nmap <silent> <C-q> <Cmd>bd<CR>
+
 " key pairs in normal mode {{{2
 " `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
-" some plugins take advantage of these available key pairs already
-" `vim-surround`: `cs`, (change s) `ds`, (delete s) and `ys` (yes s)
-" `splitjoin`: `gJ` (gJoin) and `gS` (gSplit)
-" `vim-abolish`: `cr` (CoeRce)
 
-" `cd` cm co cp `cq` cr  cu cx cy cz
-" dc dm dq dr du dx `dy` dz
+" `cd` cm co cp `cq` `cr` `cs` cu cx cy cz
+" dc dm dq dr `ds`  du dx `dy` dz
 " `gb` `gc` `gl` `gs` `gy`
 " vm vo vq `vv` vz
-" yc yd ym `yo` `yp` yq yr yu yx yz
-" `zq` ZA ... ZP, `ZQ` ... `ZZ`
+" yc yd ym `yo` `yp` yq yr `ys` yu yx yz
 
-nnoremap cd <Cmd>Zoxide<CR>
+" `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
+nnoremap ZX <Cmd>Zoxide<CR>
+
 " nnoremap cdb :cd %:p:h<CR>
 nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cd- <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 nnoremap cdh <Cmd>cd<Bar>pwd<CR>
 nnoremap cdg :cd<C-R>=git#root()<CR><Bar>pwd<CR>
-nmap <expr> cq change#quote()
+nnoremap cdc :cd<C-R>=git#root()<CR><Bar>pwd<CR>
+
+nnoremap <expr> cq change#quote()
 
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
+
+" `fugitive`
+nnoremap gcd :Gcd<Bar>pwd<CR>
+
+nnoremap zq <Cmd>Format<CR>
+
+" resursive keymaps {{{
 nmap gy "xyygcc"xp
 nmap vv Vgc
-nmap zq gqag
 
 " `unimpaired`
 nmap zJ ]ekJ
 
 " `surround`
 nmap S viWS
-" nnoremap <silent> dsf :call d#sf()<CR>
+vmap ` S`
+" }}}
 
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
@@ -166,23 +176,17 @@ nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
 nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 
-" nnoremap <leader>fp :FindPlugin<CR>
-" nnoremap <leader>sp :GrepPlugin<CR>
-nnoremap <leader>fP :FindPlugin!<CR>
-nnoremap <leader>sP :GrepPlugin!<CR>
-
 " code {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
 " nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 " nnoremap <expr> <leader>M ':let @'.v:register.' = '.string(getreg(v:register))."\<CR>\<C-f>\<Left>"
 
 " debug {{{2
-nnoremap <leader>da <Cmd>ALEInfo<CR>
 nnoremap <leader>db <Cmd>Blink status<CR>
 nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
 nnoremap <leader>dd <Cmd>LazyDev debug<CR>
 nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
-nnoremap <leader>dh <Cmd>LazyHealth<CR>
+nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
 nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
 nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
@@ -228,11 +232,6 @@ nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
 nnoremap ` ~
 nnoremap <BS> <C-o>
 vnoremap <BS> d
-vnoremap <BS> d
-
-" control
-nmap  ciw
-vmap  :sort<CR>
 
 " text objects {{{2
 " Buffer pseudo-text objects
@@ -242,12 +241,9 @@ xnoremap ag GoggV
 onoremap ag :<C-u>normal vag<CR>
 
 " buffers {{{2
-nnoremap <silent> <S-Tab>         :bprev!<CR>
-nnoremap <silent> <Tab>       :bnext!<CR>
+nnoremap <silent> <S-Tab>       :bprev!<CR>
+nnoremap <silent> <Tab>         :bnext!<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
-
-" Close buffer
-map <silent> <C-q> <Cmd>bd<CR>
 
 " resize splits {{{2
 " nnoremap <M-Up>    :resize -2<CR>
@@ -288,7 +284,7 @@ vnoremap > >gv
 nnoremap > V`]>
 nnoremap < V`]<
 
-" insert mode Undo breakpoints {{{2
+" insert mode undo breakpoints {{{2
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
@@ -331,6 +327,7 @@ iabbrev m- —
 " Section: plugins {{{1
 
 " let g:plug_home = stdpath('data') . '/site/pack/core/opt'
+" ~/.local/share/nvim/site/pack/core/opt
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
@@ -354,7 +351,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
-Plug '~/GitHub/rdnajac/vim-lol'
+" Plug '~/GitHub/rdnajac/vim-lol'
 
 if !has('nvim')
   Plug 'Konfekt/FastFold'

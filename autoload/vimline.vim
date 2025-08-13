@@ -30,7 +30,6 @@ endfunction
 
 function! vimline#flags() abort
   let l:line = ''
-  let l:line .= vimline#icons#filetype()
   let l:line .= vimline#icons#copilot()
   let l:line .= vimline#icons#treesitter()
   let l:line .= vimline#icons#lsp()

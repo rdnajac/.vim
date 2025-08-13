@@ -23,8 +23,8 @@ end
 pick_dir('G', '~/GitHub/')
 pick_dir('v', '$VIMRUNTIME')
 pick_dir('V', '$VIM')
-pick_dir('p', '~/.vim/pack')
-pick_dir('P', vim.g.plug_home, {ft={'lua','vim'}, ignored=true, hidden=false})
+pick_dir('p', '~/.vim/pack', {ignored=true, hidden=false})
+pick_dir('P', vim.g.plug_home, {ft={'lua','vim'}})
 
 vim.keymap.set('n', '<leader>bb', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>bB', function() Snacks.picker.buffers({hidden=true, nofile= true}) end, { desc = 'Buffers (all)' })
