@@ -13,6 +13,14 @@ return {
   layout = { preset = 'mylayout' },
   layouts = { mylayout = require('nvim.snacks.config.picker.layout') },
   sources = {
+    buffers = {
+      input = {
+        keys = {
+          ['<c-x>'] = { 'bufdelete', mode = { 'n', 'i' } },
+        },
+      },
+      list = { keys = { ['D'] = 'bufdelete' } },
+    },
     explorer = require('nvim.snacks.config.explorer'),
     files = require('nvim.snacks.config.picker.util').opts_extend,
     grep = require('nvim.snacks.config.picker.util').opts_extend,

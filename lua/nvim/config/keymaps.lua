@@ -26,6 +26,7 @@ pick_dir('V', '$VIM')
 pick_dir('p', '~/.vim/pack', {ignored=true, hidden=false})
 pick_dir('P', vim.g.plug_home, {ft={'lua','vim'}})
 
+vim.keymap.set('n', ',,', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>bb', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>bB', function() Snacks.picker.buffers({hidden=true, nofile= true}) end, { desc = 'Buffers (all)' })
 vim.keymap.set('n', '<leader>bl', function() Snacks.picker.lines() end, { desc = 'Buffer Lines' })
@@ -36,7 +37,7 @@ vim.keymap.set('n', '<leader>ui', function() vim.show_pos() end, { desc = 'Inspe
 vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
 
 vim.keymap.set({ 'n', 't' }, '<c-\\>', function() Snacks.terminal.toggle() end)
-vim.keymap.set({ 'n', 't' }, ',,', function() Snacks.terminal.toggle() end)
+-- vim.keymap.set({ 'n', 't' }, ',,', function() Snacks.terminal.toggle() end)
 -- stylua: ignore end
 
 Snacks.toggle.profiler():map('<leader>dpp')
