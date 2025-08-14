@@ -45,10 +45,4 @@ M.decrement = function()
   end
 end
 
-M.setup = function()
-  vim.keymap.set('n', '<C-Space>', M.start, { desc = 'Start selection' })
-  vim.keymap.set('x', '<C-Space>', M.increment, { desc = 'Increment selection' })
-  vim.keymap.set('x', '<BS>', M.decrement, { desc = 'Decrement selection' })
-end
-
 return M

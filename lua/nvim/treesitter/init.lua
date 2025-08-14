@@ -44,7 +44,7 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     vim.cmd([[setlocal commentstring=#\ %s]])
   end,
-  desc = 'Set the commentstring for languages that use `#`'
+  desc = 'Set the commentstring for languages that use `#`',
 })
 
 ---@diagnostic disable-next-line: param-type-mismatch
@@ -67,8 +67,18 @@ M.config = function()
   local parsers = require('nvim.treesitter.parsers')
 
   require('nvim-treesitter').install(parsers)
-  require('nvim.treesitter.comments').setup()
-  require('nvim.treesitter.selection').setup()
+
+  vim.keymap.set('n', '<C-Space>', function()
+    require('nvim.treesitter.selection').start()
+  end, { desc = 'Start selection' })
+
+  vim.keymap.set('x', '<C-Space>', function()
+    require('nvim.treesitter.selection').increment()
+  end, { desc = 'Increment selection' })
+
+  vim.keymap.set('x', '<BS>', function()
+    require('nvim.treesitter.selection').decrement()
+  end, { desc = 'Decrement selection' })
 end
 
 return M
