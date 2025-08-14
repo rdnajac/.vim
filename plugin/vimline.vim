@@ -34,8 +34,6 @@ function! MyWinBar() abort
   return ''
 endfunction
 
-" set winbar=%!MyWinBar()
-
 function StatusRight() abort
   let l:line = ''
   let l:line .= ' %='               " Right alignment
@@ -53,24 +51,26 @@ function StatusRight() abort
   return line
 endfunction
 
+function s:term() abort
+  " if bufname('%') =~# '^term://'
+  let l:prefix = '󱉭 ' . $PWD . ' '
+  let l:suffix = 'channel: ' . &channel
+  return [l:prefix, l:suffix]
+endfunction
 
 " TODO: write file component
 function! MyTmuxLine() abort
-  if bufname('%') =~# '^term://'
-    " let l:prefix = getcwd()
-    let l:prefix = '󱉭 ' . $PWD . ' '
-    let l:suffix = 'channel: ' . &channel
-  else
-    let [l:root, l:suffix] = path#relative_parts()
-    let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
-  endif
+  let [l:root, l:suffix] = path#relative_parts()
+  let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
   let l:line = ''
   let l:line .= '%#Chromatophore_a# '
   let l:line .= l:prefix
-  let l:line .= '%#Chromatophore_ab#🭛'
   let l:line .= '%#Chromatophore_b#'
+  let l:line .= '🭛'
   let l:line .= l:suffix
-  let l:line .= ' %#Chromatophore_bc#🭛'
+  let l:line .= ' '
+  let l:line .= '%#Chromatophore_bc#'
+  let l:line .= '🭛'
   let l:line .= '%#Chromatophore_c#'
   let l:line .= vimline#flags() . ' '
   return l:line . StatusRight()
