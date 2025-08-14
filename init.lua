@@ -44,7 +44,7 @@ vim.notify = require('nvim.notify')
 -- test if the override is working (should be colored blue)
 vim.notify('init.lua loaded!', vim.log.levels.INFO, { title = 'Test Notification' })
 
-local Plug = require('plug').Plug
+local Plug = require('nvim.plug').Plug
 
 Plug('nvim.snacks')
 

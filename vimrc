@@ -155,7 +155,8 @@ nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 nnoremap <leader><Space> viW
 
-nnoremap <leader>K  <Cmd>norm K<CR>
+" vim.lsp.hover overrides the default K mapping
+nnoremap <leader>K  <Cmd>norm! K<CR>
 
 nnoremap <leader>e <Cmd>Explore<CR>
 nnoremap <leader>r <Cmd>Restart<CR>

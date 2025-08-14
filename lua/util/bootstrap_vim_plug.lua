@@ -1,6 +1,6 @@
 -- Download `junegunn/vim-plug` to `~/.local/share/nvim/site/autoload/plug.vim`
 -- local plug_path = vim.fn.stdpath('data') .. '/site/autoload/plug.vim'
-local plug_path = vim.fn.stdpath('config') .. '/autoload/plug.vim'
+local plug_path = vim.fn.stdpath('config') .. '/autoload/_plug.vim'
 
 if vim.fn.filereadable(plug_path) == 0 then
   local url = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'

@@ -1,7 +1,7 @@
 -- automagically load plugin modules in this directory
 local M = require('meta').module()
 
-local plug = require('plug')
+local plug = require('nvim.plug')
 
 ---@type vim.pack.Spec[]
 local specs = plug.collect_specs(M)
