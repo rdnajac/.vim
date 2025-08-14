@@ -2,7 +2,7 @@ local M = { 'folke/snacks.nvim' }
 
 ---@module "snacks"
 ---@type snacks.Config
-M.opts = {
+local enabled = {
   bigfile = { enabled = true },
   dashboard = { enabled = true },
   explorer = { enabled = true },
@@ -13,13 +13,14 @@ M.opts = {
   quickfile = { enabled = true },
   scope = { enabled = true },
   scroll = { enabled = true },
-  -- TODO: 
+  -- TODO:
   statuscolumn = { enabled = false },
   words = { enabled = true },
 }
 
+M.opts = vim.tbl_deep_extend('force', enabled, require('nvim.snacks.config'))
+
 M.config = function()
-  M.opts = vim.tbl_deep_extend('force', M.opts, require('nvim.snacks.config'))
   require('snacks').setup(M.opts)
 end
 

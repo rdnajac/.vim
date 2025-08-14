@@ -1,7 +1,6 @@
-local M = {}
+local M = { 'folke/tokyonight.nvim' }
 
 M.specs = {
-  'folke/tokyonight.nvim',
   -- 'catppuccin/nvim',
   -- 'projekt0n/github-nvim-theme',
 }
@@ -38,15 +37,12 @@ M.opts = {
     copilot = vim.g.loaded_copilot == 1,
     mini = true,
     snacks = true,
-    ['render-markdown.nvim'] = package.loaded['render-markdown.nvim'] == 1,
+    ['render-markdown.nvim'] = true,
   },
 }
 
 M.config = function()
-  vim.pack.add(vim.tbl_map(function(s)
-    return 'https://github.com/' .. s
-  end, M.specs))
-  return require('tokyonight').load(M.opts)
+  M.colors, M.groups, _ = require('tokyonight').load(M.opts)
 end
 
 ---@param file string
@@ -59,29 +55,30 @@ local function _write(file, contents)
 end
 
 local want = {
-  ghostty = {},
-  lazygit = {},
-  slack = {},
-  spotify_player = { location = '~/.config/spotify-player/theme.toml' },
-  lua = {},
-  vim = {},
+  ghostty = '',
+  lazygit = '',
+  slack = '',
+  spotify_player = '~/.config/spotify-player/theme.toml',
+  lua = '',
+  vim = '~/.vim/colors/tokyomidnight.vim',
 }
 
 M.build = function()
+  -- TODO: make sure config is loaded
   local extras = require('tokyonight.extra').extras
-  local colors, groups, opts = require('tokyonight').load(M.opts)
   local style = 'midnight'
   local style_name = ''
+  local colors = M.colors
 
-  for name, user_opts in pairs(want) do
+  for name, location in pairs(want) do
     local info = extras[name]
     if not info then
       Snacks.notify.warn('tokyonight.extra: unknown extra "' .. name .. '"')
     else
       local plugin = require('tokyonight.extra.' .. name)
       local fname
-      if user_opts.location then
-        fname = vim.fn.fnamemodify(user_opts.location, ':p')
+      if location and location ~= '' then
+        fname = vim.fn.fnamemodify(location, ':p')
       else
         fname = name
           .. (info.subdir and '/' .. info.subdir .. '/' or '')
@@ -98,7 +95,7 @@ M.build = function()
       colors['_name'] = 'tokyonight_' .. style
       colors['_style'] = style
       print('Writing ' .. fname)
-      _write(fname, plugin.generate(colors, groups, opts))
+      _write(fname, plugin.generate(colors, M.groups, M.opts))
     end
   end
 end

@@ -2,7 +2,7 @@ local M = { 'stevearc/oil.nvim' }
 
 M.enabled = vim.g.default_file_explorer == 'oil'
 
-local git_status = require('plugins.oil.git_status')
+local git_status = require('nvim.oil.git_status')
 local git_status_cache = git_status.new()
 local detail = 0
 
@@ -91,7 +91,7 @@ end
 
 M.config = function()
   require('oil').setup(M.opts)
-  require('plugins.oil.autocmds')
+  require('nvim.oil.autocmds')
   M.git()
   M.keymaps()
 end

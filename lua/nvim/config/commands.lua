@@ -6,7 +6,7 @@ command('GitBlameLine', function()
   print(vim.system({ 'git', 'blame', '-L', line_number .. ',+1', filename }):wait().stdout)
 end, { desc = 'Print the git blame for the current line' })
 
-
+-- register `Snacks` Ex functions
 command('Scratch', function(opts)
   if opts.bang == true then
     Snacks.scratch.select()

@@ -1,7 +1,3 @@
-if not package.loaded['snacks'] then
-  return
-end
-
 local munchies_toggle = require('nvim.snacks.toggle')
 
 munchies_toggle.translucency():map('<leader>ub', { desc = 'Toggle Translucent Background' })

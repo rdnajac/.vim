@@ -57,6 +57,7 @@ vim.print = _G.ddd
 Plug('nvim.colorscheme')
 Plug('nvim.mini')
 Plug('nvim.lsp')
+Plug('nvim.oil')
 Plug('nvim.treesitter')
 
 _G.icons = require('nvim.icons')
