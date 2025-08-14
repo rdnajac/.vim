@@ -13,6 +13,7 @@ inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><c-g>u<CR><CR><esc>hi<Space><Space>
 
 finish
+
 " simple auto-brackets
 inoremap <buffer> ( ()<Left>
 inoremap <buffer> ' ''<Left>
@@ -21,6 +22,7 @@ inoremap <buffer> {<CR> {<CR>}<C-c>O
 inoremap <buffer> {, {<CR>},<C-c>O
 
 " WIP.. TODO: map to `cr` like with CoeRce from `vim-abolish`
+" also see `../ftplugin/lua/coerce.lua
 " local function transform
 
 " `CoeRce` - change `local` to `M` and back (normal mode)

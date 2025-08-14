@@ -297,6 +297,8 @@ inoremap <silent> <Bslash>l <C-x><C-l>
 inoremap <silent> <Bslash>n <C-x><C-n>
 inoremap <silent> <Bslash>t <C-x><C-]>
 inoremap <silent> <Bslash>u <C-x><C-u>
+inoremap <silent> ,i <Cmd>Icons<CR>
+
 
 " add chars to EOL {{{2
 nnoremap <Bslash>, mzA,<Esc>;`z

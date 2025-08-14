@@ -9,29 +9,11 @@ My (n)vim configuration.
 - [ ] on startup, attach to ui, then try out remote plugins and eval expr
 - [ ] neovim as an http server attach to instance view the buffers (logfiles)
 
-## neovim
-
-### Installation
-
-Install prereqs:
-
-```sh
-sudo apt-get install ninja-build gettext cmake curl build-essential
-```
-
-Build from source:
-
-```sh
-git clone https://github.com/neovim/neovim.git
-cd neovim && make CMAKE_BUILD_TYPE=RelWithDebInfo && sudo make install
-cd  .. && ls
-```
-
 ## Snacks
 
 ### Image
 
-Equation to do null hypothesis testing:
+null hypothesis testing
 
 $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
@@ -62,6 +44,12 @@ Luckily they have been cached by the Internet Archive.
 Download [cspell](http://streetsidesoftware.github.io/cspell/)
 dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries)
 
+### list of dictionaries
+
+```sh
+vimnpx cspell dictionaries
+```
+
 ## QoL
 
 Some plugins save their state in the cache. If you want to reset the state of a
@@ -80,7 +68,6 @@ rm -rf ~/.local/share/nvim
 | `<plugin>`       | note                        | `<path>`                      |
 | ---------------- | --------------------------- | ----------------------------- |
 | `blink`          | Blink.cmp completion cache  | `~/.local/share/nvim/blink`   |
-| `lazy`           | LazyVim root                | `~/.local/share/nvim/lazy`    |
 | `mason`          | Mason packages and binaries | `~/.local/share/nvim/mason`   |
 | `Snacks.scratch` | Snacks scratch buffers      | `~/.local/share/nvim/scratch` |
 | `Snacks.picker`  | Snacks picker histories     | `~/.local/share/nvim/snacks`  |
@@ -88,13 +75,11 @@ rm -rf ~/.local/share/nvim
 Finally, there is ~/.local/state/nvim, where we have:
 
 - backup/
-- grug-far/
-- lazy/
 - sessions/
 - shada/
 - swap/
 - undo/
-- various log files
+- log files
 
 To clean up:
 

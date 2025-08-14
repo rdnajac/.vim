@@ -92,6 +92,7 @@ M.opts = {
     default = function()
       local defaults = { 'lsp', 'snippets', 'path' }
       if in_comment() then
+        -- FIXME: sometimes we still get snippets in comments (could it be from blink capabilities?)
         return { 'buffer' }
       end
       --  ui

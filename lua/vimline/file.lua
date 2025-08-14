@@ -43,10 +43,10 @@ M.modified = function(bufnr)
   local bo = vim.bo[bufnr or 0]
   local out = ''
     if bo.modified then
-      out = out .. ' '
+      out = out .. ' 󰉉 '
     end
     if bo.readonly then
-      out = out .. ' '
+      out = out .. '  '
     end
   return out
 end

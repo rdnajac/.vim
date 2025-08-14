@@ -1,0 +1,33 @@
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = 'snacks_dashboard',
+--   group = aug,
+--   callback = function()
+--     local old_winborder = vim.o.winborder
+--     if old_winborder ~= 'none' then
+--       vim.o.winborder = 'none'
+--       vim.schedule(function()
+--         vim.opt.lazyredraw = true
+--         Snacks.dashboard.update()
+--         vim.opt.lazyredraw = false
+--         vim.o.winborder = old_winborder
+--       end)
+--     end
+--   end,
+-- })
+
+-- -- BUG: this still interferes with extui
+-- vim.api.nvim_create_autocmd('User', {
+--   pattern = 'SnacksDashboardOpened',
+--   callback = function()
+--     local old_winborder = vim.o.winborder
+--     if old_winborder ~= 'none' then
+--       vim.o.winborder = 'none'
+--       vim.schedule(function()
+--         vim.opt.lazyredraw = true
+--         Snacks.dashboard.update()
+--         vim.opt.lazyredraw = false
+--         vim.o.winborder = old_winborder
+--       end)
+--     end
+--   end,
+-- })

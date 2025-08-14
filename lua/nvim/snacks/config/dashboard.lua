@@ -3,25 +3,18 @@
 return {
   sections = {
     { section = 'header' },
----@param opts? {limit?:number, cwd?:string|boolean, filter?:fun(file:string):boolean?}
-    { section = 'recent_files', limit=10 },
+    { section = 'recent_files', limit = 10 },
     { padding = 1 },
-    -- {
-    --   section = 'terminal',
-    --   cmd = vim.fn.stdpath('config') .. '/bin/cowsay-vim-fortunes',
-    --   height = 13,
-    -- },
   },
   formats = {
+    header = { '%s', align = 'center', hl = 'Chromatophore' },
     key = function(item)
-      local sep = icons.separators.section.rounded
-        -- stylua: ignore
-      return {
-        { sep.right, hl = 'special' }, { item.key, hl = 'key' }, { sep.left, hl = 'special' }, }
+      return { item.key, hl = 'Chromatophore' }
     end,
     file = function(item, ctx)
       local fname = vim.fn.fnamemodify(item.file, ':~')
       fname = ctx.width and #fname > ctx.width and vim.fn.pathshorten(fname) or fname
+
       if #fname > ctx.width then
         local dir = vim.fn.fnamemodify(fname, ':h')
         local file = vim.fn.fnamemodify(fname, ':t')
@@ -30,8 +23,17 @@ return {
           fname = dir .. '/…' .. file
         end
       end
+
       local dir, file = fname:match('^(.*)/(.+)$')
-      return dir and { { dir .. '/', hl = 'dir' }, { file, hl = 'file' } } or { { fname, hl = 'file' } }
+      local display_str = dir and (dir .. '/' .. file) or file
+      local n_dots = math.max(1, ctx.width - #display_str - #(item.key or ''))
+      local ret = {  { file, hl = 'Chromatophore' }, { string.rep('.', n_dots), hl = 'Comment' } }
+
+      if dir then
+        table.insert(ret, 1, { dir .. '/', hl = 'dir' })
+      end
+      return ret
     end,
   },
 }
+-- TODO: add startuptime. see lewis6991 dotfiles for reference

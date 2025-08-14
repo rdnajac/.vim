@@ -1,0 +1,2 @@
+-- Disable highlighting inside of `vim.cmd([[...]])`
+-- Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
