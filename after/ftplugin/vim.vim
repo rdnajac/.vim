@@ -1,6 +1,5 @@
-" better format automatic foldmarkers with `zf`
-" setlocal commentstring=\ \"\ %s
-" setlocal commentstring=\"\ %s
+" make sure there's a space after the comment character
+setlocal commentstring=\"\ %s
 
 setlocal iskeyword-=#
 setlocal formatoptions -=ro
