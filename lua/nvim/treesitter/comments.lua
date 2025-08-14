@@ -1,68 +1,3 @@
-local commentsspec = {
-  lang = {
-    astro = '<!-- %s -->',
-    axaml = '<!-- %s -->',
-    bicep = '// %s',
-    blueprint = '// %s',
-    c = '// %s',
-    c_sharp = '// %s',
-    clojure = { ';; %s', '; %s' },
-    cpp = '// %s',
-    cs_project = '<!-- %s -->',
-    cue = '// %s',
-    fsharp = '// %s',
-    fsharp_project = '<!-- %s -->',
-    gleam = '// %s',
-    glimmer = '{{! %s }}',
-    graphql = '# %s',
-    handlebars = '{{! %s }}',
-    hcl = '# %s',
-    html = '<!-- %s -->',
-    hyprlang = '# %s',
-    ini = '; %s',
-    ipynb = '# %s',
-    javascript = {
-      '// %s', -- default commentstring when no treesitter node matches
-      '/* %s */',
-      call_expression = '// %s', -- specific commentstring for call_expression
-      jsx_attribute = '// %s',
-      jsx_element = '{/* %s */}',
-      jsx_fragment = '{/* %s */}',
-      spread_element = '// %s',
-      statement_block = '// %s',
-    },
-    just = '# %s',
-    php = '// %s',
-    proto = { '// %s', '/* %s */' },
-    rego = '# %s',
-    rescript = '// %s',
-    rust = { '// %s', '/* %s */' },
-    scss = { '// %s', '/* %s */' },
-    sql = '-- %s',
-    styled = '/* %s */',
-    svelte = '<!-- %s -->',
-    templ = {
-      '// %s',
-      component_block = '<!-- %s -->',
-    },
-    terraform = '# %s',
-    tsx = {
-      '// %s', -- default commentstring when no treesitter node matches
-      '/* %s */',
-      call_expression = '// %s', -- specific commentstring for call_expression
-      jsx_attribute = '// %s',
-      jsx_element = '{/* %s */}',
-      jsx_fragment = '{/* %s */}',
-      spread_element = '// %s',
-      statement_block = '// %s',
-    },
-    twig = '{# %s #}',
-    typescript = { '// %s', '/* %s */' }, -- langs can have multiple commentstrings
-    vue = '<!-- %s -->',
-    xaml = '<!-- %s -->',
-  },
-}
-
 local M = {}
 
 M._get_option = vim.filetype.get_option
@@ -88,7 +23,6 @@ local function get_comments(ft)
   )
 end
 
----@param spec TSCommentsSpec
 ---@return string|string[]|nil
 local function resolve_ts(spec)
   local line = vim.fn.getline('.')
@@ -115,12 +49,10 @@ end
 
 -- Resolves the possible commentstrings for a given filetype in the current line
 ---@param ft string
----@param opts? {ts?: boolean, spec?:TSCommentsSpec}
 ---@return string[]
-function M.resolve(ft, opts)
+function M.resolve(ft)
   local lang = vim.treesitter.language.get_lang(ft) or ft
-  opts = { ts = true, spec = commentsspec.lang[lang] }
-  local spec = opts.spec
+  local spec = require('nvim.treesitter.commentspec').lang[lang]
   local ret = {} ---@type string[]
 
   local have = {} ---@type table<string, boolean>
@@ -140,7 +72,7 @@ function M.resolve(ft, opts)
     end
   end
 
-  if opts.ts and type(spec) == 'table' and not vim.islist(spec) then
+  if type(spec) == 'table' and not vim.islist(spec) then
     add(resolve_ts(spec))
   end
 

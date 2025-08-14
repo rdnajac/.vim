@@ -12,7 +12,7 @@ M.dependencies = {
 -- FIXME: TSUpdate is not available until after setup is called
 M.build = function()
   Snacks.util.on_module('nvim-treesitter', function()
-    dd('Updating nvim-treesitter...')
+    ddd('Updating nvim-treesitter...')
     vim.cmd('TSUpdate')
   end)
 end
@@ -35,7 +35,7 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.treesitter.language.register('bash', ev.match)
     vim.treesitter.start(0, 'bash')
   end,
-  desc = 'Force some file types to use `bash` treesitter (and commentstring)',
+  desc = 'Force some file types to use `bash` treesitter',
 })
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -44,35 +44,31 @@ vim.api.nvim_create_autocmd('FileType', {
   callback = function()
     vim.cmd([[setlocal commentstring=#\ %s]])
   end,
-  desc = 'Force some file types to use `bash` treesitter (and commentstring)',
+  desc = 'Set the commentstring for languages that use `#`'
 })
 
-local register_custom_parser = function()
-  require('nvim-treesitter.parsers').comment = {
-    install_info = {
-      url = 'https://github.com/rdnajac/tree-sitter-comment',
-      generate = true,
-      queries = 'queries/neovim',
-    },
-  }
-end
+---@diagnostic disable-next-line: param-type-mismatch
+vim.api.nvim_create_autocmd('User', {
+  pattern = 'TSUpdate',
+  group = aug,
+  callback = function(ev)
+    require('nvim-treesitter.parsers').comment = {
+      install_info = {
+        url = 'https://github.com/rdnajac/tree-sitter-comment',
+        generate = true,
+        queries = 'queries/neovim',
+      },
+    }
+  end,
+  desc = 'Install custom parser that highlights strings in `backticks` in comments',
+})
 
 M.config = function()
   local parsers = require('nvim.treesitter.parsers')
+
   require('nvim-treesitter').install(parsers)
   require('nvim.treesitter.comments').setup()
   require('nvim.treesitter.selection').setup()
-
-  -- require('nvim.treesitter.comments')
-  ---@diagnostic disable-next-line: param-type-mismatch
-  vim.api.nvim_create_autocmd('User', {
-    pattern = 'TSUpdate',
-    group = aug,
-    callback = function(ev)
-      register_custom_parser()
-    end,
-    desc = 'Install custom parser that highlights strings in `backticks` in comments',
-  })
 end
 
 return M
