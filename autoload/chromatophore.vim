@@ -1,13 +1,3 @@
-let chromatophore#groups = [
-      \  'FloatBorder',
-      \  'FloatTitle',
-      \  'Folded',
-      \  'MsgArea',
-      \  'String',
-      \  'WinSeparator',
-      \  'helpSectionDelim',
-      \ ]
-
 function! chromatophore#setup() abort
   let black      = '#000000'
   let grey       = '#3b4261'
@@ -33,7 +23,7 @@ function! chromatophore#setup() abort
 endfunction
 
 ""
-" Change highlight colors to match the currbnt mode
+" Change highlight colors to match the currant mode
 function! chromatophore#metachrosis() abort
   let l:color = vim#mode#color()
 

@@ -1,11 +1,24 @@
+-- default parsers bundled with neovim can be found at:
+-- `~/.local/share/nvim/lib/nvim/parser/`
+-- - c.so
+-- - lua.so
+-- - markdown.so
+-- - markdown_inline.so
+-- - query.so
+-- - vim.so
+-- - vimdoc.so
 -- Table of parsers to automatically install with nvim-treesitter
 -- NOTE: They still have to be manually enabled for most filetypes
 -- see `<url>` for available parsers
+-- also check `~/.local/share/nvim/site/` for the following directories:
+-- - `parser/`: contains the parsers 
+-- - `parser-info/`: contains the download information
+-- - `query/`: installed queries for the syntax highlighting
 return {
   -- 'lua',
   -- 'vim',
   -- 'asm',
-  -- 'bash',
+  'bash',
   -- 'bibtex',
   -- 'csv',
   -- 'cmake',
@@ -35,7 +48,7 @@ return {
   -- 'make',
   -- 'ocaml',
   -- 'printf',
-  -- 'python',
+  'python',
   -- 'regex',
   -- 'r',
   -- 'rnoweb',

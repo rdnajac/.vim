@@ -1,5 +1,13 @@
 if !exists('g:chromatophore_groups')
-  let g:chromatophore_groups = chromatophore#groups
+  let g:chromatophore_groups = [
+	\  'FloatBorder',
+	\  'FloatTitle',
+	\  'Folded',
+	\  'MsgArea',
+	\  'String',
+	\  'WinSeparator',
+	\  'helpSectionDelim',
+	\ ]
 endif
 
 augroup chromatophore

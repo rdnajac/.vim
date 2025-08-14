@@ -1,13 +1,13 @@
 local M = { 'MeanderingProgrammer/render-markdown.nvim' }
 
-M.enabled = false
+M.enabled = true
 
 M.event = 'BufWinEnter'
 
 M.ft = { 'markdown', 'rmd', 'quarto', 'codecompanion' }
 
 M.opts = {
-  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion' },
+  file_types = M.ft,
   completions = { blink = { enabled = false } },
   bullet = { right_pad = 1 },
   -- checkbox = { enabled = false },

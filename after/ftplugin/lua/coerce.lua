@@ -25,33 +25,51 @@
 -- `^`  start of line
 -- `$`  end of line
 
--- regex patterns for toggling function forms and scopes in Lua
-local regex = {
-  local_function = '^%s*local%s+function%s+([%w_.]+)%s*%(',
-  local_assign = '^%s*local%s+([%w_.]+)%s*=%s*function%s*%(',
-  local_head = '^%s*local%s+([%w_]+)',
-  m_def = '^%s*function%s+M%.([%w_.]+)%s*%(',
-  m_assign = '^%s*M%.([%w_.]+)%s*=%s*function%s*%(',
-  m_head = '^%s*M%.([%w_]+)',
+local local_patterns = {
+  -- Change scope: local to module (crm)
+  scope_to_module = {
+    regex = '^%s*local%s+([%w_.]+)',
+    transform = 'M.%1',
+  },
+  -- Change function form: local function <name>(...) <-> local <name> = function(...)
+  func_to_assign = {
+    regex = '^%s*local%s+function%s+([%w_.]+)%s*%(',
+    transform = 'local %1 = function(',
+  },
+  assign_to_func = {
+    regex = '^%s*local%s+([%w_.]+)%s*=%s*function%s*%(',
+    transform = 'local function %1(',
+  },
 }
 
-local transform = {
-  local_function = 'local %1 = function(',
-  local_assign = 'local function %1(',
-  m_def = 'M.%1 = function(',
-  m_assign = 'function M.%1(',
-  local_head_to_m = 'M.%1',
-  m_head_to_local = 'local %1',
-  local_fun_def_to_m = 'function M.%1(',
-  m_fun_def_to_local = 'local function %1(',
+local module_patterns = {
+  -- Change scope: module to local (crm)
+  scope_to_local = {
+    regex = '^%s*M%.([%w_.]+)',
+    transform = 'local %1',
+  },
+  -- Change function form: function M.<name>(...) <-> M.<name> = function(...)
+  func_to_assign = {
+    regex = '^%s*function%s+M%.([%w_.]+)%s*%(',
+    transform = 'M.%1 = function(',
+  },
+  assign_to_func = {
+    regex = '^%s*M%.([%w_.]+)%s*=%s*function%s*%(',
+    transform = 'function M.%1(',
+  },
 }
 
 local function check_regex()
   local line = vim.api.nvim_get_current_line()
   local matches = {}
-  for key, pattern in pairs(regex) do
-    if line:match(pattern) then
-      table.insert(matches, key)
+  for key, pattern in pairs(local_patterns) do
+    if line:match(pattern.regex) then
+      table.insert(matches, 'local:' .. key)
+    end
+  end
+  for key, pattern in pairs(module_patterns) do
+    if line:match(pattern.regex) then
+      table.insert(matches, 'module:' .. key)
     end
   end
   if #matches == 0 then
@@ -71,14 +89,14 @@ end
 
 local function toggle_func_form(line)
   local rules = {
-    { regex.local_function, transform.local_function },
-    { regex.local_assign, transform.local_assign },
-    { regex.m_def, transform.m_def },
-    { regex.m_assign, transform.m_assign },
+    local_patterns.func_to_assign,
+    local_patterns.assign_to_func,
+    module_patterns.func_to_assign,
+    module_patterns.assign_to_func,
   }
   for _, r in ipairs(rules) do
-    if line:match(r[1]) then
-      return line:gsub(r[1], r[2])
+    if line:match(r.regex) then
+      return line:gsub(r.regex, r.transform)
     end
   end
   return nil
@@ -86,16 +104,12 @@ end
 
 local function toggle_scope(line)
   local rules = {
-    { regex.local_def, transform.local_fun_def_to_m },
-    { regex.local_assign, transform.local_head_to_m },
-    { regex.local_head, transform.m_assign },
-    { regex.m_def, transform.m_fun_def_to_local },
-    { regex.m_assign, transform.local_assign },
-    { regex.m_head, transform.m_head_to_local },
+    local_patterns.scope_to_module,
+    module_patterns.scope_to_local,
   }
   for _, r in ipairs(rules) do
-    if line:match(r[1]) then
-      return line:gsub(r[1], r[2])
+    if line:match(r.regex) then
+      return line:gsub(r.regex, r.transform)
     end
   end
   return nil
@@ -110,3 +124,10 @@ end, { buffer = true, desc = 'toggle func form' })
 vim.keymap.set('n', 'crm', function()
   modify_cur_line(toggle_scope)
 end, { buffer = true, desc = 'toggle local<->M' })
+
+vim.keymap.set('n', 'crM', 'crfcrm', { buffer = true, remap = true, desc = 'toggle func form and scope' })
+
+-- FIXME:
+-- crm on `local function toggle_scope(line)`
+-- returns `M.function toggle_scope(line)`
+-- instead of `M.toggle_scope = function(line)`

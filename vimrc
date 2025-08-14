@@ -299,7 +299,6 @@ inoremap <silent> <Bslash>t <C-x><C-]>
 inoremap <silent> <Bslash>u <C-x><C-u>
 inoremap <silent> ,i <Cmd>Icons<CR>
 
-
 " add chars to EOL {{{2
 nnoremap <Bslash>, mzA,<Esc>;`z
 nnoremap <Bslash>; mzA;<Esc>;`z
@@ -378,4 +377,12 @@ if !has('nvim')
 else
   " call v:lua.require'snacks'.debug(g:plugins)
   " call v:lua.Snacks.debug(g:plugins)
+endif
+
+if !exists('g:vimrc_reload_count')
+  let g:vimrc_reload_count = 0
+else
+  let g:vimrc_reload_count += 1
+  let msg = 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
+  call vim#notify#info(msg)
 endif

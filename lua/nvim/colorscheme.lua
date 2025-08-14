@@ -35,14 +35,10 @@ M.opts = {
   plugins = {
     all = false,
     ale = vim.g.loaded_ale == 1,
-    -- copilot = true,
-    -- fzf = true,
-    -- mini = true,
-    -- ['render-markdown.nvim'] = true,
-    -- snacks = true,
-    -- treesitter = false,
-    -- semantic_tokens = false,
-    -- kinds = false,
+    copilot = vim.g.loaded_copilot == 1,
+    mini = true,
+    snacks = true,
+    ['render-markdown.nvim'] = package.loaded['render-markdown.nvim'] == 1,
   },
 }
 

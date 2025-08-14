@@ -9,7 +9,7 @@ setlocal noautoindent
 setlocal textwidth=80
 
 " treat quoted text as comments for easy toggling
-setlocal commentstring=>\ %s
+" setlocal commentstring=>\ %s
 
 nmap <leader>k v:lua require('util.link').linkify()
 
