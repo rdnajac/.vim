@@ -1,7 +1,15 @@
 scriptencoding=utf-8
 
-function! vimline#luacomponent(name) abort
-  return luaeval('require("vimline.components")[_A]()', a:name)
+function! vimline#winbar() abort
+  let l = ''
+  let l .= ' '
+  let l .= fnamemodify(bufname('%'), ':t')
+  " check if the current window is the one we are in
+  if win_getid() == str2nr(g:actual_curwin)
+    let l .= v:lua.require'vimline'.diagnostics()
+    let l .= '%#Chromatophore_c#'
+  endif
+  return l
 endfunction
 
 function! vimline#tmuxline(fn) abort

@@ -1,38 +1,27 @@
 scriptencoding=utf-8
-
 if !has('nvim')
   finish
 endif
-" TODO: set defaults for these groups
-" StatusLineNC
-" TabLineFill
-" Winbar
-" Statusline{Term}{NC}
+
+" Note that the "%!" expression is evaluated in the context of the
+" current window and buffer, while %{} items are evaluated in the
+" context of the window that the statusline belongs to.
 
 set showcmdloc=statusline
 set statusline=%!MyStatusLine()
 let &laststatus = has('nvim') ? 3 : 2
-set noruler
+" set noruler " noop if we override the statusline
 " set tabline=%!MyTabline()
 " set showtabline=2
-" set winbar=%!MyWinbar()
 if !has_key(environ(), 'TMUX')
   set statusline=%!MyTmuxLine()
 else
   set statusline=%!MyStatusLine()
 endif
 
-function! MyWinBar() abort
-  let l:winid = get(v:, 'statusline_winid', 0)
-  let l:bufnr = winbufnr(l:winid)
-  let l:file  = fnamemodify(bufname(l:bufnr), ':p')
-  let l:root  = git#root(l:file)
-
-  if !empty(l:file) && !empty(l:root)
-    return path#relative(l:file, l:root)
-  endif
-  return ''
-endfunction
+" wrap the function in % 
+set winbar=%{%vimline#winbar()%}
+" set winbar=!%vimline#winbar(g:statusline_winid)
 
 function StatusRight() abort
   let l:line = ''
@@ -40,13 +29,13 @@ function StatusRight() abort
   " let l:line .= vimline#components#lspprogress()
   let l:line .= '%#Black#'
   let l:line .= '%#Chromatophore_y#'
-  let l:line .= vimline#luacomponent('searchcount') . ' '
-  let l:line .= mode()
+  let l:line .= v:lua.require'vimline.components'.searchcount()
+  let l:line .= mode() ==# 'n' ? ' ' : mode()
   let l:line .= '%{ &busy > 0 ? "◐ " : "" }'
   let l:line .= '%S '
-  let l:line .= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
   " let l:line .= vimline#recording()
-  let l:line .= vimline#luacomponent('blink')
+  " let l:line .= vimline#luacomponent('blink')
+  let l:line .= v:lua.require'vimline.components'.blink()
   let l:line .= '%#Black#'
   return line
 endfunction

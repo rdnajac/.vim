@@ -36,7 +36,7 @@ function! vimline#icons#treesitter() abort
 endfunction
 
 function! vimline#icons#help() abort
-  return s:indicator((&filetype ==# 'help'), s:sep . ' %h')
+  return s:indicator((&filetype ==# 'help'), s:sep . '%h')
 endfunction
 
 function! vimline#icons#modified() abort
