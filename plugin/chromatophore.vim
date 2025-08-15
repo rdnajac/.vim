@@ -1,9 +1,10 @@
 if !exists('g:chromatophore_groups')
   let g:chromatophore_groups = [
 	\  'FloatBorder',
-	\  'FloatTitle',
 	\  'Folded',
 	\  'MsgArea',
+	\  'StatusLineNC',
+	\  'StatusLineTermNC',
 	\  'String',
 	\  'WinSeparator',
 	\  'helpSectionDelim',

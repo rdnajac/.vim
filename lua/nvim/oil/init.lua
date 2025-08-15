@@ -20,6 +20,15 @@ M.opts = {
     ['h'] = { 'actions.parent', mode = 'n' },
     ['l'] = { 'actions.select', mode = 'n' },
     ['Y'] = { 'actions.yank_entry', mode = 'n' },
+    ['O'] = {
+      function()
+        local entry = require('oil').get_cursor_entry().parsed_name
+        if entry then
+          vim.cmd('!open ' .. vim.fn.expand(entry, ':p'))
+        end
+      end,
+      mode = 'n',
+    },
     ['z'] = {
       callback = function()
         Snacks.picker.zoxide({
@@ -52,7 +61,17 @@ M.opts = {
     -- },
   },
   win_options = { signcolumn = 'yes:2' },
-  float = { get_win_title = nil },
+  float = {
+    ---@type fun(winid: integer): string
+    get_win_title = function(winid)
+      local buf = vim.api.nvim_win_get_buf(winid)
+      local dir = require('oil').get_current_dir(buf)
+      if not dir then
+        return 'Oil'
+      end
+      return ' ' .. vim.fn.fnamemodify(dir, ':~') .. ' '
+    end,
+  },
   view_options = {
     is_hidden_file = function(name, bufnr)
       local dir = require('oil').get_current_dir(bufnr)

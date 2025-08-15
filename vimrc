@@ -73,11 +73,11 @@ augroup vimrc
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
   " restore cursor position
-  au BufWinEnter * exe "silent! normal! g`\"zv"
+  au BufWinEnter * exec "silent! normal! g`\"zv"
 
   " automatically create directories for new files
   " requires `vim-eunuch`
-  " FIXME:
+  " FIXME: use the vim fn
   au BufWritePre ~/ silent! Mkdir
 
   " immediately quit the command line window
@@ -85,8 +85,6 @@ augroup vimrc
 
   " automatically reload files that have been changed outside of Vim
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
-
-  au FileType json,jsonc,json5 setlocal conceallevel=0 expandtab
 
   " automatically resize splits when the window is resized
   au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t
@@ -102,6 +100,13 @@ augroup vimrc
 
   au VimLeave * if v:dying | echom "help im dying: " . v:dying | endif
 augroup END
+
+augroup vimrc_filetype
+  autocmd!
+  au FileType json,jsonc,json5 setlocal conceallevel=0 expandtab
+  au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
+  au FileType man setlocal nobuflisted
+augroup END
 " }}}1
 
 " Section: keymaps {{{1
@@ -116,7 +121,7 @@ nmap <silent> <C-q> <Cmd>bd<CR>
 " dc dm dq dr `ds`  du dx `dy` dz
 " `gb` `gc` `gl` `gs` `gy`
 " vm vo vq `vv` vz
-" yc yd ym `yo` `yp` yq yr `ys` yu yx yz
+" yc `yd` ym `yo` `yp` yq yr `ys` yu yx yz
 
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
 nnoremap ZX <Cmd>Zoxide<CR>

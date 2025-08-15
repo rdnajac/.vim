@@ -95,12 +95,6 @@ function M.format_data(data, apply_hl)
   return table.concat(location, sep)
 end
 
-function M.get_location(opts)
-  local apply_hl = opts and opts.apply_hl or false
-  local bufnr = opts and opts.bufnr or vim.api.nvim_get_current_buf()
-  local data = M.get_data(bufnr)
-  return M.format_data(data, apply_hl)
-end
 
 local awaiting_lsp_response = {}
 local function lsp_callback(for_buf, symbols)
@@ -176,6 +170,13 @@ function M.attach(client, bufnr)
   -- First call
   vim.b[bufnr].navic_awaiting_lsp_response = true
   lib.request_symbol(bufnr, lsp_callback, client)
+end
+
+function M.get(opts)
+  local apply_hl = opts and opts.apply_hl or false
+  local bufnr = opts and opts.bufnr or vim.api.nvim_get_current_buf()
+  local data = M.get_data(bufnr)
+  return M.format_data(data, apply_hl)
 end
 
 return M

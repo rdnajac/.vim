@@ -1,24 +1,20 @@
-" returns an icon or empty string based on the condition
-function! s:lualine_component(name) abort
-  " return luaeval('require("util.lualine")["' .. a:name .. '_icon"]()')
-  return s:vimline(a:name . '_icon')
-endfunction
-
-" returns an icon or empty string based on the condition
 function! s:vimline(name) abort
   return luaeval('require("vimline")["' .. a:name .. '"]()')
 endfunction
 
+function! s:lualine_component(name) abort
+  return s:vimline(a:name . '_icon')
+endfunction
 
+function! s:indicator(condition, icon) abort
+  return a:condition ? a:icon : ''
+endfunction
+
+" returns an icon or empty string based on the condition
 " let s:sep = ''
 let s:sep = ''
 " let s:sep = ' '
 " let s:sep = ' '
-
-" components for the various lines in the UI
-function! s:indicator(condition, icon) abort
-  return a:condition ? a:icon : ''
-endfunction
 
 function! vimline#icons#copilot() abort
   let l:icon = s:lualine_component('copilot')

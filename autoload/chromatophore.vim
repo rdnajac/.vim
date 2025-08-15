@@ -5,21 +5,17 @@ function! chromatophore#setup() abort
   let mode_color = vim#mode#color()
 
   highlight! Black guifg=black
-  call vim#hl#set('Chromatophore',    mode_color,   'NONE')
+  call vim#hl#set('Chromatophore',    mode_color,  'NONE')
+  call vim#hl#set('ChromatophoreB',   mode_color,  'NONE',        'bold')
   call vim#hl#set('Chromatophore_a',  black,        mode_color,   'bold')
-  call vim#hl#set('Chromatophore_bc', grey,         eigengrau)
+  call vim#hl#set('Chromatophore_y',  mode_color,   black,        'bold')
   call vim#hl#set('Chromatophore_b',  mode_color,   grey,         'bold')
   call vim#hl#set('Chromatophore_c',  mode_color,   eigengrau)
-  call vim#hl#set('Chromatophore_y',  mode_color,   black,        'bold')
   call vim#hl#set('Chromatophore_z',  mode_color,   eigengrau,    'bold')
-
-  " TODO: can we inherit the mode color?
-  " highlight! link ChromatophoreReverse Chromatophore
-  " highlight! ChromatophoreReverse gui=reverse cterm=reverse
-  " highlight! link Chromatophore_y Chromatophore
-  " highlight! Chromatophore_y guibg=black gui=bold cterm=bold
+  call vim#hl#set('Chromatophore_bc', grey,         eigengrau)
 
   call vim#hl#link('Chromatophore', g:chromatophore_groups)
+  call vim#hl#link('Chromatophore_a', 'StatusLine', 'FloatTitle')
 endfunction
 
 ""

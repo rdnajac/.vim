@@ -1,17 +1,5 @@
 scriptencoding=utf-8
 
-function! vimline#winbar() abort
-  let l = ''
-  let l .= ' '
-  let l .= fnamemodify(bufname('%'), ':t')
-  " check if the current window is the one we are in
-  if win_getid() == str2nr(g:actual_curwin)
-    let l .= v:lua.require'vimline'.diagnostics()
-    let l .= '%#Chromatophore_c#'
-  endif
-  return l
-endfunction
-
 function! vimline#tmuxline(fn) abort
   return luaeval("require('vimline.tmuxline')(vim.fn[_A]())", a:fn)
 endfunction
@@ -26,14 +14,6 @@ function! vimline#recording() abort
   "   return ret . macro . ' '
   " endif
   return ret
-endfunction
-
-function! vimline#tabline() abort
-  let l:line = ''
-  let l:line .= '%#Chromatophore_c# '
-  let l:line .= vimline#components#docsymbols()
-  let l:line .= '%#Normal#'
-  return l:line
 endfunction
 
 function! vimline#flags() abort

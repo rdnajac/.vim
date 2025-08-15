@@ -2,9 +2,11 @@
 nnoremap yY <Cmd>%y<CR>
 nnoremap dD <Cmd>%d<CR>
 
+
+" delete/paste without yanking
 nnoremap dy "_dd
-" vnoremap <silent> dy "_dP
-" vnoremap <silent> yp p"_d
+vnoremap <leader>d "_d
+vnoremap <leader>p "_dP
 
 " yank path
 nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>

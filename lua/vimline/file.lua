@@ -8,7 +8,7 @@ local M = {}
 --- Get devicon for a buffer by buffer number.
 --- @param bufnr number|nil Buffer number (defaults to current buffer)
 --- @return string icon
-M.type_icon = function(bufnr)
+M.ft_icon = function(bufnr)
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if not ok then
     return ''
@@ -27,7 +27,8 @@ M.type_icon = function(bufnr)
 
   -- Try by filetype
   local ft = vim.bo[bufnr] and vim.bo[bufnr].filetype or ''
-  return devicons.get_icon_by_filetype(ft, { default = true }) or ''
+  local icon = devicons.get_icon_by_filetype(ft, { default = true }) or ''
+  return ret
 end
 
 --- Return file format icon ( one of { unix, dos, mac })

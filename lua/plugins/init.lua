@@ -3,6 +3,7 @@ local M = require('meta').module()
 
 local plug = require('nvim.plug')
 
+-- TODO: rework so this is hidden from the user
 ---@type vim.pack.Spec[]
 local specs = plug.collect_specs(M)
 

@@ -24,7 +24,9 @@ endfunction
 augroup Clipboard
   autocmd!
   " FIXME: this is only in nvim
-  autocmd UIEnter * call s:set_clipboard()
+  if has('nvim')
+    autocmd UIEnter * call s:set_clipboard()
+  endif
   " Setup unnamedplus clipboard on first yank if
   " the system clipboard is not not already setup
   autocmd TextYankPost * ++once call s:fallback()

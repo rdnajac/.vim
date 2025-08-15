@@ -1,4 +1,3 @@
-" pack/vimfect/start/vimline.nvim/autoload/vimline/state.vim
 scriptencoding=utf-8
 function! vimline#state#recording() abort
   let rec = reg_recording()

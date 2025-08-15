@@ -51,7 +51,7 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('User', {
   pattern = 'TSUpdate',
   group = aug,
-  callback = function(ev)
+  callback = function()
     require('nvim-treesitter.parsers').comment = {
       install_info = {
         url = 'https://github.com/rdnajac/tree-sitter-comment',
@@ -63,10 +63,13 @@ vim.api.nvim_create_autocmd('User', {
   desc = 'Install custom parser that highlights strings in `backticks` in comments',
 })
 
-M.config = function()
+M.install_parsers = function()
   local parsers = require('nvim.treesitter.parsers')
-
   require('nvim-treesitter').install(parsers)
+end
+
+M.config = function()
+  M.install_parsers()
 
   vim.keymap.set('n', '<C-Space>', function()
     require('nvim.treesitter.selection').start()

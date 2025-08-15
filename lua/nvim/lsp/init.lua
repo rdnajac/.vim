@@ -73,9 +73,9 @@ M.opts = {
     end
 
     -- requires plugin
-    -- if client:supports_method('textDocument/documentSymbol') then
-    --   require('util.lualine.docsymbols').attach(client, bufnr)
-    -- end
+    if client:supports_method('textDocument/documentSymbol') then
+      require('vimline.docsymbols').attach(client, bufnr)
+    end
   end,
 }
 

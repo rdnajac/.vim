@@ -28,8 +28,6 @@ M.opts = {
     hl['Special'] = { fg = colors.red, bold = true }
     hl['SpellBad'] = { bg = colors.red }
     hl['SpecialWindow'] = { bg = '#1f2335' }
-    hl['SpecialWindow'] = { bg = '#1f2335' }
-    hl['FloatTitle'] = { fg = '#14afff', bold = true }
   end,
   plugins = {
     all = false,
@@ -41,6 +39,7 @@ M.opts = {
   },
 }
 
+-- TODO: move to `colors/`
 M.config = function()
   M.colors, M.groups, _ = require('tokyonight').load(M.opts)
 end

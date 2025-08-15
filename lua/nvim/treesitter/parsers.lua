@@ -50,11 +50,11 @@ local parsers  = {
   -- 'printf',
   'python',
   -- 'regex',
-  -- 'r',
-  -- 'rnoweb',
-  -- 'toml',
+  'r',
+  'rnoweb',
+  'toml',
   -- 'xml',
-  -- 'yaml',
+  'yaml',
 }
 
 return vim.tbl_extend('force', defaults, parsers)
