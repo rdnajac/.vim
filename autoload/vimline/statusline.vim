@@ -1,9 +1,9 @@
 " TODO: add padding
-function! vim#statusline#right() abort
+function! vimline#statusline#right() abort
   let l:state = state()
   let l:mode = mode()
   let l:ret = '%='
-  let l:ret .= v:lua.require'vimline.components'.searchcount()
+  let l:ret .= vimline#indicator#searchcount()
   let l:ret .= mode ==# 'n' ? ' ' : mode
   let l:ret .= state !=# '' ? '|'. state : ''
   let l:ret .= '%{ &busy > 0 ? "◐ " : "" }'
@@ -23,7 +23,7 @@ endfunction
 
 let s:left_sep = '🭛'
 
-function! vim#statusline#file_parts() abort
+function! vimline#statusline#file_parts() abort
   let [l:root, l:suffix] = path#relative_parts()
   let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
   let l:ret = ''
@@ -39,19 +39,27 @@ function! vim#statusline#file_parts() abort
   return l:ret
 endfunction
 
-function! vim#statusline#a() abort
+function! vimline#statusline#a() abort
   return '%f'
 endfunction
 
-function! vim#statusline#() abort
+function! s:flags() abort
+  let l:line = ''
+  let l:line .= vimline#icons#copilot()
+  let l:line .= vimline#icons#treesitter()
+  let l:line .= vimline#icons#lsp()
+  return l:line
+endfunction
+
+function! vimline#statusline#() abort
   let l:ret = ''
   let l:ret .= '%#Chromatophore_b# '
-  let l:ret .= vim#statusline#a()
+  let l:ret .= vimline#statusline#a()
   let l:ret .= ' %#Chromatophore_bc#'
   let l:ret .= s:left_sep
   let l:ret .= ' %#Chromatophore_c#'
-  let l:ret .= vimline#flags()
-  let l:ret .= vim#statusline#right()
+  let l:ret .= s:flags()
+  let l:ret .= vimline#statusline#right()
 
   return l:ret
 endfunction

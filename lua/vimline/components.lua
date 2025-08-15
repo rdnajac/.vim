@@ -33,15 +33,6 @@ M.blink = function()
   return table.concat(out, ' ')
 end
 
---- Oil statusline component
-M.oil = function()
-  local ok, oil = pcall(require, 'oil')
-  if not ok then
-    return ''
-  end
-  return vim.fn.fnamemodify(oil.get_cursor_entry(), ':~')
-end
-
 M.hostname = function()
   vimlineescape(vim.loop.os_gethostname())
 end
@@ -52,11 +43,6 @@ M.location = function()
   return string.format('%3d:%-2d', line, col)
 end
 
-M.searchcount = function()
-  local ok, r = pcall(vim.fn.searchcount, { maxcount = 999, timeout = 500 })
-  return (vim.v.hlsearch == 0 or not ok or not r or next(r) == nil) and ''
-    or ('[' .. r.current .. '/' .. math.min(r.total, r.maxcount) .. ']')
-end
 
 M.selectioncount = function()
   local mode = vim.fn.mode(true)

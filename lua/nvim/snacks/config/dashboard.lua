@@ -1,6 +1,7 @@
 ---@module "snacks"
 ---@class snacks.dashboard.Config
 return {
+  wo = { winhighlight = { 'WinBar:NONE' } },
   sections = {
     { section = 'header' },
     { section = 'recent_files', limit = 10 },

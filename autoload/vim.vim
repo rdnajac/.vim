@@ -1,12 +1,8 @@
-augroup vim_on_init
-  autocmd!
-augroup END
-
 function! vim#on_init(fn) abort
   if v:vim_did_enter
     call call(a:fn, [])
   else
-    execute 'autocmd vim_on_init VimEnter * call call(function(' . string(a:fn) . '), [])'
+    execute 'autocmd VimEnter * call call(function(' . string(a:fn) . '), [])'
   endif
 endfunction
 
@@ -45,6 +41,7 @@ function! vim#nvim_config() abort
   set undofile
 
   " nvim-specific settings
+  " NOTE: ui options are set earlier  on in `init.lua`
   set jumpoptions+=view
   set mousescroll=hor:0
   set nocdhome
@@ -52,6 +49,14 @@ function! vim#nvim_config() abort
 
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
+
+  if !exists('g:nvim_init_count')
+    let g:nvim_init_count = 0
+  else
+    let g:nvim_init_count += 1
+    let msg = 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
+    call vim#notify#info(msg)
+  endif
 endfunction
 
 function! vim#nvim_init() abort

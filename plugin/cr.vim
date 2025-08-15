@@ -21,6 +21,7 @@ augroup MapCR
   autocmd FileType vim,lua nnoremap <buffer> <silent> <M-CR> <Cmd>call <SID>source_file()<CR>
   autocmd FileType     lua nnoremap <buffer> <silent> <leader><CR> <Cmd>lua Snacks.debug.run()<CR>
   autocmd FileType     lua vnoremap <buffer> <silent> <leader><CR> :lua Snacks.debug.run()<CR>
+  autocmd FileType sh      nnoremap <buffer> <silent> <leader><CR> <Cmd>OozeFile<CR>
 augroup END
 
 finish

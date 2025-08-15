@@ -1,3 +1,4 @@
+-- https://github.com/SmiteshP/nvim-navic
 -- @Private Methods
 
 -- relation of 'other' with repect to 'symbol'
@@ -262,14 +263,7 @@ function M.request_symbol(for_buf, handler, client, file_uri, retry_count)
     return
   end
 
-  local function request(...)
-    if vim.fn.has('nvim-0.11') == 1 then
-      client:request(...)
-    else
-      client.request(...)
-    end
-  end
-  request('textDocument/documentSymbol', { textDocument = textDocument_argument }, function(err, symbols, _)
+  client:request('textDocument/documentSymbol', { textDocument = textDocument_argument }, function(err, symbols, _)
     if symbols == nil then
       if vim.api.nvim_buf_is_valid(for_buf) then
         handler(for_buf, {})
@@ -372,84 +366,6 @@ function M.update_context(for_buf, arg_cursor_pos)
   end
 
   navic_context_data[for_buf] = new_context_data
-end
-
--- stylua: ignore
-local lsp_str_to_num = {
-	File          = 1,
-	Module        = 2,
-	Namespace     = 3,
-	Package       = 4,
-	Class         = 5,
-	Method        = 6,
-	Property      = 7,
-	Field         = 8,
-	Constructor   = 9,
-	Enum          = 10,
-	Interface     = 11,
-	Function      = 12,
-	Variable      = 13,
-	Constant      = 14,
-	String        = 15,
-	Number        = 16,
-	Boolean       = 17,
-	Array         = 18,
-	Object        = 19,
-	Key           = 20,
-	Null          = 21,
-	EnumMember    = 22,
-	Struct        = 23,
-	Event         = 24,
-	Operator      = 25,
-	TypeParameter = 26,
-}
-setmetatable(lsp_str_to_num, {
-  __index = function()
-    return 0
-  end,
-})
-
-function M.adapt_lsp_str_to_num(s)
-  return lsp_str_to_num[s]
-end
-
--- stylua: ignore
-local lsp_num_to_str = {
-	[1]  = "File",
-	[2]  = "Module",
-	[3]  = "Namespace",
-	[4]  = "Package",
-	[5]  = "Class",
-	[6]  = "Method",
-	[7]  = "Property",
-	[8]  = "Field",
-	[9]  = "Constructor",
-	[10] = "Enum",
-	[11] = "Interface",
-	[12] = "Function",
-	[13] = "Variable",
-	[14] = "Constant",
-	[15] = "String",
-	[16] = "Number",
-	[17] = "Boolean",
-	[18] = "Array",
-	[19] = "Object",
-	[20] = "Key",
-	[21] = "Null",
-	[22] = "EnumMember",
-	[23] = "Struct",
-	[24] = "Event",
-	[25] = "Operator",
-	[26] = "TypeParameter",
-}
-setmetatable(lsp_num_to_str, {
-  __index = function()
-    return 'Text'
-  end,
-})
-
-function M.adapt_lsp_num_to_str(n)
-  return lsp_num_to_str[n]
 end
 
 return M

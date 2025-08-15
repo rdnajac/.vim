@@ -18,6 +18,7 @@ local enabled = {
   words = { enabled = true },
 }
 
+-- TODO: merge all opts, without nested requires
 M.opts = vim.tbl_deep_extend('force', enabled, require('nvim.snacks.config'))
 
 M.config = function()

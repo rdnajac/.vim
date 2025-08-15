@@ -1,8 +1,6 @@
-local M = {}
-
 --- Returns the file path of the first non-self caller.
 ---@return string|nil
-M.source = function()
+local M = function()
   local self_path = debug.getinfo(1, 'S').source:sub(2)
   local self_dir = vim.fn.fnamemodify(self_path, ':h')
 

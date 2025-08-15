@@ -15,21 +15,26 @@ M.ft_icon = function(bufnr)
   end
 
   bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+  -- intercept special types
+  local ft = vim.bo[bufnr] and vim.bo[bufnr].filetype or ''
+  if ft == 'help' then
+    return '󰋖 '
+  elseif ft == 'oil' then
+    return ' '
+  end
+
   local fname = vim.api.nvim_buf_get_name(bufnr)
   local shortname = vim.fn.fnamemodify(fname, ':t')
   local ext = vim.fn.fnamemodify(fname, ':e')
 
-  -- Try by filename/ext
   local icon = devicons.get_icon(shortname, ext, { default = true })
-  if icon and icon ~= '' then
-    return icon
-  end
+    or devicons.get_icon_by_filetype(ft, { default = true })
+    or ''
 
-  -- Try by filetype
-  local ft = vim.bo[bufnr] and vim.bo[bufnr].filetype or ''
-  local icon = devicons.get_icon_by_filetype(ft, { default = true }) or ''
-  return ret
+  return icon .. ' '
 end
+
 
 --- Return file format icon ( one of { unix, dos, mac })
 --- @param bufnr? integer Optional buffer number (defaults to current buffer)
@@ -38,40 +43,20 @@ M.format = function(bufnr)
   return icons[bo.fileformat] or bo.fileformat
 end
 
---- Return modified/readonly symbols for a buffer
---- @param bufnr? integer Optional buffer number (defaults to current buffer)
-M.modified = function(bufnr)
-  local bo = vim.bo[bufnr or 0]
-  local out = ''
-    if bo.modified then
-      out = out .. ' 󰉉 '
-    end
-    if bo.readonly then
-      out = out .. '  '
-    end
-  return out
-end
-
 M.size = function()
-  local file = vim.fn.expand('%:p')
-  if file == nil or #file == 0 then
-    return ''
-  end
-  local size = vim.fn.getfsize(file)
-  if size <= 0 then
-    return ''
-  end
+  local size = vim.fn.getfsize(vim.fn.expand('%:p'))
+
+  if size <= 0 then return '' end
 
   local suffixes = { 'b', 'k', 'm', 'g' }
-
   local i = 1
+
   while size > 1024 and i < #suffixes do
     size = size / 1024
     i = i + 1
   end
 
-  local format = i == 1 and '%d%s' or '%.1f%s'
-  return string.format(format, size, suffixes[i])
+  return string.format(i == 1 and '%d%s' or '%.1f%s' , size, suffixes[i])
 end
 
 ---Return a nicely shortened filename + status symbols.

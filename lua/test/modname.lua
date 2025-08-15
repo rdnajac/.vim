@@ -2,7 +2,7 @@
 -- TODO: try mini.test
 local M = {}
 
-local modname = require('meta').modname
+local modname = require('util.meta').modname
 
 --- Run test cases
 M.modname = function()
@@ -23,27 +23,5 @@ M.modname = function()
   eq(modname('/Users/me/dev/foo/bar.lua'), nil)
   print('All tests passed!')
 end
-
-M.safe_require = function()
-  local safe_require = require('meta').safe_require
-  -- Successful require
-  local mod = safe_require('math')
-  assert(mod ~= nil, 'Expected math module to be loaded')
-
-  -- Failed require with warning
-  local mod_fail = safe_require('non_existent_module')
-  assert(mod_fail == nil, 'Expected nil for non-existent module')
-
-  -- bail on failure
-  -- safe_require('non_existent_module', true) -- should error
-  print('safe_require tests passed!')
-end
-
-M.run = function()
-  -- M.modname()
-  M.safe_require()
-end
-
-M.run()
 
 return M

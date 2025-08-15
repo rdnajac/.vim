@@ -21,27 +21,29 @@ M.opts = {
     colors.blue = '#14afff'
     colors.green = '#39ff14'
     -- colors.red = '#f7768e'
+    -- colors.darkgrey = '#1f2335'
   end,
   on_highlights = function(hl, colors)
     hl['Cmdline'] = { bg = '#000000' }
     hl['Statement'] = { fg = colors.red }
     hl['Special'] = { fg = colors.red, bold = true }
     hl['SpellBad'] = { bg = colors.red }
-    hl['SpecialWindow'] = { bg = '#1f2335' }
   end,
   plugins = {
     all = false,
-    ale = vim.g.loaded_ale == 1,
-    copilot = vim.g.loaded_copilot == 1,
     mini = true,
     snacks = true,
     ['render-markdown.nvim'] = true,
+    copilot = vim.g.loaded_copilot == 1,
   },
 }
 
 -- TODO: move to `colors/`
 M.config = function()
-  M.colors, M.groups, _ = require('tokyonight').load(M.opts)
+  -- M.colors, M.groups, M.opts = require('tokyonight').load(M.opts)
+  require('tokyonight').setup(M.opts)
+  require('tokyonight').load()
+  M.colors, M.groups, _ = require('tokyonight').load()
 end
 
 ---@param file string

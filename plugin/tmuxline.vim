@@ -1,11 +1,17 @@
+scriptencoding=utf-8
+
+function! s:tmuxline(fn) abort
+  return luaeval("require('vimline.tmuxline')(vim.fn[_A]())", a:fn)
+endfunction
+
 function! Clock() abort
-  let l:line .= '%=%#Chromatophore_z#   ' . strftime('%T') . ' %#Normal#'
+  return '%=%#Chromatophore_z#   ' . strftime('%T') . ' %#Normal#'
 endfunction
 
 function! TmuxLeft() abort
-  return vimline#tmuxline('MyTmuxLine')
+  return s:tmuxline('MyTmuxLine')
 endfunction
 
 function! TmuxRight() abort
-  return vimline#tmuxline('Clock')
+  return s:tmuxline('Clock')
 endfunction

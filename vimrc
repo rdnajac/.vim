@@ -63,6 +63,8 @@ set listchars+=nbsp:+
 set number
 set numberwidth=4
 set signcolumn=number
+
+let &laststatus = has('nvim') ? 3 : 2
 " }}}1
 
 " Section: autocmds {{{1
@@ -122,8 +124,8 @@ nmap <silent> <C-q> <Cmd>bd<CR>
 " `gb` `gc` `gl` `gs` `gy`
 " vm vo vq `vv` vz
 " yc `yd` ym `yo` `yp` yq yr `ys` yu yx yz
-
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
+
 nnoremap ZX <Cmd>Zoxide<CR>
 
 " nnoremap cdb :cd %:p:h<CR>
@@ -134,7 +136,7 @@ nnoremap cdh <Cmd>cd<Bar>pwd<CR>
 nnoremap cdg :cd<C-R>=git#root()<CR><Bar>pwd<CR>
 nnoremap cdc :cd<C-R>=git#root()<CR><Bar>pwd<CR>
 
-nnoremap <expr> cq change#quote()
+nmap <expr> cq change#quote()
 
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
@@ -179,8 +181,8 @@ nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>z <Cmd>Zoxide<CR>
 nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
-nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
-nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
+
+vnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word()<CR>
 
 " code {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
@@ -188,6 +190,7 @@ nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 " nnoremap <expr> <leader>M ':let @'.v:register.' = '.string(getreg(v:register))."\<CR>\<C-f>\<Left>"
 
 " debug {{{2
+if has ('nvim')
 nnoremap <leader>db <Cmd>Blink status<CR>
 nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
 nnoremap <leader>dd <Cmd>LazyDev debug<CR>
@@ -196,13 +199,14 @@ nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
 nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
 nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
+endif
 
 " file/find/format {{{2
 nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
 nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
-nnoremap <leader>fR <Cmd>set ft=<C-R>=&ft<CR><CR>
+nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
@@ -250,6 +254,8 @@ onoremap ag :<C-u>normal vag<CR>
 nnoremap <silent> <S-Tab>       :bprev!<CR>
 nnoremap <silent> <Tab>         :bnext!<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
+nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
+nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 
 " resize splits {{{2
 " nnoremap <M-Up>    :resize -2<CR>
@@ -367,7 +373,9 @@ if !has('nvim')
   Plug 'tpope/vim-vinegar'
   Plug 'tpope/vim-commentary' " TODO: try the shipped vim9 comment plugin
 else
-  Plug! 'folke/snacks.nvim'
+  " Plug! 'rdnajac/vim-lol'
+  Plug 'folke/tokyonight.nvim'
+  " Plug 'folke/snacks.nvim'
 endif
 call plug#end()
 " }}}1
@@ -378,15 +386,9 @@ command! -nargs=1 Warn  call vim#notify#warn(<q-args>)
 command! -nargs=1 Error call vim#notify#error(<q-args>)
 " }}}
 
-if !has('nvim')
-  color scheme
-else
-  " call v:lua.require'snacks'.debug(g:plugins)
-  " call v:lua.Snacks.debug(g:plugins)
-endif
-
 if !exists('g:vimrc_reload_count')
   let g:vimrc_reload_count = 0
+  color scheme " set the default colorscheme once
 else
   let g:vimrc_reload_count += 1
   let msg = 'Reloaded vimrc [' . g:vimrc_reload_count . ']'

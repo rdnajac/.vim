@@ -11,7 +11,9 @@ if !exists('g:ooze_skip_comments') | let g:ooze_skip_comments = 1 | endif
 
 augroup ooze
   au!
-  au TermOpen * if &ft ==# 'snacks_terminal' | let g:ooze_channel = &channel | endif
+  au ChanOpen * let g:ooze_channel = &channel
+  " need to capture `TermClose` event to unset g:ooze_channel
+  " since thre is no `ChanClose` event
 augroup END
 
 " let g:ooze_send_on_enter = 2
@@ -19,7 +21,7 @@ augroup END
 nnoremap <silent><expr> <CR> ooze#cr()
 
 command! -range=% OozeVisual call ooze#visual()
-command!          OozeRunFile call ooze#runfile()
+command!          OozeFile call ooze#file()
 
 " TODO: only apply keymaps once a channel is selected
 " nmap <silent> <leader><CR> <Cmd>OozeRunFile<CR>

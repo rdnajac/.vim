@@ -32,7 +32,7 @@ M.config = function()
   --   },
   -- })
   -- vim.defer_fn(function()
-    require('meta').module(vim.fn.stdpath('config') .. '/lua/nvim/mini')
+    require('util.meta').module(vim.fn.stdpath('config') .. '/lua/nvim/mini')
   -- end, 0)
 end
 

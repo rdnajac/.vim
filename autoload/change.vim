@@ -1,4 +1,3 @@
-" autoload/change.vim
 " change the closest quote to the other type (single to double or vice versa)
 "   'string'
 "   "string"

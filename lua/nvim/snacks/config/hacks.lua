@@ -14,7 +14,7 @@
 --     end
 --   end,
 -- })
-
+--
 -- -- BUG: this still interferes with extui
 -- vim.api.nvim_create_autocmd('User', {
 --   pattern = 'SnacksDashboardOpened',

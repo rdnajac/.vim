@@ -1,5 +1,3 @@
--- init.lua
--- see `$VIMRUNTIME/example_init.lua`
 vim.loader.enable()
 
 ---@type 'netrw'|'snacks'|'oil'
@@ -16,6 +14,7 @@ end
 -- set these ooptions first so it is apparent if vimrc overrides them
 -- also try `:options`
 vim.o.cmdheight = 0
+vim.o.laststatus = 3
 vim.o.pumblend = 0
 vim.o.winborder = 'rounded'
 
@@ -23,13 +22,11 @@ vim.cmd.runtime('vimrc')
 
 -- Override require to handle errors gracefully
 local require = function(module)
-  local ok, mod = pcall(require, module)
+  local ok, mod = xpcall(require, debug.traceback, module)
   if not ok then
-    vim.notify(
-      'Failed to load module: ' .. module .. '\n' .. mod,
-      vim.log.levels.ERROR,
-      { title = 'Module Load Error' }
-    )
+    vim.schedule(function()
+      error(mod)
+    end)
     return nil
   end
   return mod
@@ -61,5 +58,5 @@ Plug('nvim.oil')
 Plug('nvim.treesitter')
 
 _G.icons = require('nvim.icons')
-_G.plugins = require('plugins')
+_G.plugins = require('plug.init')
 _G.config = require('nvim.config')

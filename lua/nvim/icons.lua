@@ -36,3 +36,4 @@ if ok then
 end
 
 return icons
+-- TODO: return case if no key

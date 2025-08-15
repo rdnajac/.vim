@@ -13,14 +13,14 @@ set completeopt=menu,preview,longest
 " set wildmode=longest,full
 
 " Same as above, but cycle through the first patch ('preinsert'?)
-" set wildmode=longest:full,full
+set wildmode=longest:full,full
 
 " First press: longest common substring
-" Second press: list all matches >vim
+" Second press: list all matches
 " set wildmode=longest,list
 
 " First press: show 'wildmenu' without completing or selecting
-" Second press: cycle full matches >vim
+" Second press: cycle full matches
 " set wildmode=noselect:full
 
 " Same as above, but buffer matches are sorted by time last used

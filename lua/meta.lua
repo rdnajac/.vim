@@ -1,38 +1,8 @@
 local M = {}
 
 M.sep = package.config:sub(1, 1)
-
-local lua_segment = M.sep .. 'lua' .. M.sep
-local lua_seg_len = #lua_segment
-
---- Converts a file path to a Lua module name.
----@param path string
----@return string|nil
-M.modname = function(path)
-  local lua_root = path:find(lua_segment, 1, true)
-  local is_lua_file = path:match('%.lua$')
-  local is_directory = vim.fn.isdirectory(path) == 1
-
-  if lua_root and (is_lua_file or is_directory) then
-    return (
-      path
-        :sub(lua_root + lua_seg_len) -- remove leading /lua/
-        :gsub('%.lua$', '') -- strip .lua
-        :gsub(M.sep, '.') -- convert path sep
-        :gsub('^%.', '') -- strip leading dot
-        :gsub('%.init$', '') -- strip .init
-        :gsub('%.$', '') -- strip trailing dot
-    )
-  end
-end
-
-M.source = require('meta.source').source
-M.safe_require = require('meta.require').safe
-M.lazy_require = require('meta.require').lazy
-
--- -------------------------------------------------------------------------
--- Meta Module Loader
--- -------------------------------------------------------------------------
+M.modname = require('util.modname')
+M.source = require('util.source')
 
 M.module = {}
 M.module.__index = M.module
@@ -40,6 +10,7 @@ M.module.__index = M.module
 ---@param source? string
 function M.module.new(source)
   source = source or M.source()
+  -- TODO: use vim.validate
   assert(type(source) == 'string' and source ~= '', 'Expected a valid string path')
 
   local stat = vim.uv.fs_stat(source)
@@ -55,16 +26,17 @@ end
 
 --- Load Lua modules from the same directory
 ---@param opts? vim.fs.dir.Opts
----@param lazy? boolean
 ---@param bail? boolean
 ---@return table<string, any>
-function M.module:load(opts, lazy, bail)
+function M.module:load(opts)
   local modules = {}
   local self_file = self.file and vim.fn.resolve(self.file) or nil
   local base_prefix = M.modname(self.dir)
 
+  -- TODO: use vim.fn.globpath?
   for name in vim.fs.dir(self.dir, opts) do
     local full = self.dir .. '/' .. name
+    -- basename?
     local resolved = vim.fn.resolve(vim.fn.fnamemodify(full, ':p'))
 
     if not self_file or resolved ~= self_file then
@@ -79,22 +51,18 @@ function M.module:load(opts, lazy, bail)
     end
   end
 
-  if lazy then
-    return M.lazy_require(modules, bail)
-  end
+  local ret = {}
 
-  local out = {}
-  for k, mod in pairs(modules) do
-    local value = M.safe_require(mod, bail)
-    if value ~= nil then
-      out[k] = value
+  for k, module in pairs(modules) do
+  local ok, mod = pcall(require, module)
+    if ok then
+      ret[k] = mod
     end
   end
 
-  return out
+  return ret
 end
 
--- Allow: local mods = M.module(source?)
 setmetatable(M.module, {
   __call = function(_, source, opts)
     return M.module.new(source):load(opts)

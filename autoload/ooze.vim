@@ -1,7 +1,3 @@
-function! ooze#test() abort
-  echom 'ooze exists!'
-endfunction
-
 let s:newline = "\n"
 
 function! s:scroll() abort
@@ -38,7 +34,7 @@ function! ooze#linefeed() abort
 endfunction
 
 function! ooze#sendline() abort
-  let line = getline(".")
+  let line = getline('.')
   " don't send empty lines
   if strlen(line) > 0
     call s:ooze(line)
@@ -62,7 +58,7 @@ function! ooze#visual() range abort
   call chansend(g:ooze_channel, join(l:lines, "\n") . "\n")
 endfunction
 
-function! ooze#runfile() abort
+function! ooze#file() abort
   let l:file = expand('%:p')
   call s:ooze(l:file)
 endfunction

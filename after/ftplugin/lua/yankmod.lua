@@ -1,4 +1,4 @@
-local modname_fn = require('meta').modname
+local modname_fn = require('util.meta').modname
 
 local function set_reg_and_notify(text)
   vim.fn.setreg('*', text)

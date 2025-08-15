@@ -1,5 +1,13 @@
 local M = {}
 
+function M.docsymbols()
+  return require('vimline.docsymbols').get_location()
+end
+
+M.ft_icon = function()
+  return require('vimline.file').ft_icon()
+end
+
 M.diagnostics = function()
   return package.loaded['vim.diagnostic'] and vim.diagnostic.status() or ''
 end
@@ -31,13 +39,6 @@ M.treesitter_icon = function()
   return ''
 end
 
-function M.docsymbols()
-  return require('vimline.docsymbols').get_location()
-end
-
-function M.docsymbols_hl()
-  return require('vimline.docsymbols').get_location({ apply_hl = true })
-end
 
 ---@param props { buf: number, win: number, focused: boolean }
 M.incline = function(props)

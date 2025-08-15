@@ -1,14 +1,10 @@
 function! s:close_other_buffer() abort
   if has('nvim')
-    " Check if snacks is available
     if exists('v:lua.package') && luaeval("package.loaded['snacks'] ~= nil")
       if luaeval("require('snacks.util').is_float()")
 	quit
       else
 	bdelete
-	" elseif &ft ==# 'snacks_dashboard'
-	" doautocmd User SnacksDashboardClosed
-	return
       endif
     endif
   endif
@@ -19,19 +15,30 @@ function! edit#(...) abort
 endfunction
 
 function! s:edit(file, ...) abort
+  let l:file = fnamemodify(a:file, ':p')
   let l:extra = a:0 >= 1 ? a:1 : ''
 
   " Check if the file exists, if not prompt to create it
-  if !filereadable(a:file)
-    let l:resp = input('File not found: ' .  fnamemodify(a:file, ':~') . '. Create new file? [y/N]: ')
-    if l:resp !~? '^y'
-      return
+  " TODO: don't prompt if trying to access a dir
+  if !filereadable(l:file)
+    let l:maybe_dir = fnamemodify(a:file, ':r')
+
+    " try file as directory
+    if isdirectory(l:maybe_dir)
+      let l:file = l:maybe_dir . '/'
+    else
+
+      " prompt to create the file, exit if the user declines
+      let l:resp = input('File not found: ' .  fnamemodify(a:file, ':~') . '. Create new file? [y/N]: ')
+      if l:resp !~? '^y'
+	return
+      endif
     endif
   endif
 
   " Jump to buffer if already open in current tab
   for w in range(1, winnr('$'))
-    if bufexists(winbufnr(w)) && fnamemodify(bufname(winbufnr(w)), ':p') ==# fnamemodify(a:file, ':p')
+    if bufexists(winbufnr(w)) && fnamemodify(bufname(winbufnr(w)), ':p') ==# l:file
       execute w . 'wincmd w'
       if l:extra =~# '\v(^|\s)\+\S'
 	execute matchstr(l:extra, '\v\+\S+')
@@ -54,15 +61,14 @@ function! s:edit(file, ...) abort
 
   " prepend the command with the layout if it is not empty
   let l:cmd = (!empty(l:layout) ? l:layout . ' | ' : '') . 'drop '
+
   " insert the extra command if it is not empty
-  let l:cmd .= (!empty(l:extra) ? l:extra . ' ' : '') . fnameescape(a:file)
+  let l:cmd .= (!empty(l:extra) ? l:extra . ' ' : '') . l:file
 
   " If we're focused on a floating window, close it
   call s:close_other_buffer()
-  " execute the command to open the file
-  " echom 'Executing: ' . l:cmd
+
   execute l:cmd
-  " open and close folds and center the view
   normal! zvzz
 endfunction
 
@@ -76,6 +82,7 @@ function! edit#luamod(name) abort
     return
   endif
   let l:file = stdpath('config') . '/lua/' . a:name . '.lua'
+
   call s:edit(l:file)
 endfunction
 
@@ -89,12 +96,7 @@ function! edit#filetype(...) abort
   let l:dir = vim#home() . (a:0 >= 1 ? '/' . a:1 : '/after/ftplugin')
   let l:ext = a:0 >= 2 ? a:2 : '.vim'
   let l:file = l:dir . '/' . &filetype . l:ext
-  if filereadable(l:file)
-    call s:edit(l:file)
-  else
-    " try directory
-    call s:edit(fnamemodify(l:file, ':r'))
-  endif
+
   call s:edit(l:file)
 endfunction
 
@@ -113,7 +115,8 @@ function! edit#ch() abort
   let alt_dir = fnamemodify(dir, ':h') . '/' . (tag ==# 'autoload' ? 'plugin' : 'autoload')
   let alt_file = alt_dir . '/' . base
 
-  call s:edit(alt_file)
+  " call s:edit(alt_file)
+  execute 'edit ' . alt_file
 endfunction
 
 function! s:find_nearest_readme() abort

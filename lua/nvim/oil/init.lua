@@ -1,10 +1,35 @@
 local M = { 'stevearc/oil.nvim' }
 
-M.enabled = vim.g.default_file_explorer == 'oil'
+-- M.enabled = vim.g.default_file_explorer == 'oil'
 
 local git_status = require('nvim.oil.git_status')
 local git_status_cache = git_status.new()
 local detail = 0
+
+-- lua/vimline/components.lua
+--- Get a path for winbar display
+---@param winid? integer
+---@return string
+M.winbar = function(winid)
+  local wid = winid or vim.g.statusline_winid
+  if not wid then
+    return ""
+  end
+
+  local bufnr = vim.api.nvim_win_get_buf(wid)
+  local dir = require("oil").get_current_dir(bufnr)
+
+  if dir then
+    return vim.fn.fnamemodify(dir, ":~")
+  end
+
+  local name = vim.api.nvim_buf_get_name(bufnr)
+  if name ~= "" then
+    return vim.fn.fnamemodify(name, ":~")
+  end
+
+  return ""
+end
 
 ---@type oil.setupOpts
 M.opts = {
@@ -60,16 +85,16 @@ M.opts = {
     --   mode = 'n',
     -- },
   },
-  win_options = { signcolumn = 'yes:2' },
+  -- win_options = { signcolumn = 'yes:2' },
   float = {
     ---@type fun(winid: integer): string
     get_win_title = function(winid)
-      local buf = vim.api.nvim_win_get_buf(winid)
-      local dir = require('oil').get_current_dir(buf)
-      if not dir then
-        return 'Oil'
-      end
-      return ' ' .. vim.fn.fnamemodify(dir, ':~') .. ' '
+      -- local buf = vim.api.nvim_win_get_buf(winid)
+      -- local dir = require('oil').get_current_dir(buf)
+      -- if not dir then
+      --   return 'Oil'
+      -- end
+      return ' ' .. M.winbar(winid) .. ' '
     end,
   },
   view_options = {

@@ -10,11 +10,7 @@ function! s:indicator(condition, icon) abort
   return a:condition ? a:icon : ''
 endfunction
 
-" returns an icon or empty string based on the condition
-" let s:sep = ''
 let s:sep = ''
-" let s:sep = ' '
-" let s:sep = ' '
 
 function! vimline#icons#copilot() abort
   let l:icon = s:lualine_component('copilot')
@@ -29,17 +25,5 @@ endfunction
 function! vimline#icons#treesitter() abort
   let l:icon = s:lualine_component('treesitter')
   return s:indicator(!empty(l:icon), s:sep . l:icon)
-endfunction
-
-function! vimline#icons#help() abort
-  return s:indicator((&filetype ==# 'help'), s:sep . '%h')
-endfunction
-
-function! vimline#icons#modified() abort
-  return s:indicator(&modified, s:sep . ' ')
-endfunction󰟔
-
-function! vimline#icons#readonly() abort
-  return s:indicator(&readonly, s:sep . ' ')
 endfunction
 
