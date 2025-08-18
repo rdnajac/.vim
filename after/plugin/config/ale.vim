@@ -15,7 +15,9 @@ let g:ale_fixers = {
       \ 'r'	  : ['styler'],
       \ }
 
+" TODO: parse this dictionary with mason auto-install
 let g:ale_linters = {
+      \ 'lua' : ['lua_language_server'],
       \ 'vim' : ['vint'],
       \ }
 

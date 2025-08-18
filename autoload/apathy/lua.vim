@@ -2,17 +2,19 @@ function! s:matchfilter(list, pat) abort
   return filter(map(copy(a:list), 'matchstr(v:val, '.string(a:pat).')'), 'len(v:val)')
 endfunction
 
-if !exists('g:lua_path')
-  let g:lua_path = split(system('lua -e "print(package.path)"')[0:-2], ';')
-  if v:shell_error || empty(g:lua_path)
-    let g:lua_path = ['./?.lua', './?/init.lua']
+function! apathy#lua#setup() abort
+  if !exists('g:lua_path')
+    let g:lua_path = split(system('lua -e "print(package.path)"')[0:-2], ';')
+    if v:shell_error || empty(g:lua_path)
+      let g:lua_path = ['./?.lua', './?/init.lua']
+    endif
   endif
-endif
 
-call apathy#Prepend('path',        s:matchfilter(g:lua_path, '^[^?]*[^?\/]'))
-call apathy#Prepend('suffixesadd', s:matchfilter(g:lua_path, '?\zs[^?]*$'))
-setlocal include=\\<require\\s*(\\=\\s*[\"']
-setlocal includeexpr=LuaIncludeExpr(v:fname)
+  call apathy#Prepend('path',        s:matchfilter(g:lua_path, '^[^?]*[^?\/]'))
+  call apathy#Prepend('suffixesadd', s:matchfilter(g:lua_path, '?\zs[^?]*$'))
+  " setlocal include=\\<require\\s*(\\=\\s*[\"']
+  " setlocal includeexpr=LuaIncludeExpr(v:fname)
+endfunction
 
 function! LuaIncludeExpr(fname) abort
   if a:fname =~# '/' || a:fname =~# '\.lua$'

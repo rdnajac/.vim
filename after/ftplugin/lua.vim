@@ -1,5 +1,3 @@
-let b:ale_linters = ['lua_language_server']
-
 setlocal expandtab
 setlocal formatoptions-=ro
 
@@ -12,6 +10,8 @@ inoremap <buffer> \se --<SPACE>stylua:<SPACE>ignore<SPACE>end
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><c-g>u<CR><CR><esc>hi<Space><Space>
 
+" call apathy#lua#setup()
+" TODO: check default include and includeexpr
 finish
 
 " simple auto-brackets

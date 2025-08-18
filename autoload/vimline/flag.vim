@@ -1,11 +1,9 @@
+scriptencoding=utf-8
 let s:flags = {
-      \ 'modified': { -> &modified ? ' ' : '' },
+      \ 'modified': { -> &modified ? ' ' : '' },
       \ 'readonly': { -> &readonly ? ' ' : '' },
       \ }
 
 function! vimline#flag#(name) abort
-  if has_key(s:flags, a:name)
-    return s:flags[a:name]()
-  endif
-  return ''
+  return has_key(s:flags, a:name) ? s:flags[a:name]() : ''
 endfunction

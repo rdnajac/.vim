@@ -4,7 +4,8 @@ function! s:err_undo() abort
   if v:shell_error > 0
     silent undo
     redraw
-    Error 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
+    let l:msg = 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
+    call vim#notify#error(msg)
   endif
 endfunction
 

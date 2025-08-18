@@ -1,10 +1,11 @@
-" Location: autoload/apathy.vim
-" Author: Tim Pope <http://tpo.pe/>
-
 if exists('g:autoloaded_apathy')
   finish
 endif
 let g:autoloaded_apathy = 1
+
+function! apathy#EnvSplit(val, ...) abort
+  return len(a:val) ? split(a:val, has('win32') ? ';' : ':') : a:000
+endfunction
 
 function! apathy#Uniq(list) abort
   let i = 0
@@ -50,21 +51,6 @@ function! apathy#Split(...) abort
   return val
 endfunction
 
-function! apathy#Real(file) abort
-  let pre = substitute(matchstr(a:file, '^\a\a\+\ze:'), '^.', '\u&', '')
-  if empty(pre)
-    return fnamemodify(a:file, ':p')
-  elseif exists('*' . pre . 'Real')
-    return {pre}Real(a:file)
-  else
-    return ''
-  endif
-endfunction
-
-function! apathy#EnvSplit(val, ...) abort
-  return len(a:val) ? split(a:val, has('win32') ? ';' : ':') : a:000
-endfunction
-
 function! apathy#Prepend(opt, ...) abort
   let orig = getbufvar('', '&'.a:opt)
   let val = apathy#Join(apathy#Uniq(call('apathy#Split', a:000 + [orig])))
@@ -77,6 +63,17 @@ function! apathy#Append(opt, ...) abort
   let val = apathy#Join(apathy#Uniq(call('apathy#Split', [orig] + a:000)))
   call setbufvar('', '&'.a:opt, val)
   return val
+endfunction
+
+function! apathy#Real(file) abort
+  let pre = substitute(matchstr(a:file, '^\a\a\+\ze:'), '^.', '\u&', '')
+  if empty(pre)
+    return fnamemodify(a:file, ':p')
+  elseif exists('*' . pre . 'Real')
+    return {pre}Real(a:file)
+  else
+    return ''
+  endif
 endfunction
 
 function! apathy#Undo(...) abort
