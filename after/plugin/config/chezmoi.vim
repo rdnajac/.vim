@@ -1,3 +1,7 @@
+if !executable('chezmoi')
+  finish
+endif
+
 let g:chezmoi#use_tmp_buffer = 1
 let g:chezmoi#source_dir_path =
       \ exists('$CHEZMOI_SOURCE_DIR')

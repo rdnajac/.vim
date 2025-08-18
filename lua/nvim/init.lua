@@ -7,6 +7,4 @@ setmetatable(M, {
   end,
 })
 
-_G.N = M
-
 return M

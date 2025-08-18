@@ -20,4 +20,4 @@ augroup End
 highlight CommentStringInBackticks guibg=NONE guifg=#39ff14
 " syntax region CommentStringInBackticks start=/`/ end=/`/ contained containedin=.*Comment
 syntax region Chromatophore start=/`/ end=/`/ contained containedin=.*Comment
-" side effect? also highlights vimCommentString
+" side effect? also highlights vimCommentString 

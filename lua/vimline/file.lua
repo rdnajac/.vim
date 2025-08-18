@@ -1,8 +1,3 @@
--- `file` lualine componenets
-
--- make sure the global icons table is available
-local icons = icons
-
 local M = {}
 
 --- Get devicon for a buffer by buffer number.
@@ -35,18 +30,18 @@ M.ft_icon = function(bufnr)
   return icon .. ' '
 end
 
-
 --- Return file format icon ( one of { unix, dos, mac })
 --- @param bufnr? integer Optional buffer number (defaults to current buffer)
 M.format = function(bufnr)
-  local bo = vim.bo[bufnr or 0]
-  return icons[bo.fileformat] or bo.fileformat
+  return (N.icons[vim.bo[bufnr or 0].fileformat] or vim.bo[bufnr or 0].fileformat)
 end
 
 M.size = function()
   local size = vim.fn.getfsize(vim.fn.expand('%:p'))
 
-  if size <= 0 then return '' end
+  if size <= 0 then
+    return ''
+  end
 
   local suffixes = { 'b', 'k', 'm', 'g' }
   local i = 1
@@ -56,7 +51,7 @@ M.size = function()
     i = i + 1
   end
 
-  return string.format(i == 1 and '%d%s' or '%.1f%s' , size, suffixes[i])
+  return string.format(i == 1 and '%d%s' or '%.1f%s', size, suffixes[i])
 end
 
 ---Return a nicely shortened filename + status symbols.

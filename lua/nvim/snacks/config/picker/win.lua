@@ -1,25 +1,25 @@
 ---@type snacks.picker.win.Config
 local win = {
+  -- TODO: what does this do?
   preview = { minimal = true },
   input = {
     keys = {
+      -- add maps common to all pickers
       ['<Esc>'] = { 'close', mode = { 'n' } },
-      -- change dir with zoxide and continue picking
-      ['<m-z>'] = {
-        function(picker, item)
-          picker.close()
-          picker.cd(item.file)
-          Snacks.picker.zoxide({
-            confirm = function(_, item)
-              -- vim.cmd.cd(vim.fn.fnameescape(item.file))
-              Snacks.picker.resume({ cwd = item.file })
-            end,
-          })
-          -- Snacks.picker.actions.cd(_, item)
-          -- Snacks.picker.actions.lcd(_, item)
-        end,
-        mode = { 'i', 'n' },
-      },
+
+      -- remove insert mode keymaps that conflict with `vim-rsi`
+      ['<a-d>'] = { 'inspect', mode = { 'n' } },
+      -- <M-d> Delete forwards one word.
+      ['<a-f>'] = { 'toggle_follow', mode = { 'n' } },
+      -- <M-f> Go forwards one word.
+      ['<c-a>'] = { 'select_all', mode = { 'n' } },
+      -- <C-b> Go backwards one character.
+      ['<c-b>'] = { 'preview_scroll_up', mode = { 'n' } },
+      -- <C-a> Go to beginning of line.
+      ['<c-d>'] = { 'list_scroll_down', mode = { 'n' } },
+      -- <C-d> Delete character in front of cursor.
+
+      -- default keymaps
       -- ['<C-Down>'] = { 'history_forward', mode = { 'i', 'n' } },
       -- ['<C-Up>'] = { 'history_back', mode = { 'i', 'n' } },
       -- ['<C-c>'] = { 'cancel', mode = 'i' },
@@ -46,17 +46,6 @@ local win = {
       -- ['<c-t>'] = { 'tab', mode = { 'n', 'i' } },
       -- ['<c-u>'] = { 'list_scroll_up', mode = { 'i', 'n' } },
       -- ['<c-v>'] = { 'edit_vsplit', mode = { 'i', 'n' } },
-      -- remove insert mode keymaps that conflict with vim-rsi
-      -- <M-d> Delete forwards one word.
-      ['<a-d>'] = { 'inspect', mode = { 'n' } },
-      -- <M-f> Go forwards one word.
-      ['<a-f>'] = { 'toggle_follow', mode = { 'n' } },
-      -- <C-a> Go to beginning of line.
-      ['<c-a>'] = { 'select_all', mode = { 'n' } },
-      -- <C-b> Go backwards one character.  On a blank line, kill it
-      ['<c-b>'] = { 'preview_scroll_up', mode = { 'n' } },
-      -- <C-d> Delete character in front of cursor.  Falls back to
-      ['<c-d>'] = { 'list_scroll_down', mode = { 'n' } },
     },
   },
 }

@@ -1,5 +1,3 @@
-vim.loader.enable()
-
 ---@type 'netrw'|'snacks'|'oil'
 vim.g.default_file_explorer = 'oil'
 
@@ -11,7 +9,7 @@ if vim.is_callable(vim.pack.add) then
   vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
 end
 
--- set these ooptions first so it is apparent if vimrc overrides them
+-- set these options first so it is apparent if vimrc overrides them
 -- also try `:options`
 vim.o.cmdheight = 0
 vim.o.laststatus = 3
@@ -19,6 +17,8 @@ vim.o.pumblend = 0
 vim.o.winborder = 'rounded'
 
 vim.cmd.runtime('vimrc')
+
+vim.loader.enable()
 
 -- Override require to handle errors gracefully
 local require = function(module)
@@ -32,11 +32,14 @@ local require = function(module)
   return mod
 end
 
+_G.N = require('nvim')
+
 -- use the new extui module if available
 require('vim._extui').enable({})
 
 -- override vim.notify to provide additional highlighting
-vim.notify = require('nvim.notify')
+-- vim.notify = require('nvim.notify')
+vim.notify = N.notify
 
 -- test if the override is working (should be colored blue)
 vim.notify('init.lua loaded!', vim.log.levels.INFO, { title = 'Test Notification' })
@@ -44,6 +47,7 @@ vim.notify('init.lua loaded!', vim.log.levels.INFO, { title = 'Test Notification
 local Plug = require('nvim.plug').Plug
 
 Plug('nvim.snacks')
+Snacks.notify.info('snacks loaded')
 
 -- stylua: ignore start
 _G.bt = function() Snacks.debug.backtrace() end
@@ -57,6 +61,9 @@ Plug('nvim.lsp')
 Plug('nvim.oil')
 Plug('nvim.treesitter')
 
-_G.icons = require('nvim.icons')
-_G.plugins = require('plug.init')
-_G.config = require('nvim.config')
+for _, f in ipairs(vim.fn.globpath(vim.fn.stdpath('config'), '/lua/plug/*', false, true)) do
+  local modname = require('util.modname')(f)
+  Plug(modname)
+end
+
+require('nvim.config')

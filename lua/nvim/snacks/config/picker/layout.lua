@@ -22,6 +22,7 @@ return {
     box = 'vertical',
     row = vim.o.lines - math.floor(0.4 * vim.o.lines),
     height = 0.4,
+    -- TODO: hide preview window if less than 120 cols
     {
       box = 'horizontal',
       -- border = borders.topandbottom,
@@ -37,6 +38,9 @@ return {
         win = 'preview',
         border = borders.topandleft,
         width = 0.65,
+        -- hide = function()
+        --   return vim.o.columns < 120
+        -- end,
       },
     },
     {

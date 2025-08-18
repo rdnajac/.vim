@@ -40,8 +40,6 @@ endfunction
 augroup apathy
   autocmd!
   autocmd VimEnter * call s:set_repo_path()
-  autocmd FileType ruby call apathy#ruby#setup()
-  autocmd FileType sh,zsh call apathy#sh#setup()
   autocmd FileType javascript,javascriptreact call apathy#javascript#setup()
   autocmd FileType typescript,typescriptreact call apathy#javascript#setup()
   " lcd to the git root on buffer enter

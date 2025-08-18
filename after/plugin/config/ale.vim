@@ -1,9 +1,5 @@
 scriptencoding utf-8
 
-if !exists('g:loaded_ale')
-  finish
-endif
-
 let g:ale_virtualtext_cursor = 0
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_echo_cursor = 'never'
