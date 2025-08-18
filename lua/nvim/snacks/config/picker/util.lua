@@ -1,7 +1,6 @@
 local M = {}
 
 ---@module "snacks"
--- see: `Snacks.picker.picker_actions()`
 
 ---@param picker snacks.Picker
 local toggle = function(picker)
@@ -15,10 +14,27 @@ local toggle = function(picker)
   end
 end
 
+---@param picker snacks.Picker
+local zoxide = function(picker)
+  local opts = picker.opts
+
+  picker:close()
+  Snacks.picker.zoxide({
+    confirm = function(z, item)
+      z:close()
+      opts.cwd = item.file
+      Snacks.picker.pick(opts)
+    end,
+  })
+end
+
 M.opts_extend = {
   actions = {
     toggle = function(self)
       toggle(self)
+    end,
+    zoxide = function(self)
+      zoxide(self)
     end,
   },
   config = function(opts)
@@ -28,7 +44,8 @@ M.opts_extend = {
     }
     local icon = icon_map[opts.finder]
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
-    opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
+    opts.title =
+      string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
     opts.cwd = opts.cwd or vim.fn['git#root']() or vim.fn.getcwd()
     return opts
   end,
@@ -36,6 +53,7 @@ M.opts_extend = {
     input = {
       keys = {
         ['`'] = { 'toggle', mode = { 'i', 'n' } },
+        ['~'] = { 'zoxide', mode = { 'i', 'n' } },
       },
     },
   },
@@ -71,7 +89,10 @@ local reopen_picker = function(picker, source, opts)
   ---@diagnostic disable-next-line
   picker.skip_reset = true
   picker:close()
-  Snacks.picker.pick(source, vim.tbl_extend('force', reopen_state[source] or {}, opts or {}))
+  Snacks.picker.pick(
+    source,
+    vim.tbl_extend('force', reopen_state[source] or {}, opts or {})
+  )
 end
 
 return M
