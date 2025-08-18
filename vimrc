@@ -78,9 +78,7 @@ augroup vimrc
   au BufWinEnter * exec "silent! normal! g`\"zv"
 
   " automatically create directories for new files
-  " requires `vim-eunuch`
-  " FIXME: use the vim fn
-  au BufWritePre ~/ silent! Mkdir
+  au BufWritePre ~/ call bin#mkdir#(expand('<afile>'))
 
   " immediately quit the command line window
   au CmdwinEnter * quit
@@ -94,6 +92,10 @@ augroup vimrc
   " no cursorline in insert mode
   au InsertLeave,WinEnter * setlocal cursorline
   au InsertEnter,WinLeave * setlocal nocursorline
+
+  " Hide the statusline while in command mode
+  au CmdlineEnter * if &ls != 0            | let g:last_ls = &ls | set ls=0        | endif
+  au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif

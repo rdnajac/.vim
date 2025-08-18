@@ -1,9 +1,9 @@
 local lib = require('vimline.docsymbols.navic_lib')
 
 local config = {
-  icons = _G.icons.kinds,
+  icons = N.icons.kinds,
   depth_limit = 0,
-  depth_limit_indicator = icons.misc.dots,
+  depth_limit_indicator = N.icons.misc.dots,
   separator = '',
   hl = {
     icon = 'Constant',
@@ -81,5 +81,7 @@ function M.get(opts)
   end
   return M.format_data(data, apply_hl)
 end
+
+
 
 return M

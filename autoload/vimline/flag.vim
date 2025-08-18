@@ -2,6 +2,7 @@ scriptencoding=utf-8
 let s:flags = {
       \ 'modified': { -> &modified ? ' ' : '' },
       \ 'readonly': { -> &readonly ? ' ' : '' },
+      \ 'busy': { -> &busy ? '◐ ' : '' },
       \ }
 
 function! vimline#flag#(name) abort

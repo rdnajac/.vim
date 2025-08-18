@@ -1,11 +1,48 @@
+-- Escape `%` in str so it doesn't get picked as stl item.
+local vimlineescape = function(str)
+  return type(str) == 'string' and str:gsub('%%', '%%%%') or str
+end
+
 local M = {}
 
-function M.docsymbols()
+M.file_format = require('vimline.file').format
+M.file_size = require('vimline.file').size
+M.hostname = function()
+  vimlineescape(vim.loop.os_gethostname())
+end
+
+M.docsymbols = function()
   return require('vimline.docsymbols').get_location()
 end
 
-M.ft_icon = function()
-  return require('vimline.file').ft_icon()
+--- Get devicon for a buffer by buffer number.
+--- @param bufnr number|nil Buffer number (defaults to current buffer)
+--- @return string icon
+M.ft_icon = function(bufnr)
+  local ok, devicons = pcall(require, 'nvim-web-devicons')
+  if not ok then
+    return ''
+  end
+
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+  -- intercept special types
+  local ft = vim.bo[bufnr] and vim.bo[bufnr].filetype or ''
+  if ft == 'help' then
+    return '󰋖 '
+  elseif ft == 'oil' then
+    return ' '
+  end
+
+  local fname = vim.api.nvim_buf_get_name(bufnr)
+  local shortname = vim.fn.fnamemodify(fname, ':t')
+  local ext = vim.fn.fnamemodify(fname, ':e')
+
+  local icon = devicons.get_icon(shortname, ext, { default = true })
+    or devicons.get_icon_by_filetype(ft, { default = true })
+    or ''
+
+  return icon .. ' '
 end
 
 M.diagnostics = function()
@@ -16,19 +53,19 @@ end
 M.copilot_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name == 'GitHub Copilot' then
-      return ' '
+      return N.icons.src.copilot
     end
   end
-  return ''
+  return N.icons.lsp.unavailable
 end
 
 M.lsp_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name ~= 'GitHub Copilot' then
-      return ' '
+      return N.icons.lsp.attched
     end
   end
-  return ''
+  return N.icons.lsp.unavailable
 end
 
 M.treesitter_icon = function()
@@ -40,30 +77,17 @@ M.treesitter_icon = function()
   return ''
 end
 
+local sep = ''
 
----@param props { buf: number, win: number, focused: boolean }
-M.incline = function(props)
-  local file = require('vimline.file')
-  local bufnr = props.buf or vim.api.nvim_get_current_buf()
-  local bufname = vim.api.nvim_buf_get_name(bufnr)
-  local buftype = vim.bo[bufnr].buftype
-
-  if buftype == 'terminal' then
-    return '  channel: ' .. vim.o.channel
-  elseif vim.bo[bufnr].filetype == 'help' then
-    local bufname = vim.api.nvim_buf_get_name(bufnr)
-    if bufname == '' then
-      -- Fallback to the buffer's "help topic" name
-      bufname = vim.api.nvim_buf_get_var(bufnr, 'current_syntax') or '[No Name]'
-    end
-    -- For help files, `:t` works fine if bufname is a real path, but if not, just use bufname
-    local filename = bufname:match('[^/\\]+$') or bufname
-    return '󰋖 ' .. filename
-  end
-
-  local icon = file.type_icon(bufnr)
-  local filename = bufname ~= '' and vim.fn.fnamemodify(bufname, ':t') or '[No Name]'
-  local modified = file.modified(bufnr)
+M.lua_icons = function()
+  return string.format(
+    '%s %s %s %s %s',
+    M.lsp_icon(),
+    sep,
+    M.copilot_icon(),
+    sep,
+    M.treesitter_icon()
+  )
 end
 
 return M

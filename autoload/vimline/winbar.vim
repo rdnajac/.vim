@@ -1,5 +1,6 @@
 scriptencoding=utf-8
 
+" TODO: rewrite in lua...
 function! vimline#winbar#right() abort
   let l:ret = '%='
   let l:ret .= vimline#indicator#diagnostics()

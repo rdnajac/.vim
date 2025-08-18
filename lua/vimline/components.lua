@@ -1,14 +1,9 @@
--- pack/vimfect/start/vimline.nvim/lua/vimline/components/init.lua
--- Escape `%` in str so it doesn't get picked as stl item.
-local vimlineescape = function(str)
-  return type(str) == 'string' and str:gsub('%%', '%%%%') or str
-end
-
 local M = {}
 
 --- Blink statusline component
 M.blink = function()
-  local source_icons = require('nvim.icons').blink_src
+  local source_icons = N.icons.blink_src
+  local kind_icons = N.icon.kinds
 
   if not package.loaded['blink.cmp.sources.lib'] then
     return ''
@@ -24,7 +19,9 @@ M.blink = function()
   local out = {}
 
   for name in pairs(sources.get_all_providers()) do
-    local icon = source_icons[name] or icons.kinds[name:sub(1, 1):upper() .. name:sub(2)] or ''
+    local icon = kind_icons[name:sub(1, 1):upper() .. name:sub(2)]
+      or source_icons[name]
+      or ''
     if enabled[name] then
       table.insert(out, icon)
     end
@@ -33,9 +30,6 @@ M.blink = function()
   return table.concat(out, ' ')
 end
 
-M.hostname = function()
-  vimlineescape(vim.loop.os_gethostname())
-end
 
 M.location = function()
   local line = vim.fn.line('.')
@@ -43,13 +37,16 @@ M.location = function()
   return string.format('%3d:%-2d', line, col)
 end
 
-
 M.selectioncount = function()
   local mode = vim.fn.mode(true)
   local line_start, col_start = vim.fn.line('v'), vim.fn.col('v')
   local line_end, col_end = vim.fn.line('.'), vim.fn.col('.')
   if mode:match('') then
-    return string.format('%dx%d', math.abs(line_start - line_end) + 1, math.abs(col_start - col_end) + 1)
+    return string.format(
+      '%dx%d',
+      math.abs(line_start - line_end) + 1,
+      math.abs(col_start - col_end) + 1
+    )
   elseif mode:match('V') or line_start ~= line_end then
     return math.abs(line_start - line_end) + 1
   elseif mode:match('v') then

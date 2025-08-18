@@ -1,22 +1,18 @@
 let s:url_scheme_regex = '^[A-Za-z][A-Za-z0-9+.-]*://'
 
-function! bin#mkdir#mkdir(file) abort
-  " Skip if URI scheme (e.g., http://, ftp://)
-  if a:file =~# s:url_scheme_regex
+function! bin#mkdir#(file) abort
+  if a:file ==# '' || a:file =~# s:url_scheme_regex 
     return
   endif
 
-  let l:path = expand(a:file)
-  let l:resolved = resolve(l:path)
-  let l:file = empty(l:resolved) ? a:file : l:resolved
-  let l:dir = fnamemodify(l:file, ':p:h')
+  let l:dir = fnamemodify(a:file, ':p:h')
 
   if !isdirectory(l:dir)
     call mkdir(l:dir, 'p')
   endif
 endfunction
 
-function! bin#mkdir#test() abort
+function! bin#mkdir#test_regex() abort
   let l:tests = [
 	\ 'http://example.com',
 	\ 'ftp://example.com',

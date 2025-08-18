@@ -1,14 +1,13 @@
 local icons = {
-  blink_src = {
+  src = {
     buffer = ' ',
     cmdline = ' ',
+    copilot = ' ',
     env = '$ ',
     lazydev = '󰒲 ',
     lsp = ' ',
     omni = ' ',
     path = ' ',
-    snippets = ' ',
-    -- snippets = icons.kinds.Snippet,
   },
   ft = { octo = ' ' },
   misc = { dots = '…' },

@@ -52,7 +52,7 @@ M.opts = {
         components = {
           kind_icon = {
             text = function(ctx)
-              return _G.icons.kinds[ctx.kind] or ''
+              return N.icons.kinds[ctx.kind] or ''
             end,
           },
         },

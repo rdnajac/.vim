@@ -65,5 +65,3 @@ for _, f in ipairs(vim.fn.globpath(vim.fn.stdpath('config'), '/lua/plug/*', fals
   local modname = require('util.modname')(f)
   Plug(modname)
 end
-
-require('nvim.config')

@@ -6,11 +6,10 @@ function! vimline#statusline#right() abort
   let l:ret .= vimline#indicator#searchcount()
   let l:ret .= mode ==# 'n' ? ' ' : mode
   let l:ret .= state !=# '' ? '|'. state : ''
-  let l:ret .= '%{ &busy > 0 ? "◐ " : "" }'
-  let l:ret .= '%S'
+  let l:ret .= '%S' " showcmd
   " let l:ret .= vimline#recording()
   " let l:ret .= vimline#luacomponent('blink')
-  let l:ret .= mode[0] ==# 'i' ? v:lua.require'vimline.components'.blink() : ''
+  let l:ret .= mode[0] ==# 'i' ? lua#require('vimline.components', 'blink') : ''
   return ret
 endfunction
 
@@ -44,11 +43,7 @@ function! vimline#statusline#a() abort
 endfunction
 
 function! s:flags() abort
-  let l:line = ''
-  let l:line .= vimline#icons#copilot()
-  let l:line .= vimline#icons#treesitter()
-  let l:line .= vimline#icons#lsp()
-  return l:line
+  return lua#require('vimline', 'lua_icons')
 endfunction
 
 function! vimline#statusline#() abort
