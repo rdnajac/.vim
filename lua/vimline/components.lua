@@ -3,7 +3,7 @@ local M = {}
 --- Blink statusline component
 M.blink = function()
   local source_icons = N.icons.blink_src
-  local kind_icons = N.icon.kinds
+  local kind_icons = N.icons.kinds
 
   if not package.loaded['blink.cmp.sources.lib'] then
     return ''

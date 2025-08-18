@@ -1,4 +1,4 @@
-local lib = require('vimline.docsymbols.navic_lib')
+local lib = require('nvim.lsp.docsymbols.navic_lib')
 
 local config = {
   icons = N.icons.kinds,
@@ -81,7 +81,5 @@ function M.get(opts)
   end
   return M.format_data(data, apply_hl)
 end
-
-
 
 return M

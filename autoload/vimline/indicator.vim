@@ -4,10 +4,6 @@ function! vimline#indicator#bom() abort
   return &fileencoding . (&bomb ? ' [BOM]' : '')
 endfunction
 
-function! vimline#indicator#help() abort
-  return &filetype ==# 'help' ? '󰋖 ' : ''
-endfunction
-
 function! vimline#indicator#recording() abort
   let rec = reg_recording()
   let reg = empty(rec) ? get(g:, 'vimline_last_reg', 'q') : rec
@@ -23,10 +19,7 @@ endfunction
 " ALE statusline component
 " https://github.com/dense-analysis/ale?tab=readme-ov-file#custom-statusline
 " set statusline=%{LinterStatus()w  w}
-function! vimline#indicator#diagnostics() abort
-  if has ('nvim')
-    return lua#require('vimline', 'diagnostics')
-  endif
+function! vimline#indicator#ale_diagnostics() abort
   let l:counts = ale#statusline#Count(bufnr(''))
   let l:all_errors = l:counts.error + l:counts.style_error
   let l:non_errors = l:counts.total - l:all_errors

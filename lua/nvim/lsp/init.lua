@@ -72,6 +72,7 @@ M.opts = {
       })
     end
 
+    require('nvim.lsp.docsymbols.navic_attach')(client, bufnr)
   end,
 }
 

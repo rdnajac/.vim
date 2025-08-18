@@ -1,12 +1,11 @@
 " autoload/lua.vim
+" FIXME: 
 function s:lsp_root() abort
   if has('nvim')
     return v:vim.lsp.buf.list_workspace_folders()[1]
   endif
   return ''
 endfunction
-
-echom s:lsp_root()
 
 " TODO: fail gracefully?
 function! s:if_vim_handle() abort

@@ -1,9 +1,10 @@
 scriptencoding=utf-8
 
-" TODO: rewrite in lua...
+" TODO: rewrite in lua..
 function! vimline#winbar#right() abort
   let l:ret = '%='
-  let l:ret .= vimline#indicator#diagnostics()
+  let l:ret .= '%#Normal#'
+  let l:ret .= lua#require('vimline', 'diagnostics')
   return ret
 endfunction
 
@@ -52,7 +53,7 @@ function! vimline#winbar#() abort
       let l:ret .= '%#Chromatophore_bc#'
       let l:ret .= '%#Chromatophore_c#'
     endif
-    let l:ret .= lua#require('vimline.docsymbols', 'get')
+    let l:ret .= lua#require('vimline', 'docsymbols')
   else " inactive winbar
     let l:ret .= vimline#flag#('readonly')
     let l:ret .= vimline#flag#('modified')

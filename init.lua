@@ -56,6 +56,7 @@ _G.ddd = function(...) return Snacks.debug.inspect(...) end
 vim.print = _G.ddd
 
 Plug('nvim.colorscheme')
+Plug('nvim.diagnostic')
 Plug('nvim.mini')
 Plug('nvim.lsp')
 Plug('nvim.oil')

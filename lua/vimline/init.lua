@@ -12,7 +12,7 @@ M.hostname = function()
 end
 
 M.docsymbols = function()
-  return require('vimline.docsymbols').get_location()
+  return require('nvim.lsp.docsymbols').get()
 end
 
 --- Get devicon for a buffer by buffer number.
@@ -46,26 +46,35 @@ M.ft_icon = function(bufnr)
 end
 
 M.diagnostics = function()
-  return package.loaded['vim.diagnostic'] and vim.diagnostic.status() or ''
+  local counts = vim.diagnostic.count(0)
+  local signs = N.diagnostic.opts.signs
+  local result = {}
+
+  for severity, count in pairs(counts) do
+    local icon = signs.text[severity]
+    local hl_group = signs.numhl[severity]
+    table.insert(result, string.format('%%#%s#%s:%d', hl_group, icon, count))
+  end
+
+  return table.concat(result, ' ')
 end
 
--- TODO: add icons from nvim icons
 M.copilot_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name == 'GitHub Copilot' then
       return N.icons.src.copilot
     end
   end
-  return N.icons.lsp.unavailable
+  return N.icons.lsp.unavailable .. ' '
 end
 
 M.lsp_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name ~= 'GitHub Copilot' then
-      return N.icons.lsp.attched
+      return N.icons.lsp.attached
     end
   end
-  return N.icons.lsp.unavailable
+  return N.icons.lsp.unavailable .. ' '
 end
 
 M.treesitter_icon = function()
@@ -81,7 +90,7 @@ local sep = ''
 
 M.lua_icons = function()
   return string.format(
-    '%s %s %s %s %s',
+    '%s%s%s%s%s',
     M.lsp_icon(),
     sep,
     M.copilot_icon(),
