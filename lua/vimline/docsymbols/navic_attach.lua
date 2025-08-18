@@ -7,9 +7,14 @@ local function lsp_callback(for_buf, symbols)
   lib.update_data(for_buf, symbols)
 end
 
+local aug = vim.api.nvim_create_augroup('navic', { clear = false })
+
 -- Attach to the given buffer if the client supports document symbols
-local M = function(client, bufnr)
-  if not client.server_capabilities.documentSymbolProvider then
+---@param client vim.lsp.Client | nil
+---@param bufnr number
+local attach = function(client, bufnr)
+  -- if not client.server_capabilities.documentSymbolProvider then
+  if not client or not client:supports_method('textDocument/documentSymbol') then
     return
   end
 
@@ -21,10 +26,9 @@ local M = function(client, bufnr)
   vim.b[bufnr].navic_client_name = client.name
   local changedtick = 0
 
-  local navic_augroup = vim.api.nvim_create_augroup('navic', { clear = false })
   vim.api.nvim_clear_autocmds({
     buffer = bufnr,
-    group = navic_augroup,
+    group = aug,
   })
 
   vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufEnter', 'CursorHold' }, {
@@ -35,7 +39,7 @@ local M = function(client, bufnr)
         lib.request_symbol(bufnr, lsp_callback, client)
       end
     end,
-    group = navic_augroup,
+    group = aug,
     buffer = bufnr,
   })
 
@@ -43,7 +47,7 @@ local M = function(client, bufnr)
     callback = function()
       lib.update_context(bufnr)
     end,
-    group = navic_augroup,
+    group = aug,
     buffer = bufnr,
   })
 
@@ -51,7 +55,7 @@ local M = function(client, bufnr)
     callback = function()
       lib.clear_buffer_data(bufnr)
     end,
-    group = navic_augroup,
+    group = aug,
     buffer = bufnr,
   })
 
@@ -60,4 +64,9 @@ local M = function(client, bufnr)
   lib.request_symbol(bufnr, lsp_callback, client)
 end
 
-return M
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = aug,
+  callback = function(ev)
+    attach(vim.lsp.get_client_by_id(ev.data.client_id), ev.buf)
+  end,
+})

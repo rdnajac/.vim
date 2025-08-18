@@ -12,6 +12,7 @@ M.diagnostics = function()
   return package.loaded['vim.diagnostic'] and vim.diagnostic.status() or ''
 end
 
+-- TODO: add icons from nvim icons
 M.copilot_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name == 'GitHub Copilot' then

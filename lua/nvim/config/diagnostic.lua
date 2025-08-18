@@ -7,10 +7,10 @@ local opts = {
   signs = {
     text = {
       -- TODO: handle errors gracefully?
-      [vim.diagnostic.severity.ERROR] = icons.diagnostics.Error,
-      [vim.diagnostic.severity.WARN] = icons.diagnostics.Warn,
-      [vim.diagnostic.severity.HINT] = icons.diagnostics.Hint,
-      [vim.diagnostic.severity.INFO] = icons.diagnostics.Info,
+      [vim.diagnostic.severity.ERROR] = N.icons.diagnostics.Error,
+      [vim.diagnostic.severity.WARN] = N.icons.diagnostics.Warn,
+      [vim.diagnostic.severity.HINT] = N.icons.diagnostics.Hint,
+      [vim.diagnostic.severity.INFO] = N.icons.diagnostics.Info,
     },
     numhl = {
       [vim.diagnostic.severity.ERROR] = 'Statement',
