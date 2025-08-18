@@ -1,16 +1,20 @@
 local M = {}
 
----@module "snacks"
-
 ---@param picker snacks.Picker
 local toggle = function(picker)
-  local cwd = picker:cwd()
-  local alt = picker.opts.source == 'files' and 'grep' or 'files'
-  picker:close()
-  if alt == 'files' then
-    Snacks.picker.files({ cwd = cwd })
+  -- local f = picker:filter()
+  local opts = {
+    cwd = picker.opts.cwd,
+  }
+  -- if picker.opts.live then
+  --   opts.input.search = f.search
+  -- else
+  --   opts.input.pattern = f.pattern
+  -- end
+  if picker.opts.source == 'grep' then
+    Snacks.picker.files(opts)
   else
-    Snacks.picker.grep({ cwd = cwd })
+    Snacks.picker.grep(opts)
   end
 end
 
@@ -54,45 +58,16 @@ M.opts_extend = {
       keys = {
         ['`'] = { 'toggle', mode = { 'i', 'n' } },
         ['~'] = { 'zoxide', mode = { 'i', 'n' } },
+        ['P'] = {
+          function(p)
+            ddd(p.opts)
+            -- ddd(p)
+          end,
+          mode = { 'n' },
+        },
       },
     },
   },
 }
-
--- TODO: test this against current implementation
--- https://github.com/folke/snacks.nvim/discussions/2003#discussioncomment-13653042
----@type table<string, snacks.picker.Config>
-local reopen_state = {}
-
----@param picker snacks.Picker
----@param source string
----@param opts? snacks.picker.Config
----@diagnostic disable-next-line
-local reopen_picker = function(picker, source, opts)
-  local on_close = picker.opts.on_close
-
-  picker.opts.on_close = function(picker)
-    ---@diagnostic disable-next-line
-    if not picker.skip_reset then
-      reopen_state = {}
-    end
-    if type(on_close) == 'function' then
-      on_close(picker)
-    end
-  end
-  local from_source = picker.opts.source
-  if from_source then
-    reopen_state[from_source] = picker.opts
-    reopen_state[from_source].pattern = picker:filter().pattern
-    reopen_state[from_source].search = picker:filter().search
-  end
-  ---@diagnostic disable-next-line
-  picker.skip_reset = true
-  picker:close()
-  Snacks.picker.pick(
-    source,
-    vim.tbl_extend('force', reopen_state[source] or {}, opts or {})
-  )
-end
 
 return M
