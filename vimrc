@@ -128,13 +128,12 @@ nmap <silent> <C-q> <Cmd>bd<CR>
 
 nnoremap ZX <Cmd>Zoxide<CR>
 
-" nnoremap cdb :cd %:p:h<CR>
-nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
-nnoremap cd- <Cmd>cd %:p:h<Bar>pwd<CR>
-nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
-nnoremap cdh <Cmd>cd<Bar>pwd<CR>
-nnoremap cdg :cd<C-R>=git#root()<CR><Bar>pwd<CR>
-nnoremap cdc :cd<C-R>=git#root()<CR><Bar>pwd<CR>
+nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>   " buffer
+nnoremap cd- <Cmd>cd -<Bar>pwd<CR>       " last dir
+nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR> " parent
+nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR> " parent
+
+nnoremap cdP :edit <C-R>=g:plug_home<CR><Bar>pwd<CR>
 
 nmap <expr> cq change#quote()
 

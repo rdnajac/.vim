@@ -1,5 +1,9 @@
 scriptencoding=utf-8
 
+if !has_key(environ(), 'TMUX')
+  finish
+endif
+
 function! s:tmuxline(fn) abort
   return luaeval("require('vimline.tmuxline')(vim.fn[_A]())", a:fn)
 endfunction
