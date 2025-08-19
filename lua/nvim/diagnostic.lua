@@ -23,8 +23,6 @@ M.opts = {
   },
 }
 
-M.config = function()
-  vim.diagnostic.config(M.opts)
-end
+vim.diagnostic.config(M.opts)
 
 return M

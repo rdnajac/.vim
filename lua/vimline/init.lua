@@ -3,7 +3,11 @@ local vimlineescape = function(str)
   return type(str) == 'string' and str:gsub('%%', '%%%%') or str
 end
 
-local M = {}
+local M = setmetatable({}, {
+  __index = function(_, key)
+    return require('vimline.' .. key)
+  end,
+})
 
 M.file_format = require('vimline.file').format
 M.file_size = require('vimline.file').size
@@ -15,6 +19,7 @@ M.docsymbols = function()
   return require('nvim.lsp.docsymbols').get()
 end
 
+-- TODO: use mini.icons directly 
 --- Get devicon for a buffer by buffer number.
 --- @param bufnr number|nil Buffer number (defaults to current buffer)
 --- @return string icon

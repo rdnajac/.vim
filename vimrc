@@ -196,6 +196,7 @@ nnoremap <leader>db <Cmd>Blink status<CR>
 nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
 nnoremap <leader>dd <Cmd>LazyDev debug<CR>
 nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
+nnoremap <leader>dL <Cmd>=vim.loader._inspect()<CR>
 nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
 nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
 nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>

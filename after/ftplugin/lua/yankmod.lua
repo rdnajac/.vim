@@ -1,4 +1,4 @@
-local modname_fn = require('util.meta').modname
+local modname = require('util').modname
 
 local function set_reg_and_notify(text)
   vim.fn.setreg('*', text)
@@ -7,7 +7,7 @@ end
 
 -- Wraps your yanking actions with module resolution
 local function with_module(action)
-  local module = modname_fn(vim.fn.expand('%:p'))
+  local module = modname(vim.fn.expand('%:p'))
   if module == '' then
     return
   end

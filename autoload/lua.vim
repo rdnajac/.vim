@@ -1,16 +1,8 @@
 " autoload/lua.vim
-" FIXME: 
-function s:lsp_root() abort
-  if has('nvim')
-    return v:vim.lsp.buf.list_workspace_folders()[1]
-  endif
-  return ''
-endfunction
 
-" TODO: fail gracefully?
 function! s:if_vim_handle() abort
   if !has('nvim')
-    throw 'This function is only available in Neovim'
+    call vim#notify#error('This function is only available in Neovim')
   endif
 endfunction
 
@@ -23,6 +15,7 @@ endfunction
 " vint doesn't like `v:lua` so we use a wrapper function
 " NOTE: no args
 function! lua#require(module, method) abort
+  call s:if_vim_handle()
   return v:lua.require(a:module)[a:method]()
 endfunction
 
