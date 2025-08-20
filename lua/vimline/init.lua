@@ -19,7 +19,7 @@ M.docsymbols = function()
   return require('nvim.lsp.docsymbols').get()
 end
 
--- TODO: use mini.icons directly 
+-- TODO: use mini.icons directly
 --- Get devicon for a buffer by buffer number.
 --- @param bufnr number|nil Buffer number (defaults to current buffer)
 --- @return string icon
@@ -48,20 +48,6 @@ M.ft_icon = function(bufnr)
     or ''
 
   return icon .. ' '
-end
-
-M.diagnostics = function()
-  local counts = vim.diagnostic.count(0)
-  local signs = N.diagnostic.opts.signs
-  local result = {}
-
-  for severity, count in pairs(counts) do
-    local icon = signs.text[severity]
-    local hl_group = signs.numhl[severity]
-    table.insert(result, string.format('%%#%s#%s:%d', hl_group, icon, count))
-  end
-
-  return table.concat(result, ' ')
 end
 
 M.copilot_icon = function()

@@ -1,30 +1,5 @@
 local M = {}
 
---- Blink statusline component
-M.blink = function()
-  if not package.loaded['blink.cmp.sources.lib'] then
-    return ''
-  end
-
-  local ok, sources = pcall(require, 'blink.cmp.sources.lib')
-  if not ok then
-    return ''
-  end
-
-  local enabled = sources.get_enabled_providers('default')
-  local source_icons = N.icons.src
-  local out = {}
-
-  for name in pairs(sources.get_all_providers()) do
-    if enabled[name] then
-      table.insert(out, source_icons[name])
-    end
-  end
-
-  return table.concat(out, ' ')
-end
-M.blink()
-
 M.location = function()
   local line = vim.fn.line('.')
   local col = vim.fn.charcol('.')

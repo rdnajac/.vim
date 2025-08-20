@@ -23,9 +23,11 @@ M.opts = vim.tbl_deep_extend('force', enabled, require('nvim.snacks.config'))
 
 M.config = function()
   require('snacks').setup(M.opts)
-  require('nvim.snacks.commands')
-  require('nvim.snacks.keymaps')
-  require('nvim.snacks.munchies')
+  vim.defer_fn(function()
+    require('nvim.snacks.commands')
+    require('nvim.snacks.keymaps')
+    require('nvim.snacks.munchies')
+  end, 0)
 end
 
 return M

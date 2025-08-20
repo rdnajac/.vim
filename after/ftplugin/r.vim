@@ -13,6 +13,7 @@ inoremap <buffer> ins<Tab> renv::install("")<Left><Left>
 inoremap <buffer> lib<Tab> library()<Left>
 
 if has('nvim') && luaeval("package.loaded['r.nvim'] ~= nil")
+  nnoremap <buffer> <localleader>R <Plug>RStart
   nnoremap <buffer> ]r <Plug>NextRChunk
   nnoremap <buffer> [r <Plug>PreviousRChunk
   vnoremap <buffer> <CR> <Plug>RSendSelection

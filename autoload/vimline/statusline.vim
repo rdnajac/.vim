@@ -1,18 +1,22 @@
 " TODO: add padding
-function! vimline#statusline#right() abort
+function! vimline#statusline#meta() abort
   let l:state = state()
   let l:mode = mode()
-  let l:ret = '%='
-  let l:ret .= vimline#indicator#searchcount()
-  let l:ret .= mode ==# 'n' ? ' ' : mode
+  let l:ret = ''
+  if mode[0] ==# 'i'
+    " FIXME: 
+    " let l:ret .= lua#require('plug.blink', 'component')
+    let l:ret .= v:lua.require'plug.blink'.component()
+  elseif mode ==# 'n'
+    let l:ret .= ' ' 
+  endif
   let l:ret .= state !=# '' ? '|'. state : ''
-  let l:ret .= '%S' " showcmd
+  let l:ret .= vimline#indicator#searchcount()
   " let l:ret .= vimline#recording()
-  " let l:ret .= vimline#luacomponent('blink')
-  let l:ret .= mode[0] ==# 'i' ? lua#require('vimline.components', 'blink') : ''
   return ret
 endfunction
 
+" -- TODO: move to winbar?
 function s:term() abort
   " if bufname('%') =~# '^term://'
   let l:prefix = '󱉭 ' . $PWD . ' '
@@ -22,39 +26,17 @@ endfunction
 
 let s:left_sep = '🭛'
 
-function! vimline#statusline#file_parts() abort
-  let [l:root, l:suffix] = path#relative_parts()
-  let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
-  let l:ret = ''
-  let l:ret .= '%#Chromatophore_a# '
-  let l:ret .= l:prefix
-  let l:ret .= '%#Chromatophore_b#'
-  let l:ret .= s:left_sep
-  let l:ret .= l:suffix
-  let l:ret .= s:left_sep
-  let l:ret .= '%#Chromatophore_bc#'
-  let l:ret .= s:left_sep
-  let l:ret .= '%#Chromatophore_c#'
-  return l:ret
-endfunction
-
-function! vimline#statusline#a() abort
-  return '%f'
-endfunction
-
-function! s:flags() abort
-  return lua#require('vimline', 'lua_icons')
-endfunction
-
 function! vimline#statusline#() abort
   let l:ret = ''
+  let l:ret .= '%#Chromatophore_a# '
+  " let l:ret .= '%-12(%{vimline#statusline#meta()}%)%S'
+  let l:ret .= vimline#statusline#meta() . '%S' . ' '
   let l:ret .= '%#Chromatophore_b# '
-  let l:ret .= vimline#statusline#a()
+  let l:ret .= '%f' " file name
   let l:ret .= ' %#Chromatophore_bc#'
   let l:ret .= s:left_sep
   let l:ret .= ' %#Chromatophore_c#'
-  let l:ret .= s:flags()
-  let l:ret .= vimline#statusline#right()
+  let l:ret .= lua#require('vimline', 'lua_icons')
 
   return l:ret
 endfunction

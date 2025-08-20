@@ -1,5 +1,8 @@
 return {
   'folke/todo-comments.nvim',
-  enabled = false,
-  opts = {}
+  enabled = true,
+  opts = {},
+  config = function()
+    require('todo-comments').setup({})
+  end,
 }

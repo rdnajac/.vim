@@ -28,6 +28,7 @@ M.opts = {
     hl['Statement'] = { fg = colors.red }
     hl['Special'] = { fg = colors.red, bold = true }
     hl['SpellBad'] = { bg = colors.red }
+    hl['Winbar'] = { bg = '#3b4261' }
   end,
   plugins = {
     all = false,
