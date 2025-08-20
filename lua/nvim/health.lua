@@ -18,10 +18,10 @@ function M.check()
 
   -- TODO: dynamically add software to this list per plugin
   for _, cmd in ipairs({
-    'cowsay',
-    'fortune',
-    'nnn',
-    'pokeget',
+    -- TODO: move to dashboard health
+    -- 'cowsay',
+    -- 'fortune',
+    -- 'pokeget',
     'quarto',
     'Rscript',
     'tmux',
