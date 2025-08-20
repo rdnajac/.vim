@@ -15,6 +15,7 @@ end
 vim.o.cmdheight = 0
 vim.o.laststatus = 3
 vim.o.pumblend = 0
+-- vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
 
 vim.cmd.runtime('vimrc')

@@ -45,7 +45,6 @@ function! vim#nvim_config() abort
   set jumpoptions+=view
   set mousescroll=hor:0
   set nocdhome
-  set smoothscroll
 
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu

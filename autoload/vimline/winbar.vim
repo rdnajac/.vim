@@ -1,10 +1,4 @@
 scriptencoding=utf-8
-
-function vimline#winbar#b(is_active) abort
-  let l:ret = ''
-  return ret
-endfunction
-
 function! vimline#winbar#() abort
   let l:bt = &buftype
 
@@ -33,7 +27,6 @@ function! vimline#winbar#() abort
   endif
 
   let l:ret .= ' '
-
 
   if l:is_active_buffer
     " if !&modified && !&readonly
