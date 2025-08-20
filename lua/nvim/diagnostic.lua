@@ -1,7 +1,9 @@
 local M = {}
 
+local icons = N.icons.diagnostics
+
 ---@type vim.diagnostic.Opts
-M.opts = {
+local opts = {
   float = { source = true },
   underline = false,
   virtual_text = false,
@@ -9,16 +11,17 @@ M.opts = {
   signs = { text = {}, numhl = {} },
 }
 
-local icons = N.icons.diagnostics
-
--- set up the signs for each severity level
-for severity, name in pairs(vim.diagnostic.severity) do
-  if type(severity) == "number" then
+-- set up the signs and highlights for each severity level
+for name, severity in pairs(vim.diagnostic.severity) do
+  -- capture the severity level as a number and ignore the short names
+  if type(severity) == 'number' and #name > 1 then
     local pretty = name:sub(1, 1) .. name:sub(2):lower()
-    M.opts.signs.text[severity]  = icons[pretty]
-    M.opts.signs.numhl[severity] = "Diagnostic" .. pretty
+    opts.signs.text[severity] = icons[pretty]
+    opts.signs.numhl[severity] = 'Diagnostic' .. pretty
   end
 end
+
+vim.diagnostic.config(opts)
 
 M.component = function()
   local counts = vim.diagnostic.count(0)
@@ -38,14 +41,16 @@ M.component = function()
     :join('')
 end
 
-M.config = function()
-  vim.diagnostic.config(M.opts)
-  -- Snacks.util.set_hl({
-  --   ['1'] = { fg = Snacks.util.color('DiagnosticError'), bg = '#3b4261' },
-  --   ['2'] = { fg = Snacks.util.color('DiagnosticWarn'), bg = '#3b4261' },
-  --   ['3'] = { fg = Snacks.util.color('DiagnosticHint'), bg = '#3b4261' },
-  --   ['4'] = { fg = Snacks.util.color('DiagnosticInfo'), bg = '#3b4261' },
-  -- }, { prefix = 'User', default = true, managed = true })
-end
+-- M.config = function()
+-- Snacks.util.set_hl({
+--   ['1'] = { fg = Snacks.util.color('DiagnosticError'), bg = '#3b4261' },
+--   ['2'] = { fg = Snacks.util.color('DiagnosticWarn'), bg = '#3b4261' },
+--   ['3'] = { fg = Snacks.util.color('DiagnosticHint'), bg = '#3b4261' },
+--   ['4'] = { fg = Snacks.util.color('DiagnosticInfo'), bg = '#3b4261' },
+-- }, { prefix = 'User', default = true, managed = true })
+-- end
+
+-- force luals to generate a diagnostic
+local unused
 
 return M

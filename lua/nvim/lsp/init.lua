@@ -1,6 +1,7 @@
 local M = {}
 
 M.dependencies = {
+  -- 'neovim/nvim-lspconfig',
   'mason-org/mason.nvim',
   'b0o/SchemaStore.nvim',
 }
@@ -81,6 +82,7 @@ M.config = function()
 
   vim.lsp.config('*', M.opts)
   vim.lsp.enable(M.servers)
+  -- vim.lsp.enable('lua_ls')
 
   vim.api.nvim_create_autocmd('LspProgress', {
     callback = function(ev)

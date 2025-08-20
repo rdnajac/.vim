@@ -10,10 +10,6 @@ M.dependencies = {
 
 M.event = 'InsertEnter'
 
-local kind = vim.lsp.protocol.SymbolKind
--- local kind = require('blink.cmp.types').CompletionItemKind
-
-
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {

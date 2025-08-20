@@ -6,7 +6,6 @@ local function get_comment_prefix()
   if not cs or cs == '' then
     return nil
   end
-  -- commentstring is like "// %s" or "/* %s */"
   -- extract prefix before %s
   local prefix = cs:match('^(.*)%%s')
   if prefix then
