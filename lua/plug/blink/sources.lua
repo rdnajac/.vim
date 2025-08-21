@@ -2,6 +2,9 @@
 ---@type blink.cmp.SourceConfig
 local M = {}
 
+local kind = vim.lsp.protocol.SymbolKind
+-- local kind = require('blink.cmp.types').CompletionItemKind
+
 ---@type table<string, blink.cmp.SourceProviderConfig>
 local default_providers = {
   path = {
@@ -35,9 +38,9 @@ local default_providers = {
 
 local ft_sources = {
   lua = { 'lazydev' },
-  r = { 'cmp_r' },
-  rmd = { 'cmp_r' },
-  quarto = { 'cmp_r' },
+  -- r = { 'cmp_r' },
+  -- rmd = { 'cmp_r' },
+  -- quarto = { 'cmp_r' },
   sh = { 'env' },
 }
 

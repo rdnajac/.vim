@@ -1,3 +1,5 @@
+local M = {}
+
 local tracked_cmd = { 'git', 'ls-tree', 'HEAD', '--name-only' }
 local ignored_cmd =
   { 'git', 'ls-files', '--ignored', '--exclude-standard', '--others', '--directory' }
@@ -17,7 +19,7 @@ local function get_files(path, cmd)
 end
 
 -- build git status cache using vim.defaulttable
-local function status()
+M.status = function()
   return vim.defaulttable(function(path)
     return {
       ignored = get_files(path, ignored_cmd),
@@ -26,4 +28,14 @@ local function status()
   end)
 end
 
-return status
+M.test = function(path)
+  return M.status()[path or vim.uv.cwd()]
+end
+
+-- print(vim.inspect(M.test(vim.fn.expand('~/.vim/lua/plug'))))
+
+return setmetatable(M, {
+  __call = function()
+    return M.status()
+  end,
+})

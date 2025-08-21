@@ -84,10 +84,6 @@ end
 
 --- Blink statusline component
 M.component = function()
-  if not package.loaded['blink.cmp.sources.lib'] then
-    return ''
-  end
-
   local ok, sources = pcall(require, 'blink.cmp.sources.lib')
   if not ok then
     return ''
@@ -95,18 +91,16 @@ M.component = function()
 
   local enabled = sources.get_enabled_providers('default')
   local source_icons = N.icons.src
-  local out = {}
 
-  for name in pairs(sources.get_all_providers()) do
-    if enabled[name] then
-      table.insert(out, source_icons[name])
-    end
-  end
-
-  return table.concat(out, ' ')
+  return vim
+    .iter(sources.get_all_providers())
+    :filter(function(name)
+      return enabled[name] ~= nil
+    end)
+    :map(function(name)
+      return source_icons[name] or ''
+    end)
+    :join('')
 end
-
-print(M.component())
-
 
 return M

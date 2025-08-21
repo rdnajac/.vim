@@ -14,10 +14,13 @@ augroup syntax
   " highlight error for vim scripts
   autocmd BufReadPost,BufNewFile *.vim if search('vim9script', 'nw') == 0 | syn match Error /^\s*#.*$/ | endif
 augroup End
-# kflse
 
-
-highlight CommentStringInBackticks guibg=NONE guifg=#39ff14
-" syntax region CommentStringInBackticks start=/`/ end=/`/ contained containedin=.*Comment
+" highlight source code inside comments
 syntax region Chromatophore start=/`/ end=/`/ contained containedin=.*Comment
-" side effect? also highlights vimCommentString 
+" side effect? also highlights vimCommentString
+
+finish
+" testing
+lua vim.print("syntax loaded")
+lua Snacks.notify.info("syntax loaded")
+echom v:lua.require'snacks'.notify.info('syntax loaded')
