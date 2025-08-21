@@ -16,18 +16,14 @@ local function get_files(path, cmd)
   return ret
 end
 
--- build git status cache
+-- build git status cache using vim.defaulttable
 local function status()
-  return setmetatable({}, {
-    __index = function(self, key)
-      local ret = {
-        ignored = get_files(key, ignored_cmd),
-        tracked = get_files(key, tracked_cmd),
-      }
-      rawset(self, key, ret)
-      return ret
-    end,
-  })
+  return vim.defaulttable(function(path)
+    return {
+      ignored = get_files(path, ignored_cmd),
+      tracked = get_files(path, tracked_cmd),
+    }
+  end)
 end
 
 return status
