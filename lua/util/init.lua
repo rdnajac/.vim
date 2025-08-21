@@ -19,7 +19,8 @@ function M.for_each_module(fn, subpath, recursive)
 
   for _, f in ipairs(files) do
     local mod = M.modname(f)
-    if mod:sub(-5) ~= '/init' then
+    -- if mod:sub(-5) ~= '/init' then
+    if not vim.endswith(mod, '/init') then
       fn(mod)
     end
   end

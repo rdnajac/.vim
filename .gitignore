@@ -1,5 +1,4 @@
-# ignore vim artefacts
+.netrwhist
 .viminfo
 .vimlog.txt
-.netrwhist
 Session.vim

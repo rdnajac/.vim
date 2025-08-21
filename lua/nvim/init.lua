@@ -1,14 +1,20 @@
-local M = {}
+-- local M = {}
+
+local M = vim.defaulttable(function(k)
+  return require('nvim.' .. k)
+end)
+
+-- setmetatable(M, {
+--   __index = function(t, k)
+--     t[k] = require('nvim.' .. k)
+--     return rawget(t, k)
+--   end,
+-- })
+
 
 -- add this module to the global namespace
 _G.N = M
 
-setmetatable(M, {
-  __index = function(t, k)
-    t[k] = require('nvim.' .. k)
-    return rawget(t, k)
-  end,
-})
 
 -- override vim.notify to provide additional highlighting
 -- vim.notify = require('nvim.notify')

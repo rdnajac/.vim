@@ -26,7 +26,8 @@ local function to_spec(module)
 
   -- convert shorthand github user/repo to full git url
   if src:match('^%w[%w._-]*/[%w._-]+$') then
-    src = 'https://github.com/' .. src .. (src:sub(-4) ~= '.git' and '.git' or '')
+    -- src = 'https://github.com/' .. src .. (src:sub(-4) ~= '.git' and '.git' or '')
+    src = 'https://github.com/' .. src .. (vim.endswith(src, '.git') and '' or '.git')
   end
 
   return {

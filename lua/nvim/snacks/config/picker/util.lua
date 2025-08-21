@@ -32,6 +32,11 @@ local zoxide = function(picker)
   })
 end
 
+-- TODO: Find command scriptnames picker in git history
+M.pick_conf = {
+  confirm = 'edit',
+}
+
 M.opts_extend = {
   actions = {
     toggle = function(self)

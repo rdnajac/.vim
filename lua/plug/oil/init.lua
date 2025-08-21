@@ -118,26 +118,17 @@ M.opts = {
   },
 }
 
-  -- stylua: ignore
-M.keymaps = function()
-  vim.keymap.set('n', '-', function() require('oil').open_float() end, { desc = 'Open Oil in float' })
-  vim.keymap.set('n', '_', function() require('oil').open() end, { desc = 'Open Oil in current window' })
-end
+M.config = function()
+  vim.keymap.set('n', '-', '<Cmd>Oil<CR>')
+  require('oil').setup(M.opts)
+  require('plug.oil.autocmds')
 
-M.git = function()
   local refresh = require('oil.actions').refresh
   local orig_refresh = refresh.callback
   refresh.callback = function(...)
     git_status_cache = git_status.new()
     orig_refresh(...)
   end
-end
-
-M.config = function()
-  require('oil').setup(M.opts)
-  require('plug.oil.autocmds')
-  M.git()
-  M.keymaps()
 end
 
 return M
