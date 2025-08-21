@@ -1,7 +1,6 @@
-local M = {}
-
----@alias GitStatus { ignored: table<string, boolean>, tracked: table<string, boolean> }
----@alias GitStatusCache table<string, GitStatus>
+local tracked_cmd = { 'git', 'ls-tree', 'HEAD', '--name-only' }
+local ignored_cmd =
+  { 'git', 'ls-files', '--ignored', '--exclude-standard', '--others', '--directory' }
 
 ---@param path string
 ---@param cmd string[]
@@ -11,27 +10,24 @@ local function get_files(path, cmd)
   local ret = {}
   if result.code == 0 then
     for line in vim.gsplit(result.stdout, '\n', { plain = true, trimempty = true }) do
-      line = line:gsub('/$', '')
-      ret[line] = true
+      ret[line:gsub('/$', '')] = true
     end
   end
   return ret
 end
 
----@return GitStatusCache
-function M.new()
+-- build git status cache
+local function status()
   return setmetatable({}, {
-    __index = function(self, path)
-      ---@type GitStatus
-      local status = {
-        ignored = get_files(path, { 'git', 'ls-files', '--ignored', '--exclude-standard', '--others', '--directory' }),
-        tracked = get_files(path, { 'git', 'ls-tree', 'HEAD', '--name-only' }),
+    __index = function(self, key)
+      local ret = {
+        ignored = get_files(key, ignored_cmd),
+        tracked = get_files(key, tracked_cmd),
       }
-
-      rawset(self, path, status)
-      return status
+      rawset(self, key, ret)
+      return ret
     end,
   })
 end
 
-return M
+return status

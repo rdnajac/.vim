@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd('User', {
       if action.type == 'delete' then
         local _, path = require('oil.util').parse_url(action.url)
         Snacks.bufdelete({ file = path, force = true })
-        vim.cmd.edit(vim.fn.fnamemodify(path, ':h'))
+        -- vim.cmd.edit(vim.fn.fnamemodify(path, ':h'))
       end
     end
   end,
