@@ -1,4 +1,3 @@
----@module "snacks"
 ---@class Snacks: snacks.plugins
 local M = {}
 

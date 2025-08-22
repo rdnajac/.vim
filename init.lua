@@ -45,12 +45,30 @@ _G.bt = function() Snacks.debug.backtrace() end
 _G.ddd = function(...) return Snacks.debug.inspect(...) end
 -- stylua: ignore end
 vim.print = _G.ddd
+
+---@type snacks.Config
+local enabled = {
+  bigfile = { enabled = true },
+  dashboard = { enabled = false },
+  explorer = { enabled = true },
+  image = { enabled = false },
+  indent = { enabled = true },
+  input = { enabled = true },
+  notifier = { enabled = false },
+  quickfile = { enabled = true },
+  scope = { enabled = true },
+  scroll = { enabled = true },
+  -- TODO:
+  statuscolumn = { enabled = false },
+  words = { enabled = true },
+}
+
+-- TODO: merge all opts, without nested requires
+-- require('nvim.snacks').setup(vim.tbl_deep_extend('force', enabled, require('nvim.snacks.config')))
+-- require('nvim.snacks').setup(require('nvim.snacks.config'))
+require('snacks').setup(require('nvim.snacks.config'))
+
 -- TODO: Make this make sense
--- local snacks = Plug('nvim.snacks')
--- Plug.do_configs({ Plug('nvim.snacks') })
-require('nvim.snacks')
-
-
 Plug.do_configs({
   Plug('nvim.colorscheme'),
   Plug('nvim.diagnostic'),
