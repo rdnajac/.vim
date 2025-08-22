@@ -13,9 +13,9 @@ local win = {
       ['<a-f>'] = { 'toggle_follow', mode = { 'n' } },
       -- <M-f> Go forwards one word.
       ['<c-a>'] = { 'select_all', mode = { 'n' } },
-      -- <C-b> Go backwards one character.
-      ['<c-b>'] = { 'preview_scroll_up', mode = { 'n' } },
       -- <C-a> Go to beginning of line.
+      ['<c-b>'] = { 'preview_scroll_up', mode = { 'n' } },
+      -- <C-b> Go backwards one character.
       ['<c-d>'] = { 'list_scroll_down', mode = { 'n' } },
       -- <C-d> Delete character in front of cursor.
 

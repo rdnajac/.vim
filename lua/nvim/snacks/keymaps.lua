@@ -25,6 +25,8 @@ pick_dir('v', '$VIMRUNTIME')
 pick_dir('V', '$VIM')
 pick_dir('p', '~/.vim/pack', {ignored=true, hidden=false})
 pick_dir('P', vim.g.plug_home, {ft={'lua','vim'}})
+-- TODO: this should be items not cwd
+-- pick_dir('N', vim.api.nvim_list_runtime_paths(), {ft={'lua','vim'}})
 
 vim.keymap.set('n', ',,', function() Snacks.picker.buffers() end, { desc = 'Buffers' })
 vim.keymap.set('n', '<leader>bb', function() Snacks.picker.buffers() end, { desc = 'Buffers' })

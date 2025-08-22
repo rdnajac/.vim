@@ -70,7 +70,6 @@ let &laststatus = has('nvim') ? 3 : 2
 " Section: autocmds {{{1
 augroup vimrc
   autocmd!
-  " au BufWritePost vimrc call vim#notify#info('Sourced vimrc!')
   au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
@@ -277,12 +276,13 @@ xnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
 
 " better n/N {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n {{{
-" normal mode also openz folds and centers the cursor
-nnoremap <expr> n ('Nn'[v:searchforward]) . 'zvzz'
+nmap n nzz
+" nnoremap <expr> n  'Nn'[v:searchforward]
 xnoremap <expr> n  'Nn'[v:searchforward]
 onoremap <expr> n  'Nn'[v:searchforward]
 
-nnoremap <expr> N ('nN'[v:searchforward]) . 'zvzz'
+nmap N Nzz
+" nnoremap <expr> N  'nN'[v:searchforward]
 xnoremap <expr> N  'nN'[v:searchforward]
 onoremap <expr> N  'nN'[v:searchforward]
 
@@ -377,15 +377,15 @@ if !has('nvim')
 else
   " Plug! 'rdnajac/vim-lol'
   Plug 'folke/tokyonight.nvim'
-  " Plug 'folke/snacks.nvim'
+  Plug 'folke/snacks.nvim'
 endif
 call plug#end()
 " }}}1
 
 " Section: commands {{{1
-command! -nargs=1 Info  call vim#notify#info(<q-args>)
-command! -nargs=1 Warn  call vim#notify#warn(<q-args>)
-command! -nargs=1 Error call vim#notify#error(<q-args>)
+command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
+command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
+command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 " }}}
 
 if !exists('g:vimrc_reload_count')
@@ -393,6 +393,5 @@ if !exists('g:vimrc_reload_count')
   color scheme " set the default colorscheme once
 else
   let g:vimrc_reload_count += 1
-  let msg = 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
-  call vim#notify#info(msg)
+  Info 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
 endif

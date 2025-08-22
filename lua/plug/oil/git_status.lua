@@ -31,7 +31,6 @@ end
 M.test = function(path)
   return M.status()[path or vim.uv.cwd()]
 end
-
 -- print(vim.inspect(M.test(vim.fn.expand('~/.vim/lua/plug'))))
 
 return setmetatable(M, {

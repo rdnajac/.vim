@@ -1,6 +1,6 @@
 " https://github.com/tpope/vim-sensible
 " also see `:h defaults.vim` and `$VIMRUNTIME/defaults.vim`
-function! vim#sensible#setup() abort
+function! vim#sensible#() abort
   set autoread
   set backspace=indent,eol,start
   set complete-=i

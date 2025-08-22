@@ -5,6 +5,14 @@ M.specs = {
   -- 'projekt0n/github-nvim-theme',
 }
 
+local bg = {
+  black = '#000000',
+  eigengrau = '#16161d',
+  darkgrey = '#1f2335',
+  tokyonight = '#24283b',
+  lualine = '#3b4261',
+}
+
 ---@type tokyonight.Config
 M.opts = {
   style = 'night',
@@ -21,14 +29,14 @@ M.opts = {
     colors.blue = '#14afff'
     colors.green = '#39ff14'
     -- colors.red = '#f7768e'
-    -- colors.darkgrey = '#1f2335'
   end,
   on_highlights = function(hl, colors)
-    hl['Cmdline'] = { bg = '#000000' }
+    hl['Cmdline'] = { bg = bg.black }
     hl['Statement'] = { fg = colors.red }
     hl['Special'] = { fg = colors.red, bold = true }
     hl['SpellBad'] = { bg = colors.red }
-    hl['WinBar'] = { bg = '#3b4261' }
+    hl['WinBar'] = { bg = bg.lualine }
+    hl['WinBorder'] = { bg = bg.lualine }
   end,
   plugins = {
     all = false,

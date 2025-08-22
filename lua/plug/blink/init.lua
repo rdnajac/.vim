@@ -16,19 +16,21 @@ M.opts = {
   fuzzy = { implementation = 'lua' },
   cmdline = { enabled = false },
   completion = {
-    accept = { auto_brackets = { enabled = true } },
-    -- documentation = { auto_show = true, window = { border = 'single' } },
+    accept = { auto_brackets = { enabled = false } },
+    documentation = {
+      auto_show = true,
+      window = { vim.o.winborder == '' and 'single' or nil },
+    },
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
-      -- auto_show = true,
-      -- border = 'single',
+      auto_show = true,
+      border = vim.o.winborder == '' and 'single' or nil,
       draw = {
         treesitter = { 'lsp' },
         columns = {
-
           { 'kind_icon' },
           { 'label', 'label_description', gap = 1 },
-          -- { 'source_name' },
+          { 'source_name' },
           -- { 'source_id' },
         },
         components = {
@@ -72,6 +74,9 @@ M.opts = {
   },
   sources = require('plug.blink.sources'),
 }
+
+-- M.keys = { 
+  -- { 'i', '$', $
 
 M.config = function()
   require('blink.cmp').setup(M.opts)

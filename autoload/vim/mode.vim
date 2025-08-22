@@ -2,32 +2,31 @@
 
 " TODO: link to highlight group
 let s:ModeColor = {
-\ 'normal':   '#9ECE6A',
-\ 'insert':   '#39FF14',
-\ 'visual':   '#F7768E',
-\ 'select':   '#FF9E64',
-\ 'replace':  '#FF007C',
-\ 'command':  '#E0AF68',
-\ 'terminal': '#BB9AF7',
-\ 'pending':  '#FFFFFF',
-\ 'shell':    '#14AEFF',
-\ }
+      \ 'normal':   '#9ECE6A',
+      \ 'insert':   '#39FF14',
+      \ 'visual':   '#F7768E',
+      \ 'select':   '#FF9E64',
+      \ 'replace':  '#FF007C',
+      \ 'command':  '#E0AF68',
+      \ 'terminal': '#BB9AF7',
+      \ 'pending':  '#FFFFFF',
+      \ 'shell':    '#14AEFF',
+      \ }
 
 function! vim#mode#(...) abort
   let m = a:0 ? a:1 : mode(1)
 
-  if m =~# '^no'
+  " Detect true operator-pending only if we're still waiting
+  " if m =~# '^no' && getchar(1)
+  if m =~# '^no' && getchar(1) == 0
     return 'pending'
-  endif
-  if m[0] ==# 'v' || m[0] ==# 'V' || m =~# '^\<C-V>'
+  elseif m[0] ==# 'n'
+    return 'normal'
+  elseif m[0] ==? 'v' || m =~# ''
     return 'visual'
-  endif
-  if m[0] ==# 's' || m[0] ==# 'S' || m =~# '^\<C-S>'
+  elseif m[0] ==? 's'|| m =~# '^\<C-S>'
     return 'select'
-  endif
-  " if m[0] ==# 'n'
-    " return 'normal'
-  if m[0] ==# 'i'
+  elseif m[0] ==# 'i'
     return 'insert'
   elseif m[0] ==# 'R'
     return 'replace'

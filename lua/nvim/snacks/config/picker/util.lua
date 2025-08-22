@@ -2,20 +2,15 @@ local M = {}
 
 ---@param picker snacks.Picker
 local toggle = function(picker)
-  -- local f = picker:filter()
-  local opts = {
-    cwd = picker.opts.cwd,
-  }
-  -- if picker.opts.live then
-  --   opts.input.search = f.search
-  -- else
-  --   opts.input.pattern = f.pattern
-  -- end
-  if picker.opts.source == 'grep' then
-    Snacks.picker.files(opts)
-  else
-    Snacks.picker.grep(opts)
-  end
+  vim.cmd('norm! dd')
+  local opts = { cwd = picker.opts.cwd }
+  local alt = picker.opts.source == 'grep' and 'files' or 'grep'
+
+  picker:close()
+  Snacks.picker(alt, opts)
+  vim.schedule(function()
+    vim.api.nvim_feedkeys(vim.keycode('<C-R>"'), 'i', false)
+  end)
 end
 
 ---@param picker snacks.Picker
@@ -27,7 +22,7 @@ local zoxide = function(picker)
     confirm = function(z, item)
       z:close()
       opts.cwd = item.file
-      Snacks.picker.pick(opts)
+      Snacks.picker(opts)
     end,
   })
 end

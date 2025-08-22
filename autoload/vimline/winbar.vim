@@ -29,16 +29,16 @@ function! vimline#winbar#() abort
   let l:ret .= ' '
   if l:is_active_buffer
     " if !&modified && !&readonly
-      " let l:ret .= '%#Chromatophore_c#'
+    " let l:ret .= '%#Chromatophore_c#'
     " else
-      let l:ret .= '%#Chromatophore_b#'
-      let l:ret .= ' '
-      let l:ret .= vimline#flag#('readonly')
-      let l:ret .= vimline#flag#('modified')
-      " let l:ret .= lua#require('nvim.diagnostic', 'component')
-      let l:ret .= v:lua.require'nvim.diagnostic'.component()
-      let l:ret .= '%#Chromatophore_bc#'
-      let l:ret .= '%#Chromatophore_c#'
+    let l:ret .= '%#Chromatophore_b#'
+    let l:ret .= ' '
+    let l:ret .= vimline#flag#('readonly')
+    let l:ret .= vimline#flag#('modified')
+    " let l:ret .= lua#require('nvim.diagnostic', 'component')
+    let l:ret .= v:lua.require'nvim.diagnostic'.component()
+    let l:ret .= '%#Chromatophore_bc#'
+    let l:ret .= '%#Chromatophore_c#'
     " endif
     let l:ret .= lua#require('vimline', 'docsymbols')
   else " inactive winbar

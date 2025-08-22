@@ -1,13 +1,12 @@
 if !exists('g:chromatophore_groups')
   let g:chromatophore_groups = [
-	\  'FloatBorder',
-	\  'Folded',
-	\  'MsgArea',
-	\  'StatusLineNC',
-	\  'StatusLineTermNC',
-	\  'String',
-	\  'WinSeparator',
-	\  'helpSectionDelim',
+	\ 'FloatBorder',
+	\ 'Folded',
+	\ 'MsgArea',
+	\ 'StatusLineNC',
+	\ 'StatusLineTermNC',
+	\ 'String',
+	\ 'helpSectionDelim',
 	\ ]
 endif
 

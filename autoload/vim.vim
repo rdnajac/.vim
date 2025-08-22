@@ -7,7 +7,7 @@ function! vim#on_init(fn) abort
 endfunction
 
 function! vim#home() abort
-  return has('nvim') ? stdpath('config') : split(&rtp, ',')[0]
+  return has('nvim') ? stdpath('config') : split(&runtimepath, ',')[0]
 endfunction
 
 function! vim#rc() abort
@@ -29,7 +29,7 @@ function! vim#vim_init() abort
     set grepformat=%f:%l:%c:%m
   endif
 
-  call vim#sensible#setup()
+  call vim#sensible#()
 endfunction
 
 function! vim#nvim_config() abort
@@ -49,15 +49,20 @@ function! vim#nvim_config() abort
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
 
-  if !exists('g:nvim_init_count')
-    let g:nvim_init_count = 0
+  if !exists('g:nvim_init')
+    let g:nvim_init = 0
   else
-    let g:nvim_init_count += 1
-    let msg = 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
+    let g:nvim_init += 1
+    let msg = 'nvim init count [' . g:nvim_init . ']'
     call vim#notify#info(msg)
   endif
 endfunction
 
 function! vim#nvim_init() abort
-  call vim#on_init(function('vim#nvim_config'))
+  if !exists('g:nvim_did_init')
+    call vim#on_init(function('vim#nvim_config'))
+    let g:nvim_did_init = 1
+  endif
 endfunction
+
+" TODO: template function to create or increment global variable

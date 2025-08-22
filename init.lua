@@ -27,7 +27,7 @@ _G.Require = function(module)
   local ok, mod = xpcall(require, debug.traceback, module)
   if not ok then
     vim.schedule(function()
-      error(mod)
+      error(mod) -- why are we scheduling the error?
     end)
     return nil
   end
@@ -40,15 +40,15 @@ Require('nvim')
 
 local Plug = N.plug
 
--- TODO: Make this make sense
--- local snacks = Plug('nvim.snacks')
-Plug.do_configs({ Plug('nvim.snacks') })
-
 -- stylua: ignore start
 _G.bt = function() Snacks.debug.backtrace() end
 _G.ddd = function(...) return Snacks.debug.inspect(...) end
 -- stylua: ignore end
 vim.print = _G.ddd
+-- TODO: Make this make sense
+-- local snacks = Plug('nvim.snacks')
+Plug.do_configs({ Plug('nvim.snacks') })
+
 
 Plug.do_configs({
   Plug('nvim.colorscheme'),
