@@ -1,5 +1,3 @@
-local M = { 'folke/snacks.nvim' }
-
 ---@module "snacks"
 ---@type snacks.Config
 local enabled = {
@@ -19,15 +17,6 @@ local enabled = {
 }
 
 -- TODO: merge all opts, without nested requires
-M.opts = vim.tbl_deep_extend('force', enabled, require('nvim.snacks.config'))
+local opts = vim.tbl_deep_extend('force', enabled, require('nvim.snacks.config'))
 
-M.config = function()
-  require('snacks').setup(M.opts)
-  vim.defer_fn(function()
-    require('nvim.snacks.commands')
-    require('nvim.snacks.keymaps')
-    require('nvim.snacks.munchies')
-  end, 0)
-end
-
-return M
+require('snacks').setup(opts)

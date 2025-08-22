@@ -47,7 +47,8 @@ _G.ddd = function(...) return Snacks.debug.inspect(...) end
 vim.print = _G.ddd
 -- TODO: Make this make sense
 -- local snacks = Plug('nvim.snacks')
-Plug.do_configs({ Plug('nvim.snacks') })
+-- Plug.do_configs({ Plug('nvim.snacks') })
+require('nvim.snacks')
 
 
 Plug.do_configs({
