@@ -27,7 +27,7 @@ function! reload#vimscript(file) abort
   call vim#notify#info('Sourced ' . a:file . '!')
 endfunction
 
-function! reload#vim() abort
+function! reload#() abort
   if exists(':Runtime')
     let files = globpath(&rtp, '**/*.vim', 0, 1)
     call execute#inPlace('Runtime! ' . join(files))

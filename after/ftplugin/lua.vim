@@ -1,5 +1,7 @@
 setlocal expandtab
 setlocal formatoptions-=ro
+setlocal foldtext=fold#text_lua()
+" setlocal foldtext=
 
 let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
 

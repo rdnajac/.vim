@@ -1,7 +1,7 @@
 if exists('g:loaded_plug')
   finish
 endif
-let g:loaded_plug = 2
+let g:loaded_plug = 2 " `junegunn/vim-plug` sets this to 1
 
 function! plug#begin() abort
   let g:plugins = []
@@ -15,9 +15,8 @@ function! s:plug(bang, qargs) abort
   let l:repo = 'https://github.com/' . expand(eval(a:qargs)) . '.git'
 
   if a:bang " install immediately
-    " call luaeval('vim.pack.add({_A})', s:gh(l:repo))
     execute 'lua vim.pack.add({"' . l:repo . '"}, { confirm = false })'
-  else
+  else " add to list for later installation
     call add(g:plugins, l:repo)
   endif
 endfunction
@@ -29,8 +28,10 @@ function! plug#end() abort
       lua vim.pack.add(vim.g.plugins, { confirm = false })
     endif
   else
-    " from tpope/vim-sensible
-    if !(exists('g:did_load_filetypes') && exists('g:did_load_ftplugin') && exists('g:did_indent_on'))
+    " from `tpope/vim-sensible`
+    if !(exists('g:did_load_filetypes')
+	  \ && exists('g:did_load_ftplugin')
+	  \ && exists('g:did_indent_on'))
       filetype plugin indent on
     endif
     if has('syntax') && !exists('g:syntax_on')

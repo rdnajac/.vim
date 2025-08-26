@@ -1,3 +1,4 @@
+" vim:fdm=marker
 scriptencoding=utf-8
 call vim#rc()
 
@@ -59,12 +60,6 @@ set listchars+=extends:>,
 set listchars+=precedes:<,
 set listchars+=nbsp:+
 
-" set foldcolumn=1
-set number
-set numberwidth=4
-set signcolumn=number
-
-let &laststatus = has('nvim') ? 3 : 2
 " }}}1
 
 " Section: autocmds {{{1
@@ -108,6 +103,7 @@ augroup vimrc_filetype
   autocmd!
   au FileType json,jsonc,json5 setlocal conceallevel=0 expandtab
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
+
   au FileType man setlocal nobuflisted
 augroup END
 " }}}1
@@ -156,6 +152,9 @@ nmap zJ ]ekJ
 " `surround`
 nmap S viWS
 vmap ` S`
+
+" xmap ga <Plug>(EasyAlign)
+" nmap ga <Plug>(EasyAlign)
 " }}}
 
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
@@ -337,6 +336,7 @@ nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
+
 " }}}1
 
 " Section: plugins {{{1
@@ -379,6 +379,7 @@ else
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/snacks.nvim'
 endif
+
 call plug#end()
 " }}}1
 

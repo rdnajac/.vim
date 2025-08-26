@@ -5,7 +5,7 @@ return {
   root_markers = { '.luarc.json', '.luarc.jsonc', 'stylua.toml' },
   settings = {
     Lua = {
-      -- diagnostics = { disable = { 'missing-fields' } },
+      diagnostics = { disable = { 'missing-fields' } },
       hover = {
         previewFields = 255,
       },

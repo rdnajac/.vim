@@ -1,3 +1,8 @@
+" set foldcolumn=1
+" set signcolumn=number
+" set numberwidth=3
+
+let &laststatus = has('nvim') ? 3 : 2
 set statusline=%!vimline#statusline#()
 
 if !has('nvim')
@@ -6,6 +11,9 @@ endif
 
 " TODO: rewrite winbar in lua since its nvim only
 set winbar=%{%vimline#winbar#()%}
+" set statuscolumn=%!vimline#statuscolumn#()
+" set statuscolumn=%!v:lua.require'vimline.statuscolumn'()
+" set statuscolumn=%{if(&number,printf('%4d',v:lnum),repeat(' ',4)).'│'}
 
 augroup vimline
   autocmd!

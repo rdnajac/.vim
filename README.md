@@ -47,7 +47,7 @@ dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-di
 ### list of dictionaries
 
 ```sh
-vimnpx cspell dictionaries
+npx cspell dictionaries
 ```
 
 ## QoL

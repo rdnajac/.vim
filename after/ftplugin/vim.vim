@@ -1,17 +1,15 @@
-" make sure there's a space after the comment character
-setlocal commentstring=\"\ %s
-
-setlocal iskeyword-=#
-setlocal formatoptions -=ro
+setlocal commentstring=\"\ %s " add space after the comment character
+setlocal iskeyword-=#         " makes autoloaded functions easier to `ciw`
+setlocal formatoptions-=ro    " don't continue comments with 'o' or 'O'
 
 nnoremap <leader>ch <Cmd>call edit#ch()<CR>
 
-inoremap <buffer> \enc scriptencoding=utf-8
+inoremap <buffer> enc scriptencoding=utf-8
 
 " Scriptease help and lsp hover collide
 nmap <silent><buffer> <leader>K <Plug>ScripteaseHelp
 
 " nnoremap <buffer> K <Cmd>lua vim.lsp.buf.hover()<CR>
-" hover doesn't work on settings prefixed with 'no'
+" BUG: hover doesn't work on settings prefixed with 'no'
 " and some settings like 'showcmdloc'
 " this might be an issue with vimls itself

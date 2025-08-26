@@ -15,9 +15,9 @@ function! fold#text_lua()
 endfunction
 
 function! fold#text() abort
-  if &ft ==# 'lua'
-    return fold#text_lua()
-  endif
+  " if &ft ==# 'lua'
+  "   return fold#text_lua()
+  " endif
   let s:foldchar = '.'
   let l:line1 = getline(v:foldstart)
 

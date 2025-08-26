@@ -3,9 +3,8 @@
 " solves, so disable it.
 set sessionoptions-=options " default in nvim
 set sessionoptions-=blank " from vim-obsession
-
-" TODO: tabpages?
-" set sessionoptions+=tabpages " from vim-obsession
+" keep tabpages separate (per project)
+set sessionoptions-=tabpages
 
 " viewoptions change the effect of the `:mkview`
 set viewoptions-=options " from defaults.vim
@@ -26,7 +25,7 @@ function! s:restart() abort
     let cmd = 'silent! source ' . sesh
     execute 'confirm restart ' cmd
   else
-    call reload#vim()
+    call reload#()
   endif
 endfunction
 

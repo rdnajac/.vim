@@ -1,8 +1,8 @@
 local diff = require('mini.diff')
-
-diff.setup({
-  view = { style = 'number', signs = { add = '▎', change = '▎', delete = '' } },
-})
+-- local signs = { add = '▎', change = '▎', delete = '' },
+-- local signs = N.icons.git
+diff.setup({ view = { style = 'number' } })
+-- diff.setup({})
 
 Snacks.toggle({
   name = 'Mini Diff Signs',
