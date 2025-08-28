@@ -52,26 +52,6 @@ M.opts = {
     ['<Down>'] = { 'select_next', 'fallback' },
     ['<Right>'] = { 'select_next', 'fallback' },
     ['<C-j>'] = { 'select_next', 'fallback' },
-    ['<Tab>'] = {
-      function(cmp)
-        local item = cmp.get_selected_item()
-        local type = require('blink.cmp.types').CompletionItemKind
-
-        if cmp.is_visible() and item then
-          -- if item.kind == type.Snippet then
-          if item.kind == type.Path then
-            cmp.accept()
-            vim.defer_fn(function()
-              cmp.show({ providers = { 'path' } })
-            end, 1)
-            return true
-          else
-            return cmp.accept()
-          end
-        end
-      end,
-      'fallback',
-    },
   },
   sources = require('plug.blink.sources'),
 }

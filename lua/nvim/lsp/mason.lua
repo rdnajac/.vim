@@ -43,28 +43,34 @@ end
 
 M.list = function()
   local pkgs = M.reg.get_all_packages()
-  local names = {}
-  for _, pkg in ipairs(pkgs) do
-    if pkg:is_installed() then
-      table.insert(names, pkg.name)
-    end
-  end
-  return names
+
+  return vim.tbl_map(
+    function(pkg)
+      return pkg.name
+    end,
+    vim.tbl_filter(function(pkg)
+      return pkg:is_installed()
+    end, pkgs)
+  )
 end
 
-M.mason_map = function()
+M.map = function()
   local _ = require('mason-core.functional')
 
   -- Cache the package specs
+  -- TODO:DRY?
   local cached_specs = _.lazy(M.reg.get_all_package_specs)
+
   M.reg:on('update:success', function()
     cached_specs = _.lazy(M.reg.get_all_package_specs)
   end)
 
-  -- Build mappings
   local mason_map = {}
+
+  -- TODO:use tbl func?
   for _, pkg_spec in ipairs(cached_specs()) do
     local lspconfig = vim.tbl_get(pkg_spec, 'neovim', 'lspconfig')
+
     if lspconfig then
       mason_map[lspconfig] = pkg_spec.name
     end
@@ -74,22 +80,23 @@ M.mason_map = function()
 end
 
 M.ensure_installed = function()
-  local map = M.mappings()
-  local servers = {}
+  local map = M.map()
+  local servers = require('nvim.lsp').servers
 
-  for _, server in ipairs(require('nvim.lsp').servers) do
-    local mason_name = map[server]
-    if mason_name then
-      table.insert(servers, mason_name)
-    end
-  end
-
-  return servers
+  return vim.tbl_map(
+    function(server)
+      return map[server]
+    end,
+    vim.tbl_filter(function(server)
+      return map[server] ~= nil
+    end, require('nvim.lsp').servers)
+  )
 end
 
--- TODO:
--- M.update = function()
---
--- end
+M.update = function()
+  M.install(M.ensure_installed())
+  -- TODO: update all?
+  -- TODO: build hook on update
+end
 
 return M

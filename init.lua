@@ -172,6 +172,28 @@ Snacks.toggle.zoom():map('<leader>uZ')
 -- munchies_toggle.color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
 -- munchies_toggle.winborder():map('<leader>uW', { desc = 'Toggle Window Border' })
 -- munchies_toggle.laststatus():map('<leader>ul', { desc = 'Toggle Laststatus' })
+
+-- Supertab
+vim.keymap.set('i', '<Tab>', function()
+  local cmp = require('blink.cmp')
+  local item = cmp.get_selected_item()
+  local type = require('blink.cmp.types').CompletionItemKind
+
+  -- TODO: what about snippet expansion?
+  if not vim.lsp.inline_completion.get() then
+    if cmp.is_visible() and item then
+      cmp.accept()
+      -- keep accepting path completions
+      if item.kind == type.Path then
+        vim.defer_fn(function()
+          cmp.show({ providers = { 'path' } })
+        end, 1)
+      end
+      return ''
+    end
+  end
+  return '<Tab>'
+end, { expr = true })
 -- ]]
 -- Section: Commands [[
 local command = vim.api.nvim_create_user_command
