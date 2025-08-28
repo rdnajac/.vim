@@ -1,4 +1,4 @@
--- Section: Housekeeping [[1
+-- Section: Housekeeping [[
 ---@type 'netrw'|'snacks'|'oil'
 vim.g.default_file_explorer = 'oil'
 
@@ -10,7 +10,9 @@ if vim.is_callable(vim.pack.add) then
   vim.g.plug_home =
     vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
 end
+-- ]]
 
+-- Section: Options and `vimrc` [[
 -- set these options first so it is apparent if vimrc overrides them
 -- also try `:options`
 vim.o.cmdheight = 0
@@ -21,7 +23,9 @@ vim.o.winborder = 'rounded'
 
 -- load vimrc!
 vim.cmd.runtime('vimrc')
+-- ]]
 
+-- Section: Core Setup [[
 vim.loader.enable()
 
 -- Override require to handle errors gracefully
@@ -29,14 +33,13 @@ _G.Require = function(module)
   local ok, mod = xpcall(require, debug.traceback, module)
   if not ok then
     vim.schedule(function()
-      error(mod) -- why are we scheduling the error?
+      error(mod) -- TODO: why are we scheduling the error?
     end)
     return nil
   end
   return mod
 end
 
--- use the new extui module if available
 Require('vim._extui').enable({})
 
 _G.nvim = vim.defaulttable(function(k)
@@ -55,20 +58,20 @@ nvim.info = function(msg, opts)
   vim.notify(msg, vim.log.levels.INFO, opts or {})
 end
 
-local Plug = nvim.plug
-
 -- stylua: ignore start
 _G.bt = function() Snacks.debug.backtrace() end
 _G.ddd = function(...) return Snacks.debug.inspect(...) end
 -- stylua: ignore end
 vim.print = _G.ddd
+-- ]]
 
--- Section: Plugins [[1
-require('munchies').setup(nvim.snacks.config)
--- require('nvim.snacks')
+-- Section: Plugins [[
 
 -- TODO: Make this make sense
+local Plug = nvim.plug
+
 Plug.do_configs({
+  Plug('nvim.snacks'), -- must be first
   Plug('nvim.colorscheme'),
   Plug('nvim.diagnostic'),
   Plug('nvim.lsp'),
@@ -76,8 +79,15 @@ Plug.do_configs({
 })
 
 require('plug')
+-- ]]
 
--- Section: Keymaps [[1
+-- Section: Keymaps [[
+
+vim.keymap.set('n', '<leader>gg', function()
+  Snacks.lazygit()
+  vim.cmd.startinsert()
+end, { desc = 'Lazygit' })
+
 vim.keymap.set({ 'i', 'n', 's' }, '<Esc>', function()
   vim.cmd('noh')
   return '<Esc>'
@@ -148,7 +158,7 @@ for _, m in ipairs(mods) do
 end
 -- ]]
 
--- Section: Toggles [[1
+-- Section: Toggles [[
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
 Snacks.toggle.animate():map('<leader>ua')
@@ -171,7 +181,7 @@ Snacks.toggle.zoom():map('<leader>uZ')
 -- munchies_toggle.laststatus():map('<leader>ul', { desc = 'Toggle Laststatus' })
 -- ]]
 
--- Section: Commands [[`1
+-- Section: Commands [[
 local command = vim.api.nvim_create_user_command
 
 -- `Snacks` Ex functions
@@ -181,9 +191,7 @@ command('Scratch', function(opts)
   else
     Snacks.scratch()
   end
-end, {
-  bang = true,
-})
+end, { bang = true })
 
 local function to_camel_case(str)
   return str
@@ -193,58 +201,29 @@ local function to_camel_case(str)
     :gsub('^%l', string.upper)
 end
 
--- start with a base skip list
 -- cache the original keys to skip
 local skip = vim.tbl_keys(Snacks.picker)
+skip[#skip + 1] = 'config' -- this one gets missed
 
 -- also skip the lazy picker if we're not using lazy.nvim
 if not package.loaded['lazy'] then
   skip[#skip + 1] = 'lazy'
 end
 
--- print(vim.inspect(skip))
 -- HACK: force early loding of picker config
 Snacks.picker.config.setup()
 
--- Filter the list of picker names first
-local valid_pickers = vim.tbl_filter(function(name)
+local pickers = vim.tbl_filter(function(name)
   return not vim.list_contains(skip, name)
-end, vim.tbl_values(Snacks.picker))
+end, vim.tbl_keys(Snacks.picker))
 
--- One clean loop using the filtered names
-for _, name in ipairs(valid_pickers) do
+for _, name in ipairs(pickers) do
   local picker = Snacks.picker[name]
   local cmd = to_camel_case(name)
   if vim.fn.exists(':' .. cmd) ~= 2 then
     command(cmd, picker, { desc = 'Snacks Picker: ' .. cmd })
   end
 end
+-- ]]
 
-vim.keymap.set('n', '<leader>ux', function()
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  line = line - 1 -- Lua indexing
-
-  -- Get all namespaces
-  local extmarks = {}
-  for ns_name, ns_id in pairs(vim.api.nvim_get_namespaces()) do
-    local marks = vim.api.nvim_buf_get_extmarks(
-      0,
-      ns_id,
-      { line, col },
-      { line, col },
-      { details = true }
-    )
-    if #marks > 0 then
-      extmarks[ns_name] = marks
-    end
-  end
-
-  if vim.tbl_isempty(extmarks) then
-    print('No extmarks at cursor')
-  else
-    print(vim.inspect(extmarks))
-  end
-end, { desc = 'Check extmarks at cursor' })
--- `]]
-
--- vim:fdm=marker:fmr=[[,]]
+-- vim:fdm=marker:fmr=[[,]]:fdl=0

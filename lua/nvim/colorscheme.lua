@@ -1,10 +1,5 @@
 local M = { 'folke/tokyonight.nvim' }
 
-M.specs = {
-  -- 'catppuccin/nvim',
-  -- 'projekt0n/github-nvim-theme',
-}
-
 local bg = {
   black = '#000000',
   eigengrau = '#16161d',
@@ -37,6 +32,7 @@ M.opts = {
     hl['SpellBad'] = { bg = colors.red }
     hl['WinBar'] = { bg = bg.lualine }
     hl['WinBorder'] = { bg = bg.lualine }
+    hl['SpecialWindow'] = { bg = bg.eigengrau }
   end,
   plugins = {
     all = false,

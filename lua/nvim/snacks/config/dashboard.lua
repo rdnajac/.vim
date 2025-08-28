@@ -1,10 +1,10 @@
 ---@module "snacks"
 ---@class snacks.dashboard.Config
 return {
-  wo = { winhighlight = { 'WinBar:NONE' } },
   sections = {
     { section = 'header' },
-    { section = 'recent_files', limit = 10 },
+    -- TODO: add plug commands, mason? treesitter?
+    { section = 'recent_files', limit = 10, indent = 2 },
     { padding = 1 },
   },
   formats = {
@@ -36,5 +36,6 @@ return {
       return ret
     end,
   },
+  wo = { winhighlight = { 'WinBar:NONE' } },
 }
 -- TODO: add startuptime. see lewis6991 dotfiles for reference

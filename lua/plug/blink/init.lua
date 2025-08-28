@@ -2,7 +2,7 @@ local M = { 'Saghen/blink.cmp' }
 
 M.build = 'cargo build --release'
 
-M.dependencies = {
+M.specs = {
   'bydlw98/blink-cmp-env',
   'fang2hou/blink-copilot',
   'mgalliou/blink-cmp-tmux',
@@ -74,9 +74,6 @@ M.opts = {
   },
   sources = require('plug.blink.sources'),
 }
-
--- M.keys = { 
-  -- { 'i', '$', $
 
 M.config = function()
   require('blink.cmp').setup(M.opts)

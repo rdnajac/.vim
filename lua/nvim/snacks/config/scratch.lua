@@ -1,19 +1,23 @@
 ---@type snacks.scratch.Config
 return {
-  template = "local x = \nprint(x)",
+  -- filekey = {
+  --   -- cwd = vim.fn.systemlist("git rev-parse --show-toplevel")[1] or
+  --   branch = false, -- optional: ignore branch
+  --   count = false, -- optional: ignore vim.v.count1
+  -- },
   ---@type table<string, snacks.win.Config>
-  win_by_ft = {
-    vim = {
-      keys = {
-        ['source'] = {
-          '<CR>',
-          function(_)
-            vim.cmd.source('%')
-          end,
-          desc = 'Source buffer',
-          mode = { 'n', 'x' },
-        },
-      },
-    },
-  },
+  -- win_by_ft = {
+  --   vim = {
+  --     keys = {
+  --       ['source'] = {
+  --         '<CR>',
+  --         function(_)
+  --           vim.cmd.source('%')
+  --         end,
+  --         desc = 'Source buffer',
+  --         mode = { 'n', 'x' },
+  --       },
+  --     },
+  --   },
+  -- },
 }

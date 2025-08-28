@@ -187,6 +187,7 @@ vnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word()<CR>
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
 " nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 " nnoremap <expr> <leader>M ':let @'.v:register.' = '.string(getreg(v:register))."\<CR>\<C-f>\<Left>"
+nnoremap <leader>cc <Cmd>CodeCompanion<CR>
 
 " debug {{{2
 if has ('nvim')
@@ -217,7 +218,6 @@ nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
 nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
 nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
 nnoremap <leader>ga <Cmd>!git add %<CR>
-nnoremap <leader>gg <Cmd>lua Snacks.lazygit()<CR>
 nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
 nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 
@@ -374,12 +374,7 @@ if !has('nvim')
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   Plug 'tpope/vim-commentary' " TODO: try the shipped vim9 comment plugin
-else
-  " Plug! 'rdnajac/vim-lol'
-  Plug 'folke/tokyonight.nvim'
-  Plug 'folke/snacks.nvim'
 endif
-
 call plug#end()
 " }}}1
 

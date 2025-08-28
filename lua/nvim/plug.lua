@@ -5,7 +5,6 @@
 ---@field dependencies? (string|vim.pack.Spec|PlugSpec)[]
 ---@field event? vim.api.keyset.events|vim.api.keyset.events[]
 ---@field enabled? boolean|fun():boolean
----@field priority? number
 ---@field specs? (string|vim.pack.Spec|PlugSpec)[]
 
 local M = {}

@@ -10,6 +10,7 @@ M.opts = {
     {
       {
         mode = { 'n', 'v' },
+        -- TODO: add each bracket mapping manually
         { '[', group = 'prev' },
         { ']', group = 'next' },
         { 'g', group = 'goto' },
