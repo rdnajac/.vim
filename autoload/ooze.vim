@@ -43,13 +43,21 @@ endfunction
 
 function! ooze#line() abort
   if &buftype ==# 'terminal'
-    return '<CR>'
+    return 0
   endif
 
   let l:line = getline('.')
+
+  if l:line[0] ==# '#' && l:line[1] ==# '!'
+    Info bang
+    return 0
+  endif
+
   let l:ft = &filetype
+
   if l:ft ==# 'r' || l:ft ==# 'rmd' || l:ft ==# 'quarto'
     Warn 'Ooze does not support R yet.'
+    " <Plug>RDSendLine
     return 0
   endif
 
@@ -59,14 +67,7 @@ function! ooze#line() abort
     return 1
   endif
 
-  let l:bytes = ooze#send(l:line)
-
-  if  l:bytes > 0
-    Info 'Sent ' . l:bytes . ' bytes: [[' . l:line . ']]'
-  else
-    Warn 'Failed to send line: [[' . l:line . ']]'
-    return '<CR>'
-  endif
+  return ooze#send(l:line)
 endfunction
 
 function! ooze#file() abort

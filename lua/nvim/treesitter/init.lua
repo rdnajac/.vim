@@ -20,7 +20,7 @@ end
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'sh', 'tex', 'markdown', 'python', 'vim' },
+  pattern = { 'sh', 'markdown', 'r', 'rmd', 'python', 'vim' },
   group = aug,
   callback = function()
     vim.treesitter.start()

@@ -53,16 +53,16 @@ end
 
 M.copilot_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
-    if client.name == 'GitHub Copilot' then
+    if client.name == 'copilot' then
       return icons.src.copilot
     end
   end
-  return icons.lsp.unavailable .. ' '
+  return ''
 end
 
 M.lsp_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
-    if client.name ~= 'GitHub Copilot' then
+    if client.name ~= 'copilot' then
       return icons.lsp.attached
     end
   end
@@ -82,6 +82,10 @@ local sep = ''
 
 M.lua_icons = function()
   return string.format('%s%s%s%s%s', M.lsp_icon(), sep, M.copilot_icon(), sep, M.treesitter_icon())
+end
+
+M.winbar_icons = function()
+  return string.format('%s%s%s', M.lsp_icon(),  M.copilot_icon(), M.treesitter_icon())
 end
 
 return M

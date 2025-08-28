@@ -2,7 +2,7 @@
 -- TODO: try mini.test
 local M = {}
 
-local modname = require('util.meta').modname
+local modname = require('util').modname
 
 --- Run test cases
 M.modname = function()
@@ -23,5 +23,7 @@ M.modname = function()
   eq(modname('/Users/me/dev/foo/bar.lua'), nil)
   print('All tests passed!')
 end
+
+M.modname()  
 
 return M

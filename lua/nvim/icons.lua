@@ -10,6 +10,7 @@ local icons = {
     omni = ' ',
     path = ' ',
     snippets = ' ',
+    cmp_r = ' ',
   },
   ft = { octo = ' ' },
   misc = { dots = '…' },

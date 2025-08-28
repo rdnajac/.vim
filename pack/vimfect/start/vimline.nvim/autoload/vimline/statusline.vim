@@ -36,7 +36,7 @@ function! vimline#statusline#() abort
   let l:ret .= ' %#Chromatophore_bc#'
   let l:ret .= s:left_sep
   let l:ret .= ' %#Chromatophore_c#'
-  let l:ret .= lua#require('vimline', 'lua_icons')
+  " let l:ret .= lua#require('vimline', 'lua_icons')
 
   return l:ret
 endfunction

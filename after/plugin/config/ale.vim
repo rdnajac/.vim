@@ -1,4 +1,7 @@
 scriptencoding utf-8
+if has ('nvim')
+    finish
+endif
 
 let g:ale_virtualtext_cursor = 0
 let g:ale_lint_on_text_changed = 'never'

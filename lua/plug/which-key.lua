@@ -16,23 +16,8 @@ M.opts = {
         { 'g', group = 'goto' },
         { 'z', group = 'fold' },
       },
-      mode = { 'n' },
-      -- {
-      --   '<leader>b',
-      --   group = 'buffer',
-      --   expand = function()
-      --     return require('which-key.extras').expand.buf()
-      --   end,
-      -- },
-      -- {
-      --   '<c-w>',
-      --   group = 'windows',
-      --   expand = function()
-      --     return require('which-key.extras').expand.win()
-      --   end,
-      -- },
 
-      -- groups
+      mode = { 'n' },
       { 'co', group = 'comment below' },
       { 'cO', group = 'comment above' },
       { '<leader>dp', group = 'profiler' },

@@ -2,6 +2,7 @@ local M = { 'Saghen/blink.cmp' }
 -- M.build = 'cargo build --release'
 
 M.specs = {
+  'Saghen/blink.compat',
   'bydlw98/blink-cmp-env',
   'fang2hou/blink-copilot',
   'mgalliou/blink-cmp-tmux',
@@ -46,6 +47,11 @@ M.opts = {
   },
   signature = { enabled = true, window = { border = 'single' } },
   keymap = {
+    -- default
+    ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+    ['<C-e>'] = { 'cancel', 'fallback' },
+    ['<C-y>'] = { 'select_and_accept', 'fallback' },
+    -- moving up and down
     ['<Up>'] = { 'select_prev', 'fallback' },
     ['<Left>'] = { 'select_prev', 'fallback' },
     ['<C-k'] = { 'select_prev', 'fallback' },
@@ -62,7 +68,7 @@ M.config = function()
   vim.keymap.set('i', '$', function()
     require('blink.cmp').show({ providers = { 'env' } })
     return '$'
-  end, { expr = true, replace_keycodes = false })
+  end, { expr = true })
 end
 
 --- Blink statusline component

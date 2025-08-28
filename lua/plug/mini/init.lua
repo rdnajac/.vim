@@ -7,7 +7,6 @@ end
 
 M.config = function()
   require('util').for_each_module(function(minimod)
-    -- print(minimod)
     require(minimod)
   end, 'plug/mini')
 end

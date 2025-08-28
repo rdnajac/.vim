@@ -53,6 +53,7 @@ function! vimline#winbar#() abort
     let l:ret .= ' '
     let l:ret .= vimline#flag#('readonly')
     let l:ret .= vimline#flag#('modified')
+    let l:ret .= lua#require('vimline', 'winbar_icons')
     " let l:ret .= lua#require('nvim.diagnostic', 'component')
     let l:ret .= v:lua.require'nvim.diagnostic'.component()
     let l:ret .= '%#Chromatophore_bc#'

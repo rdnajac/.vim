@@ -109,6 +109,7 @@ augroup END
 " }}}1
 
 " Section: keymaps {{{1
+nnoremap <expr> <CR> ooze#line() > 0 ? '' : "\<CR>"
 nmap  ciw
 vmap  :sort<CR>
 nmap <silent> <C-q> <Cmd>bd<CR>
@@ -336,13 +337,11 @@ nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
-
 " }}}1
 
 " Section: plugins {{{1
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
-Plug 'dense-analysis/ale' " TODO: try nvim-lint
 Plug 'lervag/vimtex'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -365,6 +364,7 @@ Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 
 if !has('nvim')
+  Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
   Plug 'junegunn/vim-easy-align'
@@ -380,6 +380,19 @@ command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 " }}}
+
+" https://github.com/tpope/vim-eunuch/blob/master/doc/eunuch.txt
+let g:interpreters = {
+      \ '.':      '/bin/sh',
+      \ 'sh':     '/bin/bash',
+      \ 'bash':   'bash',
+      \ 'zsh':    'zsh',
+      \ 'lua':    'lua',
+      \ 'python': 'python3',
+      \ 'R':      'Rscript',
+      \ 'r':      'Rscript',
+      \ 'rmd':      'Rscript',
+      \ }
 
 if !exists('g:vimrc_reload_count')
   let g:vimrc_reload_count = 0

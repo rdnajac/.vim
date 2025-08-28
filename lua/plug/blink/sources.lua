@@ -17,7 +17,7 @@ local default_providers = {
     },
   },
   snippets = {
-    score_offset = 99,
+    score_offset = 999,
     opts = { friendly_snippets = false },
     -- HIDE SNIPPETS AFTER TRIGGER CHARACTER ~
     should_show_items = function(ctx)
@@ -28,8 +28,8 @@ local default_providers = {
   lsp = {
     score_offset = 1,
     transform_items = function(_, items)
-      return vim.tbl_filter(function(item)
         -- FILTER OUT KEYWORDS AND SNIPPETS FROM LSP
+      return vim.tbl_filter(function(item)
         return item.kind ~= kind.Keyword and item.kind ~= kind.Snippet
       end, items)
     end,
@@ -38,9 +38,9 @@ local default_providers = {
 
 local ft_sources = {
   lua = { 'lazydev' },
-  -- r = { 'cmp_r' },
-  -- rmd = { 'cmp_r' },
-  -- quarto = { 'cmp_r' },
+  r = { 'cmp_r' },
+  rmd = { 'cmp_r' },
+  quarto = { 'cmp_r' },
   sh = { 'env' },
 }
 
@@ -59,13 +59,6 @@ M.providers = {
     module = 'lazydev.integrations.blink',
     score_offset = 100,
   },
-  -- copilot = {
-  --   name = 'copilot',
-  --   module = 'blink-copilot',
-  --   -- score_offset = 10,
-  --   async = true,
-  --   opts = { max_completions = 2 },
-  -- },
   env = {
     name = 'env',
     module = 'blink-cmp-env',
@@ -78,15 +71,10 @@ M.providers = {
       show_documentation_window = true,
     },
   },
-  -- tmux = {
-  --   name = 'tmux',
-  --   module = 'blink-cmp-tmux',
-  --   score_offset = -1,
-  --   opts = {
-  --     all_panes = true,
-  --     capture_history = true,
-  --   },
-  -- },
+  cmp_r = {
+    name = 'cmp_r',
+    module = 'blink.compat.source',
+  },
 }
 
 return M

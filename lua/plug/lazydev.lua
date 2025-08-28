@@ -15,10 +15,12 @@ return {
       return mod
     end
 
-    require('lazydev.config').setup({
+    require('lazydev').setup({
       library = {
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
         { path = 'snacks.nvim', words = { 'Snacks' } },
+        -- { path = 'nvim', words = { 'nvim' } },
+        -- { path = 'nvim', words = { 'nv' } },
       },
     })
   end,

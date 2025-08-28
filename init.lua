@@ -218,6 +218,7 @@ end
 -- cache the original keys to skip
 local skip = vim.tbl_keys(Snacks.picker)
 skip[#skip + 1] = 'config' -- this one gets missed
+skip[#skip + 1] = 'keymap'
 
 -- also skip the lazy picker if we're not using lazy.nvim
 if not package.loaded['lazy'] then
@@ -238,6 +239,31 @@ for _, name in ipairs(pickers) do
     command(cmd, picker, { desc = 'Snacks Picker: ' .. cmd })
   end
 end
+
+vim.api.nvim_create_user_command('PlugClean', function()
+  vim.pack.del(vim.tbl_map(
+    function(plugin)
+      return plugin.spec.name
+    end,
+    vim.tbl_filter(function(plugin)
+      return plugin.active == false
+    end, vim.pack.get())
+  ))
+end, { desc = 'Remove unused plugins' })
+
+vim.api.nvim_create_user_command('Plug', function(args)
+  if #args.fargs == 0 then
+    print(vim.inspect(vim.pack.get()))
+  else
+    vim.pack.add({ 'https://github.com/' .. args.fargs[1] })
+  end
+end, { nargs = '?', desc = 'Add a plugin' })
+
+-- must pass nil to update all plugins with a bang
+vim.api.nvim_create_user_command('PlugUpdate', function(opts)
+  vim.pack.update(nil, { force = opts.bang })
+end, { bang = true })
+
 -- ]]
 
 -- vim:fdm=marker:fmr=[[,]]:fdl=0
