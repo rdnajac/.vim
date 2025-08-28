@@ -1,88 +1,83 @@
 let s:newline = "\n"
 
 function! s:scroll() abort
-  if exists('g:ooze_buffer') && bufexists(g:ooze_buffer)
-    let winid = bufwinid(g:ooze_buffer)
-    if winid > 0
-      let line_count = nvim_buf_line_count(g:ooze_buffer)
-      call nvim_win_set_cursor(winid, [line_count, 0])
-    endif
-  endif
+  call nvim_win_set_cursor(bufwinid(g:ooze_buffer), [nvim_buf_line_count(g:ooze_buffer), 0])
 endfunction
 
-function! s:ooze(text) abort
-  if g:ooze_auto_exec
-    let text = a:text . s:newline
-  endif
-  call chansend(g:ooze_channel, text)
-  " if g:ooze_auto_scroll | call s:scroll() | endif
-call s:scroll()
-endfunction
-
-function! ooze#linefeed() abort
+function! s:linefeed() abort
   let i = line('.')
   while i < line('$')
     let curline = substitute(getline(i + 1), '^\s*', '', '')
     if strlen(curline) > 0
-      " if !(exists('g:ooze_skip_comments') && g:ooze_skip_comments && curline =~ '^#')
-      call cursor(i + 1, 1)
-      return
-      " endif
+      if !get(g:, 'ooze_skip_comments', 1) || curline !~# '^#'
+	call cursor(i + 1, 1)
+	return
+      endif
     endif
     let i += 1
   endwhile
 endfunction
 
-function! ooze#sendline() abort
-  let line = getline('.')
-  " don't send empty lines
-  if strlen(line) > 0
-    call s:ooze(line)
-  else
-    call ooze#linefeed()
+function! ooze#send(text) abort
+  if !exists('g:ooze_channel') || empty(g:ooze_channel)
+    echohl WarningMsg | echom 'Ooze: no channel selected' | echohl None
+    return
+  endif
+
+  let l:text = a:text
+
+  if get(g:, 'ooze_auto_exec', 1)
+    let l:text .= s:newline
+  endif
+  let l:chan = str2nr(g:ooze_channel)
+  call chansend(l:chan, l:text)
+
+  if get(g:, 'ooze_auto_advance', 1)
+    call s:linefeed()
+  endif
+  if get(g:, 'ooze_auto_scroll', 1)
+    call s:scroll()
   endif
 endfunction
 
-function! s:tostring()
-  try
-    let a_orig = @a
-    silent! normal! gv"ay
-    return @a
-  finally
-    let @a = a_orig
-  endtry
-endfunction
+function! ooze#line() abort
+  let l:line = getline('.')
 
-function! ooze#visual() range abort
-  let l:lines = getline(a:firstline, a:lastline)
-  call chansend(g:ooze_channel, join(l:lines, "\n") . "\n")
+  if &filetype ==# 'vim'
+    execute l:line
+    Info 'Executed Vim line: ' . l:line
+  elseif &filetype ==# 'lua'
+    execute 'lua ' . l:line
+    Info 'Executed Lua line: ' . l:line
+  else
+    call ooze#send(l:line)
+  endif
 endfunction
 
 function! ooze#file() abort
-  let l:file = expand('%:p')
-  call s:ooze(l:file)
+  if &ft ==# 'vim'
+    execute 'source %'
+    Info 'Sourced ' . expand('%:p')
+  elseif &ft ==# 'lua'
+    lua Snacks.debug.run()
+  else
+    call ooze#send(expand('%:p'))
+  endif
 endfunction
 
-function! ooze#cr() abort
-  if v:lua.Snacks.util.var(0, 'ooze_send_on_enter', 0) == 1
-    call ooze#sendline()
-    call ooze#linefeed()
-    return ''
-  else
-    return "\<CR>"
-  endif
+function! ooze#range(...) range abort
+  call ooze#send(join(getline(a:firstline, a:lastline), "\n"))
 endfunction
 
 function! ooze#operator(type) abort
-  let [l1, c1] = getpos("'[")[1:2]
-  let [l2, c2] = getpos("']")[1:2]
-  let lines = getline(l1, l2)
+  let [l1, l2] = getpos("'[")[1], getpos("']")[1]
+  call ooze#range(l1, l2)
+endfunction
 
-  if a:type ==# 'v' || a:type ==# 'char'
-    let lines[-1] = lines[-1][: c2 - 1]
-    let lines[0] = lines[0][c1 - 1 :]
-  endif
 
-  call chansend(g:ooze_channel, join(lines, "\n") . "\n")
-  if g:ooze_auto_scroll | call s:scroll() | endif
+function! ooze#init() abort
+  " todo make this buffer-local
+  let g:ooze_channel = input('Select ooze channel: ', get(g:, 'ooze_channel', ''))
+  Info 'Selected channel: ' . g:ooze_channel
+  nnoremap <silent><buffer> <CR> <Cmd>call ooze#line()<CR>
 endfunction

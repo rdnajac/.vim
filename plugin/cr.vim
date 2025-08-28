@@ -1,32 +1,4 @@
-function! s:execute_line() abort
-  let l:line = getline('.')
-  if &filetype ==# 'lua'
-    let l:line = 'lua ' . l:line
-  elseif &filetype !=# 'vim'
-    echom l:line
-    return
-  endif
-  execute l:line
-  echom l:line
-endfunction
-
-function! s:source_file() abort
-  execute 'source %'
-  echom 'sourced `' . expand('%') . '`!'
-endfunction
-
-augroup MapCR
-  autocmd!
-  autocmd FileType vim,lua nnoremap <buffer> <silent> <CR> <Cmd>call <SID>execute_line()<CR>
-  autocmd FileType vim,lua nnoremap <buffer> <silent> <M-CR> <Cmd>call <SID>source_file()<CR>
-  autocmd FileType     lua nnoremap <buffer> <silent> <leader><CR> <Cmd>lua Snacks.debug.run()<CR>
-  autocmd FileType     lua vnoremap <buffer> <silent> <leader><CR> :lua Snacks.debug.run()<CR>
-  autocmd FileType sh      nnoremap <buffer> <silent> <leader><CR> <Cmd>OozeFile<CR>
-augroup END
-
-finish
-" eunuch compatibility for <CR> mapping
-
+finish " eunuch compatibility for <CR> mapping
 function! EunuchNewLine(...) abort
   if a:0 && type(a:1) == type('')
     return a:1 . (a:1 =~# "\r" && empty(&buftype) ? "\<C-R>=EunuchNewLine()\r" : "")
@@ -76,6 +48,5 @@ function! s:MapCR() abort
     imap <script><silent><expr> <CR> EunuchNewLine("<Bslash>035<Bslash>r")
   endif
 endfunction
-call s:MapCR()
 
-" TODO: ooze send
+call s:MapCR()

@@ -11,7 +11,6 @@ if vim.is_callable(vim.pack.add) then
     vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
 end
 -- ]]
-
 -- Section: Options and `vimrc` [[
 -- set these options first so it is apparent if vimrc overrides them
 -- also try `:options`
@@ -24,7 +23,6 @@ vim.o.winborder = 'rounded'
 -- load vimrc!
 vim.cmd.runtime('vimrc')
 -- ]]
-
 -- Section: Core Setup [[
 vim.loader.enable()
 
@@ -64,7 +62,6 @@ _G.ddd = function(...) return Snacks.debug.inspect(...) end
 -- stylua: ignore end
 vim.print = _G.ddd
 -- ]]
-
 -- Section: Plugins [[
 
 -- TODO: Make this make sense
@@ -80,7 +77,6 @@ Plug.do_configs({
 
 require('plug')
 -- ]]
-
 -- Section: Keymaps [[
 
 vim.keymap.set('n', '<leader>gg', function()
@@ -157,7 +153,6 @@ for _, m in ipairs(mods) do
   end
 end
 -- ]]
-
 -- Section: Toggles [[
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
@@ -180,7 +175,6 @@ Snacks.toggle.zoom():map('<leader>uZ')
 -- munchies_toggle.winborder():map('<leader>uW', { desc = 'Toggle Window Border' })
 -- munchies_toggle.laststatus():map('<leader>ul', { desc = 'Toggle Laststatus' })
 -- ]]
-
 -- Section: Commands [[
 local command = vim.api.nvim_create_user_command
 

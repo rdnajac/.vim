@@ -1,4 +1,22 @@
 scriptencoding=utf-8
+
+function vimline#winbar#term() abort
+  let l:ret = ''
+  let l:ret .= '%#Chromatophore_a# '
+  let l:ret .= fnamemodify($PWD, ':~') . ' '
+  let l:ret .= '%#Chromatophore_b# '
+
+  if exists('g:ooze_channel') && g:ooze_channel == &channel
+    let l:ret .= ' '
+  else
+    let l:ret .= ' '
+  endif
+  let l:ret.= ' [' . &channel . '] '
+  let l:ret .= '%#Chromatophore_bc# '
+  " let l:ret .= '%*'
+  return l:ret
+endfunction
+
 function! vimline#winbar#() abort
   let l:bt = &buftype
 
@@ -7,7 +25,7 @@ function! vimline#winbar#() abort
   elseif l:bt ==# 'quickfix'
     return '%q'
   elseif l:bt ==# 'terminal'
-    return ' ' . fnamemodify($PWD, ':~') . '%=ch:' . &channel . ' '
+    return vimline#winbar#term()
   endif
 
   let l:is_active_buffer = win_getid() == str2nr(g:actual_curwin)

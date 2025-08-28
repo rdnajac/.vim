@@ -32,15 +32,11 @@ M.opts = {
       'print(x)',
     }, '\n'),
   },
-  terminal = {
-    start_insert = false,
-    auto_insert = true,
-    auto_close = true,
-  },
+  terminal = { start_insert = false, auto_insert = true, auto_close = true },
   styles = {
     dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
     lazygit = { height = 0, width = 0 },
-    terminal = { wo = { winhighlight = 'Normal:String' } },
+    terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
   },
 }
 

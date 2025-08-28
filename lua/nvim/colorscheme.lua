@@ -33,6 +33,7 @@ M.opts = {
     hl['WinBar'] = { bg = bg.lualine }
     hl['WinBorder'] = { bg = bg.lualine }
     hl['SpecialWindow'] = { bg = bg.eigengrau }
+    hl['Green'] = { fg = colors.green }
   end,
   plugins = {
     all = false,

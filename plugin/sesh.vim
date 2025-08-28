@@ -5,6 +5,7 @@ set sessionoptions-=options " default in nvim
 set sessionoptions-=blank " from vim-obsession
 " keep tabpages separate (per project)
 set sessionoptions-=tabpages
+set sessionoptions-=terminal
 
 " viewoptions change the effect of the `:mkview`
 set viewoptions-=options " from defaults.vim
