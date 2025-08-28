@@ -65,6 +65,11 @@ function M.import_specs(plugin)
   return specs
 end
 
+-- ---@param plug plug_data: { spec: vim.pack.Spec, path: string }
+-- local load = function(spec, path)
+--   vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter != 0, magic = { file = false } })
+-- end
+
 -- Load a plugin module and return its spec table without calling config
 M.Plug = function(modname)
   local plugin = Require(modname)
@@ -72,10 +77,14 @@ M.Plug = function(modname)
   if plugin then
     local specs = M.import_specs(plugin)
 
-       if #specs > 0 then
+    if #specs > 0 then
       -- rely on default loading behavior (ie packadd with or without !)
       -- and automatically install if starting up
-      vim.pack.add(specs, { confirm = vim.v.vim_did_enter == 0 })
+      local opts = {
+        confirm = vim.v.vim_did_enter == 0,
+        -- load = load,
+      }
+      vim.pack.add(specs, opts)
     end
   end
 
@@ -158,10 +167,10 @@ end
 
 --- Execute all queued plugin configs a la `lazy.nvim`
 ---@param plugins table<string, PlugSpec>
--- TODO: save a table of names mapped to config functions with the optional event 
+-- TODO: save a table of names mapped to config functions with the optional event
 -- TODO: print for debugging
 M.do_configs = function(plugins)
-  for name, plugin in pairs(plugins) do
+  for _, plugin in pairs(plugins) do
     -- print('Configuring plugin: ' .. name)
     M.config(plugin)
   end

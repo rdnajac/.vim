@@ -65,12 +65,14 @@ vim.print = _G.ddd
 -- Section: Plugins [[
 
 -- TODO: Make this make sense
-local Plug = nvim.plug
+local Plug = require('nvim.plug')
 
 Plug.do_configs({
   Plug('nvim.snacks'), -- must be first
   Plug('nvim.colorscheme'),
   Plug('nvim.diagnostic'),
+  -- Plug('nvim.format'),
+  -- Plug('nvim.lint'),
   Plug('nvim.lsp'),
   Plug('nvim.treesitter'),
 })
@@ -219,5 +221,8 @@ for _, name in ipairs(pickers) do
   end
 end
 -- ]]
+require('util.lspprogress')
+-- require('util.lspprogress2')
+
 
 -- vim:fdm=marker:fmr=[[,]]:fdl=0

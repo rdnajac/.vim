@@ -42,16 +42,18 @@ endfunction
 
 function! ooze#line() abort
   let l:line = getline('.')
-
+  if &ft ==# 'r' || &ft ==# 'rmd' || &ft ==# 'quarto'
+    Warn 'Ooze does not support R yet.'
+    return
+  endif
   if &filetype ==# 'vim'
     execute l:line
-    Info 'Executed Vim line: ' . l:line
   elseif &filetype ==# 'lua'
     execute 'lua ' . l:line
-    Info 'Executed Lua line: ' . l:line
   else
     call ooze#send(l:line)
   endif
+  Info ' [[' . l:line . ']]'
 endfunction
 
 function! ooze#file() abort
@@ -66,18 +68,17 @@ function! ooze#file() abort
 endfunction
 
 function! ooze#range(...) range abort
+  " TODO: replace newlines with spaces if lua
   call ooze#send(join(getline(a:firstline, a:lastline), "\n"))
 endfunction
 
-function! ooze#operator(type) abort
-  let [l1, l2] = getpos("'[")[1], getpos("']")[1]
-  call ooze#range(l1, l2)
-endfunction
-
+" function! ooze#operator(type) abort
+"   let [l1, l2] = getpos("'[")[1], getpos("']")[1]
+"   call ooze#range(l1, l2)
+" endfunction
 
 function! ooze#init() abort
   " todo make this buffer-local
   let g:ooze_channel = input('Select ooze channel: ', get(g:, 'ooze_channel', ''))
   Info 'Selected channel: ' . g:ooze_channel
-  nnoremap <silent><buffer> <CR> <Cmd>call ooze#line()<CR>
 endfunction

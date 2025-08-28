@@ -2,7 +2,6 @@
 nnoremap yY <Cmd>%y<CR>
 nnoremap dD <Cmd>%d<CR>
 
-
 " delete/paste without yanking
 nnoremap dy "_dd
 vnoremap <leader>d "_d
@@ -20,6 +19,7 @@ augroup yankring
 	\ endfor |
 	\ endif
 augroup END
+
 if !has('nvim')
   packadd hlyank
 else
