@@ -13,10 +13,10 @@ local defaults = {
 -- NOTE: They still have to be manually enabled for most filetypes
 -- see `<url>` for available parsers
 -- also check `~/.local/share/nvim/site/` for the following directories:
--- - `parser/`: contains the parsers 
+-- - `parser/`: contains the parsers
 -- - `parser-info/`: contains the download information
 -- - `query/`: installed queries for the syntax highlighting
-local parsers  = {
+local parsers = {
   -- 'asm',
   'bash',
   -- 'bibtex',

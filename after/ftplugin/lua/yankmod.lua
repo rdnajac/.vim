@@ -34,41 +34,17 @@ end
 
 local function yank_func()
   with_module(function(module)
-    set_reg_and_notify(
-      "lua require('" .. module .. "')." .. vim.fn.expand('<cword>') .. '()'
-    )
+    set_reg_and_notify("lua require('" .. module .. "')." .. vim.fn.expand('<cword>') .. '()')
   end)
 end
 
 local function print_yank_func()
   with_module(function(module)
-    set_reg_and_notify(
-      "=require('" .. module .. "')." .. vim.fn.expand('<cword>') .. '()'
-    )
+    set_reg_and_notify("=require('" .. module .. "')." .. vim.fn.expand('<cword>') .. '()')
   end)
 end
 
-vim.keymap.set(
-  'n',
-  'ym',
-  yank_module_name,
-  { buffer = true, desc = 'yank lua module name' }
-)
-vim.keymap.set(
-  'n',
-  'yM',
-  yank_module_require,
-  { buffer = true, desc = 'yank require(...) form' }
-)
-vim.keymap.set(
-  'n',
-  'yr',
-  yank_func,
-  { buffer = true, desc = 'yank require + function' }
-)
-vim.keymap.set(
-  'n',
-  'yR',
-  print_yank_func,
-  { buffer = true, desc = 'print require + function' }
-)
+vim.keymap.set('n', 'ym', yank_module_name, { buffer = true, desc = 'yank lua module name' })
+vim.keymap.set('n', 'yM', yank_module_require, { buffer = true, desc = 'yank require(...) form' })
+vim.keymap.set('n', 'yr', yank_func, { buffer = true, desc = 'yank require + function' })
+vim.keymap.set('n', 'yR', print_yank_func, { buffer = true, desc = 'print require + function' })

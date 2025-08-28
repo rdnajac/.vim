@@ -1,6 +1,14 @@
-if vim.fn.exists('g:loaded_copilot') == 0 then
+-- if vim.fn.exists('g:loaded_copilot') == 0 then
+if 1 then
   return
 end
+
+vim.cmd([[
+let g:copilot_workspace_folders = [ '~/GitHub' ]
+" let g:copilot_no_maps = v:true
+let g:copilot_no_tab_map = v:true
+imap <silent><script><expr> <S-Tab> copilot#Accept("\<CR>")
+]])
 
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.deprecate = function() end -- HACK: remove this once plugin is updated

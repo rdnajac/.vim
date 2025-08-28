@@ -14,7 +14,10 @@ end
 M.start = function()
   _G.selected_nodes = {}
   local is_coment = function(node)
-    return vim.tbl_contains({ 'comment', 'line_comment', 'block_comment', 'comment_content' }, node:type())
+    return vim.tbl_contains(
+      { 'comment', 'line_comment', 'block_comment', 'comment_content' },
+      node:type()
+    )
   end
   local success, node = pcall(vim.treesitter.get_node)
   if not success or not node or is_coment(node) then

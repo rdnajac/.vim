@@ -28,7 +28,7 @@ return {
       local dir, file = fname:match('^(.*)/(.+)$')
       local display_str = dir and (dir .. '/' .. file) or file
       local n_dots = math.max(1, ctx.width - #display_str - #(item.key or ''))
-      local ret = {  { file, hl = 'Chromatophore' }, { string.rep('.', n_dots), hl = 'Comment' } }
+      local ret = { { file, hl = 'Chromatophore' }, { string.rep('.', n_dots), hl = 'Comment' } }
 
       if dir then
         table.insert(ret, 1, { dir .. '/', hl = 'dir' })

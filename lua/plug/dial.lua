@@ -7,7 +7,9 @@ M.event = 'BufWinEnter'
 function M.dial(increment, g)
   local mode = vim.fn.mode(true)
   local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
-  local func = (increment and 'inc' or 'dec') .. (g and '_g' or '_') .. (is_visual and 'visual' or 'normal')
+  local func = (increment and 'inc' or 'dec')
+    .. (g and '_g' or '_')
+    .. (is_visual and 'visual' or 'normal')
   local group = vim.g.dials_by_ft[vim.bo.filetype] or 'default'
   return require('dial.map')[func](group)
 end
@@ -59,7 +61,18 @@ M.opts = function()
         'November',
         'December',
       }, true),
-      new({ 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth' }, false),
+      new({
+        'first',
+        'second',
+        'third',
+        'fourth',
+        'fifth',
+        'sixth',
+        'seventh',
+        'eighth',
+        'ninth',
+        'tenth',
+      }, false),
       augend.constant.alias.bool,
       new({ 'True', 'False' }, true),
       new({ 'and', 'or' }, true),

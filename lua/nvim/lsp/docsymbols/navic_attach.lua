@@ -18,10 +18,7 @@ local M = function(client, bufnr)
     return
   end
 
-  if
-    vim.b[bufnr].navic_client_id ~= nil
-    and vim.b[bufnr].navic_client_name ~= client.name
-  then
+  if vim.b[bufnr].navic_client_id ~= nil and vim.b[bufnr].navic_client_name ~= client.name then
     return
   end
 

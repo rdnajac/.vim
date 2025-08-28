@@ -36,4 +36,3 @@ local zoxide = function(picker)
     end,
   })
 end
-

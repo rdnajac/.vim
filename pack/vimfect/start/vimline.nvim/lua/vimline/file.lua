@@ -54,7 +54,10 @@ M.name = function(opts)
 
   local function is_new_file()
     local fn = vim.fn.expand('%')
-    return fn ~= '' and fn:match('^%a+://') == nil and vim.bo.buftype == '' and vim.fn.filereadable(fn) == 0
+    return fn ~= ''
+      and fn:match('^%a+://') == nil
+      and vim.bo.buftype == ''
+      and vim.fn.filereadable(fn) == 0
   end
 
   local function shorten(path, max_len)

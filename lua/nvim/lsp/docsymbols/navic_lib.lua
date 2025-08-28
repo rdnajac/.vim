@@ -25,7 +25,10 @@ local function symbol_relation(symbol, other)
       o['start'].line < s['start'].line
       or (o['start'].line == s['start'].line and o['start'].character <= s['start'].character)
     )
-    and (o['end'].line > s['end'].line or (o['end'].line == s['end'].line and o['end'].character >= s['end'].character))
+    and (
+      o['end'].line > s['end'].line
+      or (o['end'].line == s['end'].line and o['end'].character >= s['end'].character)
+    )
   then
     return 'around'
   end
@@ -263,23 +266,28 @@ function M.request_symbol(for_buf, handler, client, file_uri, retry_count)
     return
   end
 
-  client:request('textDocument/documentSymbol', { textDocument = textDocument_argument }, function(err, symbols, _)
-    if symbols == nil then
-      if vim.api.nvim_buf_is_valid(for_buf) then
-        handler(for_buf, {})
+  client:request(
+    'textDocument/documentSymbol',
+    { textDocument = textDocument_argument },
+    function(err, symbols, _)
+      if symbols == nil then
+        if vim.api.nvim_buf_is_valid(for_buf) then
+          handler(for_buf, {})
+        end
+      elseif err ~= nil then
+        if vim.api.nvim_buf_is_valid(for_buf) then
+          vim.defer_fn(function()
+            M.request_symbol(for_buf, handler, client, file_uri, retry_count - 1)
+          end, 750)
+        end
+      elseif symbols ~= nil then
+        if vim.api.nvim_buf_is_loaded(for_buf) then
+          handler(for_buf, symbols)
+        end
       end
-    elseif err ~= nil then
-      if vim.api.nvim_buf_is_valid(for_buf) then
-        vim.defer_fn(function()
-          M.request_symbol(for_buf, handler, client, file_uri, retry_count - 1)
-        end, 750)
-      end
-    elseif symbols ~= nil then
-      if vim.api.nvim_buf_is_loaded(for_buf) then
-        handler(for_buf, symbols)
-      end
-    end
-  end, for_buf)
+    end,
+    for_buf
+  )
 end
 
 local navic_symbols = {}

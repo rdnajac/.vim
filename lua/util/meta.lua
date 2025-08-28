@@ -54,7 +54,7 @@ function M.module:load(opts)
   local ret = {}
 
   for k, module in pairs(modules) do
-  local ok, mod = pcall(require, module)
+    local ok, mod = pcall(require, module)
     if ok then
       ret[k] = mod
     end

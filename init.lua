@@ -7,8 +7,7 @@ vim.g.loaded_netrw = vim.g.default_file_explorer == 'netrw' and 1 or nil
 
 -- set the plugin directory if the new native package manager is available
 if vim.is_callable(vim.pack.add) then
-  vim.g.plug_home =
-    vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+  vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
 end
 -- ]]
 -- Section: Options and `vimrc` [[

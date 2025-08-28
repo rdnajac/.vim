@@ -135,11 +135,7 @@ M.build = function(plugin_name, build)
       elseif type(build) == 'string' then
         local cmd = string.format('cd %s && %s', vim.fn.shellescape(spec.dir), build)
         local output = vim.fn.system(cmd)
-        notify_build(
-          plugin_name,
-          vim.v.shell_error == 0,
-          vim.v.shell_error ~= 0 and output or nil
-        )
+        notify_build(plugin_name, vim.v.shell_error == 0, vim.v.shell_error ~= 0 and output or nil)
       else
         notify_build(plugin_name, false, 'Invalid build command type: ' .. type(build))
       end

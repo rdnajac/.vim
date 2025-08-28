@@ -6,7 +6,7 @@ local this_dir = vim.fs.dirname(vim.fs.normalize(this_file))
 local topmod = vim.fn.substitute(this_dir, '.*/lua/', '', '')
 
 for name, type_ in vim.fs.dir(this_dir) do
-  print ( name )
+  print(name)
   local modname
   if name:sub(-4) == '.lua' then
     modname = name:sub(1, -5) -- strip .lua

@@ -48,8 +48,7 @@ M.opts_extend = {
     }
     local icon = icon_map[opts.finder]
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
-    opts.title =
-      string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
+    opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
     opts.cwd = opts.cwd or vim.fn['git#root']() or vim.fn.getcwd()
     return opts
   end,

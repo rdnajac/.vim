@@ -50,10 +50,7 @@ M.default = function()
   if require('nvim.treesitter').in_comment_node() then
     return { 'buffer' }
   end
-  return vim.list_extend(
-    vim.tbl_keys(default_providers),
-    ft_sources[vim.bo.filetype] or {}
-  )
+  return vim.list_extend(vim.tbl_keys(default_providers), ft_sources[vim.bo.filetype] or {})
 end
 
 M.providers = {

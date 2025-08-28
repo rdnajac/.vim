@@ -6,7 +6,12 @@ local mini_ai_opts = {
     c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }),
     d = { '%f[%d]%d+' }, -- digits
     e = { -- Word with case
-      { '%u[%l%d]+%f[^%l%d]', '%f[%S][%l%d]+%f[^%l%d]', '%f[%P][%l%d]+%f[^%l%d]', '^[%l%d]+%f[^%l%d]' },
+      {
+        '%u[%l%d]+%f[^%l%d]',
+        '%f[%S][%l%d]+%f[^%l%d]',
+        '%f[%P][%l%d]+%f[^%l%d]',
+        '^[%l%d]+%f[^%l%d]',
+      },
       '^().*()$',
     },
     f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function

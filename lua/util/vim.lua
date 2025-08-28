@@ -10,7 +10,7 @@ local mapping = {
 --- @param groups tokyonight.Highlights
 --- @param opts tokyonight.Config
 function M.generate(colors, groups, opts)
-  -- FIXME: 
+  -- FIXME:
   opts.plugins = { all = false, auto = false, treesitter = false }
   local Groups = require('tokyonight.groups')
   for p, n in pairs(Groups.plugins) do

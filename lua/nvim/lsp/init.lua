@@ -90,7 +90,7 @@ function M.root()
   local clients = vim.lsp.get_clients({ bufnr = bufnr })
 
   for _, client in ipairs(clients) do
-    if client.name ~= "copilot" and client.root_dir then
+    if client.name ~= 'copilot' and client.root_dir then
       return client.root_dir
     end
   end

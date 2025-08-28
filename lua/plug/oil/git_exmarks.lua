@@ -84,7 +84,9 @@ local highlight_group_suffix_for_status_code = {
 local function highlight_group(code, index)
   local location = index and 'Index' or 'WorkingTree'
 
-  return 'OilGitStatus' .. location .. (highlight_group_suffix_for_status_code[code] or 'Unmodified')
+  return 'OilGitStatus'
+    .. location
+    .. (highlight_group_suffix_for_status_code[code] or 'Unmodified')
 end
 
 local function get_symbol(symbols, code)
@@ -100,7 +102,8 @@ local function add_status_extmarks(buffer, status)
       if entry and entry.name ~= '..' then
         local name = entry.name
 
-        local status_codes = status[name] or (config.show_ignored and { index = '!', working_tree = '!' })
+        local status_codes = status[name]
+          or (config.show_ignored and { index = '!', working_tree = '!' })
 
         if status_codes then
           vim.api.nvim_buf_set_extmark(buffer, ns, n - 1, 0, {
@@ -142,11 +145,16 @@ local function load_git_status(buffer, callback)
   concurrent({
     function(cb)
       -- quotepath=false - don't escape UTF-8 paths.
-      vim.system(
-        { 'git', '-c', 'core.quotepath=false', '-c', 'status.relativePaths=true', 'status', '.', '--short' },
-        { text = true, cwd = path },
-        cb
-      )
+      vim.system({
+        'git',
+        '-c',
+        'core.quotepath=false',
+        '-c',
+        'status.relativePaths=true',
+        'status',
+        '.',
+        '--short',
+      }, { text = true, cwd = path }, cb)
     end,
     function(cb)
       if config.show_ignored then
@@ -242,7 +250,11 @@ M.setup = function()
     if hl_group.index then
       vim.api.nvim_set_hl(0, hl_group.hl_group, { link = 'OilGitStatusIndex', default = true })
     else
-      vim.api.nvim_set_hl(0, hl_group.hl_group, { link = 'OilGitStatusWorkingTree', default = true })
+      vim.api.nvim_set_hl(
+        0,
+        hl_group.hl_group,
+        { link = 'OilGitStatusWorkingTree', default = true }
+      )
     end
   end
 end

@@ -125,7 +125,12 @@ vim.keymap.set('n', 'crm', function()
   modify_cur_line(toggle_scope)
 end, { buffer = true, desc = 'toggle local<->M' })
 
-vim.keymap.set('n', 'crM', 'crfcrm', { buffer = true, remap = true, desc = 'toggle func form and scope' })
+vim.keymap.set(
+  'n',
+  'crM',
+  'crfcrm',
+  { buffer = true, remap = true, desc = 'toggle func form and scope' }
+)
 
 -- FIXME:
 -- crm on `local function toggle_scope(line)`

@@ -81,14 +81,7 @@ end
 local sep = ''
 
 M.lua_icons = function()
-  return string.format(
-    '%s%s%s%s%s',
-    M.lsp_icon(),
-    sep,
-    M.copilot_icon(),
-    sep,
-    M.treesitter_icon()
-  )
+  return string.format('%s%s%s%s%s', M.lsp_icon(), sep, M.copilot_icon(), sep, M.treesitter_icon())
 end
 
 return M

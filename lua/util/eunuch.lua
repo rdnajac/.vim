@@ -32,7 +32,11 @@ vim.api.nvim_create_autocmd('InsertLeave', {
   group = aug,
   nested = true,
   callback = function()
-    if vim.fn.line('.') == 1 and vim.fn.getline(1) == vim.fn.getreg('.') and vim.fn.getreg('.'):match('^#!%s*%S') then
+    if
+      vim.fn.line('.') == 1
+      and vim.fn.getline(1) == vim.fn.getreg('.')
+      and vim.fn.getreg('.'):match('^#!%s*%S')
+    then
       vim.cmd('filetype detect')
     end
   end,

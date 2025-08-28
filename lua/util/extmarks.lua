@@ -23,4 +23,3 @@ vim.keymap.set('n', '<leader>ux', function()
     print(vim.inspect(extmarks))
   end
 end, { desc = 'Check extmarks at cursor' })
-
