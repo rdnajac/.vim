@@ -1,20 +1,37 @@
-#!/usr/bin/env bash
+#!/usr/bin/env -S nvim -l
 
-NVIM_PIPE="${NVIM_PIPE:-${XDG_RUNTIME_DIR:-/tmp}/nvim.pipe}"
+local uv = vim.uv
+local PWD = os.getenv("PWD") or uv.cwd()
+local NVIM_PIPE = os.getenv('NVIM_PIPE') or (os.getenv('XDG_RUNTIME_DIR') or '/tmp') .. '/nvim.pipe'
 
-resolve() {
-  realpath "$1" 2>/dev/null || readlink -f "$1" 2>/dev/null || printf '%s/%s\n' "$PWD" "$1"
-}
+local function resolve(path)
+  return uv.fs_realpath(path) or (PWD .. '/' .. path)
+end
 
-args=()
-for a in "$@"; do
-  [[ $a == -* ]] && args+=("$a") || args+=("$(resolve "$a")")
-done
+local args = {}
+for i = 1, #arg do
+  local a = arg[i]
+  if a:sub(1, 1) == '-' then
+    table.insert(args, a)
+  else
+    table.insert(args, resolve(a))
+  end
+end
 
-if [[ -S $NVIM_PIPE ]]; then
-  exec nvim --server "$NVIM_PIPE" --remote "${args[@]}"
-elif [[ -n $NVIM ]]; then
-  exec nvim --server "$NVIM" --remote "${args[@]}"
+vim.print(vim.inspect(args))
+
+local NVIM = os.getenv('NVIM')
+local stat = uv.fs_stat(NVIM_PIPE)
+
+local cmd = ''
+if stat and stat.type == 'socket' then
+  cmd = string.format('nvim --server %q --remote %s', NVIM_PIPE, table.concat(args, ' '))
+elseif NVIM and NVIM ~= '' then
+  cmd = string.format('nvim --server %q --remote %s', NVIM, table.concat(args, ' '))
 else
-  exec nvim --listen "$NVIM_PIPE" "${args[@]}"
-fi
+  cmd = string.format('nvim --listen %q %s', NVIM_PIPE, table.concat(args, ' '))
+end
+
+return os.exit(os.execute(cmd))
+
+-- vim:ft=lua

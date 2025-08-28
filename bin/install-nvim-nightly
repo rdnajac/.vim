@@ -1,7 +1,7 @@
 #!/bin/bash
 ## Install `neovim` nightly build for ARM64 on macOS.
 
-set -eu
+set -eux
 
 URL="https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-arm64.tar.gz"
 TARBALL="${URL##*/}"

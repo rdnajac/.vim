@@ -20,8 +20,8 @@ endfunction
 
 function! ooze#send(text) abort
   if !exists('g:ooze_channel') || empty(g:ooze_channel)
-    echohl WarningMsg | echom 'Ooze: no channel selected' | echohl None
-    return
+    Warn 'Ooze: no channel selected'
+    return 0
   endif
 
   let l:text = a:text
@@ -30,7 +30,7 @@ function! ooze#send(text) abort
     let l:text .= s:newline
   endif
   let l:chan = str2nr(g:ooze_channel)
-  call chansend(l:chan, l:text)
+  let l:bytes = chansend(l:chan, l:text)
 
   if get(g:, 'ooze_auto_advance', 1)
     call s:linefeed()
@@ -38,22 +38,35 @@ function! ooze#send(text) abort
   if get(g:, 'ooze_auto_scroll', 1)
     call s:scroll()
   endif
+  return l:bytes
 endfunction
 
 function! ooze#line() abort
+  if &buftype ==# 'terminal'
+    return '<CR>'
+  endif
+
   let l:line = getline('.')
-  if &ft ==# 'r' || &ft ==# 'rmd' || &ft ==# 'quarto'
+  let l:ft = &filetype
+  if l:ft ==# 'r' || l:ft ==# 'rmd' || l:ft ==# 'quarto'
     Warn 'Ooze does not support R yet.'
-    return
+    return 0
   endif
-  if &filetype ==# 'vim'
-    execute l:line
-  elseif &filetype ==# 'lua'
-    execute 'lua ' . l:line
+
+  if l:ft ==# 'vim' || l:ft ==# 'lua'
+    execute (l:ft ==# 'lua' ? 'lua ' : '') . l:line
+    Info (l:ft ==# 'lua' ? ' ' : ' ') . '[[' . l:line . ']]'
+    return 1
+  endif
+
+  let l:bytes = ooze#send(l:line)
+
+  if  l:bytes > 0
+    Info 'Sent ' . l:bytes . ' bytes: [[' . l:line . ']]'
   else
-    call ooze#send(l:line)
+    Warn 'Failed to send line: [[' . l:line . ']]'
+    return '<CR>'
   endif
-  Info ' [[' . l:line . ']]'
 endfunction
 
 function! ooze#file() abort

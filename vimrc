@@ -340,13 +340,9 @@ iabbrev m- —
 " }}}1
 
 " Section: plugins {{{1
-
-" let g:plug_home = stdpath('data') . '/site/pack/core/opt'
-" ~/.local/share/nvim/site/pack/core/opt
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
-Plug 'dense-analysis/ale'
-Plug 'github/copilot.vim'
+Plug 'dense-analysis/ale' " TODO: try nvim-lint
 Plug 'lervag/vimtex'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -369,6 +365,7 @@ Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 
 if !has('nvim')
+  Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
   Plug 'junegunn/vim-easy-align'
   " Plug 'tpope/vim-sensible'
