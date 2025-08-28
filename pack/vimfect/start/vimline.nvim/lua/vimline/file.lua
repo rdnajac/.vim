@@ -1,9 +1,11 @@
 local M = {}
 
+local icons = nvim.icons
+
 --- Return file format icon ( one of { unix, dos, mac })
 --- @param bufnr? integer Optional buffer number (defaults to current buffer)
 M.format = function(bufnr)
-  return (N.icons[vim.bo[bufnr or 0].fileformat] or vim.bo[bufnr or 0].fileformat)
+  return (icons[vim.bo[bufnr or 0].fileformat] or vim.bo[bufnr or 0].fileformat)
 end
 
 -- TODO: accept bufnr?

@@ -1,6 +1,5 @@
 local M = { 'Saghen/blink.cmp' }
-
-M.build = 'cargo build --release'
+-- M.build = 'cargo build --release'
 
 M.specs = {
   'bydlw98/blink-cmp-env',
@@ -9,6 +8,8 @@ M.specs = {
 }
 
 M.event = 'InsertEnter'
+
+local icons = nvim.icons
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
@@ -36,7 +37,7 @@ M.opts = {
         components = {
           kind_icon = {
             text = function(ctx)
-              return N.icons.kinds[ctx.kind] or ''
+              return icons.kinds[ctx.kind] or ''
             end,
           },
         },
@@ -92,7 +93,7 @@ M.component = function()
   end
 
   local enabled = sources.get_enabled_providers('default')
-  local source_icons = N.icons.src
+  local source_icons = icons.src
 
   return vim
     .iter(sources.get_all_providers())

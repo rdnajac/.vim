@@ -44,9 +44,6 @@ _G.nvim = vim.defaulttable(function(k)
   return require('nvim.' .. k)
 end)
 
--- FIXME: remove this shim
-_G.N = _G.nvim
-
 -- override vim.notify to provide additional highlighting
 vim.notify = nvim.notify
 
@@ -221,8 +218,5 @@ for _, name in ipairs(pickers) do
   end
 end
 -- ]]
-require('util.lspprogress')
--- require('util.lspprogress2')
-
 
 -- vim:fdm=marker:fmr=[[,]]:fdl=0

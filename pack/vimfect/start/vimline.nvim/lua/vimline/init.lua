@@ -1,3 +1,4 @@
+local icons = nvim.icons
 -- Escape `%` in str so it doesn't get picked as stl item.
 local vimlineescape = function(str)
   return type(str) == 'string' and str:gsub('%%', '%%%%') or str
@@ -53,19 +54,19 @@ end
 M.copilot_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name == 'GitHub Copilot' then
-      return N.icons.src.copilot
+      return icons.src.copilot
     end
   end
-  return N.icons.lsp.unavailable .. ' '
+  return icons.lsp.unavailable .. ' '
 end
 
 M.lsp_icon = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name ~= 'GitHub Copilot' then
-      return N.icons.lsp.attached
+      return icons.lsp.attached
     end
   end
-  return N.icons.lsp.unavailable .. ' '
+  return icons.lsp.unavailable .. ' '
 end
 
 M.treesitter_icon = function()

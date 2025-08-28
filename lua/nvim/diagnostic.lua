@@ -1,6 +1,6 @@
 local M = {}
 
-local icons = N.icons.diagnostics
+local icons = nvim.icons.diagnostics
 
 ---@type vim.diagnostic.Opts
 local opts = {
