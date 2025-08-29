@@ -1,12 +1,10 @@
-local M = { 'nvim-treesitter/nvim-treesitter' }
+local M = {}
 
-M.version = 'main'
+local version = 'main'
 
-M.dependencies = {
-  {
-    src = 'nvim-treesitter/nvim-treesitter-textobjects',
-    version = M.version,
-  },
+M.specs = {
+  { src = 'nvim-treesitter/nvim-treesitter', version = version },
+  { src = 'nvim-treesitter/nvim-treesitter-textobjects', version = version },
 }
 
 -- FIXME: TSUpdate is not available until after setup is called
@@ -65,6 +63,7 @@ vim.api.nvim_create_autocmd('User', {
 
 M.install_parsers = function()
   local parsers = require('nvim.treesitter.parsers')
+
   require('nvim-treesitter').install(parsers)
 end
 

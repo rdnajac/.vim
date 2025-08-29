@@ -1,4 +1,5 @@
 -- Function to capture tmux key bindings using vim.system
+-- TODO: capture ghostty keys
 local function capture_tmux_keys()
   local result = vim.system({ 'tmux', 'list-keys', '-N' }, { text = true }):wait()
 
@@ -22,28 +23,3 @@ local function capture_tmux_keys()
   end
   return filtered_keys
 end
-
--- Run the function to capture tmux key bindings
-local key_bindings = capture_tmux_keys()
--- print(vim.inspect(key_bindings))
-
--- require('which-key').add({
---   { '<C-F>', group = 'tmux' },
---   { '<C-F>:', desc = 'tmux' },
---   key_bindings,
--- })
-
--- some vim window key bindings overlap
---   `d` ➜ 󱖫 Show diagnostics under the cursor │
--- skip
-
---   `w` ➜  Switch windows                    │
-
---   `x` ➜  Swap current with next            │
--- use capital x
-
---   `L` ➜  Move window to far right          │
--- skip
-
---   `=` ➜  Equally high and wide             │
---   `|` ➜  Max out the width                 │

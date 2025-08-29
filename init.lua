@@ -74,6 +74,7 @@ Plug.do_configs({
 })
 
 require('plug')
+
 -- ]]
 -- Section: Keymaps [[
 

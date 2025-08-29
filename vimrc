@@ -9,7 +9,7 @@ let g:maplocalleader = '\'
 " TODO: figure this out
 " set autowrite autowriteall
 set noswapfile
-set confirm
+" set confirm
 
 set ignorecase smartcase
 set mouse=a
