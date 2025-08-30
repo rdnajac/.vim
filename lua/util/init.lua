@@ -2,6 +2,18 @@ local M = {}
 
 M.sep = package.config:sub(1, 1)
 
+-- Override require to handle errors gracefully
+M.safe_require = function(module)
+  local ok, mod = xpcall(require, debug.traceback, module)
+  if not ok then
+    vim.schedule(function()
+      error(mod) -- TODO: why are we scheduling the error?
+    end)
+    return nil
+  end
+  return mod
+end
+
 -- does not normalize the path, that is the responsibility of the caller
 M.modname = function(path)
   return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
@@ -23,6 +35,30 @@ function M.for_each_module(fn, subpath, recursive)
     if not vim.endswith(mod, '/init') then
       fn(mod)
     end
+  end
+end
+
+--- Returns the file path of the first non-self caller.
+---@return string|nil
+M.source = function()
+  local self_path = debug.getinfo(1, 'S').source:sub(2)
+  local self_dir = vim.fn.fnamemodify(self_path, ':h')
+
+  local i = 2
+  while true do
+    local info = debug.getinfo(i, 'S')
+    if not info then
+      return nil
+    end
+
+    local src = info.source
+    if src:sub(1, 1) == '@' then
+      local abs = vim.fn.fnamemodify(src:sub(2), ':p')
+      if not vim.startswith(abs, self_dir) then
+        return abs
+      end
+    end
+    i = i + 1
   end
 end
 

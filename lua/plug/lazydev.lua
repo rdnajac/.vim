@@ -19,8 +19,7 @@ return {
       library = {
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
         { path = 'snacks.nvim', words = { 'Snacks' } },
-        -- { path = 'nvim', words = { 'nvim' } },
-        -- { path = 'nvim', words = { 'nv' } },
+        { path = 'nvim', words = { 'nvim' } }, -- FIXME: doesn't work
       },
     })
   end,

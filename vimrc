@@ -56,8 +56,8 @@ set list
 set listchars= " reset
 set listchars+=trail:¿,
 set listchars+=tab:→\ ",
-set listchars+=extends:>,
-set listchars+=precedes:<,
+set listchars+=extends:…,
+set listchars+=precedes:…,
 set listchars+=nbsp:+
 
 " }}}1
@@ -192,15 +192,15 @@ nnoremap <leader>cc <Cmd>CodeCompanion<CR>
 
 " debug {{{2
 if has ('nvim')
-nnoremap <leader>db <Cmd>Blink status<CR>
-nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
-nnoremap <leader>dd <Cmd>LazyDev debug<CR>
-nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
-nnoremap <leader>dL <Cmd>=vim.loader._inspect()<CR>
-nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
-nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
-nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
-nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
+  nnoremap <leader>db <Cmd>Blink status<CR>
+  nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
+  nnoremap <leader>dd <Cmd>LazyDev debug<CR>
+  nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
+  nnoremap <leader>dL <Cmd>=vim.loader._inspect()<CR>
+  nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
+  nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
+  nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
+  nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
 endif
 
 " file/find/format {{{2
@@ -361,9 +361,10 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
-" Plug '~/GitHub/rdnajac/vim-lol'
 
-if !has('nvim')
+if has('nvim')
+  " Plug '~/GitHub/rdnajac/vim-lol'
+else
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
@@ -391,8 +392,9 @@ let g:interpreters = {
       \ 'python': 'python3',
       \ 'R':      'Rscript',
       \ 'r':      'Rscript',
-      \ 'rmd':      'Rscript',
+      \ 'rmd':    'Rscript',
       \ }
+" FIXME: doesn't work with r files
 
 if !exists('g:vimrc_reload_count')
   let g:vimrc_reload_count = 0

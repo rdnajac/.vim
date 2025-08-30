@@ -2,7 +2,10 @@ if exists('g:loaded_plug')
   finish
 endif
 let g:loaded_plug = 2 " `junegunn/vim-plug` sets this to 1
+let g:plug_home = luaeval("vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')")
 
+""
+" register the `Plug` command
 function! plug#begin() abort
   let g:plugins = []
   command! -nargs=1 -bar -bang Plug call s:plug(<bang>0, <q-args>)

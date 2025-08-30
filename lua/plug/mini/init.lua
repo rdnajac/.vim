@@ -1,4 +1,4 @@
-local M = { 'echasnovski/mini.nvim' }
+local M = { 'nvim-mini/mini.nvim' }
 
 package.preload['nvim-web-devicons'] = function()
   require('mini.icons').mock_nvim_web_devicons()

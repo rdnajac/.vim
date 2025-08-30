@@ -1,7 +1,5 @@
 setlocal expandtab
 setlocal formatoptions-=ro
-setlocal foldtext=fold#text_lua()
-" setlocal foldtext=
 
 let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
 
@@ -10,6 +8,8 @@ inoremap <buffer> \ss --<SPACE>stylua:<SPACE>ignore<SPACE>start
 inoremap <buffer> \se --<SPACE>stylua:<SPACE>ignore<SPACE>end
 
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
+iabbrev <buffer> fu function()
+
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><c-g>u<CR><CR><esc>hi<Space><Space>
 
 " call apathy#lua#setup()

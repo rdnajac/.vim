@@ -2,7 +2,6 @@ local M = {}
 
 M.specs = {
   -- 'neovim/nvim-lspconfig',
-  'mason-org/mason.nvim',
   'b0o/SchemaStore.nvim',
 }
 
@@ -25,7 +24,7 @@ end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
 -- override some of the default LSP keymaps with snacks
 M.keys = function()
   local opts = { buffer = true, nowait = true }
-  -- TODO use which key to set these up
+  -- TODO: use which key to set these up
   -- stylua: ignore
   return {
     { 'glr', function() Snacks.picker.lsp_references() end,        opts },
@@ -78,11 +77,11 @@ M.opts = {
 }
 
 M.config = function()
-  require('mason').setup({})
   require('nvim.lsp.progress')
 
   vim.lsp.config('*', M.opts)
   vim.lsp.enable(M.servers)
+  -- TODO:make this a toggle 
   vim.lsp.inline_completion.enable() -- XXX:
 end
 

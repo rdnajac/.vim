@@ -1,16 +1,11 @@
--- Section: Housekeeping [[
+-- init.lua
+
 ---@type 'netrw'|'snacks'|'oil'
-vim.g.default_file_explorer = 'oil'
+vim.g.file_explorer = 'oil'
 
 -- disable netrw if using another file explorer
-vim.g.loaded_netrw = vim.g.default_file_explorer == 'netrw' and 1 or nil
+vim.g.loaded_netrw = vim.g.file_explorer == 'netrw' and 1 or nil
 
--- set the plugin directory if the new native package manager is available
-if vim.is_callable(vim.pack.add) then
-  vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
-end
--- ]]
--- Section: Options and `vimrc` [[
 -- set these options first so it is apparent if vimrc overrides them
 -- also try `:options`
 vim.o.cmdheight = 0
@@ -19,30 +14,18 @@ vim.o.pumblend = 0
 -- vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
 
--- load vimrc!
 vim.cmd.runtime('vimrc')
--- ]]
--- Section: Core Setup [[
+
 vim.loader.enable()
 
--- Override require to handle errors gracefully
-_G.Require = function(module)
-  local ok, mod = xpcall(require, debug.traceback, module)
-  if not ok then
-    vim.schedule(function()
-      error(mod) -- TODO: why are we scheduling the error?
-    end)
-    return nil
-  end
-  return mod
+local ok, extui = xpcall(require, debug.traceback, 'vim._extui')
+if ok then
+  extui.enable({})
 end
 
-Require('vim._extui').enable({})
+require('nvim') -- makes `nvim` global, like with Snacks
 
-_G.nvim = vim.defaulttable(function(k)
-  return require('nvim.' .. k)
-end)
-
+-- vim.notify [[
 -- override vim.notify to provide additional highlighting
 vim.notify = nvim.notify
 
@@ -51,6 +34,7 @@ vim.notify = nvim.notify
 nvim.info = function(msg, opts)
   vim.notify(msg, vim.log.levels.INFO, opts or {})
 end
+-- ]]
 
 -- stylua: ignore start
 _G.bt = function() Snacks.debug.backtrace() end
@@ -58,24 +42,82 @@ _G.ddd = function(...) return Snacks.debug.inspect(...) end
 -- stylua: ignore end
 vim.print = _G.ddd
 -- ]]
+
 -- Section: Plugins [[
+
+--- custon load function to overide vim.pack.add's
+--- provides automatic setup for nvim plugins
+---@param plug_data {spec: vim.pack.Spec, path: string}
+local load = function(plug_data)
+  local spec = plug_data.spec
+  local opts = spec.data.opts or nil
+  local config = spec.data.config or nil
+
+  -- we have to `packadd` oureslves since load overrides this step
+  -- TODO: no bang if loaded?
+  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
+
+  if config then
+    print('configuring: ' .. spec.name)
+    config()
+  elseif opts then
+    print('setting up: ' .. spec.name)
+    require(spec.name).setup(opts)
+  end
+end
+
+local to_spec = function(plugin)
+  local repo = plugin[1]
+  local src = 'http://github.com/' .. repo .. '.git'
+  local name = repo:match('([^/]+)$'):gsub('%..*$', '')
+  local version = plugin.version or nil
+  local opts = plugin.opts or nil
+  local config = plugin.config or nil
+
+  vim.validate('opts', opts, 'table', true, 'opts must be a table')
+  vim.validate('config', config, 'function', true, 'config must be a function')
+
+  local data = (opts or config) and { opts = opts, config = config } or nil
+
+  local spec = { src = src, name = name, version = version, data = data }
+  return spec
+end
+-- ]]
+
+-- ]]
+local mods = {
+  require('nvim.snacks'),
+  require('nvim.mason'),
+  require('nvim.colorscheme'),
+  -- require('nvim.format'),
+  -- require('nvim.lint'),
+}
+
+---@type (string|vim.pack.Spec)[]
+local specs = vim.tbl_map(function(mod)
+  return to_spec(mod)
+end, mods)
+
+---@type vim.pack.keyset.add
+local opts = {
+  confirm = vim.v.vim_did_enter == 0,
+  load = load,
+}
+
+vim.pack.add(specs, opts)
+
+require('tokyonight').load()
 
 -- TODO: Make this make sense
 local Plug = require('nvim.plug')
 
 Plug.do_configs({
-  Plug('nvim.snacks'), -- must be first
-  Plug('nvim.colorscheme'),
-  Plug('nvim.diagnostic'),
-  -- Plug('nvim.format'),
-  -- Plug('nvim.lint'),
   Plug('nvim.lsp'),
   Plug('nvim.treesitter'),
 })
 
 require('plug')
 
--- ]]
 -- Section: Keymaps [[
 
 vim.keymap.set('n', '<leader>gg', function()
@@ -152,6 +194,7 @@ for _, m in ipairs(mods) do
   end
 end
 -- ]]
+
 -- Section: Toggles [[
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
@@ -196,6 +239,7 @@ vim.keymap.set('i', '<Tab>', function()
   return '<Tab>'
 end, { expr = true })
 -- ]]
+
 -- Section: Commands [[
 local command = vim.api.nvim_create_user_command
 
@@ -265,6 +309,29 @@ vim.api.nvim_create_user_command('PlugUpdate', function(opts)
   vim.pack.update(nil, { force = opts.bang })
 end, { bang = true })
 
+-- ]]
+
+--- vim.diagnostic [[
+---@type vim.diagnostic.Opts
+local opts = {
+  float = { source = true },
+  underline = false,
+  virtual_text = false,
+  severity_sort = true,
+  signs = { text = {}, numhl = {} },
+}
+
+-- set up the signs and highlights for each severity level
+for name, severity in pairs(vim.diagnostic.severity) do
+  -- capture the severity level as a number and ignore the short names
+  if type(severity) == 'number' and #name > 1 then
+    local diagnostic = name:sub(1, 1) .. name:sub(2):lower()
+    opts.signs.text[severity] = nvim.icons.diagnostics[diagnostic]
+    opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
+  end
+end
+
+vim.diagnostic.config(opts)
 -- ]]
 
 -- vim:fdm=marker:fmr=[[,]]:fdl=0

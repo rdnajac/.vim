@@ -23,7 +23,6 @@ M.opts = {
   on_colors = function(colors)
     colors.blue = '#14afff'
     colors.green = '#39ff14'
-    -- colors.red = '#f7768e'
   end,
   on_highlights = function(hl, colors)
     hl['Cmdline'] = { bg = bg.black }
@@ -45,12 +44,10 @@ M.opts = {
 }
 
 -- TODO: move to `colors/`
-M.config = function()
-  -- M.colors, M.groups, M.opts = require('tokyonight').load(M.opts)
-  require('tokyonight').setup(M.opts)
-  require('tokyonight').load()
-  M.colors, M.groups, _ = require('tokyonight').load()
-end
+-- M.config = function()
+--   require('tokyonight').setup(M.opts)
+--   M.colors, M.groups, _ = require('tokyonight').load()
+-- end
 
 ---@param file string
 ---@param contents string

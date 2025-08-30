@@ -18,7 +18,7 @@ return {
   },
   settings = {
     telemetry = {
-      telemetryLevel = 'all',
+      telemetryLevel = 'all', -- TODO:do i want this?
     },
   },
 }

@@ -3,9 +3,10 @@
 " Author:       rdnajac
 
 " if has('nvim') && luaeval('package.loaded["tokyonight"]')
+   " lua require('tokyonight').load()
 " if has('nvim')
 "   lua _G.colors, _G.groups, _G.opts = require('tokyonight').load()
-"   finish
+  " finish
 " endif
 
 hi clear

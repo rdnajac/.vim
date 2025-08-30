@@ -1,6 +1,6 @@
 local M = {}
 
-local version = 'main'
+local version = 'main' -- XXX: Remove this if main ever becomes default
 
 M.specs = {
   { src = 'nvim-treesitter/nvim-treesitter', version = version },

@@ -18,7 +18,7 @@ local enabled = {
 
 ---@module "snacks"
 ---@type snacks.config
-M.opts = {
+local opts = {
   dashboard = require('nvim.snacks.config.dashboard'),
   explorer = { replace_netrw = vim.g.default_file_explorer == 'snacks' },
   indent = { indent = { only_current = true, only_scope = true } },
@@ -40,9 +40,6 @@ M.opts = {
   },
 }
 
-M.config = function()
-  local opts = vim.tbl_deep_extend('force', M.opts, enabled)
-  require('snacks').setup(opts)
-end
+M.opts = vim.tbl_deep_extend('force', opts, enabled)
 
 return M

@@ -1,8 +1,8 @@
 " plugin/comment.vim
-
 function! s:map_insert_comment(lhs, tag) abort
-  execute 'nnoremap cO' . a:lhs ':call comment#above("' . a:tag . '")<CR>'
-  execute 'nnoremap co' . a:lhs ':call comment#below("' . a:tag . '")<CR>'
+  execute 'nnoremap cO' . a:lhs . ' :call comment#above("' . a:tag . '")<CR>'
+  execute 'nnoremap co' . toupper(a:lhs) . ' :call comment#above("' . a:tag . '")<CR>'
+  execute 'nnoremap co' . a:lhs . ' :call comment#below("' . a:tag . '")<CR>'
 endfunction
 
 call s:map_insert_comment('o', '')

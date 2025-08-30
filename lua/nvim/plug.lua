@@ -1,5 +1,6 @@
 ---- Extend the `vim.pack.Spec` type with additional fields
----@class PlugSpec : vim.pack.Spec
+---@class PlugSpec 
+---@field [1]? string|vim.pack.Spec shorthand for `src`
 ---@field build? string|fun(): nil
 ---@field config? fun(): nil
 ---@field dependencies? (string|vim.pack.Spec|PlugSpec)[]
@@ -32,7 +33,8 @@ local function to_spec(module)
   return {
     src = src,
     name = t == 'table' and module.name or nil,
-    version = t == 'table' and module.version or nil,
+    version = t == 'table' and module.version or nil
+    -- data = module,
   }
 end
 
@@ -72,7 +74,7 @@ end
 
 -- Load a plugin module and return its spec table without calling config
 M.Plug = function(modname)
-  local plugin = Require(modname)
+  local plugin = require('util').safe_require(modname)
 
   if plugin then
     local specs = M.import_specs(plugin)
@@ -183,30 +185,6 @@ M.enabled = function(plugin)
   end
   return enabled == nil or enabled == true
 end
-
-vim.api.nvim_create_user_command('PlugClean', function()
-  vim.pack.del(vim.tbl_map(
-    function(plugin)
-      return plugin.spec.name
-    end,
-    vim.tbl_filter(function(plugin)
-      return plugin.active == false
-    end, vim.pack.get())
-  ))
-end, { desc = 'Remove unused plugins' })
-
-vim.api.nvim_create_user_command('Plug', function(args)
-  if #args.fargs == 0 then
-    print(vim.inspect(vim.pack.get()))
-  else
-    vim.pack.add({ 'https://github.com/' .. args.fargs[1] })
-  end
-end, { nargs = '?', desc = 'Add a plugin' })
-
--- must pass nil to update all plugins with a bang
-vim.api.nvim_create_user_command('PlugUpdate', function(opts)
-  vim.pack.update(nil, { force = opts.bang })
-end, { bang = true })
 
 -- TODO: _G.Plug=require('nvim.plug')
 return setmetatable(M, {

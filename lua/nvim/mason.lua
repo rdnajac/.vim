@@ -1,8 +1,10 @@
-local M = {}
+local M = { 'mason-org/mason.nvim', opts = {} }
 
 -- TODO: do we have to cache this ourselves?
 -- or does mason do this internally?
-M.reg = require('mason-registry')
+M.reg = function()
+  return require('mason-registry')
+end
 
 function M.install(tools)
   local total = #tools
@@ -18,7 +20,8 @@ function M.install(tools)
   end
 
   for _, name in ipairs(tools) do
-    local ok, pkg = pcall(M.reg.get_package, name)
+    local reg = M.reg()
+    local ok, pkg = pcall(reg.get_package, name)
     if not ok then
       Snacks.notify.error('Tool not found: ' .. name)
       tick()
@@ -42,7 +45,8 @@ function M.install(tools)
 end
 
 M.list = function()
-  local pkgs = M.reg.get_all_packages()
+    local reg = M.reg()
+  local pkgs = reg.get_all_packages()
 
   return vim.tbl_map(
     function(pkg)

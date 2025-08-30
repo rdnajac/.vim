@@ -26,17 +26,25 @@ endfunction
 
 let s:left_sep = '🭛'
 
+function! s:file_parts() abort
+  let [l:root, l:suffix] = path#relative_parts()
+  let l:prefix = l:root !=# '' ? '󱉭 ' . l:root . '/' : ''
+  let l:ret = ''
+  " let l:ret .= s:left_sep
+  let l:ret .= '%#Chromatophore_b#'
+  let l:ret .= l:prefix
+  let l:ret .= '%#Chromatophore_bc#'
+  let l:ret .= s:left_sep
+  let l:ret .= '%#Chromatophore_c#'
+  let l:ret .= l:suffix
+  return l:ret
+endfunction
+
 function! vimline#statusline#() abort
   let l:ret = ''
   let l:ret .= '%#Chromatophore_a# '
   " let l:ret .= '%-12(%{vimline#statusline#meta()}%)%S'
   let l:ret .= vimline#statusline#meta() . '%S' . ' '
-  let l:ret .= '%#Chromatophore_b# '
-  let l:ret .= '%f' " file name
-  let l:ret .= ' %#Chromatophore_bc#'
-  let l:ret .= s:left_sep
-  let l:ret .= ' %#Chromatophore_c#'
-  " let l:ret .= lua#require('vimline', 'lua_icons')
-
+  let l:ret .= s:file_parts()
   return l:ret
 endfunction

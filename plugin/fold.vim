@@ -16,7 +16,7 @@ augroup vimrc_fold
   " auto_pause_folds
   " au CmdlineLeave /,\? call fold#pause()
   " au CursorMoved,CursorMovedI * call fold#unpause()
-  au FileType lua setl fdm=expr
+  au FileType lua setl fdm=expr foldtext=fold#text_lua()
   au FileType sh  setl fdm=expr
   au FileType vim setl fdm=marker
 augroup END
