@@ -1,4 +1,3 @@
-local Util = require('lazydev.util')
 local Workspace = require('lazydev.workspace')
 
 local M = {}
@@ -9,14 +8,14 @@ M.commands = {
     local buf = vim.api.nvim_get_current_buf()
     local ws = Workspace.find({ buf = buf })
     if not ws then
-      return Util.warn(
+      return Snacks.notify.warn(
         'No **LuaLS** workspace found.\nUse `:LazyDev lsp` to see settings of attached LSP clients.'
       )
     end
     ws:debug({ details = true })
   end,
   lsp = function()
-    local clients = Util.get_clients({ bufnr = 0 })
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
     local lines = {} ---@type string[]
     for _, client in ipairs(clients) do
       lines[#lines + 1] = '## ' .. client.name
@@ -24,7 +23,7 @@ M.commands = {
       lines[#lines + 1] = 'settings = ' .. vim.inspect(client.settings)
       lines[#lines + 1] = '```'
     end
-    Util.info(lines)
+    Snacks.notify.info(lines)
   end,
 }
 
@@ -32,7 +31,8 @@ function M.execute(input)
   local prefix, args = M.parse(input.args)
   prefix = prefix and prefix ~= '' and prefix or 'debug'
   if not M.commands[prefix or ''] then
-    return Util.error('Invalid command')
+    -- return Util.error('Invalid command')
+    return Snacks.notify.error('Invalid command')
   end
   M.commands[prefix](args)
 end

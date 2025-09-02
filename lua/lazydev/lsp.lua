@@ -2,7 +2,6 @@ local Workspace = require('lazydev.workspace')
 
 local M = {}
 M.attached = {} ---@type table<number,number>
-M.did_global_handler = false
 
 ---@param client? vim.lsp.Client
 function M.assert(client)
@@ -11,6 +10,7 @@ end
 
 ---@param client? vim.lsp.Client
 function M.supports(client)
+  -- HACK: 'lua_ls' is the name used by lspconfig, drop the underscore for now
   -- return client and vim.tbl_contains({ "lua_ls", "emmylua-analyzer-rust" }, client.name)
   return client and client.name == 'luals'
 end
@@ -28,22 +28,7 @@ function M.attach(client)
   -- lspconfig uses the same empty table for all clients.
   -- We need to make sure that each client has its own handlers table.
   client.handlers = vim.tbl_extend('force', {}, client.handlers or {})
-
-  if vim.fn.has('nvim-0.10') == 0 then
-    if M.did_global_handler then
-      return
-    end
-    M.did_global_handler = true
-    local orig = vim.lsp.handlers['workspace/configuration']
-    vim.lsp.handlers['workspace/configuration'] = function(err, params, ctx, cfg)
-      if M.attached[ctx.client_id] then
-        return M.on_workspace_configuration(err, params, ctx, cfg)
-      end
-      return orig(err, params, ctx, cfg)
-    end
-  else
-    client.handlers['workspace/configuration'] = M.on_workspace_configuration
-  end
+  client.handlers['workspace/configuration'] = M.on_workspace_configuration
 end
 
 ---@param params lsp.ConfigurationParams
@@ -89,9 +74,7 @@ end
 ---@param client vim.lsp.Client
 function M.update(client)
   M.assert(client)
-  client:notify('workspace/didChangeConfiguration', {
-    settings = { Lua = {} },
-  })
+  client:notify('workspace/didChangeConfiguration', { settings = { Lua = {} } })
 end
 
 return M

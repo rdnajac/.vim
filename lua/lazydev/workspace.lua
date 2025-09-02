@@ -37,7 +37,7 @@ end
 ---@param client vim.lsp.Client|number
 ---@param root string
 function M.get(client, root)
-  root = M.is_special(root) and root or Util.norm(root)
+  root = M.is_special(root) and root or vim.fs.normalize(root)
   local client_id = type(client) == 'number' and client or client.id
   local id = client_id .. root
   if not M.workspaces[id] then
@@ -59,7 +59,7 @@ end
 function M.find(opts)
   if opts.buf then
     local Lsp = require('lazydev.lsp')
-    local clients = Util.get_clients({ bufnr = opts.buf })
+    local clients = vim.lsp.get_clients({ bufnr = opts.buf })
     clients = vim.tbl_filter(function(client)
       return client and Lsp.supports(client)
     end, clients)
@@ -78,7 +78,7 @@ end
 ---@param opts? {library?:boolean}
 function M:has(path, opts)
   opts = opts or {}
-  path = Util.norm(path)
+  path = vim.fs.normalize(path)
   local dirs = { self.root } ---@type string[]
   if opts.library ~= false then
     vim.list_extend(dirs, self.library)
@@ -103,6 +103,10 @@ function M.get_root(client, buf)
   return client.root_dir or 'single'
 end
 
+local function is_absolute(path)
+  return vim.startswith(path, '/')
+end
+
 ---@param path string|string[]
 function M:add(path)
   if type(path) == 'table' then
@@ -117,10 +121,10 @@ function M:add(path)
     return
   end
   -- normalize
-  path = Util.norm(path)
+  path = vim.fs.normalize(path)
 
   -- try to resolve to a plugin path
-  if not Util.is_absolute(path) and not vim.uv.fs_stat(path) then
+  if not is_absolute(path) and not vim.uv.fs_stat(path) then
     local name, extra = path:match('([^/]+)(/?.*)')
     if name then
       local pp = Pkg.get_plugin_path(name)
@@ -129,7 +133,7 @@ function M:add(path)
   end
 
   path = vim.uv.fs_realpath(path) or path
-  path = Util.norm(path) -- normalize again
+  path = vim.fs.normalize(path) -- normalize again
   -- append /lua if it exists
   if Config.lua_root and not path:find('/lua/?$') and vim.uv.fs_stat(path .. '/lua') then
     path = path .. '/lua'
@@ -201,7 +205,7 @@ function M:debug(opts)
   local rc = not M.is_special(self.root)
     and vim.fs.find('.luarc.json', { upward = true, path = self.root })[1]
   if rc then
-    Util.warn('Found `.luarc.json` in workspace. This may break **lazydev.nvim**\n- `' .. rc .. '`')
+    Snacks.notify.warn('Found `.luarc.json` in workspace. This may break **lazydev.nvim**\n- `' .. rc .. '`')
   end
   opts = opts or {}
   local root = M.is_special(self.root) and '[' .. self.root .. ']'
@@ -219,7 +223,7 @@ function M:debug(opts)
     lines[#lines + 1] = 'settings = ' .. vim.inspect(self.settings)
     lines[#lines + 1] = '```'
   end
-  Util.info(lines)
+  Snacks.notify.info(lines)
 end
 
 return M
