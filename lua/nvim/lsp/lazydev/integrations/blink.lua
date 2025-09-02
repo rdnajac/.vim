@@ -1,8 +1,8 @@
 ---@module 'blink.cmp'
 
-local Buf = require('lazydev.buf')
-local Config = require('lazydev.config')
-local Pkg = require('lazydev.pkg')
+local Buf = require('nvim.lsp.lazydev.buf')
+local Config = require('nvim.lsp.lazydev.config')
+local Pkg = require('nvim.lsp.lazydev.pkg')
 
 --- @type blink.cmp.Source
 local M = {}

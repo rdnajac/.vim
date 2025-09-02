@@ -46,7 +46,7 @@ function M.setup(opts)
   options = vim.tbl_deep_extend('force', {}, options or defaults, opts or {})
 
   M.libs, M.words, M.mods, M.files = {}, {}, {}, {}
-  local runtime = require('lazydev.util').norm(options.runtime)
+  local runtime = vim.fs.normalize(options.runtime)
   table.insert(M.libs, {
     path = vim.uv.fs_stat(runtime) and runtime or vim.env.VIMRUNTIME,
     words = {},
@@ -78,18 +78,18 @@ function M.setup(opts)
   end
 
   vim.api.nvim_create_user_command('LazyDev', function(...)
-    require('lazydev.cmd').execute(...)
+    require('nvim.lsp.lazydev.cmd').execute(...)
   end, {
     nargs = '*',
     complete = function(...)
-      return require('lazydev.cmd').complete(...)
+      return require('nvim.lsp.lazydev.cmd').complete(...)
     end,
     desc = 'lazydev.nvim',
   })
 
   vim.schedule(function()
-    require('lazydev.buf').setup()
-    require('lazydev.integrations').setup()
+    require('nvim.lsp.lazydev.buf').setup()
+    require('nvim.lsp.lazydev.integrations.init').setup()
   end)
   return options
 end

@@ -1,4 +1,4 @@
-local Config = require('lazydev.config')
+local Config = require('nvim.lsp.lazydev.config')
 
 local M = {}
 
@@ -17,7 +17,7 @@ end
 function M.load(name)
   if not M.loaded[name] then
     M.loaded[name] = true
-    require('lazydev.integrations.' .. name).setup()
+    require('nvim.lsp.lazydev.integrations.' .. name).setup()
   end
 end
 

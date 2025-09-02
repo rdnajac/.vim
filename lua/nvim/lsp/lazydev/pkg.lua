@@ -23,12 +23,12 @@ function M.pack_unloaded()
   if not vim.tbl_contains(sites, default_site) then
     sites[#sites + 1] = default_site
   end
-  local Util = require('lazydev.util')
+
   packs = {} ---@type string[]
   for _, site in pairs(sites) do
     for _, pack in ipairs(vim.fn.expand(site .. '/pack/*/opt/*', false, true)) do
       if not pack:find('*', 1, true) then
-        packs[#packs + 1] = Util.norm(pack)
+        packs[#packs + 1] = vim.fs.normalize(pack)
       end
     end
   end
@@ -55,7 +55,6 @@ function M.get_plugin_path(name)
     end
   end
 end
-
 
 ---@param modname string
 ---@return string[]

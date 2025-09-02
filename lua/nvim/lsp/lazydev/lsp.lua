@@ -1,4 +1,4 @@
-local Workspace = require('lazydev.workspace')
+local Workspace = require('nvim.lsp.lazydev.workspace')
 
 local M = {}
 M.attached = {} ---@type table<number,number>

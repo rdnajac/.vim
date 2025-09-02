@@ -1,5 +1,5 @@
-local Config = require('lazydev.config')
-local Pkg = require('lazydev.pkg')
+local Config = require('nvim.lsp.lazydev.config')
+local Pkg = require('nvim.lsp.lazydev.pkg')
 
 ---@class lazydev.Workspace
 ---@field root string
@@ -57,7 +57,7 @@ end
 ---@param opts {buf?:number, path?:string}
 function M.find(opts)
   if opts.buf then
-    local Lsp = require('lazydev.lsp')
+    local Lsp = require('nvim.lsp.lazydev.lsp')
     local clients = vim.lsp.get_clients({ bufnr = opts.buf })
     clients = vim.tbl_filter(function(client)
       return client and Lsp.supports(client)
@@ -140,7 +140,7 @@ function M:add(path)
   if path ~= self.root and not vim.tbl_contains(self.library, path) then
     table.insert(self.library, path)
     if self.root ~= M.GLOBAL then
-      require('lazydev.buf').update()
+      require('nvim.lsp.lazydev.buf').update()
     end
   end
 end

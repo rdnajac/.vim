@@ -79,7 +79,7 @@ M.opts = {
 
 M.config = function()
   require('nvim.lsp.progress')
-  require('lazydev').setup({
+  require('nvim.lsp.lazydev').setup({
     library = {
       { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },

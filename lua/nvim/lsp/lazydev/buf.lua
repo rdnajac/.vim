@@ -1,7 +1,7 @@
-local Config = require('lazydev.config')
-local Lsp = require('lazydev.lsp')
-local Pkg = require('lazydev.pkg')
-local Workspace = require('lazydev.workspace')
+local Config = require('nvim.lsp.lazydev.config')
+local Lsp = require('nvim.lsp.lazydev.lsp')
+local Pkg = require('nvim.lsp.lazydev.pkg')
+local Workspace = require('nvim.lsp.lazydev.workspace')
 
 local M = {}
 
@@ -21,6 +21,7 @@ function M.setup()
   -- debounce updates
   local update = vim.schedule_wrap(M.update)
   local timer = assert(vim.uv.new_timer())
+
   M.update = function()
     timer:start(100, 0, update)
   end
@@ -57,7 +58,7 @@ end
 function M.get_clients()
   return vim.tbl_filter(function(client)
     return Lsp.supports(client)
-  end, vim.lsp.get_clients)
+  end, vim.lsp.get_clients())
 end
 
 --- Attach to the buffer

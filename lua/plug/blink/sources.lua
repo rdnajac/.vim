@@ -56,7 +56,7 @@ end
 M.providers = {
   lazydev = {
     name = 'LazyDev',
-    module = 'lazydev.integrations.blink',
+    module = 'nvim.lsp.lazydev.integrations.blink',
     score_offset = 100,
   },
   env = {

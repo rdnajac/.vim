@@ -5,7 +5,7 @@ function M.setup()
   if not ok then
     return
   end
-  local Lsp = require('lazydev.lsp')
+  local Lsp = require('nvim.lsp.lazydev.lsp')
 
   local try_add = Manager.try_add
 
@@ -23,7 +23,7 @@ function M.setup()
       end
     end
     if is_supported and not project_root then
-      local root = require('lazydev').find_workspace(buf)
+      local root = require('nvim.lsp.lazydev').find_workspace(buf)
       if root then
         return self:add(root, false, buf)
       end
