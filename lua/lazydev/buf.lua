@@ -150,11 +150,6 @@ function M.on_mod(buf, modname)
     if path then
       ws:add(path)
     end
-  else
-    local modpath = Pkg.find_rock(modname)
-    if modpath then
-      ws:add(modpath)
-    end
   end
 end
 
@@ -170,12 +165,6 @@ end
 
 --- Update LuaLS settings with the current library
 function M.update()
-  if package.loaded['neodev'] then
-    vim.notify_once(
-      'Please disable `neodev.nvim` in your config.\nThis is no longer needed when you use `lazydev.nvim`',
-      vim.log.levels.WARN
-    )
-  end
   for _, client in ipairs(M.get_clients()) do
     local update = false
 

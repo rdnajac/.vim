@@ -8,18 +8,11 @@ M.PAT_REQUIRE_BEFORE = M.PAT_REQUIRE_BASE .. '$'
 M.PAT_MODULE = M.PAT_MODULE_BASE .. '["\']'
 M.PAT_REQUIRE = M.PAT_REQUIRE_BASE .. '["\']'
 
-local is_lazy = type(package.loaded.lazy) == 'table'
-
----@param modname string
----@return string[]
-function M.lazy_unloaded(modname)
-  local Util = require('lazy.core.util')
-  return Util.get_unloaded_rtp(modname)
-end
-
 ---@type string[]
 local packs = nil
 
+-- TODO: some calls to this func pass a variable modname, but it's unused
+-- after removinv the lazy loader for packs
 function M.pack_unloaded()
   if packs then
     return packs
@@ -45,47 +38,24 @@ end
 ---@param modname string
 ---@return string[]
 function M.get_unloaded(modname)
-  return is_lazy and M.lazy_unloaded(modname) or M.pack_unloaded()
+  return M.pack_unloaded()
 end
 
 function M.get_plugin_path(name)
-  if is_lazy then
-    local Config = require('lazy.core.config')
-    local plugin = Config.spec.plugins[name]
-    return plugin and plugin.dir
-  else
-    for _, dir in ipairs(vim.opt.rtp:get()) do
-      local basename = vim.fs.basename(dir)
-      if basename == name then
-        return dir
-      end
+  for _, dir in ipairs(vim.opt.rtp:get()) do
+    local basename = vim.fs.basename(dir)
+    if basename == name then
+      return dir
     end
-    for _, dir in ipairs(M.pack_unloaded()) do
-      local basename = vim.fs.basename(dir)
-      if basename == name then
-        return dir
-      end
+  end
+  for _, dir in ipairs(M.pack_unloaded()) do
+    local basename = vim.fs.basename(dir)
+    if basename == name then
+      return dir
     end
   end
 end
 
-function M.find_rock(modname)
-  if not is_lazy then
-    return
-  end
-  local Config = require('lazy.core.config')
-  for _, plugin in pairs(Config.spec.plugins) do
-    if plugin._.pkg and plugin._.pkg.source == 'rockspec' then
-      local root = Config.options.rocks.root .. '/' .. plugin.name
-      root = root .. '/share/lua/5.1'
-      for _, p in ipairs({ '/init.lua', '.lua' }) do
-        if vim.uv.fs_stat(root .. '/' .. modname:gsub('%.', '/') .. p) then
-          return root
-        end
-      end
-    end
-  end
-end
 
 ---@param modname string
 ---@return string[]
