@@ -83,8 +83,6 @@ local to_spec = function(plugin)
   return spec
 end
 -- ]]
-
--- ]]
 local mods = {
   require('nvim.snacks'),
   require('nvim.mason'),

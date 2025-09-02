@@ -78,10 +78,17 @@ M.opts = {
 
 M.config = function()
   require('nvim.lsp.progress')
+  require('lazydev').setup({
+    library = {
+      { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+      { path = 'snacks.nvim', words = { 'Snacks' } },
+      -- { path = 'nvim', words = { 'nvim' } }, -- FIXME: doesn't work
+    },
+  })
 
   vim.lsp.config('*', M.opts)
   vim.lsp.enable(M.servers)
-  -- TODO:make this a toggle 
+  -- TODO:make this a toggle
   vim.lsp.inline_completion.enable() -- XXX:
 end
 

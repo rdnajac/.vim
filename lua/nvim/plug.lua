@@ -1,5 +1,5 @@
 ---- Extend the `vim.pack.Spec` type with additional fields
----@class PlugSpec 
+---@class PlugSpec
 ---@field [1]? string|vim.pack.Spec shorthand for `src`
 ---@field build? string|fun(): nil
 ---@field config? fun(): nil
@@ -33,7 +33,7 @@ local function to_spec(module)
   return {
     src = src,
     name = t == 'table' and module.name or nil,
-    version = t == 'table' and module.version or nil
+    version = t == 'table' and module.version or nil,
     -- data = module,
   }
 end
@@ -168,9 +168,12 @@ end
 -- TODO: save a table of names mapped to config functions with the optional event
 -- TODO: print for debugging
 M.do_configs = function(plugins)
-  for _, plugin in pairs(plugins) do
-    -- print('Configuring plugin: ' .. name)
-    M.config(plugin)
+  for name, plugin in pairs(plugins) do
+    if plugin.enabled and not M.enabled(plugin) then
+      print('Skipping plugin: ' .. name)
+    else
+      M.config(plugin)
+    end
   end
 end
 
