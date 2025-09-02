@@ -1,6 +1,5 @@
 local Config = require('lazydev.config')
 local Pkg = require('lazydev.pkg')
-local Util = require('lazydev.util')
 
 ---@class lazydev.Workspace
 ---@field root string

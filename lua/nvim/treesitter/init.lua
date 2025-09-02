@@ -87,15 +87,15 @@ end
 ---@return boolean
 M.in_comment_node = function()
   local success, node = pcall(vim.treesitter.get_node)
-  if success and node then
-    return vim.tbl_contains({
-      'comment',
-      'line_comment',
-      'block_comment',
-      'comment_content',
-    }, node:type())
-  end
-  return false
+  return success
+      and node
+      and vim.tbl_contains({
+        'comment',
+        'line_comment',
+        'block_comment',
+        'comment_content',
+      }, node:type())
+    or false
 end
 
 return M

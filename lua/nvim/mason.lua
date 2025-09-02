@@ -8,9 +8,8 @@ end
 
 function M.install(tools)
   local total = #tools
-  if total == 0 then
-    return
-  end
+  if total == 0 then return end
+
   local done = 0
   local function tick()
     done = done + 1
@@ -85,7 +84,6 @@ end
 
 M.ensure_installed = function()
   local map = M.map()
-  local servers = require('nvim.lsp').servers
 
   return vim.tbl_map(
     function(server)

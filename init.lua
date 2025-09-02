@@ -33,10 +33,7 @@ require('nvim') -- makes `nvim` global, like with Snacks
 vim.notify = nvim.notify
 
 -- test if the override is working (should be colored blue)
--- vim.notify('init.lua loaded!', vim.log.levels.INFO, { title = 'Test Notification' })
-nvim.info = function(msg, opts)
-  vim.notify(msg, vim.log.levels.INFO, opts or {})
-end
+vim.notify('init.lua loaded!', vim.log.levels.INFO, { title = 'Test Notification' })
 -- ]]
 
 -- stylua: ignore start
@@ -61,10 +58,8 @@ local load = function(plug_data)
   vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
 
   if config then
-    print('configuring: ' .. spec.name)
     config()
   elseif opts then
-    print('setting up: ' .. spec.name)
     require(spec.name).setup(opts)
   end
 end
@@ -86,6 +81,7 @@ local to_spec = function(plugin)
   return spec
 end
 -- ]]
+
 local mods = {
   require('nvim.snacks'),
   require('nvim.mason'),

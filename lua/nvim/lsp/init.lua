@@ -1,6 +1,7 @@
 local M = {}
 
 M.specs = {
+  -- TODO: check whether the configs in after/lsp actually override the default configs
   -- 'neovim/nvim-lspconfig',
   'b0o/SchemaStore.nvim',
 }
@@ -105,9 +106,3 @@ function M.root()
 end
 
 return M
-
--- vim.cmd([[
--- let g:copilot_workspace_folders = [ '~/GitHub' ]
--- let g:copilot_no_tab_map = v:true
--- imap <silent><script><expr> <S-Tab> copilot#Accept("\<CR>")
--- ]])

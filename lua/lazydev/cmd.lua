@@ -31,7 +31,6 @@ function M.execute(input)
   local prefix, args = M.parse(input.args)
   prefix = prefix and prefix ~= '' and prefix or 'debug'
   if not M.commands[prefix or ''] then
-    -- return Util.error('Invalid command')
     return Snacks.notify.error('Invalid command')
   end
   M.commands[prefix](args)

@@ -4,4 +4,8 @@ end)
 
 _G.nvim = M
 
+-- nvim.info = function(msg, opts)
+--   vim.notify(msg, vim.log.levels.INFO, opts or {})
+-- end
+
 return M
