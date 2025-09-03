@@ -49,13 +49,16 @@ local module_patterns = {
     transform = 'local %1',
   },
   -- Change function form: function M.<name>(...) <-> M.<name> = function(...)
+  -- also handle `:` method notation
   func_to_assign = {
-    regex = '^%s*function%s+M%.([%w_.]+)%s*%(',
-    transform = 'M.%1 = function(',
+    regex = '^%s*function%s+M([.:])([%w_.]+)%s*%(',
+    transform = 'M%1%2 = function(',
   },
+
+  -- Change back: M.<name> = function(...) -> function M.<name>(...)
   assign_to_func = {
-    regex = '^%s*M%.([%w_.]+)%s*=%s*function%s*%(',
-    transform = 'function M.%1(',
+    regex = '^%s*M([.:])([%w_.]+)%s*=%s*function%s*%(',
+    transform = 'function M%1%2(',
   },
 }
 
