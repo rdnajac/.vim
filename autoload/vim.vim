@@ -1,3 +1,12 @@
+""
+" @section Introduction, intro
+" @stylized rdnajac/.vim
+" @library
+" @order intro version
+" A vimscript library that hides the worst parts of vimscript and helps you
+" provide consistent plugins.
+"
+
 function! vim#on_init(fn) abort
   if v:vim_did_enter
     call call(a:fn, [])

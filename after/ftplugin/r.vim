@@ -17,7 +17,7 @@ if has('nvim') && luaeval('package.loaded["r"] ~= nil')
   nnoremap <buffer> ]r <Plug>NextRChunk
   nnoremap <buffer> [r <Plug>PreviousRChunk
   vnoremap <buffer> <CR> <Plug>RSendSelection
-  nnoremap <buffer> <CR> <Plug>RDSendLine
+  " nnoremap <buffer> <CR> <Plug>RDSendLine
   nnoremap <buffer> <M-CR> <Plug>RInsertLineOutput
 
   nnoremap <buffer> <localleader>r<CR> <Plug>RSendFile
@@ -31,7 +31,7 @@ if has('nvim') && luaeval('package.loaded["r"] ~= nil')
   nnoremap <buffer> <localleader>rS <Cmd>RSend renv::snapshot()<CR>
   nnoremap <buffer> <localleader>rr <Cmd>RSend renv::restore()<CR>
 
-  nnoremap <buffer> <localleader>rq :<C-U>RSend quarto::quarto_preview(file=expand('%:p'))<CR>
+  nnoremap <buffer> <localleader>rq :<C-U>RSend quarto::quarto_preview(file="<C-R>=expand('%:p')<CR>")<CR>
 
   " TODO: are these overridden by R.nvim in after/ftplugin?
   hi clear RCodeBlock

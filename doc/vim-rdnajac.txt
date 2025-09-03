@@ -1,0 +1,24 @@
+*vim-rdnajac.txt*
+                                                  *rdnajac/.vim* *vim-rdnajac*
+
+==============================================================================
+CONTENTS                                                *vim-rdnajac-contents*
+  1. Introduction..........................................|vim-rdnajac-intro|
+  2. Functions.........................................|vim-rdnajac-functions|
+
+==============================================================================
+INTRODUCTION                                               *vim-rdnajac-intro*
+
+A vimscript library that hides the worst parts of vimscript and helps you
+provide consistent plugins.
+
+
+==============================================================================
+FUNCTIONS                                              *vim-rdnajac-functions*
+
+vim#hl#link({base})                                            *vim#hl#link()*
+  Link multiple highlight groups to a base group Accepts either a list or
+  multiple arguments
+
+
+vim:tw=78:ts=8:ft=help:norl:

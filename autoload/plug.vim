@@ -1,29 +1,26 @@
 if exists('g:loaded_plug')
   finish
 endif
+
 let g:loaded_plug = 2 " `junegunn/vim-plug` sets this to 1
-let g:plug_home = luaeval("vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')")
+let g:plug_home = join([stdpath('data'), 'site', 'pack', 'core', 'opt'], '/')
 
 ""
-" register the `Plug` command
+" Initialize plugin system
 function! plug#begin() abort
   let g:plugins = []
-  command! -nargs=1 -bar -bang Plug call s:plug(<bang>0, <q-args>)
+  command! -nargs=+ -bar Plug call plug#(<args>)
 endfunction
 
 ""
-" we only allow for a single argument for now
-function! s:plug(bang, qargs) abort
-  " `expand` strips the surrounding quotes if any
-  let l:repo = 'https://github.com/' . expand(eval(a:qargs)) . '.git'
-
-  if a:bang " install immediately
-    execute 'lua vim.pack.add({"' . l:repo . '"}, { confirm = false })'
-  else " add to list for later installation
-    call add(g:plugins, l:repo)
-  endif
+" Add a plugin to the list
+function! plug#(repo) abort
+  let l:repo = 'https://github.com/' . trim(a:repo) . '.git'
+  call add(g:plugins, l:repo)
 endfunction
 
+""
+" Finalize plugin system
 function! plug#end() abort
   delcommand Plug
   if has('nvim')
