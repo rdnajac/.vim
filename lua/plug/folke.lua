@@ -1,10 +1,6 @@
 return {
-  specs = {
-    'folke/todo-comments.nvim',
-    'folke/trouble.nvim',
-  },
-  config = function()
-    require('todo-comments').setup()
-    require('trouble').setup()
-  end,
+     'folke/todo-comments.nvim', opts = {} ,
+    -- { 'folke/todo-comments.nvim', opts = {} },
+    -- { 'folke/trouble.nvim', opts = {} },
+    -- {  'folke/noice.nvim', opts = {} },
 }

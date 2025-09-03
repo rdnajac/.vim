@@ -5,7 +5,6 @@ local deps = {
   'nvim-treesitter/nvim-treesitter',
   'nvim-treesitter/nvim-treesitter-textobjects',
 }
-
 M.specs = vim.tbl_map(function(spec)
   return {
     src = 'https://github.com/' .. spec .. '.git',

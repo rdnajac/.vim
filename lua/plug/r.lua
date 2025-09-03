@@ -1,8 +1,8 @@
 vim.g.rout_follow_colorscheme = true
 
 local M = {
-  'R-nvim/R.nvim',
   specs = {
+    'R-nvim/R.nvim',
     'R-nvim/cmp-r',
   },
   ft = { 'r', 'rmd', 'quarto' },

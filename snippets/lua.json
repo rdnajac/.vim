@@ -20,6 +20,12 @@
     "description": "Create an augroup with clear = true"
   },
 
+  "pr": {
+    "prefix": "pr",
+    "body": "print(vim.inspect(${0}))",
+    "description": "print inspect"
+  }, 
+
   "module": {
     "prefix": "local M",
     "body": [

@@ -39,6 +39,7 @@ function! vim#vim_init() abort
   endif
 
   call vim#sensible#()
+  color scheme " set the default colorscheme once
 endfunction
 
 function! vim#nvim_config() abort

@@ -366,7 +366,7 @@ if has('nvim')
   " Plug '~/GitHub/rdnajac/vim-lol'
   Plug 'folke/snacks.nvim',
   Plug 'folke/tokyonight.nvim',
-  Plug 'mason-org/mason.nvim',
+  " Plug 'folke/which-key.nvim',
   " local modules
   Plug 'nvim/treesitter'
   Plug 'nvim/lsp'
@@ -403,7 +403,6 @@ let g:interpreters = {
 
 if !exists('g:vimrc_reload_count')
   let g:vimrc_reload_count = 0
-  color scheme " set the default colorscheme once
 else
   let g:vimrc_reload_count += 1
   Info 'Reloaded vimrc [' . g:vimrc_reload_count . ']'

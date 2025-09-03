@@ -1,14 +1,10 @@
 local M = {}
 
-local deps = {
   -- TODO: check whether the configs in after/lsp actually override the default configs
+M.specs = {
   -- 'neovim/nvim-lspconfig',
   'b0o/SchemaStore.nvim',
 }
-
-M.specs = vim.tbl_map(function(spec)
-  return 'https://github.com/' .. spec .. '.git'
-end, deps)
 
 ---@type string[] The list of LSP servers to configure and enable from `lsp/`
 M.servers = vim.tbl_map(function(path)
