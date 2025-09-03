@@ -43,12 +43,6 @@ M.opts = {
   },
 }
 
--- TODO: move to `colors/`
--- M.config = function()
---   require('tokyonight').setup(M.opts)
---   M.colors, M.groups, _ = require('tokyonight').load()
--- end
-
 ---@param file string
 ---@param contents string
 local function _write(file, contents)

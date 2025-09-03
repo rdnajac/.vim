@@ -3,120 +3,47 @@ vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
 
----@type 'netrw'|'snacks'|'oil'
-vim.g.file_explorer = 'oil'
+vim.g.file_explorer = 'oil' ---@type 'netrw'|'snacks'|'oil'
 
 -- disable netrw if using another file explorer
 vim.g.loaded_netrw = vim.g.file_explorer == 'netrw' and 1 or nil
 
+vim.loader.enable()
+
 -- set these options first so it is apparent if vimrc overrides them
--- also try `:options`
 vim.o.cmdheight = 0
 vim.o.laststatus = 3
 vim.o.pumblend = 0
 -- vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
-
-vim.cmd.runtime('vimrc')
-
-vim.loader.enable()
+-- also try `:options`
 
 local ok, extui = xpcall(require, debug.traceback, 'vim._extui')
 if ok then
   extui.enable({})
 end
 
-require('nvim') -- makes `nvim` global, like with Snacks
+local require = require('util').safe_require
 
--- vim.notify [[
+_G.nv = require('nvim')
+
 -- override vim.notify to provide additional highlighting
-vim.notify = nvim.notify
+vim.notify = nv.notify
 
--- test if the override is working (should be colored blue)
-vim.notify('init.lua loaded!', vim.log.levels.INFO, { title = 'Test Notification' })
--- ]]
+vim.cmd.runtime('vimrc')
 
 -- stylua: ignore start
 _G.bt = function() Snacks.debug.backtrace() end
 _G.ddd = function(...) return Snacks.debug.inspect(...) end
 -- stylua: ignore end
 vim.print = _G.ddd
--- ]]
 
--- Section: Plugins [[
-
---- custon load function to overide vim.pack.add's
---- provides automatic setup for nvim plugins
----@param plug_data {spec: vim.pack.Spec, path: string}
-local load = function(plug_data)
-  local spec = plug_data.spec
-  local opts = spec.data.opts or nil
-  local config = spec.data.config or nil
-
-  -- we have to `packadd` oureslves since load overrides this step
-  -- TODO: no bang if loaded?
-  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-
-  if config then
-    config()
-  elseif opts then
-    require(spec.name).setup(opts)
-  end
-end
-
-local to_spec = function(plugin)
-  local repo = plugin[1]
-  local src = 'http://github.com/' .. repo .. '.git'
-  local name = repo:match('([^/]+)$'):gsub('%..*$', '')
-  local version = plugin.version or nil
-  local opts = plugin.opts or nil
-  local config = plugin.config or nil
-
-  vim.validate('opts', opts, 'table', true, 'opts must be a table')
-  vim.validate('config', config, 'function', true, 'config must be a function')
-
-  local data = (opts or config) and { opts = opts, config = config } or nil
-
-  local spec = { src = src, name = name, version = version, data = data }
-  return spec
-end
--- ]]
-
-local mods = {
-  require('nvim.snacks'),
-  require('nvim.mason'),
-  require('nvim.colorscheme'),
-  -- require('nvim.format'),
-  -- require('nvim.lint'),
-}
-
----@type (string|vim.pack.Spec)[]
-local specs = vim.tbl_map(function(mod)
-  return to_spec(mod)
-end, mods)
-
----@type vim.pack.keyset.add
-local opts = {
-  confirm = vim.v.vim_did_enter == 0,
-  load = load,
-}
-
-vim.pack.add(specs, opts)
-
-require('tokyonight').load()
-
--- TODO: Make this make sense
-local Plug = require('nvim.plug')
-
-Plug.do_configs({
-  Plug('nvim.lsp'),
-  Plug('nvim.treesitter'),
-})
+-- test if the override is working (should be colored blue)
+Snacks.notify.info('init.lua loaded!')
 
 require('plug')
 
 -- Section: Keymaps [[
-
 vim.keymap.set('n', '<leader>gg', function()
   Snacks.lazygit()
   vim.cmd.startinsert()
@@ -323,7 +250,7 @@ for name, severity in pairs(vim.diagnostic.severity) do
   -- capture the severity level as a number and ignore the short names
   if type(severity) == 'number' and #name > 1 then
     local diagnostic = name:sub(1, 1) .. name:sub(2):lower()
-    opts.signs.text[severity] = nvim.icons.diagnostics[diagnostic]
+    opts.signs.text[severity] = nv.icons.diagnostics[diagnostic]
     opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
   end
 end

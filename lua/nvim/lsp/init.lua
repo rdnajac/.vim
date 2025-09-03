@@ -1,10 +1,14 @@
 local M = {}
 
-M.specs = {
+local deps = {
   -- TODO: check whether the configs in after/lsp actually override the default configs
   -- 'neovim/nvim-lspconfig',
   'b0o/SchemaStore.nvim',
 }
+
+M.specs = vim.tbl_map(function(spec)
+  return 'https://github.com/' .. spec .. '.git'
+end, deps)
 
 ---@type string[] The list of LSP servers to configure and enable from `lsp/`
 M.servers = vim.tbl_map(function(path)
@@ -77,7 +81,7 @@ M.opts = {
   end,
 }
 
-M.config = function()
+M.init = function()
   require('nvim.lsp.progress')
   require('nvim.lsp.lazydev').setup({
     library = {
@@ -91,18 +95,6 @@ M.config = function()
   vim.lsp.enable(M.servers)
   -- TODO:make this a toggle
   vim.lsp.inline_completion.enable() -- XXX:
-end
-
-function M.root()
-  local bufnr = vim.api.nvim_get_current_buf()
-  local clients = vim.lsp.get_clients({ bufnr = bufnr })
-
-  for _, client in ipairs(clients) do
-    if client.name ~= 'copilot' and client.root_dir then
-      return client.root_dir
-    end
-  end
-  return vim.fn.getcwd()
 end
 
 return M

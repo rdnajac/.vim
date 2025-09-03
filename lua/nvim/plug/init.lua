@@ -1,14 +1,98 @@
----- Extend the `vim.pack.Spec` type with additional fields
----@class PlugSpec
----@field [1]? string|vim.pack.Spec shorthand for `src`
----@field build? string|fun(): nil
----@field config? fun(): nil
----@field dependencies? (string|vim.pack.Spec|PlugSpec)[]
----@field event? vim.api.keyset.events|vim.api.keyset.events[]
----@field enabled? boolean|fun():boolean
----@field specs? (string|vim.pack.Spec|PlugSpec)[]
+-- let g:plug_home = join([stdpath('data'), 'site', 'pack', 'core', 'opt'], '/')
+vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+
+local _load = function(plug_data)
+  local spec = plug_data.spec
+  local opts = spec.data and spec.data.opts or nil
+  local config = spec.data and spec.data.config or nil
+
+  -- we have to `packadd` oureslves since load overrides this step
+  -- TODO: no bang if loaded?
+  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
+
+  if config then
+    config()
+  elseif opts then
+    require(spec.name).setup(opts)
+  end
+end
 
 local M = {}
+
+M.begin = function()
+  M.plugins = {} -- initialize the plugin list
+  -- vim.cmd([[command! -nargs=+ -bar Plug call plug#(<args>)]])
+end
+
+local _to_spec = function(plugin)
+  if plugin and plugin.specs then
+    return plugin.specs
+  end
+
+  local repo = plugin[1]
+  local src = 'http://github.com/' .. repo .. '.git'
+  local name = repo:match('([^/]+)$'):gsub('%..*$', '')
+  local version = plugin.version or nil
+  local opts = plugin.opts or nil
+  local config = plugin.config or nil
+
+  vim.validate('opts', opts, 'table', true, 'opts must be a table')
+  vim.validate('config', config, 'function', true, 'config must be a function')
+
+  local data = (opts or config) and { opts = opts, config = config } or nil
+
+  return { src = src, name = name, version = version, data = data }
+end
+
+M._plug = function(repo)
+  -- Ensure repo is a string like "user/repo"
+  local name = repo[1] or repo -- support either table or single string
+  local user, plugin = name:match('^([^/]+)/([^/]+)$')
+  if not (user and plugin) then
+    error(string.format('Invalid plugin repo format: %s (expected user/repo)', tostring(name)))
+  end
+  print(name)
+
+  -- Case 1: plugin starts with "nvim/" → load as Lua module
+  if vim.startswith(name, 'nvim/') then
+    print('case1')
+    local plugin_module = require(name)
+
+    if vim.is_callable(plugin_module.init) then
+      plugin_module.init()
+    end
+    -- Extend with module specs if present
+    local specs = plugin_module.specs
+    if specs then
+      if type(specs) == 'table' then
+        vim.list_extend(M.plugins, specs)
+      else
+        table.insert(M.plugins, specs)
+      end
+    end
+  else
+    -- Case 2: plain GitHub repo
+    if not vim.endswith(plugin, '.nvim') then
+      print('case2')
+      table.insert(M.plugins, 'https://github.com/' .. name .. '.git')
+    else
+      print('case3')
+      -- Case 3: require as module under "nvim.<plugin>"
+      local mod_name = 'nvim.' .. plugin:gsub('%.nvim$', '')
+      local ok, mod = pcall(require, mod_name)
+      if not ok or mod == nil then
+        return
+      end
+
+      local spec = _to_spec(mod)
+      if type(spec) == 'table' and type(spec[1]) == 'table' then
+        vim.list_extend(M.plugins, spec)
+      else
+        table.insert(M.plugins, spec)
+      end
+    end
+  end
+end
 
 ---@param module string|vim.pack.Spec|PlugSpec
 ---@return vim.pack.Spec|nil
@@ -36,6 +120,10 @@ local function to_spec(module)
     version = t == 'table' and module.version or nil,
     -- data = module,
   }
+end
+
+M.end_ = function()
+  vim.pack.add(M.plugins, { confirm = false, load = _load })
 end
 
 ---@param plugin string|vim.pack.Spec|PlugSpec
@@ -189,7 +277,6 @@ M.enabled = function(plugin)
   return enabled == nil or enabled == true
 end
 
--- TODO: _G.Plug=require('nvim.plug')
 return setmetatable(M, {
   __call = function(_, modname)
     return M.Plug(modname)

@@ -1,6 +1,6 @@
 local M = {}
 
-local icons = nvim.icons
+local icons = nv.icons
 
 --- Return file format icon ( one of { unix, dos, mac })
 --- @param bufnr? integer Optional buffer number (defaults to current buffer)

@@ -1,4 +1,4 @@
-local Plug = nvim.plug
+local Plug = require("nvim.plug")
 
 ---@type table<string, any>
 local M = setmetatable({}, {

@@ -10,7 +10,7 @@ M.specs = {
 
 M.event = 'InsertEnter'
 
-local icons = nvim.icons
+local icons = nv.icons
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config

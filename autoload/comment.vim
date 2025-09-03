@@ -9,5 +9,5 @@ function! comment#above(tag) abort
 endfunction
 
 function! comment#below(tag) abort
-  call s:insert_comment(a:tag, v:false
+  call s:insert_comment(a:tag, v:false)
 endfunction

@@ -364,6 +364,12 @@ Plug 'vuciv/golf'
 
 if has('nvim')
   " Plug '~/GitHub/rdnajac/vim-lol'
+  Plug 'folke/snacks.nvim',
+  Plug 'folke/tokyonight.nvim',
+  Plug 'mason-org/mason.nvim',
+  " local modules
+  Plug 'nvim/treesitter'
+  Plug 'nvim/lsp'
 else
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
@@ -387,11 +393,10 @@ let g:interpreters = {
       \ '.':      '/bin/sh',
       \ 'sh':     '/bin/bash',
       \ 'bash':   'bash',
+      \ 'r':      'Rscript',
       \ 'zsh':    'zsh',
       \ 'lua':    'lua',
       \ 'python': 'python3',
-      \ 'R':      'Rscript',
-      \ 'r':      'Rscript',
       \ 'rmd':    'Rscript',
       \ }
 " FIXME: doesn't work with r files

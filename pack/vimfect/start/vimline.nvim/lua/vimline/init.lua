@@ -1,4 +1,4 @@
-local icons = nvim.icons
+local icons = nv.icons
 -- Escape `%` in str so it doesn't get picked as stl item.
 local vimlineescape = function(str)
   return type(str) == 'string' and str:gsub('%%', '%%%%') or str

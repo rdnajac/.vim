@@ -1,4 +1,4 @@
-local icons = nvim.icons
+local icons = nv.icons
 local lib = require('nvim.lsp.docsymbols.navic_lib')
 
 local config = {
