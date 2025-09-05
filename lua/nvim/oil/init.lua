@@ -1,9 +1,7 @@
 local M = { 'stevearc/oil.nvim' }
 
--- M.enabled = vim.g.default_file_explorer == 'oil'
 local detail = 0
-
-local new_git_status = require('plug.oil.git_status')
+local new_git_status = require('nvim.oil.git_status')
 local git_status = new_git_status()
 
 ---@type oil.setupOpts
@@ -100,17 +98,17 @@ M.winbar = function(winid)
 end
 
 M.config = function()
+  vim.keymap.set('n', '-', '<Cmd>Oil<CR>')
+
+  require('nvim.oil.autocmds')
   -- Clear git status cache on refresh
+  -- Snacks.util.on_module('oil', function()
   local refresh = require('oil.actions').refresh
   local orig_refresh = refresh.callback
   refresh.callback = function(...)
     git_status = new_git_status()
     orig_refresh(...)
   end
-
-  require('oil').setup(M.opts)
-  require('plug.oil.autocmds')
-  vim.keymap.set('n', '-', '<Cmd>Oil<CR>')
 end
 
 return M

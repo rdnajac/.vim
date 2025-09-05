@@ -62,6 +62,9 @@ function! ooze#line() abort
   endif
 
   if l:ft ==# 'vim' || l:ft ==# 'lua'
+    " check if the line contains the word `function`
+    " if it does, call ooze#fn that calls the function
+    " see yankmkd for capturing and converting modnames
     execute (l:ft ==# 'lua' ? 'lua ' : '') . l:line
     Info (l:ft ==# 'lua' ? ' ' : ' ') . '[[' . l:line . ']]'
     return 1

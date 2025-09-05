@@ -1,14 +1,13 @@
 local modname = function(path)
   local name = vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
-  if name:sub(-5) == 'init' then
-    name = name:sub(1, -6)
-  end
-  return name
+
+  -- drop `init.lua` and require the module
+  return name:sub(-4) == 'init' and name:sub(1, -6) or name
 end
 
 local function set_reg_and_notify(text)
   vim.fn.setreg('*', text)
-  Snacks.notify('yanked: ' .. text)
+  info('yanked: ' .. text)
 end
 
 -- Wraps your yanking actions with module resolution
@@ -48,3 +47,5 @@ vim.keymap.set('n', 'ym', yank_module_name, { buffer = true, desc = 'yank lua mo
 vim.keymap.set('n', 'yM', yank_module_require, { buffer = true, desc = 'yank require(...) form' })
 vim.keymap.set('n', 'yr', yank_func, { buffer = true, desc = 'yank require + function' })
 vim.keymap.set('n', 'yR', print_yank_func, { buffer = true, desc = 'print require + function' })
+-- TODO: yank and execute function
+vim.keymap.set('n', 'y<CR>', print_yank_func, { buffer = true, desc = 'print require + function' })

@@ -51,7 +51,7 @@ M.config = function()
   -- set up once to cache the user opts
   require('tokyonight').setup(M.opts)
   -- load sets the color scheme and returns useful tables
-  local colors, groups, opts = require('tokyonight').load() 
+  local colors, groups, opts = require('tokyonight').load()
   M.colors = colors
   M.groups = groups
 end
@@ -69,7 +69,6 @@ function M.generate_vim_scheme()
     error('M.colors or M.groups not loaded. Did you call M.config() first?')
   end
 
-
   local lines = {
     [[
       hi clear
@@ -81,7 +80,7 @@ function M.generate_vim_scheme()
   local names = vim.tbl_filter(function(group)
     -- filter out treesitter/semantic token highlights
     -- PERF: also filter out vim plugins
-    return group:sub(1, 1) ~= '@' 
+    return group:sub(1, 1) ~= '@'
   end, vim.tbl_keys(groups))
 
   table.sort(names)

@@ -1,5 +1,16 @@
 local aug = vim.api.nvim_create_augroup('oil', { clear = true })
 
+vim.api.nvim_create_autocmd('BufEnter', {
+  pattern = 'oil://*',
+  group = aug,
+  callback = function()
+    require('oil.actions').cd.callback({ silent = true })
+  end,
+  desc = 'Sync cd with Oil directory on buffer enter',
+})
+
+-- these require snacks to be loaded.
+
 vim.api.nvim_create_autocmd('User', {
   pattern = 'OilActionsPost',
   group = aug,
@@ -24,13 +35,4 @@ vim.api.nvim_create_autocmd('User', {
     end
   end,
   desc = 'Delete buffer on Oil delete',
-})
-
-vim.api.nvim_create_autocmd('BufEnter', {
-  pattern = 'oil://*',
-  group = aug,
-  callback = function()
-    require('oil.actions').cd.callback({ silent = true })
-  end,
-  desc = 'Sync cd with Oil directory on buffer enter',
 })

@@ -1,4 +1,11 @@
-require('mini.icons').setup({
+local icons = require('mini.icons')
+
+package.preload['nvim-web-devicons'] = function()
+  icons.mock_nvim_web_devicons()
+  return package.loaded['nim-web-devicons']
+end
+
+icons.setup({
   file = {
     ['.keep'] = { glyph = '󰊢', hl = 'MiniIconsGrey' },
     ['devcontainer.json'] = { glyph = '', hl = 'MiniIconsAzure' },

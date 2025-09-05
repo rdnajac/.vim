@@ -66,18 +66,16 @@ M.opts = {
   html = { comment = { conceal = false } },
 }
 
-M.config = function()
-  require('render-markdown').setup(M.opts)
-
-  Snacks.toggle({
-    name = 'Render Markdown',
-    get = function()
-      return require('render-markdown.state').enabled
-    end,
-    set = function(enabled)
-      require('render-markdown').set(enabled)
-    end,
-  }):map('<leader>um')
-end
-
+-- vim.schedule(function()
+-- 	Snacks.toggle({
+-- 		name = "Render Markdown",
+-- 		get = function()
+-- 			return require("render-markdown.state").enabled
+-- 		end,
+-- 		set = function(enabled)
+-- 			require("render-markdown").set(enabled)
+-- 		end,
+-- 	}):map("<leader>um")
+-- end)
+--
 return M

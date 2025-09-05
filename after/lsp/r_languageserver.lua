@@ -1,5 +1,5 @@
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities.textDocument.completion.completionItem = nil  -- disables LSP completion
+capabilities.textDocument.completion.completionItem = nil -- disables LSP completion
 
 --- @type vim.lsp.Config
 return {

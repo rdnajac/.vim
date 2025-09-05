@@ -1,4 +1,5 @@
 ---@module 'blink.cmp'
+-- TODO: download the other sources with nv.wget
 
 local Buf = require('nvim.lsp.lazydev.buf')
 local Config = require('nvim.lsp.lazydev.config')

@@ -1,5 +1,5 @@
 local hipatterns = require('mini.hipatterns')
-
+-- #39FF14
 hipatterns.setup({
   highlighters = {
     hex_color = hipatterns.gen_highlighter.hex_color(),

@@ -24,6 +24,6 @@ M.modname = function()
   print('All tests passed!')
 end
 
-M.modname()  
+M.modname()
 
 return M

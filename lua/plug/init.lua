@@ -1,168 +1,177 @@
 local M = {}
 
-M.plugins = {}
+---- transforms the shortform `user_repo` to a github url
+local function gh(user_repo)
+  return user_repo and 'https://github.com/' .. user_repo .. '.git' or nil
+end
 
-local enabled = function(plugin)
-  local enabled = plugin.enabled
-  if vim.is_callable(enabled) then
-    local ok, res = pcall(enabled)
+--- Represents a lua plugin.
+---
+--- A |Plugin| object contains the metadata needed for...
+--- To create a new |Plugin| object, call `nv.Plug()`.
+---
+---
+--- @class Plugin
+--- @field [1]? string|vim.pack.Spec
+--- @field build? string|fun(): nil
+--- @field config? fun(): nil
+--- @field dependencies? (string|vim.pack.Spec|PlugSpec)[]
+--- @field event? vim.api.keyset.events|vim.api.keyset.events[]
+--- @field enabled? boolean|fun():boolean
+--- @field specs? (string|vim.pack.Spec)[]
+--- @field opts? table|any
+local Plugin = {}
+Plugin.__index = Plugin
+
+-- constructor
+function Plugin.new(t)
+  return setmetatable(t or {}, Plugin)
+end
+
+setmetatable(Plugin, {
+  __call = function(_, t)
+    return Plugin.new(t)
+  end,
+})
+
+function Plugin:spec()
+  local src = gh(self.src or self[1])
+  -- TODO: vim.validate?
+  if type(src) ~= 'string' or src == '' then
+    return specs or nil
+  end
+
+  local name = self.name or src:match('[^/]+$'):match('^(.-)%.nvim')
+  -- use gsub? what avout repo.git?
+  local version = self.version or nil
+  -- TODO: make an opts table?
+  -- what if no opts table?
+  -- TODO can data be a metatable? can it be the plugin and we pass the plugin to data when we ivm.pack.add?
+  local data = {}
+  data.config = self.config or nil
+  data.opts = self.opts or nil
+  if data.config then
+    data.opts = nil
+  end
+
+  -- data.self = self
+
+  local spec = { src = src, name = name, version = version, data = data }
+  -- list of strings
+  local deps = self.deps or self.specs or nil
+
+  return spec, deps
+end
+
+function Plugin:enabled()
+  if vim.is_callable(self.enabled) then
+    local ok, res = pcall(self.enabled)
     return ok and res
   end
-  return enabled == nil or enabled == true
+  return self.enabled ~= false
 end
 
--- TODO: add logic from to_spec
----@param module string|vim.pack.Spec|PlugSpec
----@return vim.pack.Spec|nil
-local function to_spec(module)
-  -- if not M.enabled(module) then
-  --   return nil
-  -- end
-
-  local t = type(module)
-  local src = t == 'string' and module or module[1] or module.src
-
-  if type(src) ~= 'string' or src == '' then
-    return nil
-  end
-
-  -- convert shorthand github user/repo to full git url
-  if src:match('^%w[%w._-]*/[%w._-]+$') then
-    -- src = 'https://github.com/' .. src .. (src:sub(-4) ~= '.git' and '.git' or '')
-    src = 'https://github.com/' .. src .. (vim.endswith(src, '.git') and '' or '.git')
-  end
-
-  return {
-    src = src,
-    name = t == 'table' and module.name or nil,
-    version = t == 'table' and module.version or nil,
-    -- data = module,
-  }
-end
-
-local function add_spec(list, plugin)
-  list = list or {}
-  if not plugin then
-    return list
-  end
-
-  local function _add(p)
-    if not p then
-      return
-    end
-    local spec
-
-    -- TODO:
-    -- if its a list, handle it
-
-    if type(p) == 'string' then
-      spec = { src = 'https://github.com/' .. p .. '.git', name = p:match('([^/]+)$') }
-    elseif type(p) == 'table' then
-      if not enabled(plugin) then
-        return
-      end
-      if p[1] and type(p[1]) == 'string' then
-        spec = {
-          src = 'https://github.com/' .. p[1] .. '.git',
-          name = p[1]:match('([^/]+)$'):gsub('%.nvim$', ''),
-          version = p.version,
-          data = p.config and { config = p.config } or p.opts and { opts = p.opts } or nil,
-        }
-      elseif p.src then
-        spec = p -- already a spec table
-      end
-    end
-
-    if spec then
-      table.insert(list, spec)
-    end
-  end
-
-  _add(plugin)
-
-  if type(plugin) == 'table' then
-    for _, field in ipairs({ 'dependencies', 'specs' }) do
-      local sub = plugin[field]
-      if type(sub) == 'table' then
-        for _, f in ipairs(sub) do
-          _add(f)
-        end
-      end
-    end
-  end
-
-  return list
-end
-
--- Plug a single plugin/module
-function M.plug(repo)
-  -- unwrap table if needed
-  if type(repo) == 'table' and type(repo[1]) == 'string' then
-    repo = repo[1]
-  end
-
-  local user, plugin = repo:match('^([^/]+)/([^/]+)$')
-  if not (user and plugin) then
-    error(string.format('Invalid plugin repo format: %s (expected user/repo)', tostring(repo)))
-  end
-
-  if vim.startswith(repo, 'nvim/') then
-    local mod = require(repo)
-    if vim.is_callable(mod.init) then
-      mod.init()
-    end
-    add_spec(M.plugins, mod.specs or mod)
-  elseif vim.endswith(plugin, '.nvim') then
-    local ok, mod = pcall(require, 'nvim.' .. plugin:gsub('%.nvim$', ''))
-    if ok and mod then
-      add_spec(M.plugins, mod.specs or mod)
-    end
-  else
-    add_spec(M.plugins, repo) -- plain GitHub repo
+function Plugin:setup()
+  local config = self.config or nil
+  local opts = self.opts or nil
+  local name = self.name or self.src
+  if config and vim.is_callable(config) then
+    info('configuring ' .. name)
+    config()
+  elseif opts and name then
+    info('setting up ' .. name)
+    require(self).setup(opts)
+  elseif spec_data.p then
+    -- info(spec_data.p():spec())
   end
 end
 
--- Plugin load callback
+M.specs = function()
+  return vim.pack.get()
+end
+
+-- this should be called on every entry
+-- and should contain the plugin handling logic
+function M.plug(plugin)
+  local m = require('util').safe_require(m)
+  return m and Plugin(m) or nil
+end
+
+local setup = function(spec_name, spec_data)
+  local config = spec_data.config or nil
+  -- local opts = spec_data.opts or {}
+  if config and vim.is_callable(config) then
+    info('configuring ' .. spec_name)
+    config()
+  elseif spec_data.opts then
+    info('setting up ' .. spec_name)
+    require(spec_name).setup(spec_data.opts)
+  elseif spec_data.p then
+    info(spec_data.p():spec())
+  end
+end
+
 local _load = function(plug_data)
   local spec = plug_data.spec
-  local opts = spec.data and spec.data.opts
-  local config = spec.data and spec.data.config
 
   vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
 
-  if config and vim.is_callable(config) then
-    print('Running config for ' .. spec.name)
-    config()
-  elseif opts then
-    print('Running setup for ' .. spec.name)
-    require(spec.name).setup(opts)
+  if spec.data then
+    -- pass plugin object in and try to call methods on that
+    -- info(spec.data.self)
+    local p = spec.data.self or nil
+    -- if p then p:setup() end
+    setup(spec.name, spec.data)
   end
 end
 
--- Finalize plugin loading
 function M.end_()
-  -- Load manually added plugins
-  vim.pack.add(M.plugins, { confirm = false, load = _load })
+  local extra = {}
+  local specs = vim.tbl_map(
+    ---@param plugin string
+    function(plugin)
+      if vim.endswith(plugin, '.nvim') then
+        local modname = 'nvim/' .. plugin:match('([^/]+)$'):gsub('%.nvim$', '')
+        local mod = require('util').safe_require(modname)
+        if mod then
+          local spec, deps = Plugin(mod):spec()
+          if deps then
+            vim.list_extend(extra, deps) -- add to extras table
+          end
+          return spec -- add to specs table
+        end
+      end
+      return gh(plugin)
+    end,
+    vim.g['plug#list']
+  )
 
-  -- Build a second list from all plug modules
-  local dir = 'plug/'
-  local module_plugins = {}
+  local blink_spec, blink_deps = Plugin(require('plug/blink')):spec()
+  table.insert(specs, blink_spec)
+  vim.list_extend(specs, vim.tbl_map(gh, blink_deps))
+  vim.list_extend(specs, vim.tbl_map(gh, require('nvim.lsp').specs))
+  vim.list_extend(specs, require('nvim.treesitter').specs)
 
-  require('util').for_each_module(function(plugin)
-    local mod = require('util').safe_require(plugin)
-    if mod then
-      add_spec(module_plugins, mod)
-    end
-  end, dir)
+  -- add to extras table
+  -- local test = {
+  --   src = 'https://github.com/rdnajac/vim-lol.git',
+  --   data = {
+  --     p = function()
+  --       return Plugin.new({ 'user/repo' })
+  --     end,
+  --   },
+  -- }
 
-  -- Load all module plugins
-  if #module_plugins > 0 then
-    vim.pack.add(module_plugins, { confirm = false, load = _load })
-  end
+  vim.pack.add(specs, { confirm = false, load = _load })
+end
+
+function M.test(plugin, dict)
+  info(plugin)
+  info('type(plugin) = ' .. type(plugin))
 end
 
 return setmetatable(M, {
-  __call = function(_, modname)
-    return M.plug(modname)
+  __call = function(_, plugin)
+    return M.plug(plugin)
   end,
 })

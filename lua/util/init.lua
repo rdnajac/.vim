@@ -3,11 +3,15 @@ local M = {}
 M.sep = package.config:sub(1, 1)
 
 -- Override require to handle errors gracefully
-M.safe_require = function(module)
+M.safe_require = function(module, err)
   local ok, mod = xpcall(require, debug.traceback, module)
   if not ok then
     vim.schedule(function()
-      error(mod) -- TODO: why are we scheduling the error?
+      if err == true then
+        error(mod)
+      else
+        vim.notify(('Failed to load %s:\n%s'):format(module, mod), vim.log.levels.ERROR)
+      end
     end)
     return nil
   end
@@ -17,6 +21,11 @@ end
 -- does not normalize the path, that is the responsibility of the caller
 M.modname = function(path)
   return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
+end
+
+function M.submodules(topmod)
+  local caller = M.source()
+  info(caller)
 end
 
 --- Iterate over modules under $XDG_CONFIG_HOME/nvim/lua

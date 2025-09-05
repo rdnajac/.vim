@@ -19,6 +19,7 @@ set scrolloff=8
 set shortmess+=aAcCI
 set shortmess-=o
 set showmatch
+set number
 set splitbelow splitright
 set splitkeep=screen
 set startofline
@@ -353,23 +354,28 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-capslock'
-Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-dispatch'
+" Plug 'tpope/vim-abolish'
+" Plug 'tpope/vim-capslock'
+" Plug 'tpope/vim-characterize'
+" Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
+" Plug '~/GitHub/rdnajac/vim-lol'
 
 if has('nvim')
-  " Plug '~/GitHub/rdnajac/vim-lol'
-  Plug 'folke/snacks.nvim',
-  Plug 'folke/tokyonight.nvim',
-  " Plug 'folke/which-key.nvim',
-  " local modules
-  Plug 'nvim/treesitter'
-  Plug 'nvim/lsp'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'folke/which-key.nvim'
+  Plug 'folke/snacks.nvim'
+  Plug 'stevearc/oil.nvim'
+  Plug 'nvim-mini/mini.nvim'
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
+  Plug 'R-nvim/R.nvim'
+  Plug 'mason-org/mason.nvim'
+  Plug 'monaqa/dial.nvim'
+  " Plug 'nvim/treesitter'
+  " Plug 'nvim/lsp'
 else
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
@@ -399,7 +405,7 @@ let g:interpreters = {
       \ 'python': 'python3',
       \ 'rmd':    'Rscript',
       \ }
-" FIXME: doesn't work with r files
+" FIXME: doesn't work well with r files
 
 if !exists('g:vimrc_reload_count')
   let g:vimrc_reload_count = 0

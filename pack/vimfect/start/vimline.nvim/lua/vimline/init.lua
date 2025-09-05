@@ -10,7 +10,7 @@ local M = setmetatable({}, {
   end,
 })
 
-M.diagnostics = function ()
+M.diagnostics = function()
   local counts = vim.diagnostic.count(0)
   local signs = vim.diagnostic.config().signs
 
@@ -103,7 +103,7 @@ M.lua_icons = function()
 end
 
 M.winbar_icons = function()
-  return string.format('%s%s%s', M.lsp_icon(),  M.copilot_icon(), M.treesitter_icon())
+  return string.format('%s%s%s', M.lsp_icon(), M.copilot_icon(), M.treesitter_icon())
 end
 
 return M

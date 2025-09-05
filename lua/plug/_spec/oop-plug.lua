@@ -1,32 +1,3 @@
----@class Plugin
----@inlinedoc
----@field spec PlugSpec
----@field name string
----@field active boolean
-
-local Plugin = {}
-Plugin.__index = Plugin
-
---- Constructor
---- Can accept:
---- 1. A table like `{spec, data}` → spec becomes spec, rest becomes data
---- 2. A spec table and optional data table
----@param spec vim.pack.Spec|table
----@param data? any
----@return Plugin
-function Plugin.new(spec, data)
-  local self = setmetatable({}, Plugin)
-
-  -- Case: spec is a table like {spec, data}
-  if type(spec) == 'table' and spec[1] then
-    self.spec = spec[1]
-    self.data = spec.data or {}
-  else
-    self.spec = spec
-    self.data = data or {}
-  end
-end
-
 -- Check if plugin is enabled
 function Plugin:enabled()
   local e = self.data.enabled
@@ -127,7 +98,7 @@ function M.import_specs(plugin)
       return
     end
     table.insert(specs, s)
-    for _, field in ipairs({ 'dependencies', 'specs' }) do
+    for _, field in ipairs({ 'specs' }) do
       local list = s[field]
       if type(list) == 'table' then
         for _, f in ipairs(list) do
@@ -168,18 +139,3 @@ function M.do_configs(plugins)
     end
   end
 end
-
-M.enabled = function(plugin)
-  local enabled = plugin.enabled
-  if vim.is_callable(enabled) then
-    local ok, res = pcall(enabled)
-    return ok and res
-  end
-  return enabled == nil or enabled == true
-end
-
-return setmetatable(M, {
-  __call = function(_, modname)
-    return M.Plug(modname)
-  end,
-})

@@ -16,4 +16,7 @@ local M = function(msg, level, opts)
   vim.api.nvim_echo(chunks, true, { err = level == vim.log.levels.ERROR })
 end
 
+-- test if the override is working (should be colored blue)
+-- Snacks.notify.info('init.lua loaded!')
+
 return M

@@ -6,6 +6,7 @@ M.specs = {
   'bydlw98/blink-cmp-env',
   'fang2hou/blink-copilot',
   'mgalliou/blink-cmp-tmux',
+  'R-nvim/cmp-r',
 }
 
 M.event = 'InsertEnter'

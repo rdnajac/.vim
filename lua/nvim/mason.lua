@@ -8,7 +8,9 @@ end
 
 function M.install(tools)
   local total = #tools
-  if total == 0 then return end
+  if total == 0 then
+    return
+  end
 
   local done = 0
   local function tick()
@@ -44,16 +46,13 @@ function M.install(tools)
 end
 
 M.list = function()
-    local reg = M.reg()
-  local pkgs = reg.get_all_packages()
-
   return vim.tbl_map(
     function(pkg)
       return pkg.name
     end,
     vim.tbl_filter(function(pkg)
       return pkg:is_installed()
-    end, pkgs)
+    end, require('mason-registry').get_all_packages())
   )
 end
 
@@ -73,7 +72,6 @@ M.map = function()
   -- TODO:use tbl func?
   for _, pkg_spec in ipairs(cached_specs()) do
     local lspconfig = vim.tbl_get(pkg_spec, 'neovim', 'lspconfig')
-
     if lspconfig then
       mason_map[lspconfig] = pkg_spec.name
     end

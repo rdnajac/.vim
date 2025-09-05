@@ -1,0 +1,2 @@
+-- TODO: configure debuging with
+-- nvim_eval_statusline()

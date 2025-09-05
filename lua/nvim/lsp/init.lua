@@ -1,6 +1,6 @@
 local M = {}
 
-  -- TODO: check whether the configs in after/lsp actually override the default configs
+-- TODO: check whether the configs in after/lsp actually override the default configs
 M.specs = {
   -- 'neovim/nvim-lspconfig',
   'b0o/SchemaStore.nvim',
@@ -38,59 +38,60 @@ M.keys = function()
   }
 end
 
-M.opts = {
-  -- `blink.cmp` will automatically set some capabilities
-  -- to customize further, uncomment this line and pass your own capabilities
-  -- capabilities = require('blink.cmp').get_lsp_capabilities(),
+-- M.opts = {
+-- `blink.cmp` will automatically set some capabilities
+-- to customize further, uncomment this line and pass your own capabilities
+-- capabilities = require('blink.cmp').get_lsp_capabilities(),
 
-  --- Apply keymaps and other settings when LSP attaches to a buffer
-  ---@param client vim.lsp.Client
-  ---@param bufnr integer
-  on_attach = function(client, bufnr)
-    -- set this manually in case there is another mapping for `K`
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = true })
+--- Apply keymaps and other settings when LSP attaches to a buffer
+---@param client vim.lsp.Client
+---@param bufnr integer
+M.on_attach = function(client, bufnr)
+  -- set this manually in case there is another mapping for `K`
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = true })
 
-    -- set the rest of the keymaps
-    for _, keymap in ipairs(M.keys()) do
-      vim.keymap.set('n', keymap[1], keymap[2], keymap.opts)
-    end
+  -- set the rest of the keymaps
+  for _, keymap in ipairs(M.keys()) do
+    vim.keymap.set('n', keymap[1], keymap[2], keymap.opts)
+  end
 
-    client.server_capabilities.documentFormattingProvider = false
-    -- client.server_capabilities.semanticTokensProvider = nil
+  client.server_capabilities.documentFormattingProvider = false
+  -- client.server_capabilities.semanticTokensProvider = nil
 
-    -- see `:h lsp-inlay_hint`
-    if client:supports_method('textDocument/inlayHint') then
-      vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-      Snacks.toggle.inlay_hints():map('<leader>uh')
-    end
+  -- see `:h lsp-inlay_hint`
+  if client:supports_method('textDocument/inlayHint') then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+    Snacks.toggle.inlay_hints():map('<leader>uh')
+  end
 
-    -- see `:h lsp-codelens`
-    if client:supports_method('textDocument/codeLens') then
-      vim.lsp.codelens.refresh()
-      vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-        buffer = bufnr,
-        callback = vim.lsp.codelens.refresh,
-      })
-    end
+  -- see `:h lsp-codelens`
+  if client:supports_method('textDocument/codeLens') then
+    vim.lsp.codelens.refresh()
+    vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+      buffer = bufnr,
+      callback = vim.lsp.codelens.refresh,
+    })
+  end
 
-    require('nvim.lsp.docsymbols.navic_attach')(client, bufnr)
-  end,
-}
-
-M.init = function()
-  require('nvim.lsp.progress')
-  require('nvim.lsp.lazydev').setup({
-    library = {
-      { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-      { path = 'snacks.nvim', words = { 'Snacks' } },
-      -- { path = 'nvim', words = { 'nvim' } }, -- FIXME: doesn't work
-    },
-  })
-
-  vim.lsp.config('*', M.opts)
-  vim.lsp.enable(M.servers)
-  -- TODO:make this a toggle
-  vim.lsp.inline_completion.enable() -- XXX:
+  require('nvim.lsp.docsymbols.navic_attach')(client, bufnr)
 end
+-- }
+
+-- M.init = function()
+require('nvim.lsp.progress')
+require('nvim.lsp.lazydev').setup({
+  library = {
+    { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+    { path = 'snacks.nvim', words = { 'Snacks' } },
+    -- { path = 'nvim', words = { 'nvim' } }, -- FIXME: doesn't work
+  },
+})
+
+info('lsp setup')
+vim.lsp.config('*', { on_attach = M.on_attach })
+vim.lsp.enable(M.servers)
+-- TODO:make this a toggle
+vim.lsp.inline_completion.enable() -- XXX:
+-- end
 
 return M
