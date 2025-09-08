@@ -9,13 +9,10 @@ function! plug#begin() abort
   let g:plug#list = []
   " allows 0 or 1 args
   command! -nargs=? -bar Plug call plug#(<args>)
-  command! -nargs=+ -bar Test call luaeval("require('plug').test(_A)", plug#(<f-args>))
+  lua require('plug').init()
 endfunction
 
-" wrapper func that collects the plugin names and does some
-" preprossing befor passing the work over to the lua func
 function! plug#(repo) abort
-  " XXX: just add the string to the list for now
   call add(g:plug#list, a:repo)
   " call luaeval("require('plug')(_A)", a:repo)
   " execute 'lua require("plug")(' . a:repo . ')'

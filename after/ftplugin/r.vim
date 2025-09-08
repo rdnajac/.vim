@@ -1,8 +1,6 @@
 setlocal iskeyword-=.
-setlocal formatexpr=
-
-" FIXME: this adds unwanted text to the start of the file
-" let &l:formatprg = "Rscript -e \"con <- file('stdin'); src <- readLines(con); close(con); cat(styler::style_text(src), sep = '\\n')\""
+setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
+setlocal foldmethod=expr
 
 " Note that not all terminals handle these key presses the same way
 inoremap <buffer> <M--> <-<Space>
@@ -13,6 +11,9 @@ inoremap <buffer> ins<Tab> renv::install("")<Left><Left>
 inoremap <buffer> lib<Tab> library()<Left>
 
 if has('nvim') && luaeval('package.loaded["r"] ~= nil')
+  setlocal keywordprg=:RHelp
+  nmap <buffer> zq <Cmd>RFormat<CR>
+
   nnoremap <buffer> <localleader>R <Plug>RStart
   nnoremap <buffer> ]r <Plug>NextRChunk
   nnoremap <buffer> [r <Plug>PreviousRChunk

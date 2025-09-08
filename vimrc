@@ -321,10 +321,10 @@ nnoremap <Bslash>; mzA;<Esc>;`z
 " unimpaired {{{2
 " exchange lines
 nnoremap ]e :execute 'move .+' . v:count1<CR>==
-inoremap ]e <Esc>:m .+1<CR>==gi
+" inoremap ]e <Esc>:m .+1<CR>==gi
 vnoremap ]e :<C-u>execute "'<,'>move '>+" . v:count1<CR>gv=gv
 nnoremap [e :execute 'move .-' . (v:count1 + 1)<CR>==
-inoremap [e <Esc>:m .-2<CR>==gi
+" inoremap [e <Esc>:m .-2<CR>==gi
 vnoremap [e :<C-u>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv
 
 " toggles
@@ -365,15 +365,15 @@ Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 
 if has('nvim')
-  Plug 'folke/tokyonight.nvim'
+  " Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
-  Plug 'folke/snacks.nvim'
+  " Plug 'folke/snacks.nvim'
   Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'
   Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'R-nvim/R.nvim'
   Plug 'mason-org/mason.nvim'
-  Plug 'monaqa/dial.nvim'
+  " Plug 'monaqa/dial.nvim'
   " Plug 'nvim/treesitter'
   " Plug 'nvim/lsp'
 else
