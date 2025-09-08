@@ -1,7 +1,7 @@
 local Config = require('nvim.lsp.lazydev.config')
-local Lsp = require('nvim.lsp.lazydev.lsp')
 local Pkg = require('nvim.lsp.lazydev.pkg')
 local Workspace = require('nvim.lsp.lazydev.workspace')
+local Lsp = require('nvim.lsp.lazydev.luals')
 
 local M = {}
 
@@ -32,7 +32,7 @@ function M.setup()
     group = group,
     callback = function(ev)
       local client = vim.lsp.get_client_by_id(ev.data.client_id)
-      if client and Lsp.supports(client) then
+      if client and client.name == 'luals' then
         if ev.event == 'LspAttach' then
           M.on_attach(client, ev.buf)
         else
@@ -57,7 +57,7 @@ end
 ---@return vim.lsp.Client[]
 function M.get_clients()
   return vim.tbl_filter(function(client)
-    return Lsp.supports(client)
+    return client and client.name == 'luals'
   end, vim.lsp.get_clients())
 end
 

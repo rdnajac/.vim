@@ -5,7 +5,7 @@ function M.setup()
   if not ok then
     return
   end
-  local Lsp = require('nvim.lsp.lazydev.lsp')
+  local Lsp = require('nvim.lsp.lazydev.luals')
 
   local try_add = Manager.try_add
 

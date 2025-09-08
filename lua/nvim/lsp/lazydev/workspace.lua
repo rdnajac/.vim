@@ -57,10 +57,9 @@ end
 ---@param opts {buf?:number, path?:string}
 function M.find(opts)
   if opts.buf then
-    local Lsp = require('nvim.lsp.lazydev.lsp')
     local clients = vim.lsp.get_clients({ bufnr = opts.buf })
     clients = vim.tbl_filter(function(client)
-      return client and Lsp.supports(client)
+      return client and client.name == 'luals'
     end, clients)
     local client = clients[1]
     return client and M.get(client.id, M.get_root(client, opts.buf))

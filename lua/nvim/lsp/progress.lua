@@ -63,7 +63,8 @@ vim.schedule(function()
       local client = assert(vim.lsp.get_client_by_id(e.data.client_id))
       local value = e.data.params.value
       local create_msg = function(progress)
-        return string.format('[%s] %s %d%%', client.name, value.title, progress)
+        -- return string.format('[%s] %s %d%%', client.name, value.title, progress)
+        return string.format('%s: %s [%s, %02d%%]', client.name, value.title, value.message, progress)
       end
       if value.kind == 'end' then
         notify(create_msg(100), 'Special', 1000)
