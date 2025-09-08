@@ -1,17 +1,20 @@
-function test_modnames()
-  local plugins = { 'user/repo', 'nvim/repo', 'user/repo.nvim' }
+-- user/repo can contain only letters, digits, '_', '-' and '.'
+-- `%w`  represents all alphanumeric characters.
+local user_repo_regex = '^[%w._-]+/[%w._-]+$'
+local test = function()
+  local cases = {
+    'user/repo',
+    'user_123/repo-1.0',
+    'http://github.com/user/repo.git',
+    'user/repo/extra',
+    '/repo',
+    'user/',
+    'user!repo',
+  }
 
-  for _, plugin in ipairs(plugins) do
-    local plugname = vim.endswith(plugin, '.nvim')
-        and 'nvim.' .. plugin:match('([^/]+)$'):gsub('%.nvim$', '')
-      or plugin
-
-    print('plugin =', plugin, '-> plugname =', plugname)
+  for _, case in ipairs(cases) do
+    local ok = case:match(user_repo_regex) ~= nil
+    print('[' .. (ok == true and 'PASS' or 'FAIL') .. '] ' .. case)
   end
 end
-
-test_modnames()
-
--- local Plugin = require('plug._spec')('user/repo')
-local Plugin = require('plug._spec')(require('nvim.dial'))
-info(Plugin:spec().data())
+-- test()

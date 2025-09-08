@@ -7,15 +7,17 @@ let g:loaded_plug = 2 " `junegunn/vim-plug` sets this to 1
 " Initialize plugin system
 function! plug#begin() abort
   let g:plug#list = []
-  " allows 0 or 1 args
   command! -nargs=? -bar Plug call plug#(<args>)
-  lua require('plug').init()
+  " command! -nargs=? -bang -bar Plug call plug#(<args>, <bang>0)
+  " execute 'lua require("plug")("' . a:repo . '")'
 endfunction
 
-function! plug#(repo) abort
+function! plug#(repo, ...) abort
+  " if a:bang
+  " execute 'lua require("plug")("' . a:repo . '")'
+  " else
   call add(g:plug#list, a:repo)
-  " call luaeval("require('plug')(_A)", a:repo)
-  " execute 'lua require("plug")(' . a:repo . ')'
+  " endif
 endfunction
 
 function! plug#parse(spec, ...) abort
@@ -63,9 +65,8 @@ endfunction
 function! plug#end() abort
   " delcommand Plug
   if has('nvim')
-    " the plugin list is available as `vim.g['plug#list']`
     lua require('plug').end_()
-    " lua vim.pack.add(vim.g.plug#list, { confirm = false, load = _load })
+    " lua vim.pack.add(vim.g['plug#list'], { confirm = false })
   else
     if !(exists('g:did_load_filetypes')
 	  \ && exists('g:did_load_ftplugin')
