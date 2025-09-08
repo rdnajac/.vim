@@ -1,7 +1,4 @@
 -- init.lua
-_G.ddd = function(...)
-  print(vim.inspect(...))
-end
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_ruby_provider = 0
@@ -43,28 +40,21 @@ vim.o.pumblend = 0
 vim.o.winborder = 'rounded'
 -- also try `:options`
 
-local require = require('util').safe_require
+_G.ddd = function(...)
+  print(vim.inspect(...))
+end
 
-require('vim._extui').enable({})
+require('util').safe_require('vim._extui').enable({})
 
 _G.nv = require('nvim')
 
--- override vim.notify to provide additional highlighting
 vim.notify = nv.notify
-
 _G.info = function(t)
   vim.notify(vim.inspect(t), vim.log.levels.INFO)
 end
-
--- vim.print = Snacks and Snacks.debug.inspect or info
 vim.print = info
 
-vim.cmd.runtime('vimrc')
+nv.mods_on_init = mods
+nv.did_setup = {}
 
-vim.schedule(function()
-  require('keymaps')
-  require('nvim.lsp')
-  require('nvim.treesitter')
-  require('diagnostic')
-  require('commands')
-end)
+vim.cmd([[runtime vimrc | packadd vimline.nvim]])

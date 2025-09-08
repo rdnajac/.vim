@@ -365,17 +365,21 @@ Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 
 if has('nvim')
-  " Plug 'folke/tokyonight.nvim'
-  Plug 'folke/which-key.nvim'
-  " Plug 'folke/snacks.nvim'
-  Plug 'stevearc/oil.nvim'
-  Plug 'nvim-mini/mini.nvim'
-  Plug 'MeanderingProgrammer/render-markdown.nvim'
-  Plug 'R-nvim/R.nvim'
-  Plug 'mason-org/mason.nvim'
-  " Plug 'monaqa/dial.nvim'
-  " Plug 'nvim/treesitter'
-  " Plug 'nvim/lsp'
+    Plug 'folke/snacks.nvim'
+    Plug 'folke/tokyonight.nvim'
+    Plug 'folke/which-key.nvim'
+    Plug 'folke/todo-comments.nvim'
+    Plug 'folke/trouble.nvim'
+    " Plug 'folke/noice.nvim'
+    Plug 'stevearc/oil.nvim'
+    Plug 'MeanderingProgrammer/render-markdown.nvim'
+    Plug 'R-nvim/r.nvim'
+    Plug 'mason-org/mason.nvim'
+    " Plug 'Saghen/blink.cmp'
+    " Plug 'stevearc/conform.nvim'
+    " Plug 'mfussenegger/nvim-lint'
+    Plug 'monaqa/dial.nvim',
+    Plug 'nvim-mini/mini.nvim',
 else
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
