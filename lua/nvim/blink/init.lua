@@ -11,7 +11,7 @@ M.specs = {
 
 M.event = 'InsertEnter'
 
-local icons = nv.icons
+local icons = require('nvim.icons')
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
@@ -60,17 +60,8 @@ M.opts = {
     ['<Right>'] = { 'select_next', 'fallback' },
     ['<C-j>'] = { 'select_next', 'fallback' },
   },
-  sources = require('plug.blink.sources'),
+  sources = require('nvim.blink.sources'),
 }
-
-M.config = function()
-  require('blink.cmp').setup(M.opts)
-
-  vim.keymap.set('i', '$', function()
-    require('blink.cmp').show({ providers = { 'env' } })
-    return '$'
-  end, { expr = true })
-end
 
 --- Blink statusline component
 M.component = function()
