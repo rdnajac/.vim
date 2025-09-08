@@ -1,4 +1,5 @@
 local ai = require('mini.ai')
+-- FIXME: treesitter objects arent working
 
 local mini_ai_opts = {
   n_lines = 500,

@@ -1,19 +1,9 @@
 local M = {}
-M.version = 'main' -- XXX: Remove this if main ever becomes default
 
-local deps = {
+M.specs = {
   'nvim-treesitter/nvim-treesitter',
   'nvim-treesitter/nvim-treesitter-textobjects',
 }
-
-M.specs = vim.tbl_map(function(spec)
-  return {
-    src = 'https://github.com/' .. spec .. '.git',
-    version = M.version,
-  }
-end, deps)
-
--- info(M.specs)
 
 M.build = function()
   local parsers = require('nvim.treesitter.parsers')

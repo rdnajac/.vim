@@ -2,36 +2,7 @@ local M = { 'monaqa/dial.nvim' }
 
 M.event = 'BufWinEnter'
 
----@param increment boolean
----@param g? boolean
-function M.dial(increment, g)
-  local mode = vim.fn.mode(true)
-  local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
-  local func = (increment and 'inc' or 'dec')
-    .. (g and '_g' or '_')
-    .. (is_visual and 'visual' or 'normal')
-  local group = vim.g.dials_by_ft[vim.bo.filetype] or 'default'
-  return require('dial.map')[func](group)
-end
-
--- stylua: ignore
-M.keys =  {
-  {{ 'n', 'v' }, '<C-a>', function() return M.dial(true) end, { expr = true, desc = 'Increment' }},
-  {{ 'n', 'v' }, '<C-x>', function() return M.dial(false) end, { expr = true, desc = 'Decrement' }},
-  {{ 'n', 'v' }, 'g<C-a>', function() return M.dial(true, true) end, { expr = true, desc = 'Increment' }},
-  {{ 'n', 'v' }, 'g<C-x>', function() return M.dial(false, true) end, { expr = true, desc = 'Decrement' }},
-}
-
--- stylua: ignore
-M.keymaps = function()
-  for _, keymap in ipairs(M.keys) do
-    local modes, lhs, rhs, opts = unpack(keymap)
-    ---@diagnostic disable-next-line: param-type-mismatch
-    vim.keymap.set(modes, lhs, rhs, opts)
-  end
-end
-
-M.opts = function()
+M.config = function()
   local augend = require('dial.augend')
 
   ---@param elements string[] The elements to cycle through
@@ -40,49 +11,51 @@ M.opts = function()
     return augend.constant.new({ elements = elements, word = word, cyclic = true })
   end
 
+  local default_switches = {
+    augend.integer.alias.decimal,
+    augend.integer.alias.decimal_int,
+    augend.integer.alias.hex,
+    augend.date.alias['%Y/%m/%d'],
+    augend.constant.alias.en_weekday_full,
+    new({
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    }, true),
+    new({
+      'first',
+      'second',
+      'third',
+      'fourth',
+      'fifth',
+      'sixth',
+      'seventh',
+      'eighth',
+      'ninth',
+      'tenth',
+    }, false),
+    augend.constant.alias.bool,
+    new({ 'True', 'False' }, true),
+    new({ 'and', 'or' }, true),
+    new({ '&&', '||' }, false),
+    new({ 'top', 'middle', 'bottom' }, true),
+    new({ 'left', 'center', 'right' }, true),
+    new({ 'start', 'end' }, true),
+    new({ 'row', 'col' }, false),
+    new({ 'human', 'mouse' }, true),
+  }
+
   local opts = {
-    default = {
-      augend.integer.alias.decimal,
-      augend.integer.alias.decimal_int,
-      augend.integer.alias.hex,
-      augend.date.alias['%Y/%m/%d'],
-      augend.constant.alias.en_weekday_full,
-      new({
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
-      }, true),
-      new({
-        'first',
-        'second',
-        'third',
-        'fourth',
-        'fifth',
-        'sixth',
-        'seventh',
-        'eighth',
-        'ninth',
-        'tenth',
-      }, false),
-      augend.constant.alias.bool,
-      new({ 'True', 'False' }, true),
-      new({ 'and', 'or' }, true),
-      new({ '&&', '||' }, false),
-      new({ 'top', 'middle', 'bottom' }, true),
-      new({ 'left', 'center', 'right' }, true),
-      new({ 'start', 'end' }, true),
-      new({ 'rows', 'cols' }, true),
-      new({ 'human', 'mouse' }, true),
-    },
+    default = {},
     json = { augend.semver.alias.semver },
     css = {
       augend.hexcolor.new({ case = 'lower' }),
@@ -94,7 +67,8 @@ M.opts = function()
     },
     r = {
       new({ 'TRUE', 'FALSE' }, false),
-      new({ 'row', 'col' }, false),
+      new({ 'fin', 'oza', 'pon' }, false),
+      new({ 'Fingolimod', 'Ozanimod', 'Ponesimod' }, false),
     },
     vim = {
       new({ 'opt', 'start' }, false),
@@ -102,16 +76,15 @@ M.opts = function()
     },
   }
 
-  for name, group in pairs(opts) do
-    if name ~= 'default' then
-      vim.list_extend(group, opts.default)
-    end
-  end
-  return opts
-end
+  -- create rmd group as a combination of markdown and r
+  opts.rmd = {}
+  vim.list_extend(opts.rmd, opts.markdown)
+  vim.list_extend(opts.rmd, opts.r)
 
-M.config = function()
-  local opts = M.opts()
+  -- extend each group with default switches
+  for name, group in pairs(opts) do
+    vim.list_extend(group, default_switches)
+  end
 
   -- Build dials_by_ft from non-default groups
   local dials_by_ft = {}
@@ -122,18 +95,49 @@ M.config = function()
   end
 
   -- Merge with explicit extensions
+  -- TODO: FIXME
   local extend = {
     sass = 'css',
     scss = 'css',
-    quarto = 'markdown',
+    quarto = 'rmd',
+    zsh = 'sh',
+    lua = 'vim',
   }
 
-  dials_by_ft = vim.tbl_extend('force', dials_by_ft, extend)
-
-  vim.g.dials_by_ft = dials_by_ft
+  vim.g.dials_by_ft = vim.tbl_extend('force', dials_by_ft, extend)
 
   require('dial.config').augends:register_group(opts)
-  M.keymaps()
+
+  ---@param increment boolean
+  ---@param g? boolean
+  local function dial(increment, g)
+    local mode = vim.fn.mode(true)
+    local is_visual = mode == 'v' or mode == 'V' or mode == '\22'
+    local func = string.format(
+      '%s%s%s',
+      increment and 'inc' or 'dec',
+      g and '_g' or '_',
+      is_visual and 'visual' or 'normal'
+    )
+    -- local group = vim.g.dials_by_ft[vim.bo.filetype] or 'default'
+    -- return require('dial.map')[func](group)
+    return require('dial.map')[func](vim.g.dials_by_ft[vim.bo.filetype] or 'default')
+  end
+
+-- stylua: ignore
+local keys = {
+  -- {'<C-a>', dial(true) },
+  {'<C-a>', function() return dial(true) end, },
+  {'<C-x>', function() return dial(false) end,},
+  {'g<C-a>', function() return dial(true, true) end,},
+  {'g<C-x>', function() return dial(false, true) end, }
+}
+
+  for _, keymap in ipairs(keys) do
+    local lhs, rhs = unpack(keymap)
+    ---@diagnostic disable-next-line: param-type-mismatch
+    vim.keymap.set({ 'n', 'v' }, lhs, rhs, { expr = true })
+  end
 end
 
 return M
