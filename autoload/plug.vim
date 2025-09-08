@@ -21,7 +21,7 @@ function! plug#(repo, ...) abort
 endfunction
 
 function! plug#parse(spec, ...) abort
-  " FIXME
+  " FIXME:
 endfunction
 
 " examples from the `vim-plug` docs
@@ -65,7 +65,7 @@ endfunction
 function! plug#end() abort
   " delcommand Plug
   if has('nvim')
-    lua require('plug').end_()
+    lua require('nvim.plug').end_()
     " lua vim.pack.add(vim.g['plug#list'], { confirm = false })
   else
     if !(exists('g:did_load_filetypes')
