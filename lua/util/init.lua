@@ -1,4 +1,6 @@
-local M = {}
+local M = vim.defaulttable(function(k)
+  return require('util.' .. k)
+end)
 
 M.sep = package.config:sub(1, 1)
 

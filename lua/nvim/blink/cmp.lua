@@ -2,10 +2,10 @@ local M = { 'Saghen/blink.cmp' }
 -- M.build = 'cargo build --release'
 
 M.specs = {
+  -- 'bydlw98/blink-cmp-env',
+  -- 'fang2hou/blink-copilot',
+  -- 'mgalliou/blink-cmp-tmux',
   'Saghen/blink.compat',
-  'bydlw98/blink-cmp-env',
-  'fang2hou/blink-copilot',
-  'mgalliou/blink-cmp-tmux',
   'R-nvim/cmp-r',
 }
 
@@ -83,6 +83,18 @@ M.component = function()
       return source_icons[name] or ''
     end)
     :join('')
+end
+
+M.after = function()
+  local url =
+    'https://raw.githubusercontent.com/bydlw98/blink-cmp-env/refs/heads/main/lua/blink-cmp-env.lua'
+  -- https://raw.githubusercontent.com/mgalliou/blink-cmp-tmux/refs/heads/main/lua/blink-cmp-tmux/init.lua
+  local path =
+    vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim', 'blink', 'sources', 'env.lua')
+  if not vim.uv.fs_stat(path) then
+    print('downloading to ' .. path)
+    require('util.wget')(url, { outpath = path })
+  end
 end
 
 return M

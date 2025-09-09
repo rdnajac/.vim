@@ -61,7 +61,8 @@ M.providers = {
   },
   env = {
     name = 'env',
-    module = 'blink-cmp-env',
+    -- module = 'blink-cmp-env',
+    module = 'nvim.blink.sources.env',
     score_offset = -5,
     opts = {
       item_kind = function()
