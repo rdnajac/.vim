@@ -42,26 +42,3 @@ for _, name in ipairs(pickers) do
   end
 end
 
-vim.api.nvim_create_user_command('PlugClean', function()
-  vim.pack.del(vim.tbl_map(
-    function(plugin)
-      return plugin.spec.name
-    end,
-    vim.tbl_filter(function(plugin)
-      return plugin.active == false
-    end, vim.pack.get())
-  ))
-end, { desc = 'Remove unused plugins' })
-
-vim.api.nvim_create_user_command('Plug', function(args)
-  if #args.fargs == 0 then
-    print(vim.inspect(vim.pack.get()))
-  else
-    vim.pack.add({ 'https://github.com/' .. args.fargs[1] })
-  end
-end, { nargs = '?', desc = 'Add a plugin' })
-
--- must pass nil to update all plugins with a bang
-vim.api.nvim_create_user_command('PlugUpdate', function(opts)
-  vim.pack.update(nil, { force = opts.bang })
-end, { bang = true })

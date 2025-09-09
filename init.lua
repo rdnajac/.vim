@@ -57,4 +57,50 @@ vim.print = info
 nv.mods_on_init = mods
 nv.did_setup = {}
 
-vim.cmd([[runtime vimrc | packadd vimline.nvim]])
+vim.cmd([[runtime vimrc]])
+
+local pluglist = vim.g['plug#list']
+
+nv.specs = vim.tbl_map(function(p)
+  return vim.endswith(p, '.nvim') and nv.plug.spec(p) or p
+end, pluglist)
+
+-- FIXME:
+for _, mod in ipairs({ 'blink.cmp', 'treesitter', 'lsp' }) do
+  vim.list_extend(nv.specs, nv.plug(mod))
+end
+
+vim.pack.add(nv.specs, {
+  confirm = vim.v.vim_did_enter == 1, -- don't confirm during startup
+  load = function(data)
+    local spec = data.spec
+    local plugin = spec.name
+    local bang = vim.v.vim_did_enter == 0
+
+    vim.cmd.packadd({ plugin, bang = bang, magic = { file = false } })
+
+    if not spec.data then
+      return
+    end
+
+    if spec.data and vim.is_callable(spec.data.setup) then
+      spec.data.setup()
+    end
+
+    -- do setup
+    -- TODO: use spec object
+    if vim.is_callable(spec.data.config) then
+      spec.data.config()
+      info('configured ' .. plugin .. '!')
+      table.insert(nv.did_setup, plugin)
+    elseif type(spec.data.opts) == 'table' then
+      require(plugin).setup(spec.data.opts)
+      info('setup ' .. plugin .. '!')
+      table.insert(nv.did_setup, plugin)
+    end
+  end,
+})
+
+vim.cmd([[packadd vimline.nvim]])
+
+nv.plug.after('oil')

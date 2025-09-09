@@ -340,20 +340,27 @@ iabbrev n- –
 iabbrev m- —
 " }}}1
 
+" Section: commands {{{1
+command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
+command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
+command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
+" }}}
+
 " Section: plugins {{{1
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
+" Plug 'lervag/wiki.vim.git'
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-tbone'
+" Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-abolish'
 " Plug 'tpope/vim-capslock'
 " Plug 'tpope/vim-characterize'
@@ -365,21 +372,21 @@ Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 
 if has('nvim')
-    Plug 'folke/snacks.nvim'
-    Plug 'folke/tokyonight.nvim'
-    Plug 'folke/which-key.nvim'
-    Plug 'folke/todo-comments.nvim'
-    Plug 'folke/trouble.nvim'
-    " Plug 'folke/noice.nvim'
-    Plug 'stevearc/oil.nvim'
-    Plug 'MeanderingProgrammer/render-markdown.nvim'
-    Plug 'R-nvim/r.nvim'
-    Plug 'mason-org/mason.nvim'
-    " Plug 'Saghen/blink.cmp'
-    " Plug 'stevearc/conform.nvim'
-    " Plug 'mfussenegger/nvim-lint'
-    Plug 'monaqa/dial.nvim',
-    Plug 'nvim-mini/mini.nvim',
+  Plug 'folke/snacks.nvim'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'folke/which-key.nvim'
+  Plug 'folke/todo-comments.nvim'
+  Plug 'folke/trouble.nvim'
+  " Plug 'folke/noice.nvim'
+  Plug 'stevearc/oil.nvim'
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
+  Plug 'R-nvim/r.nvim'
+  Plug 'mason-org/mason.nvim'
+  " Plug 'Saghen/blink.cmp'
+  " Plug 'stevearc/conform.nvim'
+  " Plug 'mfussenegger/nvim-lint'
+  Plug 'monaqa/dial.nvim',
+  Plug 'nvim-mini/mini.nvim',
 else
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
@@ -392,12 +399,7 @@ endif
 call plug#end()
 " }}}1
 
-" Section: commands {{{1
-command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
-command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
-command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
-" }}}
-
+" FIXME: doesn't work well with r files
 " https://github.com/tpope/vim-eunuch/blob/master/doc/eunuch.txt
 let g:interpreters = {
       \ '.':      '/bin/sh',
@@ -409,7 +411,6 @@ let g:interpreters = {
       \ 'python': 'python3',
       \ 'rmd':    'Rscript',
       \ }
-" FIXME: doesn't work well with r files
 
 if !exists('g:vimrc_reload_count')
   let g:vimrc_reload_count = 0
@@ -417,3 +418,4 @@ else
   let g:vimrc_reload_count += 1
   Info 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
 endif
+let g:vimtex_format_enabled = 1

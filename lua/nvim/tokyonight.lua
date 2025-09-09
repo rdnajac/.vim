@@ -49,6 +49,9 @@ M.opts = {
   },
 }
 
+M.colors = {}
+M.groups = {}
+
 M.config = function()
   -- set up once to cache the user opts
   require('tokyonight').setup(M.opts)

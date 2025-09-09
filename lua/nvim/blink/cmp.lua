@@ -25,8 +25,9 @@ M.opts = {
       window = { vim.o.winborder == '' and 'single' or nil },
     },
     list = { selection = { preselect = true, auto_insert = true } },
+    ghost_text = { enabled = true }, 
     menu = {
-      auto_show = true,
+      auto_show = false,
       border = vim.o.winborder == '' and 'single' or nil,
       draw = {
         treesitter = { 'lsp' },

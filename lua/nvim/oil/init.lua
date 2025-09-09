@@ -97,17 +97,16 @@ M.winbar = function(winid)
   return path ~= '' and vim.fn.fnamemodify(path, ':~') or ''
 end
 
--- guard if oil not loaded?
--- snacks.util.on_module?
-vim.keymap.set('n', '-', '<Cmd>Oil<CR>')
-
-require('nvim.oil.autocmds')
--- Clear git status cache on refresh
-local refresh = require('oil.actions').refresh
-local orig_refresh = refresh.callback
-refresh.callback = function(...)
-  git_status = new_git_status()
-  orig_refresh(...)
+M.after = function()
+  -- Clear git status cache on refresh
+  local refresh = require('oil.actions').refresh
+  local orig_refresh = refresh.callback
+  refresh.callback = function(...)
+    git_status = new_git_status()
+    orig_refresh(...)
+  end
+  vim.keymap.set('n', '-', '<Cmd>Oil<CR>')
+  require('nvim.oil.autocmds')
 end
 
 return M

@@ -6,7 +6,7 @@ function! vimline#statusline#meta() abort
   if mode[0] ==# 'i'
     " FIXME: call lua wrapper
     " let l:ret .= lua#require('plug.blink', 'component')
-    let l:ret .= v:lua.require'nvim.blink'.component()
+    let l:ret .= v:lua.require'nvim.blink.cmp'.component()
   elseif mode ==# 'n'
     let l:ret .= ' ' 
   endif

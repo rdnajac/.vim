@@ -39,6 +39,7 @@ M.opts = {
   html = { comment = { conceal = false } },
 }
 
+-- tODO: use m.after
 vim.schedule(function()
   Snacks.toggle({
     name = 'Render Markdown',

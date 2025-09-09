@@ -1,7 +1,7 @@
 #!/usr/bin/env -S nvim -l
 
 local uv = vim.uv
-local PWD = os.getenv("PWD") or uv.cwd()
+local PWD = os.getenv('PWD') or uv.cwd()
 local NVIM_PIPE = os.getenv('NVIM_PIPE') or (os.getenv('XDG_RUNTIME_DIR') or '/tmp') .. '/nvim.pipe'
 
 local function resolve(path)
@@ -12,6 +12,10 @@ local args = {}
 for i = 1, #arg do
   local a = arg[i]
   if a:sub(1, 1) == '-' then
+    if a == '-d' then
+      print('Deleting ' .. NVIM_PIPE)
+      return vim.fs.rm(NVIM_PIPE)
+    end
     table.insert(args, a)
   else
     table.insert(args, resolve(a))
@@ -33,5 +37,4 @@ else
 end
 
 return os.exit(os.execute(cmd))
-
 -- vim:ft=lua
