@@ -49,7 +49,18 @@ M.opts_extend = {
     local icon = icon_map[opts.finder]
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
     opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
-    opts.cwd = opts.cwd or vim.fn['git#root']() or vim.fn.getcwd()
+    -- Safely resolve cwd
+    if not opts.cwd then
+      -- Check if current buffer is an Oil buffer
+      if vim.bo.filetype == 'oil' then
+        opts.cwd = require('oil').get_current_dir()
+        -- TODO: write project root func usinglsp
+      elseif vim.fn.exists('*git#root') == 1 and vim.fn['git#root']() ~= '' then
+        opts.cwd = vim.fn['git#root']()
+      else
+        opts.cwd = vim.fn.getcwd()
+      end
+    end
     return opts
   end,
   win = {

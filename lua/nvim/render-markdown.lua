@@ -39,8 +39,7 @@ M.opts = {
   html = { comment = { conceal = false } },
 }
 
--- tODO: use m.after
-vim.schedule(function()
+M.after = function()
   Snacks.toggle({
     name = 'Render Markdown',
     get = function()
@@ -50,6 +49,6 @@ vim.schedule(function()
       require('render-markdown').set(enabled)
     end,
   }):map('<leader>um')
-end)
+end
 
 return M

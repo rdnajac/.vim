@@ -1,5 +1,9 @@
 local command = vim.api.nvim_create_user_command
 
+if not package.loaded['snacks'] then
+  return
+end
+
 -- `Snacks` Ex functions
 command('Scratch', function(opts)
   if opts.bang == true then

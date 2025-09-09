@@ -14,6 +14,10 @@ function! CRooze() abort
   let l:ft = &filetype
   let l:line = getline('.')
 
+  if l:ft ==# 'qf\|pager' 
+   return 0
+  endif
+
   if l:line[0] ==# '#' && l:line[1] ==# '!'
     Info bang
     return 0
@@ -34,6 +38,7 @@ endfunction
 
 nnoremap <leader><CR> <Cmd>call ooze#init()<CR>
 nnoremap <M-CR> <Cmd>call ooze#file()<CR>
+nnoremap <expr> <CR> CRooze() > 0 ? '' : "\<CR>"
 
 augroup ooze
   autocmd!

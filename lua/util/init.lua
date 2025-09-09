@@ -10,7 +10,7 @@ M.safe_require = function(module, err)
       if err == true then
         error(mod)
       else
-        vim.notify(('Failed to load %s:\n%s'):format(module, mod), vim.log.levels.ERROR)
+        vim.notify(('Failed to load %s:\n%s'):format(module, mod), vim.log.levels.WARN)
       end
     end)
     return nil

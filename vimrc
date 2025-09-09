@@ -110,7 +110,6 @@ augroup END
 " }}}1
 
 " Section: keymaps {{{1
-nnoremap <expr> <CR> ooze#line() > 0 ? '' : "\<CR>"
 nmap  ciw
 vmap  :sort<CR>
 nmap <silent> <C-q> <Cmd>bd<CR>
@@ -127,12 +126,11 @@ nmap <silent> <C-q> <Cmd>bd<CR>
 
 nnoremap ZX <Cmd>Zoxide<CR>
 
-nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>   " buffer
-nnoremap cd- <Cmd>cd -<Bar>pwd<CR>       " last dir
-nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR> " parent
-nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR> " parent
+nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
+nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
+nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
-nnoremap cdP :edit <C-R>=g:plug_home<CR><Bar>pwd<CR>
+nnoremap cdP :execute 'edit ' . plug_home . '/' \| pwd<CR>
 
 nmap <expr> cq change#quote()
 
@@ -166,7 +164,7 @@ nnoremap <leader><Space> viW
 " vim.lsp.hover overrides the default K mapping
 nnoremap <leader>K  <Cmd>norm! K<CR>
 
-nnoremap <leader>e <Cmd>Explore<CR>
+nnoremap <leader>e <Cmd>Explorer<CR>
 nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
 

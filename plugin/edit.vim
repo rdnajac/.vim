@@ -6,6 +6,9 @@ nnoremap <leader>vp <Cmd>call edit#vimrc('+/Section:\ plugins')<CR>
 nnoremap <leader>vs <Cmd>call edit#vimrc('+/Section:\ settings')<CR>
 
 nnoremap <BSlash>i <Cmd>call edit#(stdpath('config') . '/init.lua')<CR>
+nnoremap <BSlash>n <Cmd>call edit#(stdpath('config') . '/lua/nvim/init.lua')<CR>
+nnoremap <BSlash>p <Cmd>call edit#(stdpath('config') . '/lua/nvim/plug/init.lua')<CR>
+nnoremap <BSlash>u <Cmd>call edit#(stdpath('config') . '/lua/util/init.lua')<CR>
 
 nnoremap <BSlash>0 <Cmd>call edit#readme()<CR>
 

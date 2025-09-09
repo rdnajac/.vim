@@ -1,14 +1,18 @@
-local map = require('which-key').add
+-- local map = require('which-key').add
+vim.keymap.set({ 'i', 'n', 's' }, '<Esc>', function()
+  vim.cmd('noh')
+  return '<Esc>'
+end, { expr = true, desc = 'Escape and Clear hlsearch' })
+
+if not package.loaded['snacks'] then
+  return
+end
 
 vim.keymap.set('n', '<leader>gg', function()
   Snacks.lazygit()
   vim.cmd.startinsert()
 end, { desc = 'Lazygit' })
 
-vim.keymap.set({ 'i', 'n', 's' }, '<Esc>', function()
-  vim.cmd('noh')
-  return '<Esc>'
-end, { expr = true, desc = 'Escape and Clear hlsearch' })
 
 -- stylua: ignore start
 local function map_pickers(key, picker_opts, keymap_opts)

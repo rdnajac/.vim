@@ -6,7 +6,7 @@ local git_status = new_git_status()
 
 ---@type oil.setupOpts
 M.opts = {
-  default_file_explorer = vim.g.default_file_explorer == 'oil',
+  default_file_explorer = vim.g.file_explorer == 'oil',
   -- skip_confirm_for_simple_edits = true,
   constrain_cursor = 'name',
   watch_for_changes = true,
