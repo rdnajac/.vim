@@ -18,6 +18,14 @@ vim.lsp.enable(M.servers)
 -- vim.lsp.inline_completion.enable() -- XXX:
 
 require('nvim.lsp.progress')
-require('nvim.lsp.lazydev').setup()
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = vim.api.nvim_create_augroup('LazyDevSetup', { clear = true }),
+  pattern = 'lua',
+  once = true,
+  callback = function()
+    require('nvim.lsp.lazydev')
+  end,
+})
 
 return M

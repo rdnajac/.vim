@@ -34,7 +34,6 @@ M.opts = {
     hl['SpecialWindow'] = { bg = bg.eigengrau }
     hl['Green'] = { fg = colors.green }
     hl['RenderMarkdownCode'] = { bg = bg.tokyonight }
-
   end,
   plugins = {
     all = false,

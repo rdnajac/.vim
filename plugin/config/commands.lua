@@ -45,4 +45,3 @@ for _, name in ipairs(pickers) do
     command(cmd, picker, { desc = 'Snacks Picker: ' .. cmd })
   end
 end
-

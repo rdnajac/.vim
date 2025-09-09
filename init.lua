@@ -56,11 +56,11 @@ vim.pack.add(nv.specs, {
       -- TODO: use spec object?
       if vim.is_callable(spec.data.config) then
         spec.data.config()
-        info('configured ' .. plugin .. '!')
+        -- info('configured ' .. plugin .. '!')
         table.insert(nv.did_setup, plugin)
       elseif type(spec.data.opts) == 'table' then
         require(plugin).setup(spec.data.opts)
-        info('setup ' .. plugin .. '!')
+        -- info('setup ' .. plugin .. '!')
         table.insert(nv.did_setup, plugin)
       end
     end
@@ -71,5 +71,4 @@ vim.cmd([[packadd vimline.nvim]])
 
 nv.plug.after('oil')
 nv.plug.after('render-markdown')
--- vim.pack.add({ 'folke/trouble.nvim' })
 -- vim:fdm=marker:fmr=[[,]]:fdl=0

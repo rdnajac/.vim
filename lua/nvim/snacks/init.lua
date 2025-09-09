@@ -30,7 +30,7 @@ local opts = {
       'local x = ',
       '',
       'print(x)',
-    }, '\n'),
+    }, '\n')
   },
   terminal = { start_insert = false, auto_insert = true, auto_close = true },
   styles = {

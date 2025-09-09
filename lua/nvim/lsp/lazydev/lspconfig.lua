@@ -5,7 +5,6 @@ function M.setup()
   if not ok then
     return
   end
-  local Lsp = require('nvim.lsp.lazydev.luals')
 
   local try_add = Manager.try_add
 
@@ -16,12 +15,13 @@ function M.setup()
     for _, ids in pairs(self._clients) do
       for _, client_id in ipairs(ids) do
         local client = vim.lsp.get_client_by_id(client_id)
-        if client and Lsp.supports(client) then
+        if client and client.name == 'luals' then
           is_supported = true
           break
         end
       end
     end
+    -- TODO: should this be moved?
     if is_supported and not project_root then
       local root = require('nvim.lsp.lazydev').find_workspace(buf)
       if root then

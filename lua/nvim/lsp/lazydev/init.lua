@@ -1,26 +1,37 @@
 local M = {}
 
-M.opts = {
-  library = {
-    { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-    { path = 'snacks.nvim', words = { 'Snacks' } },
-    -- { path = 'nvim', words = { 'nvim' } }, -- FIXME: doesn't work
-  },
+---@alias lazydev.Library {path:string, words:string[], mods:string[], files:string[]}
+---@alias lazydev.Library.spec string|{path:string, words?:string[], mods?:string[], files?:string[]}
+---@type lazydev.Library.spec[]
+M.library = {
+  { path = vim.env.VIMRUNTIME },
+  { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+  -- { path = 'snacks.nvim', words = { 'Snacks' } },
+  { path = vim.g.plug_home .. '/snacks.nvim', words = { 'Snacks' } },
+  -- { path = 'nvim', words = { 'nvim' } }, -- FIXME: doesn't work
 }
 
----@param opts? lazydev.Config
-function M.setup()
-  -- vim.api.nvim_create_autocmd('FileType', {
-  --   group = vim.api.nvim_create_augroup('LazyDevSetup', { clear = true }),
-  --   pattern = 'lua',
-  --   once = true,
-  --   callback = function(args)
-  --     info('setting up lazydev for lua filetype')
-  --     require('nvim.lsp.lazydev.config').setup(M.opts)
-  --   end,
-  -- })
-  require('nvim.lsp.lazydev.config').setup(M.opts)
+M.enabled = function(root_dir)
+  return vim.g.lazydev_enabled ~= false
 end
+
+M.debug = false
+
+vim.api.nvim_create_user_command('LazyDev', function(opts)
+  local cmd = opts.args
+  require('nvim.lsp.lazydev.cmd')[cmd]()
+end, {
+  nargs = 1,
+  complete = function()
+    return { 'debug', 'lsp' }
+  end,
+  desc = 'Run lazydev command (debug or lsp)',
+})
+
+vim.schedule(function()
+  require('nvim.lsp.lazydev.buf').setup()
+  require('nvim.lsp.lazydev.lspconfig').setup()
+end)
 
 --- Checks if the current buffer is in a workspace:
 --- * part of the workspace root

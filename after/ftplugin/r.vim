@@ -26,6 +26,9 @@ if has('nvim') && luaeval('package.loaded["r"] ~= nil')
   nnoremap <buffer> <localleader>rD <Plug>RSetwd
 
   nnoremap <buffer> <localleader>r? <Cmd>RSend getwd()<CR>
+  nnoremap <buffer> <localleader>ry <Cmd>RSend Y<CR>
+  nnoremap <buffer> <localleader>ra <Cmd>RSend a<CR>
+  nnoremap <buffer> <localleader>rn <Cmd>RSend n<CR>
   nnoremap <buffer> <localleader>rR <Cmd>RSend source(".Rprofile")<CR>
   nnoremap <buffer> <localleader>rd <Cmd>RSend setwd(vim.fn.expand("<cword>"))<CR>
   nnoremap <buffer> <localleader>rs <Cmd>RSend renv::status()<CR>

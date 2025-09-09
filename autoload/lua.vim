@@ -1,4 +1,6 @@
 " autoload/lua.vim
+"
+" vimscript bindings for lua functions
 
 function! s:if_vim_handle() abort
   if !has('nvim')

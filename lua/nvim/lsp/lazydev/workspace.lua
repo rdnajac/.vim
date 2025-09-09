@@ -191,7 +191,7 @@ function M:update()
 
   if not vim.deep_equal(settings, self.settings) then
     self.settings = settings
-    if Config.debug then
+    if require('nvim.lsp.lazydev').debug then
       self:debug()
     end
     return true

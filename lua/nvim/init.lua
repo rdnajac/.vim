@@ -7,11 +7,11 @@ local self_path = debug.getinfo(1, 'S').source:sub(2)
 local self_dir = vim.fs.dirname(self_path)
 local pattern = '*'
 -- local files = vim.fn.globpath(self_dir, pattern, false, true)
--- print(vim.inspect(files))  
+-- print(vim.inspect(files))
 
 -- for file in vim.fs.find(pattern, { path = self_dir, limit = 1 }) do
 --   print(file)
--- end  
+-- end
 -- collect files with vi.sidr
 -- local files = {}
 
@@ -34,7 +34,7 @@ local files = {}
 --   local lua_root = vim.fs.normalize(vim.fs.joinpath(vim.fn.stdpath('config'), 'lua'))
 --   return vim.fs.relpath(lua_root, file)
 -- end, files)
--- 
+--
 -- print(vim.inspect(submods))
 
 return vim.defaulttable(function(k)

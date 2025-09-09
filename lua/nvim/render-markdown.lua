@@ -31,7 +31,7 @@ M.opts = {
     style = 'normal',
   },
   heading = {
-    sign = false, 
+    sign = false,
     width = 'full',
     position = 'inline',
     -- icons = '',
