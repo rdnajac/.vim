@@ -74,4 +74,5 @@ vim.cmd([[packadd vimline.nvim]])
 _G.bt = Snacks.debug.backtrace
 nv.plug.after('oil')
 nv.plug.after('render-markdown')
+require('nvim.copilot')
 -- vim:fdm=marker:fmr=[[,]]:fdl=0
