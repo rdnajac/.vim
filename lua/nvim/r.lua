@@ -4,7 +4,11 @@ local M = {
   --- HACK: lowercase `r` to match the modname
   'R-nvim/r.nvim',
   ft = { 'r', 'rmd', 'quarto' },
-  ---@type RConfigUserOpts
+  specs = {
+    'Saghen/blink.compat',
+    'R-nvim/cmp-r',
+  },
+  --- @type RConfigUserOpts
   opts = {
     R_args = { '--quiet', '--no-save' },
     pdfviewer = '',

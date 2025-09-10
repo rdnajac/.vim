@@ -38,6 +38,7 @@ vim.cmd([[runtime vimrc]])
 nv.specs = vim.tbl_map(function(p)
   -- return nv.plug[vim.endswith(p, '.nvim') and 'spec' or 'gh'](p)
   if vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp') then
+    -- TODO: combine these funcs
     return nv.plug.spec(p)
   else
     return nv.plug.gh(p)

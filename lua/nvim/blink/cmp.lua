@@ -1,14 +1,6 @@
 local M = { 'Saghen/blink.cmp' }
 -- M.build = 'cargo build --release'
 
-M.specs = {
-  -- 'bydlw98/blink-cmp-env',
-  -- 'fang2hou/blink-copilot',
-  -- 'mgalliou/blink-cmp-tmux',
-  'Saghen/blink.compat',
-  'R-nvim/cmp-r',
-}
-
 M.event = 'InsertEnter'
 
 local icons = require('nvim.icons')

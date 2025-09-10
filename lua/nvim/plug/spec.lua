@@ -34,10 +34,8 @@ function Plugin:setup()
 end
 
 function Plugin:deps()
-    info(self.name)
   if type(self.specs) == 'table' and #self.specs > 0 then
     local specs = vim.tbl_map(require('nvim.plug').gh, self.specs)
-    info(specs)
     vim.pack.add(specs, { confirm = false })
   end
 end

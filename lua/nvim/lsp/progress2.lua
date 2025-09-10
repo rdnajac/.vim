@@ -6,27 +6,20 @@ vim.api.nvim_create_autocmd('LspProgress', {
       '%s: %s [%s%%]',
       value.title or 'LSP',
       value.message or '',
-      value.percentage or 0
+      value.percentage or 100
     )
-
+    local opts =
+      { kind = 'progress', title = value.title, percent = value.percentage, status = 'running' }
     if value.kind == 'begin' then
-      vim.api.nvim_echo(
-        { { msg, 'MoreMsg' } },
-        true,
-        { kind = 'progress', title = value.title, percent = value.percentage, status = 'running' }
-      )
+      vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
     elseif value.kind == 'report' then
-      vim.api.nvim_echo(
-        { { msg, 'MoreMsg' } },
-        true,
-        { kind = 'progress', title = value.title, percent = value.percentage, status = 'running' }
-      )
-    elseif value.kind == 'end' then
-      vim.api.nvim_echo(
-        { { msg, 'OkMsg' } },
-        true,
-        { kind = 'progress', title = value.title, percent = 100, status = 'success' }
-      )
+      vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
+    -- elseif value.kind == 'end' then
+      -- opts.percent = 100
+      -- opts.status = 'success'
+      -- vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
+      -- { { msg, 'OkMsg' } },
+      -- { kind = 'progress', title = value.title, percent = 100, status = 'success' }
     end
   end,
 })
