@@ -36,10 +36,15 @@ vim.print = info
 vim.cmd([[runtime vimrc]])
 
 nv.specs = vim.tbl_map(function(p)
-  return nv.plug[vim.endswith(p, '.nvim') and 'spec' or 'gh'](p)
+  -- return nv.plug[vim.endswith(p, '.nvim') and 'spec' or 'gh'](p)
+  if vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp') then
+    return nv.plug.spec(p)
+  else
+    return nv.plug.gh(p)
+  end
 end, vim.g['plug#list'])
 
-for _, mod in ipairs({ 'blink.cmp', 'treesitter', 'lsp' }) do
+for _, mod in ipairs({ 'lsp', 'treesitter' }) do
   vim.list_extend(nv.specs, nv.plug(mod))
 end
 
@@ -58,6 +63,7 @@ vim.pack.add(nv.specs, {
       local plugin = spec.data()
       plugin:setup()
       table.insert(nv.did_setup, name)
+      plugin:deps()
     end
   end,
 })

@@ -381,7 +381,7 @@ if has('nvim')
   Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'R-nvim/r.nvim'
   Plug 'mason-org/mason.nvim'
-  " Plug 'Saghen/blink.cmp'
+  Plug 'Saghen/blink.cmp'
   " Plug 'stevearc/conform.nvim'
   " Plug 'mfussenegger/nvim-lint'
   Plug 'monaqa/dial.nvim',
