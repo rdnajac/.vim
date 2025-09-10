@@ -47,27 +47,23 @@ vim.pack.add(nv.specs, {
   confirm = vim.v.vim_did_enter == 1, -- don't confirm during startup
   load = function(data)
     local spec = data.spec
-    local plugin = spec.name
+    local name = spec.name
     local bang = vim.v.vim_did_enter == 0
 
-    vim.cmd.packadd({ plugin, bang = bang, magic = { file = false } })
+    -- TODO: defer this for certain plugins
+    vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
 
-    if spec.data then
-      -- TODO: use spec object?
-      if vim.is_callable(spec.data.config) then
-        spec.data.config()
-        -- info('configured ' .. plugin .. '!')
-        table.insert(nv.did_setup, plugin)
-      elseif type(spec.data.opts) == 'table' then
-        require(plugin).setup(spec.data.opts)
-        -- info('setup ' .. plugin .. '!')
-        table.insert(nv.did_setup, plugin)
-      end
+    if vim.is_callable(spec.data) then
+      local plugin = spec.data()
+      plugin:setup()
+      table.insert(nv.did_setup, name)
     end
   end,
 })
 
 vim.cmd([[packadd vimline.nvim]])
+
+_G.bt = Snacks.debug.backtrace
 
 nv.plug.after('oil')
 nv.plug.after('render-markdown')

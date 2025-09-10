@@ -30,25 +30,11 @@ M.to_spec = function(p)
   }
 end
 
--- TODO lazy load?
---- Adds data from the spec table
 M.spec = function(user_repo)
-  -- TODO: add contition to return string
-  -- if not vim.endswith(user_repo, '.nvim') then
-  --   return gh(user_repo)
-  -- end
   local spec = M.to_spec(user_repo)
-  -- check if we have a spec table available
-  -- TODO: check against a lazy-loaded manifest rther than trying to require
-  local ok, plug = pcall(require, 'nvim.' .. spec.name)
-  -- local plug = safe_require('nvim.' .. spec.name)
-  -- if not ok or not plug then info(spec) return spec end
-  if ok and type(plug) == 'table' then
-    local config = vim.is_callable(plug.config) and plug.config or nil
-    local opts = config == nil and type(plug.opts) == 'table' and vim.deepcopy(plug.opts) or {}
-    if config or opts then
-      spec.data = { config = config, opts = opts }
-    end
+  spec.data = function()
+    local plugspec = require('nvim.plug.spec')
+    return plugspec(require('nvim')[spec.name])
   end
   return spec
 end
@@ -109,6 +95,17 @@ end
 M.after = function(module)
   Snacks.util.on_module(module, function()
     require('nvim')[module].after()
+  end)
+end
+
+M.setup_on_module = function(module)
+  Snacks.util.on_module(module, function()
+    local spec = require('nvim')[module]
+    if vim.is_callable(spec.config) then
+      spec.config()
+    else
+      require(module).setup(type(spec.opts) == 'table' and spec.opts or {})
+    end
   end)
 end
 
