@@ -4,15 +4,14 @@ vim.keymap.set({ 'i', 'n', 's' }, '<Esc>', function()
   return '<Esc>'
 end, { expr = true, desc = 'Escape and Clear hlsearch' })
 
-if not package.loaded['snacks'] then
-  return
-end
+-- if not package.loaded['snacks'] then
+--   return
+-- end
 
 vim.keymap.set('n', '<leader>gg', function()
   Snacks.lazygit()
   vim.cmd.startinsert()
 end, { desc = 'Lazygit' })
-
 
 -- stylua: ignore start
 local function map_pickers(key, picker_opts, keymap_opts)
@@ -75,7 +74,7 @@ end, { desc = 'Next inline completion' })
 vim.keymap.set('i', '<M-p>', function()
   vim.lsp.inline_completion.select({ count = -1 })
 end, { desc = 'Previous inline completion' })
--- 
+--
 Snacks.toggle({
   name = 'Inline Completion',
   get = function()
@@ -104,6 +103,7 @@ vim.keymap.set('i', '<Tab>', function()
   local type = require('blink.cmp.types').CompletionItemKind
 
   -- TODO: what about snippet expansion?
+  -- TODO: how to hide copilot completion?
   if not vim.lsp.inline_completion.get() then
     if cmp.is_visible() and item then
       cmp.accept()

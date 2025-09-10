@@ -143,7 +143,8 @@ nnoremap gcd :Gcd<Bar>pwd<CR>
 nnoremap zq <Cmd>Format<CR>
 
 " resursive keymaps {{{
-nmap gy "xyygcc"xp
+nmap gy "xyygcc"xp<Up>
+nmap gY "xyygcc"xP
 nmap vv Vgc
 
 " `unimpaired`

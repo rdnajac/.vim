@@ -6,9 +6,8 @@ local M = {}
 M.library = {
   { path = vim.env.VIMRUNTIME },
   { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-  -- { path = 'snacks.nvim', words = { 'Snacks' } },
-  { path = vim.g.plug_home .. '/snacks.nvim', words = { 'Snacks' } },
-  -- { path = 'nvim', words = { 'nvim' } }, -- FIXME: doesn't work
+  { path = vim.fs.joinpath(vim.g.plug_home, 'snacks/lua/snacks'), words = { 'Snacks' } },
+  { path = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim'), words = { 'nv' } },
 }
 
 M.enabled = function(root_dir)
@@ -18,8 +17,7 @@ end
 M.debug = false
 
 vim.api.nvim_create_user_command('LazyDev', function(opts)
-  local cmd = opts.args
-  require('nvim.lsp.lazydev.cmd')[cmd]()
+  require('nvim.lsp.lazydev.cmd')[opts.args]()
 end, {
   nargs = 1,
   complete = function()

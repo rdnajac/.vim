@@ -1,3 +1,5 @@
+--- XXX: deprecated; should use colon notation with client; source code modified at:
+--- ~/.local/share/nvim/site/pack/core/opt/snacks/lua/snacks/words.lua:111
 local M = { 'folke/snacks.nvim' }
 
 -- stylua: ignore
@@ -30,7 +32,7 @@ local opts = {
       'local x = ',
       '',
       'print(x)',
-    }, '\n')
+    }, '\n'),
   },
   terminal = { start_insert = false, auto_insert = true, auto_close = true },
   styles = {

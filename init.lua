@@ -53,6 +53,7 @@ vim.pack.add(nv.specs, {
     -- TODO: defer this for certain plugins
     vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
 
+    -- TODO: add type notations
     if vim.is_callable(spec.data) then
       local plugin = spec.data()
       plugin:setup()
@@ -64,7 +65,6 @@ vim.pack.add(nv.specs, {
 vim.cmd([[packadd vimline.nvim]])
 
 _G.bt = Snacks.debug.backtrace
-
 nv.plug.after('oil')
 nv.plug.after('render-markdown')
 -- vim:fdm=marker:fmr=[[,]]:fdl=0

@@ -93,7 +93,7 @@ M.ensure_installed = function()
   )
 end
 
--- TODO: 
+-- TODO:
 -- M.ensure_installed_transformed() = vim.tbl_map(
 
 M.update = function()
