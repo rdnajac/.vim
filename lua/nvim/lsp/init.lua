@@ -15,7 +15,7 @@ vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
 vim.lsp.enable(M.servers)
 
 -- TODO:make this a toggle
--- vim.lsp.inline_completion.enable() -- XXX:
+vim.lsp.inline_completion.enable() -- XXX:
 
 require('nvim.lsp.progress')
 

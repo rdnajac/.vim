@@ -21,13 +21,13 @@ M.opts = {
   completion = {
     accept = { auto_brackets = { enabled = false } },
     documentation = {
-      auto_show = true,
+      auto_show = false,
       window = { vim.o.winborder == '' and 'single' or nil },
     },
-    list = { selection = { preselect = true, auto_insert = true } },
     ghost_text = { enabled = true },
+    list = { selection = { preselect = true, auto_insert = true } },
     menu = {
-      auto_show = false,
+      auto_show = true,
       border = vim.o.winborder == '' and 'single' or nil,
       draw = {
         treesitter = { 'lsp' },
@@ -45,6 +45,9 @@ M.opts = {
           },
         },
       },
+    },
+    trigger = {
+      show_on_keyword = false,
     },
   },
   signature = { enabled = true, window = { border = 'single' } },

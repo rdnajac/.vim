@@ -73,6 +73,7 @@ function Plugin:setup()
     -- info(spec_data.p():spec())
   end
 end
+
 function Plugin.new(t)
   return setmetatable(t or {}, Plugin)
 end

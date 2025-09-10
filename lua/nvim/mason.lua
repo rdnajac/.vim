@@ -93,6 +93,9 @@ M.ensure_installed = function()
   )
 end
 
+-- TODO: 
+-- M.ensure_installed_transformed() = vim.tbl_map(
+
 M.update = function()
   M.install(M.ensure_installed())
   -- TODO: update all?

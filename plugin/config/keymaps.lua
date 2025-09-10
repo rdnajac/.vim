@@ -65,6 +65,17 @@ Snacks.toggle.indent():map('<leader>ug')
 Snacks.toggle.scroll():map('<leader>us')
 Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
+
+-- Cycle suggestions: Next
+vim.keymap.set('i', '<M-n>', function()
+  vim.lsp.inline_completion.select({ count = 1 })
+end, { desc = 'Next inline completion' })
+
+-- Cycle suggestions: Previous
+vim.keymap.set('i', '<M-p>', function()
+  vim.lsp.inline_completion.select({ count = -1 })
+end, { desc = 'Previous inline completion' })
+-- 
 Snacks.toggle({
   name = 'Inline Completion',
   get = function()

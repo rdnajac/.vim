@@ -58,6 +58,7 @@ local on_attach = function(client, bufnr)
       callback = vim.lsp.codelens.refresh,
     })
   end
+  -- TODO: inline completion? 
 
   require('nvim.lsp.docsymbols.navic_attach')(client, bufnr)
 end

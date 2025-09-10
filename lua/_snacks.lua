@@ -1,6 +1,5 @@
 ---@class Snacks: snacks.plugins
 local M = {}
-info('snack attack!')
 
 setmetatable(M, {
   __index = function(t, k)
