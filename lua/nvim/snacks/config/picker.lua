@@ -23,7 +23,7 @@ return {
     },
     explorer = require('nvim.snacks.config.explorer'),
     autocmds = require('nvim.snacks.config.picker.util').pick_conf,
-    keymap = require('nvim.snacks.config.picker.util').pick_conf,
+    keymaps = require('nvim.snacks.config.picker.util').pick_conf,
     files = require('nvim.snacks.config.picker.util').opts_extend,
     grep = require('nvim.snacks.config.picker.util').opts_extend,
     icons = {

@@ -27,9 +27,19 @@ local zoxide = function(picker)
   })
 end
 
+-- TODO: make jump work for vimscript items
 -- TODO: Find command scriptnames picker in git history
 M.pick_conf = {
-  confirm = 'edit',
+  --- @param p snacks.Picker
+  --- @param item snacks.Item
+  confirm = function(p, item)
+    local file = item.file
+    if not file or file == '' then
+      Snacks.notify.warn('No file associated with this item')
+      return
+    end
+    p:action('jump', file)
+  end,
 }
 
 M.opts_extend = {
