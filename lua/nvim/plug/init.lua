@@ -1,9 +1,7 @@
 vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
 
 local safe_require = require('util').safe_require
-
 local user_repo_regex = '^[%w._-]+/[%w._-]+$'
-
 local function is_nonempty_string(x)
   return type(x) == 'string' and x ~= ''
 end
@@ -63,20 +61,40 @@ function M.plug(m)
   return ret
 end
 
-M.unloaded = function()
-  return vim.tbl_map(
-    function(plugin)
-      return plugin.spec.name
-    end,
-    vim.tbl_filter(function(plugin)
-      return plugin.active == false
-    end, vim.pack.get())
-  )
-end
-
 function M.end_()
-  -- assuming setup happens after calling plug#end()
   nv.did_setup = {}
+  nv.specs = vim.tbl_map(function(p)
+    -- return nv.plug[vim.endswith(p, '.nvim') and 'spec' or 'gh'](p)
+    if vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp') then
+      -- TODO: combine these funcs
+      return nv.plug.spec(p)
+    else
+      return nv.plug.gh(p)
+    end
+  end, vim.g['plug#list'])
+
+  for _, mod in ipairs({ 'lsp', 'treesitter' }) do
+    vim.list_extend(nv.specs, nv.plug(mod))
+  end
+
+  vim.pack.add(nv.specs, {
+    confirm = vim.v.vim_did_enter == 1, -- don't confirm during startup
+    load = function(data)
+      local spec = data.spec
+      local name = spec.name
+      local bang = vim.v.vim_did_enter == 0
+
+      -- TODO: defer this for certain plugins
+      vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
+
+      -- TODO: add type notations
+      if vim.is_callable(spec.data) then
+        local plugin = spec.data()
+        plugin:init()
+        table.insert(nv.did_setup, name)
+      end
+    end,
+  })
 
   vim.api.nvim_create_user_command('PlugClean', function()
     vim.pack.del(M.unloaded())
@@ -92,6 +110,18 @@ function M.end_()
   end, { bang = true })
 end
 
+M.unloaded = function()
+  return vim.iter(vim.pack.get())
+    :filter(function(plugin)
+      return plugin.active == false
+    end)
+    :map(function(plugin)
+      return plugin.spec.name
+    end)
+    :totable()
+end
+
+
 M.after = function(module)
   Snacks.util.on_module(module, function()
     require('nvim')[module].after()
@@ -101,7 +131,7 @@ end
 M.setup_on_module = function(module)
   Snacks.util.on_module(module, function()
     local spec = require('nvim')[module]
-    if vim.is_callable(spec.config) then
+    if vim.is_callable(spec.configf) then
       spec.config()
     else
       require(module).setup(type(spec.opts) == 'table' and spec.opts or {})
