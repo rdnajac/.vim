@@ -20,9 +20,7 @@ local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'sh', 'markdown', 'r', 'rmd', 'python', 'vim' },
   group = aug,
-  callback = function()
-    vim.treesitter.start()
-  end,
+  callback = vim.treesitter.start,
   desc = 'Start treesitter for certiain file types',
 })
 
@@ -39,33 +37,14 @@ vim.api.nvim_create_autocmd('FileType', {
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'kitty', 'ghostty', 'ghostty.chezmoitmpl' },
   group = aug,
-  callback = function()
-    vim.cmd([[setlocal commentstring=#\ %s]])
-  end,
+  command = 'setlocal commentstring=#\\ %s',
   desc = 'Set the commentstring for languages that use `#`',
-})
-
----@diagnostic disable-next-line: param-type-mismatch
-vim.api.nvim_create_autocmd('User', {
-  pattern = 'TSUpdate',
-  group = aug,
-  callback = function()
-    require('nvim-treesitter.parsers').comment = {
-      install_info = {
-        url = 'https://github.com/rdnajac/tree-sitter-comment',
-        generate = true,
-        queries = 'queries/neovim',
-      },
-    }
-  end,
-  desc = 'Install custom parser that highlights strings in `backticks` in comments',
 })
 
 --- Check if the current node is a comment node
 ---@return boolean
 M.in_comment_node = function()
   local success, node = pcall(vim.treesitter.get_node)
-
   return success
       and node
       and vim.tbl_contains({
@@ -82,5 +61,7 @@ vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection')
 vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
 vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
 -- stylua: ignore end
+
+require('nvim.treesitter.mycommentparser')
 
 return M

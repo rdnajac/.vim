@@ -5,7 +5,6 @@ local toggle = function(picker)
   vim.cmd('norm! dd')
   local opts = { cwd = picker.opts.cwd }
   local alt = picker.opts.source == 'grep' and 'files' or 'grep'
-
   picker:close()
   Snacks.picker(alt, opts)
   vim.schedule(function()
@@ -16,7 +15,6 @@ end
 ---@param picker snacks.Picker
 local zoxide = function(picker)
   local opts = picker.opts
-
   picker:close()
   Snacks.picker.zoxide({
     confirm = function(z, item)
@@ -44,12 +42,8 @@ M.pick_conf = {
 
 M.opts_extend = {
   actions = {
-    toggle = function(self)
-      toggle(self)
-    end,
-    zoxide = function(self)
-      zoxide(self)
-    end,
+    toggle = toggle,
+    zoxide = zoxide,
   },
   config = function(opts)
     local icon_map = {
@@ -59,9 +53,7 @@ M.opts_extend = {
     local icon = icon_map[opts.finder]
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
     opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
-    -- Safely resolve cwd
     if not opts.cwd then
-      -- Check if current buffer is an Oil buffer
       if vim.bo.filetype == 'oil' then
         opts.cwd = require('oil').get_current_dir()
         -- TODO: write project root func usinglsp
@@ -81,7 +73,6 @@ M.opts_extend = {
         ['P'] = {
           function(p)
             ddd(p.opts)
-            -- ddd(p)
           end,
           mode = { 'n' },
         },

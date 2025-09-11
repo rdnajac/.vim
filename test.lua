@@ -3,11 +3,11 @@ local name = 'edgy'
 local spec = { src = src, name = name }
 
 local specs = vim.tbl_map(function(p)
-  return 'http://github.com/'..p..'.git'
+  return 'http://github.com/' .. p .. '.git'
 end, {
   'tpope/vim-capslock',
   'tpope/vim-characterize',
-  'tpope/vim-dispatch'
+  'tpope/vim-dispatch',
 })
 print(specs)
 ---@module "snacks"
@@ -23,7 +23,7 @@ vim.pack.add({ specs[1] }, {
     local bang = vim.v.vim_did_enter == 0
 
     vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
-    vim.pack.add({specs[2]}, {confirm = false})
-    vim.pack.add({specs[3]}, {confirm = false})
+    vim.pack.add({ specs[2] }, { confirm = false })
+    vim.pack.add({ specs[3] }, { confirm = false })
   end,
 })

@@ -1,5 +1,8 @@
 local M = { 'Saghen/blink.cmp' }
+
 -- M.build = 'cargo build --release'
+
+M.specs = { 'Saghen/blink.compat' }
 
 M.event = 'InsertEnter'
 
@@ -87,7 +90,6 @@ M.after = function()
   local path =
     vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim', 'blink', 'sources', 'env.lua')
   if not vim.uv.fs_stat(path) then
-    print('downloading to ' .. path)
     require('util.wget')(url, { outpath = path })
   end
 end

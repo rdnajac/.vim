@@ -14,7 +14,7 @@ vim.api.nvim_create_autocmd('LspProgress', {
       vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
     elseif value.kind == 'report' then
       vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
-    -- elseif value.kind == 'end' then
+      -- elseif value.kind == 'end' then
       -- opts.percent = 100
       -- opts.status = 'success'
       -- vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)

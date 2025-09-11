@@ -5,7 +5,6 @@ local M = {
   'R-nvim/r.nvim',
   ft = { 'r', 'rmd', 'quarto' },
   specs = {
-    'Saghen/blink.compat',
     'R-nvim/cmp-r',
   },
   --- @type RConfigUserOpts

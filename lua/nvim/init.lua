@@ -1,10 +1,8 @@
 -- vim.g.use_uv = true
 -- TODO: benchmark uv, vifn, and string methods
 
-local self_path = debug.getinfo(1, 'S').source:sub(2)
 -- local self_dir = vim.fn.fnamemodify(self_path, ':p:h')
 -- local self_dir = vim.fs.dirname(vim.fs.abspath(self_path))
-local self_dir = vim.fs.dirname(self_path)
 local pattern = '*'
 -- local files = vim.fn.globpath(self_dir, pattern, false, true)
 -- print(vim.inspect(files))
@@ -38,5 +36,5 @@ local files = {}
 -- print(vim.inspect(submods))
 
 return vim.defaulttable(function(k)
-  return require('nvim.' .. k)
+  return require(vim.fs.basename(vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2))) .. '.' .. k)
 end)

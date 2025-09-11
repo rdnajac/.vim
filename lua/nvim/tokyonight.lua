@@ -206,18 +206,18 @@ M.build = function()
         .. style
         .. '.'
         .. info.ext
-        -- TODO: use string format
+      -- TODO: use string format
 
-      -- FIXME: 
+      -- FIXME:
       fname:gsub('%.$', '') -- remove trailing dot
 
-    colors['_style_name'] = 'Tokyo Night' .. style_name
-    colors['_name'] = 'tokyonight_' .. style
-    colors['_style'] = style
-    print('Writing ' .. fname)
-    -- _write(fname, plugin.generate(colors, M.groups, M.opts))
-    -- TODO:  add luals  
-    _write(fname, plugin.generate(require('tokyonight').load()))
+      colors['_style_name'] = 'Tokyo Night' .. style_name
+      colors['_name'] = 'tokyonight_' .. style
+      colors['_style'] = style
+      print('Writing ' .. fname)
+      -- _write(fname, plugin.generate(colors, M.groups, M.opts))
+      -- TODO:  add luals
+      _write(fname, plugin.generate(require('tokyonight').load()))
     end
   end
 end
