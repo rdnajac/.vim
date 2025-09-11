@@ -1,6 +1,6 @@
 " vim:fdm=marker
 scriptencoding=utf-8
-call vim#rc()
+call vimrc#init()
 
 let g:mapleader = ' '
 let g:maplocalleader = '\'
@@ -339,13 +339,29 @@ iabbrev n- –
 iabbrev m- —
 " }}}1
 
-" Section: commands {{{1
+" Section: commands {{{ 1
 command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 " }}}
 
-" Section: plugins {{{1
+" globals for plugin con
+let g:vimtex_format_enabled = 1
+
+" FIXME: doesn't work well with r files
+" https://github.com/tpope/vim-eunuch/blob/master/doc/eunuch.txt
+let g:interpreters = {
+      \ '.':      '/bin/sh',
+      \ 'sh':     '/bin/bash',
+      \ 'bash':   'bash',
+      \ 'r':      'Rscript',
+      \ 'zsh':    'zsh',
+      \ 'lua':    'lua',
+      \ 'python': 'python3',
+      \ 'rmd':    'Rscript',
+      \ }
+
+" Section: plugins {{{ 1
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
@@ -369,8 +385,17 @@ Plug 'tpope/vim-unimpaired'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
-
-if has('nvim')
+if !has('nvim') " {{{
+  Plug 'dense-analysis/ale' " TODO: try nvim-lint
+  Plug 'github/copilot.vim'
+  Plug 'Konfekt/FastFold'
+  Plug 'junegunn/vim-easy-align'
+  " Plug 'tpope/vim-sensible'
+  Plug 'tpope/vim-vinegar'
+  " TODO: try the shipped vim9 comment plugin
+  Plug 'tpope/vim-commentary'
+  " }}}
+else " neovim plugins {{{
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
@@ -386,30 +411,9 @@ if has('nvim')
   " Plug 'mfussenegger/nvim-lint'
   Plug 'monaqa/dial.nvim',
   Plug 'nvim-mini/mini.nvim',
-else
-  Plug 'dense-analysis/ale' " TODO: try nvim-lint
-  Plug 'github/copilot.vim'
-  Plug 'Konfekt/FastFold'
-  Plug 'junegunn/vim-easy-align'
-  " Plug 'tpope/vim-sensible'
-  Plug 'tpope/vim-vinegar'
-  Plug 'tpope/vim-commentary' " TODO: try the shipped vim9 comment plugin
+  " }}}
 endif
-call plug#end()
-" }}}1
-
-" FIXME: doesn't work well with r files
-" https://github.com/tpope/vim-eunuch/blob/master/doc/eunuch.txt
-let g:interpreters = {
-      \ '.':      '/bin/sh',
-      \ 'sh':     '/bin/bash',
-      \ 'bash':   'bash',
-      \ 'r':      'Rscript',
-      \ 'zsh':    'zsh',
-      \ 'lua':    'lua',
-      \ 'python': 'python3',
-      \ 'rmd':    'Rscript',
-      \ }
+call plug#end() " }}}1
 
 if !exists('g:vimrc_reload_count')
   let g:vimrc_reload_count = 0
@@ -417,4 +421,3 @@ else
   let g:vimrc_reload_count += 1
   Info 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
 endif
-let g:vimtex_format_enabled = 1

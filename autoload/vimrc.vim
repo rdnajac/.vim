@@ -7,7 +7,9 @@
 " provide consistent plugins.
 "
 
-function! vim#on_init(fn) abort
+""
+"
+function! vimrc#on_init(fn) abort
   if v:vim_did_enter
     call call(a:fn, [])
   else
@@ -15,17 +17,17 @@ function! vim#on_init(fn) abort
   endif
 endfunction
 
-function! vim#home() abort
+function! vimrc#home() abort
   return has('nvim') ? stdpath('config') : split(&runtimepath, ',')[0]
 endfunction
 
-function! vim#rc() abort
-  execute 'call vim#' . (has('nvim') ? 'n' : '') . 'vim_init()'
+function! vimrc#init() abort
+  execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
 endfunction
 
 " configure vim-specific settings
-function! vim#vim_init() abort
-  let l:home = vim#home()
+function! vimrc#init_vim() abort " {{{
+  let l:home = vimrc#home()
   let &viminfofile = home . '.viminfo'
   let &verbosefile = home . '.vimlog.txt'
 
@@ -42,7 +44,8 @@ function! vim#vim_init() abort
   color scheme " set the default colorscheme once
 endfunction
 
-function! vim#nvim_config() abort
+" }}}
+function! vimrc#nvim_config() abort " {{{
   set backup
   set backupext=.bak
   let &backupdir = stdpath('state') . '/backup//'
@@ -59,19 +62,16 @@ function! vim#nvim_config() abort
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
 
-  if !exists('g:nvim_init')
-    let g:nvim_init = 0
-  else
-    let g:nvim_init += 1
-    let msg = 'nvim init count [' . g:nvim_init . ']'
-    call vim#notify#info(msg)
-  endif
+  " load configs
+  " globpath 
+
+  let g:nvim_did_init = 1
 endfunction
 
-function! vim#nvim_init() abort
+" }}}
+function! vimrc#init_nvim() abort
   if !exists('g:nvim_did_init')
-    call vim#on_init(function('vim#nvim_config'))
-    let g:nvim_did_init = 1
+    call vimrc#on_init(function('vimrc#nvim_config'))
   endif
 endfunction
 
