@@ -91,7 +91,6 @@ function M.end_()
       if vim.is_callable(spec.data) then
         local plugin = spec.data()
         plugin:init()
-        table.insert(nv.did_setup, name)
       end
     end,
   })
@@ -111,7 +110,8 @@ function M.end_()
 end
 
 M.unloaded = function()
-  return vim.iter(vim.pack.get())
+  return vim
+    .iter(vim.pack.get())
     :filter(function(plugin)
       return plugin.active == false
     end)
@@ -121,21 +121,9 @@ M.unloaded = function()
     :totable()
 end
 
-
 M.after = function(module)
   Snacks.util.on_module(module, function()
     require('nvim')[module].after()
-  end)
-end
-
-M.setup_on_module = function(module)
-  Snacks.util.on_module(module, function()
-    local spec = require('nvim')[module]
-    if vim.is_callable(spec.configf) then
-      spec.config()
-    else
-      require(module).setup(type(spec.opts) == 'table' and spec.opts or {})
-    end
   end)
 end
 

@@ -37,6 +37,39 @@ function Plugin:setup()
     -- info('setting up ' .. self.name)
     require(self.name).setup(opts or {})
   end
+  -- TODO: test for success?
+  table.insert(nv.did_setup, self.name)
+end
+
+local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
+--- Lazy-load a plugin based on its event or call init immediately
+---@param cb fun() The function to call when the event fires
+---@param event string|string[] The Neovim event(s) to watch
+---@param pattern? string|string[] Optional pattern for events like FileType
+local function lazyload(cb, event, pattern)
+  vim.api.nvim_create_autocmd(event, {
+    callback = cb,
+    group = aug,
+    once = true,
+    pattern = pattern or '*',
+  })
+end
+
+function Plugin:init()
+  if not self:is_enabled() then
+    return
+  end
+  local _init = function()
+    self:setup()
+    self:deps()
+  end
+  if self.event then
+    lazyload(_init, self.event)
+  elseif self.ft then
+    lazyload(_init, 'FileType', self.ft)
+  else
+    _init()
+  end
 end
 
 --- If there are any dependencies, `vim.pack.add()` them
@@ -50,11 +83,6 @@ function Plugin:deps()
   if type(self.specs) == 'table' and #self.specs > 0 then
     vim.pack.add(vim.tbl_map(require('nvim.plug').gh, specs), { confirm = false })
   end
-end
-
-function Plugin:init()
-  self:setup()
-  self:deps()
 end
 
 function Plugin.new(t)
