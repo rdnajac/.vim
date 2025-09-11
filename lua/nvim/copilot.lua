@@ -10,7 +10,7 @@ vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
 })
 vim.g.copilot_no_tab_map = true
 
-Snacks.util.on_module('blink.cmp', function()
+require('munchies').on_module('blink.cmp', function()
   local aug = vim.api.nvim_create_augroup('BlinkCopilot', { clear = true })
 
   vim.api.nvim_create_autocmd('User', {

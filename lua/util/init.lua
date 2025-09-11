@@ -39,10 +39,8 @@ function M.for_each_module(fn, subpath, recursive)
   subpath = subpath or ''
   local pattern = vim.fs.joinpath(subpath, (recursive and '**' or '*'))
   local files = vim.fn.globpath(base, pattern, false, true)
-
   for _, f in ipairs(files) do
     local mod = M.modname(f)
-    -- if mod:sub(-5) ~= '/init' then
     if not vim.endswith(mod, '/init') then
       fn(mod)
     end

@@ -8,12 +8,12 @@
 "
 
 ""
-"
+" execute a function on VimEnter or immediately if already entered
 function! vimrc#on_init(fn) abort
   if v:vim_did_enter
     call call(a:fn, [])
   else
-    execute 'autocmd VimEnter * call call(function(' . string(a:fn) . '), [])'
+    execute 'autocmd VimEnter * call ' . string(a:fn) . '()'
   endif
 endfunction
 
@@ -46,6 +46,19 @@ endfunction
 
 " }}}
 function! vimrc#nvim_config() abort " {{{
+  " Disable external providers
+  let g:loaded_node_provider = 0
+  let g:loaded_perl_provider = 0
+  let g:loaded_ruby_provider = 0
+
+  " ---@type 'netrw'|'snacks'|'oil'
+  let g:file_explorer = 'oil'
+
+  " disable netrw if using a different file explorer
+  if exists('g:file_explorer') && g:file_explorer !=# 'netrw'
+    let g:loaded_netrw = 1
+  endif
+
   set backup
   set backupext=.bak
   let &backupdir = stdpath('state') . '/backup//'
@@ -54,16 +67,14 @@ function! vimrc#nvim_config() abort " {{{
   set undofile
 
   " nvim-specific settings
-  " NOTE: ui options are set earlier  on in `init.lua`
   set jumpoptions+=view
   set mousescroll=hor:0
   set nocdhome
+  " NOTE: ui options are set earlier  on in `init.lua`
+  " NOTE: also try `:options`
 
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
-
-  " load configs
-  " globpath 
 
   let g:nvim_did_init = 1
 endfunction

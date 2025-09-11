@@ -8,6 +8,7 @@ M.library = {
   { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
   { path = vim.fs.joinpath(vim.g.plug_home, 'snacks/lua/snacks'), words = { 'Snacks' } },
   -- { path = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim'), words = { 'nv' } },
+  -- { path = vim.fn.stdpath('config') .. '/lua', words = { 'nvim' } },
 }
 
 M.enabled = function(root_dir)

@@ -5,14 +5,10 @@ M.specs = {
   'nvim-treesitter/nvim-treesitter-textobjects',
 }
 
+-- M.build = 'TSUpdate'
 M.build = function()
   local parsers = require('nvim.treesitter.parsers')
-
   require('nvim-treesitter').install(parsers)
-  -- FIXME: TSUpdate is not available until after setup is called
-  -- Snacks.util.on_module('nvim-treesitter', function()
-  --   vim.cmd('TSUpdate')
-  -- end)
 end
 
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
@@ -20,7 +16,9 @@ local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'sh', 'markdown', 'r', 'rmd', 'python', 'vim' },
   group = aug,
-  callback = vim.treesitter.start,
+  callback = function()
+    vim.treesitter.start()
+  end,
   desc = 'Start treesitter for certiain file types',
 })
 

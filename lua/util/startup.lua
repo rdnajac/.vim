@@ -1,78 +1,55 @@
-local start = vim.uv.hrtime()
-
--- Random boolean
-local enable_loader = vim.uv.random(1):byte(1) % 2 == 1
-
-if enable_loader then
-  vim.loader.enable()
-end
-
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
-    local startuptime = (vim.uv.hrtime() - start) / 1e6
+    local startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
+    local logpath = vim.fs.joinpath(vim.fn.stdpath('data'), 'loader.log')
+    local enabled_time = startuptime
+    local enabled_cnt = 1
+    local enabled_high = startuptime
+    local enabled_low = startuptime
 
-    local logpath = vim.fs.joinpath(vim.env.HOME, '.nvim_startuptime.log')
-
-    local enabled_avg = 0
-    local disabled_avg = 0
-
-    local stats = {
-      enabled = {
-        avg = 0,
-        high = 0,
-        low = math.huge,
-        cnt = 0,
-      },
-      disabled = {
-        avg = 0,
-        high = 0,
-        low = math.huge,
-        cnt = 0,
-      },
-    }
-
-    local enabled_time = 0
-    local disabled_time = 0
-
-    if enable_loader then
-      enabled_time = enabled_time + startuptime
-    else
-      disabled_time = disabled_time + startuptime
-    end
-
-    -- Read log
+    -- read previous logs
     if vim.uv.fs_stat(logpath) then
       for line in io.lines(logpath) do
         local state, time = line:match('%w+: Loader (.+), ([^ ]+)ms')
-        time = tonumber(time) --[[@as integer]]
+        time = tonumber(time)
         if state == 'enabled' then
-          stats.enabled.cnt = stats.enabled.cnt + 1
-          stats.enabled.high = math.max(stats.enabled.high, time)
-          stats.enabled.low = math.min(stats.enabled.low, time)
+          enabled_cnt = enabled_cnt + 1
           enabled_time = enabled_time + time
-        elseif state == 'disabled' then
-          stats.disabled.cnt = stats.disabled.cnt + 1
-          stats.disabled.high = math.max(stats.disabled.high, time)
-          stats.disabled.low = math.min(stats.disabled.low, time)
-          disabled_time = disabled_time + time
-        else
-          error('invalid: ' .. line)
+          enabled_high = math.max(enabled_high, time)
+          enabled_low = math.min(enabled_low, time)
         end
       end
-      stats.enabled.avg = enabled_time / stats.enabled.cnt
-      stats.disabled.avg = disabled_time / stats.disabled.cnt
     end
 
-    -- update log
-    assert(io.open(logpath, 'a+')):write(
-      ('%s: %s, %sms, avg: %sms\n'):format(
-        os.date(),
-        enable_loader and 'Loader enabled' or 'Loader disabled',
-        startuptime,
-        enable_loader and enabled_avg or disabled_avg
-      )
+    local enabled_avg = enabled_time / enabled_cnt
+
+    -- write new log entry
+    local fd = assert(io.open(logpath, 'a+'))
+    fd:write(
+      ('%s: Loader enabled, %.2fms, avg: %.2fms\n'):format(os.date(), startuptime, enabled_avg)
     )
+    fd:close()
+
+    local stats = {
+      avg = enabled_avg,
+      high = enabled_high,
+      low = enabled_low,
+      cnt = enabled_cnt,
+    }
 
     vim.g.loader_stats = stats
+
+    -- notify
+    if Snacks and Snacks.notify then
+      Snacks.notify.info(
+        ('Startup Loader: %.2fms (avg %.2fms, high %.2fms, low %.2fms, runs %d)'):format(
+          startuptime,
+          stats.avg,
+          stats.high,
+          stats.low,
+          stats.cnt
+        )
+      )
+    end
   end,
 })

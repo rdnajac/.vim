@@ -7,6 +7,7 @@ M.specs = { 'Saghen/blink.compat' }
 M.event = 'InsertEnter'
 
 local icons = require('nvim.icons')
+local border = vim.o.winborder == '' and 'single' or nil
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
@@ -17,13 +18,13 @@ M.opts = {
     accept = { auto_brackets = { enabled = false } },
     documentation = {
       auto_show = false,
-      window = { vim.o.winborder == '' and 'single' or nil },
+      window = { border = border },
     },
     ghost_text = { enabled = true },
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
       auto_show = true,
-      border = vim.o.winborder == '' and 'single' or nil,
+      border = border,
       draw = {
         treesitter = { 'lsp' },
         columns = {
@@ -45,7 +46,13 @@ M.opts = {
       show_on_keyword = false,
     },
   },
-  signature = { enabled = true, window = { border = 'single' } },
+  signature = {
+    enabled = true,
+    window = {
+      border = border,
+      show_documentation = false,
+    },
+  },
   keymap = {
     -- default
     ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },

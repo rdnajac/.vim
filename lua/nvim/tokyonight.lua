@@ -8,6 +8,10 @@ local bg = {
   lualine = '#3b4261',
 }
 
+--- @type ColorScheme
+M.colors = nil
+--- @type tokyonight.Highlights
+M.groups = nil
 ---@type tokyonight.Config
 M.opts = {
   style = 'night',
@@ -37,53 +41,43 @@ M.opts = {
   end,
   plugins = {
     all = false,
-    -- ale = true
-    blink = true,
     mini = true,
     -- noice = true,
+    ['render-markdown'] = true,
     snacks = true,
     -- trouble = true
-    ['render-markdown'] = true,
     ['which-key'] = true,
   },
 }
 
-M.colors = {}
-M.groups = {}
-
-M.config = function()
-  -- set up once to cache the user opts
-  require('tokyonight').setup(M.opts)
-  -- load sets the color scheme and returns useful tables
-  local colors, groups, opts = require('tokyonight').load()
-  M.colors = colors
-  M.groups = groups
+--- calling this actually sets up the colorscheme
+--- see how they're defined in `colors` at
+---  ~/.local/share/nvim/site/pack/core/opt/tokyonight/colors/
+--- NOTE: the `ColorScheme` autocommand event not fired for this load
+M.after = function()
+  M.colors, M.groups, opts = require('tokyonight').load()
 end
 
---- @param colors ColorScheme
---- @param groups tokyonight.Highlights
---- @param opts tokyonight.Config
+-- FIXME: this function is cached on the first require and
+-- doesn't see changes to M.colors or M.groups
 function M.generate_vim_scheme()
-  M.config() -- PERF: I shouldn't have to call this a second time...
-  -- M.colors/groups not ready an func def
   local colors = M.colors
   local groups = M.groups
 
-  if not colors or not groups then
-    error('M.colors or M.groups not loaded. Did you call M.config() first?')
+  if type(M.groups) ~= 'table' or #M.groups == 0 then
+    error('Did you call config() first?')
   end
 
   local lines = {
     [[
       hi clear
-      let g:colors_name = "tokyonight"
+      let g:colors_name = 'tokyonight'
     ]],
     -- :format(colors._style),
   }
 
   local names = vim.tbl_filter(function(group)
     -- filter out treesitter/semantic token highlights
-    -- PERF: also filter out vim plugins
     return group:sub(1, 1) ~= '@'
   end, vim.tbl_keys(groups))
 
@@ -110,10 +104,25 @@ function M.generate_vim_scheme()
           props[#props + 1] = ('%s=%s'):format(mapping[k], v)
         end
       end
+      -- TODO: try this
+      -- local props = vim.tbl_map(function(k)
+      --   return ('%s=%s'):format(mapping[k], hl[k])
+      -- end,
+      -- vim.tbl_filter(function(k) return mapping[k] ~= nil end, vim.tbl_keys(hl)))
+      --
 
-      -- gui
+      -- TODO: or this!
+      -- local props = vim
+      --   .iter(hl)
+      --   :filter(function(k, _v)
+      --     return mapping[k] ~= nil
+      --   end)
+      --   :map(function(k, v)
+      --     return ('%s=%s'):format(mapping[k], v)
+      --   end)
+      --   :totable()
+
       local gui = {}
-
       for _, attr in ipairs({
         'bold',
         'underline',
@@ -174,13 +183,14 @@ local function _write(file, contents)
   fd:close()
 end
 
+-- see ~/.local/share/nvim/site/pack/core/opt/tokyonight/lua/tokyonight/extra/
 local want = {
   ghostty = '',
   lazygit = '',
   lua = '', -- for debugging
   slack = '',
   -- spotify_player = '~/.config/spotify-player/theme.toml',
-  spotify_player = '',
+  spotify_player = '', -- TODO: fix the output; see template
   vim = '',
   -- TODO: use the gen function in this module
 }
@@ -191,6 +201,8 @@ M.build = function()
   local style = 'midnight'
   local style_name = ''
   local colors = M.colors
+  local groups = M.groups
+  local opts = M.opts
   local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'tokyonight')
 
   for name, location in pairs(want) do
@@ -210,14 +222,13 @@ M.build = function()
 
       -- FIXME:
       fname:gsub('%.$', '') -- remove trailing dot
+      fname = vim.fs.joinpath(dir, fname)
 
       colors['_style_name'] = 'Tokyo Night' .. style_name
       colors['_name'] = 'tokyonight_' .. style
       colors['_style'] = style
       print('Writing ' .. fname)
-      -- _write(fname, plugin.generate(colors, M.groups, M.opts))
-      -- TODO:  add luals
-      _write(fname, plugin.generate(require('tokyonight').load()))
+      _write(fname, plugin.generate(colors, groups, opts))
     end
   end
 end

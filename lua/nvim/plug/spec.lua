@@ -1,3 +1,5 @@
+local utils = require('nvim.plug')
+
 --- @class Plugin
 --- @field [1]? string
 --- @field build? string|fun(): nil
@@ -7,6 +9,8 @@
 --- @field ft? string|string[]
 --- @field opts? table|fun():table
 --- @field specs? string[]|fun():string[]
+--- TODO: can we get it from the spec instead?
+--- @field name string The plugin name, derived from [1]
 local Plugin = {}
 Plugin.__index = Plugin
 
@@ -31,7 +35,7 @@ function Plugin:setup()
     self.config()
   else
     local opts = self.opts
-    if vim.is_callable(opts) then
+    if opts and vim.is_callable(opts) then
       opts = opts()
     end
     -- info('setting up ' .. self.name)
@@ -59,10 +63,13 @@ function Plugin:init()
   if not self:is_enabled() then
     return
   end
+
   local _init = function()
-    self:setup()
-    self:deps()
+    utils.packadd(self.name) -- add the plugin to runtimepath
+    self:setup() -- call config or setup
+    self:deps() -- add any dependencies
   end
+
   if self.event then
     lazyload(_init, self.event)
   elseif self.ft then
@@ -70,18 +77,26 @@ function Plugin:init()
   else
     _init()
   end
+
+  if self.after and vim.is_callable(self.after) then
+    self.after()
+  end
 end
 
 --- If there are any dependencies, `vim.pack.add()` them
 --- Dependencies are not initialized or configured, just installed
 --- and are assumed to be in the form `user/repo`
 function Plugin:deps()
+  -- info ('checking deps for ' .. self.name)
   local specs = self.specs
-  if vim.is_callable(specs) then
+  -- info(specs)
+  if specs and vim.is_callable(specs) then
     specs = specs()
   end
-  if type(self.specs) == 'table' and #self.specs > 0 then
-    vim.pack.add(vim.tbl_map(require('nvim.plug').gh, specs), { confirm = false })
+  if type(specs) == 'table' and #specs > 0 then
+    local deps = vim.tbl_map(utils.spec, specs)
+    -- info(deps)
+    utils.plug(deps)
   end
 end
 

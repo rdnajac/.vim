@@ -1,3 +1,20 @@
+vim.o.cmdheight = 0
+vim.o.laststatus = 3
+vim.o.pumblend = 0
+-- vim.o.smoothscroll = true
+vim.o.winborder = 'rounded'
+
+-- local modules = vim.loader.find('*', { all = true })
+-- for _, mod in ipairs(modules) do
+--   print(mod.modname, '->', mod.modpath)
+-- end
+
+-- enable the experimental ui module if available
+local ok, extui = pcall(require, 'vim._extui')
+if ok and extui then
+  extui.enable({})
+end
+
 -- vim.g.use_uv = true
 -- TODO: benchmark uv, vifn, and string methods
 
