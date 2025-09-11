@@ -72,9 +72,6 @@ augroup vimrc
   " restore cursor position
   au BufWinEnter * exec "silent! normal! g`\"zv"
 
-  " automatically create directories for new files
-  au BufWritePre ~/ call bin#mkdir#(expand('<afile>'))
-
   " immediately quit the command line window
   au CmdwinEnter * quit
 
@@ -382,9 +379,11 @@ Plug 'tpope/vim-tbone'
 " Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-unimpaired'
+Plug 'github/copilot.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
+  Plug 'github/copilot.vim'
 if !has('nvim') " {{{
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'

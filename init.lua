@@ -34,46 +34,11 @@ vim.print = info
 -- ]]
 
 vim.cmd([[runtime vimrc]])
-
-nv.specs = vim.tbl_map(function(p)
-  -- return nv.plug[vim.endswith(p, '.nvim') and 'spec' or 'gh'](p)
-  if vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp') then
-    -- TODO: combine these funcs
-    return nv.plug.spec(p)
-  else
-    return nv.plug.gh(p)
-  end
-end, vim.g['plug#list'])
-
-for _, mod in ipairs({ 'lsp', 'treesitter' }) do
-  vim.list_extend(nv.specs, nv.plug(mod))
-end
-
-vim.pack.add(nv.specs, {
-  confirm = vim.v.vim_did_enter == 1, -- don't confirm during startup
-  load = function(data)
-    local spec = data.spec
-    local name = spec.name
-    local bang = vim.v.vim_did_enter == 0
-
-    -- TODO: defer this for certain plugins
-    vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
-
-    -- TODO: add type notations
-    if vim.is_callable(spec.data) then
-      local plugin = spec.data()
-      plugin:setup()
-      table.insert(nv.did_setup, name)
-      plugin:deps()
-    end
-  end,
-})
-
 vim.cmd([[packadd vimline.nvim]])
 
 _G.bt = Snacks.debug.backtrace
 nv.plug.after('oil')
 nv.plug.after('render-markdown')
-
 require('nvim.config')
+require('nvim.copilot')
 -- vim:fdm=marker:fmr=[[,]]:fdl=0

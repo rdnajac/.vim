@@ -15,9 +15,9 @@ vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
 vim.lsp.enable(M.servers)
 
 -- TODO:make this a toggle
-vim.lsp.inline_completion.enable() -- XXX:
+-- vim.lsp.inline_completion.enable() -- XXX:
 
-require('nvim.lsp.progress2')
+-- require('nvim.lsp.progress2')
 
 vim.api.nvim_create_autocmd('FileType', {
   group = vim.api.nvim_create_augroup('LazyDevSetup', { clear = true }),

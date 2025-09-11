@@ -1,3 +1,3 @@
-require('commands')
-require('diagnostic')
-require('keymaps')
+require('nvim.config.commands')
+require('nvim.config.diagnostic')
+require('nvim.config.keymaps')
