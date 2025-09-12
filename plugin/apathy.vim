@@ -36,12 +36,11 @@ function! s:set_repo_path() abort
   endif
 endfunction
 
-
 augroup apathy
   autocmd!
   autocmd VimEnter * call s:set_repo_path()
   autocmd FileType javascript,javascriptreact call apathy#javascript#setup()
   autocmd FileType typescript,typescriptreact call apathy#javascript#setup()
   " lcd to the git root on buffer enter
-  " autocmd BufEnter * exec 'lcd ' . git#root()
+  autocmd BufEnter *.r,*.rmd,*.quarto exec 'lcd ' . git#root() | pwd
 augroup END

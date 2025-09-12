@@ -10,8 +10,11 @@ inoremap <buffer> <M-Bslash> <Bar>><Space>
 inoremap <buffer> ins<Tab> renv::install("")<Left><Left>
 inoremap <buffer> lib<Tab> library()<Left>
 
-if has('nvim') && luaeval('package.loaded["r"] ~= nil')
+" if has('nvim') && luaeval('package.loaded["r"] ~= nil')
   setlocal keywordprg=:RHelp
+
+  autocmd BufEnter term://*:R\ * startinsert
+
   nmap <buffer> zq <Cmd>RFormat<CR>
 
   nnoremap <buffer> <localleader>R <Plug>RStart
@@ -23,14 +26,10 @@ if has('nvim') && luaeval('package.loaded["r"] ~= nil')
 
   nnoremap <buffer> <localleader>r<CR> <Plug>RSendFile
   nnoremap <buffer> <localleader>rq <Plug>RClose
-  nnoremap <buffer> <localleader>rD <Plug>RSetwd
 
-  nnoremap <buffer> <localleader>r? <Cmd>RSend getwd()<CR>
   nnoremap <buffer> <localleader>ry <Cmd>RSend Y<CR>
   nnoremap <buffer> <localleader>ra <Cmd>RSend a<CR>
   nnoremap <buffer> <localleader>rn <Cmd>RSend n<CR>
-  nnoremap <buffer> <localleader>rR <Cmd>RSend source(".Rprofile")<CR>
-  nnoremap <buffer> <localleader>rd <Cmd>RSend setwd(vim.fn.expand("<cword>"))<CR>
   nnoremap <buffer> <localleader>rs <Cmd>RSend renv::status()<CR>
   nnoremap <buffer> <localleader>rS <Cmd>RSend renv::snapshot()<CR>
   nnoremap <buffer> <localleader>rr <Cmd>RSend renv::restore()<CR>
@@ -40,4 +39,4 @@ if has('nvim') && luaeval('package.loaded["r"] ~= nil')
   " TODO: are these overridden by R.nvim in after/ftplugin?
   hi clear RCodeBlock
   hi clear RCodeComment
-endif
+" endif

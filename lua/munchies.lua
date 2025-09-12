@@ -5,6 +5,7 @@ local mod_cb = {} ---@type table<string, fun(modname:string)[]>
 
 ---@return boolean waiting
 local function mod_check()
+  -- info(mod_cb)
   for modname, cbs in pairs(mod_cb) do
     if package.loaded[modname] then
       mod_cb[modname] = nil

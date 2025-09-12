@@ -93,7 +93,7 @@ function! edit#filetype(...) abort
   if &filetype ==# ''
     call vim#notify#error('filetype is empty')
   endif
-  let l:dir = vim#home() . (a:0 >= 1 ? '/' . a:1 : '/after/ftplugin')
+  let l:dir = vimrc#home() . (a:0 >= 1 ? '/' . a:1 : '/after/ftplugin')
   let l:ext = a:0 >= 2 ? a:2 : '.vim'
   let l:file = l:dir . '/' . &filetype . l:ext
 

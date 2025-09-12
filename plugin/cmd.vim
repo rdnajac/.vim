@@ -5,6 +5,7 @@ cnoreabbrev <expr> %% expand('%:p:h')
 cnoreabbrev !! !./%
 cnoreabbrev scp !./%
 cnoreabbrev ?? verbose set?<Left>
+cnoreabbrev <expr> vv getcmdtype() == ':' && getcmdline() =~ '^vv' ? 'verbose' : 'vv'
 cnoreabbrev <expr> scp getcmdtype() == ':' && getcmdline() =~ '^scp' ? '!scp %' : 'scp'
 cnoreabbrev <expr> require getcmdtype() == ':' && getcmdline() =~ '^require' ? 'lua require' : 'require'
 cnoreabbrev <expr> man (getcmdtype() ==# ':' && getcmdline() =~# '^man\s*$') ? 'Man' : 'man'

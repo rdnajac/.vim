@@ -72,6 +72,7 @@ M.config = function()
       new({ 'phip', 'phf6' }, false),
       new({ 'PHIP', 'PHF6' }, false),
       new({ 'jurkat', 'pf382' }, false),
+      new({ 'Jurkat', 'PF382' }, false),
     },
     vim = {
       new({ 'opt', 'start' }, false),

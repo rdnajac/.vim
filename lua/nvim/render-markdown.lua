@@ -1,12 +1,12 @@
 local M = { 'MeanderingProgrammer/render-markdown.nvim' }
 
-M.ft = { 'markdown', 'rmd', 'quarto', 'codecompanion' }
+M.event = { 'BufWinEnter' }
 
 ---@type render.md.UserConfig
 M.opts = {
-  file_types = M.ft,
-  completions = { blink = { enabled = false } },
+  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion' },
   bullet = { right_pad = 1 },
+  completions = { blink = { enabled = false } },
   -- checkbox = { enabled = false },
   code = {
     enabled = true,
@@ -21,12 +21,6 @@ M.opts = {
     width = 'block',
     min_width = 0,
     border = 'thin',
-    -- highlight = 'RenderMarkdownCode',
-    -- highlight_info = 'RenderMarkdownCodeInfo',
-    -- highlight_language = nil,
-    -- highlight_border = 'RenderMarkdownCodeBorder',
-    -- highlight_fallback = 'RenderMarkdownCodeFallback',
-    -- highlight_inline = 'RenderMarkdownCodeInline',
     style = 'normal',
   },
   heading = {
@@ -39,13 +33,15 @@ M.opts = {
 }
 
 M.after = function()
+  local m = require('render-markdown')
+  m.set(true)
   Snacks.toggle({
     name = 'Render Markdown',
     get = function()
-      return require('render-markdown.state').enabled
+      return require('render-markdown.state').get()
     end,
     set = function(enabled)
-      require('render-markdown').set(enabled)
+      m.set(enabled)
     end,
   }):map('<leader>um')
 end

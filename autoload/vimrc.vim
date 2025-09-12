@@ -25,7 +25,9 @@ function! vimrc#init() abort
   execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
 endfunction
 
+""
 " configure vim-specific settings
+" these are only run once
 function! vimrc#init_vim() abort " {{{
   let l:home = vimrc#home()
   let &viminfofile = home . '.viminfo'
@@ -46,19 +48,6 @@ endfunction
 
 " }}}
 function! vimrc#nvim_config() abort " {{{
-  " Disable external providers
-  let g:loaded_node_provider = 0
-  let g:loaded_perl_provider = 0
-  let g:loaded_ruby_provider = 0
-
-  " ---@type 'netrw'|'snacks'|'oil'
-  let g:file_explorer = 'oil'
-
-  " disable netrw if using a different file explorer
-  if exists('g:file_explorer') && g:file_explorer !=# 'netrw'
-    let g:loaded_netrw = 1
-  endif
-
   set backup
   set backupext=.bak
   let &backupdir = stdpath('state') . '/backup//'
@@ -82,6 +71,20 @@ endfunction
 " }}}
 function! vimrc#init_nvim() abort
   if !exists('g:nvim_did_init')
+    " Disable external providers
+    let g:loaded_node_provider = 0
+    let g:loaded_perl_provider = 0
+    let g:loaded_ruby_provider = 0
+
+    " ---@type 'netrw'|'snacks'|'oil'
+    let g:file_explorer = 'oil'
+
+    " disable netrw if using a different file explorer
+    if exists('g:file_explorer') && g:file_explorer !=# 'netrw'
+      " let g:loaded_netrwPlugin = 1
+      let g:loaded_netrw = 1
+    endif
+
     call vimrc#on_init(function('vimrc#nvim_config'))
   endif
 endfunction

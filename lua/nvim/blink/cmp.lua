@@ -1,13 +1,11 @@
 local M = { 'Saghen/blink.cmp' }
 
 -- M.build = 'cargo build --release'
-
+-- M.event = 'InsertEnter'
 M.specs = { 'Saghen/blink.compat' }
 
-M.event = 'InsertEnter'
-
-local icons = require('nvim.icons')
 local border = vim.o.winborder == '' and 'single' or nil
+local icons = require('nvim.icons')
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
@@ -54,17 +52,10 @@ M.opts = {
     },
   },
   keymap = {
-    -- default
+    -- default if we had selected a preset
     ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
     ['<C-e>'] = { 'cancel', 'fallback' },
     ['<C-y>'] = { 'select_and_accept', 'fallback' },
-    -- moving up and down
-    ['<Up>'] = { 'select_prev', 'fallback' },
-    ['<Left>'] = { 'select_prev', 'fallback' },
-    ['<C-k'] = { 'select_prev', 'fallback' },
-    ['<Down>'] = { 'select_next', 'fallback' },
-    ['<Right>'] = { 'select_next', 'fallback' },
-    ['<C-j>'] = { 'select_next', 'fallback' },
   },
   sources = require('nvim.blink.sources'),
 }

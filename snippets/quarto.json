@@ -1,0 +1,7 @@
+{
+  "ts": {
+    "prefix": "tabset",
+    "body": "::: {.tabset}\n\n## ${1:Tab 1}\n\n${0:Content for Tab 1}\n\n## ${2:Tab 2}\n\nContent for Tab 2\n\n:::",
+    "description": "Create a tabset in Quarto"
+  }
+}

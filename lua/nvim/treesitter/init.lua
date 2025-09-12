@@ -33,6 +33,17 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'quarto' },
+  group = aug,
+  callback = function(ev)
+    -- vim.treesitter.language.register('rmarkdown', ev.match)
+    -- vim.treesitter.start()
+    -- vim.treesitter.start(0, 'rmd')
+  end,
+  desc = 'Force some file types to use `bash` treesitter',
+})
+
+vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'kitty', 'ghostty', 'ghostty.chezmoitmpl' },
   group = aug,
   command = 'setlocal commentstring=#\\ %s',
@@ -58,7 +69,10 @@ end
 vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection').start() end, { desc = 'Start selection' })
 vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
 vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
+vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
 -- stylua: ignore end
+
+Snacks.toggle.treesitter():map('<leader>ut')
 
 require('nvim.treesitter.mycommentparser')
 

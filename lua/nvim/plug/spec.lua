@@ -2,13 +2,13 @@ local utils = require('nvim.plug')
 
 --- @class Plugin
 --- @field [1]? string
+--- @field after? fun(): nil
 --- @field build? string|fun(): nil
 --- @field config? fun(): nil
 --- @field event? vim.api.keyset.events|vim.api.keyset.events[]
 --- @field enabled? boolean|fun():boolean
---- @field ft? string|string[]
---- @field opts? table|fun():table
 --- @field specs? string[]|fun():string[]
+--- @field opts? table|fun():table
 --- TODO: can we get it from the spec instead?
 --- @field name string The plugin name, derived from [1]
 local Plugin = {}
@@ -52,10 +52,13 @@ local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
 ---@param pattern? string|string[] Optional pattern for events like FileType
 local function lazyload(cb, event, pattern)
   vim.api.nvim_create_autocmd(event, {
-    callback = cb,
+    callback = function(ev)
+      -- info(ev)
+      cb()
+    end,
     group = aug,
     once = true,
-    pattern = pattern or '*',
+    pattern = pattern and pattern or '*',
   })
 end
 
@@ -72,14 +75,14 @@ function Plugin:init()
 
   if self.event then
     lazyload(_init, self.event)
-  elseif self.ft then
-    lazyload(_init, 'FileType', self.ft)
   else
     _init()
   end
 
   if self.after and vim.is_callable(self.after) then
-    self.after()
+    require('munchies').on_module(self.name, function()
+      self.after()
+    end)
   end
 end
 
