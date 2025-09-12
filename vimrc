@@ -1,5 +1,5 @@
 " vim:fdm=marker
-scriptencoding=utf-8
+scriptencoding utf-8
 call vimrc#init()
 
 let g:mapleader = ' '

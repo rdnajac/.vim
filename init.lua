@@ -23,6 +23,5 @@ for _, mod in ipairs({ 'copilot', 'lsp', 'treesitter' }) do
 end
 
 require('nvim.config')
--- require('nvim.copilot')
 require('util.startup')
 vim.print = Snacks.notify

@@ -4,7 +4,7 @@ setlocal formatoptions-=ro    " don't continue comments with 'o' or 'O'
 
 nnoremap <leader>ch <Cmd>call edit#ch()<CR>
 
-inoremap <buffer> enc scriptencoding=utf-8
+inoremap <buffer> enc scriptencoding utf-8
 
 " Scriptease help and lsp hover collide
 nmap <silent><buffer> <leader>K <Plug>ScripteaseHelp

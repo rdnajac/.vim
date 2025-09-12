@@ -1,4 +1,4 @@
-scriptencoding=utf-8
+scriptencoding utf-8
 
 function! s:err_undo() abort
   if v:shell_error > 0

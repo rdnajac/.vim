@@ -1,4 +1,4 @@
-scriptencoding=utf-8
+scriptencoding utf-8
 
 function! vimline#indicator#bom() abort
   return &fileencoding . (&bomb ? ' [BOM]' : '')

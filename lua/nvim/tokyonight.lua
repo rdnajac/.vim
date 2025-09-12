@@ -1,4 +1,5 @@
 local M = { 'folke/tokyonight.nvim' }
+-- TODO: kyza0d/xeno.nvim
 
 local bg = {
   black = '#000000',

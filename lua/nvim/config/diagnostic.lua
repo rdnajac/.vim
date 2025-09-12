@@ -1,7 +1,8 @@
 local M = {}
 
 ---@type vim.diagnostic.Opts
-M.opts = {
+-- M.opts = {
+local opts = {
   float = { source = true },
   underline = false,
   virtual_text = false,

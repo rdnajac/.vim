@@ -1,4 +1,4 @@
-scriptencoding=utf-8
+scriptencoding utf-8
 
 if !has_key(environ(), 'TMUX')
   finish

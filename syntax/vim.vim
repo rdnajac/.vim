@@ -1,4 +1,4 @@
-scriptencoding=utf-8
+scriptencoding utf-8
 " https://stackoverflow.com/a/28399202/26469286
 " For files that don't have filetype-specific syntax rules
 " autocmd BufNewFile,BufRead *syntax match NotPrintableAscii "[^\x20-\x7F]"
