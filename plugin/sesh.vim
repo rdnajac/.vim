@@ -1,38 +1,55 @@
-" sessions, restarts, and more
-" Saving options in session and view files causes more problems than it
-" solves, so disable it.
-set sessionoptions-=options " default in nvim
-set sessionoptions-=blank " from vim-obsession
-" keep tabpages separate (per project)
-set sessionoptions-=tabpages
-set sessionoptions-=terminal
+" sessions, restarts, and project-specific tabs
 
-" viewoptions change the effect of the `:mkview`
-set viewoptions-=options " from defaults.vim
+" Disable saving of irrelevant options in sessions
+set sessionoptions-=options   " already default in nvim
+set sessionoptions-=blank     " like vim-obsession
+set sessionoptions-=tabpages  " per project, not global
+set sessionoptions-=terminal  " don't save terminals
 
-""
-" @section(session)
-" @function(s:restart)
-" Save the current session and restart Neovim. In Vim, reload all scripts.
-"
-" This function will:
-" 1. Save the current session to {stdpath('state')}/Session.vim.
-" 2. Prompt the user to confirm restart with :confirm.
-" 3. Reload the saved session after restart.
-function! s:restart() abort
-  if has('nvim')
-    let sesh = fnameescape(stdpath('state') . '/Session.vim')
-    execute 'mksession! ' . sesh
-    let cmd = 'silent! source ' . sesh
-    execute 'confirm restart ' cmd
-  else
-    call reload#()
+" Keep mkview minimal
+set viewoptions-=options
+
+" --- Helpers ---
+" Find the root of the Git repository, or return current working directory.
+function! s:git_root() abort
+  let l:root = system('git rev-parse --show-toplevel 2>/dev/null')
+  if v:shell_error
+    return getcwd()
+  endif
+  return substitute(l:root, '\n\+$', '', '')
+endfunction
+
+" Try to load a session.vim if it exists in the project root.
+function! s:maybe_load_session() abort
+  let l:root = s:git_root()
+  let l:session = l:root . '/session.vim'
+  if filereadable(l:session)
+    " Open a new tab for this project and source its session
+    tabnew
+    execute 'silent! source ' . fnameescape(l:session)
   endif
 endfunction
 
+" --- Restart logic ---
+" Save the current session and restart Neovim (or reload in Vim).
+function! s:restart() abort
+  if has('nvim')
+    let l:sesh = fnameescape(stdpath('state') . '/Session.vim')
+    execute 'mksession! ' . l:sesh
+    let l:cmd = 'silent! source ' . l:sesh
+    execute 'confirm restart ' . l:cmd
+  else
+    " crude reload fallback
+    source $MYVIMRC
+  endif
+endfunction
 
-""
-" @section(commands)
-" @command(Restart)
-" Saves the session and restarts the editor.
+" --- Commands ---
 command! Restart call s:restart()
+command! ProjectSession call s:maybe_load_session()
+
+" Auto-load session.vim for the current project on startup
+augroup ProjectSessions
+  autocmd!
+  autocmd VimEnter * call s:maybe_load_session()
+augroup END
