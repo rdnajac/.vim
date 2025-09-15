@@ -8,6 +8,8 @@ vim.o.pumblend = 0
 -- vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
 
+vim.o.winbar = '%{%v:lua.MyWinBar()%}'
+
 M.specs = {
   'folke/todo-comments.nvim',
   -- 'folke/noice.nvim',

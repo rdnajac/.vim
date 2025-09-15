@@ -29,8 +29,7 @@ for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' })
   end
 
   if vim.is_callable(module.config) then
-    -- TODO: load on vim enter
-    module.config()
+    module.config() -- TODO: load on vim enter
     table.insert(nv.did_setup, modname)
   end
 end

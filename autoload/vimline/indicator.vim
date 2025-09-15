@@ -4,18 +4,6 @@ function! vimline#indicator#bom() abort
   return &fileencoding . (&bomb ? ' [BOM]' : '')
 endfunction
 
-function! vimline#indicator#recording() abort
-  let rec = reg_recording()
-  let reg = empty(rec) ? get(g:, 'vimline_last_reg', 'q') : rec
-  let icon = empty(rec) ? '@' : '󰑋'
-  let ret = '[' . icon . reg . '] '
-  " if empty(rec)
-  "   let macro = escape(keytrans(getreg(reg)), '%\|')
-  "   return ret . macro . ' '
-  " endif
-  return ret
-endfunction
-
 " ALE statusline component
 " https://github.com/dense-analysis/ale?tab=readme-ov-file#custom-statusline
 " set statusline=%{LinterStatus()w  w}

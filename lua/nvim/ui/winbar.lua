@@ -11,6 +11,7 @@ local map = {
   quickfix = function() return '%q' end,
   terminal = function() return vim.fn["vimline#winbar#term"]() end,
 }
+
 function MyWinBar()
   -- - <empty>	normal buffer
   -- - acwrite	buffer will always be written with |BufWriteCmd|s
