@@ -9,6 +9,16 @@
     "description": "Function definition."
   },
 
+  "autoloadedfunction": {
+    "prefix": "auto",
+    "body": [
+      "function! ${TM_FILENAME_BASE}#(${1}) abort",
+      "  ${0}",
+      "endfunction"
+    ],
+    "description": "Function definition."
+  },
+
   "if_exists_equals": {
     "prefix": "ifeq",
     "body": [

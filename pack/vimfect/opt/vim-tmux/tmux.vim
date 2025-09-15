@@ -1,5 +1,8 @@
 " Maps <C-h/j/k/l> to switch vim splits in the given direction.
 " If there are no more windows in that direction, forwards the operation to tmux.
+" TODO: set other g: vars to v:false to differentuate from the original plugin
+" value of 1
+let g:loaded_tmux_navigator = v:false " don't load christoomey/tmux-navigator
 let g:tmux_navigator_disable_when_zoomed = 0
 let g:tmux_navigator_preserve_zoom = 0
 let g:tmux_navigator_no_wrap = 0

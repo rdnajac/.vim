@@ -24,7 +24,7 @@
     "prefix": "pr",
     "body": "print(vim.inspect(${0}))",
     "description": "print inspect"
-  }, 
+  },
 
   "module": {
     "prefix": "local M",
@@ -34,6 +34,18 @@
       "return M"
     ],
     "description": "Module skeleton"
+  },
+
+  "mfunc": {
+    "prefix": "mfunc",
+    "body": [
+      "local ${TM_FILENAME_BASE} = {}\n",
+      "function M.${TM_FILENAME_BASE}($1)",
+      "  $0",
+      "end\n",
+      "return setmetatable(M, {\n  __call = ${TM_FILENAME_BASE}\n})"
+    ],
+    "description": "Module function skeleton with callable module and function"
   },
 
   "init": {
