@@ -198,7 +198,7 @@ M.generate_highlight_groups = function()
   return highlight_groups
 end
 
-M.setup = function()
+M.config = function()
   local oil_config = require('oil.config')
   -- local signcolumn = oil_config.win_options.signcolumn
   -- if not (vim.startswith(signcolumn, 'yes') or vim.startswith(signcolumn, 'auto')) then
@@ -259,6 +259,6 @@ M.setup = function()
   end
 end
 
-M.setup()
+M.config()
 
 return M

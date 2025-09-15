@@ -9,8 +9,9 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
-    info(nv.did_setup)
-    -- Stats table with inline metatable
+    local startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
+    local state = vim.loader.enabled and 'enabled' or 'disabled'
+    local logpath = vim.fs.joinpath(vim.fn.stdpath('data'), 'startuptime.log')
     local stats = setmetatable({ total = 0, cnt = 0, high = 0, low = math.huge }, {
       __index = function(t, k)
         if k == 'avg' then
@@ -26,10 +27,6 @@ vim.api.nvim_create_autocmd('VimEnter', {
         t.low = math.min(t.low, time)
       end,
     })
-
-    local startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
-    local state = vim.loader.enabled and 'enabled' or 'disabled'
-    local logpath = vim.fs.joinpath(vim.fn.stdpath('data'), 'startuptime.log')
 
     -- Read previous log and accumulate only current state
     if vim.uv.fs_stat(logpath) then

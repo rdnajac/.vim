@@ -42,6 +42,7 @@ end
 --- @param plug_data { spec: vim.pack.Spec, path: string }
 function M.load(plug_data)
   local spec = plug_data.spec ---@type vim.pack.Spec
+  -- print(spec.name)
   if vim.is_callable(spec.data) then
     -- info('loading ' .. spec.name)
     local plugin = spec.data() ---@type Plugin
@@ -49,22 +50,27 @@ function M.load(plug_data)
   else
     -- info('`packadd`ing ' .. spec.name .. ' (no init)')
     M.packadd(spec.name)
+    -- if vim.endswith(spec.name, '.nvim') then
+    --   require(spec.name).config({})
+    -- end
   end
 end
 
 --- @param specs (string|vim.pack.Spec)[]
 function M.plug(specs)
   local speclist = vim.islist(specs) and specs or { specs }
-  vim.pack.add(speclist, { load = M.load, })
+  vim.pack.add(speclist, { load = M.load })
 end
 
+-- TODO: need seperate loadinb for specs vs deps
+-- namely who gets to call data() and in turn config
 function M.end_()
   nv.did_setup = {}
   nv.specs = vim
     .iter(vim.g['plug#list'])
     :map(function(p)
       -- HACK: most plugins end in `.nvim`, except special cases like blink.cmp
-      local is_nvim_plugin = vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp') 
+      local is_nvim_plugin = vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp')
       return M.to_spec(p, is_nvim_plugin)
     end)
     :totable()

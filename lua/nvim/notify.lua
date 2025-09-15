@@ -19,7 +19,7 @@ M.notify = function(msg, level, opts)
 end
 
 --- Override vim.notify with custom function
-M.setup = function()
+M.config = function()
   vim.notify = M.notify
 end
 

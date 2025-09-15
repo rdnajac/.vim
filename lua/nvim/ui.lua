@@ -6,4 +6,8 @@ M.specs = {
   -- 'jhui/fidget.nvim',
 }
 
+M.config = function()
+  require('todo-comments').setup({})
+end
+
 return M

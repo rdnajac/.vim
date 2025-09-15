@@ -11,7 +11,7 @@ M.servers = vim.tbl_map(function(path)
   return path:match('^.+/(.+)%.lua$')
 end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
 
-M.setup = function()
+M.config = function()
   vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
   vim.lsp.enable(M.servers)
   -- require('nvim.lsp.progress')

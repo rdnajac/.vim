@@ -41,7 +41,7 @@ M.opts = {
       },
     },
     trigger = {
-      show_on_keyword = false,
+      show_on_keyword = true,
     },
   },
   signature = {

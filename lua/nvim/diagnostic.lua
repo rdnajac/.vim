@@ -40,9 +40,10 @@ vim
 --   end
 -- end
 
-M.setup = function()
+M.config = function()
   -- TODO: infer this function in packadd
   vim.diagnostic.config(opts)
+  require('trouble').setup({})
 end
 
 return M

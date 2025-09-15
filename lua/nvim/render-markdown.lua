@@ -1,6 +1,6 @@
 local M = { 'MeanderingProgrammer/render-markdown.nvim' }
 
--- M.event = { 'BufWinEnter' }
+M.event = { 'BufWinEnter' }
 
 ---@type render.md.UserConfig
 M.opts = {
