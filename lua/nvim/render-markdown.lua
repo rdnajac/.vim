@@ -1,10 +1,10 @@
 local M = { 'MeanderingProgrammer/render-markdown.nvim' }
 
-M.event = { 'BufWinEnter' }
+-- M.event = { 'BufWinEnter' }
 
 ---@type render.md.UserConfig
 M.opts = {
-  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion' },
+  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion', 'snacks_notify' },
   bullet = { right_pad = 1 },
   completions = { blink = { enabled = false } },
   -- checkbox = { enabled = false },
@@ -29,7 +29,10 @@ M.opts = {
     position = 'inline',
     -- icons = '',
   },
-  html = { comment = { conceal = false } },
+  html = {
+    comment = { conceal = false },
+    enabled = false,
+  },
 }
 
 M.after = function()

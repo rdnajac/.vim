@@ -41,7 +41,7 @@ local parsers = {
   -- 'json',
   -- 'jsonc',
   -- 'json5',
-  -- 'latex',
+  'latex', -- Snacks.image
   -- 'llvm',
   -- 'luadoc',
   -- 'luap',

@@ -1,5 +1,3 @@
---- XXX: deprecated; should use colon notation with client; source code modified at:
---- ~/.local/share/nvim/site/pack/core/opt/snacks/lua/snacks/words.lua:111
 local M = { 'folke/snacks.nvim' }
 
 -- stylua: ignore
@@ -24,7 +22,7 @@ local opts = {
   dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = vim.g.default_file_explorer == 'snacks' },
   indent = { indent = { only_current = true, only_scope = true } },
-  notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
+  -- notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
   picker = require('nvim.snacks.picker'),
   scratch = {
     template = table.concat({
