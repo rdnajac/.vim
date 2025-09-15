@@ -2,6 +2,14 @@ M = {}
 
 M.specs = {
   -- 'fang2hou/blink-copilot',
+  -- {
+  --   'olimorris/codecompanion.nvim',
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --     'nvim-treesitter/nvim-treesitter',
+  --   },
+  --   opts = {},
+  -- },
 }
 
 vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
@@ -10,7 +18,7 @@ vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
 })
 vim.g.copilot_no_tab_map = true
 
-require('munchies').on_module('blink.cmp', function()
+require('nvim.util.module').on_module('blink.cmp', function()
   local aug = vim.api.nvim_create_augroup('BlinkCopilot', { clear = true })
 
   vim.api.nvim_create_autocmd('User', {

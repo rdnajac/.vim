@@ -11,7 +11,7 @@ return {
     -- extmarks = true, -- show extmarks errors
   },
   layout = { preset = 'mylayout' },
-  layouts = { mylayout = require('nvim.snacks.config.picker.layout') },
+  layouts = { mylayout = require('nvim.snacks.picker.layout') },
   sources = {
     buffers = {
       input = {
@@ -21,11 +21,11 @@ return {
       },
       list = { keys = { ['D'] = 'bufdelete' } },
     },
-    explorer = require('nvim.snacks.config.explorer'),
-    autocmds = require('nvim.snacks.config.picker.util').pick_conf,
-    keymaps = require('nvim.snacks.config.picker.util').pick_conf,
-    files = require('nvim.snacks.config.picker.util').opts_extend,
-    grep = require('nvim.snacks.config.picker.util').opts_extend,
+    explorer = require('nvim.snacks.explorer'),
+    autocmds = require('nvim.snacks.picker.util').pick_conf,
+    keymaps = require('nvim.snacks.picker.util').pick_conf,
+    files = require('nvim.snacks.picker.util').opts_extend,
+    grep = require('nvim.snacks.picker.util').opts_extend,
     icons = {
       layout = {
         layout = {
@@ -104,5 +104,5 @@ return {
     --   -- end,
     -- },
   },
-  win = require('nvim.snacks.config.picker.win'),
+  win = require('nvim.snacks.picker.win'),
 }

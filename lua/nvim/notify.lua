@@ -1,22 +1,33 @@
+local M = {}
+
+-- Highlight groups for different log levels
+-- 1 = DEBUG, 2 = INFO, 3 = WARN, 4 = ERROR
+local groups = { 'Statement', 'MoreMsg', 'WarningMsg' }
+
 --- Override for vim.notify that provides additional highlighting
 ---@param msg string
 ---@param level vim.log.levels|nil
 ---@param opts table|nil
 ---@diagnostic disable-next-line: unused-local opts
-local M = function(msg, level, opts)
-  local chunks = {
-    {
-      msg,
-      level == vim.log.levels.DEBUG and 'Statement'
-        or level == vim.log.levels.INFO and 'MoreMsg'
-        or level == vim.log.levels.WARN and 'WarningMsg'
-        or nil,
-    },
-  }
-  vim.api.nvim_echo(chunks, true, { err = level == vim.log.levels.ERROR })
+M.notify = function(msg, level, opts)
+  -- if error, index it out of bounds and hl = nil
+  local hl = groups[level]
+  opts = opts or {}
+  opts.err = level == vim.log.levels.ERROR
+
+  vim.api.nvim_echo({ { msg, hl } }, true, opts)
 end
 
--- test if the override is working (should be colored blue)
--- Snacks.notify.info('init.lua loaded!')
+--- Override vim.notify with custom function
+M.setup = function()
+  vim.notify = M.notify
+  -- test if the override is working (should be colored blue)
+  local msg = 'vim.notify override!'
+  vim.notify(msg, vim.log.levels.INFO)
+end
 
-return M
+return setmetatable(M, {
+  __call = function(_, ...)
+    return M.notify(...)
+  end,
+})

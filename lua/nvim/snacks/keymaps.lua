@@ -1,13 +1,3 @@
--- local map = require('which-key').add
-vim.keymap.set({ 'i', 'n', 's' }, '<Esc>', function()
-  vim.cmd('noh')
-  return '<Esc>'
-end, { expr = true, desc = 'Escape and Clear hlsearch' })
-
--- if not package.loaded['snacks'] then
---   return
--- end
-
 vim.keymap.set('n', '<leader>gg', function()
   Snacks.lazygit()
   vim.cmd.startinsert()
@@ -61,57 +51,3 @@ Snacks.toggle.indent():map('<leader>ug')
 Snacks.toggle.scroll():map('<leader>us')
 Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
-
--- Cycle suggestions: Next
-vim.keymap.set('i', '<M-n>', function()
-  vim.lsp.inline_completion.select({ count = 1 })
-end, { desc = 'Next inline completion' })
-
--- Cycle suggestions: Previous
-vim.keymap.set('i', '<M-p>', function()
-  vim.lsp.inline_completion.select({ count = -1 })
-end, { desc = 'Previous inline completion' })
---
-Snacks.toggle({
-  name = 'Inline Completion',
-  get = function()
-    return vim.lsp.inline_completion.is_enabled()
-  end,
-  set = function(state)
-    vim.lsp.inline_completion.enable(state)
-  end,
-}):map('<M-,>')
-
--- FIXME:
--- local munchies_toggle = require('nvim.snacks.toggle')
---
--- munchies_toggle
---   .translucency()
---   :map('<leader>ub', { desc = 'Toggle Translucent Background' })
--- munchies_toggle.virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
--- munchies_toggle.color_column():map('<leader>u\\', { desc = 'Toggle Color Column' })
--- munchies_toggle.winborder():map('<leader>uW', { desc = 'Toggle Window Border' })
--- munchies_toggle.laststatus():map('<leader>ul', { desc = 'Toggle Laststatus' })
-
--- Supertab
-vim.keymap.set('i', '<Tab>', function()
-  local cmp = require('blink.cmp')
-  local item = cmp.get_selected_item()
-  local type = require('blink.cmp.types').CompletionItemKind
-
-  -- TODO: what about snippet expansion?
-  -- TODO: how to hide copilot completion?
-  if not vim.lsp.inline_completion.get() then
-    if cmp.is_visible() and item then
-      cmp.accept()
-      -- keep accepting path completions
-      if item.kind == type.Path then
-        vim.defer_fn(function()
-          cmp.show({ providers = { 'path' } })
-        end, 1)
-      end
-      return ''
-    end
-  end
-  return '<Tab>'
-end, { expr = true })

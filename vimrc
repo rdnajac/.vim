@@ -398,18 +398,15 @@ else " neovim plugins {{{
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
-  Plug 'folke/todo-comments.nvim'
-  Plug 'folke/trouble.nvim'
-  " Plug 'folke/noice.nvim'
   Plug 'stevearc/oil.nvim'
+  Plug 'nvim-mini/mini.nvim'
+  " TODO: load these automatically from module specs
   Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'R-nvim/r.nvim'
   Plug 'mason-org/mason.nvim'
   Plug 'Saghen/blink.cmp'
+  Plug 'monaqa/dial.nvim'
   " Plug 'stevearc/conform.nvim'
-  " Plug 'mfussenegger/nvim-lint'
-  Plug 'monaqa/dial.nvim',
-  Plug 'nvim-mini/mini.nvim',
   " }}}
 endif
 call plug#end() " }}}1

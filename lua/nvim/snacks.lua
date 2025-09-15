@@ -21,11 +21,11 @@ local enabled = {
 ---@module "snacks"
 ---@type snacks.config
 local opts = {
-  dashboard = require('nvim.snacks.config.dashboard'),
+  dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = vim.g.default_file_explorer == 'snacks' },
   indent = { indent = { only_current = true, only_scope = true } },
   notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
-  picker = require('nvim.snacks.config.picker'),
+  picker = require('nvim.snacks.picker'),
   scratch = {
     template = table.concat({
       'local pr = function(...) return print(vim.inspect(...)) end',
@@ -42,6 +42,17 @@ local opts = {
   },
 }
 
+-- TODO: use the config merge functions in utils
 M.opts = vim.tbl_deep_extend('force', opts, enabled)
+
+M.after = function()
+  -- set up global backtrace for debugging
+  _G.bt = Snacks.debug.backtrace
+  -- override vim.print
+  -- vim.print = Snacks.debug.print
+  -- TODO: defer until vim enter
+  require('snacks.keymaps')
+end
+
 
 return M

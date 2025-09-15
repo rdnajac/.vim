@@ -80,7 +80,7 @@ function Plugin:init()
   end
 
   if self.after and vim.is_callable(self.after) then
-    require('munchies').on_module(self.name, function()
+    require('nvim.util.module').on_module(self.name, function()
       self.after()
     end)
   end
@@ -97,7 +97,7 @@ function Plugin:deps()
     specs = specs()
   end
   if type(specs) == 'table' and #specs > 0 then
-    local deps = vim.tbl_map(utils.spec, specs)
+    local deps = vim.tbl_map(utils.to_spec, specs)
     -- info(deps)
     utils.plug(deps)
   end

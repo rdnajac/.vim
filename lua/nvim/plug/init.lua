@@ -7,7 +7,7 @@ local M = {}
 --- if false, return minimal spec for non-nvim plugins
 --- if nil, return spec optional name and version
 --- @return string|vim.pack.Spec
-M.spec = function(user_repo, data)
+M.to_spec = function(user_repo, data)
   -- if user_repo:match('^[%w._-]+/[%w._-]+$') then
   local src = 'https://github.com/' .. user_repo .. '.git'
   if data == false then
@@ -65,7 +65,7 @@ function M.end_()
     :map(function(p)
       -- HACK: most plugins end in `.nvim`, except special cases like blink.cmp
       local is_nvim_plugin = vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp') 
-      return M.spec(p, is_nvim_plugin)
+      return M.to_spec(p, is_nvim_plugin)
     end)
     :totable()
 

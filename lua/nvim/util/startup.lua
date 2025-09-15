@@ -42,7 +42,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
     -- notify
     if Snacks and Snacks.notify then
       Snacks.notify.info(
-        ('Startup Loader: %.2fms (avg %.2fms, high %.2fms, low %.2fms, runs %d)'):format(
+        ('Startup Loader: %.2fms\navg %.2fms,\nhigh %.2fms,\nlow %.2fms,\nruns %d)'):format(
           startuptime,
           stats.avg,
           stats.high,
