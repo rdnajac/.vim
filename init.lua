@@ -11,7 +11,7 @@ end
 _G.nv = require('nvim') or {}
 
 _G.info = function(...)
-  vim.notify(vim.inspect(...), vim.log.levels.INFO)
+    vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
 
 -- optionally, override vim.notify
@@ -21,7 +21,6 @@ vim.cmd([[runtime vimrc]])
 
 -- TODO: turn these into plugins
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
-  -- local module = require('nvim.' .. modname)
   local module = nv[modname]
   local specs = module.specs or { module[1] } or {}
 
@@ -36,4 +35,6 @@ for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' })
   end
 end
 
-require('nvim.util.startuptime')
+_G.startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
+print(('nvim initialized in %.2f ms'):format(startuptime))
+-- require('nvim.util.startuptime')

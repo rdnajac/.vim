@@ -8,6 +8,7 @@ M.specs = {
 
 M.config = function()
   require('todo-comments').setup({})
+  require('ui.winbar')
 end
 
 return M

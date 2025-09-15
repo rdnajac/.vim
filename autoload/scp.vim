@@ -1,4 +1,4 @@
-function! bin#scp#scp(dest) abort
+function! scp#(dest) abort
   if !executable('scp')
     echoerr 'scp command not found'
     return
@@ -14,7 +14,7 @@ function! bin#scp#scp(dest) abort
   execute '!scp % ' . shellescape(target)
 endfunction
 
-function! bin#scp#complete(A, L, P) abort
+function! scp#complete(A, L, P) abort
   let all = split(system("grep '^Host\\>' ~/.ssh/config | awk '{print $2}'"), "\n")
   return filter(all, 'v:val =~? "^" . a:A')
 endfunction

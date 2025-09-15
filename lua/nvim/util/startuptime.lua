@@ -9,7 +9,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
-    local startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
+    local startuptime = _G.startuptime
     local state = vim.loader.enabled and 'enabled' or 'disabled'
     local logpath = vim.fs.joinpath(vim.fn.stdpath('data'), 'startuptime.log')
     local stats = setmetatable({ total = 0, cnt = 0, high = 0, low = math.huge }, {

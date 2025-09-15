@@ -19,16 +19,6 @@ function vimline#winbar#term() abort
 endfunction
 
 function! vimline#winbar#() abort
-  let l:bt = &buftype
-
-  if l:bt ==# 'nofile'
-    return ''
-  elseif l:bt ==# 'quickfix'
-    return '%q'
-  elseif l:bt ==# 'terminal'
-    return vimline#winbar#term()
-  endif
-
   let l:is_active_buffer = win_getid() == str2nr(g:actual_curwin)
 
   let l:ret = ''

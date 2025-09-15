@@ -10,8 +10,8 @@ if !has('nvim')
   finish
 endif
 
-" TODO: rewrite winbar in lua since its nvim only
-set winbar=%{%vimline#winbar#()%}
+" set winbar=%{%vimline#winbar#()%}
+set winbar=v:lua.require'nvim.ui.winbar'
 " TODO: move to nv.ui
 " set statuscolumn=%!vimline#statuscolumn#()
 " set statuscolumn=%!v:lua.require'vimline.statuscolumn'()
