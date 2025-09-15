@@ -3,9 +3,9 @@ M = {}
 M.specs = {
   -- 'fang2hou/blink-copilot',
   -- {
-  --   'olimorris/codecompanion.nvim',
+    'olimorris/codecompanion.nvim',
   --   dependencies = {
-  --     'nvim-lua/plenary.nvim',
+      'nvim-lua/plenary.nvim',
   --     'nvim-treesitter/nvim-treesitter',
   --   },
   --   opts = {},

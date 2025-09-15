@@ -22,6 +22,7 @@ M.opts = {
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
       auto_show = true,
+      auto_show_delay_ms = 1000,
       border = border,
       draw = {
         treesitter = { 'lsp' },

@@ -6,8 +6,7 @@ M.specs = {
 }
 
 ---@type vim.diagnostic.Opts
--- M.opts = {
-local opts = {
+M.opts = {
   float = { source = true },
   underline = false,
   virtual_text = false,
@@ -26,8 +25,8 @@ vim
   -- Build signs and highlights
   :each(function(name, severity)
     local diagnostic = name:sub(1, 1) .. name:sub(2):lower()
-    opts.signs.text[severity] = nv.icons.diagnostics[diagnostic]
-    opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
+    M.opts.signs.text[severity] = nv.icons.diagnostics[diagnostic]
+    M.opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
   end)
 
 -- set up the signs and highlights for each severity level
@@ -42,8 +41,10 @@ vim
 
 M.config = function()
   -- TODO: infer this function in packadd
-  vim.diagnostic.config(opts)
+  vim.diagnostic.config(M.opts)
   require('trouble').setup({})
 end
+
+local unused_local = 'smoke test'
 
 return M
