@@ -22,11 +22,18 @@ local mini_ai_opts = {
     }),
     u = ai.gen_spec.function_call(), -- u for "Usage"
     U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
+    -- FIXME: doesn't work
+    -- code fence textobject
+    z = ai.gen_spec.treesitter({
+      a = '@fenced_code_block.outer', -- around: include delimiters
+      i = '@fenced_code_block.inner', -- inside: content only
+    }),
   },
 }
 
 require('mini.ai').setup(mini_ai_opts)
 
+-- TODO: put which key from LazyVim back in
 -- local objects = {
 --   { ' ', desc = 'whitespace' },
 --   { '"', desc = '" string' },
