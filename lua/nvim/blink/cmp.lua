@@ -88,7 +88,8 @@ M.after = function()
   local path =
     vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim', 'blink', 'sources', 'env.lua')
   if not vim.uv.fs_stat(path) then
-    require('util.wget')(url, { outpath = path })
+    local wget = require('nvim.util.wget')
+    wget(url, { outpath = path })
   end
 end
 

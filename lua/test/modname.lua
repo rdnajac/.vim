@@ -2,7 +2,7 @@
 -- TODO: try mini.test
 local M = {}
 
-local modname = require('util').modname
+local modname = require('nvim.util').modname
 
 --- Run test cases
 M.modname = function()
