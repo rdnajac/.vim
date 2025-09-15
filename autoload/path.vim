@@ -53,7 +53,7 @@ function! path#relative_parts(...) abort
 
   let root = path#root(file)
   " let cwd  = getcwd()
-  let cwd = getcwd(0)
+  let cwd = getcwd(0,0)
 
   if !empty(root) && (cwd ==# root || cwd[:strlen(root)] ==# root . '/')
     return [s:make_prefix(root, cwd), s:make_suffix(file, cwd)]

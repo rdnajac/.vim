@@ -38,10 +38,10 @@ M.docsymbols = function()
   return require('nvim.lsp.docsymbols').get()
 end
 
--- TODO: use mini.icons directly
 --- Get devicon for a buffer by buffer number.
 --- @param bufnr number|nil Buffer number (defaults to current buffer)
 --- @return string icon
+-- TODO: use mini.icons directly
 M.ft_icon = function(bufnr)
   local ok, devicons = pcall(require, 'nvim-web-devicons')
   if not ok then

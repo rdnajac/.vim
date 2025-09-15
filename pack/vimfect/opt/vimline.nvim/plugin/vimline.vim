@@ -1,5 +1,5 @@
 " set foldcolumn=1
-" set signcolumn=number
+set signcolumn=number
 " set numberwidth=3
 
 let &laststatus = has('nvim') ? 3 : 2

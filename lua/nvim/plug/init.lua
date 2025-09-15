@@ -55,10 +55,7 @@ end
 --- @param specs (string|vim.pack.Spec)[]
 function M.plug(specs)
   local speclist = vim.islist(specs) and specs or { specs }
-  vim.pack.add(speclist, {
-    confirm = vim.v.vim_did_enter == 1, -- don't confirm during startup
-    load = M.load,
-  })
+  vim.pack.add(speclist, { load = M.load, })
 end
 
 function M.end_()
