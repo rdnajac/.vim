@@ -21,9 +21,6 @@ end
 --- Override vim.notify with custom function
 M.setup = function()
   vim.notify = M.notify
-  -- test if the override is working (should be colored blue)
-  local msg = 'vim.notify override!'
-  vim.notify(msg, vim.log.levels.INFO)
 end
 
 return setmetatable(M, {

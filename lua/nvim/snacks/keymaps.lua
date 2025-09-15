@@ -14,9 +14,7 @@ map_pickers('d', {cwd=vim.fn.stdpath('data')}, {desc = 'Data Files'})
 map_pickers('.', {cwd=os.getenv('HOME') .. '/.local/share/chezmoi', hidden=true}, {desc = 'Dotfiles'})
 
 local function pick_dir(key, dir, picker_opts)
-  -- local opts = vim.tbl_extend('force', { cwd = dir }, picker_opts or {})
   local opts = picker_opts or {}
-
   opts.cwd = vim.fn.expand(dir)
   map_pickers(key, opts, { desc = dir })
 end
@@ -51,3 +49,4 @@ Snacks.toggle.indent():map('<leader>ug')
 Snacks.toggle.scroll():map('<leader>us')
 Snacks.toggle.words():map('<leader>uw')
 Snacks.toggle.zoom():map('<leader>uZ')
+-- see `toggle.lua` for more toggles

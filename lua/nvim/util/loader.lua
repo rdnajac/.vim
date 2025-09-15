@@ -1,8 +1,6 @@
 -- TODO: make this generic
---
--- ~/.local/neovim/share/nvim/runtime/lua/vim/lsp.lua
+-- from: `~/.local/neovim/share/nvim/runtime/lua/vim/lsp.lua`
 
---- @nodoc
 --- @class vim.lsp.config
 --- @field [string] vim.lsp.Config
 --- @field package _configs table<string,vim.lsp.Config>

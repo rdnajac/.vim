@@ -2,7 +2,10 @@
 -- vim._print(true, vim.tbl_keys(package.loaded))
 _G.t0 = vim.uv.hrtime() -- capture the start time
 
-vim.loader.enable()
+-- randomly enable loader for benchmarking
+if vim.uv.random(1):byte(1) % 2 == 1 then
+  vim.loader.enable()
+end
 
 --- @type table
 _G.nv = require('nvim') or {}
@@ -15,10 +18,9 @@ end
 -- nv.notify.setup()
 
 vim.cmd([[runtime vimrc]])
-vim.cmd([[packadd vimline.nvim]])
 
--- TODO: turn these into plugins 
-for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter' }) do
+-- TODO: turn these into plugins
+for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
   -- local module = require('nvim.' .. modname)
   local module = nv[modname]
   local specs = module.specs or { module[1] } or {}
@@ -32,7 +34,6 @@ for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter' }) do
     module.setup()
     table.insert(nv.did_setup, modname)
   end
-
 end
 
-require('nvim.util.startup')
+require('nvim.util.startuptime')

@@ -3,7 +3,8 @@ scriptencoding utf-8
 function vimline#winbar#term() abort
   let l:ret = ''
   let l:ret .= '%#Chromatophore_a# '
-  let l:ret .= fnamemodify($PWD, ':~') . ' '
+  " let l:ret .= fnamemodify($PWD, ':~') . ' '
+  let l:ret .= fnamemodify(getcwd(), ':~') . ' '
   let l:ret .= '%#Chromatophore_b# '
 
   if exists('g:ooze_channel') && g:ooze_channel == &channel
