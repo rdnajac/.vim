@@ -1,4 +1,5 @@
 -- init.lua
+-- vim._print(true, vim.tbl_keys(package.loaded))
 _G.t0 = vim.uv.hrtime() -- capture the start time
 
 vim.loader.enable()
