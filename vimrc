@@ -301,13 +301,13 @@ inoremap . .<C-g>u
 inoremap ; ;<C-g>u
 
 " easier completion {{{2
-inoremap <silent> <Bslash>o <C-x><C-o>
-inoremap <silent> <Bslash>f <C-x><C-f>
-inoremap <silent> <Bslash>i <C-x><C-i>
-inoremap <silent> <Bslash>l <C-x><C-l>
-inoremap <silent> <Bslash>n <C-x><C-n>
-inoremap <silent> <Bslash>t <C-x><C-]>
-inoremap <silent> <Bslash>u <C-x><C-u>
+" inoremap <silent> <Bslash>o <C-x><C-o>
+" inoremap <silent> <Bslash>f <C-x><C-f>
+" inoremap <silent> <Bslash>i <C-x><C-i>
+" inoremap <silent> <Bslash>l <C-x><C-l>
+" inoremap <silent> <Bslash>n <C-x><C-n>
+" inoremap <silent> <Bslash>t <C-x><C-]>
+" inoremap <silent> <Bslash>u <C-x><C-u>
 inoremap <silent> ,i <Cmd>Icons<CR>
 
 " add chars to EOL {{{2
@@ -326,7 +326,7 @@ vnoremap [e :<C-u>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv
 " toggles
 nmap yol :set list!<BAR>set list?<CR>
 nmap yon :set number!<BAR>redraw!<BAR>set number?<CR>
-nmap yos :set spell!<BAR>set wrap?<CR>
+nmap yos :set spell!<BAR>set spell?<CR>
 nmap yow :set wrap!<BAR>set wrap?<CR>
 nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
 
@@ -398,6 +398,7 @@ else " neovim plugins {{{
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
+  Plug 'folke/flash.nvim'
   Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'
   " TODO: load these automatically from module specs

@@ -35,5 +35,11 @@ for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' })
 end
 
 _G.startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
+-- TODO: util func to wrap around a function to measure time
 print(('nvim initialized in %.2f ms'):format(startuptime))
+-- local flash_keys = nv.flash.keys
+-- info(flash_keys)
+nv.map = require('which-key').add
+nv.map(nv.flash.keys)
+
 -- require('nvim.util.startuptime')
