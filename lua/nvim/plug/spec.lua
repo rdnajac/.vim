@@ -5,9 +5,9 @@ local utils = require('nvim.plug')
 --- @field after? fun(): nil
 --- @field build? string|fun(): nil
 --- @field config? fun(): nil
---- @field event? vim.api.keyset.events|vim.api.keyset.events[]
 --- @field enabled? boolean|fun():boolean
 --- @field keys? wk.Spec|fun():wk.Spec
+--- @field lazy? boolean
 --- @field specs? string[]|fun():string[]
 --- @field opts? table|fun():table
 --- TODO: can we get it from the spec instead?
@@ -47,7 +47,7 @@ function Plugin:setup()
 end
 
 local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
---- Lazy-load a plugin based on its event or call init immediately
+--- Lazy-load a function on its event or on VimEnter by default.
 ---@param cb fun() The function to call when the event fires
 ---@param event? string|string[] The Neovim event(s) to watch (default: VimEnter)
 ---@param pattern? string|string[] Optional pattern for events like FileType
@@ -75,8 +75,8 @@ function Plugin:init()
     self:deps() -- add any dependencies
   end
 
-  if self.event then
-    lazyload(_init, self.event)
+  if self.lazy then
+    lazyload(_init)
   else
     _init()
   end
@@ -132,3 +132,4 @@ return setmetatable(Plugin, {
     return Plugin.new(t)
   end,
 })
+--- @field lazy? boolean

@@ -1,7 +1,9 @@
 local M = { 'Saghen/blink.cmp' }
 
+-- TODO: use the new build ex command `:...`
 -- M.build = 'cargo build --release'
--- M.event = 'InsertEnter'
+M.lazy = false
+--- FIXME: lazy = true breaks loading cmp-r
 M.specs = { 'Saghen/blink.compat' }
 
 local border = vim.o.winborder == '' and 'single' or nil

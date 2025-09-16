@@ -1,6 +1,6 @@
 local M = { 'monaqa/dial.nvim' }
 
-M.event = 'BufWinEnter'
+M.lazy = true
 
 M.config = function()
   local augend = require('dial.augend')
