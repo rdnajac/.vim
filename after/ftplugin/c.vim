@@ -1,4 +1,3 @@
-echom 'Loading c.vim...'
 function! s:CPreProcIncludes(exe, opts) abort
   let paths = []
   let active = 0

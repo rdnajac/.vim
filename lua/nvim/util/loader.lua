@@ -1,5 +1,5 @@
 -- TODO: make this generic
--- from: `~/.local/neovim/share/nvim/runtime/lua/vim/lsp.lua`
+-- from: `$VIMRUNTIME/lua/vim/lsp.lua`
 
 --- @class vim.lsp.config
 --- @field [string] vim.lsp.Config

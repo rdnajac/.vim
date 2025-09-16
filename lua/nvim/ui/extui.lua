@@ -2,7 +2,7 @@
 --- This module checks if the 'vim._extui' module can be loaded and, if
 --- successful, enables it with default settings.
 ---
---- from `~/.local/share/nvim/share/nvim/runtime/lua/vim/_extui.lua`:
+--- from `$VIMRUNTIME/lua/vim/_extui.lua`:
 ---```lua
 ---require('vim._extui').enable({
 ---  enable = true, -- Whether to enable or disable the UI.
@@ -14,7 +14,9 @@
 ---  },
 ---})
 ---```
+local opts = {}
+
 local ok, extui = pcall(require, 'vim._extui')
 if ok and extui then
-  extui.enable({})
+  extui.enable(opts)
 end

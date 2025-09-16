@@ -20,7 +20,7 @@ function s:fallback() abort
   endif
 endfunction
 
-" TODO: ~/.local/neovim/share/nvim/runtime/plugin/osc52.lua
+" TODO: $VIMRUNTIME/plugin/osc52.lua
 augroup Clipboard
   autocmd!
   " FIXME: this is only in nvim
