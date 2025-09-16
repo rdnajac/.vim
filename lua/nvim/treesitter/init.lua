@@ -13,17 +13,6 @@ end
 
 local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'lua',
-  group = aug,
-  -- command = 'syntax on', TODO: is this command buffer-local?
-  callback = function(args)
-    vim.bo[args.buf].syntax = 'ON'
-  end,
-  desc = 'Keep using legacy syntax (for `vim-endwise`)',
-})
-
---- Autostart treesitter for certain filetypes
 --- @param ft string|string[] filetype or list of filetypes
 --- @param override string|nil optional override parser lang
 local autostart = function(ft, override)
@@ -33,7 +22,7 @@ local autostart = function(ft, override)
     callback = function(args)
       vim.treesitter.start(args.buf, override)
     end,
-    desc = 'Start Tree-sitter for certain filetypes',
+    desc = 'Automatically start tree-sitter with optional language override',
   })
 end
 
@@ -43,6 +32,26 @@ vim.api.nvim_create_autocmd('FileType', {
   command = 'setlocal commentstring=#\\ %s',
   desc = 'Set the commentstring for languages that use `#`',
 })
+
+M.config = function()
+  autostart({ 'sh', 'markdown', 'r', 'python', 'kitty' })
+  autostart({ 'kitty', 'ghostty', 'zsh' }, 'bash')
+end
+
+-- M.keys = {
+--
+-- }
+
+M.after = function()
+  require('nvim.treesitter.mycommentparser')
+  -- stylua: ignore start
+  vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection').start() end, { desc = 'Start selection' })
+  vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
+  vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
+  vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
+  -- stylua: ignore end
+  Snacks.toggle.treesitter():map('<leader>ut')
+end
 
 --- Check if the current node is a comment node
 ---@return boolean
@@ -59,21 +68,6 @@ M.in_comment_node = function()
     or false
 end
 
-M.config = function()
-  autostart({ 'sh', 'markdown', 'r', 'python', 'kitty' })
-  autostart({ 'kitty', 'ghostty', 'zsh' }, 'bash')
-end
-
-M.after = function()
-  require('nvim.treesitter.mycommentparser')
-  -- stylua: ignore start
-  vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection').start() end, { desc = 'Start selection' })
-  vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
-  vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
-  vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
-  -- stylua: ignore end
-  Snacks.toggle.treesitter():map('<leader>ut')
-end
 
 -- TODO: add vimline component; report treesiter language
 

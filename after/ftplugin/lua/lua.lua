@@ -5,3 +5,6 @@
 --     .. vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':p')
 --     .. ' -f '
 --     .. vim.fs.joinpath(vim.fn.stdpath('config'), 'stylua.toml')
+
+-- Keep using legacy syntax for `vim-endwise`
+vim.bo.syntax = 'ON'
