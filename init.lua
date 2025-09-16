@@ -16,7 +16,10 @@ end
 
 -- nv.notify.setup() -- optionally, override vim.notify
 
-vim.cmd.runtime([[vimrc]])
+  --nv.util.track(function()
+-- require('nvim.util.track')(function()
+  vim.cmd.runtime([[vimrc]])
+-- end)
 
 -- TODO: turn these into plugins
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
@@ -51,5 +54,4 @@ end
 
 _G.startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
 print(('nvim initialized in %.2f ms'):format(startuptime))
--- TODO: util func to wrap around a function to measure time
 -- require('nvim.util.startuptime')

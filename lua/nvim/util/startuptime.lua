@@ -1,12 +1,3 @@
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'snacks_notif',
-  callback = function(ev)
-    -- info(ev)
-    -- require('render-markdown').set(true)
-    -- vim.cmd('set ft=markdown')
-  end,
-})
-
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
     local startuptime = _G.startuptime
