@@ -56,7 +56,8 @@ M.opts = {
 ---  ~/.local/share/nvim/site/pack/core/opt/tokyonight/colors/
 --- NOTE: the `ColorScheme` autocommand event not fired for this load
 M.after = function()
-  M.colors, M.groups, opts = require('tokyonight').load()
+  M.colors, M.groups, _ = require('tokyonight').load()
+  vim.cmd.doautocmd('ColorScheme') -- fire the autocommand manually
 end
 
 -- FIXME: this function is cached on the first require and
