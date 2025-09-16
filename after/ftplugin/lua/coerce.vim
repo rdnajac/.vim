@@ -1,14 +1,12 @@
-" WIP.. TODO: map to `cr` like with CoeRce from `vim-abolish`
-" also see `../ftplugin/lua/coerce.lua
+finish " XXX: WIP...
+
+" map to `cr` like with CoeRce from `vim-abolish`
+" keymaps should work from anywhere on the
 " local function transform
+" function M.transform
 
-" `CoeRce` - change `local` to `M` and back (normal mode)
-" keymaps work from anywhere on the line as long as the
-" entire line is formatted consistently
-
-" some important notes:
-" 0 - start at the beginning of the line
-" <C-O> - from insert mode, execute the next normal mode command
+" `0`     (normal mode): start at the beginning of the line
+" `<C-o>` (insert mode): execute the next normal mode command
 
 " `local function fn(...)` --> `M.fn = function(...)`
 nnoremap <buffer> crM <Cmd>normal! 0dwdiM.<C-O>w = <Esc>p<CR>
