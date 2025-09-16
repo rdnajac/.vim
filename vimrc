@@ -374,6 +374,7 @@ let g:interpreters = {
       \ }
 
 " }}}1
+
 " Section: plugins {{{ 1
 call plug#begin()
 Plug 'alker0/chezmoi.vim'

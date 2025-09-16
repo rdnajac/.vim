@@ -11,7 +11,7 @@ end
 _G.nv = require('nvim') or {}
 
 _G.info = function(...)
-    vim.notify(vim.inspect(...), vim.log.levels.INFO)
+  vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
 
 -- nv.notify.setup() -- optionally, override vim.notify
@@ -30,6 +30,22 @@ for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' })
   if vim.is_callable(module.config) then
     module.config() -- TODO: load on vim enter
     table.insert(nv.did_setup, modname)
+  end
+
+  if module.after and vim.is_callable(module.after) then
+    module.after()
+  end
+
+  local keys
+  if module.keys then
+    if vim.is_callable(module.keys) then
+      keys = module.keys()
+    else
+      keys = module.keys
+    end
+    if keys and vim.islist(keys) and #keys > 0 then
+      require('which-key').add(keys)
+    end
   end
 end
 
