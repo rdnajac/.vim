@@ -9,6 +9,9 @@ M.opts = {
   default_file_explorer = vim.g.file_explorer == 'oil',
   -- skip_confirm_for_simple_edits = true,
   constrain_cursor = 'name',
+  win_options = {
+    conceallevel = 2,
+  },
   watch_for_changes = true,
   keymaps = {
     ['Y'] = { 'actions.yank_entry', opts = { modify = ':~' } },
