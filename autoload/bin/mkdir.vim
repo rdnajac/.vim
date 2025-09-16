@@ -1,7 +1,7 @@
 let s:url_scheme_regex = '^[A-Za-z][A-Za-z0-9+.-]*://'
 
 function! bin#mkdir#(file) abort
-  if a:file ==# '' || a:file =~# s:url_scheme_regex 
+  if a:file ==# '' || a:file =~# s:url_scheme_regex
     return
   endif
 

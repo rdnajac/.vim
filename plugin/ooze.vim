@@ -14,7 +14,7 @@ function! CRooze() abort
   let l:ft = &filetype
   let l:line = getline('.')
 
-  if l:ft ==# 'qf\|pager' 
+  if l:ft ==# 'qf\|pager'
    return 0
   endif
 

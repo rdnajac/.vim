@@ -30,7 +30,7 @@ let s:fg_dark = '#a9b1d6'
 let s:tokyonight = '#24283b'
 
 let s:blue = '#7aa2f7'
-et s:blue1 = '#2ac3de'
+let s:blue1 = '#2ac3de'
 let s:blue2 = '#0db9d7'
 let s:blue5 = '#89ddff'
 let s:chambray = '#545c7e'

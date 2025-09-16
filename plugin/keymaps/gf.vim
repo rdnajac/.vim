@@ -17,7 +17,7 @@ function! s:gf(word)
     " execute 'edit' fnameescape(a:word)
   endif
 endfunction
-" wincmd f is an alias for CTRL-W CTRL-F and 
+" wincmd f is an alias for CTRL-W CTRL-F and
 " doesnt have a versiohn that does to the line number
 " TODO: add this
 " NOTE:

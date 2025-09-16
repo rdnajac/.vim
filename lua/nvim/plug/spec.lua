@@ -79,10 +79,14 @@ function Plugin:init()
     _init()
   end
 
+  -- after
+  -- loads after VimEnter and on module
   if self.after and vim.is_callable(self.after) then
-    require('nvim.util.module').on_module(self.name, function()
-      self.after()
-    end)
+    lazyload(function()
+      require('nvim.util.module').on_module(self.name, function()
+        self.after()
+      end)
+    end, 'VimEnter')
   end
 end
 

@@ -155,40 +155,23 @@ vmap ` S`
 " nmap ga <Plug>(EasyAlign)
 " }}}
 
-nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap <leader>! <Cmd>call redir#prompt()<CR>
-nnoremap <leader><Space> viW
-
 " vim.lsp.hover overrides the default K mapping
-nnoremap <leader>K  <Cmd>norm! K<CR>
-
-nnoremap <leader>e <Cmd>Explorer<CR>
+nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
-
 nnoremap <leader>S <Cmd>Scriptnames<CR>
-nnoremap <leader>. <Cmd>Scratch<CR>
 nnoremap <leader>q <Cmd>Quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
-nnoremap <leader>> <Cmd>Scratch!<CR>
-nnoremap <leader>i <Cmd>help index<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 nnoremap <leader>h <Cmd>Help<CR>
-nnoremap <leader>t <Cmd>edit #<CR>
 nnoremap <leader>w <Cmd>write!<CR>
-nnoremap <leader>z <Cmd>Zoxide<CR>
-nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
+nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 
-vnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word()<CR>
-
-" code {{{2
-" https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
-" nnoremap <leader>M  :<c-u><c-r>V-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
-" nnoremap <expr> <leader>M ':let @'.v:register.' = '.string(getreg(v:register))."\<CR>\<C-f>\<Left>"
-nnoremap <leader>cc <Cmd>CodeCompanion<CR>
-
-" debug {{{2
 if has ('nvim')
+  nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
+  " code
+  nnoremap <leader>cc <Cmd>CodeCompanion<CR>
+  " debug
   nnoremap <leader>db <Cmd>Blink status<CR>
   nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
   nnoremap <leader>dd <Cmd>LazyDev debug<CR>
@@ -198,47 +181,30 @@ if has ('nvim')
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
   nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
+  " git
+  nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
+  nnoremap <leader>gB <Cmd>lua Snacks.gitbrowse()<CR>
+  nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
+  nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
+  nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
+  nnoremap <leader>ga <Cmd>!git add %<CR>
+  nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
+  nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
+  " pickers
+  nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
+  nnoremap <leader>P <Cmd>lua Snacks.picker()<CR>
+  " file/find/format
+  nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
+  nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
+  nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
 endif
 
-" file/find/format {{{2
-nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
-nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
-nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
 nnoremap <leader>fD <Cmd>Delete!<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
-" git {{{2
-nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
-nnoremap <leader>gB <Cmd>lua Snacks.gitbrowse()<CR>
-nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
-nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
-nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
-nnoremap <leader>ga <Cmd>!git add %<CR>
-nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
-nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
-
-" pickers {{{2
-nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
-nnoremap <leader>P <Cmd>lua Snacks.picker()<CR>
-nnoremap <leader>n <Cmd>lua Snacks.picker.notifications()<CR>
-
-" search
-nnoremap <leader>s" <Cmd>lua Snacks.picker.registers()<CR>
-nnoremap <leader>s/ <Cmd>lua Snacks.picker.search_history()<CR>
-nnoremap <leader>s: <Cmd>lua Snacks.picker.command_history()<CR>
-nnoremap <leader>sd <Cmd>lua Snacks.picker.diagnostics()<CR>
-nnoremap <leader>sj <Cmd>lua Snacks.picker.jumps()<CR>
-nnoremap <leader>sq <Cmd>lua Snacks.picker.qflist()<CR>
-nnoremap <leader>sh <Cmd>lua Snacks.picker.help()<CR>
-nnoremap <leader>sH <Cmd>lua Snacks.picker.highlights()<CR>
-nnoremap <leader>si <Cmd>lua Snacks.picker.icons()<CR>
-nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
-
-" XXX: potential conflicts
 nnoremap ` ~
-nnoremap <BS> <C-o>
 vnoremap <BS> d
 
 " text objects {{{2
@@ -271,6 +237,12 @@ xnoremap <expr> <Down> v:count == 0 ? 'gj' : 'j'
 nnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
 xnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
 
+" TODO: check == 0 viml rule
+" nnoremap <expr> j v:count ? 'j' : 'gj'
+" nnoremap <expr> k v:count ? 'k' : 'gk'
+" xnoremap <expr> j v:count ? 'j' : 'gj'
+" xnoremap <expr> k v:count ? 'k' : 'gk'
+
 " better n/N {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n {{{
 nmap n nzz
@@ -288,6 +260,47 @@ nnoremap *  *zzzv
 nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
+
+" lervag/dotfiles " {{{2
+" already in nivm
+" nnoremap Y      y$
+" nnoremap '      `
+
+" TODO: 
+nnoremap J      mzJ`z
+nnoremap dp     dp]c
+nnoremap do     do]c
+
+" TODO: vim
+" nnoremap <c-e>       <c-^>
+" nnoremap <c-w><c-e>  <c-w><c-^>
+nnoremap gV     `[V`]
+
+" lile tmux!
+" nnoremap <c-w>-     <c-w>s
+" nnoremap <c-w><bar> <c-w>v
+
+" Buffer navigation
+" nnoremap <silent> gb    :bnext<cr>
+" nnoremap <silent> gB    :bprevious<cr>
+
+" Navigate folds
+nnoremap          zv zMzvzz
+nnoremap <silent> zj zcjzOzz
+nnoremap <silent> zk zckzOzz
+
+" Backspace and return for improved navigation
+nnoremap        <bs> <c-o>zvzz
+
+" Utility maps for repeatable quickly change/delete current word
+nnoremap c*   *``cgn
+nnoremap c#   *``cgN
+nnoremap cg* g*``cgn
+nnoremap cg# g*``cgN
+nnoremap d*   *``dgn
+nnoremap d#   *``dgN
+nnoremap dg* g*``dgn
+nnoremap dg# g*``dgN
 
 " better indenting {{{2
 vnoremap < <gv
@@ -323,13 +336,6 @@ nnoremap [e :execute 'move .-' . (v:count1 + 1)<CR>==
 " inoremap [e <Esc>:m .-2<CR>==gi
 vnoremap [e :<C-u>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv
 
-" toggles
-nmap yol :set list!<BAR>set list?<CR>
-nmap yon :set number!<BAR>redraw!<BAR>set number?<CR>
-nmap yos :set spell!<BAR>set spell?<CR>
-nmap yow :set wrap!<BAR>set wrap?<CR>
-nmap yo~ :set autochdir!<BAR>set autochdir?<CR>
-
 " insert special chars {{{2
 inoremap \sec Section:
 iabbrev n- –
@@ -363,8 +369,7 @@ call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
-Plug 'AndrewRadev/dsf.vim'
-Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'github/copilot.vim'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'
@@ -372,18 +377,18 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-endwise'
 " Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-abolish'
 " Plug 'tpope/vim-capslock'
 " Plug 'tpope/vim-characterize'
 " Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-unimpaired'
-Plug 'github/copilot.vim'
+" Plug 'tpope/vim-unimpaired'
+Plug 'AndrewRadev/dsf.vim'
+Plug 'AndrewRadev/splitjoin.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
-  Plug 'github/copilot.vim'
 if !has('nvim') " {{{
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
@@ -402,8 +407,8 @@ else " neovim plugins {{{
   Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'
   " TODO: load these automatically from module specs
-  Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'R-nvim/r.nvim'
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'mason-org/mason.nvim'
   Plug 'Saghen/blink.cmp'
   Plug 'monaqa/dial.nvim'

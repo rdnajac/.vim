@@ -4,7 +4,6 @@ set signcolumn=number
 " set numberwidth=3
 
 let &laststatus = has('nvim') ? 3 : 2
-set statusline=%!vimline#statusline#()
 
 " TODO: move to nv.ui
 " set statuscolumn=%!vimline#statuscolumn#()

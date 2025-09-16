@@ -34,7 +34,7 @@ endfunction
 " automatically delete empty buffers
 " call from an autocmd like `autocmd BufLeave * quit#ifempty(expand('%'))`
 function! quit#ifempty(buf) abort
-  if empty(&buftype) && line('$') == 1 && getline(1) == '' 
+  if empty(&buftype) && line('$') == 1 && getline(1) == ''
     call quit#buffer('')
   endif
 endfunction

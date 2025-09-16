@@ -1,10 +1,10 @@
 local M = { 'MeanderingProgrammer/render-markdown.nvim' }
 
-M.event = { 'BufWinEnter' }
+-- M.event = { 'BufWinEnter' }
 
 ---@type render.md.UserConfig
 M.opts = {
-  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion', 'snacks_notify' },
+  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion', },
   bullet = { right_pad = 1 },
   completions = { blink = { enabled = false } },
   -- checkbox = { enabled = false },
@@ -41,7 +41,7 @@ M.after = function()
   Snacks.toggle({
     name = 'Render Markdown',
     get = function()
-      return require('render-markdown.state').get()
+      return require('render-markdown.state').enabled
     end,
     set = function(enabled)
       m.set(enabled)

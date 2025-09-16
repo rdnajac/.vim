@@ -10,21 +10,8 @@ vnoremap <leader>p "_dP
 " yank path
 nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
 
-" see `:h yankring`
-augroup yankring
-  autocmd!
-  autocmd TextYankPost * if v:event.operator ==# 'y' |
-	\ for i in range(9, 1, -1) |
-	\   call setreg(string(i), getreg(string(i - 1))) |
-	\ endfor |
-	\ endif
-augroup END
-
-if !has('nvim')
-  packadd hlyank
-else
-  augroup highlight_yank
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.hl.on_yank()
-  augroup END
-endif
+" https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
+" orig
+" nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+" remove the <C-f>
+nnoremap <leader>cm :<c-u><c-r><c-r>="let @". v:register ." = ". string(getreg(v:register))<cr>><left>

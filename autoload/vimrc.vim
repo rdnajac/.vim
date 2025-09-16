@@ -25,7 +25,7 @@ function! vimrc#init() abort
   execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
 endfunction
 
-""
+"
 " configure vim-specific settings
 " these are only run once
 function! vimrc#init_vim() abort " {{{
@@ -43,6 +43,7 @@ function! vimrc#init_vim() abort " {{{
   endif
 
   call vim#sensible#()
+  call vim#toggle#register_keymaps()
   color scheme " set the default colorscheme once
 endfunction
 

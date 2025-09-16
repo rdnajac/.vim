@@ -48,9 +48,7 @@ M.after = function()
   _G.bt = Snacks.debug.backtrace
   -- override vim.print
   -- vim.print = Snacks.debug.print
-  -- TODO: defer until vim enter
   require('nvim.snacks.commands')
-  -- TODO: Don't map snacks commands to keymaps
   require('nvim.snacks.keymaps')
 end
 

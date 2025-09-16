@@ -4,15 +4,6 @@ if not package.loaded['snacks'] then
   return
 end
 
--- `Snacks` Ex functions
-command('Scratch', function(opts)
-  if opts.bang == true then
-    Snacks.scratch.select()
-  else
-    Snacks.scratch()
-  end
-end, { bang = true })
-
 local function to_camel_case(str)
   return str
     :gsub('_%a', function(c)

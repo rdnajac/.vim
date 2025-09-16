@@ -1,4 +1,5 @@
 local M = {}
+--- @module 'snacks'
 
 ---@param picker snacks.Picker
 local toggle = function(picker)
@@ -31,7 +32,7 @@ M.pick_conf = {
   --- @param p snacks.Picker
   --- @param item snacks.Item
   confirm = function(p, item)
-    local file = item.file
+    local file = item and item.file
     if not file or file == '' then
       Snacks.notify.warn('No file associated with this item')
       return

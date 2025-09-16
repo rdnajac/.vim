@@ -33,4 +33,3 @@ function! ShellHarden(buffer) abort
   return { 'command': command }
 endfunction
 execute ale#fix#registry#Add('shellharden', 'ShellHarden', ['sh'], 'Double quote everything!')
-

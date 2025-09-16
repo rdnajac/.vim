@@ -8,7 +8,7 @@ function! vimline#statusline#meta() abort
     " let l:ret .= lua#require('plug.blink', 'component')
     let l:ret .= v:lua.require'nvim.blink.cmp'.component()
   elseif mode ==# 'n'
-    let l:ret .= ' ' 
+    let l:ret .= ' '
   endif
   let l:ret .= state !=# '' ? '|'. state : ''
   let l:ret .= vimline#indicator#searchcount()

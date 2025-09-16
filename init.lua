@@ -42,4 +42,5 @@ print(('nvim initialized in %.2f ms'):format(startuptime))
 nv.map = require('which-key').add
 nv.map(nv.flash.keys)
 
+vim.call('vimline#tabline#')
 -- require('nvim.util.startuptime')
