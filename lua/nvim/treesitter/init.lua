@@ -16,22 +16,21 @@ local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
 vim.api.nvim_create_autocmd('FileType', {
   pattern = 'lua',
   group = aug,
-  command = 'syntax on',
-  -- callback = function(args)
-  --   vim.bo[args.buf].syntax = 'ON'
-  -- end,
+  -- command = 'syntax on', TODO: is this command buffer-local?
+  callback = function(args)
+    vim.bo[args.buf].syntax = 'ON'
+  end,
   desc = 'Keep using legacy syntax (for `vim-endwise`)',
 })
 
 --- Autostart treesitter for certain filetypes
 --- @param ft string|string[] filetype or list of filetypes
---- @param force string|nil optional override for the parser to use
+--- @param override string|nil optional override parser lang
 local autostart = function(ft, override)
   vim.api.nvim_create_autocmd('FileType', {
     pattern = ft,
     group = aug,
     callback = function(args)
-      -- vim.treesitter.start()
       vim.treesitter.start(args.buf, override)
     end,
     desc = 'Start Tree-sitter for certain filetypes',
@@ -66,18 +65,16 @@ M.config = function()
 end
 
 M.after = function()
+  require('nvim.treesitter.mycommentparser')
   -- stylua: ignore start
   vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection').start() end, { desc = 'Start selection' })
   vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
   vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
   vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
   -- stylua: ignore end
-
   Snacks.toggle.treesitter():map('<leader>ut')
-
-  require('nvim.treesitter.mycommentparser')
 end
--- TODO: add vimline component
--- report treesiter language
+
+-- TODO: add vimline component; report treesiter language
 
 return M

@@ -14,10 +14,9 @@ _G.info = function(...)
     vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
 
--- optionally, override vim.notify
--- nv.notify.setup()
+-- nv.notify.setup() -- optionally, override vim.notify
 
-vim.cmd([[runtime vimrc]])
+vim.cmd.runtime([[vimrc]])
 
 -- TODO: turn these into plugins
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
@@ -35,12 +34,9 @@ for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' })
 end
 
 _G.startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
--- TODO: util func to wrap around a function to measure time
 print(('nvim initialized in %.2f ms'):format(startuptime))
--- local flash_keys = nv.flash.keys
--- info(flash_keys)
-nv.map = require('which-key').add
-nv.map(nv.flash.keys)
-
-vim.call('vimline#tabline#')
+-- TODO: util func to wrap around a function to measure time
 -- require('nvim.util.startuptime')
+
+-- initialize tabline
+vim.call('vimline#tabline#')

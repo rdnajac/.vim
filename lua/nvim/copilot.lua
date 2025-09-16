@@ -1,11 +1,12 @@
 M = {}
 
 M.specs = {
+  'github/copilot.vim',
   -- 'fang2hou/blink-copilot',
   -- {
-    'olimorris/codecompanion.nvim',
+  'olimorris/codecompanion.nvim',
   --   dependencies = {
-      'nvim-lua/plenary.nvim',
+  'nvim-lua/plenary.nvim',
   --     'nvim-treesitter/nvim-treesitter',
   --   },
   --   opts = {},
@@ -15,6 +16,7 @@ M.specs = {
 vim.g.copilot_no_tab_map = true
 
 M.config = function()
+  require('codecompanion').setup({})
   vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
     expr = true,
     replace_keycodes = false,
@@ -22,6 +24,7 @@ M.config = function()
 end
 
 M.after = function()
+  -- TODO: add copilot toggle
   require('nvim.util.module').on_module('blink.cmp', function()
     local aug = vim.api.nvim_create_augroup('BlinkCopilot', { clear = true })
 

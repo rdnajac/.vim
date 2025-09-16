@@ -7,6 +7,7 @@ local utils = require('nvim.plug')
 --- @field config? fun(): nil
 --- @field event? vim.api.keyset.events|vim.api.keyset.events[]
 --- @field enabled? boolean|fun():boolean
+--- @field keys? wk.Spec|fun():wk.Spec
 --- @field specs? string[]|fun():string[]
 --- @field opts? table|fun():table
 --- TODO: can we get it from the spec instead?
@@ -48,10 +49,10 @@ end
 local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
 --- Lazy-load a plugin based on its event or call init immediately
 ---@param cb fun() The function to call when the event fires
----@param event string|string[] The Neovim event(s) to watch
+---@param event? string|string[] The Neovim event(s) to watch (default: VimEnter)
 ---@param pattern? string|string[] Optional pattern for events like FileType
 local function lazyload(cb, event, pattern)
-  vim.api.nvim_create_autocmd(event, {
+  vim.api.nvim_create_autocmd(event or 'VimEnter', {
     callback = function(ev)
       -- info(ev)
       cb()
@@ -62,6 +63,7 @@ local function lazyload(cb, event, pattern)
   })
 end
 
+local on_module = require('nvim.util.module').on_module
 function Plugin:init()
   if not self:is_enabled() then
     return
@@ -80,13 +82,24 @@ function Plugin:init()
   end
 
   -- after
+  -- TODO: make these methods
   -- loads after VimEnter and on module
   if self.after and vim.is_callable(self.after) then
     lazyload(function()
-      require('nvim.util.module').on_module(self.name, function()
+      on_module(self.name, function()
         self.after()
       end)
-    end, 'VimEnter')
+    end)
+  end
+
+  local keys = vim.is_callable(self.keys) and self.keys() or self.keys
+  if vim.islist(keys) and #keys > 0 then
+    lazyload(function()
+      on_module('which-key', function()
+        --- @diagnostic disable-next-line: param-type-mismatch
+        require('which-key').add(keys)
+      end)
+    end)
   end
 end
 
