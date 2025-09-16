@@ -22,10 +22,9 @@ M.config = function()
   require('todo-comments').setup({})
 end
 
--- TODO: make default tables set these values to empty tables so 
+-- TODO: make default tables set these values to empty tables so
 -- the loading mechanism stops freaking out
 M.keys = {}
-function M.after()
-end
+function M.after() end
 
 return M

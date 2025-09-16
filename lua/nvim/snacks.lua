@@ -52,5 +52,4 @@ M.after = function()
   require('nvim.snacks.keymaps')
 end
 
-
 return M

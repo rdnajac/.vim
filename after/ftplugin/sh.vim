@@ -22,7 +22,6 @@ if executable('shfmt')
   let &l:formatprg = s:cmd
 endif
 
-
 lua vim.keymap.set('i', '$', function() require('blink.cmp').show({ providers = { 'env' } }) return '$' end, { buffer = true, expr = true })
 
 finish

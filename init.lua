@@ -53,6 +53,3 @@ _G.startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
 print(('nvim initialized in %.2f ms'):format(startuptime))
 -- TODO: util func to wrap around a function to measure time
 -- require('nvim.util.startuptime')
-
--- initialize tabline
-vim.call('vimline#tabline#')

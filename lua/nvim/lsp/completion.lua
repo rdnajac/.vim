@@ -19,4 +19,3 @@ Snacks.toggle({
     vim.lsp.inline_completion.enable(state)
   end,
 }):map('<M-,>')
-

@@ -10,7 +10,6 @@ inoremap <buffer> \se --<SPACE>stylua:<SPACE>ignore<SPACE>end
 
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 iabbrev <buffer> fu function()
-
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 
 " NOTE: don't need vim-apathy for lua anymore:

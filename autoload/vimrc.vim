@@ -66,6 +66,11 @@ function! vimrc#nvim_config() abort " {{{
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
 
+
+  " -- initialize tabline
+  " vim.call('vimline#tabline#')
+  call vimrc#init_vim()
+
   let g:nvim_did_init = 1
 endfunction
 

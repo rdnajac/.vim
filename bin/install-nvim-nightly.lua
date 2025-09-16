@@ -32,17 +32,20 @@ wget(URL, {
   force = true,
 })
 
-vim.system({ "xattr", "-c", TARBALL }):wait()
-vim.system({ "rm", "-rfv", INSTALL_DIR .. "/runtime" }):wait()
-vim.system({ "tar", "-xzf", TARBALL, "-C", INSTALL_DIR, "--strip-components=1" }):wait()
-vim.system({ "ln", "-sfv", INSTALL_DIR .. "/bin/nvim", BIN_DIR .. "/nvim" }):wait()
-vim.system({ "rm", "-fv", TARBALL }):wait()
+vim.system({ 'xattr', '-c', TARBALL }):wait()
+vim.system({ 'rm', '-rfv', INSTALL_DIR .. '/runtime' }):wait()
+vim.system({ 'tar', '-xzf', TARBALL, '-C', INSTALL_DIR, '--strip-components=1' }):wait()
+vim.system({ 'ln', '-sfv', INSTALL_DIR .. '/bin/nvim', BIN_DIR .. '/nvim' }):wait()
+vim.system({ 'rm', '-fv', TARBALL }):wait()
 
-local result = vim.system({ BIN_DIR .. "/nvim", "--version" }, { text = true }):wait()
+local result = vim.system({ BIN_DIR .. '/nvim', '--version' }, { text = true }):wait()
 
 if result.code ~= 0 then
-  print("❌ Error running nvim --version: " .. (result.stderr ~= "" and result.stderr or "unknown error"))
+  print(
+    '❌ Error running nvim --version: '
+      .. (result.stderr ~= '' and result.stderr or 'unknown error')
+  )
 else
-  local first_line = result.stdout:match("([^\n]+)")
-  print("✅ Neovim upgraded to " .. (first_line or "unknown version"))
+  local first_line = result.stdout:match('([^\n]+)')
+  print('✅ Neovim upgraded to ' .. (first_line or 'unknown version'))
 end

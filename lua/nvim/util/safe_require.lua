@@ -16,7 +16,6 @@ M.safe_require = function(module, err)
   return mod
 end
 
-
 return setmetatable(M, {
   __call = M.safe_require,
 })

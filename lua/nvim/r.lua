@@ -29,7 +29,6 @@ M.debug_word = function()
   vim.api.nvim_win_set_cursor(0, { row, col })
 end
 
-
 --- @module "r"
 --- @type RConfigUserOpts
 M.opts = {

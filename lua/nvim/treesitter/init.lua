@@ -68,7 +68,6 @@ M.in_comment_node = function()
     or false
 end
 
-
 -- TODO: add vimline component; report treesiter language
 
 return M
