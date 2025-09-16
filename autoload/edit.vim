@@ -72,8 +72,9 @@ function! s:edit(file, ...) abort
   normal! zvzz
 endfunction
 
+let s:myvimrc = vimrc#home() . '/vimrc'
 function! edit#vimrc(...) abort
-  call call('s:edit', extend([my#vimrc()], a:000))
+  call call('s:edit', extend([s:myvimrc], a:000))
 endfunction
 
 function! edit#luamod(name) abort

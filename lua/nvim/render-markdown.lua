@@ -1,10 +1,8 @@
 local M = { 'MeanderingProgrammer/render-markdown.nvim' }
 
--- M.event = { 'BufWinEnter' }
-
 ---@type render.md.UserConfig
 M.opts = {
-  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion', },
+  file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion' },
   bullet = { right_pad = 1 },
   completions = { blink = { enabled = false } },
   -- checkbox = { enabled = false },
@@ -37,7 +35,8 @@ M.opts = {
 
 M.after = function()
   local m = require('render-markdown')
-  m.set(true)
+  m.set(true) -- TODO: do I need to explicitly start up?
+
   Snacks.toggle({
     name = 'Render Markdown',
     get = function()
