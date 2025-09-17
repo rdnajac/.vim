@@ -2,6 +2,9 @@
 -- `:runtime! filetype.lua`
 
 vim.filetype.add({
+  extension = {
+    ['log'] = 'log',
+  },
   pattern = {
     ['.*%.env%..*'] = 'sh',
     ['.*/tmux/.*%.conf'] = 'tmux',
