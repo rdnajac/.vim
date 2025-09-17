@@ -55,3 +55,14 @@ end
 _G.startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
 print(('nvim initialized in %.2f ms'):format(startuptime))
 -- require('nvim.util.startuptime')
+
+vim.g.health = { style = 'float' }
+-- disable external providers to silence checkhealth warnings
+for _, provider in ipairs({ 'node', 'perl', 'ruby'}) do
+  vim.g[provider] = 0
+end
+
+---@type 'netrw'|'snacks'|'oil'
+vim.g.file_explorer = 'oil'
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1

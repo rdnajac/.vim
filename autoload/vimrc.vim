@@ -69,7 +69,7 @@ function! vimrc#nvim_config() abort " {{{
 
   " -- initialize tabline
   " vim.call('vimline#tabline#')
-  call vimrc#init_vim()
+  call vimline#tabline#()
 
   let g:nvim_did_init = 1
 endfunction
@@ -77,20 +77,6 @@ endfunction
 " }}}
 function! vimrc#init_nvim() abort
   if !exists('g:nvim_did_init')
-    " Disable external providers
-    let g:loaded_node_provider = 0
-    let g:loaded_perl_provider = 0
-    let g:loaded_ruby_provider = 0
-
-    " ---@type 'netrw'|'snacks'|'oil'
-    let g:file_explorer = 'oil'
-
-    " disable netrw if using a different file explorer
-    if exists('g:file_explorer') && g:file_explorer !=# 'netrw'
-      " let g:loaded_netrwPlugin = 1
-      let g:loaded_netrw = 1
-    endif
-
     call vimrc#on_init(function('vimrc#nvim_config'))
   endif
 endfunction

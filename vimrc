@@ -108,6 +108,10 @@ nmap  ciw
 vmap  :sort<CR>
 nmap <silent> <C-q> <Cmd>bd<CR>
 
+nnoremap <C-w>- <C-w>s
+nnoremap <C-w><Bar> <C-w>v
+" nnoremap <C-w>
+
 " key pairs in normal mode {{{2
 " `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
 
@@ -204,13 +208,6 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 nnoremap ` ~
 vnoremap <BS> d
 
-" text objects {{{2
-" Buffer pseudo-text objects
-xnoremap ig :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
-onoremap ig :<C-u>normal vig<CR>
-xnoremap ag GoggV
-onoremap ag :<C-u>normal vag<CR>
-
 " buffers {{{2
 nnoremap <silent> <S-Tab>       :bprev!<CR>
 nnoremap <silent> <Tab>         :bnext!<CR>
@@ -219,10 +216,10 @@ nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 
 " resize splits {{{2
-" nnoremap <M-Up>    :resize -2<CR>
-" nnoremap <M-Down>  :resize +2<CR>
-nnoremap <M-Left>  :vertical resize -2<CR>
-nnoremap <M-Right> :vertical resize +2<CR>
+nnoremap <C-W><Up>    :resize +10<CR>
+nnoremap <C-W><Down>  :resize -10<CR>
+nnoremap <C-W><Left>  :vertical resize +10<CR>
+nnoremap <C-W><Right> :vertical resize -10<CR>
 
 " smarter j/k {{{2
 nnoremap <expr> j      v:count == 0 ? 'gj' : 'j'
@@ -414,7 +411,7 @@ else " neovim plugins {{{
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
-  Plug 'folke/flash.nvim'
+  " Plug 'folke/flash.nvim'
   Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'
   " TODO: load these automatically from module specs

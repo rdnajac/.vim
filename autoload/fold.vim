@@ -14,6 +14,7 @@ function! fold#text_lua()
   return l:open
 endfunction
 
+" TODO: trim trailing dots after closing bar
 function! fold#text() abort
   " if &ft ==# 'lua'
   "   return fold#text_lua()

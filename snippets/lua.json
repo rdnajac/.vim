@@ -79,8 +79,8 @@
   },
 
   "require": {
-    "prefix": "require",
-    "body": ["require('${1:module}')"],
+    "prefix": "re",
+    "body": ["require('${0}')"],
     "description": "Require module"
   },
 
@@ -94,12 +94,6 @@
     "prefix": "local",
     "body": ["local ${1:varName} = ${0:value}"],
     "description": "define a variable"
-  },
-
-  "locreq": {
-    "prefix": "lreq",
-    "body": ["local ${1:var} = require(${2:module})"],
-    "description": "Require module as a variable"
   },
 
   "if": {
