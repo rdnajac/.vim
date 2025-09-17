@@ -1,12 +1,9 @@
 " vim global to `vim.g.%s =`
-nnoremap crv 0d3wivim.g.<Esc>
+nnoremap crv ^d3wivim.g.<Esc>
 " vim.g to `let g:%s =`
-nnoremap crV 0d4wilet<Space>g:<Esc>
+nnoremap crV ^d4wilet<Space>g:<Esc>
 
 finish " XXX: WIP...
-
-" `0`     (normal mode): start at the beginning of the line
-" `<C-o>` (insert mode): execute the next normal mode command
 
 " `local function fn(...)` --> `M.fn = function(...)`
 nnoremap <buffer> crM <Cmd>normal! 0dwdiM.<C-O>w = <Esc>p<CR>

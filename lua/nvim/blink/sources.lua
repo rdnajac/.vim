@@ -17,7 +17,7 @@ local default_providers = {
     },
   },
   snippets = {
-    score_offset = 999,
+    score_offset = 99,
     opts = { friendly_snippets = false },
     -- HIDE SNIPPETS AFTER TRIGGER CHARACTER ~
     should_show_items = function(ctx)
@@ -26,11 +26,11 @@ local default_providers = {
     -- transform_items = function(_, items) return vim.tbl_filter(function(item) return is_in_comment() end, items) end,
   },
   lsp = {
-    score_offset = 1,
+    score_offset = -1,
     transform_items = function(_, items)
       -- FILTER OUT KEYWORDS AND SNIPPETS FROM LSP
       return vim.tbl_filter(function(item)
-        return item.kind ~= kind.Keyword and item.kind ~= kind.Snippet
+        return item.kind == kind.Keyword and item.kind == kind.Snippet
       end, items)
     end,
   },
@@ -42,6 +42,7 @@ local ft_sources = {
   rmd = { 'cmp_r' },
   quarto = { 'cmp_r' },
   sh = { 'env' },
+  vim = { 'env' },
 }
 
 ---@return blink.cmp.SourceList[]

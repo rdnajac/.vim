@@ -308,13 +308,13 @@ inoremap . .<C-g>u
 inoremap ; ;<C-g>u
 
 " easier completion {{{2
-" inoremap <silent> <Bslash>o <C-x><C-o>
-" inoremap <silent> <Bslash>f <C-x><C-f>
-" inoremap <silent> <Bslash>i <C-x><C-i>
-" inoremap <silent> <Bslash>l <C-x><C-l>
-" inoremap <silent> <Bslash>n <C-x><C-n>
-" inoremap <silent> <Bslash>t <C-x><C-]>
-" inoremap <silent> <Bslash>u <C-x><C-u>
+inoremap <silent> ,o <C-x><C-o>
+" inoremap <silent> ,f <C-x><C-f>
+" inoremap <silent> ,i <C-x><C-i>
+" inoremap <silent> ,l <C-x><C-l>
+" inoremap <silent> ,n <C-x><C-n>
+" inoremap <silent> ,t <C-x><C-]>
+" inoremap <silent> ,u <C-x><C-u>
 inoremap <silent> ,i <Cmd>Icons<CR>
 
 " add chars to EOL {{{2

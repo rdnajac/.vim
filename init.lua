@@ -16,9 +16,9 @@ end
 
 -- nv.notify.setup() -- optionally, override vim.notify
 
-  --nv.util.track(function()
+--nv.util.track(function()
 -- require('nvim.util.track')(function()
-  vim.cmd.runtime([[vimrc]])
+vim.cmd.runtime([[vimrc]])
 -- end)
 
 -- TODO: turn these into plugins
@@ -58,7 +58,7 @@ print(('nvim initialized in %.2f ms'):format(startuptime))
 
 vim.g.health = { style = 'float' }
 -- disable external providers to silence checkhealth warnings
-for _, provider in ipairs({ 'node', 'perl', 'ruby'}) do
+for _, provider in ipairs({ 'node', 'perl', 'ruby' }) do
   vim.g[provider] = 0
 end
 

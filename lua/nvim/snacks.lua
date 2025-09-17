@@ -8,11 +8,11 @@ local enabled = {
   image        = { enabled = true },
   indent       = { enabled = true },
   input        = { enabled = true },
-  notifier     = { enabled = true },
+  notifier     = { enabled = false },
   quickfile    = { enabled = true },
   scope        = { enabled = true },
   scroll       = { enabled = true },
-  statuscolumn = { enabled = false },
+  statuscolumn = { enabled = true },
   words        = { enabled = true },
 }
 
@@ -50,6 +50,7 @@ M.after = function()
   -- vim.print = Snacks.debug.print
   require('nvim.snacks.commands')
   require('nvim.snacks.keymaps')
+
 end
 
 return M

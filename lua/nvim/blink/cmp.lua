@@ -12,19 +12,34 @@ local icons = require('nvim.icons')
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
-  fuzzy = { implementation = 'lua' },
   cmdline = { enabled = false },
   completion = {
-    accept = { auto_brackets = { enabled = false } },
+    accept = {
+      auto_brackets = { enabled = false },
+    },
     documentation = {
       auto_show = false,
       window = { border = border },
     },
-    ghost_text = { enabled = true },
+    trigger = {
+      show_on_keyword = true,
+      show_on_accept_on_trigger_character = true,
+      show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+    },
+    ghost_text = { enabled = false },
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
       auto_show = true,
-      auto_show_delay_ms = 1000,
+      -- auto_show_delay_ms = 1000,
+      --- @param ctx blink.cmp.Context
+      --- @param items blink.cmp.CompletionItem[]
+      -- auto_show_delay_ms = function(ctx, items)
+      --   if ctx.trigger.initial_character == '.'
+      --   then
+      --     return 0
+      --   end
+      --   return 1000
+      -- end,
       border = border,
       draw = {
         treesitter = { 'lsp' },
@@ -43,22 +58,12 @@ M.opts = {
         },
       },
     },
-    trigger = {
-      show_on_keyword = true,
-    },
   },
+  fuzzy = { implementation = 'lua' },
+  keymap = require('nvim.blink.keymap'),
   signature = {
     enabled = true,
-    window = {
-      border = border,
-      show_documentation = false,
-    },
-  },
-  keymap = {
-    -- default if we had selected a preset
-    ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-    ['<C-e>'] = { 'cancel', 'fallback' },
-    ['<C-y>'] = { 'select_and_accept', 'fallback' },
+    window = { border = border, show_documentation = false },
   },
   sources = require('nvim.blink.sources'),
 }

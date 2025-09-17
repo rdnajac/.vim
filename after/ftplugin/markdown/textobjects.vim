@@ -16,7 +16,7 @@ function! s:SelectInnerCodeBlock()
   function! IsClosingFence()
     return IsFence() && !IsOpeningFence()
   endfunction
-
+  Info 'Selecting code block'
   if IsOpeningFence() || IsBetweenFences()
     call search('^```', 'W')
     normal -
@@ -31,6 +31,6 @@ function! s:SelectInnerCodeBlock()
     return
   endif
 endfunction
-xnoremap <buffer> <silent> iC :<C-u>call <SID>SelectInnerCodeBlock()<CR>
-onoremap <buffer> <silent> iC :<C-u>call <SID>SelectInnerCodeBlock()<CR>
-
+" FIXME: 
+xnoremap <buffer> <silent> ij :<C-u>call <SID>SelectInnerCodeBlock()<CR>
+onoremap <buffer> <silent> ij :<C-u>call <SID>SelectInnerCodeBlock()<CR>

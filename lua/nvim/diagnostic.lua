@@ -1,7 +1,7 @@
 local M = {}
 
 M.specs = {
-  'folke/trouble.nvim',
+  -- 'folke/trouble.nvim',
   -- 'mfussenegger/nvim-lint',
 }
 
@@ -40,9 +40,8 @@ vim
 -- end
 
 M.config = function()
-  -- TODO: infer this function in packadd
+  -- TODO: infer this function in load func
   vim.diagnostic.config(M.opts)
-  require('trouble').setup({})
 end
 
 local unused_local = 'smoke test'

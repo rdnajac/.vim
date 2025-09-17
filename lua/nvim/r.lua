@@ -59,16 +59,17 @@ function M.root()
   return vim.fs.root(0, { '.here.', '.Rprofile' })
 end
 
-local aug =
-  vim.api.nvim_create_augroup('r.nvim', { clear = true }),
-  vim.api.nvim_create_autocmd({ 'BufEnter' }, {
-    pattern = { '*.r', '*.rmd', '*.quarto' },
-    group = aug,
-    callback = function()
-      vim.cmd.lcd(M.root())
-      vim.cmd.pwd()
-    end,
-    desc = '',
-  })
+-- TODO: call here::root() on BufEnter for r, rmd, quarto
+-- local aug =
+--   vim.api.nvim_create_augroup('r.nvim', { clear = true }),
+--   vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+--     pattern = { '*.r', '*.rmd', '*.quarto' },
+--     group = aug,
+--     callback = function()
+--       vim.cmd.lcd(M.root())
+--       vim.cmd.pwd()
+--     end,
+--     desc = '',
+--   })
 
 return M

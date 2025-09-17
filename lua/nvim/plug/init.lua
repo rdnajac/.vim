@@ -75,21 +75,13 @@ function M.end_()
     end)
     :totable()
 
-  -- info('Registering ' .. #nv.specs .. ' plugins')
   M.plug(nv.specs)
 
-  vim.api.nvim_create_user_command('PlugClean', function()
-    vim.pack.del(M.unloaded())
-  end, { desc = 'Remove unloaded plugins' })
-
-  vim.api.nvim_create_user_command('PlugStatus', function()
-    print(vim.inspect(vim.pack.get()))
-  end, {})
-
-  -- must pass nil to update all plugins with a bang
-  vim.api.nvim_create_user_command('PlugUpdate', function(opts)
-    vim.pack.update(nil, { force = opts.bang })
-  end, { bang = true })
+  -- TODO: move these to a cmd submodule
+  vim.api.nvim_create_user_command('PlugClean', M.clean, {})
+  -- TODO: pass bang to get extra information
+  vim.api.nvim_create_user_command('PlugStatus', M.status, {})
+  vim.api.nvim_create_user_command('PlugUpdate', M.update, {})
 end
 
 M.unloaded = function()
@@ -102,6 +94,18 @@ M.unloaded = function()
       return plugin.spec.name
     end)
     :totable()
+end
+
+-- stylua: ignore
+M.clean = function() vim.pack.del(M.unloaded()) end
+M.update = function(opts)
+  vim.pack.update(nil, opts or {})
+end
+-- stylua: ignore end
+M.status = function(extra)
+  --- @type vim.pack.keyset.get
+  local opts = { info = extra == true }
+  print(vim.inspect(vim.pack.get(nil, opts)))
 end
 
 return setmetatable(M, {

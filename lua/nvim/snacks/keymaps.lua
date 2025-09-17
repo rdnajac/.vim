@@ -55,6 +55,7 @@ Snacks.toggle.option('wrap', { name = 'Wrap' }):map('<leader>uw')
 Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map('<leader>uL')
 Snacks.toggle.line_number():map('<leader>ul')
 -- Snacks.toggle.inlay_hints():map('<leader>uh') -- XXX: in lsp.lua
+-- TODO: toggle copilot
 
 -- stylua: ignore
 local keys = {
@@ -147,3 +148,15 @@ local keys = {
 }
 
 require('which-key').add(keys)
+
+-- no hlsearch on <Esc>
+-- vimscript: nnoremap <expr> <Esc> ':nohlsearch\<CR><Esc>'
+-- vim.keymap.set({ 'i', 'n', 's' }, '<Esc>', function()
+--   vim.cmd.nohlsearch()
+--   return '<Esc>'
+-- end, { expr = true, desc = 'Escape and Clear hlsearch' })
+
+Snacks.util.on_key('<Esc>', function()
+  vim.cmd.nohlsearch()
+end)
+-- print(Snacks.util.keycode('<Esc>'))
