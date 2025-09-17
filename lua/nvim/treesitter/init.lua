@@ -26,16 +26,9 @@ local autostart = function(ft, override)
   })
 end
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'kitty', 'ghostty', 'ghostty.chezmoitmpl' },
-  group = aug,
-  command = 'setlocal commentstring=#\\ %s',
-  desc = 'Set the commentstring for languages that use `#`',
-})
-
 M.config = function()
-  autostart({ 'sh', 'markdown', 'r', 'python', 'kitty' })
-  autostart({ 'kitty', 'ghostty', 'zsh' }, 'bash')
+  autostart({ 'sh', 'markdown', 'r', 'python', 'vim' })
+  autostart({ 'ghostty', 'zsh' }, 'bash')
 end
 
 -- M.keys = {

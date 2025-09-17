@@ -3,8 +3,6 @@
 
 vim.filetype.add({
   pattern = {
-    ['.*/kitty/.*%.conf'] = 'kitty',
-    ['.*/kitty%.conf'] = 'kitty',
     ['.*%.env%..*'] = 'sh',
     ['.*/tmux/.*%.conf'] = 'tmux',
   },

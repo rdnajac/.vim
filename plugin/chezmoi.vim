@@ -17,4 +17,6 @@ augroup chezmoi
   " Apply chezmoi changes when files in chezmoi source directory are saved
   autocmd BufWritePost ~/.local/share/chezmoi/* !chezmoi apply --source-path --force "%"
   " exec 'au BufWritePost ' . g:chezmoi#source_dir_path . '/* !chezmoi apply --force --no-tty --source-path "%"'
+
+  autocmd FileType ghostty,ghostty.chezmoitmpl setlocal commentstring=#\ %s
 augroup END
