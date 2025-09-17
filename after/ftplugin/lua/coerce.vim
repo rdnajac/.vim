@@ -1,9 +1,9 @@
-finish " XXX: WIP...
+" vim global to `vim.g.%s =`
+nnoremap crv 0d3wivim.g.<Esc>
+" vim.g to `let g:%s =`
+nnoremap crV 0d4wilet<Space>g:<Esc>
 
-" map to `cr` like with CoeRce from `vim-abolish`
-" keymaps should work from anywhere on the
-" local function transform
-" function M.transform
+finish " XXX: WIP...
 
 " `0`     (normal mode): start at the beginning of the line
 " `<C-o>` (insert mode): execute the next normal mode command
