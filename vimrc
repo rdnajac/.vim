@@ -339,6 +339,7 @@ iabbrev m- —
 command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
+command! Restart call sesh#restart()
 " }}}
 " Section: ui {{{1
 " TODO: move to col.vim or something
@@ -413,14 +414,14 @@ else " neovim plugins {{{
   Plug 'folke/which-key.nvim'
   " Plug 'folke/todo-comments.nvim',
   " Plug 'folke/flash.nvim'
-  " Plug 'stevearc/oil.nvim'
+  Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'
   Plug 'R-nvim/r.nvim'
   Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'mason-org/mason.nvim'
   Plug 'monaqa/dial.nvim'
   Plug 'Saghen/blink.cmp'
-  Plug 'stevearc/conform.nvim'
+  " Plug 'stevearc/conform.nvim'
   " }}}
 endif
 call plug#end() " }}}1
