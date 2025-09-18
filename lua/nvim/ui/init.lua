@@ -2,11 +2,6 @@ local M = vim.defaulttable(function(k)
   return require('ui.' .. k)
 end)
 
-vim.o.cmdheight = 0
-vim.o.laststatus = 3
-vim.o.pumblend = 0
--- vim.o.smoothscroll = true
-vim.o.winborder = 'rounded'
 
 M.specs = {
   -- 'folke/noice.nvim',
@@ -16,10 +11,6 @@ M.specs = {
 M.config = function()
   require('nvim.ui.winbar')
   vim.o.winbar = '%{%v:lua.MyWinBar()%}'
-  vim.schedule(function ()
-    
-  require('nvim.ui.extui')
-end)
 end
 
 -- TODO: make default tables set these values to empty tables so

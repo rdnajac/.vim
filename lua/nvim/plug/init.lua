@@ -2,7 +2,6 @@ vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core'
 
 local M = {}
 
-
 --- @param user_repo string plugin (`user/repo`)
 --- @param data boolean|nil if true, add `data` function to spec
 --- if false, return minimal spec for non-nvim plugins
@@ -35,16 +34,14 @@ function M.load(plug_data)
   local spec = plug_data.spec ---@type vim.pack.Spec
   local name = spec.name
   local bang = vim.v.vim_did_enter == 0
+  -- print(spec.name .. (bang and '!' or '...'))
 
-  -- info('`packadd`ing ' .. spec.name)
   vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
-
-  if spec.data == true then
-    local ok, module = pcall(require, 'nvim.' .. spec.name)
-    local plugin = Plugin(ok and module and module or spec)
+  --
+  if spec.data == true then -- create plugin object
+    local plugin = Plugin(name)
     if plugin then
-      --info('initializing ' .. spec.name)
-      plugin:init() -- calls packadd, setup, and adds deps
+      plugin:init() -- calls setup, and adds deps
     end
   end
 end
@@ -52,17 +49,14 @@ end
 --- @param specs (string|vim.pack.Spec)[]
 function M.plug(specs)
   local speclist = vim.islist(specs) and specs or { specs }
-  vim.pack.add(speclist, { load = M.load })
-end
-
-local function is_nonempty_string(x)
-  return type(x) == 'string' and x ~= ''
+  local resolved = vim.tbl_map(nv.plug.to_spec, speclist)
+  vim.pack.add(resolved, { load = M.load })
 end
 
 -- TODO: need seperate loading for specs vs deps
 -- namely who gets to call data() and in turn config
 function M.end_()
-  nv.did_setup = {}
+  nv.did = vim.defaulttable()
   nv.specs = vim
     .iter(vim.g.plug_list)
     :map(function(p)
@@ -72,7 +66,7 @@ function M.end_()
     end)
     :totable()
 
-  M.plug(nv.specs)
+  vim.pack.add(nv.specs, { load = M.load })
   M.commands()
 end
 

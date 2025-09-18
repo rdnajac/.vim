@@ -13,14 +13,30 @@
 local Plugin = {}
 Plugin.__index = Plugin
 
-function Plugin:is_enabled()
-  if vim.is_callable(self.enabled) then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    local ok, res = pcall(self.enabled)
-    return ok and res
+--- Get the value or evaluate the function for a field safely
+---@generic T
+---@param field T|fun():T
+---@return T|nil
+local function get(field)
+  if vim.is_callable(field) then
+    local ok, res = xpcall(field, debug.traceback)
+    if ok then
+      return res
+    else
+      vim.schedule(function()
+        vim.notify(('Error evaluating field: %s'):format(res), vim.log.levels.ERROR)
+      end)
+      return nil
+    end
   end
-  return self.enabled ~= false
+  return field
 end
+
+function Plugin:is_enabled()
+  return get(self.enabled) ~= false
+end
+
+local safe_require = nv.util.safe_require
 
 --- Call the plugin's `config` function if it exists, otherwise
 --- call the plugin's `setup` function with `opts` if it exists.
@@ -28,16 +44,27 @@ end
 --- If neither `config` nor `opts` exist, call `setup` with an empty table.
 --- Assumes the plugin has already been loaded with `packadd`.
 function Plugin:setup()
+  local ok, err
   if vim.is_callable(self.config) then
-    print('configuring ' .. self.name)
-    self.config()
+    ok, err = pcall(self.config)
+    nv.did.config[self.name] = ok
+    info(ok)
   else
-    local opts = self.opts and vim.is_callable(self.opts) and self.opts() or self.opts
-    print('setting up ' .. self.name)
-    require(self.name).setup(opts or {})
+    local mod = require(self.name)
+    ok, err = pcall(mod.setup, self.opts)
+    nv.did.setup[self.name] = ok
   end
-  -- TODO: test for success?
-  table.insert(nv.did_setup, self.name)
+  if ok == false then
+    vim.notify(string.format('Plugin %s setup failed: %s', self.name, err), vim.log.levels.ERROR)
+  end
+end
+
+local function is_nonempty_string(x)
+  return type(x) == 'string' and x ~= ''
+end
+
+local function is_nonempty_list(t)
+  return vim.islist(t) and #t > 0
 end
 
 -- TODO: use snacks?
@@ -46,19 +73,22 @@ local on_module = require('nvim.util.module').on_module
 function Plugin:on_load()
   -- loads after VimEnter and on module
   if vim.is_callable(self.after) then
-    on_module(self.name, function()
-      self.after()
-    end)
+    -- on_module(self.name, function()
+    self.after()
+    vim.list_extend(nv.did.after, { self.name })
+    -- end)
   end
 end
 
 function Plugin:apply_keymaps()
-  local keys = vim.is_callable(self.keys) and self.keys() or self.keys
-  if vim.islist(keys) and #keys > 0 then
-    on_module('which-key', function()
+  local keys = get(self.keys)
+  -- info(keys)
+  if is_nonempty_list(keys) then
+    -- on_module('which-key', function()
       --- @diagnostic disable-next-line: param-type-mismatch
       require('which-key').add(keys)
-    end)
+      vim.list_extend(nv.did.wk, { self.name })
+    -- end)
   end
 end
 
@@ -70,7 +100,6 @@ local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
 local function lazyload(cb, event, pattern)
   vim.api.nvim_create_autocmd(event or 'VimEnter', {
     callback = function(ev)
-      -- info(ev)
       cb()
     end,
     group = aug,
@@ -79,51 +108,47 @@ local function lazyload(cb, event, pattern)
   })
 end
 
-
-
 --- If there are any dependencies, `vim.pack.add()` them
 --- Dependencies are not initialized or configured, just installed
 --- and are assumed to be in the form `user/repo`
 function Plugin:deps()
-  -- info ('checking deps for ' .. self.name)
-  local specs = self.specs
-  -- info(specs)
-  if specs and vim.is_callable(specs) then
-    specs = specs()
-  end
-  if type(specs) == 'table' and #specs > 0 then
-    local deps = vim.tbl_map(nv.plug.to_spec, specs)
-    -- info(deps)
-    nv.plug.plug(deps)
+  local specs = get(self.specs)
+  if is_nonempty_list(specs) then
+    nv.plug(specs)
   end
 end
 
 function Plugin:init()
-  if not self:is_enabled() then
-    return
-  end
+  self:deps()
+  self:setup()
 
-  local lazy = self.lazy == true -- opt-in
-
-  if not lazy then
-    self:setup()
-    self:deps()
-  end
-
+  -- vim.schedule(function()
   lazyload(function()
-    if lazy then
-      self:setup()
-      self:deps()
-    end -- alawys lazy load these 
-    self:on_load() -- call after if it exist
-    self:apply_keymaps() -- call after if it exist
+    self:on_load()
+    self:apply_keymaps()
   end)
+  -- end)
 end
 
 function Plugin.new(t)
-  local self = setmetatable(t, Plugin)
-  self.name = t.name or t[1]:match('[^/]+$'):gsub('%.nvim$', '')
-  -- if not name then info(t) end
+  local self
+  local plug
+  local name
+
+  if type(t) == 'table' then
+    plug = t
+  elseif is_nonempty_string(t) then
+    name = t
+    -- try to require the module under nvim
+    local ok, module = pcall(require, 'nvim.' .. t)
+    if ok and module then
+      plug = module
+    end
+  end
+  -- plug[1] = plug[1] or t
+  self = setmetatable(plug or {}, Plugin)
+  self.name = self.name or name or self[1] or 'N/A'
+  self.opts = self.opts or {}
   return self
 end
 

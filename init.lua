@@ -2,46 +2,30 @@ local t0 = vim.uv.hrtime() -- capture the start time
 
 vim.loader.enable()
 
+vim.o.cmdheight = 0
+vim.o.laststatus = 3
+vim.o.pumblend = 0
+-- vim.o.smoothscroll = true
+vim.o.winborder = 'rounded'
 _G.nv = require('nvim')
 -- _G.nv = vim.defaulttable(function(k)
 --   return require('nvim.' .. k)
 -- end)
+require('nvim.ui.extui')
 
 _G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
 -- nv.notify.setup() -- optionally, override vim.notify
 vim.cmd.runtime([[vimrc]])
+-- info(vim.tbl_keys(package.loaded))
+
+local Plugin = require('nvim.plug.spec')
 
 -- TODO: turn these into plugins
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
-  local module = nv[modname]
-  local specs = module.specs or { module[1] } or {}
-
-  if vim.islist(specs) and #specs > 0 then
-    nv.plug(vim.tbl_map(nv.plug.to_spec, specs))
-  end
-
-  if vim.is_callable(module.config) then
-    module.config() -- TODO: load on vim enter
-    table.insert(nv.did_setup, modname)
-  end
-
-  if module.after and vim.is_callable(module.after) then
-    module.after()
-  end
-
-  local keys
-  if module.keys then
-    if vim.is_callable(module.keys) then
-      keys = module.keys()
-    else
-      keys = module.keys
-    end
-    if keys and vim.islist(keys) and #keys > 0 then
-      require('which-key').add(keys)
-    end
-  end
+  local plugin = Plugin(modname)
+  plugin:init() -- setup, deps, after
 end
 
 _G.startuptime = (vim.uv.hrtime() - t0) / 1e6

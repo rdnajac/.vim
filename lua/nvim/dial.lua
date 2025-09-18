@@ -54,7 +54,7 @@ M.config = function()
     new({ 'human', 'mouse' }, true),
   }
 
-  local opts = {
+  local groups = {
     default = {},
     json = { augend.semver.alias.semver },
     css = {
@@ -81,18 +81,18 @@ M.config = function()
   }
 
   -- create rmd group as a combination of markdown and r
-  opts.rmd = {}
-  vim.list_extend(opts.rmd, opts.markdown)
-  vim.list_extend(opts.rmd, opts.r)
+  groups.rmd = {}
+  vim.list_extend(groups.rmd, groups.markdown)
+  vim.list_extend(groups.rmd, groups.r)
 
   -- extend each group with default switches
-  for name, group in pairs(opts) do
+  for name, group in pairs(groups) do
     vim.list_extend(group, default_switches)
   end
 
   -- Build dials_by_ft from non-default groups
   local dials_by_ft = {}
-  for name, _ in pairs(opts) do
+  for name, _ in pairs(groups) do
     if name ~= 'default' then
       dials_by_ft[name] = name
     end
@@ -110,7 +110,7 @@ M.config = function()
 
   vim.g.dials_by_ft = vim.tbl_extend('force', dials_by_ft, extend)
 
-  require('dial.config').augends:register_group(opts)
+  require('dial.config').augends:register_group(groups)
 
   ---@param increment boolean
   ---@param g? boolean
@@ -130,7 +130,6 @@ M.config = function()
 
 -- stylua: ignore
 local keys = {
-  -- {'<C-a>', dial(true) },
   {'<C-a>', function() return dial(true) end, },
   {'<C-x>', function() return dial(false) end,},
   {'g<C-a>', function() return dial(true, true) end,},

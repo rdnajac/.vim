@@ -23,6 +23,7 @@ end
 ---@param modname string
 ---@param cb fun(modname:string)
 function M.on_module(modname, cb)
+  -- info('adding on_module for ' .. modname)
   mod_cb[modname] = mod_cb[modname] or {}
   table.insert(mod_cb[modname], cb)
   if mod_check() then

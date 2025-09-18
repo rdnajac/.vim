@@ -1,17 +1,16 @@
 local M = vim.defaulttable(function(k)
-  return require('util.' .. k)
+  return require('nvim.util.' .. k)
 end)
+
+local function is_nonempty_string(x)
+  return type(x) == 'string' and x ~= ''
+end
 
 M.sep = package.config:sub(1, 1)
 
 -- does not normalize the path, that is the responsibility of the caller
 M.modname = function(path)
   return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
-end
-
-function M.submodules(topmod)
-  local caller = M.source()
-  info(caller)
 end
 
 --- Iterate over modules under $XDG_CONFIG_HOME/nvim/lua

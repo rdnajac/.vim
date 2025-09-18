@@ -1,4 +1,5 @@
 --- @meta
+error('this file should not be required directly')
 
 nv.blink = require('nvim.blink')
 nv.dial = require('nvim.dial')
