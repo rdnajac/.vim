@@ -40,34 +40,13 @@ M.docsymbols = function()
   return require('nvim.lsp.docsymbols').get()
 end
 
---- Get devicon for a buffer by buffer number.
---- @param bufnr number|nil Buffer number (defaults to current buffer)
---- @return string icon
--- TODO: use mini.icons directly
+--- Get icon for a buffer by buffer number
+---@param bufnr number|nil Buffer number (defaults to current buffer)
+---@return string icon
 M.ft_icon = function(bufnr)
-  local ok, devicons = pcall(require, 'nvim-web-devicons')
-  if not ok then
-    return ''
-  end
-
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-
-  -- intercept special types
-  local ft = vim.bo[bufnr] and vim.bo[bufnr].filetype or ''
-  if ft == 'help' then
-    return '󰋖 '
-  elseif ft == 'oil' then
-    return ' '
-  end
-
-  local fname = vim.api.nvim_buf_get_name(bufnr)
-  local shortname = vim.fn.fnamemodify(fname, ':t')
-  local ext = vim.fn.fnamemodify(fname, ':e')
-
-  local icon = devicons.get_icon(shortname, ext, { default = true })
-    or devicons.get_icon_by_filetype(ft, { default = true })
-    or ''
-
+  local ft = vim.bo[bufnr].filetype or nil
+  local icon = ft and MiniIcons.get('filetype', ft) or nv.icons.files.file
   return icon .. ' '
 end
 

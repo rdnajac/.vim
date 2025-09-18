@@ -13,16 +13,22 @@ M.debug = function()
   ws:debug({ details = true })
 end
 
+
+-- TODO: add other debugs for other client fields
+-- TODO: move to lsp/debug
 M.lsp = function()
   local clients = vim.lsp.get_clients({ bufnr = 0 })
-  local lines = {} ---@type string[]
   for _, client in ipairs(clients) do
-    lines[#lines + 1] = '## ' .. client.name
-    lines[#lines + 1] = '```lua'
-    lines[#lines + 1] = 'settings = ' .. vim.inspect(client.settings)
-    lines[#lines + 1] = '```'
+    -- Snacks.notify.info(vim.inspect(client.capabilities), {
+    Snacks.notify.info(vim.inspect(client.settings), {
+      id = 'lazydev_lsp',
+      title = client.name,
+      ft = 'lua',
+      opts = function(notif)
+        notif.icon = require('vimline').ft_icon()
+      end,
+    })
   end
-  Snacks.notify.info(lines)
 end
 
 return M

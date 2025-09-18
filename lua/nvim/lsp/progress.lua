@@ -1,32 +1,5 @@
--- vim.api.nvim_create_autocmd('LspProgress', {
---   group = vim.api.nvim_create_augroup('LspProgressGroup', { clear = true }),
---   callback = function(ev)
---     local value = ev.data.params.value
---     local msg = string.format(
---       '%s: %s [%s%%]',
---       value.title or 'LSP',
---       value.message or '',
---       value.percentage or 100
---     )
---     local opts =
---       { kind = 'progress', title = value.title, percent = value.percentage, status = 'running' }
---     if value.kind == 'begin' then
---       -- vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
---       Snacks.notify.info(msg)
---     elseif value.kind == 'report' then
---       -- vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
---       Snacks.notify(msg)
---       -- elseif value.kind == 'end' then
---       -- opts.percent = 100
---       -- opts.status = 'success'
---       -- vim.api.nvim_echo({ { msg, 'MoreMsg' } }, true, opts)
---       -- { { msg, 'OkMsg' } },
---       -- { kind = 'progress', title = value.title, percent = 100, status = 'success' }
---     end
---   end,
--- })
-
 local progress = vim.defaulttable()
+
 vim.api.nvim_create_autocmd('LspProgress', {
   ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
   callback = function(ev)
@@ -61,9 +34,9 @@ vim.api.nvim_create_autocmd('LspProgress', {
       id = 'lsp_progress',
       title = client.name,
       opts = function(notif)
-        notif.icon = #progress[client.id] == 0 and ' ' or Snacks.util.spinner()
+        notif.icon = #progress[client.id] == 0 and require('vimline').ft_icon()
+          or Snacks.util.spinner()
       end,
     })
   end,
 })
-Snacks.util.spinner()
