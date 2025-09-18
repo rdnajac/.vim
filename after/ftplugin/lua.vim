@@ -9,6 +9,8 @@ inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> \ig --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 
+inoremap <buffer> req<Tab> require(')<Left><Left>'
+
 " NOTE: don't need `tpope/vim-apathy` for lua anymore:
 " from `$VIMRUNTIME/runtime/ftplugin/lua.lua`
 " includeexpr=v:lua.require'vim._ftplugin.lua'.includeexpr(v:fname)
@@ -16,5 +18,5 @@ inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space>
 " from ~/.local/share/nvim/share/nvim/runtime/ftplugin/lua.vim line 39
 
 " custom surround using `tpope/vim-surround`
-" i
+" use ascii value (i = 105)
 let b:surround_105 ="-- stylua: ignore start\n \r \n--stylua: ignore end" 

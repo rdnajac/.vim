@@ -14,9 +14,6 @@ local icons = require('nvim.icons')
 M.opts = {
   cmdline = { enabled = false },
   completion = {
-    accept = {
-      auto_brackets = { enabled = false },
-    },
     documentation = {
       auto_show = false,
       window = { border = border },
@@ -26,7 +23,6 @@ M.opts = {
       show_on_accept_on_trigger_character = true,
       show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
     },
-    ghost_text = { enabled = false },
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
       auto_show = true,
@@ -90,6 +86,12 @@ M.component = function()
 end
 
 M.after = function()
+  -- some config can be changed after setup
+  local completion = require('blink.cmp.config').completion
+  completion.accept.auto_brackets.enabled = false
+  completion.ghost_text.enabled = false
+  -- Snacks.util.set_hl({ ghost_text = 'BlinkCmpGhostText',  }, { link = 'MoreMsg', default = true })
+
   local url =
     'https://raw.githubusercontent.com/bydlw98/blink-cmp-env/refs/heads/main/lua/blink-cmp-env.lua'
   -- https://raw.githubusercontent.com/mgalliou/blink-cmp-tmux/refs/heads/main/lua/blink-cmp-tmux/init.lua

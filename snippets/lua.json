@@ -78,12 +78,6 @@
     "description": "lazy spec keys"
   },
 
-  "require": {
-    "prefix": "re",
-    "body": ["require('${0}')"],
-    "description": "Require module"
-  },
-
   "return": {
     "prefix": "return",
     "body": ["return ${1:M}$0"],
@@ -120,15 +114,5 @@
   "print": {
     "prefix": "print",
     "body": ["print(${0})"]
-  },
-
-  "dd": {
-    "prefix": "dd",
-    "body": ["dd(${0})"]
-  },
-
-  "while": {
-    "prefix": "while",
-    "body": ["while ${1:true} do", "\t$0", "end"]
   }
 }

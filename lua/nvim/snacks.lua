@@ -11,7 +11,7 @@ local enabled = {
   notifier     = { enabled = false },
   quickfile    = { enabled = true },
   scope        = { enabled = true },
-  scroll       = { enabled = true },
+  scroll       = { enabled = false },
   statuscolumn = { enabled = true },
   words        = { enabled = true },
 }
@@ -24,14 +24,7 @@ local opts = {
   indent = { indent = { only_current = true, only_scope = true } },
   -- notifier = { style = 'fancy', date_format = '%T', timeout = 4000 },
   picker = require('nvim.snacks.picker'),
-  scratch = {
-    template = table.concat({
-      'local pr = function(...) return print(vim.inspect(...)) end',
-      'local x = ',
-      '',
-      'print(x)',
-    }, '\n'),
-  },
+  scratch = { template = 'local x = \n\nprint(x)' },
   terminal = { start_insert = false, auto_insert = true, auto_close = true },
   styles = {
     dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
@@ -50,7 +43,6 @@ M.after = function()
   -- vim.print = Snacks.debug.print
   require('nvim.snacks.commands')
   require('nvim.snacks.keymaps')
-
 end
 
 return M

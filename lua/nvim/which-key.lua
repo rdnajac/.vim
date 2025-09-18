@@ -9,8 +9,8 @@ M.opts = {
   sort = { 'order', 'alphanum', 'case', 'mod' },
   ---@param mapping wk.Mapping
   filter = function(mapping)
-    return mapping.desc and mapping.desc ~= ''
-    -- return true
+    -- return mapping.desc and mapping.desc ~= ''
+    return true
   end,
   spec = {
     {
@@ -36,10 +36,9 @@ M.opts = {
   },
 }
 
-M.config = function()
-  local reg_mod = require('which-key.plugins.registers')
-  reg_mod.registers = '*+"-:.%/#=_0123456789'
-  require('which-key').setup(M.opts)
+M.after = function()
+  local registers = '*+"-:.%/#=_0123456789'
+  require('which-key.plugins.registers').registers = registers
 end
 
 return M
