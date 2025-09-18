@@ -1,5 +1,6 @@
 local M = {
   'folke/flash.nvim',
+  enabled = false,
   opts = {},
 }
 -- stylua: ignore

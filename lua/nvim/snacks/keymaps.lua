@@ -1,6 +1,3 @@
-print('in snacks keymaps')
-info(vim.g.mapleader)
-
 vim.keymap.set('n', '<leader>gg', function()
   Snacks.lazygit()
   vim.cmd.startinsert()

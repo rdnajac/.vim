@@ -10,20 +10,8 @@ endfunction
 
 function! plug#(repo, ...) abort
   call add(g:plug#list, a:repo)
-  " if v:vim_did_enter != 1
-  "   Warn a:repo
-  " else
-  "   Info a:repo
-  " endif
 endfunction
 
-""
-" Finalize plugin system:
-" First the Plug command is deleted to avoid conflicts. Then, if running in
-" Neovim and there are plugins to install, they are added. Otherwise, syntax
-" and filetype detection, plugins, and indenting are enabled
-" using the guards copied from `tpope/vim-sensible`
-" @public
 function! plug#end() abort
   if exists('g:loaded_vimrc')
     let g:loaded_vimrc += 1
