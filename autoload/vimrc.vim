@@ -43,7 +43,7 @@ function! vimrc#init_vim() abort " {{{
   endif
 
   call vim#sensible#()
-  call vim#toggle#register_keymaps()
+  call vim#toggle#()
   color scheme " set the default colorscheme once
 endfunction
 
@@ -66,9 +66,7 @@ function! vimrc#nvim_config() abort " {{{
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
 
-
   " -- initialize tabline
-  " vim.call('vimline#tabline#')
   call vimline#tabline#()
 
   let g:nvim_did_init = 1

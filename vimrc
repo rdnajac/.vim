@@ -1,9 +1,8 @@
 " vim:fdm=marker
 scriptencoding utf-8
-call vimrc#init()
-
 let g:mapleader = ' '
 let g:maplocalleader = '\'
+call vimrc#init()
 
 " Section: settings {{{1
 set noswapfile
@@ -259,7 +258,7 @@ nnoremap g# g#zzzv
 " nnoremap Y      y$
 " nnoremap '      `
 
-" TODO: 
+" TODO:
 nnoremap J      mzJ`z
 nnoremap dp     dp]c
 nnoremap do     do]c
@@ -333,15 +332,16 @@ vnoremap [e :<C-u>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
+
 " }}}1
 " Section: commands {{{1
 command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 command! Restart call sesh#restart()
-" }}}
+
+" }}}1
 " Section: ui {{{1
-" TODO: move to col.vim or something
 " set foldcolumn=1
 set signcolumn=number
 " set numberwidth=3
@@ -349,12 +349,8 @@ set signcolumn=number
 let &laststatus = has('nvim') ? 3 : 2
 set statusline=%!vimline#statusline#()
 
-" TODO: move to nv.ui
-" set statuscolumn=%!vimline#statuscolumn#()
-" set statuscolumn=%!v:lua.require'vimline.statuscolumn'()
-" set statuscolumn=%{if(&number,printf('%4d',v:lnum),repeat(' ',4)).'│'}
 " }}}1
-" globals for plugin configuration {{{1
+" Section: global variables {{{1
 let g:vimtex_format_enabled = 1
 
 " FIXME: doesn't work well with r files
@@ -397,7 +393,8 @@ Plug 'AndrewRadev/splitjoin.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
-if !has('nvim') " {{{
+if !has('nvim')
+  " vim plugins {{{
   Plug 'dense-analysis/ale' " TODO: try nvim-lint
   Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
@@ -407,7 +404,8 @@ if !has('nvim') " {{{
   " TODO: try the shipped vim9 comment plugin
   Plug 'tpope/vim-commentary'
   " }}}
-else " neovim plugins {{{
+else
+  " neovim plugins {{{
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
   Plug 'folke/snacks.nvim'

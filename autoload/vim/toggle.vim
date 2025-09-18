@@ -1,4 +1,4 @@
-function! vim#toggle#register_keymaps() abort
+function! vim#toggle#() abort
   nnoremap yol :set list!<BAR>set list?<CR>
   nnoremap yon :set number!<BAR>redraw!<BAR>set number?<CR>
   nnoremap yos :set spell!<BAR>set spell?<CR>
