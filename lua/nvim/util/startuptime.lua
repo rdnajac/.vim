@@ -1,3 +1,5 @@
+vim.loader.enable({ enable = vim.uv.random(1):byte(1) % 2 == 1 })
+
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
     local startuptime = _G.startuptime

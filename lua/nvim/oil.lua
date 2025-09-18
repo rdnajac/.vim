@@ -14,7 +14,7 @@ M.opts = {
   },
   watch_for_changes = true,
   keymaps = {
-    ['Y'] = { 'actions.yank_entry', opts = { modify = ':~' } },
+    ['yp'] = { 'actions.yank_entry', opts = { modify = ':~' } },
     ['q'] = { 'actions.close', mode = 'n' },
     ['<Tab>'] = { 'actions.close', mode = 'n' },
     ['<Left>'] = { 'actions.parent', mode = 'n' },

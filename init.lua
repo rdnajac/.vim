@@ -1,25 +1,17 @@
--- init.lua
--- vim._print(true, vim.tbl_keys(package.loaded))
-_G.t0 = vim.uv.hrtime() -- capture the start time
+local t0 = vim.uv.hrtime() -- capture the start time
 
--- randomly enable loader for benchmarking
-if vim.uv.random(1):byte(1) % 2 == 1 then
-  vim.loader.enable()
-end
+vim.loader.enable()
 
---- @type table
-_G.nv = require('nvim') or {}
+_G.nv = require('nvim')
+-- _G.nv = vim.defaulttable(function(k)
+--   return require('nvim.' .. k)
+-- end)
 
 _G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
-
 -- nv.notify.setup() -- optionally, override vim.notify
-
---nv.util.track(function()
--- require('nvim.util.track')(function()
 vim.cmd.runtime([[vimrc]])
--- end)
 
 -- TODO: turn these into plugins
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
@@ -52,7 +44,7 @@ for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' })
   end
 end
 
-_G.startuptime = (vim.uv.hrtime() - _G.t0) / 1e6
+_G.startuptime = (vim.uv.hrtime() - t0) / 1e6
 print(('nvim initialized in %.2f ms'):format(startuptime))
 -- require('nvim.util.startuptime')
 

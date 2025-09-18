@@ -30,7 +30,7 @@ local default_providers = {
     transform_items = function(_, items)
       -- FILTER OUT KEYWORDS AND SNIPPETS FROM LSP
       return vim.tbl_filter(function(item)
-        return item.kind == kind.Keyword and item.kind == kind.Snippet
+        return item.kind == kind.Keyword and item.kind == kind.Snippet and item.kind == kind.Text
       end, items)
     end,
   },

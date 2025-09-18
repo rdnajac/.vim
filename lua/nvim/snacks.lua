@@ -33,7 +33,7 @@ local opts = {
   },
 }
 
--- TODO: use the config merge functions in utils
+-- TODO: use the snacks.config.merge functions
 M.opts = vim.tbl_deep_extend('force', opts, enabled)
 
 M.after = function()

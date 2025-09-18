@@ -42,7 +42,6 @@ end
 --- @param plug_data { spec: vim.pack.Spec, path: string }
 function M.load(plug_data)
   local spec = plug_data.spec ---@type vim.pack.Spec
-  -- print(spec.name)
   if vim.is_callable(spec.data) then
     -- info('loading ' .. spec.name)
     local plugin = spec.data() ---@type Plugin
@@ -62,12 +61,12 @@ function M.plug(specs)
   vim.pack.add(speclist, { load = M.load })
 end
 
--- TODO: need seperate loadinb for specs vs deps
+-- TODO: need seperate loading for specs vs deps
 -- namely who gets to call data() and in turn config
 function M.end_()
   nv.did_setup = {}
   nv.specs = vim
-    .iter(vim.g['plug#list'])
+    .iter(vim.g.plug_list)
     :map(function(p)
       -- HACK: most plugins end in `.nvim`, except special cases like blink.cmp
       local is_nvim_plugin = vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp')
@@ -77,23 +76,27 @@ function M.end_()
 
   M.plug(nv.specs)
 
+  local command = vim.api.nvim_create_user_command
   -- TODO: move these to a cmd submodule
-  vim.api.nvim_create_user_command('PlugClean', M.clean, {})
-  -- TODO: pass bang to get extra information
-  vim.api.nvim_create_user_command('PlugStatus', M.status, {})
-  vim.api.nvim_create_user_command('PlugUpdate', M.update, {})
+  command('PlugClean', M.clean, {})
+  command('PlugUpdate', M.update, {})
+  command( 'PlugStatus', M.status,
+  { bang = true } 
+)
 end
 
 M.unloaded = function()
   return vim
-    .iter(vim.pack.get())
-    :filter(function(plugin)
-      return plugin.active == false
-    end)
-    :map(function(plugin)
-      return plugin.spec.name
-    end)
-    :totable()
+  .iter(vim.pack.get())
+  --- @param plugin vim.pack.PlugData
+  :filter(function(plugin)
+    return plugin.active == false
+  end)
+  --- @param plugin vim.pack.PlugData
+  :map(function(plugin)
+    return plugin.spec.name
+  end)
+  :totable()
 end
 
 -- stylua: ignore
@@ -102,10 +105,11 @@ M.update = function(opts)
   vim.pack.update(nil, opts or {})
 end
 -- stylua: ignore end
-M.status = function(extra)
+M.status = function(opts)
+  -- opts.bang is true if the user ran `:PlugStatus!`
   --- @type vim.pack.keyset.get
-  local opts = { info = extra == true }
-  print(vim.inspect(vim.pack.get(nil, opts)))
+  local get_opts = { info = opts.bang }
+  vim._print(true, vim.pack.get(nil, get_opts))
 end
 
 return setmetatable(M, {
