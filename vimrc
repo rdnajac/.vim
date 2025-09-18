@@ -411,23 +411,20 @@ else " neovim plugins {{{
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
+  " Plug 'folke/todo-comments.nvim',
   " Plug 'folke/flash.nvim'
-  Plug 'stevearc/oil.nvim'
+  " Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'
-  " TODO: load these automatically from module specs
   Plug 'R-nvim/r.nvim'
   Plug 'MeanderingProgrammer/render-markdown.nvim'
   Plug 'mason-org/mason.nvim'
-  Plug 'Saghen/blink.cmp'
   Plug 'monaqa/dial.nvim'
-  " Plug 'stevearc/conform.nvim'
+  Plug 'Saghen/blink.cmp'
+  Plug 'stevearc/conform.nvim'
   " }}}
 endif
 call plug#end() " }}}1
 
-if !exists('g:vimrc_reload_count')
-  let g:vimrc_reload_count = 0
-else
-  let g:vimrc_reload_count += 1
-  Info 'Reloaded vimrc [' . g:vimrc_reload_count . ']'
+if !exists('g:loaded_vimrc')
+  let g:loaded_vimrc = 1
 endif

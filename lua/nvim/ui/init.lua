@@ -11,7 +11,6 @@ vim.o.winborder = 'rounded'
 vim.o.winbar = '%{%v:lua.MyWinBar()%}'
 
 M.specs = {
-  'folke/todo-comments.nvim',
   -- 'folke/noice.nvim',
   -- 'jhui/fidget.nvim',
 }

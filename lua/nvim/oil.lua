@@ -100,6 +100,8 @@ M.winbar = function(winid)
   return path ~= '' and vim.fn.fnamemodify(path, ':~') or ''
 end
 
+M.keys = { '-', '<Cmd>Oil<CR>' }
+
 M.after = function()
   -- Clear git status cache on refresh
   local refresh = require('oil.actions').refresh
@@ -108,7 +110,6 @@ M.after = function()
     git_status = new_git_status()
     orig_refresh(...)
   end
-  vim.keymap.set('n', '-', '<Cmd>Oil<CR>')
   require('nvim.oil.autocmds')
 end
 

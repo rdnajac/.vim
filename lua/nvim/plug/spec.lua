@@ -1,5 +1,3 @@
-local utils = require('nvim.plug')
-
 --- @class Plugin
 --- @field [1]? string
 --- @field after? fun(): nil
@@ -70,7 +68,7 @@ function Plugin:init()
   end
 
   local _init = function()
-    utils.packadd(self.name) -- add the plugin to runtimepath
+    nv.plug.packadd(self.name) -- add the plugin to runtimepath
     self:setup() -- call config or setup
     self:deps() -- add any dependencies
   end
@@ -114,9 +112,9 @@ function Plugin:deps()
     specs = specs()
   end
   if type(specs) == 'table' and #specs > 0 then
-    local deps = vim.tbl_map(utils.to_spec, specs)
+    local deps = vim.tbl_map(nv.plug.to_spec, specs)
     -- info(deps)
-    utils.plug(deps)
+    nv.plug.plug(deps)
   end
 end
 

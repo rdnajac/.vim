@@ -2,6 +2,8 @@ vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core'
 
 local M = {}
 
+M.plugin = require('nvim.plug.spec')
+
 --- @param user_repo string plugin (`user/repo`)
 --- @param data boolean|nil if true, add `data` function to spec
 --- if false, return minimal spec for non-nvim plugins
@@ -21,10 +23,9 @@ M.to_spec = function(user_repo, data)
   }
   if data == true then
     spec.data = function()
-      local plugspec = require('nvim.plug.spec')
-      return plugspec(require('nvim')[spec.name])
+      return require('nvim.plug.spec')(require('nvim.' .. spec.name))
+      end
     end
-  end
   return spec
 end
 
@@ -43,9 +44,11 @@ end
 function M.load(plug_data)
   local spec = plug_data.spec ---@type vim.pack.Spec
   if vim.is_callable(spec.data) then
-    -- info('loading ' .. spec.name)
     local plugin = spec.data() ---@type Plugin
-    plugin:init() -- calls packadd, setup, and adds deps
+    --info('loading ' .. spec.name)
+    info(plugin)
+    if plugin then plugin:init() -- calls packadd, setup, and adds deps
+    end
   else
     -- info('`packadd`ing ' .. spec.name .. ' (no init)')
     M.packadd(spec.name)
@@ -61,42 +64,57 @@ function M.plug(specs)
   vim.pack.add(speclist, { load = M.load })
 end
 
+local function is_nonempty_string(x)
+  return type(x) == 'string' and x ~= ''
+end
+
 -- TODO: need seperate loading for specs vs deps
 -- namely who gets to call data() and in turn config
 function M.end_()
+  --print(vim.inspect(vim.g.plug_list))
   nv.did_setup = {}
   nv.specs = vim
     .iter(vim.g.plug_list)
     :map(function(p)
       -- HACK: most plugins end in `.nvim`, except special cases like blink.cmp
       local is_nvim_plugin = vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp')
+      -- Info p . ' is' . is_nvim_plugin
       return M.to_spec(p, is_nvim_plugin)
     end)
     :totable()
 
   M.plug(nv.specs)
+  info('ok')
+info('nv.specs')
 
   local command = vim.api.nvim_create_user_command
   -- TODO: move these to a cmd submodule
-  command('PlugClean', M.clean, {})
+
+  vim.api.nvim_create_user_command('PlugClean', function(opts)
+    info(opts.fargs)
+    -- vim.pack.del(M.unloaded())
+  end, {
+    nargs = '*',
+    complete = function(_, _, _)
+      return M.unloaded()
+    end,
+  })
   command('PlugUpdate', M.update, {})
-  command( 'PlugStatus', M.status,
-  { bang = true } 
-)
+  command('PlugStatus', M.status, { bang = true })
 end
 
 M.unloaded = function()
   return vim
-  .iter(vim.pack.get())
-  --- @param plugin vim.pack.PlugData
-  :filter(function(plugin)
-    return plugin.active == false
-  end)
-  --- @param plugin vim.pack.PlugData
-  :map(function(plugin)
-    return plugin.spec.name
-  end)
-  :totable()
+    .iter(vim.pack.get())
+    --- @param plugin vim.pack.PlugData
+    :filter(function(plugin)
+      return plugin.active == false
+    end)
+    --- @param plugin vim.pack.PlugData
+    :map(function(plugin)
+      return plugin.spec.name
+    end)
+    :totable()
 end
 
 -- stylua: ignore
