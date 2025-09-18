@@ -8,17 +8,18 @@ vim.o.pumblend = 0
 -- vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
 
-vim.o.winbar = '%{%v:lua.MyWinBar()%}'
-
 M.specs = {
   -- 'folke/noice.nvim',
   -- 'jhui/fidget.nvim',
 }
 
 M.config = function()
-  require('nvim.ui.extui')
   require('nvim.ui.winbar')
-  require('todo-comments').setup({})
+  vim.o.winbar = '%{%v:lua.MyWinBar()%}'
+  vim.schedule(function ()
+    
+  require('nvim.ui.extui')
+end)
 end
 
 -- TODO: make default tables set these values to empty tables so

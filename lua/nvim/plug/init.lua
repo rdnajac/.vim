@@ -2,7 +2,6 @@ vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core'
 
 local M = {}
 
-M.plugin = require('nvim.plug.spec')
 
 --- @param user_repo string plugin (`user/repo`)
 --- @param data boolean|nil if true, add `data` function to spec
@@ -15,26 +14,17 @@ M.to_spec = function(user_repo, data)
   if data == false then
     return src
   end
-  local spec = {
+
+  return {
     src = src,
     name = user_repo:match('([^/]+)$'):gsub('%.nvim$', ''),
-    --- XXX: remove this hack when treesitter is on main
+    --- HACK: remove this when treesitter is on main
     version = user_repo:match('treesitter') and 'main' or nil,
+    data = data,
   }
-  if data == true then
-    spec.data = function()
-      return require('nvim.plug.spec')(require('nvim.' .. spec.name))
-      end
-    end
-  return spec
 end
 
---- `:packadd!` equivalent that works during startup
---- @param name string
-function M.packadd(name)
-  local bang = vim.v.vim_did_enter == 0
-  vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
-end
+local Plugin = require('nvim.plug.spec')
 
 --- Custom load function for `vim.pack.add`
 --- This handles both simple plugins and those
@@ -43,18 +33,19 @@ end
 --- @param plug_data { spec: vim.pack.Spec, path: string }
 function M.load(plug_data)
   local spec = plug_data.spec ---@type vim.pack.Spec
-  if vim.is_callable(spec.data) then
-    local plugin = spec.data() ---@type Plugin
-    --info('loading ' .. spec.name)
-    info(plugin)
-    if plugin then plugin:init() -- calls packadd, setup, and adds deps
+  local name = spec.name
+  local bang = vim.v.vim_did_enter == 0
+
+  -- info('`packadd`ing ' .. spec.name)
+  vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
+
+  if spec.data == true then
+    local ok, module = pcall(require, 'nvim.' .. spec.name)
+    local plugin = Plugin(ok and module and module or spec)
+    if plugin then
+      --info('initializing ' .. spec.name)
+      plugin:init() -- calls packadd, setup, and adds deps
     end
-  else
-    -- info('`packadd`ing ' .. spec.name .. ' (no init)')
-    M.packadd(spec.name)
-    -- if vim.endswith(spec.name, '.nvim') then
-    --   require(spec.name).config({})
-    -- end
   end
 end
 
@@ -71,36 +62,18 @@ end
 -- TODO: need seperate loading for specs vs deps
 -- namely who gets to call data() and in turn config
 function M.end_()
-  --print(vim.inspect(vim.g.plug_list))
   nv.did_setup = {}
   nv.specs = vim
     .iter(vim.g.plug_list)
     :map(function(p)
       -- HACK: most plugins end in `.nvim`, except special cases like blink.cmp
       local is_nvim_plugin = vim.endswith(p, '.nvim') or vim.endswith(p, 'blink.cmp')
-      -- Info p . ' is' . is_nvim_plugin
       return M.to_spec(p, is_nvim_plugin)
     end)
     :totable()
 
   M.plug(nv.specs)
-  info('ok')
-info('nv.specs')
-
-  local command = vim.api.nvim_create_user_command
-  -- TODO: move these to a cmd submodule
-
-  vim.api.nvim_create_user_command('PlugClean', function(opts)
-    info(opts.fargs)
-    -- vim.pack.del(M.unloaded())
-  end, {
-    nargs = '*',
-    complete = function(_, _, _)
-      return M.unloaded()
-    end,
-  })
-  command('PlugUpdate', M.update, {})
-  command('PlugStatus', M.status, { bang = true })
+  M.commands()
 end
 
 M.unloaded = function()
@@ -117,17 +90,40 @@ M.unloaded = function()
     :totable()
 end
 
--- stylua: ignore
-M.clean = function() vim.pack.del(M.unloaded()) end
-M.update = function(opts)
-  vim.pack.update(nil, opts or {})
-end
--- stylua: ignore end
-M.status = function(opts)
-  -- opts.bang is true if the user ran `:PlugStatus!`
-  --- @type vim.pack.keyset.get
-  local get_opts = { info = opts.bang }
-  vim._print(true, vim.pack.get(nil, get_opts))
+M.commands = function()
+  local command = vim.api.nvim_create_user_command
+
+  command('PlugUpdate', function(opts)
+    local plugs = #opts.fargs > 0 and opts.fargs or nil
+    vim.pack.update(plugs, { force = opts.bang })
+  end, {
+    nargs = '*',
+    bang = true,
+
+    complete = function()
+      return vim.tbl_map(function(p)
+        return p.spec.name
+      end, vim.pack.get())
+    end,
+  })
+
+  -- TODO: take optional names with a completel list
+  command('PlugStatus', function(opts)
+    vim._print(true, vim.pack.get(nil, { info = opts.bang }))
+  end, {
+    bang = true,
+    nargs = '*',
+  })
+
+  command('PlugClean', function(opts)
+    local plugs = #opts.fargs > 0 and opts.fargs or M.unloaded()
+    vim.pack.del(plugs)
+  end, {
+    nargs = '*',
+    complete = function(_, _, _)
+      return M.unloaded()
+    end,
+  })
 end
 
 return setmetatable(M, {

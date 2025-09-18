@@ -25,9 +25,10 @@ end
 
 M.after = function()
   -- TODO: add copilot toggle
-  vim.schedule(function()
+  -- vim.schedule(function()
+  vim.defer_fn(function()
     vim.cmd([[ delcommand PlenaryBustedDirectory | delcommand PlenaryBustedFile ]])
-  end)
+  end, 2000)
   require('nvim.util.module').on_module('blink.cmp', function()
     local aug = vim.api.nvim_create_augroup('BlinkCopilot', { clear = true })
 

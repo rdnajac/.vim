@@ -6,9 +6,8 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 
 " Section: settings {{{1
-" TODO: figure this out
-" set autowrite autowriteall
 set noswapfile
+" set autowrite autowriteall
 " set confirm
 
 set ignorecase smartcase
@@ -409,10 +408,10 @@ if !has('nvim') " {{{
   Plug 'tpope/vim-commentary'
   " }}}
 else " neovim plugins {{{
-  Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
-  " Plug 'folke/todo-comments.nvim',
+  Plug 'folke/snacks.nvim'
+  Plug 'folke/todo-comments.nvim',
   " Plug 'folke/flash.nvim'
   Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'

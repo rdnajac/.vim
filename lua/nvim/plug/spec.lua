@@ -13,7 +13,6 @@
 local Plugin = {}
 Plugin.__index = Plugin
 
---- Determine if the plugin is enabled.
 function Plugin:is_enabled()
   if vim.is_callable(self.enabled) then
     ---@diagnostic disable-next-line: param-type-mismatch
@@ -30,18 +29,37 @@ end
 --- Assumes the plugin has already been loaded with `packadd`.
 function Plugin:setup()
   if vim.is_callable(self.config) then
-    -- info('configuring ' .. self.name)
+    print('configuring ' .. self.name)
     self.config()
   else
-    local opts = self.opts
-    if opts and vim.is_callable(opts) then
-      opts = opts()
-    end
-    -- info('setting up ' .. self.name)
+    local opts = self.opts and vim.is_callable(self.opts) and self.opts() or self.opts
+    print('setting up ' .. self.name)
     require(self.name).setup(opts or {})
   end
   -- TODO: test for success?
   table.insert(nv.did_setup, self.name)
+end
+
+-- TODO: use snacks?
+local on_module = require('nvim.util.module').on_module
+
+function Plugin:on_load()
+  -- loads after VimEnter and on module
+  if vim.is_callable(self.after) then
+    on_module(self.name, function()
+      self.after()
+    end)
+  end
+end
+
+function Plugin:apply_keymaps()
+  local keys = vim.is_callable(self.keys) and self.keys() or self.keys
+  if vim.islist(keys) and #keys > 0 then
+    on_module('which-key', function()
+      --- @diagnostic disable-next-line: param-type-mismatch
+      require('which-key').add(keys)
+    end)
+  end
 end
 
 local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
@@ -61,45 +79,7 @@ local function lazyload(cb, event, pattern)
   })
 end
 
-local on_module = require('nvim.util.module').on_module
-function Plugin:init()
-  if not self:is_enabled() then
-    return
-  end
 
-  local _init = function()
-    nv.plug.packadd(self.name) -- add the plugin to runtimepath
-    self:setup() -- call config or setup
-    self:deps() -- add any dependencies
-  end
-
-  if self.lazy then
-    lazyload(_init)
-  else
-    _init()
-  end
-
-  -- after
-  -- TODO: make these methods
-  -- loads after VimEnter and on module
-  if self.after and vim.is_callable(self.after) then
-    lazyload(function()
-      on_module(self.name, function()
-        self.after()
-      end)
-    end)
-  end
-
-  local keys = vim.is_callable(self.keys) and self.keys() or self.keys
-  if vim.islist(keys) and #keys > 0 then
-    lazyload(function()
-      on_module('which-key', function()
-        --- @diagnostic disable-next-line: param-type-mismatch
-        require('which-key').add(keys)
-      end)
-    end)
-  end
-end
 
 --- If there are any dependencies, `vim.pack.add()` them
 --- Dependencies are not initialized or configured, just installed
@@ -118,10 +98,32 @@ function Plugin:deps()
   end
 end
 
+function Plugin:init()
+  if not self:is_enabled() then
+    return
+  end
+
+  local lazy = self.lazy == true -- opt-in
+
+  if not lazy then
+    self:setup()
+    self:deps()
+  end
+
+  lazyload(function()
+    if lazy then
+      self:setup()
+      self:deps()
+    end -- alawys lazy load these 
+    self:on_load() -- call after if it exist
+    self:apply_keymaps() -- call after if it exist
+  end)
+end
+
 function Plugin.new(t)
   local self = setmetatable(t, Plugin)
-  self.name = t[1]:match('[^/]+$'):gsub('%.nvim$', '')
-  -- info(self.name)
+  self.name = t.name or t[1]:match('[^/]+$'):gsub('%.nvim$', '')
+  -- if not name then info(t) end
   return self
 end
 
@@ -130,4 +132,3 @@ return setmetatable(Plugin, {
     return Plugin.new(t)
   end,
 })
---- @field lazy? boolean
