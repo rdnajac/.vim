@@ -7,13 +7,8 @@ vim.o.laststatus = 3
 vim.o.pumblend = 0
 -- vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
--- _G.nv = require('nvim')
 
-_G.nv = vim.defaulttable(function(k)
-  return require('nvim.' .. k)
-end)
-
-require('nvim.ui.extui')
+_G.nv = require('nvim')
 
 _G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)

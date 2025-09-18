@@ -399,6 +399,8 @@ if !has('nvim')
   Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
   Plug 'junegunn/vim-easy-align'
+  Plug 'welle/targets.vim'
+  Plug 'welle/tmux-complete.vim'
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   " TODO: try the shipped vim9 comment plugin

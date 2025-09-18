@@ -12,21 +12,38 @@ M.servers = vim.tbl_map(function(path)
 end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
 
 M.config = function()
-  vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
-  vim.lsp.enable(M.servers)
-  -- require('nvim.lsp.progress')
+  --- lsps won't start on restart, so schedule it
+  vim.schedule(function()
+    vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
+    vim.lsp.enable(M.servers)
+  end)
+  require('nvim.lsp.progress')
   -- require('nvim.lsp.completion')
-  vim.api.nvim_create_autocmd('FileType', {
-    group = vim.api.nvim_create_augroup('LazyDevSetup', { clear = true }),
-    pattern = 'lua',
-    once = true,
-    callback = function()
-      require('nvim.lsp.lazydev')
-    end,
-  })
+  nv.lazyload(function()
+    require('nvim.lsp.lazydev')
+  end, 'FileType', 'lua')
 end
 
-M.root_sttus = nil
--- TODO: implement this
+---Find project root using LSP config root_markers for the buffer's filetype.
+---@param path? string starting path (defaults to current buffer path)
+---@return string|nil
+M.root = function(path)
+  -- if no path given, use the current buffer path
+  if not path or path == '' then
+    path = vim.api.nvim_buf_get_name(0)
+  end
+  if path == '' then
+    return nil
+  end
+
+  local ft = vim.bo.filetype
+  -- TODO: seems flaky...
+  local lsp_cfg = vim.lsp.config[ft]
+  if not lsp_cfg or not lsp_cfg.root_markers then
+    return nil
+  end
+
+  return vim.fs.root(path, lsp_cfg.root_markers)
+end
 
 return M

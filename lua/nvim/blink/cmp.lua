@@ -12,7 +12,7 @@ local icons = require('nvim.icons')
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
-  cmdline = { enabled = false },
+  -- cmdline = { enabled = false },
   completion = {
     documentation = {
       auto_show = false,
@@ -87,8 +87,12 @@ end
 
 M.after = function()
   -- some config can be changed after setup
-  local completion = require('blink.cmp.config').completion
-  completion.accept.auto_brackets.enabled = false
+  local conf = require('blink.cmp.config')
+
+  conf.cmdline.enabled = false
+
+  local completion = conf.completion
+  completion.accept.auto_brackets.enabled = true
   completion.ghost_text.enabled = false
   -- Snacks.util.set_hl({ ghost_text = 'BlinkCmpGhostText',  }, { link = 'MoreMsg', default = true })
 

@@ -37,7 +37,7 @@ function M.end_()
   end, vim.g.plug_list)
 
   vim.pack.add(specs, { load = M.load })
-  nv.util.lazyload(M.commands, 'CmdLineEnter')
+  nv.lazyload(M.commands, 'CmdLineEnter')
 end
 
 --- @param specs (string|vim.pack.Spec)[]

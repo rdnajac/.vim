@@ -52,10 +52,8 @@ end
 function Plugin:deps()
   local specs = get(self.specs)
   if is_nonempty_list(specs) or is_nonempty_string(specs) then
-    info('scheduling dependencies for ' .. self.name)
     vim.schedule(function()
       nv.plug(specs)
-      info('added dependencies for ' .. self.name)
     end)
   end
 end
@@ -112,7 +110,6 @@ end
 function Plugin:init()
   self:deps()
   self:setup()
-
   -- vim.schedule(function()
   lazyload(function()
     self:on_load()
@@ -121,24 +118,16 @@ function Plugin:init()
   -- end)
 end
 
-function Plugin.new(t)
-  local self
+function Plugin.new(modname)
   local plug
-  local name
-
-  if type(t) == 'table' then
-    plug = t
-  elseif is_nonempty_string(t) then
-    name = t
-    -- try to require the module under nvim
-    local ok, module = pcall(require, 'nvim.' .. t)
-    if ok and module then
-      plug = module
-    end
+  -- vim.validate('modname', is_nonempty_string, 'string', true)
+  -- try to require the module under nvim
+  local ok, module = pcall(require, 'nvim.' .. modname)
+  if ok and module then
+    plug = module
   end
-  -- plug[1] = plug[1] or t
-  self = setmetatable(plug or {}, Plugin)
-  self.name = self.name or name or self[1] or 'N/A'
+  local self = setmetatable(plug or {}, Plugin)
+  self.name = self.name or modname
   self.opts = self.opts or {}
   return self
 end

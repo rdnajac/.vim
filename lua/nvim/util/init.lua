@@ -1,10 +1,7 @@
+local M = {}
 local M = vim.defaulttable(function(k)
   return require('nvim.util.' .. k)
 end)
-
-local function is_nonempty_string(x)
-  return type(x) == 'string' and x ~= ''
-end
 
 M.sep = package.config:sub(1, 1)
 
