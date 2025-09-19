@@ -27,18 +27,19 @@ function Plugin.new(modname)
   if ok and module then
     plug = module
   end
+  -- here we have the module, we should check if there is a titlespec
   local self = setmetatable(plug or {}, Plugin)
-  self.name = self.name or modname
-  self.opts = self.opts or {}
+  self.name = self.name or modname -- XXX:
   -- init
   self:deps()
   self:setup()
   self:on_load()
-  self:apply_commands() -- already lazy-loaded
+  self:apply_commands()
   self:apply_keymaps()
   return self
 end
 
+-- TODO: should this be an `__index`
 --- Get the value or evaluate the function for a field safely
 ---@generic T
 ---@param field T|fun():T
@@ -65,7 +66,7 @@ end
 --- If there are any dependencies, `vim.pack.add()` them
 --- Dependencies are not initialized or configured, just installed
 --- and are assumed to be in the form `user/repo`
-function Plugin:deps()
+function Plugin:deps() -- TODO: handle [1] in spec
   local specs = get(self.specs)
   if is_nonempty_list(specs) or is_nonempty_string(specs) then
     vim.schedule(function()
@@ -85,8 +86,8 @@ function Plugin:setup()
     ok, err = pcall(self.config)
     nv.did.config[self.name] = ok
   else
-    local mod = require(self.name)
-    ok, err = pcall(mod.setup, self.opts)
+    local mod = require(self.name) -- TODO: safe require
+    ok, err = pcall(mod.setup, get(self.opts) or {})
     nv.did.setup[self.name] = ok
   end
   if ok == false then
@@ -125,7 +126,6 @@ function Plugin:apply_commands()
     end, 'CmdLineEnter')
   end
 end
-
 
 return setmetatable(Plugin, {
   __call = function(_, t)

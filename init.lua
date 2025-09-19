@@ -1,4 +1,5 @@
-local t0 = vim.uv.hrtime() -- capture the start time
+local t0 = vim.uv.hrtime()
+
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.health = { style = 'float' }
@@ -18,6 +19,7 @@ _G.nv = require('nvim')
 nv.did = vim.defaulttable()
 nv.spec = require('nvim.plug.spec')
 
+-- nv.spec('_plugins')
 -- TODO: Snacks.debug
 _G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
@@ -26,8 +28,8 @@ end
 vim.cmd.runtime([[vimrc]])
 
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
-  -- for _, modname in ipairs({ '_plugins', 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
   nv.spec(modname)
 end
 
 print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - t0) / 1e6))
+-- TODO: get the time to `VimEnter` event
