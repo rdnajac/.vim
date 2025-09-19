@@ -55,7 +55,14 @@ M.opts_extend = {
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
     opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
     if nv.util.is_nonempty_list(opts.ft) then
-      opts.title = opts.title .. ' ' .. table.concat(vim.tbl_map(function(f) return require('vimline').ft_icon(f) end, opts.ft), ' ')
+      opts.title = opts.title
+        .. ' '
+        .. table.concat(
+          vim.tbl_map(function(f)
+            return require('vimline').ft_icon(f)
+          end, opts.ft),
+          ' '
+        )
     end
     if not opts.cwd then
       if vim.bo.filetype == 'oil' then

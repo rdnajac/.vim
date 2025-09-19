@@ -21,7 +21,7 @@ end
 
 -- check again since we might have installed it already
 if vim.fn.executable('tree-sitter') == 1 then
-  return 
+  return
 end
 
 local mr = require('mason-registry')

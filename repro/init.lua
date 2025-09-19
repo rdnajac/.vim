@@ -17,5 +17,5 @@ end
 -- vim.pack.add(vim.tbl_map(gh, specs), { confirm = false })
 --
 -- vim.cmd([[
---   color tokyonight 
+--   color tokyonight
 -- ]])

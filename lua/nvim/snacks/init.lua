@@ -15,7 +15,6 @@ local enabled = {
   statuscolumn = { enabled = false },
   words        = { enabled = true  },
 }
-
 local skip = {} -- upvalue
 
 M.after = function()
@@ -33,7 +32,7 @@ local opts = {
   dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = vim.g.default_file_explorer == 'snacks' },
   indent = { indent = { only_current = true, only_scope = true } },
-  -- notifier = { style = 'fancy',  date_format = '%T',  timeout = 4000 },
+  notifier = require('nvim.snacks.notifier'),
   picker = require('nvim.snacks.picker'),
   scratch = { template = 'local x = \n\nprint(x)' },
   terminal = { start_insert = false, auto_insert = true, auto_close = true },

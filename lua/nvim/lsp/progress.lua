@@ -34,6 +34,7 @@ vim.api.nvim_create_autocmd('LspProgress', {
       id = 'lsp_progress',
       title = client.name,
       opts = function(notif)
+        notif.style = 'compact' --- use a style without a timestamp
         notif.icon = #progress[client.id] == 0 and require('vimline').ft_icon()
           or Snacks.util.spinner()
       end,

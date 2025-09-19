@@ -18,7 +18,7 @@ _G.nv = require('nvim')
 nv.did = vim.defaulttable()
 nv.spec = require('nvim.plug.spec')
 
-  -- TODO: Snacks.debug
+-- TODO: Snacks.debug
 _G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
