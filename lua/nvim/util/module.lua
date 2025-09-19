@@ -5,7 +5,6 @@ local mod_cb = {} ---@type table<string, fun(modname:string)[]>
 
 ---@return boolean waiting
 local function mod_check()
-  -- info(mod_cb)
   for modname, cbs in pairs(mod_cb) do
     if package.loaded[modname] then
       mod_cb[modname] = nil
@@ -23,7 +22,6 @@ end
 ---@param modname string
 ---@param cb fun(modname:string)
 function M.on_module(modname, cb)
-  -- info('adding on_module for ' .. modname)
   mod_cb[modname] = mod_cb[modname] or {}
   table.insert(mod_cb[modname], cb)
   if mod_check() then

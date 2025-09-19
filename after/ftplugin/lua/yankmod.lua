@@ -7,7 +7,7 @@ end
 
 local function set_reg_and_notify(text)
   vim.fn.setreg('*', text)
-  info('yanked: ' .. text)
+  print('yanked: ' .. text)
 end
 
 -- Wraps your yanking actions with module resolution

@@ -3,17 +3,16 @@ local t0 = vim.uv.hrtime() -- capture the start time
 vim.loader.enable()
 
 vim.o.cmdheight = 0
-vim.o.laststatus = 3
 vim.o.pumblend = 0
--- vim.o.smoothscroll = true
 vim.o.winborder = 'rounded'
+-- vim.o.smoothscroll = true
 
 _G.nv = require('nvim')
 
 _G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
--- nv.notify.setup() -- optionally, override vim.notify
+
 vim.cmd.runtime([[vimrc]])
 
 local Plugin = require('nvim.plug.spec')

@@ -39,8 +39,6 @@ M.opts = {
   register_treesitter = true, -- DIY
   hook = {
     on_filetype = function()
-      -- info('R.nvim on_filetype hook')
-      vim.treesitter.start(0, 'markdown')
       vim.keymap.set('n', '<localleader><CR>', M.debug_word, { buffer = true })
     end,
   },

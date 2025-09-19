@@ -101,10 +101,6 @@ function M.get_root(client, buf)
   return client.root_dir or 'single'
 end
 
-local function is_absolute(path)
-  return vim.startswith(path, '/')
-end
-
 ---@param path string|string[]
 function M:add(path)
   if type(path) == 'table' then
@@ -122,7 +118,7 @@ function M:add(path)
   path = vim.fs.normalize(path)
 
   -- try to resolve to a plugin path
-  if not is_absolute(path) and not vim.uv.fs_stat(path) then
+  if not vim.startswith(path, '/') and not vim.uv.fs_stat(path) then
     local name, extra = path:match('([^/]+)(/?.*)')
     if name then
       local pp = Pkg.get_plugin_path(name)

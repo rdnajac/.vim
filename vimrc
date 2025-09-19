@@ -412,7 +412,7 @@ else
   Plug 'folke/which-key.nvim'
   Plug 'folke/snacks.nvim'
   Plug 'folke/todo-comments.nvim',
-  " Plug 'folke/flash.nvim'
+  Plug 'folke/flash.nvim'
   Plug 'stevearc/oil.nvim'
   Plug 'nvim-mini/mini.nvim'
   Plug 'R-nvim/r.nvim'

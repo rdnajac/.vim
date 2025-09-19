@@ -1,4 +1,5 @@
 vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+vim.env.PACKDIR = vim.g.plug_home
 
 nv.did = vim.defaulttable()
 nv.spec = require('nvim.plug.spec')

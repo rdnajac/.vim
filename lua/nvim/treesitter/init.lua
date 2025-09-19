@@ -28,7 +28,7 @@ end
 
 M.config = function()
   autostart({ 'sh', 'markdown', 'r', 'python', 'vim' })
-  autostart({ 'ghostty', 'zsh' }, 'bash')
+  autostart({ 'zsh' }, 'bash')
 end
 
 -- M.keys = {

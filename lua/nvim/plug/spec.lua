@@ -102,7 +102,7 @@ function Plugin:apply_commands()
   if vim.is_callable(self.commands) then
     lazyload(function()
       self:commands()
-      info('registered commands for ' .. self.name)
+      vim.list_extend(nv.did.commands, { self.name })
     end, 'CmdLineEnter')
   end
 end
@@ -113,6 +113,7 @@ function Plugin:init()
   -- vim.schedule(function()
   lazyload(function()
     self:on_load()
+    self:apply_commands()
     self:apply_keymaps()
   end)
   -- end)
