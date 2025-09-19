@@ -6,6 +6,9 @@ let g:loaded_plug = 2 " `junegunn/vim-plug` sets this to 1
 function! plug#begin() abort
   let g:plug#list = [] " script-local list
   command! -nargs=+ -bar Plug call plug#(<args>)
+  " if we're on vim, there still time to curl the plug.vim file and source
+  " it; need to ensuer plug#begin behaves correctly since we probably won't
+  " get another chance to call it unless we do something funky with autocmds?
 endfunction
 
 function! plug#(repo, ...) abort
@@ -13,19 +16,17 @@ function! plug#(repo, ...) abort
 endfunction
 
 function! plug#end() abort
-  if exists('g:loaded_vimrc')
-    let g:loaded_vimrc += 1
-    Info 'Reloaded vimrc [' . g:loaded_vimrc . ']'
-  elseif has('nvim')
+  if has('nvim')
     delcommand Plug
-    if !exists('g:plug_list')
+    if !exists('g:plug_list') " first time
       let g:plug_list = deepcopy(g:plug#list)
-    elseif len(g:plug_list) > len(g:plug#list)
-      Warn "different number of plugins"
-      PlugClean
+      lua require('nvim.plug').end_()
+    else
+      Warn "plug# reloaded!"
+      call plug#reload#()
     endif
-    lua require('nvim.plug').end_()
   else
+    " TODO: move this to a separate function?
     if !(exists('g:did_load_filetypes')
 	  \ && exists('g:did_load_ftplugin')
 	  \ && exists('g:did_indent_on')

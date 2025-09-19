@@ -8,6 +8,7 @@ call vimrc#init()
 set noswapfile
 " set autowrite autowriteall
 " set confirm
+set virtualedit=block
 
 set ignorecase smartcase
 set mouse=a
@@ -220,12 +221,13 @@ nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
-  " git
-  nnoremap <leader>ga <Cmd>!git add %<CR>
-  nnoremap <leader>gN <Cmd>execute '!open ' . git#url('neovim/neovim')<CR>
-  nnoremap <leader>gZ <Cmd>execute '!open ' . git#url('lazyvim/lazyvim')<CR>
+" git
+nnoremap <leader>ga <Cmd>!git add %<CR>
+nnoremap <leader>gN <Cmd>execute '!open ' . git#url('neovim/neovim')<CR>
+nnoremap <leader>gZ <Cmd>execute '!open ' . git#url('lazyvim/lazyvim')<CR>
 
 nnoremap ` ~
+nnoremap ~ `
 vnoremap <BS> d
 
 " buffers {{{2
@@ -447,4 +449,6 @@ call plug#end() " }}}1
 
 if !exists('g:loaded_vimrc')
   let g:loaded_vimrc = 1
+else
+  let g:loaded_vimrc+= 1 | Info 'Reloaded vimrc [' . g:loaded_vimrc . ']'
 endif

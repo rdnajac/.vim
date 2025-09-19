@@ -7,27 +7,16 @@
 " provide consistent plugins.
 "
 
-""
-" execute a function on VimEnter or immediately if already entered
-function! vimrc#on_init(fn) abort
-  if v:vim_did_enter
-    call call(a:fn, [])
-  else
-    execute 'autocmd VimEnter * call ' . string(a:fn) . '()'
-  endif
+function! vimrc#init() abort
+  execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
 endfunction
 
 function! vimrc#home() abort
   return has('nvim') ? stdpath('config') : split(&runtimepath, ',')[0]
 endfunction
 
-function! vimrc#init() abort
-  execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
-endfunction
-
-"
-" configure vim-specific settings
-" these are only run once
+""
+" configure vim-specific settings (these are only run once)
 function! vimrc#init_vim() abort " {{{
   let l:home = vimrc#home()
   let &viminfofile = home . '.viminfo'
@@ -60,8 +49,8 @@ function! vimrc#nvim_config() abort " {{{
   set jumpoptions+=view
   set mousescroll=hor:0
   set nocdhome
-  " NOTE: ui options are set earlier  on in `init.lua`
-  " NOTE: also try `:options`
+  " NOTE: ui options are set elsewhere
+  " NOTE: also try running `:options`
 
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
@@ -69,14 +58,26 @@ function! vimrc#nvim_config() abort " {{{
   " -- initialize tabline
   call vimline#tabline#()
 
-  let g:nvim_did_init = 1
+  let g:nvim_did_init = v:true
 endfunction
 
 " }}}
-function! vimrc#init_nvim() abort
+function! vimrc#init_nvim() abort " {{{
   if !exists('g:nvim_did_init')
+    let g:nvim_did_init = v:false
     call vimrc#on_init(function('vimrc#nvim_config'))
   endif
 endfunction
 
-" TODO: template function to create or increment global variable
+" }}}
+""
+" execute a function on VimEnter or immediately if already entered
+function! vimrc#on_init(fn) abort " {{{
+  if v:vim_did_enter
+    call call(a:fn, [])
+  else
+    execute 'autocmd VimEnter * call ' . string(a:fn) . '()'
+  endif
+endfunction
+
+" }}}
