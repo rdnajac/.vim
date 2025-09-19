@@ -6,7 +6,7 @@ local git_status = new_git_status()
 
 ---@type oil.setupOpts
 M.opts = {
-  default_file_explorer = vim.g.file_explorer == 'oil',
+  -- default_file_explorer = vim.g.file_explorer == 'oil',
   -- skip_confirm_for_simple_edits = true,
   constrain_cursor = 'name',
   win_options = {
@@ -63,24 +63,15 @@ M.opts = {
   },
   view_options = {
     is_hidden_file = function(name, bufnr)
-      local dir = require('oil').get_current_dir(bufnr)
+      local local_dir = require('oil').get_current_dir(bufnr)
       local is_dotfile = vim.startswith(name, '.') and name ~= '..'
-
-      if not dir then
-        return is_dotfile
+      if not local_dir then -- e.g. over ssh connections)
+        return is_dotfile -- just hide dotfiles
       end
-
       local status = git_status[dir]
-
-      if is_dotfile then
-        -- Show dotfiles if tracked
-        return not status.tracked[name]
-      else
-        -- Hide files if gitignored
-        return status.ignored[name] or false
-      end
+      -- hide untracked dotfiles, and ignored files
+      return (is_dotfile and not status.tracked[name]) or status.ignored[name] or false
     end,
-
     is_always_hidden = function(name, _)
       return name == '../'
     end,

@@ -105,7 +105,6 @@ M.config = function()
     scss = 'css',
     quarto = 'rmd',
     zsh = 'sh',
-    lua = 'vim',
   }
 
   vim.g.dials_by_ft = vim.tbl_extend('force', dials_by_ft, extend)

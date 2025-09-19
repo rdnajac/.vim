@@ -1,4 +1,3 @@
-
 --- Tracks the time spent in a function
 --- @generic F: function
 --- @param f F

@@ -27,13 +27,13 @@ set whichwrap+=<,>,[,],h,l
 " TODO: use ftplugins to set format options
 set formatoptions-=or
 
-" editing {{{2
+" editing {{{
 set breakindent
 set linebreak
 set nowrap
 set shiftround
-" don't change shiftwidth or tabstop!
-" instead, use `sw` and `sts`
+" don't change tabstop!
+" use `sw` and `sts`
 set shiftwidth=2
 set softtabstop=2
 
@@ -58,6 +58,37 @@ set listchars+=tab:→\ ",
 set listchars+=extends:…,
 set listchars+=precedes:…,
 set listchars+=nbsp:+
+
+" folding {{{
+set fillchars+=fold:\ ,
+set fillchars+=foldclose:▸,
+set fillchars+=foldopen:▾,
+set fillchars+=foldsep:\ ,
+set fillchars+=foldsep:│
+set foldlevel=99
+" set foldlevelstart=2
+" set foldminlines=5
+set foldopen+=insert,jump
+set foldtext=fold#text()
+" set foldmethod=marker
+
+augroup vimrc_fold
+  au!
+  " auto_pause_folds
+  " au CmdlineLeave /,\? call fold#pause()
+  " au CursorMoved,CursorMovedI * call fold#unpause()
+  au FileType lua setl fdm=expr foldtext=fold#text_lua()
+  au FileType sh  setl fdm=expr
+  au FileType vim setl fdm=marker
+augroup END
+
+" open and closed folds with `h` in normal mode
+nnoremap <expr> h fold#open_or_h()
+
+" better search if auto pausing folds
+" set foldopen-=search
+" nnoremap <silent> / zn/
+
 " }}}1
 " Section: autocmds {{{1
 augroup vimrc
@@ -167,7 +198,6 @@ nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 
 if has ('nvim')
-  nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
   " code
   nnoremap <leader>cc <Cmd>CodeCompanion<CR>
   " debug
@@ -181,23 +211,14 @@ if has ('nvim')
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
   nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
   " git
-  nnoremap <leader>gb <Cmd>lua Snacks.picker.git_log_line()<CR>
-  nnoremap <leader>gB <Cmd>lua Snacks.gitbrowse()<CR>
-  nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
-  nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
-  nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
   nnoremap <leader>ga <Cmd>!git add %<CR>
-  nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
-  nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
+  nnoremap <leader>gB <Cmd>lua Snacks.gitbrowse()<CR>
   " pickers
   nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
   nnoremap <leader>P <Cmd>lua Snacks.picker()<CR>
   " file/find/format
   nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
-  nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
-  nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
 endif
-
 nnoremap <leader>fD <Cmd>Delete!<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
@@ -210,8 +231,6 @@ vnoremap <BS> d
 nnoremap <silent> <S-Tab>       :bprev!<CR>
 nnoremap <silent> <Tab>         :bnext!<CR>
 nnoremap <silent> <leader><Tab> :e #<CR>
-nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
-nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 
 " resize splits {{{2
 nnoremap <C-W><Up>    :resize +10<CR>

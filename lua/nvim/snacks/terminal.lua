@@ -1,10 +1,13 @@
-vim.api.nvim_create_autocmd('BufEnter', {
-  group = vim.api.nvim_create_augroup('snacks_terminal', { clear = true }),
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = vim.api.nvim_create_augroup('lazygit', { clear = true }),
+  -- pattern = 'term://*/lazygit',
+  -- pattern = 'snacks_terminal',
   callback = function(args)
-    if vim.bo.filetype == 'snacks_terminal' and
-     vim.endswith(vim.api.nvim_buf_get_name(args.buf), 'lazygit') then
-      vim.cmd.startinsert()
-    end
+    -- if vim.endswith(vim.api.nvim_buf_get_name(args.buf), 'lazygit') then
+      vim.schedule(function()
+        vim.cmd.startinsert()
+      end)
+    -- end
   end,
-  desc = 'Start insertmode when entering a Snacks.lazugit buffer'
+  desc = 'Start insertmode when entering a Snacks.lazygit buffer',
 })
