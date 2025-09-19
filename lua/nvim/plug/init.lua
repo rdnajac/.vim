@@ -1,9 +1,6 @@
 vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
 vim.env.PACKDIR = vim.g.plug_home
 
-nv.did = vim.defaulttable()
-nv.spec = require('nvim.plug.spec')
-
 --- @param user_repo string plugin (`user/repo`)
 --- @param data boolean|nil if true, add `data` function to spec
 --- if false, return minimal spec for non-nvim plugins

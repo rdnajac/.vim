@@ -8,14 +8,18 @@ vim.o.winborder = 'rounded'
 -- vim.o.smoothscroll = true
 
 _G.nv = require('nvim')
+nv.did = vim.defaulttable()
+nv.spec = require('nvim.plug.spec')
+
 
 _G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
 
+local Plugin = require('nvim.plug.spec')
+-- Plugin('_plugins'):load()
 vim.cmd.runtime([[vimrc]])
 
-local Plugin = require('nvim.plug.spec')
 
 -- TODO: turn these into plugins
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
