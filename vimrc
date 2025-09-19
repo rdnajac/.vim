@@ -209,10 +209,6 @@ if has ('nvim')
   nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
-  nnoremap <leader>dP <Cmd>=vim.pack.get()<CR>
-  " git
-  nnoremap <leader>ga <Cmd>!git add %<CR>
-  nnoremap <leader>gB <Cmd>lua Snacks.gitbrowse()<CR>
   " pickers
   nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
   nnoremap <leader>P <Cmd>lua Snacks.picker()<CR>
@@ -223,6 +219,11 @@ nnoremap <leader>fD <Cmd>Delete!<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
+
+  " git
+  nnoremap <leader>ga <Cmd>!git add %<CR>
+  nnoremap <leader>gN <Cmd>execute '!open ' . git#url('neovim/neovim')<CR>
+  nnoremap <leader>gZ <Cmd>execute '!open ' . git#url('lazyvim/lazyvim')<CR>
 
 nnoremap ` ~
 vnoremap <BS> d

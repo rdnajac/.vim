@@ -19,8 +19,7 @@ local Plugin = require('nvim.plug.spec')
 
 -- TODO: turn these into plugins
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
-  local plugin = Plugin(modname)
-  plugin:init() -- setup, deps, after
+  Plugin(modname):load()
 end
 
 vim.g.health = { style = 'float' }

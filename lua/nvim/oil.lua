@@ -4,6 +4,14 @@ local detail = 0
 local new_git_status = require('nvim.oil.git_status')
 local git_status = new_git_status()
 
+-- Clear git status cache o
+local refresh = require('oil.actions').refresh
+local orig_refresh = refresh.callback
+refresh.callback = function(...)
+  git_status = new_git_status()
+  orig_refresh(...)
+end
+
 ---@type oil.setupOpts
 M.opts = {
   -- default_file_explorer = vim.g.file_explorer == 'oil',
@@ -63,14 +71,17 @@ M.opts = {
   },
   view_options = {
     is_hidden_file = function(name, bufnr)
-      local local_dir = require('oil').get_current_dir(bufnr)
+      local dir = require('oil').get_current_dir(bufnr)
       local is_dotfile = vim.startswith(name, '.') and name ~= '..'
-      if not local_dir then -- e.g. over ssh connections)
-        return is_dotfile -- just hide dotfiles
+      if not dir then
+        return is_dotfile
       end
       local status = git_status[dir]
-      -- hide untracked dotfiles, and ignored files
-      return (is_dotfile and not status.tracked[name]) or status.ignored[name] or false
+      if is_dotfile then
+        return not status.tracked[name]
+      else
+        return status.ignored[name] or false
+      end
     end,
     is_always_hidden = function(name, _)
       return name == '../'
@@ -94,13 +105,6 @@ end
 M.keys = { '-', '<Cmd>Oil<CR>' }
 
 M.after = function()
-  -- Clear git status cache on refresh
-  local refresh = require('oil.actions').refresh
-  local orig_refresh = refresh.callback
-  refresh.callback = function(...)
-    git_status = new_git_status()
-    orig_refresh(...)
-  end
   require('nvim.oil.autocmds')
 end
 

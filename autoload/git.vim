@@ -7,3 +7,7 @@ function! git#root(...) abort
   let l:root = fnamemodify(l:gitdir, ':p:h:h')
   return l:root
 endfunction
+
+function! git#url(user_repo) abort
+  return 'http://github.com/' . a:user_repo . '.git'
+endfunction

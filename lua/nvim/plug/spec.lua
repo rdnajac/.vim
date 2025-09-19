@@ -15,6 +15,7 @@ end
 --- @field config? fun(): nil
 --- @field enabled? boolean|fun():boolean
 --- @field keys? wk.Spec|fun():wk.Spec
+--- @field init? fun(): nil
 --- @field lazy? boolean
 --- @field specs? string[]|fun():string[]
 --- @field opts? table|fun():table
@@ -44,6 +45,13 @@ end
 
 function Plugin:is_enabled()
   return get(self.enabled) ~= false
+end
+
+function Plugin:do_init()
+  if vim.is_callable(self.init) then
+    local ok, err = pcall(self.init)
+    nv.did.init[self.name] = ok
+  end
 end
 
 --- If there are any dependencies, `vim.pack.add()` them
@@ -80,10 +88,9 @@ end
 
 function Plugin:on_load()
   if vim.is_callable(self.after) then
-    -- Snacks.util.on_module(self.name, function()
-    self.after()
+    local ok, err = pcall(self.after)
+    nv.did.after[self.name] = ok
     vim.list_extend(nv.did.after, { self.name })
-    -- end)
   end
 end
 
@@ -107,8 +114,9 @@ function Plugin:apply_commands()
   end
 end
 
-function Plugin:init()
+function Plugin:load()
   self:deps()
+  self:do_init()
   self:setup()
   -- vim.schedule(function()
   lazyload(function()

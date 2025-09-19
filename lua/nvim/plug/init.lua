@@ -61,11 +61,7 @@ function M.load(plug_data)
   vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
 
   if spec.data == true then -- create plugin object
-    -- local plugin = require('nvim.plug.spec')(name)
-    local plugin = nv.spec(name)
-    if plugin then
-      plugin:init() -- calls setup, and adds deps
-    end
+    nv.spec(name):load()
   end
 end
 
