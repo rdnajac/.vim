@@ -128,11 +128,11 @@ local keys = {
 { '<leader>sS', function() Snacks.picker.lsp_workspace_symbols() end,desc = 'LSP Workspace Symbols' },
 { ']]', function() Snacks.words.jump(vim.v.count1) end,mode={'n','t'},desc = 'Next Reference'       },
 { '[[', function() Snacks.words.jump(-vim.v.count1)end,mode={'n','t'},desc = 'Prev Reference'       },
-{
-  '<leader>N', function()
-    Snacks.zen({win={file=vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}})
-  end, desc = 'Neovim News'
-}
+  {
+    '<leader>N', function()
+      Snacks.zen({win={file=vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}})
+    end, desc = 'Neovim News'
+  }
 }
 
   --- Create a pair of which-key specs for mapping a file picker and a grep picker

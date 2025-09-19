@@ -1,0 +1,69 @@
+local opts = {}
+local paths = vim.api.nvim_list_runtime_paths()
+-- print(paths)
+opts.dirs = paths
+opts.ft = { 'lua', 'vim' }
+-- TODO: this should be items not cwd
+-- pick_dir('N', vim.api.nvim_list_runtime_paths(), {ft={'lua','vim'}})
+Snacks.picker.files(opts)
+
+-- scripts = {
+--   title = 'Scriptnames',
+--   items = function()
+--     local items = {}
+--     -- Use vim.schedule or vim.defer_fn to defer execution
+--     -- Return empty items for now; they will update later asynchronously if possible
+--     -- FIXME:
+--     vim.schedule(function()
+--       local ok, result = pcall(vim.api.nvim_exec2, 'scriptnames', { output = true })
+--       if not ok then
+--         print('Error running scriptnames:', result)
+--         return
+--       else
+--         print('Successfully retrieved scriptnames.')
+--         dd(result.output)
+--       end
+--       for _, line in ipairs(vim.split(result.output, '\n', { plain = true, trimempty = true })) do
+--         local idx, path = line:match('^%s*(%d+):%s+(.*)$')
+--         if idx and path then
+--           table.insert(items, {
+--             formatted = path,
+--             text = string.format('%3d %s', idx, path),
+--             file = path,
+--             item = path,
+--             idx = tonumber(idx),
+--           })
+--         end
+--       end
+--     end)
+--
+--     return items
+--   end,
+--   format = function(item)
+--     return { { item.text } }
+--   end,
+--   sort = { fields = { 'idx' } },
+-- },
+-- subdir = {
+--   title = 'Select directory',
+--   items = function()
+--     local result = {}
+--     for name, type in vim.fs.dir(dir) do
+--       if type == 'directory' then
+--         table.insert(result, {
+--           text = name,
+--           file = vim.fs.joinpath(dir, name),
+--         })
+--       end
+--     end
+--     return result
+--   end,
+--   format = function(entry)
+--     return { { entry.text } }
+--   end,
+--   -- confirm = function(self, entry)
+--   --   if self.opts.on_select then
+--   --     self.opts.on_select(entry.file)
+--   --   end
+--   -- end,
+-- },
