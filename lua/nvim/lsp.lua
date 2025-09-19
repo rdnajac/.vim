@@ -20,7 +20,7 @@ M.config = function()
   require('nvim.lsp.progress')
   -- require('nvim.lsp.completion')
   nv.lazyload(function()
-    require('nvim.lsp.lazydev')
+    require('nvim.lsp.lazydev').config()
   end, 'FileType', 'lua')
 end
 
@@ -36,10 +36,10 @@ M.root = function(path)
     return nil
   end
 
-  local ft = vim.bo.filetype
-  -- TODO: seems flaky...
-  local lsp_cfg = vim.lsp.config[ft]
-  if not lsp_cfg or not lsp_cfg.root_markers then
+  -- TODO: maybe we need lspconfig to get the ft mapping?
+  -- maybe mason has it?
+  local cgf = vim.lsp.config[vim.bo.filetype] --- XXX: BAD!
+  if not cgf or not cgf.root_markers then
     return nil
   end
 

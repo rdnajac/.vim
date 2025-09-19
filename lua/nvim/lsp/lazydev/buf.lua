@@ -48,9 +48,7 @@ function M.setup()
       M.on_attach(client, buf)
     end
   end
-
-  -- Check for library changes
-  M.update()
+  M.update() -- Check for library changes
 end
 
 --- Gets all LuaLS clients that are enabled
