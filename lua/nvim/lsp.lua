@@ -12,7 +12,7 @@ M.servers = vim.tbl_map(function(path)
 end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
 
 M.config = function()
-  --- lsps won't start on restart, so schedule it
+  --- servers won't start on restart, so schedule it
   vim.schedule(function()
     vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
     vim.lsp.enable(M.servers)

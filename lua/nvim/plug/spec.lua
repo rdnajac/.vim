@@ -1,11 +1,6 @@
 local lazyload = nv.util.lazyload
-local function is_nonempty_string(x)
-  return type(x) == 'string' and x ~= ''
-end
-
-local function is_nonempty_list(t)
-  return vim.islist(t) and #t > 0
-end
+local is_nonempty_string = nv.util.is_nonempty_string
+local is_nonempty_list = nv.util.is_nonempty_list
 
 --- @class Plugin
 --- @field [1]? string
@@ -23,6 +18,21 @@ end
 --- @field name string The plugin name, derived from [1]
 local Plugin = {}
 Plugin.__index = Plugin
+
+function Plugin.new(modname)
+  local plug
+  -- vim.validate('modname', is_nonempty_string, 'string', true)
+  -- try to require the module under nvim
+  -- TODO pcall snippet
+  local ok, module = pcall(require, 'nvim.' .. modname)
+  if ok and module then
+    plug = module
+  end
+  local self = setmetatable(plug or {}, Plugin)
+  self.name = self.name or modname
+  self.opts = self.opts or {}
+  return self
+end
 
 --- Get the value or evaluate the function for a field safely
 ---@generic T
@@ -87,6 +97,8 @@ function Plugin:setup()
 end
 
 function Plugin:on_load()
+  -- TODO: does this need to guard against unloaded modules?
+  -- we assume it is only run after `packadd` in the load func
   if vim.is_callable(self.after) then
     local ok, err = pcall(self.after)
     nv.did.after[self.name] = ok
@@ -97,11 +109,13 @@ end
 function Plugin:apply_keymaps()
   local keys = get(self.keys)
   if is_nonempty_list(keys) then
-    -- Snacks.util.on_module('which-key', function()
-    --- @diagnostic disable-next-line: param-type-mismatch
-    require('which-key').add(keys)
-    vim.list_extend(nv.did.wk, { self.name })
-    -- end)
+    lazyload(function()
+      -- Snacks.util.on_module('which-key', function()
+      --- @diagnostic disable-next-line: param-type-mismatch
+      require('which-key').add(keys)
+      vim.list_extend(nv.did.wk, { self.name })
+      -- end)
+    end)
   end
 end
 
@@ -118,27 +132,9 @@ function Plugin:load()
   self:deps()
   self:do_init()
   self:setup()
-  -- vim.schedule(function()
-  lazyload(function()
-    self:on_load()
-    self:apply_commands()
-    self:apply_keymaps()
-  end)
-  -- end)
-end
-
-function Plugin.new(modname)
-  local plug
-  -- vim.validate('modname', is_nonempty_string, 'string', true)
-  -- try to require the module under nvim
-  local ok, module = pcall(require, 'nvim.' .. modname)
-  if ok and module then
-    plug = module
-  end
-  local self = setmetatable(plug or {}, Plugin)
-  self.name = self.name or modname
-  self.opts = self.opts or {}
-  return self
+  self:on_load()
+  self:apply_commands() -- already lazy-loaded
+  self:apply_keymaps()
 end
 
 return setmetatable(Plugin, {

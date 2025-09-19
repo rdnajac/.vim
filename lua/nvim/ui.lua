@@ -1,15 +1,14 @@
 local M = {}
 
 M.specs = {
-  -- 'folke/noice.nvim',
+  -- 'folke/noice..vim',
   -- 'jhui/fidget.nvim',
 }
 
--- map of buffer types to functions 
 -- stylua: ignore
 local map = {
-  -- probably an oil buffer
   -- [''] = function() return '' end,
+  -- probably an oil buffer
   -- acwrite = function() return '' end,
   help = function() return '%h' end,
   -- nofile = function() return '' end,

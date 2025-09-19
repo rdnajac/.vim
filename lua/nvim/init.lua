@@ -3,7 +3,7 @@ local M = vim.defaulttable(function(k)
   -- return require('nvim.' .. k)
 end)
 
-require('nvim.ui.extui')
+require('vim._extui').enable({}) -- XXX: experimental
 
 M.lazyload = require('nvim.util.lazyload')
 

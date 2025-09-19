@@ -40,12 +40,19 @@ M.docsymbols = function()
   return require('nvim.lsp.docsymbols').get()
 end
 
---- Get icon for a buffer by buffer number
----@param bufnr number|nil Buffer number (defaults to current buffer)
+--- Get icon for a buffer by buffer number or filetype
+---@param bufnr_or_ft number|string|nil
 ---@return string icon
-M.ft_icon = function(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local ft = vim.bo[bufnr].filetype or nil
+M.ft_icon = function(bufnr_or_ft)
+  local ft
+
+  if type(bufnr_or_ft) == 'string' then
+    ft = bufnr_or_ft
+  else
+    local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
+    ft = vim.bo[bufnr].filetype
+  end
+
   local icon = ft and MiniIcons.get('filetype', ft) or nv.icons.files.file
   return icon .. ' '
 end

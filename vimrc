@@ -223,8 +223,8 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " git
 nnoremap <leader>ga <Cmd>!git add %<CR>
-nnoremap <leader>gN <Cmd>execute '!open ' . git#url('neovim/neovim')<CR>
-nnoremap <leader>gZ <Cmd>execute '!open ' . git#url('lazyvim/lazyvim')<CR>
+nnoremap <leader>gN <Cmd>execute '!open' git#url('neovim/neovim')<CR>
+nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 
 nnoremap ` ~
 nnoremap ~ `

@@ -1,10 +1,9 @@
 local M = { 'stevearc/oil.nvim' }
 
 local detail = 0
+-- XXX: this will fail if this file is loaded before oil.nvim
 local new_git_status = require('nvim.oil.git_status')
 local git_status = new_git_status()
-
--- Clear git status cache o
 local refresh = require('oil.actions').refresh
 local orig_refresh = refresh.callback
 refresh.callback = function(...)
@@ -14,7 +13,6 @@ end
 
 ---@type oil.setupOpts
 M.opts = {
-  -- default_file_explorer = vim.g.file_explorer == 'oil',
   -- skip_confirm_for_simple_edits = true,
   constrain_cursor = 'name',
   win_options = {
@@ -22,13 +20,11 @@ M.opts = {
   },
   watch_for_changes = true,
   keymaps = {
-    ['yp'] = { 'actions.yank_entry', opts = { modify = ':~' } },
-    ['q'] = { 'actions.close', mode = 'n' },
-    ['<Tab>'] = { 'actions.close', mode = 'n' },
-    ['<Left>'] = { 'actions.parent', mode = 'n' },
-    ['<Right>'] = { 'actions.select', mode = 'n' },
     ['h'] = { 'actions.parent', mode = 'n' },
     ['l'] = { 'actions.select', mode = 'n' },
+    ['<Left>'] = { 'actions.parent', mode = 'n' },
+    ['<Right>'] = { 'actions.select', mode = 'n' },
+    ['<Tab>'] = { 'actions.close', mode = 'n' },
     ['O'] = {
       function()
         local path = require('oil').get_cursor_entry().parsed_name
@@ -37,7 +33,6 @@ M.opts = {
         end
       end,
     },
-    ['z'] = '<Cmd>Zoxide<CR>',
     ['gi'] = {
       desc = 'Toggle file detail view',
       callback = function()
@@ -52,15 +47,14 @@ M.opts = {
         require('oil').set_columns(columns)
       end,
     },
-    -- [':'] = {
-    --   'actions.open_cmdline',
-    --   opts = {
-    --     shorten_path = false,
-    --     modify = '~:',
-    --   },
-    --   desc = 'Open the command line with the current directory as an argument',
-    --   mode = 'n',
-    -- },
+    ['q'] = { 'actions.close', mode = 'n' },
+    ['yp'] = { 'actions.yank_entry', opts = { modify = ':~' } },
+    ['~'] = '<Cmd>Zoxide<CR>',
+    [';'] = {
+      'actions.open_cmdline',
+      opts = { shorten_path = false, modify = ':~' },
+      desc = 'Open cmdline with current directory as an argument',
+    },
   },
   -- win_options = { signcolumn = 'yes:2' },
   float = {

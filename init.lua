@@ -6,7 +6,7 @@ for _, provider in ipairs({ 'node', 'perl', 'ruby' }) do
   vim.g[provider] = 0 -- disable providers to silence warnings
 end
 
-vim.o.cmdheight = 0 
+vim.o.cmdheight = 0
 -- vim.o.pumblend = 0 -- default: 10
 -- vim.o.smoothscroll = true -- default: false
 vim.o.winborder = 'rounded'
@@ -18,18 +18,16 @@ _G.nv = require('nvim')
 nv.did = vim.defaulttable()
 nv.spec = require('nvim.plug.spec')
 
-_G.info = function(...) 
   -- TODO: Snacks.debug
+_G.info = function(...)
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
-
-local Plugin = require('nvim.plug.spec')
 
 vim.cmd.runtime([[vimrc]])
 
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
--- for _, modname in ipairs({ '_plugins', 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
-  Plugin(modname):load()
+  -- for _, modname in ipairs({ '_plugins', 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
+  nv.spec(modname):load()
 end
 
 print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - t0) / 1e6))

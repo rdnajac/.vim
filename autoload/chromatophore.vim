@@ -15,7 +15,8 @@ function! chromatophore#setup() abort
   call vim#hl#set('Chromatophore_bc', grey,         eigengrau)
 
   call vim#hl#link('Chromatophore', g:chromatophore_groups)
-  call vim#hl#link('Chromatophore_a', 'StatusLine', 'FloatTitle')
+  call vim#hl#link('Chromatophore_a', 'FloatTitle')
+  call vim#hl#link('Chromatophore_a', 'StatusLine')
   " call vim#hl#link('Chromatophore_a', 'FloatTitle')
 endfunction
 
