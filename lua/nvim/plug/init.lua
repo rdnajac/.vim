@@ -12,7 +12,6 @@ local function to_spec(user_repo, data)
   if data == false then
     return src
   end
-
   return {
     src = src,
     name = user_repo:match('([^/]+)$'):gsub('%.nvim$', ''),
@@ -58,7 +57,7 @@ function M.load(plug_data)
   vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
 
   if spec.data == true then -- create plugin object
-    nv.spec(name):load()
+    nv.spec(name)
   end
 end
 

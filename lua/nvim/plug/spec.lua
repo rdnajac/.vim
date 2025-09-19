@@ -10,7 +10,6 @@ local is_nonempty_list = nv.util.is_nonempty_list
 --- @field config? fun(): nil
 --- @field enabled? boolean|fun():boolean
 --- @field keys? wk.Spec|fun():wk.Spec
---- @field init? fun(): nil
 --- @field lazy? boolean
 --- @field specs? string[]|fun():string[]
 --- @field opts? table|fun():table
@@ -31,6 +30,12 @@ function Plugin.new(modname)
   local self = setmetatable(plug or {}, Plugin)
   self.name = self.name or modname
   self.opts = self.opts or {}
+  -- init
+  self:deps()
+  self:setup()
+  self:on_load()
+  self:apply_commands() -- already lazy-loaded
+  self:apply_keymaps()
   return self
 end
 
@@ -55,13 +60,6 @@ end
 
 function Plugin:is_enabled()
   return get(self.enabled) ~= false
-end
-
-function Plugin:do_init()
-  if vim.is_callable(self.init) then
-    local ok, err = pcall(self.init)
-    nv.did.init[self.name] = ok
-  end
 end
 
 --- If there are any dependencies, `vim.pack.add()` them
@@ -128,14 +126,6 @@ function Plugin:apply_commands()
   end
 end
 
-function Plugin:load()
-  self:deps()
-  self:do_init()
-  self:setup()
-  self:on_load()
-  self:apply_commands() -- already lazy-loaded
-  self:apply_keymaps()
-end
 
 return setmetatable(Plugin, {
   __call = function(_, t)

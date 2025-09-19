@@ -1,7 +1,7 @@
 local M = { 'folke/snacks.nvim' }
 
 -- stylua: ignore
-local enabled = {
+local _enabled = {
   bigfile      = { enabled = true  },
   dashboard    = { enabled = true  },
   explorer     = { enabled = true  },
@@ -22,7 +22,7 @@ M.after = function()
   skip = vim.tbl_keys(Snacks.picker)
 
   _G.bt = Snacks.debug.backtrace
-  bt()
+  -- bt()
   require('nvim.snacks.terminal')
 end
 
@@ -44,7 +44,7 @@ local opts = {
 }
 
 -- TODO: use the snacks.config.merge functions
-M.opts = vim.tbl_deep_extend('force', opts, enabled)
+M.opts = vim.tbl_deep_extend('force', opts, _enabled)
 
 M.keys = function()
   require('nvim.snacks.toggle') -- set up toggles

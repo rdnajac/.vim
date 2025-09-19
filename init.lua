@@ -27,7 +27,7 @@ vim.cmd.runtime([[vimrc]])
 
 for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
   -- for _, modname in ipairs({ '_plugins', 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
-  nv.spec(modname):load()
+  nv.spec(modname)
 end
 
 print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - t0) / 1e6))
