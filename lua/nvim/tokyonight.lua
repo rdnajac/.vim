@@ -13,7 +13,7 @@ local bg = {
 M.colors = nil
 --- @type tokyonight.Highlights
 M.groups = nil
----@type tokyonight.Config
+--- @type tokyonight.Config
 M.opts = {
   style = 'night',
   transparent = true,

@@ -1,6 +1,7 @@
-local lazyload = nv.util.lazyload
-local is_nonempty_string = nv.util.is_nonempty_string
-local is_nonempty_list = nv.util.is_nonempty_list
+local util = require('nvim.util')
+local to_spec = require('nvim.plug').to_spec
+local is_nonempty_string = util.is_nonempty_string
+local is_nonempty_list = util.is_nonempty_list
 
 --- @class Plugin
 --- @field [1]? string
@@ -27,6 +28,10 @@ function Plugin.new(modname)
   if ok and module then
     plug = module
   end
+  if is_nonempty_string(module[1]) then vim.pack.add({{
+    src = 'http://github.com/'..module[1]..'.git',
+    name = modname,
+  }}) end
   -- here we have the module, we should check if there is a titlespec
   local self = setmetatable(plug or {}, Plugin)
   self.name = self.name or modname -- XXX:
@@ -70,7 +75,9 @@ function Plugin:deps() -- TODO: handle [1] in spec
   local specs = get(self.specs)
   if is_nonempty_list(specs) or is_nonempty_string(specs) then
     vim.schedule(function()
-      nv.plug(specs)
+  local speclist = vim.islist(specs) and specs or { specs }
+  local resolved = vim.tbl_map(to_spec, speclist)
+  vim.pack.add(resolved)
     end)
   end
 end
@@ -86,9 +93,12 @@ function Plugin:setup()
     ok, err = pcall(self.config)
     nv.did.config[self.name] = ok
   else
+    local opts = get(self.opts)
+    if type(opts) == 'table' then
     local mod = require(self.name) -- TODO: safe require
-    ok, err = pcall(mod.setup, get(self.opts) or {})
+    ok, err = pcall(mod.setup, opts)
     nv.did.setup[self.name] = ok
+    end
   end
   if ok == false then
     vim.notify(string.format('Plugin %s setup failed: %s', self.name, err), vim.log.levels.ERROR)
@@ -108,7 +118,7 @@ end
 function Plugin:apply_keymaps()
   local keys = get(self.keys)
   if is_nonempty_list(keys) then
-    lazyload(function()
+    nv.lazyload(function()
       -- Snacks.util.on_module('which-key', function()
       --- @diagnostic disable-next-line: param-type-mismatch
       require('which-key').add(keys)
@@ -120,7 +130,7 @@ end
 
 function Plugin:apply_commands()
   if vim.is_callable(self.commands) then
-    lazyload(function()
+    nv.lazyload(function()
       self:commands()
       vim.list_extend(nv.did.commands, { self.name })
     end, 'CmdLineEnter')

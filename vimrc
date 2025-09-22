@@ -1,4 +1,3 @@
-" vim:fdm=marker
 scriptencoding utf-8
 let g:mapleader = ' '
 let g:maplocalleader = '\'
@@ -8,33 +7,26 @@ call vimrc#init()
 set noswapfile
 " set autowrite autowriteall
 " set confirm
-set virtualedit=block
 
-set ignorecase smartcase
 set mouse=a
-set pumheight=10
 set report=0
 set scrolloff=8
 set shortmess+=aAcCI
 set shortmess-=o
-set showmatch
-set number
 set splitbelow splitright
 set splitkeep=screen
 set startofline
 set timeoutlen=420
 set updatetime=69
 set whichwrap+=<,>,[,],h,l
-" TODO: use ftplugins to set format options
-set formatoptions-=or
+set virtualedit=block
 
-" editing {{{
+" text {{{
 set breakindent
 set linebreak
 set nowrap
 set shiftround
-" don't change tabstop!
-" use `sw` and `sts`
+" don't change tabstop! use `sw` and `sts`
 set shiftwidth=2
 set softtabstop=2
 
@@ -45,7 +37,17 @@ augroup vimrc_indent
   autocmd FileType c,sh,zsh        setlocal shiftwidth=8 softtabstop=8
 augroup END
 
-" ui {{{2
+" TODO: use ftplugins to set format options
+set formatoptions-=or
+
+" searching {{{
+set showmatch
+set ignorecase 
+set smartcase
+
+" ui {{{
+" set pumheight=10
+set number
 set lazyredraw
 set termguicolors
 set fillchars= " reset
@@ -417,7 +419,8 @@ Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 if !has('nvim')
   " vim plugins {{{
-  Plug 'dense-analysis/ale' " TODO: try nvim-lint
+ " TODO: try nvim-lint
+  Plug 'dense-analysis/ale'
   Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
   Plug 'junegunn/vim-easy-align'
@@ -430,18 +433,15 @@ if !has('nvim')
   " }}}
 else
   " neovim plugins {{{
-  Plug 'folke/tokyonight.nvim'
-  Plug 'folke/which-key.nvim'
-  Plug 'folke/snacks.nvim'
-  Plug 'folke/todo-comments.nvim',
-  Plug 'folke/flash.nvim'
-  Plug 'stevearc/oil.nvim'
-  Plug 'nvim-mini/mini.nvim'
-  Plug 'R-nvim/r.nvim'
-  Plug 'MeanderingProgrammer/render-markdown.nvim'
-  Plug 'mason-org/mason.nvim'
-  Plug 'monaqa/dial.nvim'
-  Plug 'Saghen/blink.cmp'
+  " Plug 'folke/todo-comments.nvim',
+  " Plug 'folke/flash.nvim'
+  " Plug 'stevearc/oil.nvim'
+  " Plug 'nvim-mini/mini.nvim'
+  " Plug 'R-nvim/r.nvim'
+  " Plug 'MeanderingProgrammer/render-markdown.nvim'
+  " Plug 'mason-org/mason.nvim'
+  " Plug 'monaqa/dial.nvim'
+  " Plug 'Saghen/blink.cmp'
   " Plug 'stevearc/conform.nvim'
   " }}}
 endif
@@ -452,3 +452,4 @@ if !exists('g:loaded_vimrc')
 else
   let g:loaded_vimrc+= 1 | Info 'Reloaded vimrc [' . g:loaded_vimrc . ']'
 endif
+" vim:fdm=marker

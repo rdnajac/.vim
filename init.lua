@@ -1,5 +1,4 @@
-local t0 = vim.uv.hrtime()
-
+vim.g.t0 = vim.uv.hrtime()
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.health = { style = 'float' }
@@ -16,20 +15,35 @@ vim.o.winborder = 'rounded'
 vim.loader.enable()
 
 _G.nv = require('nvim')
-nv.did = vim.defaulttable()
-nv.spec = require('nvim.plug.spec')
-
--- nv.spec('_plugins')
--- TODO: Snacks.debug
-_G.info = function(...)
+_G.info = function(...) -- TODO: Snacks.debug
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
 
-vim.cmd.runtime([[vimrc]])
-
-for _, modname in ipairs({ 'copilot', 'diagnostic', 'lsp', 'treesitter', 'ui' }) do
+-- print(vim.api.nvim_get_runtime_file('lua/nvim/*.lua', true))
+local plugins = {
+  'tokyonight',
+  'which-key',
+  'snacks',
+  -- 'todo-comments',
+  'flash',
+  'oil',
+  'mini',
+  'r',
+  'render-markdown',
+  'mason',
+  'dial',
+  'blink.cmp',
+  'copilot',
+  'diagnostic',
+  'lsp',
+  'plug',
+  'treesitter',
+  'ui',
+}
+for _, modname in ipairs(plugins) do
   nv.spec(modname)
 end
 
-print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - t0) / 1e6))
+vim.cmd.runtime([[vimrc]])
+print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - vim.g.t0) / 1e6))
 -- TODO: get the time to `VimEnter` event

@@ -4,12 +4,6 @@ local detail = 0
 -- XXX: this will fail if this file is loaded before oil.nvim
 local new_git_status = require('nvim.oil.git_status')
 local git_status = new_git_status()
-local refresh = require('oil.actions').refresh
-local orig_refresh = refresh.callback
-refresh.callback = function(...)
-  git_status = new_git_status()
-  orig_refresh(...)
-end
 
 ---@type oil.setupOpts
 M.opts = {
@@ -100,6 +94,12 @@ M.keys = { '-', '<Cmd>Oil<CR>' }
 
 M.after = function()
   require('nvim.oil.autocmds')
+  local refresh = require('oil.actions').refresh
+  local orig_refresh = refresh.callback
+  refresh.callback = function(...)
+    git_status = new_git_status()
+    orig_refresh(...)
+  end
 end
 
 return M

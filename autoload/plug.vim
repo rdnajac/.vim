@@ -20,7 +20,8 @@ function! plug#end() abort
     delcommand Plug
     if !exists('g:plug_list') " first time
       let g:plug_list = deepcopy(g:plug#list)
-      lua require('nvim.plug').end_()
+      " lua require('nvim.plug').end_()
+      lua vim.pack.add(vim.tbl_map(function(p) return 'https://github.com/'..p..'.git' end, vim.g.plug_list))
     else
       Warn "plug# reloaded!"
       call plug#reload#()
