@@ -16,8 +16,8 @@
 
   "augroup": {
     "prefix": "augroup",
-    "body": "local aug = vim.api.nvim_create_augroup('$0', { clear = true })",
-    "description": "Create an augroup with clear = true"
+    "body": "local aug = vim.api.nvim_create_augroup('$0', {})",
+    "description": "Create augroup"
   },
 
   "pr": {

@@ -16,7 +16,7 @@ end
 M.after = function()
   -- TODO: add copilot toggle
   require('nvim.util.module').on_module('blink.cmp', function()
-    local aug = vim.api.nvim_create_augroup('BlinkCopilot', { clear = true })
+    local aug = vim.api.nvim_create_augroup('BlinkCopilot', {})
 
     vim.api.nvim_create_autocmd('User', {
       pattern = 'BlinkCmpMenuOpen',

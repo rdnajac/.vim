@@ -1,4 +1,4 @@
-local aug = vim.api.nvim_create_augroup('shebang', { clear = true })
+local aug = vim.api.nvim_create_augroup('shebang', {})
 
 vim.api.nvim_create_autocmd('BufNewFile', {
   group = aug,

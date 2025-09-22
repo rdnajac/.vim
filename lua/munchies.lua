@@ -37,7 +37,7 @@ local function load(event, ev)
   end
 end
 
-local group = vim.api.nvim_create_augroup('snacks', { clear = true })
+local group = vim.api.nvim_create_augroup('snacks', {})
 vim.api.nvim_create_autocmd(vim.tbl_keys(events), {
   group = group,
   once = true,

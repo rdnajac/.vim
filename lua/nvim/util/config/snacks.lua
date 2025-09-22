@@ -93,7 +93,7 @@ function M.setup(opts)
     load('UIEnter')
   end
 
-  local group = vim.api.nvim_create_augroup('snacks', { clear = true })
+  local group = vim.api.nvim_create_augroup('snacks_load?', {})
   vim.api.nvim_create_autocmd(vim.tbl_keys(events), {
     group = group,
     once = true,

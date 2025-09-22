@@ -1,4 +1,4 @@
-local aug = vim.api.nvim_create_augroup('myoil', { clear = true })
+local aug = vim.api.nvim_create_augroup('myoil', {})
 
 vim.api.nvim_create_autocmd('BufEnter', {
   pattern = 'oil://*',

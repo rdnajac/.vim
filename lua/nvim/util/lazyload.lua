@@ -1,4 +1,4 @@
-local aug = vim.api.nvim_create_augroup('LazyLoad', { clear = true })
+local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- Lazy-load a function on its event or on VimEnter by default.
 ---@param cb fun() The function to call when the event fires
 ---@param event? string|string[] The Neovim event(s) to watch (default: VimEnter)

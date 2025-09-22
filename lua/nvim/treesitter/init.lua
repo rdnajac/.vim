@@ -11,7 +11,7 @@ M.build = function()
   require('nvim-treesitter').install(parsers)
 end
 
-local aug = vim.api.nvim_create_augroup('treesitter', { clear = true })
+local aug = vim.api.nvim_create_augroup('treesitter', {})
 
 --- @param ft string|string[] filetype or list of filetypes
 --- @param override string|nil optional override parser lang

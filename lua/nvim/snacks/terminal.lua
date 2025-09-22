@@ -1,5 +1,5 @@
 vim.api.nvim_create_autocmd('TermOpen', {
-  group = vim.api.nvim_create_augroup('lazygit', { clear = true }),
+  group = vim.api.nvim_create_augroup('lazygit', {}),
   -- pattern = 'term://*/lazygit',
   -- pattern = 'snacks_terminal',
   callback = function(args)

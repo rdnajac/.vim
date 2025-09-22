@@ -26,7 +26,7 @@ function M.setup()
     timer:start(100, 0, update)
   end
 
-  local group = vim.api.nvim_create_augroup('lazydev', { clear = true })
+  local group = vim.api.nvim_create_augroup('lazydev', {})
 
   vim.api.nvim_create_autocmd({ 'LspAttach', 'LspDetach' }, {
     group = group,
