@@ -12,21 +12,18 @@ M.opts = {
   pdfviewer = '',
   user_maps_only = true,
   quarto_chunk_hl = { highlight = false },
-  -- register_treesitter = true, -- DIY
-  hook = {
-    on_filetype = function()
-      vim.keymap.set('n', '<localleader><CR>', M.debug_word, { buffer = true })
-    end,
-  },
 }
 
 -- TODO: 
 -- > bc903b2 │ Run `vim.treesitter.start()` in all our filetypes (#437)
 
+M.filetypes = { 'r', 'rmd', 'quarto' }
+
 M.keys = {
   icon = { icon = ' ', color = 'blue' },
   { '<localleader>r', group = 'R' },
   { '<localleader>\\', '<Plug>RStart', ft = M.filetypes },
+  { '<localleader><CR>', M.debug_word, ft = M.filetypes },
 }
 
 -- TODO: call here::root() on BufEnter for r, rmd, quarto

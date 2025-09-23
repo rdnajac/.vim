@@ -44,7 +44,6 @@ function M.load(plug_data)
   vim.cmd.packadd({ name, bang = bang, magic = { file = false } })
 
   if spec.data == true then -- create plugin object
-    print(name)
     nv.spec(name)
   end
 end

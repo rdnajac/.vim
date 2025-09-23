@@ -4,17 +4,16 @@ M.specs = {
   'github/copilot.vim',
 }
 
-vim.g.copilot_no_tab_map = true
-
 M.config = function()
+  vim.g.copilot_no_tab_map = true
   vim.keymap.set('i', '<C-J>', 'copilot#Accept("\\<CR>")', {
     expr = true,
     replace_keycodes = false,
   })
 end
 
-M.after = function()
   -- TODO: add copilot toggle
+M.after = function()
   require('nvim.util.module').on_module('blink.cmp', function()
     local aug = vim.api.nvim_create_augroup('BlinkCopilot', {})
 

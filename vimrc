@@ -397,7 +397,6 @@ call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
-" Plug 'github/copilot.vim'
 Plug 'tpope/vim-git'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-repeat'

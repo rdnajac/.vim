@@ -18,4 +18,8 @@ M.status = function()
   return string.format('%s%s%s%s', nv.lsp.status(), nv.copilot.status(), nv.treesitter.status(), nv.diagnostic.status())
 end
 
+_G.info = function(...) -- TODO: Snacks.debug
+  vim.notify(vim.inspect(...), vim.log.levels.INFO)
+end
+
 return M
