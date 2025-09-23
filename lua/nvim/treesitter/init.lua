@@ -35,30 +35,30 @@ end
 --
 -- }
 
+  -- stylua: ignore
 M.after = function()
-  require('nvim.treesitter.mycommentparser')
-  -- stylua: ignore start
   vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection').start() end, { desc = 'Start selection' })
   vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
   vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
   vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
-  -- stylua: ignore end
   Snacks.toggle.treesitter():map('<leader>ut')
 end
 
 --- Check if the current node is a comment node
----@return boolean
-M.in_comment_node = function()
-  local success, node = pcall(vim.treesitter.get_node)
-  return success
-      and node
-      and vim.tbl_contains({
-        'comment',
-        'line_comment',
-        'block_comment',
-        'comment_content',
-      }, node:type())
-    or false
+--- @param pos? integer[] position {line, col} 0-indexed
+--- @return boolean
+M.in_comment_node = function(pos)
+  local ok, node = pcall(vim.treesitter.get_node, {
+    bufnr = 0,
+    pos = pos,
+  })
+  if not ok or not node then
+    return false
+  end
+  return vim.tbl_contains(
+    { 'comment', 'line_comment', 'block_comment', 'comment_content' },
+    node:type()
+  )
 end
 
 -- TODO:  report language
@@ -70,7 +70,5 @@ M.status = function()
   end
   return ''
 end
-
-
 
 return M

@@ -24,7 +24,6 @@ local parsers = {
   -- 'cmake',
   -- 'cpp',
   -- 'cuda',
-  'comment', -- HACK: this is a custom parser
   -- 'diff',
   -- 'dockerfile',
   -- 'doxygen',

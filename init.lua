@@ -42,6 +42,8 @@ local plugins = {
 for _, modname in ipairs(plugins) do
   nv.spec(modname)
 end
+require('nvim.util.sourcecode')
+require('nvim.util.extmarks')
 
 print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - vim.g.t0) / 1e6))
 -- TODO: get the time to `VimEnter` event
