@@ -1,5 +1,5 @@
 function! plug#reload#() abort
-  let l:old = g:plug_list
+  let l:old = g:plug#cache
   let l:new = g:plug#list
   let l:removed = filter(copy(l:old), {_, v -> index(l:new, v) == -1})
   let l:added = filter(copy(l:new), {_, v -> index(l:old, v) == -1})

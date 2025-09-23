@@ -14,6 +14,12 @@
     "description": "autocmd"
   },
 
+  "pcall": {
+    "prefix": "pcall",
+    "body": "local ok, ${1:result} = pcall(${0})",
+    "description": "pcall"
+  },
+
   "augroup": {
     "prefix": "augroup",
     "body": "local aug = vim.api.nvim_create_augroup('$0', {})",

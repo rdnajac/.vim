@@ -42,7 +42,7 @@ set formatoptions-=or
 
 " searching {{{
 set showmatch
-set ignorecase 
+set ignorecase
 set smartcase
 
 " ui {{{
@@ -80,7 +80,7 @@ augroup vimrc_fold
   " auto_pause_folds
   " au CmdlineLeave /,\? call fold#pause()
   " au CursorMoved,CursorMovedI * call fold#unpause()
-  au FileType lua setl fdm=expr foldtext=fold#text_lua()
+  " au FileType lua setl fdm=expr foldtext=fold#text_lua()
   au FileType sh  setl fdm=expr
   au FileType vim setl fdm=marker
 augroup END
@@ -419,7 +419,7 @@ Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 if !has('nvim')
   " vim plugins {{{
- " TODO: try nvim-lint
+  " TODO: try nvim-lint
   Plug 'dense-analysis/ale'
   Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
@@ -433,16 +433,9 @@ if !has('nvim')
   " }}}
 else
   " neovim plugins {{{
-  " Plug 'folke/todo-comments.nvim',
-  " Plug 'folke/flash.nvim'
-  " Plug 'stevearc/oil.nvim'
-  " Plug 'nvim-mini/mini.nvim'
-  " Plug 'R-nvim/r.nvim'
-  " Plug 'MeanderingProgrammer/render-markdown.nvim'
-  " Plug 'mason-org/mason.nvim'
-  " Plug 'monaqa/dial.nvim'
-  " Plug 'Saghen/blink.cmp'
-  " Plug 'stevearc/conform.nvim'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'folke/snacks.nvim'
+  " Plug 'folke/which-key.nvim'
   " }}}
 endif
 call plug#end() " }}}1
