@@ -16,13 +16,14 @@ M.groups = nil
 --- @type tokyonight.Config
 M.opts = {
   style = 'night',
-  transparent = true,
+  transparent = vim.g.transparent == true,
+
   styles = {
     comments = { italic = true },
     keywords = { italic = false, bold = true },
     -- variables = { italic = true },
-    sidebars = 'transparent',
-    floats = 'transparent',
+    floats = vim.g.transparent == true and 'transparent' or nil,
+    sidebars = vim.g.transparent == true and 'transparent' or nil,
   },
   dim_inactive = true,
   on_colors = function(colors)
@@ -30,6 +31,7 @@ M.opts = {
     colors.green = '#39ff14'
   end,
   on_highlights = function(hl, colors)
+    hl['Normal'] = { bg = bg.tokyonight }
     hl['Cmdline'] = { bg = bg.black }
     hl['Statement'] = { fg = colors.red }
     hl['Special'] = { fg = colors.red, bold = true }

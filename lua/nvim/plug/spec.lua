@@ -28,10 +28,15 @@ function Plugin.new(modname)
   if ok and module then
     plug = module
   end
-  if is_nonempty_string(module[1]) then vim.pack.add({{
-    src = 'http://github.com/'..module[1]..'.git',
-    name = modname,
-  }}) end
+  if is_nonempty_string(module[1]) then
+          print(module[1])
+    vim.pack.add({
+      {
+        src = 'http://github.com/' .. module[1] .. '.git',
+        name = modname,
+      },
+    })
+  end
   -- here we have the module, we should check if there is a titlespec
   local self = setmetatable(plug or {}, Plugin)
   self.name = self.name or modname -- XXX:
@@ -48,7 +53,7 @@ end
 --- Get the value or evaluate the function for a field safely
 ---@generic T
 ---@param field T|fun():T
----@return T|nil
+---@return T?
 local function get(field)
   if vim.is_callable(field) then
     local ok, res = xpcall(field, debug.traceback)
@@ -75,9 +80,10 @@ function Plugin:deps() -- TODO: handle [1] in spec
   local specs = get(self.specs)
   if is_nonempty_list(specs) or is_nonempty_string(specs) then
     vim.schedule(function()
-  local speclist = vim.islist(specs) and specs or { specs }
-  local resolved = vim.tbl_map(to_spec, speclist)
-  vim.pack.add(resolved)
+      local speclist = vim.islist(specs) and specs or { specs }
+      --- @cast speclist string[]
+      local resolved = vim.tbl_map(to_spec, speclist)
+      vim.pack.add(resolved)
     end)
   end
 end
@@ -95,9 +101,9 @@ function Plugin:setup()
   else
     local opts = get(self.opts)
     if type(opts) == 'table' then
-    local mod = require(self.name) -- TODO: safe require
-    ok, err = pcall(mod.setup, opts)
-    nv.did.setup[self.name] = ok
+      local mod = require(self.name) -- TODO: safe require
+      ok, err = pcall(mod.setup, opts)
+      nv.did.setup[self.name] = ok
     end
   end
   if ok == false then

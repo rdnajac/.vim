@@ -29,8 +29,8 @@
   },
 
   "ifne": {
-    "prefix": "ifneq",
-    "body": ["if !exists('g:${1}')", "  finish", "endif"],
+    "prefix": "ifne",
+    "body": ["if !exists('g:${1}')", "  let g:{1} = ", "endif"],
     "description": "Global variable declaration"
   },
 

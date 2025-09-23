@@ -18,9 +18,3 @@ augroup End
 " highlight source code inside comments
 syntax region Chromatophore start=/`/ end=/`/ contained containedin=.*Comment
 " side effect? also highlights vimCommentString
-
-finish
-" testing
-lua vim.print("syntax loaded")
-lua Snacks.notify.info("syntax loaded")
-echom v:lua.require'snacks'.notify.info('syntax loaded')

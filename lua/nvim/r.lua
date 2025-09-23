@@ -2,7 +2,7 @@ vim.g.rout_follow_colorscheme = true
 
 local M = {
   'R-nvim/r.nvim', --- HACK: lowercase `r` to match the modname
-  specs = { 'R-nvim/cmp-r' },
+   -- specs = { 'R-nvim/cmp-r' },
 }
 
 --- @module "r"
@@ -12,13 +12,16 @@ M.opts = {
   pdfviewer = '',
   user_maps_only = true,
   quarto_chunk_hl = { highlight = false },
-  register_treesitter = true, -- DIY
+  -- register_treesitter = true, -- DIY
   hook = {
     on_filetype = function()
       vim.keymap.set('n', '<localleader><CR>', M.debug_word, { buffer = true })
     end,
   },
 }
+
+-- TODO: 
+-- > bc903b2 │ Run `vim.treesitter.start()` in all our filetypes (#437)
 
 M.keys = {
   icon = { icon = ' ', color = 'blue' },
