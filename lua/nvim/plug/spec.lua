@@ -1,7 +1,6 @@
-local util = require('nvim.util')
 local to_spec = require('nvim.plug').to_spec
-local is_nonempty_string = util.is_nonempty_string
-local is_nonempty_list = util.is_nonempty_list
+local is_nonempty_string = require('nvim.util').is_nonempty_string
+local is_nonempty_list = require('nvim.util').is_nonempty_list
 
 --- @class Plugin
 --- @field [1]? string
@@ -20,32 +19,37 @@ local Plugin = {}
 Plugin.__index = Plugin
 
 function Plugin.new(modname)
-  local plug
-  -- vim.validate('modname', is_nonempty_string, 'string', true)
-  -- try to require the module under nvim
-  -- TODO pcall snippet
-  local ok, module = pcall(require, 'nvim.' .. modname)
-  if ok and module then
-    plug = module
+  local plug, name
+
+  if is_nonempty_string(modname) then
+    print('got string ' .. modname)
+    local ok, mod = pcall(require, 'nvim.' .. modname)
+    if not ok or not mod then
+      print('got bad module: ' .. modname)
+      return nil
+    end
+    plug = mod
+    plug.name = modname
+  elseif type(modname) == 'table' then
+    plug = modname
+  else
+    return nil
   end
-  if is_nonempty_string(module[1]) then
-          print(module[1])
+
+  -- normalize the repo string
+  if is_nonempty_string(plug[1]) then
+    local repo = plug[1]
+    plug.name = repo:match('([^/]+)$'):gsub('%.nvim$', '')
     vim.pack.add({
       {
-        src = 'http://github.com/' .. module[1] .. '.git',
-        name = modname,
+        src = 'https://github.com/' .. repo .. '.git',
+        name = name,
       },
     })
   end
-  -- here we have the module, we should check if there is a titlespec
-  local self = setmetatable(plug or {}, Plugin)
-  self.name = self.name or modname -- XXX:
-  -- init
-  self:deps()
-  self:setup()
-  self:on_load()
-  self:apply_commands()
-  self:apply_keymaps()
+  local self = setmetatable(plug, Plugin)
+  print(self.name)
+  self:init()
   return self
 end
 
@@ -73,6 +77,16 @@ function Plugin:is_enabled()
   return get(self.enabled) ~= false
 end
 
+function Plugin:init()
+  if self:is_enabled() then
+    self:deps()
+    self:setup()
+    self:on_load()
+    self:apply_commands()
+    self:apply_keymaps()
+  end
+end
+
 --- If there are any dependencies, `vim.pack.add()` them
 --- Dependencies are not initialized or configured, just installed
 --- and are assumed to be in the form `user/repo`
@@ -96,28 +110,23 @@ end
 function Plugin:setup()
   local ok, err
   if vim.is_callable(self.config) then
-    ok, err = pcall(self.config)
-    nv.did.config[self.name] = ok
+    nv.did.config[self.name] = pcall(self.config)
   else
     local opts = get(self.opts)
     if type(opts) == 'table' then
       local mod = require(self.name) -- TODO: safe require
       ok, err = pcall(mod.setup, opts)
+      if not ok then
+        err = string.format('Error calling setup for %s with opts: %s', self.name, err)
+      end
       nv.did.setup[self.name] = ok
     end
-  end
-  if ok == false then
-    vim.notify(string.format('Plugin %s setup failed: %s', self.name, err), vim.log.levels.ERROR)
   end
 end
 
 function Plugin:on_load()
-  -- TODO: does this need to guard against unloaded modules?
-  -- we assume it is only run after `packadd` in the load func
   if vim.is_callable(self.after) then
-    local ok, err = pcall(self.after)
-    nv.did.after[self.name] = ok
-    vim.list_extend(nv.did.after, { self.name })
+    nv.did.after[self.name] = pcall(self.after)
   end
 end
 
@@ -126,9 +135,8 @@ function Plugin:apply_keymaps()
   if is_nonempty_list(keys) then
     nv.lazyload(function()
       -- Snacks.util.on_module('which-key', function()
-      --- @diagnostic disable-next-line: param-type-mismatch
-      require('which-key').add(keys)
-      vim.list_extend(nv.did.wk, { self.name })
+      local wk = require('which-key')
+      nv.did.wk[self.name] = pcall(wk.add, keys)
       -- end)
     end)
   end
@@ -137,8 +145,7 @@ end
 function Plugin:apply_commands()
   if vim.is_callable(self.commands) then
     nv.lazyload(function()
-      self:commands()
-      vim.list_extend(nv.did.commands, { self.name })
+      nv.did.commands[self.name] = pcall(self.commands)
     end, 'CmdLineEnter')
   end
 end
