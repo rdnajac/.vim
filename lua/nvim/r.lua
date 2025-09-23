@@ -2,28 +2,22 @@ vim.g.rout_follow_colorscheme = true
 
 local M = {
   'R-nvim/r.nvim', --- HACK: lowercase `r` to match the modname
-   -- specs = { 'R-nvim/cmp-r' },
-}
-
---- @module "r"
---- @type RConfigUserOpts
-M.opts = {
-  R_args = { '--quiet', '--no-save' },
-  pdfviewer = '',
-  user_maps_only = true,
-  quarto_chunk_hl = { highlight = false },
-}
-
--- TODO: 
--- > bc903b2 │ Run `vim.treesitter.start()` in all our filetypes (#437)
-
-M.filetypes = { 'r', 'rmd', 'quarto' }
-
-M.keys = {
-  icon = { icon = ' ', color = 'blue' },
-  { '<localleader>r', group = 'R' },
-  { '<localleader>\\', '<Plug>RStart', ft = M.filetypes },
-  { '<localleader><CR>', M.debug_word, ft = M.filetypes },
+  specs = { 'R-nvim/cmp-r' },
+  --- @module "r"
+  --- @type RConfigUserOpts
+  opts = {
+    R_args = { '--quiet', '--no-save' },
+    pdfviewer = '',
+    user_maps_only = true,
+    quarto_chunk_hl = { highlight = false },
+  },
+  keys = {
+    ft = { 'r', 'rmd', 'quarto' },
+    icon = { icon = ' ', color = 'blue' },
+    { '<localleader>r', group = 'R' },
+    { '<localleader>\\', '<Plug>RStart' },
+    { '<localleader><CR>', M.debug_word },
+  },
 }
 
 -- TODO: call here::root() on BufEnter for r, rmd, quarto
