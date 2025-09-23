@@ -1,11 +1,11 @@
-# Defaults                                            *defaults* *nvim-defaults*
+# Defaults _defaults_ _nvim-defaults_
 
-Add these to vim sensible
+Add these to vim sensible:
 
 ```help
 - Filetype detection
-- Syntax highlighting 
-- 
+- Syntax highlighting
+-
 - see :highlight for a list of highlight groups colorschemes should set.
 
 - 'autoindent' is enabled
@@ -72,6 +72,7 @@ Add these to vim sensible
 - |g:vimsyn_embed| defaults to "l" to enable Lua highlighting
 
 ```
+
 ## Keymaps
 
 ```help
@@ -146,4 +147,4 @@ nvim.terminal:
     - 'winhighlight' uses |hl-StatusLineTerm| and |hl-StatusLineTermNC| in
       place of |hl-StatusLine| and |hl-StatusLineNC|
     - |[[| and |]]| to navigate between shell prompts
-``` 
+```

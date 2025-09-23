@@ -14,5 +14,8 @@ require('vim._extui').enable({}) -- XXX: experimental
 M.did = vim.defaulttable()
 M.lazyload = require('nvim.util.lazyload')
 M.spec = require('nvim.plug.spec')
+M.status = function()
+  return string.format('%s%s%s%s', nv.lsp.status(), nv.copilot.status(), nv.treesitter.status(), nv.diagnostic.status())
+end
 
 return M

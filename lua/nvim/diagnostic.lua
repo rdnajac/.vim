@@ -46,4 +46,22 @@ end
 
 local unused_local = 'smoke test'
 
+M.status = function()
+  local counts = vim.diagnostic.count(0)
+  local signs = vim.diagnostic.config().signs
+
+  if not signs or vim.tbl_isempty(counts) then
+    return ''
+  end
+
+  return vim
+    .iter(pairs(counts))
+    :map(function(severity, count)
+      local icon = signs.text[severity]
+      local hl_group = signs.numhl[severity]
+      return string.format('%%#%s#%s:%d', hl_group, icon, count)
+    end)
+    :join('')
+end
+
 return M

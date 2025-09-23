@@ -21,7 +21,7 @@ M.lsp = function()
       title = client.name,
       ft = 'lua',
       opts = function(notif)
-        notif.icon = require('vimline').ft_icon()
+        notif.icon = nv.icons()
       end,
     })
   end

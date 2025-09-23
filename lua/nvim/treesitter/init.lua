@@ -61,6 +61,16 @@ M.in_comment_node = function()
     or false
 end
 
--- TODO: add vimline component; report treesiter language
+-- TODO:  report language
+M.status = function()
+  local highlighter = require('vim.treesitter.highlighter')
+  local buf = vim.api.nvim_get_current_buf()
+  if highlighter.active[buf] then
+    return ' '
+  end
+  return ''
+end
+
+
 
 return M

@@ -99,8 +99,11 @@ function M.commands()
   })
 end
 
+function M.after()
+  local status = (' %d'):format(#vim.pack.get())
+  M.status = function() return status end
+end
+
 return setmetatable(M, {
-  __call = function(_, plugin)
-    return M.plug(plugin)
-  end,
+  __call = M.plug,
 })

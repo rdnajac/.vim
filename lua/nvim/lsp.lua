@@ -46,4 +46,18 @@ M.root = function(path)
   return vim.fs.root(path, lsp_cfg.root_markers)
 end
 
+M.status = function()
+  for _, client in pairs(vim.lsp.get_clients()) do
+    if client.name ~= 'copilot' then
+      return nv.icons.lsp.attached
+    end
+  end
+  return nv.icons.lsp.unavailable .. ' '
+end
+
+M.docsymbols = function()
+  return require('nvim.lsp.docsymbols').get()
+end
+
+
 return M

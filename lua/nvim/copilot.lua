@@ -32,4 +32,14 @@ M.after = function()
   end)
 end
 
+M.status = function()
+  -- TODO: util func in nv.lsp module
+  for _, client in pairs(vim.lsp.get_clients()) do
+    if client.name == 'copilot' then
+      return nv.icons.src.copilot
+    end
+  end
+  return ''
+end
+
 return M

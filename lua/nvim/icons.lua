@@ -170,4 +170,25 @@ if icons.kinds then
   end
 end
 
-return icons
+return setmetatable(icons, {
+  -- TODO: use __index to return fticons conditionally
+  __call = function(_, bufnr_or_ft)
+    local ft
+    if type(bufnr_or_ft) == 'string' then
+      ft = bufnr_or_ft
+    else
+      local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
+      ft = vim.bo[bufnr].filetype
+    end
+
+    if type(ft) ~= 'string' or ft == '' then
+      return ' '
+    end
+
+    local ok, icon = pcall(require('mini.icons').get, 'filetype', ft)
+    if not ok or not icon then
+      icon = ' '
+    end
+    return icon .. ' '
+  end,
+})
