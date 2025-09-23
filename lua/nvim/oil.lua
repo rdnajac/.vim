@@ -1,7 +1,6 @@
 local M = { 'stevearc/oil.nvim' }
 
 local detail = 0
--- XXX: this will fail if this file is loaded before oil.nvim
 local new_git_status = require('nvim.oil.git_status')
 local git_status = new_git_status()
 
@@ -72,7 +71,7 @@ M.opts = {
       end
     end,
     is_always_hidden = function(name, _)
-      return name == '../'
+      return name == '..'
     end,
   },
 }
