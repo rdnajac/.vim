@@ -15,10 +15,14 @@ function source.new(opts)
 end
 
 -- (Optional) Enable the source in specific contexts only
-function source:enabled() return vim.bo.filetype == 'lua' end
+function source:enabled()
+  return vim.bo.filetype == 'lua'
+end
 
 -- (Optional) Non-alphanumeric characters that trigger the source
-function source:get_trigger_characters() return { '.' } end
+function source:get_trigger_characters()
+  return { '.' }
+end
 
 function source:get_completions(ctx, callback)
   -- ctx (context) contains the current keyword, cursor position, bufnr, etc.
