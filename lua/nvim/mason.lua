@@ -1,4 +1,5 @@
 local M = { 'mason-org/mason.nvim', opts = {} }
+-- TODO: move under lsp/
 
 -- TODO: do we have to cache this ourselves?
 -- or does mason do this internally?

@@ -35,4 +35,25 @@ function M.on_module(modname, cb)
   end
 end
 
+--- from shared.lua
+--- @generic T
+--- @param root string
+--- @param mod T
+--- @return T
+function _defer_require(root, mod)
+  return setmetatable({ _submodules = mod }, {
+    ---@param t table<string, any>
+    ---@param k string
+    __index = function(t, k)
+      if not mod[k] then
+        return
+      end
+      local name = string.format('%s.%s', root, k)
+      t[k] = require(name)
+      return t[k]
+    end,
+  })
+end
+
+
 return M

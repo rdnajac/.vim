@@ -170,11 +170,9 @@ function Plugin:on_load()
 end
 
 function Plugin:apply_keymaps()
-  print('register autocmd')
   local keys = get(self.keys)
   if is_nonempty_list(keys) then
     nv.lazyload(function()
-      print('fire autocmd')
       -- NOTE: do not have to wait for wk if lazyloaded on VimEnter
       -- Snacks.util.on_module('which-key', function()
       local wk = require('which-key')

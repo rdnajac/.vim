@@ -30,7 +30,10 @@ M.opts = {
     colors.green = '#39ff14'
   end,
   on_highlights = function(hl, colors)
-    -- hl['Normal'] = { bg = bg.tokyonight }
+    -- TODO: 
+    hl['Normal'] = { bg = bg.eigengrau }
+    -- hl['LineNr'] = { fg = '#3B4261', bg = '#111111' }
+    -- hl['LineNr'] = { bg = bg.tokyonight }
     hl['Cmdline'] = { bg = bg.black }
     hl['Statement'] = { fg = colors.red }
     hl['Special'] = { fg = colors.red, bold = true }
@@ -63,13 +66,11 @@ M.opts = {
 --   vim.cmd.doautocmd('ColorScheme') -- fire the autocommand manually
 -- end
 
--- nv.util.module.on_module('tokyonight', function()
-vim.schedule(function()
+nv.util.module.on_module('tokyonight', function()
   M.colors, M.groups, _ = require('tokyonight').load()
   vim.fn['chromatophore#setup']()
   vim.cmd.doautocmd('ColorScheme') -- fire the autocommand manually
 end)
--- end)
 
 -- FIXME: this function is cached on the first require and
 -- doesn't see changes to M.colors or M.groups

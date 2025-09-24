@@ -8,9 +8,8 @@ local modules = vim.loader.find('*', { all = true })
 
 -- return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
 
-local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua')
-print(dir)
+local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim')
 local iter = vim.iter(vim.fs.dir(dir))
 for name in iter do
-  print(name)
+  print('nvim.' .. name:match('^(%a*).*$'))
 end

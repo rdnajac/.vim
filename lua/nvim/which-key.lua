@@ -1,5 +1,4 @@
 local M = { 'folke/which-key.nvim' }
-print('nvim.whick-key required')
 
 --- @module "which-key"
 ---@class wk.Opts
