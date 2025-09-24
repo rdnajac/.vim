@@ -41,4 +41,3 @@ local function run_list(plug_list, f, progress_action)
 
   report_progress('end', 100, '(%d/%d)', #funs, #funs)
 end
-

@@ -5,9 +5,10 @@ local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 ---@param pattern? string|string[] Optional pattern for events like FileType
 local function lazyload(cb, event, pattern)
   vim.api.nvim_create_autocmd(event or 'VimEnter', {
-    callback = function(ev)
-      cb()
-    end,
+    callback = cb,
+    -- callback = function(ev)
+    --   cb()
+    -- end,
     group = aug,
     once = true,
     pattern = pattern and pattern or '*',

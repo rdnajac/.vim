@@ -23,3 +23,14 @@ local function capture_tmux_keys()
   end
   return filtered_keys
 end
+
+local function capture_ghostty_keys()
+  local result = vim.system({ 'ghostty', '+list-keybinds' }, { text = true }):wait()
+  local keys = vim.split(result.stdout, '\n', { plain = true })
+  for _, key in ipairs(keys) do
+    local keymap, action = key:sub(#'keybind =  '):match('^(.+)=(.+)$')
+    print('`' .. keymap .. '` --> ' .. action)
+  end
+end
+
+capture_ghostty_keys()

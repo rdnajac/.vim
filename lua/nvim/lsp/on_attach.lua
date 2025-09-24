@@ -26,7 +26,7 @@ local on_attach = function(client, bufnr)
   -- see `:h lsp-inlay_hint`
   if client:supports_method('textDocument/inlayHint') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-    Snacks.toggle.inlay_hints():map('<leader>uh')
+    -- Snacks.toggle.inlay_hints():map('<leader>uh')
   end
   -- see `:h lsp-codelens`
   if client:supports_method('textDocument/codeLens') then
