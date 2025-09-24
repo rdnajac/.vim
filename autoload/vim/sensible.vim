@@ -40,4 +40,17 @@ function! vim#sensible#() abort
   if exists(':Man') != 2 && !exists('g:loaded_man') && &filetype !=? 'man' && !has('nvim')
     runtime ftplugin/man.vim
   endif
+
+  " `junegunn/vim-plug` will do these automatically
+  if !exists('g:loaded_plug')
+    if !(exists('g:did_load_filetypes')
+	  \ && exists('g:did_load_ftplugin')
+	  \ && exists('g:did_indent_on')
+	  \ )
+      filetype plugin indent on
+    endif
+    if has('syntax') && !exists('g:syntax_on')
+      syntax enable
+    endif
+  endif
 endfunction

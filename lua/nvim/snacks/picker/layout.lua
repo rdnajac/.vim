@@ -37,8 +37,6 @@ return {
         border = borders.topandleft,
         width = 0.65,
         -- TODO: hide preview window if less than 120 cols
-        -- on_buf = ddd('on_buf'),
-        -- on_win = ddd('on_win'),
       },
     },
     {

@@ -14,7 +14,7 @@ local map = {
 
 function M.winbar()
   -- - <empty>	normal buffer
-  -- - acwrite	
+  -- - acwrite
   -- probably an oil buffer
   -- - help	help buffer (do not set this manually)
   -- - nofile	buffer is not related to a file, will not be written

@@ -83,7 +83,7 @@ M.opts_extend = {
         ['~'] = { 'zoxide', mode = { 'i', 'n' } },
         ['P'] = {
           function(p)
-            ddd(p.opts)
+            Snacks.debug.inspect(p.opts)
           end,
           mode = { 'n' },
         },

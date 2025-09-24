@@ -1,6 +1,7 @@
 local M = vim.defaulttable(function(k)
-  return require(vim.fs.basename(vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2))) .. '.' .. k)
-  -- return require('nvim.' .. k)
+  -- return require(vim.fs.basename(vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2))) .. '.' .. k)
+  return require('nvim.' .. k)
+  -- TODO: handle utils
 end)
 
 -- set some ui options
@@ -13,9 +14,14 @@ require('vim._extui').enable({}) -- XXX: experimental
 
 M.did = vim.defaulttable()
 M.lazyload = require('nvim.util.lazyload')
-M.spec = require('nvim.plug.spec')
 M.status = function()
-  return string.format('%s%s%s%s', nv.lsp.status(), nv.copilot.status(), nv.treesitter.status(), nv.diagnostic.status())
+  return string.format(
+    '%s%s%s%s',
+    nv.lsp.status(),
+    nv.copilot.status(),
+    nv.treesitter.status(),
+    nv.diagnostic.status()
+  )
 end
 
 _G.info = function(...) -- TODO: Snacks.debug

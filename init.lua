@@ -10,13 +10,13 @@ end
 vim.loader.enable()
 
 vim.cmd.runtime([[vimrc]])
-vim.cmd([[color scheme]])
+-- vim.cmd([[color scheme]])
 
 _G.nv = require('nvim')
 
 local plugins = {
+  'tokyonight',
   'snacks',
-  'which-key',
   'blink.cmp',
   'copilot',
   'diagnostic',
@@ -25,22 +25,23 @@ local plugins = {
   'mason',
   'mini',
   'oil',
-  'plug',
+  -- 'plug',
+  'vim-plug',
   'r',
   'render-markdown',
   'todo-comments',
   'treesitter',
   'ui',
+  'which-key',
 }
-for _, modname in ipairs(plugins) do
-  nv.spec(modname)
+for _, plugin in ipairs(plugins) do
+  nv.plug(plugin)
 end
 
 require('nvim.util.sourcecode')
--- require('nvim.util.extmarks')
+-- require('nvim.`util`.extmarks')
 
--- local spec = require('nvim.plugin.folke')[1]
--- nv.spec(spec)
+nv.plug(require('nvim.plugin.folke')[1])
 
 print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - vim.g.t0) / 1e6))
 -- TODO: get the time to `VimEnter` event

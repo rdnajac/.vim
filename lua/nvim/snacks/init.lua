@@ -208,7 +208,6 @@ M.commands = function()
       -- currently, this only guards against `:Man`
       if vim.fn.exists(':' .. cmd) ~= 2 then
         vim.api.nvim_create_user_command(cmd, function(args)
-          info(args.bang)
           local opts = {}
           if nv.util.is_nonempty_string(args.args) then
             --- @diagnostic disable-next-line: param-type-mismatch

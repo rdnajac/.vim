@@ -59,5 +59,4 @@ M.docsymbols = function()
   return require('nvim.lsp.docsymbols').get()
 end
 
-
 return M

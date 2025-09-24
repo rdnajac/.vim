@@ -1,4 +1,5 @@
 local M = { 'folke/which-key.nvim' }
+print('nvim.whick-key required')
 
 --- @module "which-key"
 ---@class wk.Opts
@@ -7,11 +8,6 @@ M.opts = {
   preset = 'helix',
   show_help = false,
   sort = { 'order', 'alphanum', 'case', 'mod' },
-  ---@param mapping wk.Mapping
-  filter = function(mapping)
-    -- return mapping.desc and mapping.desc ~= ''
-    return true
-  end,
   spec = {
     {
       {
@@ -37,6 +33,7 @@ M.opts = {
 }
 
 M.after = function()
+  -- TODO:
   local registers = '*+"-:.%/#=_0123456789'
   require('which-key.plugins.registers').registers = registers
 end

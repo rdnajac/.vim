@@ -77,10 +77,6 @@ set foldtext=fold#text()
 
 augroup vimrc_fold
   au!
-  " auto_pause_folds
-  " au CmdlineLeave /,\? call fold#pause()
-  " au CursorMoved,CursorMovedI * call fold#unpause()
-  " au FileType lua setl fdm=expr foldtext=fold#text_lua()
   au FileType sh  setl fdm=expr
   au FileType vim setl fdm=marker
 augroup END
@@ -92,6 +88,13 @@ nnoremap <expr> h fold#open_or_h()
 " set foldopen-=search
 " nnoremap <silent> / zn/
 
+" sesh {{{
+set sessionoptions-=options   " already default in nvim
+set sessionoptions-=blank     " like vim-obsession
+set sessionoptions-=folds     
+set sessionoptions-=tabpages  " per project, not global
+set sessionoptions-=terminal  " don't save terminals
+set viewoptions-=options      " keep mkview minimal
 " }}}1
 " Section: autocmds {{{1
 augroup vimrc
@@ -183,6 +186,7 @@ nmap zJ ]ekJ
 " `surround`
 nmap S viWS
 vmap ` S`
+vmap F Sf
 
 " xmap ga <Plug>(EasyAlign)
 " nmap ga <Plug>(EasyAlign)
@@ -417,8 +421,6 @@ Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
 " Plug '~/GitHub/rdnajac/vim-lol'
 if !has('nvim')
-  " vim plugins {{{
-  " TODO: try nvim-lint
   Plug 'dense-analysis/ale'
   Plug 'github/copilot.vim'
   Plug 'Konfekt/FastFold'
@@ -427,15 +429,7 @@ if !has('nvim')
   Plug 'welle/tmux-complete.vim'
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
-  " TODO: try the shipped vim9 comment plugin
   Plug 'tpope/vim-commentary'
-  " }}}
-else
-  " neovim plugins {{{
-  Plug 'folke/tokyonight.nvim'
-  Plug 'folke/snacks.nvim'
-  " Plug 'folke/which-key.nvim'
-  " }}}
 endif
 call plug#end() " }}}1
 
