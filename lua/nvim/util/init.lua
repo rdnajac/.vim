@@ -4,11 +4,12 @@ end)
 
 M.sep = package.config:sub(1, 1)
 
--- stylua: ignore start
-M.is_nonempty_string = function(x) return type(x) == 'string' and x ~= '' end
-M.is_nonempty_list = function(t) return vim.islist(t) and #t > 0 end
-M.modname = function(path) return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??') end
---stylua: ignore end
+M.is_nonempty_string = function(x)
+  return type(x) == 'string' and x ~= ''
+end
+M.is_nonempty_list = function(t)
+  return vim.islist(t) and #t > 0
+end
 
 --- Iterate over modules under $XDG_CONFIG_HOME/nvim/lua
 ---@param fn fun(modname: string)   -- callback with the module name (e.g. "plug.mini.foo")

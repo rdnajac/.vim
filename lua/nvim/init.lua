@@ -35,12 +35,8 @@ for name, _type in vim.fs.dir(dir) do
   end
 end
 
-lap('init plugs')
-
--- TODO: check bottlenecks in r, mason, blink
 for i = #mods, 1, -1 do
-  local mod = mods[i]
-  Plug(mod)
+  Plug(mods[i])
 end
 
 return M

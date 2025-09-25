@@ -11,6 +11,7 @@ Global accessor `nv`
 - [ ] Who is VIMDIR? VIMHOME?
 
 remote ui stuff
+
 - [ ] start an instance of nvim in the background without a ui attached
 - [ ] on startup, attach to ui, then try out remote plugins and eval expr
 - [ ] neovim as an http server attach to instance view the buffers (logfiles)

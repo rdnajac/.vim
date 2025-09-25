@@ -2,7 +2,9 @@
 -- TODO: try mini.test
 local M = {}
 
-local modname = require('nvim.util').modname
+local modname = function(path)
+  return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
+end
 
 --- Run test cases
 M.modname = function()

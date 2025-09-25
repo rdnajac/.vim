@@ -2,12 +2,11 @@ M = {}
 
 M.specs = {
   'github/copilot.vim',
+  -- TODO:  set this up
   'fang2hou/blink-copilot',
 }
 
 M.build = ':Copilot Auth'
-
-M.enabled = true
 
 M.config = function()
   vim.g.copilot_no_tab_map = true
@@ -17,9 +16,11 @@ M.config = function()
   })
 end
 
+M.enabled = true
+
 -- TODO: add copilot toggle
 M.after = function()
-  require('nvim.util.module').on_module('blink.cmp', function()
+  Snacks.util.on_module('blink.cmp', function()
     local aug = vim.api.nvim_create_augroup('BlinkCopilot', {})
 
     vim.api.nvim_create_autocmd('User', {

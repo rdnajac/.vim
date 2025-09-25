@@ -34,18 +34,18 @@ M.opts = {
 }
 
 -- PERF: improve `after`
--- M.after = function()
---   local m = require('render-markdown')
---   m.set(true) -- TODO: do I need to explicitly start up?
---   Snacks.toggle({
---     name = 'Render Markdown',
---     get = function()
---       return require('render-markdown.state').enabled
---     end,
---     set = function(enabled)
---       m.set(enabled)
---     end,
---   }):map('<leader>um')
--- end
+nv.lazyload(function()
+  local m = require('render-markdown')
+  m.set(true) -- TODO: do I need to explicitly start up?
+  Snacks.toggle({
+    name = 'Render Markdown',
+    get = function()
+      return require('render-markdown.state').enabled
+    end,
+    set = function(enabled)
+      m.set(enabled)
+    end,
+  }):map('<leader>um')
+end)
 
 return M
