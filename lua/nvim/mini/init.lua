@@ -9,4 +9,5 @@ return {
     require('nvim.mini.diff')
     require('nvim.mini.hipatterns')
   end,
+  -- icon = 
 }

@@ -31,9 +31,8 @@ M.opts = {
   end,
   on_highlights = function(hl, colors)
     -- TODO:
-    hl['Normal'] = { bg = bg.eigengrau }
+    -- hl['Normal'] = { bg = bg.eigengrau }
     -- hl['LineNr'] = { fg = '#3B4261', bg = '#111111' }
-    -- hl['LineNr'] = { bg = bg.tokyonight }
     hl['Cmdline'] = { bg = bg.black }
     hl['Statement'] = { fg = colors.red }
     hl['Special'] = { fg = colors.red, bold = true }

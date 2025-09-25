@@ -1,6 +1,6 @@
-
-Plugin.__index = function(self, key)
-  local val = rawget(Plugin, key)
+local M = {}
+M.__index = function(self, key)
+  local val = rawget(M, key)
   if type(val) == 'function' then
     return function(_, ...)
       nv.did = nv.did or {}
@@ -14,10 +14,10 @@ Plugin.__index = function(self, key)
         })
         return result
       end
-    elseif val ~= nil then
-      return val
-    else
-      return Plugin[key] -- fallback to normal delegation
     end
+  else
+    return M[key] -- fallback to normal delegation
   end
 end
+
+return M

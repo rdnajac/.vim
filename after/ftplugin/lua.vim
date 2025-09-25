@@ -1,5 +1,4 @@
 setlocal expandtab
-setlocal formatoptions-=ro
 
 " let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
 let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'

@@ -35,7 +35,8 @@ vim.api.nvim_create_autocmd('LspProgress', {
       title = client.name,
       opts = function(notif)
         notif.style = 'compact' --- use a style without a timestamp
-        notif.icon = #progress[client.id] == 0 and nv.icon() or Snacks.util.spinner()
+        -- TODO: get the filetype assosciated withthe lsp, not the buffer
+        notif.icon = #progress[client.id] == 0 and nv.icon.fticon() or Snacks.util.spinner()
       end,
     })
   end,

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+NVIM_LOG_FILE=$HOME/.vim/nvim-crash.log nvim -V"${1:-3}"nvim-verbose.log

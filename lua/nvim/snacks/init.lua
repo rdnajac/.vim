@@ -17,12 +17,10 @@ local _enabled = {
 }
 local skip = {} -- upvalue
 
-M.after = function()
-  -- capture the methods we want to skip
+M.on_load = function()
+  -- print('on load')
   skip = vim.tbl_keys(Snacks.picker)
-
-  _G.bt = Snacks.debug.backtrace
-  -- bt()
+  _G.nv.icon = require('nvim._icon')
   require('nvim.snacks.terminal')
 end
 
@@ -40,6 +38,7 @@ local opts = {
     dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
     lazygit = { height = 0, width = 0 },
     terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
+    -- TODO: style for notification history window
   },
 }
 
@@ -173,7 +172,6 @@ local keys = {
   -- stylua: ignore start
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
   vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
-  vim.keymap.set('n', '<leader>ui', function() vim.show_pos() end, { desc = 'Inspect Pos' })
   vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
   vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
   --stylua: ignore end

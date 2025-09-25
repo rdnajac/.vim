@@ -2,4 +2,4 @@
 .viminfo
 .vimlog.txt
 Session.vim
-doc/tags
+**/doc/tags

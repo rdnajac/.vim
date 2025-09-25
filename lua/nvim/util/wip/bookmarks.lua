@@ -1,4 +1,5 @@
 -- filter only modules under config
+-- TODO: use this to make bookmarks for submodules under nvim not using vim.loader
 local mods = vim.tbl_filter(function(m)
   return m.modpath:find(vim.fn.stdpath('config'), 1, true) == 1
 end, vim.loader.find('*', { all = true }))

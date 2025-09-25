@@ -21,7 +21,7 @@ M.config = function()
   end)
   require('nvim.lsp.progress')
   -- require('nvim.lsp.completion')
-  nv.lazyload(function()
+  nv.util.lazyload(function()
     require('nvim.lsp.lazydev').config()
   end, 'FileType', 'lua')
 end

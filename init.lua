@@ -1,11 +1,11 @@
 _G.t = { vim.uv.hrtime() }
 vim.g.transparent = true
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+vim.g.loaded_netrw = false
+-- vim.g.loaded_netrwPlugin = 1
 vim.g.health = { style = 'float' }
-for _, provider in ipairs({ 'node', 'perl', 'ruby' }) do
-  vim.g[provider] = 0 -- disable to silence warnings
-end
+-- for _, provider in ipairs({ 'node', 'perl', 'ruby' }) do
+--   vim.g[provider] = 0 -- disable to silence warnings
+-- end
 
 vim.cmd([[runtime vimrc]])
 
@@ -32,8 +32,12 @@ _G.xprequire = function(module, errexit)
   return mod
 end
 
+_G.track = require('nvim.util.chrono')
+
 vim.loader.enable()
 vim.o.cmdheight = 0
 vim.o.winborder = 'rounded'
-xprequire('vim._extui').enable({}) -- XXX: experimental
-xprequire('nvim')
+track('xprequire extui', xprequire('vim._extui').enable({}))
+-- xprequire('munchies')
+track('xprequire nvim', xprequire('nvim'))
+-- xprequire('nvim')

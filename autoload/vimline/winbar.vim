@@ -1,5 +1,9 @@
 scriptencoding utf-8
 
+function s:fticon() abort
+  return ' ' . v:lua.nv.icon.fticon()
+endfunction
+
 function vimline#winbar#terminal() abort
   let l:ret = ''
   let l:ret .= '%#Chromatophore_a# '
@@ -21,12 +25,12 @@ function! vimline#winbar#acwrite() abort
   let l:ret = ''
   let l:ret = '%#Chromatophore_a#'
   if &filetype ==# 'oil'
-    let l:ret .= ' ' . v:lua.nv.icon()
+    let l:ret .=  s:fticon()
     let l:ret .= fnamemodify(lua#require('oil', 'get_current_dir'), ':~')
   elseif &filetype ==# 'nvim-pack'
-    " let l:ret .= v:lua.nv.plug.status()
-    let l:ret .='  '
+    let l:ret .='  ' " TODO: make this the fticon for nvim-pack
     let l:ret .='TODO: print relevant status info'
+    " let l:ret .= v:lua.nv.plug.status()
     " let l:ret .=luaeval("#vim.pack.get()"))
   endif
   return l:ret
@@ -38,20 +42,9 @@ function! vimline#winbar#() abort
 
   let l:ret = ''
   let l:ret = '%#Chromatophore_a#'
-  let l:ret .= ' ' . v:lua.nv.icon() . ' '
-
-  " if &filetype ==# 'oil'
-  "   let l:ret .= fnamemodify(lua#require('oil', 'get_current_dir'), ':~')
-  " else
+  let l:ret .=  s:fticon()
   if l:is_active_buffer
     let l:ret .= '%t'
-  else
-    let l:ret .= '%{expand("%:~:.")}'
-  endif
-  " endif
-
-  let l:ret .= ' '
-  if l:is_active_buffer
     let l:ret .= '%#Chromatophore_b#'
     let l:ret .= ' '
     let l:ret .= vimline#flag#('readonly')
@@ -64,6 +57,8 @@ function! vimline#winbar#() abort
     let l:ret .= '%#Chromatophore_c#'
     let l:ret .= v:lua.nv.lsp.docsymbols()
   else " inactive winbar
+    let l:ret .= '%{expand("%:~:.")}'
+    let l:ret .= ' '
     let l:ret .= vimline#flag#('readonly')
     let l:ret .= vimline#flag#('modified')
   endif

@@ -25,8 +25,7 @@ function M.winbar()
   return map[vim.bo.buftype]()
 end
 
-M.config = function()
-  -- TODO: defer these
+M.after = function()
   vim.o.winbar = "%{%v:lua.require'nvim.ui'.winbar()%}"
   xprequire('nvim.util.sourcecode')
 end

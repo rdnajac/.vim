@@ -79,7 +79,7 @@ rm -rf ~/.local/share/nvim
 | `Snacks.scratch` | Snacks scratch buffers      | `~/.local/share/nvim/scratch` |
 | `Snacks.picker`  | Snacks picker histories     | `~/.local/share/nvim/snacks`  |
 
-Finally, there is ~/.local/state/nvim, where we have:
+Finally, there is `~/.local/state/nvim`, where we have:
 
 - backup/
 - sessions/

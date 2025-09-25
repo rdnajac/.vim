@@ -7,7 +7,6 @@ M.lazy = false
 M.specs = { 'Saghen/blink.compat' }
 
 local border = vim.o.winborder == '' and 'single' or nil
-local icons = require('nvim.icon')
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
@@ -48,7 +47,7 @@ M.opts = {
         components = {
           kind_icon = {
             text = function(ctx)
-              return icons.kinds[ctx.kind] or ''
+              return nv.icon.kinds[ctx.kind] or ''
             end,
           },
         },
@@ -65,14 +64,14 @@ M.opts = {
 }
 
 --- Blink statusline component
-M.component = function()
+M.status = function()
   local ok, sources = pcall(require, 'blink.cmp.sources.lib')
   if not ok then
     return ''
   end
 
   local enabled = sources.get_enabled_providers('default')
-  local source_icons = icons.src
+  local source_icons = nv.icon.src
 
   return vim
     .iter(sources.get_all_providers())

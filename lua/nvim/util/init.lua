@@ -7,25 +7,24 @@ M.sep = package.config:sub(1, 1)
 M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end
+
 M.is_nonempty_list = function(t)
   return vim.islist(t) and #t > 0
 end
 
---- Iterate over modules under $XDG_CONFIG_HOME/nvim/lua
----@param fn fun(modname: string)   -- callback with the module name (e.g. "plug.mini.foo")
----@param subpath? string           -- optional subpath inside lua/, e.g. "plug/mini"
----@param recursive? boolean        -- recurse into subdirs if true
-function M.for_each_module(fn, subpath, recursive)
-  local base = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua')
-  subpath = subpath or ''
-  local pattern = vim.fs.joinpath(subpath, (recursive and '**' or '*'))
-  local files = vim.fn.globpath(base, pattern, false, true)
-  for _, f in ipairs(files) do
-    local mod = M.modname(f)
-    if not vim.endswith(mod, '/init') then
-      fn(mod)
-    end
-  end
+local aug = vim.api.nvim_create_augroup('LazyLoad', {})
+--- Lazy-load a function on its event or on UIEnter by default.
+-- TODO:  fix this signature
+---@param cb fun(ev?: vim.api.autocmd.callback.args)  Callback when the event fires.
+---@param event? string|string[] The Neovim event(s) to watch (default: VimEnter)
+---@param pattern? string|string[] Optional pattern for events like FileType
+M.lazyload = function(cb, event, pattern)
+  vim.api.nvim_create_autocmd(event or 'UIEnter', {
+    callback = cb,
+    group = 'LazyLoad',
+    once = true,
+    pattern = pattern and pattern or '*',
+  })
 end
 
 --- Returns the file path of the first non-self caller.

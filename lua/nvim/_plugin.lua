@@ -1,10 +1,15 @@
 local is_nonempty_string = require('nvim.util').is_nonempty_string
 local is_nonempty_list = require('nvim.util').is_nonempty_list
-
+local lazyload = require('nvim.util').lazyload
 local gh = function(s)
   return s:match('^[%w._-]+/[%w._-]+$') and 'https://github.com/' .. s .. '.git' or s
 end
 
+nv.did = vim.defaulttable()
+
+-- TODO: stronger overlap between spec and plugin esp. `name` field
+
+---
 --- @param user_repo string plugin (`user/repo`)
 --- @param data? any
 --- @return string|vim.pack.Spec
@@ -21,22 +26,21 @@ end
 
 --- Hook to run after a plugin is loaded, immediately after `packadd`
 --- @param spec vim.pack.Spec see `spec.data` for custom behavior
--- - @param path? string
--- local on_load = function(spec, path)
---   vim.schedule(function()
---     vim.print(path)
---   end)
--- end
+--- @param path? string
+local on_load = function(spec, path)
+  vim.schedule(function()
+    vim.print(path)
+  end)
+end
 
 --- @class Plugin
 --- @field [1]? string
---- @field after? fun(): nil
---- @field build? string|fun(): nil
---- @field commands? fun(): nil
---- @field config? fun(): nil
+--- @field after? fun():nil
+--- @field build? string|fun():nil
+--- @field commands? fun():nil
+--- @field config? fun():nil
 --- @field enabled? boolean|fun():boolean
 --- @field keys? wk.Spec|fun():wk.Spec
---- @field lazy? boolean
 --- @field specs? string[]
 --- @field opts? table|fun():table
 --- TODO: can we get it from the spec instead?
@@ -44,27 +48,26 @@ end
 local Plugin = {}
 Plugin.__index = Plugin
 
+-- TODO: use to_spec here
 function Plugin.new(plugin)
   local self
-
   if is_nonempty_string(plugin) then
     -- require it under nvim topmod
-    local module = xprequire('nvim.' .. plugin, false)
-    if module then
-      self = module
-      if is_nonempty_string(module[1]) then
-        self.name = module[1]:match('([^/]+)$'):gsub('%.nvim$', '')
+    self = xprequire('nvim.' .. plugin, false)
+    if self then
+      if is_nonempty_string(self[1]) then
+        self.name = self[1]:match('([^/]+)$'):gsub('%.nvim$', '')
       else
         self.name = plugin
       end
     end
   elseif type(plugin) == 'table' then
     if is_nonempty_string(plugin[1]) then
-      -- TODO: use to_spec
       self = plugin
       self.name = plugin[1]:match('([^/]+)$'):gsub('%.nvim$', '')
     end
   end
+
   if self then
     setmetatable(self, Plugin)
     self:init()
@@ -101,10 +104,13 @@ function Plugin:init()
     self:add()
     -- self:build()
     self:setup()
-    self:on_load()
-    -- self:on_ui()
+    lazyload(function()
+      if vim.is_callable(self.after) then
+        nv.did.after[self.name] = pcall(self.after)
+      end
+      self:apply_keymaps()
+    end)
     self:apply_commands()
-    self:apply_keymaps()
   else
     nv.did.disabled[self.name] = true
   end
@@ -143,28 +149,22 @@ function Plugin:setup()
       nv.did.setup[self.name] = pcall(mod.setup, opts)
     end
   end
-end
-
--- TODO: load when?
-function Plugin:on_load()
-  if vim.is_callable(self.after) then
-    nv.did.after[self.name] = pcall(self.after)
+  if vim.is_callable(self.on_load) then
+    self.on_load()
   end
 end
 
 function Plugin:apply_keymaps()
   local keys = get(self.keys)
   if is_nonempty_list(keys) then
-    nv.lazyload(function()
-      local wk = require('which-key')
-      nv.did.wk[self.name] = pcall(wk.add, keys)
-    end)
+    local wk = require('which-key')
+    nv.did.wk[self.name] = pcall(wk.add, keys)
   end
 end
 
 function Plugin:apply_commands()
   if vim.is_callable(self.commands) then
-    nv.lazyload(function()
+    lazyload(function()
       nv.did.commands[self.name] = pcall(self.commands)
     end, 'CmdLineEnter')
   end

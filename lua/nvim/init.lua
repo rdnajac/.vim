@@ -1,8 +1,11 @@
-local M = vim.defaulttable(function(k)
-  -- return require(vim.fs.basename(vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2))) .. '.' .. k)
-  return require('nvim.' .. k)
-  -- TODO: handle utils
-end)
+local M = {}
+
+_G.nv = setmetatable(M, {
+  __index = function(t, k)
+    t[k] = require('nvim.' .. k)
+    return rawget(t, k) -- does this stop nested metatable __index?
+  end,
+})
 
 _G.dd = function(...)
   require('snacks.debug').inspect(...)
@@ -18,24 +21,36 @@ vim._print = function(_, ...)
   dd(...)
 end
 
-_G.nv = M
-M.did = vim.defaulttable()
-M.lazyload = require('nvim.util.lazyload')
 local Plug = require('nvim._plugin').new
--- TODO: don't skip icons
-local skip = { init = true, icon = true, util = true }
-local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim')
-local mods = {}
 
+local skip = { init = true, util = true }
+local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim')
 for name, _type in vim.fs.dir(dir) do
-  local mod = name:match('^([%w%-]+)')
-  if mod and not skip[mod] then
-    mods[#mods + 1] = mod
+  local modname = name:match('^([%w%-]+)')
+  if modname and not skip[modname] then
+  print(modname)
+    -- track('plug: ' .. modname, require('nvim._plugin').new(modname))
   end
 end
 
-for i = #mods, 1, -1 do
-  Plug(mods[i])
-end
+Plug('Snacks')
+Plug('tokyonight')
+Plug('which-key')
+Plug('lsp')
+Plug('blink')
+Plug('mini')
+Plug('config')
+-- Plug('copilot')
+Plug('diagnostic')
+-- Plug('dial')
+-- Plug('flash')
+-- Plug('notify')
+Plug('plug')
+-- Plug('r')
+-- Plug('render-markdown')
+-- Plug('todo-comments')
+-- Plug('treesitter')
+-- Plug('ui')
+Plug('oil')
 
 return M
