@@ -10,6 +10,8 @@ Snacks.toggle.scroll():map('<leader>uS')
 Snacks.toggle.words():map('<leader>uW')
 Snacks.toggle.zoom():map('<leader>uZ')
 
+Snacks.toggle.treesitter():map('<leader>ut')
+
 Snacks.toggle.option('wrap', { name = 'Wrap' }):map('<leader>uw')
 Snacks.toggle.option('spell', { name = 'Spelling' }):map('<leader>us')
 Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map('<leader>uL')

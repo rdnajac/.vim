@@ -31,10 +31,10 @@ M.opts = {
   },
 }
 
-M.after = function()
-  -- TODO:
-  local registers = '*+"-:.%/#=_0123456789'
-  require('which-key.plugins.registers').registers = registers
-end
-
+-- M.after = function()
+--   -- TODO:
+--   local registers = '*+"-:.%/#=_0123456789'
+--   require('which-key.plugins.registers').registers = registers
+-- end
+--
 return M

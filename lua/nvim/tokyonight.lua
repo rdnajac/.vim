@@ -30,7 +30,7 @@ M.opts = {
     colors.green = '#39ff14'
   end,
   on_highlights = function(hl, colors)
-    -- TODO: 
+    -- TODO:
     hl['Normal'] = { bg = bg.eigengrau }
     -- hl['LineNr'] = { fg = '#3B4261', bg = '#111111' }
     -- hl['LineNr'] = { bg = bg.tokyonight }

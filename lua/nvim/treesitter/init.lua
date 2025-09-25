@@ -1,7 +1,6 @@
-local M = {}
+local M = { 'nvim-treesitter/nvim-treesitter' }
 
 M.specs = {
-  'nvim-treesitter/nvim-treesitter',
   'nvim-treesitter/nvim-treesitter-textobjects',
 }
 
@@ -31,9 +30,9 @@ M.config = function()
   autostart({ 'zsh' }, 'bash')
 end
 
--- M.keys = {
---
--- }
+-- M.keys = function()
+--   return {}
+-- end
 
   -- stylua: ignore
 M.after = function()
@@ -41,7 +40,6 @@ M.after = function()
   vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
   vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
   vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
-  Snacks.toggle.treesitter():map('<leader>ut')
 end
 
 --- Check if the current node is a comment node

@@ -24,7 +24,10 @@ function! vimline#winbar#acwrite() abort
     let l:ret .= ' ' . v:lua.nv.icons()
     let l:ret .= fnamemodify(lua#require('oil', 'get_current_dir'), ':~')
   elseif &filetype ==# 'nvim-pack'
-    let l:ret .= v:lua.nv.plug.status()
+    " let l:ret .= v:lua.nv.plug.status()
+    let l:ret .='  '
+    let l:ret .='TODO: print relevant status info'
+    " let l:ret .=luaeval("#vim.pack.get()"))
   endif
   return l:ret
 endfunction
@@ -35,16 +38,16 @@ function! vimline#winbar#() abort
 
   let l:ret = ''
   let l:ret = '%#Chromatophore_a#'
-    let l:ret .= ' ' . v:lua.nv.icons() . ' '
+  let l:ret .= ' ' . v:lua.nv.icons() . ' '
 
   " if &filetype ==# 'oil'
   "   let l:ret .= fnamemodify(lua#require('oil', 'get_current_dir'), ':~')
   " else
-    if l:is_active_buffer
-      let l:ret .= '%t'
-    else
-      let l:ret .= '%{expand("%:~:.")}'
-    endif
+  if l:is_active_buffer
+    let l:ret .= '%t'
+  else
+    let l:ret .= '%{expand("%:~:.")}'
+  endif
   " endif
 
   let l:ret .= ' '
@@ -53,7 +56,10 @@ function! vimline#winbar#() abort
     let l:ret .= ' '
     let l:ret .= vimline#flag#('readonly')
     let l:ret .= vimline#flag#('modified')
-    let l:ret .= v:lua.nv.status()
+    let l:ret .= v:lua.nv.lsp.status()
+    let l:ret .= v:lua.nv.copilot.status()
+    let l:ret .= v:lua.nv.treesitter.status()
+    let l:ret .= v:lua.nv.diagnostic.status()
     let l:ret .= '%#Chromatophore_bc#'
     let l:ret .= '%#Chromatophore_c#'
     let l:ret .= v:lua.nv.lsp.docsymbols()

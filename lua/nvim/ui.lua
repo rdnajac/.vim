@@ -26,8 +26,9 @@ function M.winbar()
 end
 
 M.config = function()
+  -- TODO: defer these
   vim.o.winbar = "%{%v:lua.require'nvim.ui'.winbar()%}"
-  require('nvim.util.sourcecode')
+  xprequire('nvim.util.sourcecode')
 end
 
 return M

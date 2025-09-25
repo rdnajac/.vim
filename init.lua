@@ -1,4 +1,4 @@
-vim.g.t = { vim.uv.hrtime() }
+_G.t = { vim.uv.hrtime() }
 vim.g.transparent = true
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
@@ -8,7 +8,6 @@ for _, provider in ipairs({ 'node', 'perl', 'ruby' }) do
 end
 
 vim.cmd([[runtime vimrc]])
-vim.loader.enable()
 
 --- Same as require but handles errors gracefully
 ---
@@ -33,7 +32,37 @@ _G.xprequire = function(module, errexit)
   return mod
 end
 
-xprequire('nvim')
+-- TODO: work this into custom vim.notify
+_G.lap = function(msg)
+  local now = vim.uv.hrtime()
+  local prev = t[#t]
+  table.insert(t, now)
 
-print(('nvim initialized in %.2f ms'):format((vim.uv.hrtime() - vim.g.t[1]) / 1e6))
--- TODO: get the time to `VimEnter` event
+  local lap_num = #t - 1
+  local total_ms = (now - t[1]) / 1e6
+  local lap_ms = (now - prev) / 1e6
+
+  print(('%2d: %-24s %8.3f (%7.3f)'):format(lap_num, msg or '', lap_ms, total_ms))
+end
+
+vim.loader.enable()
+
+vim.o.cmdheight = 0
+vim.o.winborder = 'rounded'
+xprequire('vim._extui').enable({}) -- XXX: experimental
+
+lap('require("nvim")')
+require('nvim', true)
+-- xprequire('nvim')
+
+vim.api.nvim_create_autocmd({ 'BufWinEnter', 'VimEnter', 'UIEnter' }, {
+  once = true,
+  callback = function(ev)
+    lap(ev.event)
+  end,
+})
+
+vim.schedule(function()
+  lap('vim.schedule()')
+end)
+lap('init.lua')

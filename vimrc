@@ -118,6 +118,10 @@ augroup vimrc
   au InsertLeave,WinEnter * setlocal cursorline
   au InsertEnter,WinLeave * setlocal nocursorline
 
+  " no numbers in split
+  " au WinEnter * setlocal number
+  " au WinLeave * setlocal nocursorline
+
   " Hide the statusline while in command mode
   au CmdlineEnter * if &ls != 0            | let g:last_ls = &ls | set ls=0        | endif
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
