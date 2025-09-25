@@ -45,14 +45,6 @@ function M.add(specs)
   })
 end
 
--- HACK: defer loading this
-function M.after()
-  local status = (' %d'):format(#vim.pack.get())
-  M.status = function()
-    return status
-  end
-end
-
 --- @class Plugin
 --- @field [1]? string
 --- @field after? fun(): nil
@@ -70,23 +62,27 @@ local Plugin = {}
 Plugin.__index = Plugin
 
 function Plugin.new(plugin)
-  local self
+  local self, name
 
   if is_nonempty_string(plugin) then
     -- require it under nvim topmod
-    local ok, module = pcall(require, 'nvim.' .. plugin)
-    if ok and module then
+    local module = xprequire('nvim.' .. plugin, false)
+    if module then
       self = module
-      self.name = plugin
+      if is_nonempty_string(module[1]) then
+        self.name = module[1]:match('([^/]+)$'):gsub('%.nvim$', '')
+      else
+        self.name = plugin
+      end
     end
   elseif type(plugin) == 'table' then
-    -- check if topmod
     if is_nonempty_string(plugin[1]) then
       -- TODO: use to_spec
       self = plugin
       self.name = plugin[1]:match('([^/]+)$'):gsub('%.nvim$', '')
     end
   end
+
   if self then
     setmetatable(self, Plugin)
     self:init()

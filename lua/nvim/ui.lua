@@ -27,6 +27,7 @@ end
 
 M.config = function()
   vim.o.winbar = "%{%v:lua.require'nvim.ui'.winbar()%}"
+  require('nvim.util.sourcecode')
 end
 
 return M

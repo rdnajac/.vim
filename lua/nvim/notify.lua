@@ -1,5 +1,7 @@
 local M = {}
 
+M.enabled = false
+
 -- Highlight groups for different log levels
 -- 1 = DEBUG, 2 = INFO, 3 = WARN, 4 = ERROR
 local groups = { 'Statement', 'MoreMsg', 'WarningMsg' }

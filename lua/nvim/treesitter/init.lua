@@ -71,4 +71,32 @@ M.status = function()
   return ''
 end
 
+M._installed = nil ---@type table<string,string>?
+
+---@param update boolean?
+function M.get_installed(update)
+  if update then
+    M._installed = {}
+    for _, lang in ipairs(require('nvim-treesitter').get_installed('parsers')) do
+      M._installed[lang] = lang
+    end
+  end
+  return M._installed or {}
+end
+
+M.install_cli = function()
+  if vim.fn.executable('tree-sitter') == 1 then
+    return
+  end
+
+  --- @module 'mason'
+  local reg = nv.mason.reg()
+  reg.refresh(function()
+    local p = reg.get_package('tree-sitter-cli')
+    if not p:is_installed() then
+      nv.mason.install(p)
+    end
+  end)
+end
+
 return M

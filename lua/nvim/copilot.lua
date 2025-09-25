@@ -2,9 +2,12 @@ M = {}
 
 M.specs = {
   'github/copilot.vim',
+  'fang2hou/blink-copilot',
 }
 
-M.enabled = false
+M.build = ':Copilot Auth'
+
+M.enabled = true
 
 M.config = function()
   vim.g.copilot_no_tab_map = true

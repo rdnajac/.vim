@@ -4,13 +4,12 @@ local M = vim.defaulttable(function(k)
   -- TODO: handle utils
 end)
 
--- set some ui options
+-- TODO: move to ui
 vim.o.cmdheight = 0
--- vim.o.pumblend = 0 -- default: 10
--- vim.o.smoothscroll = true -- default: false
 vim.o.winborder = 'rounded'
--- behavior changes with cmdheight and winborder
-require('vim._extui').enable({}) -- XXX: experimental
+xprequire('vim._extui').enable({}) -- XXX: experimental
+
+_G.nv = M
 
 M.did = vim.defaulttable()
 M.lazyload = require('nvim.util.lazyload')
@@ -27,5 +26,17 @@ end
 _G.info = function(...) -- TODO: Snacks.debug
   vim.notify(vim.inspect(...), vim.log.levels.INFO)
 end
+
+local skip = { init = true, icons = true, plug = true, util = true }
+local dir = vim.fs.joinpath(vim.fn.stdpath("config"), "lua", "nvim")
+
+for name, _ in vim.fs.dir(dir) do
+  local mod = name:match("^([%w%-]+)")
+  if mod and not skip[mod] then
+    nv.plug(mod)
+  end
+end
+
+nv.plug(require('nvim.plugin.folke')[1])
 
 return M

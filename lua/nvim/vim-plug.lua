@@ -37,7 +37,7 @@ M.commands = function()
 
   -- TODO: take optional names with a completion list
   command('PlugStatus', function(opts)
-    local plugin = is_nonempty_string(opts.fargs) and opts.fargs or nil
+    local plugin = nv.util.is_nonempty_string(opts.fargs) and opts.fargs or nil
     vim._print(true, vim.pack.get(plugin, { info = opts.bang }))
   end, {
     bang = true,
@@ -58,6 +58,14 @@ M.commands = function()
       return M.unloaded()
     end,
   })
+end
+
+-- HACK: defer loading this
+function M.after()
+  local status = (' %d'):format(#vim.pack.get())
+  M.status = function()
+    return status
+  end
 end
 
 return M

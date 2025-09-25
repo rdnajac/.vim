@@ -46,10 +46,11 @@ function! vimrc#nvim_config() abort " {{{
   set undofile
 
   " nvim-specific settings
+  set pumblend=0
+  set smoothscroll
   set jumpoptions+=view
   set mousescroll=hor:0
   set nocdhome
-  " NOTE: ui options are set elsewhere
   " NOTE: also try running `:options`
 
   " disable the default popup menu
