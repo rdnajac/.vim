@@ -1,3 +1,6 @@
+vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+vim.env.PACKDIR = vim.g.plug_home
+
 local is_nonempty_string = require('nvim.util').is_nonempty_string
 local is_nonempty_list = require('nvim.util').is_nonempty_list
 local lazyload = require('nvim.util').lazyload
@@ -52,8 +55,7 @@ Plugin.__index = Plugin
 function Plugin.new(plugin)
   local self
   if is_nonempty_string(plugin) then
-    -- require it under nvim topmod
-    self = xprequire('nvim.' .. plugin, false)
+    self = nv.util.xprequire('nvim.' .. plugin, false)
     if self then
       if is_nonempty_string(self[1]) then
         self.name = self[1]:match('([^/]+)$'):gsub('%.nvim$', '')
@@ -140,11 +142,13 @@ end
 --- If neither `config` nor `opts` exist, call `setup` with an empty table.
 --- Assumes the plugin has already been loaded with `packadd`.
 function Plugin:setup()
+  -- TODO: set self.config = single function instead of checking here
   if vim.is_callable(self.config) then
     nv.did.config[self.name] = pcall(self.config)
   else
     local opts = get(self.opts)
     if type(opts) == 'table' then
+      -- if self.name == 'which-key' then bt() end
       local mod = require(self.name)
       nv.did.setup[self.name] = pcall(mod.setup, opts)
     end
@@ -157,6 +161,7 @@ end
 function Plugin:apply_keymaps()
   local keys = get(self.keys)
   if is_nonempty_list(keys) then
+    track('wk: '..self.name)
     local wk = require('which-key')
     nv.did.wk[self.name] = pcall(wk.add, keys)
   end

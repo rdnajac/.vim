@@ -134,5 +134,17 @@ end
 M.colorcolumn():map('<leader>u\\', { desc = 'Toggle ColorColumn' })
 M.virtual_text():map('<leader>uv', { desc = 'Toggle Virtual Text' })
 M.laststatus():map('<leader>uu', { desc = 'Toggle LastStatus' })
+if package.loaded['render-markdown'] then
+  local m = require('render-markdown')
+  Snacks.toggle({
+    name = 'Render Markdown',
+    get = function()
+      return require('render-markdown.state').enabled
+    end,
+    set = function(enabled)
+      m.set(enabled)
+    end,
+  }):map('<leader>um')
+end
 
 return M

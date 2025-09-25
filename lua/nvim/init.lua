@@ -22,35 +22,26 @@ vim._print = function(_, ...)
 end
 
 local Plug = require('nvim._plugin').new
-
 local skip = { init = true, util = true }
 local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim')
+
+local seen = {}
 for name, _type in vim.fs.dir(dir) do
   local modname = name:match('^([%w%-]+)')
   if modname and not skip[modname] then
-  print(modname)
-    -- track('plug: ' .. modname, require('nvim._plugin').new(modname))
+    Plug(modname)
+    track(modname)
+    local char_idx = modname:sub(1, 1)
+    -- print(char_idx .. ': ' .. modname)
+    if not vim.tbl_contains(seen, char_idx) then
+      seen[#seen + 1] = char_idx
+    --   vim.keymap.set('n', '<Bslash>' .. char_idx, function()
+    --     vim.cmd.edit(file_to_edit)
+    --   end, { desc = 'Edit ' .. m.modname })
+    else
+      -- print('skipping ' .. modname)
+    end
   end
 end
-
-Plug('Snacks')
-Plug('tokyonight')
-Plug('which-key')
-Plug('lsp')
-Plug('blink')
-Plug('mini')
-Plug('config')
--- Plug('copilot')
-Plug('diagnostic')
--- Plug('dial')
--- Plug('flash')
--- Plug('notify')
-Plug('plug')
--- Plug('r')
--- Plug('render-markdown')
--- Plug('todo-comments')
--- Plug('treesitter')
--- Plug('ui')
-Plug('oil')
 
 return M

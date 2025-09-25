@@ -1,4 +1,5 @@
 local M = { 'folke/snacks.nvim' }
+-- TODO: use the snacks.config.merge functions
 
 -- stylua: ignore
 local _enabled = {
@@ -18,17 +19,16 @@ local _enabled = {
 local skip = {} -- upvalue
 
 M.on_load = function()
-  -- print('on load')
   skip = vim.tbl_keys(Snacks.picker)
-  _G.nv.icon = require('nvim._icon')
   require('nvim.snacks.terminal')
+  -- Snacks.util.on_module('which-key', bt)
 end
 
 ---@module "snacks"
 ---@type snacks.config
-local opts = {
+M.opts = vim.tbl_deep_extend('force', {
   dashboard = require('nvim.snacks.dashboard'),
-  explorer = { replace_netrw = vim.g.default_file_explorer == 'snacks' },
+  explorer = { replace_netrw = false }, -- using `oil` instead
   indent = { indent = { only_current = true, only_scope = true } },
   notifier = require('nvim.snacks.notifier'),
   picker = require('nvim.snacks.picker'),
@@ -39,11 +39,9 @@ local opts = {
     lazygit = { height = 0, width = 0 },
     terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
     -- TODO: style for notification history window
+    -- TODO: nonumber or signcolumn on preview windows (or norificaiton history)
   },
-}
-
--- TODO: use the snacks.config.merge functions
-M.opts = vim.tbl_deep_extend('force', opts, _enabled)
+}, _enabled)
 
 M.keys = function()
   require('nvim.snacks.toggle') -- set up toggles

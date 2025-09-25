@@ -47,7 +47,7 @@ M.opts = {
         components = {
           kind_icon = {
             text = function(ctx)
-              return nv.icon.kinds[ctx.kind] or ''
+              return nv.icons.kinds[ctx.kind] or ''
             end,
           },
         },
@@ -71,7 +71,7 @@ M.status = function()
   end
 
   local enabled = sources.get_enabled_providers('default')
-  local source_icons = nv.icon.src
+  local source_icons = nv.icons.src
 
   return vim
     .iter(sources.get_all_providers())

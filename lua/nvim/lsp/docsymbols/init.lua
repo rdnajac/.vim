@@ -2,7 +2,7 @@ local lib = require('nvim.lsp.docsymbols.navic_lib')
 
 local opts = {
   depth_limit = 0,
-  depth_limit_indicator = nv.icon.misc.dots,
+  depth_limit_indicator = nv.icons.misc.dots,
   separator = '',
   hl = {
     icon = 'Constant',
@@ -31,7 +31,7 @@ function M.get_data(bufnr)
           kind = v.kind,
           type = vim.lsp.protocol.SymbolKind[v.kind] or 'Text',
           name = v.name,
-          icon = nv.icon.kinds[v.kind],
+          icon = nv.icons.kinds[v.kind],
           scope = v.scope,
         })
       end

@@ -1,6 +1,6 @@
 -- TODO: configure debuging with
 -- nvim_eval_statusline()
-
+track('in vimline')
 -- Escape `%` in str so it doesn't get picked as stl item.
 local vimlineescape = function(str)
   return nv.is_nonempty_str(str) and str:gsub('%%', '%%%%') or str
@@ -42,7 +42,7 @@ end
 
 M.file = {
   format = function(bufnr)
-    return (nv.icon[vim.bo[bufnr or 0].fileformat] or vim.bo[bufnr or 0].fileformat)
+    return (nv.icons[vim.bo[bufnr or 0].fileformat] or vim.bo[bufnr or 0].fileformat)
   end,
 
   -- TODO: accept bufnr?

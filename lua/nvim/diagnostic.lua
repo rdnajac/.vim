@@ -26,7 +26,7 @@ M.after = function()
     -- Build signs and highlights
     :each(function(name, severity)
       local diagnostic = name:sub(1, 1) .. name:sub(2):lower()
-      opts.signs.text[severity] = nv.icon.diagnostics[diagnostic]
+      opts.signs.text[severity] = nv.icons.diagnostics[diagnostic]
       opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
     end)
   -- set up the signs and highlights for each severity level

@@ -51,10 +51,10 @@ end
 M.status = function()
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name ~= 'copilot' then
-      return nv.icon.lsp.attached
+      return nv.icons.lsp.attached
     end
   end
-  return nv.icon.lsp.unavailable .. ' '
+  return nv.icons.lsp.unavailable .. ' '
 end
 
 M.docsymbols = function()

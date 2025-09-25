@@ -57,8 +57,8 @@ local icons = {
   },
 }
 
+-- function M.config()
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
--- merge the tables
 icons = vim.tbl_deep_extend('force', icons, snacks_icons)
 
 -- add an inverted lookup table for kinds
@@ -70,25 +70,13 @@ if icons.kinds then
   end
 end
 
-return setmetatable(icons, {
-  -- TODO: use __index to return fticons conditionally
-  __call = function(_, bufnr_or_ft)
-    local ft
-    if type(bufnr_or_ft) == 'string' then
-      ft = bufnr_or_ft
-    else
-      local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
-      ft = vim.bo[bufnr].filetype
-    end
+icons.fticon = function(bufnr_or_ft)
+  local ft = type(bufnr_or_ft) == 'string' and bufnr_or_ft or nil
+  if not ft then
+    local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
+    ft = vim.bo[bufnr].filetype
+  end
+  return (MiniIcons and MiniIcons.get('filetype', ft) or ' ') .. ' '
+end
 
-    if type(ft) ~= 'string' or ft == '' then
-      return ' '
-    end
-
-    local ok, icon = pcall(require('mini.icons').get, 'filetype', ft)
-    if not ok or not icon then
-      icon = ' '
-    end
-    return icon .. ' '
-  end,
-})
+return icons

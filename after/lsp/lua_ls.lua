@@ -1,5 +1,4 @@
 --- @type vim.lsp.Config
--- bt()
 return {
   settings = {
     Lua = {

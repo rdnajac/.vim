@@ -20,7 +20,7 @@ M.enabled = true
 
 -- TODO: add copilot toggle
 M.after = function()
-  Snacks.util.on_module('blink.cmp', function()
+  -- Snacks.util.on_module('blink.cmp', function()
     local aug = vim.api.nvim_create_augroup('BlinkCopilot', {})
 
     vim.api.nvim_create_autocmd('User', {
@@ -34,14 +34,13 @@ M.after = function()
       group = aug,
       command = 'let b:copilot_enabled = v:true',
     })
-  end)
 end
 
 M.status = function()
   -- TODO: util func in nv.lsp module
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name == 'copilot' then
-      return nv.icon.src.copilot
+      return nv.icons.src.copilot
     end
   end
   return ''

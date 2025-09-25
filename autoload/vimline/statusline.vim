@@ -5,7 +5,6 @@ function! vimline#statusline#meta() abort
   let l:ret = ''
   if mode[0] ==# 'i'
     let l:ret .= v:lua.require'nvim.blink'.status()
-    " let l:ret .= v:lua.require'nvim.blink.cmp'.component()
   elseif mode ==# 'n'
     let l:ret .= ' '
   endif

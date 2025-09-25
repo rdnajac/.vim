@@ -59,7 +59,7 @@ M.opts_extend = {
         .. ' '
         .. table.concat(
           vim.tbl_map(function(ft)
-            return nv.icon.fticon(ft)
+            return nv.icons.fticon(ft)
           end, opts.ft),
           ' '
         )

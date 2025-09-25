@@ -37,9 +37,6 @@ augroup vimrc_indent
   autocmd FileType c,sh,zsh        setlocal shiftwidth=8 softtabstop=8
 augroup END
 
-" TODO: use ftplugins to set format options
-set formatoptions-=or
-
 " searching {{{
 set showmatch
 set ignorecase
@@ -201,12 +198,17 @@ nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
-nnoremap <leader>q <Cmd>Quit<CR>
+nnoremap <leader>q <Cmd>quit<CR>
 nnoremap <leader>Q <Cmd>Quit!<CR>
 nnoremap <leader>m <Cmd>messages<CR>
+nnoremap <leader>N <Cmd>lua Snacks.picker.notifications()<CR>
+" nnoremap <leader>N <Cmd>lua Snacks.notifier.show_history()<CR>
+" nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
 nnoremap <leader>h <Cmd>Help<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
+
+
 
 if has ('nvim')
   " code
@@ -220,7 +222,7 @@ if has ('nvim')
   nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
-  " pickers
+  " TODO: move to snacks
   nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
   nnoremap <leader>P <Cmd>lua Snacks.picker()<CR>
   " file/find/format
@@ -405,36 +407,38 @@ call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-endwise'
-" Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-git'
 " Plug 'tpope/vim-abolish'
 " Plug 'tpope/vim-capslock'
 " Plug 'tpope/vim-characterize'
 " Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-unimpaired'
-Plug 'AndrewRadev/dsf.vim'
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'bullets-vim/bullets.vim'
+Plug 'tpope/vim-repeat'
+" Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-unimpaired' " TODO go through nvim default pairs
+" Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
-" Plug '~/GitHub/rdnajac/vim-lol'
 if !has('nvim')
   Plug 'dense-analysis/ale'
   Plug 'github/copilot.vim'
-  Plug 'Konfekt/FastFold'
   Plug 'junegunn/vim-easy-align'
-  Plug 'welle/targets.vim'
-  Plug 'welle/tmux-complete.vim'
+  Plug 'tpope/vim-commentary'
+  " Plug 'tpope/vim-scriptease'
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
-  Plug 'tpope/vim-commentary'
+  Plug 'welle/targets.vim'
+  Plug 'welle/tmux-complete.vim'
+  Plug 'Konfekt/FastFold'
+else
+" Plug '~/GitHub/rdnajac/vim-lol'
 endif
+" ruby
+Plug 'AndrewRadev/dsf.vim'
+Plug 'AndrewRadev/splitjoin.vim'
 call plug#end() " }}}1
 
 if !exists('g:loaded_vimrc')
