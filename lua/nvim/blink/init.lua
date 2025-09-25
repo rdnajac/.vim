@@ -7,7 +7,7 @@ M.lazy = false
 M.specs = { 'Saghen/blink.compat' }
 
 local border = vim.o.winborder == '' and 'single' or nil
-local icons = require('nvim.icons')
+local icons = require('nvim.icon')
 
 ---@module "blink.cmp"
 ---@type blink.cmp.Config

@@ -21,7 +21,7 @@ M.lsp = function()
       title = client.name,
       ft = 'lua',
       opts = function(notif)
-        notif.icon = nv.icons()
+        notif.icon = nv.icon()
       end,
     })
   end

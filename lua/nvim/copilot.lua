@@ -41,7 +41,7 @@ M.status = function()
   -- TODO: util func in nv.lsp module
   for _, client in pairs(vim.lsp.get_clients()) do
     if client.name == 'copilot' then
-      return nv.icons.src.copilot
+      return nv.icon.src.copilot
     end
   end
   return ''

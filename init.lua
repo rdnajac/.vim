@@ -37,14 +37,3 @@ vim.o.cmdheight = 0
 vim.o.winborder = 'rounded'
 xprequire('vim._extui').enable({}) -- XXX: experimental
 xprequire('nvim')
-
--- vim.api.nvim_create_autocmd({ 'BufWinEnter', 'VimEnter', 'UIEnter' }, {
---   once = true,
---   callback = function(ev)
---     lap(ev.event)
---   end,
--- })
--- vim.schedule(function()
---   lap('vim.schedule()')
--- end)
--- lap('init.lua')

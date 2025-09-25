@@ -42,7 +42,7 @@ end
 
 M.file = {
   format = function(bufnr)
-    return (nv.icons[vim.bo[bufnr or 0].fileformat] or vim.bo[bufnr or 0].fileformat)
+    return (nv.icon[vim.bo[bufnr or 0].fileformat] or vim.bo[bufnr or 0].fileformat)
   end,
 
   -- TODO: accept bufnr?

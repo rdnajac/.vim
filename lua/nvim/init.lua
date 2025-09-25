@@ -3,9 +3,7 @@ local M = vim.defaulttable(function(k)
   return require('nvim.' .. k)
   -- TODO: handle utils
 end)
-M.lazyload = require('nvim.util.lazyload')
 
-_G.nv = M
 _G.dd = function(...)
   require('snacks.debug').inspect(...)
 end
@@ -20,11 +18,12 @@ vim._print = function(_, ...)
   dd(...)
 end
 
+_G.nv = M
 M.did = vim.defaulttable()
-
+M.lazyload = require('nvim.util.lazyload')
 local Plug = require('nvim._plugin').new
 -- TODO: don't skip icons
-local skip = { init = true, icons = true, util = true }
+local skip = { init = true, icon = true, util = true }
 local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim')
 local mods = {}
 

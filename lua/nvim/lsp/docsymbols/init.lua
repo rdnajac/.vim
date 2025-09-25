@@ -1,10 +1,8 @@
-local icons = nv.icons
 local lib = require('nvim.lsp.docsymbols.navic_lib')
 
-local config = {
-  icons = icons.kinds,
+local opts = {
   depth_limit = 0,
-  depth_limit_indicator = icons.misc.dots,
+  depth_limit_indicator = nv.icon.misc.dots,
   separator = '',
   hl = {
     icon = 'Constant',
@@ -33,7 +31,7 @@ function M.get_data(bufnr)
           kind = v.kind,
           type = vim.lsp.protocol.SymbolKind[v.kind] or 'Text',
           name = v.name,
-          icon = config.icons[v.kind],
+          icon = nv.icon.kinds[v.kind],
           scope = v.scope,
         })
       end
@@ -60,15 +58,15 @@ function M.format_data(data, apply_hl)
   end
 
   local location = vim.tbl_map(function(v)
-    return maybe_hl(config.hl.icon, v.icon) .. maybe_hl(config.hl.text, sanitize_name(v))
+    return maybe_hl(opts.hl.icon, v.icon) .. maybe_hl(opts.hl.text, sanitize_name(v))
   end, data)
 
-  if config.depth_limit > 0 and #location > config.depth_limit then
-    location = vim.list_slice(location, #location - config.depth_limit + 1, #location)
-    table.insert(location, 1, maybe_hl(config.hl.icon, config.depth_limit_indicator))
+  if opts.depth_limit > 0 and #location > opts.depth_limit then
+    location = vim.list_slice(location, #location - opts.depth_limit + 1, #location)
+    table.insert(location, 1, maybe_hl(opts.hl.icon, opts.depth_limit_indicator))
   end
 
-  local sep = maybe_hl(config.hl.sep, config.separator)
+  local sep = maybe_hl(opts.hl.sep, opts.separator)
   return table.concat(location, sep)
 end
 

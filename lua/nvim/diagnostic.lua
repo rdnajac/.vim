@@ -25,7 +25,7 @@ vim
   -- Build signs and highlights
   :each(function(name, severity)
     local diagnostic = name:sub(1, 1) .. name:sub(2):lower()
-    M.opts.signs.text[severity] = nv.icons.diagnostics[diagnostic]
+    M.opts.signs.text[severity] = nv.icon.diagnostics[diagnostic]
     M.opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
   end)
 
@@ -34,7 +34,7 @@ vim
 --   -- capture the severity level as a number and ignore the short names
 --   if type(severity) == 'number' and #name > 1 then
 --     local diagnostic = name:sub(1, 1) .. name:sub(2):lower()
---     opts.signs.text[severity] = nv.icons.diagnostics[diagnostic]
+--     opts.signs.text[severity] = nv.icon.diagnostics[diagnostic]
 --     opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
 --   end
 -- end

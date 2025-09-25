@@ -10,3 +10,14 @@ _G.lap = function(msg)
 
   print(('%2d: %-24s %8.3f (%7.3f)'):format(lap_num, msg or '', lap_ms, total_ms))
 end
+
+-- vim.api.nvim_create_autocmd({ 'BufWinEnter', 'VimEnter', 'UIEnter' }, {
+--   once = true,
+--   callback = function(ev)
+--     lap(ev.event)
+--   end,
+-- })
+-- vim.schedule(function()
+--   lap('vim.schedule()')
+-- end)
+-- lap('init.lua')

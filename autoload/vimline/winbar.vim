@@ -21,7 +21,7 @@ function! vimline#winbar#acwrite() abort
   let l:ret = ''
   let l:ret = '%#Chromatophore_a#'
   if &filetype ==# 'oil'
-    let l:ret .= ' ' . v:lua.nv.icons()
+    let l:ret .= ' ' . v:lua.nv.icon()
     let l:ret .= fnamemodify(lua#require('oil', 'get_current_dir'), ':~')
   elseif &filetype ==# 'nvim-pack'
     " let l:ret .= v:lua.nv.plug.status()
@@ -38,7 +38,7 @@ function! vimline#winbar#() abort
 
   let l:ret = ''
   let l:ret = '%#Chromatophore_a#'
-  let l:ret .= ' ' . v:lua.nv.icons() . ' '
+  let l:ret .= ' ' . v:lua.nv.icon() . ' '
 
   " if &filetype ==# 'oil'
   "   let l:ret .= fnamemodify(lua#require('oil', 'get_current_dir'), ':~')
