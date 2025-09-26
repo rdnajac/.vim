@@ -48,11 +48,11 @@ end
 --- @field opts? table|fun():table
 --- TODO: can we get it from the spec instead?
 --- @field name string The plugin name, derived from [1]
-local Plugin = {}
-Plugin.__index = Plugin
+local M = {}
+M.__index = M
 
 -- TODO: use to_spec here
-function Plugin.new(plugin)
+function M.new(plugin)
   local self
   if is_nonempty_string(plugin) then
     self = nv.util.xprequire('nvim.' .. plugin, false)
@@ -71,7 +71,7 @@ function Plugin.new(plugin)
   end
 
   if self then
-    setmetatable(self, Plugin)
+    setmetatable(self, M)
     self:init()
   end
   return self
@@ -97,11 +97,11 @@ local function get(field)
   return field
 end
 
-function Plugin:is_enabled()
+function M:is_enabled()
   return get(self.enabled) ~= false
 end
 
-function Plugin:init()
+function M:init()
   if self:is_enabled() then
     self:add()
     -- self:build()
@@ -118,7 +118,7 @@ function Plugin:init()
   end
 end
 
-function Plugin:add()
+function M:add()
   --- @type string[]
   local specs = vim.list_extend({ self[1] }, self.specs or {})
   if is_nonempty_list(specs) then
@@ -141,7 +141,7 @@ end
 --- If `opts` is a function, call it to get the options table.
 --- If neither `config` nor `opts` exist, call `setup` with an empty table.
 --- Assumes the plugin has already been loaded with `packadd`.
-function Plugin:setup()
+function M:setup()
   -- TODO: set self.config = single function instead of checking here
   if vim.is_callable(self.config) then
     nv.did.config[self.name] = pcall(self.config)
@@ -158,7 +158,7 @@ function Plugin:setup()
   end
 end
 
-function Plugin:apply_keymaps()
+function M:apply_keymaps()
   local keys = get(self.keys)
   if is_nonempty_list(keys) then
     track('wk: '..self.name)
@@ -167,7 +167,7 @@ function Plugin:apply_keymaps()
   end
 end
 
-function Plugin:apply_commands()
+function M:apply_commands()
   if vim.is_callable(self.commands) then
     lazyload(function()
       nv.did.commands[self.name] = pcall(self.commands)
@@ -175,4 +175,4 @@ function Plugin:apply_commands()
   end
 end
 
-return Plugin
+return M

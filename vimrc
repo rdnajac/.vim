@@ -434,6 +434,11 @@ if !has('nvim')
   Plug 'welle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'
 else
+  Plug 'folke/snacks.nvim'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'folke/which-key.nvim'
+  Plug 'folke/todo-comments.nvim'
+  Plug 'folke/trouble.nvim'
 " Plug '~/GitHub/rdnajac/vim-lol'
 endif
 " ruby

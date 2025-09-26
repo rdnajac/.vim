@@ -1,5 +1,8 @@
 local M = {}
 
+local Plugin = require('nvim.plug.oop')
+M.__call = Plugin.new
+
 -- specs collected from vimrc
 M.specs = vim.g.pluglist
 
@@ -58,5 +61,13 @@ M.commands = function()
     end,
   })
 end
+
+
+-- return setmetatable(M, {
+--   __call = function(_, argv0)
+--     print(argv0)
+--     return Plugin.new(argv0)
+--   end,
+-- })
 
 return M

@@ -21,7 +21,7 @@ vim._print = function(_, ...)
   dd(...)
 end
 
-local Plug = require('nvim._plugin').new
+-- local Plug = require('nvim.plug.oop').new
 local skip = { init = true, util = true }
 local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim')
 
@@ -29,7 +29,7 @@ local seen = {}
 for name, _type in vim.fs.dir(dir) do
   local modname = name:match('^([%w%-]+)')
   if modname and not skip[modname] then
-    Plug(modname)
+    require('nvim.plug.oop').new(modname)
     track(modname)
     local char_idx = modname:sub(1, 1)
     -- print(char_idx .. ': ' .. modname)
