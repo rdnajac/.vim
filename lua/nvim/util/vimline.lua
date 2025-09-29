@@ -164,15 +164,6 @@ M.file = {
   end,
 }
 
-M.clock = {
-  {
-    function()
-      return '  ' .. os.date('%T')
-    end,
-    separator = { left = ' ' },
-  },
-}
-
 M.date = {
   function()
     return ' ' .. os.date('%F')

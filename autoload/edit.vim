@@ -82,6 +82,7 @@ function! edit#luamod(name) abort
     vim#notify#error('This function is only available in Neovim.')
     return
   endif
+  " TODO: handle /init.lua
   let l:file = stdpath('config') . '/lua/' . a:name . '.lua'
 
   call s:edit(l:file)

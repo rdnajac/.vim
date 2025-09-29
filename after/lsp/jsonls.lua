@@ -27,8 +27,9 @@ return {
   root_markers = { '.git' },
   settings = {
     json = {
-      schemas = require('schemastore').json.schemas(),
-      validate = { enable = true },
+      --- XXX: temp
+      -- schemas = require('schemastore').json.schemas(),
+      -- validate = { enable = true },
     },
   },
 }

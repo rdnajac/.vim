@@ -38,6 +38,12 @@ M.opts = vim.tbl_deep_extend('force', {
     dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
     lazygit = { height = 0, width = 0 },
     terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
+    notification_history = {
+      wo = { number = false,  winhighlight = 'WinBar:Chromatophore' },
+      position = 'bottom',
+      width = 100,
+      height = 0.4,
+    },
     -- TODO: style for notification history window
     -- TODO: nonumber or signcolumn on preview windows (or norificaiton history)
   },

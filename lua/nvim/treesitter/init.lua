@@ -26,8 +26,8 @@ local autostart = function(ft, override)
 end
 
 M.config = function()
-  autostart({ 'sh', 'markdown', 'r', 'python', 'vim' })
-  autostart({ 'zsh' }, 'bash')
+  autostart({ 'markdown', 'python' })
+  autostart({ 'sh', 'zsh' }, 'bash')
 end
 
 -- M.keys = function()

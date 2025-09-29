@@ -88,7 +88,7 @@ nnoremap <expr> h fold#open_or_h()
 " sesh {{{
 set sessionoptions-=options   " already default in nvim
 set sessionoptions-=blank     " like vim-obsession
-set sessionoptions-=folds     
+set sessionoptions-=folds
 set sessionoptions-=tabpages  " per project, not global
 set sessionoptions-=terminal  " don't save terminals
 set viewoptions-=options      " keep mkview minimal
@@ -140,6 +140,33 @@ augroup vimrc_filetype
 augroup END
 " }}}1
 " Section: keymaps {{{1
+" shortcuts! {{{
+nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
+nnoremap <BSlash>i <Cmd>e ~/.vim/init.lua<CR>
+nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/init')<CR>
+nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
+nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plug')<CR>
+nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util')<CR>
+nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/init')<CR>
+
+nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
+nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
+
+nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
+" TODO: find thecode for automatic marks
+function! s:autosection() abort
+  let l:vimrc = vimrc#home() . '/vimrc'
+  for l:line in readfile(l:vimrc)
+    if l:line =~? '^"\s*Section:\s*'
+      let l:idx = matchend(l:line, '^"\s*Section:\s*')
+      let l:ch  = strcharpart(l:line, l:idx, 1)
+      execute printf("nnoremap <silent> <leader>v%s :call edit#vimrc('\+\/Section:\\ %s')<CR>", l:ch, l:ch)
+    endif
+  endfor
+endfunction
+
+call s:autosection()
 nmap  ciw
 vmap  :sort<CR>
 nmap <silent> <C-q> <Cmd>bd<CR>
@@ -188,6 +215,7 @@ nmap zJ ]ekJ
 nmap S viWS
 vmap ` S`
 vmap F Sf
+" nmap ds mm`m
 
 " xmap ga <Plug>(EasyAlign)
 " nmap ga <Plug>(EasyAlign)
@@ -242,10 +270,7 @@ nnoremap ` ~
 nnoremap ~ `
 vnoremap <BS> d
 
-" buffers {{{2
-nnoremap <silent> <S-Tab>       :bprev!<CR>
-nnoremap <silent> <Tab>         :bnext!<CR>
-nnoremap <silent> <leader><Tab> :e #<CR>
+nnoremap  <leader><Tab> <Cmd>e #<CR>
 
 " resize splits {{{2
 nnoremap <C-W><Up>    :resize +10<CR>
@@ -407,43 +432,39 @@ call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
+" Plug 'tpope/vim-abolish'
+" Plug 'tpope/vim-capslock'
+" Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
-" Plug 'tpope/vim-abolish'
-" Plug 'tpope/vim-capslock'
-" Plug 'tpope/vim-characterize'
-" Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-repeat'
 " Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 " Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-unimpaired' " TODO go through nvim default pairs
+" Plug 'tpope/vim-unimpaired'
+" Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
+" ruby
+Plug 'AndrewRadev/dsf.vim'
+Plug 'AndrewRadev/splitjoin.vim'
 if !has('nvim')
   Plug 'dense-analysis/ale'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'tpope/vim-commentary'
-  " Plug 'tpope/vim-scriptease'
+ " Plug 'tpope/vim-scriptease'
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   Plug 'welle/targets.vim'
   Plug 'welle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'
 else
-  Plug 'folke/snacks.nvim'
-  Plug 'folke/tokyonight.nvim'
-  Plug 'folke/which-key.nvim'
-  Plug 'folke/todo-comments.nvim'
-  Plug 'folke/trouble.nvim'
-" Plug '~/GitHub/rdnajac/vim-lol'
+  " Plug '~/GitHub/rdnajac/vim-lol'
 endif
-" ruby
-Plug 'AndrewRadev/dsf.vim'
-Plug 'AndrewRadev/splitjoin.vim'
 call plug#end() " }}}1
 
 if !exists('g:loaded_vimrc')
