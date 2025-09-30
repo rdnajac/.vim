@@ -1,9 +1,9 @@
 local M = {}
+
 M.name = 'lsp'
 -- TODO: check whether the configs in after/lsp actually override the default configs
 M.specs = {
   -- 'neovim/nvim-lspconfig',
-  'mason-org/mason.nvim',
   -- 'b0o/SchemaStore.nvim',
 }
 
@@ -13,7 +13,6 @@ M.servers = vim.tbl_map(function(path)
 end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
 
 M.config = function()
-  require('mason').setup({})
   --- servers won't start on restart, so schedule it
   vim.schedule(function()
     vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })

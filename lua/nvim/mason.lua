@@ -1,4 +1,7 @@
-local M = { 'mason-org/mason.nvim' }
+local M = {
+  'mason-org/mason.nvim',
+  opts = {},
+}
 
 --- commands for the mason-registry
 local api = {
@@ -41,7 +44,7 @@ function M.install(tools)
   vim.validate('tools', tools, nv.util.is_nonempty_list, 'Expected a non-empty list of tool names')
 end
 
-M.install('a')
+-- M.install('a')
 -- if 1 then return end
 --   local total = #tools
 --   if total == 0 then
@@ -131,5 +134,5 @@ M.install('a')
 --   -- TODO: update all?
 --   -- TODO: build hook on update
 -- end
---
--- return M
+
+return M
