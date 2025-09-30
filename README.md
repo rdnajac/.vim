@@ -2,13 +2,11 @@
 
 My (n)vim configuration.
 
-## nvim
-
-Global accessor `nv`
-
 ## TODO
 
 - [ ] Who is VIMDIR? VIMHOME?
+- [ ] snacks profiler and todo comments
+- [ ] vim.pack to install/update neovim
 
 remote ui stuff
 
