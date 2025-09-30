@@ -11,7 +11,7 @@ setmetatable(M, {
 
 _G.Snacks = M
 _G.svim = vim
-vim.print(vim.inspect(vim.tbl_keys(Snacks.picker)))
+-- vim.print(vim.inspect(vim.tbl_keys(Snacks.picker)))
 
 --- Config Start [[
 ---@class snacks.Config.base
@@ -23,7 +23,7 @@ vim.print(vim.inspect(vim.tbl_keys(Snacks.picker)))
 ---@field image? snacks.image.Config|{}
 local config = {
   image = {
-  -- stylua: ignore
+    -- stylua: ignore
     formats = { 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff', 'heic', 'avif', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'pdf' },
   },
 }
@@ -98,6 +98,7 @@ opts = require('nvim.snacks').opts
 for k in pairs(opts) do
   opts[k].enabled = opts[k].enabled == nil or opts[k].enabled
 end
+-- TODO: check config before and after merge
 config = vim.tbl_deep_extend('force', config, opts or {})
 
 local events = {
@@ -139,27 +140,27 @@ vim.api.nvim_create_autocmd(vim.tbl_keys(events), {
   end,
 })
 
-if M.config.image.enabled and #M.config.image.formats > 0 then
-  vim.api.nvim_create_autocmd('BufReadCmd', {
-    once = true,
-    pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
-    group = group,
-    callback = function(e)
-      require('snacks.image').setup(e)
-    end,
-  })
-end
+-- if M.config.image.enabled and #M.config.image.formats > 0 then
+vim.api.nvim_create_autocmd('BufReadCmd', {
+  once = true,
+  pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
+  group = group,
+  callback = function(e)
+    require('snacks.image').setup(e)
+  end,
+})
+-- end
 
-if M.config.statuscolumn.enabled then
-  vim.o.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
-end
+-- if M.config.statuscolumn.enabled then
+--   vim.o.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
+-- end
 
-if M.config.notifier.enabled then
-  vim.notify = function(msg, level, o)
-    vim.notify = Snacks.notifier.notify
-    return Snacks.notifier.notify(msg, level, o)
-  end
+-- if M.config.notifier.enabled then
+vim.notify = function(msg, level, o)
+  vim.notify = Snacks.notifier.notify
+  return Snacks.notifier.notify(msg, level, o)
 end
+-- end
 -- end
 
 return M

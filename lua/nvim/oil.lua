@@ -1,16 +1,14 @@
 local M = { 'stevearc/oil.nvim' }
 
 local detail = 0
-local new_git_status = require('nvim.oil.git_status')
+local new_git_status = require('nvim.util.git_status')
 local git_status = new_git_status()
 
 ---@type oil.setupOpts
 M.opts = {
   -- skip_confirm_for_simple_edits = true,
   constrain_cursor = 'name',
-  win_options = {
-    conceallevel = 2,
-  },
+  win_options = { conceallevel = 2, number = false, signcolumn = 'yes:2' },
   watch_for_changes = true,
   keymaps = {
     ['h'] = { 'actions.parent', mode = 'n' },
@@ -95,13 +93,13 @@ M.keys = {
 }
 
 M.after = function()
-  require('nvim.oil.autocmds')
   local refresh = require('oil.actions').refresh
   local orig_refresh = refresh.callback
   refresh.callback = function(...)
     git_status = new_git_status()
     orig_refresh(...)
   end
+  require('oil_git_exmarks')
 end
 
 return M

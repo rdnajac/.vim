@@ -1,14 +1,7 @@
+-- https://github.com/refractalize/oil-git-status.nvim
+-- TODO: Merge with util/git_status
 local ns = vim.api.nvim_create_namespace('oil-git-status')
-local config = {
-  show_ignored = true,
-  symbols = {
-    index = {},
-    working_tree = {},
-  },
-}
-
-local M = {}
-
+local show_ignored = true
 local function set_filename_status_code(filename, index_status_code, working_status_code, status)
   local dir_index = filename:find('/')
   if dir_index ~= nil then
@@ -76,21 +69,20 @@ local highlight_group_suffix_for_status_code = {
   ['D'] = 'Deleted',
   ['M'] = 'Modified',
   ['R'] = 'Renamed',
-  ['T'] = 'TypeChanged',
+  ['T'] = 'TypeChanged', -- XXX: ???
   ['U'] = 'Unmerged',
-  [' '] = 'Unmodified',
+  [' '] = 'Unmodified', -- XXX: ???
 }
 
 local function highlight_group(code, index)
-  local location = index and 'Index' or 'WorkingTree'
-
   return 'OilGitStatus'
-    .. location
+    .. (index and 'Index' or 'WorkingTree')
     .. (highlight_group_suffix_for_status_code[code] or 'Unmodified')
 end
 
-local function get_symbol(symbols, code)
-  return symbols[code] or code
+local function get_symbol(code)
+  local k = highlight_group_suffix_for_status_code[code]
+  return nv.icons.git[vim.fn.tolower(k)] or code
 end
 
 local function add_status_extmarks(buffer, status)
@@ -101,18 +93,16 @@ local function add_status_extmarks(buffer, status)
       local entry = require('oil').get_entry_on_line(buffer, n)
       if entry and entry.name ~= '..' then
         local name = entry.name
-
-        local status_codes = status[name]
-          or (config.show_ignored and { index = '!', working_tree = '!' })
+        local status_codes = status[name] or (show_ignored and { index = '!', working_tree = '!' })
 
         if status_codes then
           vim.api.nvim_buf_set_extmark(buffer, ns, n - 1, 0, {
-            sign_text = get_symbol(config.symbols.index, status_codes.index),
+            sign_text = get_symbol(status_codes.index),
             sign_hl_group = highlight_group(status_codes.index, true),
             priority = 2,
           })
           vim.api.nvim_buf_set_extmark(buffer, ns, n - 1, 0, {
-            sign_text = get_symbol(config.symbols.working_tree, status_codes.working_tree),
+            sign_text = get_symbol(status_codes.working_tree),
             sign_hl_group = highlight_group(status_codes.working_tree, false),
             priority = 1,
           })
@@ -157,7 +147,7 @@ local function load_git_status(buffer, callback)
       }, { text = true, cwd = path }, cb)
     end,
     function(cb)
-      if config.show_ignored then
+      if show_ignored then
         -- quotepath=false - don't escape UTF-8 paths.
         vim.system(
           { 'git', '-c', 'core.quotepath=false', 'ls-tree', 'HEAD', '.', '--name-only' },
@@ -183,7 +173,7 @@ local function load_git_status(buffer, callback)
 end
 
 ---@return table<string, {hl_group: string, index: boolean, status_code: string}>
-M.generate_highlight_groups = function()
+local generate_highlight_groups = function()
   local highlight_groups = {}
   for status_code, suffix in pairs(highlight_group_suffix_for_status_code) do
     table.insert(
@@ -198,67 +188,45 @@ M.generate_highlight_groups = function()
   return highlight_groups
 end
 
-M.config = function()
-  local oil_config = require('oil.config')
-  -- local signcolumn = oil_config.win_options.signcolumn
-  -- if not (vim.startswith(signcolumn, 'yes') or vim.startswith(signcolumn, 'auto')) then
-  --   vim.notify(
-  --     "oil-git-status requires win_options.signcolumn to be set to at least 'yes:2' or 'auto:2'",
-  --     vim.log.levels.WARN,
-  --     {
-  --       title = 'oil-git-status',
-  --     }
-  --   )
-  -- end
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'oil',
+  callback = function()
+    local buffer = vim.api.nvim_get_current_buf()
+    local current_status = nil
 
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'oil',
-    callback = function()
-      local buffer = vim.api.nvim_get_current_buf()
-      local current_status = nil
+    if not vim.b[buffer].oil_git_status_started then
+      vim.b[buffer].oil_git_status_started = true
+      vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost' }, {
+        buffer = buffer,
+        callback = function()
+          load_git_status(buffer, function(status)
+            current_status = status
+            add_status_extmarks(buffer, current_status)
+          end)
+        end,
+      })
 
-      if not vim.b[buffer].oil_git_status_started then
-        vim.b[buffer].oil_git_status_started = true
-        vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost' }, {
-          buffer = buffer,
-          callback = function()
-            load_git_status(buffer, function(status)
-              current_status = status
-              add_status_extmarks(buffer, current_status)
-            end)
-          end,
-        })
-
-        vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
-          buffer = buffer,
-          callback = function()
-            if current_status then
-              add_status_extmarks(buffer, current_status)
-            end
-          end,
-        })
-      end
-    end,
-  })
-
-  vim.api.nvim_set_hl(0, 'OilGitStatusIndex', { link = 'DiagnosticSignInfo', default = true })
-  vim.api.nvim_set_hl(0, 'OilGitStatusWorkingTree', { link = 'DiagnosticSignWarn', default = true })
-
-  local highlight_groups = M.generate_highlight_groups()
-
-  for _, hl_group in ipairs(highlight_groups) do
-    if hl_group.index then
-      vim.api.nvim_set_hl(0, hl_group.hl_group, { link = 'OilGitStatusIndex', default = true })
-    else
-      vim.api.nvim_set_hl(
-        0,
-        hl_group.hl_group,
-        { link = 'OilGitStatusWorkingTree', default = true }
-      )
+      vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged' }, {
+        buffer = buffer,
+        callback = function()
+          if current_status then
+            add_status_extmarks(buffer, current_status)
+          end
+        end,
+      })
     end
+  end,
+})
+
+vim.api.nvim_set_hl(0, 'OilGitStatusIndex', { link = 'DiagnosticSignInfo', default = true })
+vim.api.nvim_set_hl(0, 'OilGitStatusWorkingTree', { link = 'DiagnosticSignWarn', default = true })
+
+local highlight_groups = generate_highlight_groups()
+
+for _, hl_group in ipairs(highlight_groups) do
+  if hl_group.index then
+    vim.api.nvim_set_hl(0, hl_group.hl_group, { link = 'OilGitStatusIndex', default = true })
+  else
+    vim.api.nvim_set_hl(0, hl_group.hl_group, { link = 'OilGitStatusWorkingTree', default = true })
   end
 end
-
-M.config()
-
-return M

@@ -13,4 +13,6 @@ end, { desc = 'Inspect Tree' })
 --   return '<Esc>'
 -- end, { expr = true, desc = 'Escape and Clear hlsearch' })
 -- Snacks.util.on_key('<Esc>', vim.cmd.nohlsearch)
-Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
+Snacks.util.on_key('<Esc>', function()
+  vim.cmd.nohlsearch()
+end)

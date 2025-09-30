@@ -147,6 +147,7 @@ nnoremap <BSlash>i <Cmd>call edit#luamod('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/util/plug')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util')<CR>
 nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/init')<CR>
+nnoremap <BSlash>S <Cmd>call edit#luamod('snacks')<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
@@ -164,8 +165,8 @@ function! s:autosection() abort
     endif
   endfor
 endfunction
-
 call s:autosection()
+
 nmap  ciw
 vmap  :sort<CR>
 nmap <silent> <C-q> <Cmd>bd<CR>
