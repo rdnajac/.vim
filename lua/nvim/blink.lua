@@ -4,6 +4,7 @@ local M = { 'Saghen/blink.cmp' }
 -- M.build = 'cargo build --release'
 M.specs = { 'Saghen/blink.compat' }
 
+-- use the winborder or default to 'single'
 local border = vim.o.winborder == '' and 'single' or nil
 
 ---@module "blink.cmp"

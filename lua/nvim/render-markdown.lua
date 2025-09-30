@@ -1,9 +1,9 @@
 return {
   'MeanderingProgrammer/render-markdown.nvim',
-
-  ---@type render.md.UserConfig
+  --- @module "render-markdown"
+  --- @type render.md.UserConfig
   opts = {
-    file_types = { 'markdown', 'rmd', 'quarto', 'codecompanion' },
+    file_types = { 'markdown', 'rmd', 'quarto' },
     bullet = { right_pad = 1 },
     completions = { blink = { enabled = false } },
     -- checkbox = { enabled = false },

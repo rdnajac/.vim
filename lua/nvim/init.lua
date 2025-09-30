@@ -20,7 +20,6 @@ Plug(nv['snacks'])
 for _, plugin in ipairs({
   -- 'tokyonight',
   -- 'snacks',
-  'which-key',
   'mini',
   'oil',
 }) do
@@ -41,9 +40,5 @@ for _, plugin in ipairs(nv.folke) do
 end
 
 require('nvim.config')
-
--- /007 󰉋  config/
--- /005 󰉋  util/
--- /008 󰢱  copilot.lua
 
 return M
