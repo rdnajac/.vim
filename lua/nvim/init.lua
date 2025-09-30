@@ -14,8 +14,7 @@ _G.nv = setmetatable({}, {
   end,
 })
 
-Plug = require('nvim.util.plug')
-Plug(nv['snacks'])
+local Plug = require('nvim.util.plug')
 
 for _, plugin in ipairs(nv.folke) do
   Plug(plugin)

@@ -1,26 +1,7 @@
 local M = { 'folke/snacks.nvim' }
 -- TODO: use the snacks.config.merge functions
 
-local skip = {} -- upvalue
-
-M.after = function()
-  _G.dd = function(...)
-    require('snacks.debug').inspect(...)
-  end
-  _G.bt = function(...)
-    require('snacks.debug').backtrace(...)
-  end
-  _G.p = function(...)
-    require('snacks.debug').profile(...)
-  end
-  --- @diagnostic disable-next-line: duplicate-set-field
-  vim._print = function(_, ...)
-    dd(...)
-  end
-
-  skip = vim.tbl_keys(Snacks.picker)
-  require('nvim.snacks.terminal')
-end
+-- local skip = {} vim.tbl_keys(require('snacks').picker)
 
 -- stylua: ignore
 local _enabled = {
@@ -192,47 +173,6 @@ local keys = {
   vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
   --stylua: ignore end
   return keys
-end
-
-M.commands = function()
-  --- assumes input is [a-z],_
-  local function to_camel_case(str)
-    return str
-      :gsub('_(%a)', function(c)
-        return c:upper()
-      end)
-      :gsub('^%l', string.upper)
-  end
-
-  -- add any additional methods to skip creating commands for
-  vim.list_extend(skip, { 'config', 'highlight', 'keymap' })
-  -- also skip the lazy picker if we're not using lazy.nvim
-  if not package.loaded['lazy'] then
-    skip[#skip + 1] = 'lazy'
-  end
-
-  vim
-    .iter(vim.tbl_keys(Snacks.picker))
-    :filter(function(name)
-      return not vim.list_contains(skip, name)
-    end)
-    :each(function(name)
-      local cmd = to_camel_case(name)
-      -- currently, this only guards against `:Man`
-      if vim.fn.exists(':' .. cmd) ~= 2 then
-        vim.api.nvim_create_user_command(cmd, function(args)
-          local opts = {}
-          if nv.util.is_nonempty_string(args.args) then
-            --- @diagnostic disable-next-line: param-type-mismatch
-            local ok, result = pcall(loadstring('return {' .. args.args .. '}'))
-            if ok and type(result) == 'table' then
-              opts = result
-            end
-          end
-          Snacks.picker[name](opts)
-        end, { nargs = '?', desc = 'Snacks Picker: ' .. cmd })
-      end
-    end)
 end
 
 return M

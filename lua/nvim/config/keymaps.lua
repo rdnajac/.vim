@@ -1,3 +1,4 @@
+require('which-key').add(nv.snacks.keys())
 -- vim.keymap.set('n', 'zS', vim.show_pos)
 vim.keymap.set('n', '<leader>ui', vim.show_pos)
 vim.keymap.set('n', '<leader>uI', function()

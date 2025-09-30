@@ -1,4 +1,4 @@
----@class lazydev.Config.mod: lazydev.Config
+-- TODO: move this to lazydev/init
 local M = {}
 
 M.libs = {} ---@type lazydev.Library[]
