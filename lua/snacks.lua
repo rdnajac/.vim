@@ -1,18 +1,18 @@
----@class Snacks: snacks.plugins
 print('snack attack!')
+---@class Snacks: snacks.plugins
 local M = {}
 
 setmetatable(M, {
   __index = function(t, k)
-    ---@diagnostic disable-next-line: no-unknown
     t[k] = require('snacks.' .. k)
     return rawget(t, k)
   end,
 })
 
 _G.Snacks = M
-_G.svim = vim.fn.has('nvim-0.11') == 1 and vim or require('snacks.compat')
+_G.svim = vim
 
+--- Config Start [[
 ---@class snacks.Config.base
 ---@field example? string
 ---@field config? fun(opts: table, defaults: table)
@@ -22,24 +22,8 @@ _G.svim = vim.fn.has('nvim-0.11') == 1 and vim or require('snacks.compat')
 ---@field image? snacks.image.Config|{}
 local config = {
   image = {
-    -- define these here, so that we don't need to load the image module
-    formats = {
-      'png',
-      'jpg',
-      'jpeg',
-      'gif',
-      'bmp',
-      'webp',
-      'tiff',
-      'heic',
-      'avif',
-      'mp4',
-      'mov',
-      'avi',
-      'mkv',
-      'webm',
-      'pdf',
-    },
+  -- stylua: ignore
+    formats = { 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff', 'heic', 'avif', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'pdf' },
   },
 }
 config.styles = {}
@@ -87,10 +71,7 @@ end
 ---@param name string
 ---@param opts? table
 function M.config.example(snack, name, opts)
-  local path = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':h:h:h')
-    .. '/docs/examples/'
-    .. snack
-    .. '.lua'
+  local path = vim.fs.joinpath(vim.g.plug_home, 'snacks.nvim', 'docs', 'examples', snack .. '.lua')
   local ok, ret = pcall(function()
     return loadfile(path)().examples[name] or error(('`%s` not found'):format(name))
   end)
@@ -134,6 +115,8 @@ function M.config.style(name, defaults)
   return name
 end
 
+-- Config End ]]
+
 M.did_setup = false
 M.did_setup_after_vim_enter = false
 
@@ -147,14 +130,6 @@ function M.setup(opts)
     )
   end
   M.did_setup = true
-
-  if vim.fn.has('nvim-0.9.4') ~= 1 then
-    return vim.notify(
-      'snacks.nvim requires Neovim >= 0.9.4',
-      vim.log.levels.ERROR,
-      { title = 'snacks.nvim' }
-    )
-  end
 
   -- enable all by default when config is passed
   opts = opts or {}

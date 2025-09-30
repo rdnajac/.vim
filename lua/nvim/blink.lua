@@ -23,7 +23,7 @@ M.opts = {
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
       auto_show = true,
-      -- auto_show_delay_ms = 1000,
+      auto_show_delay_ms = 1000,
       --- @param ctx blink.cmp.Context
       --- @param items blink.cmp.CompletionItem[]
       -- auto_show_delay_ms = function(ctx, items)
@@ -54,11 +54,7 @@ M.opts = {
   },
   fuzzy = { implementation = 'lua' },
   keymap = {
-    -- default if we had selected a preset
     ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-    -- ['<C-e>'] = { 'cancel', 'fallback' },
-    -- ['<C-y>'] = { 'select_and_accept', 'fallback' },
-    -- supertab
     ['<Tab>'] = {
       function(cmp)
         if cmp.snippet_active() then
@@ -68,27 +64,6 @@ M.opts = {
         end
       end,
       'snippet_forward',
-      'fallback',
-    },
-    ['.'] = {
-      function(cmp)
-        if cmp.is_menu_visible() then
-          ---@ type blink.cmp.CompletionItem?
-          local sel = cmp.get_selected_item()
-          if sel and sel.source_name == 'LazyDev' then
-            cmp.select_and_accept()
-            -- vim.defer_fn(function()
-            cmp.show({ providers = { 'lazydev' } })
-            -- end, 1)
-            return
-          end
-          --- @type blink.cmp.Context
-          -- local ctx = cmp.get_context()
-          -- if vim.tbl_contains(ctx.providers, 'LazyDev') then
-          --   return cmp
-          -- end
-        end
-      end,
       'fallback',
     },
   },

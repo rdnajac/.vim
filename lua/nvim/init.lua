@@ -18,7 +18,7 @@ Plug = require('nvim.util.plug')
 Plug(nv['snacks'])
 
 for _, plugin in ipairs({
-  'tokyonight',
+  -- 'tokyonight',
   -- 'snacks',
   'which-key',
   'mini',
@@ -34,6 +34,11 @@ Plug(nv.lsp)
 Plug(nv.r)
 Plug(nv['render-markdown'])
 Plug(nv.treesitter)
+Plug(nv.tokyonight)
+
+for _, plugin in ipairs(nv.folke) do
+  Plug(plugin)
+end
 
 require('nvim.config')
 
