@@ -1,6 +1,6 @@
 local M = {}
 
-M.enabled = false
+-- M.enabled = false
 
 -- Highlight groups for different log levels
 -- 1 = DEBUG, 2 = INFO, 3 = WARN, 4 = ERROR
@@ -21,9 +21,9 @@ M.notify = function(msg, level, opts)
 end
 
 --- Override vim.notify with custom function
-M.config = function()
-  vim.notify = M.notify
-end
+-- M.config = function()
+vim.notify = M.notify
+-- end
 
 return setmetatable(M, {
   __call = function(_, ...)

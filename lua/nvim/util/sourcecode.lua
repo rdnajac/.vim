@@ -1,6 +1,5 @@
--- Highlight text enclosed in `backticks` within comments
-
 local ns = vim.api.nvim_create_namespace('src')
+
 local function highlight_backticks(bufnr)
   vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 

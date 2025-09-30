@@ -7,6 +7,7 @@ local bg = {
   tokyonight = '#24283b',
   lualine = '#3b4261',
 }
+vim.g.transparent = true
 
 --- @type ColorScheme
 M.colors = nil
@@ -49,27 +50,21 @@ M.opts = {
     -- noice = true,
     ['render-markdown'] = true,
     snacks = true,
-    -- trouble = true
+    trouble = true,
     ['which-key'] = true,
   },
 }
 
 M.after = function()
-  M.colors, M.groups, _ = require('tokyonight').load()
-  vim.fn['chromatophore#setup']()
-  vim.cmd.doautocmd('ColorScheme') -- fire the autocommand manually
+  vim.cmd.colorscheme('tokyonight')
 end
 
 -- FIXME: this function is cached on the first require and
 -- doesn't see changes to M.colors or M.groups
 function M.generate_vim_scheme()
+  M.colors, M.groups, _ = require('tokyonight').load()
   local colors = M.colors
   local groups = M.groups
-
-  if type(M.groups) ~= 'table' or #M.groups == 0 then
-    error('Did you call config() first?')
-  end
-
   local lines = {
     [[
       hi clear
@@ -77,7 +72,6 @@ function M.generate_vim_scheme()
     ]],
     -- :format(colors._style),
   }
-
   local names = vim.tbl_filter(function(group)
     -- filter out treesitter/semantic token highlights
     return group:sub(1, 1) ~= '@'

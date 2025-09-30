@@ -3,7 +3,7 @@
 --- @class config
 --- @field [string] Config
 --- @field package _configs table<string,Config>
-M = setmetatable({ _configs = {}, _enabled = {}}, {
+M = setmetatable({ _configs = {}, _enabled = {} }, {
 
   --- @param self config
   --- @param name string

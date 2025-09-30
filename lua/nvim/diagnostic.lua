@@ -1,11 +1,10 @@
 local M = {}
-
-M.specs = {
-  -- 'folke/trouble.nvim',
-  -- 'mfussenegger/nvim-lint',
-}
-
 ---@type vim.diagnostic.Opts
+
+
+M.name = 'diagnostic'
+local unused_local = 'smoke test'
+
 local opts = {
   float = { source = true },
   underline = false,
@@ -14,7 +13,6 @@ local opts = {
   signs = { text = {}, numhl = {} },
 }
 
-M.after = function()
   vim
     .iter(vim.diagnostic.severity)
     -- Keep only numeric severities and ignore short keys like "ERROR" -> 1
@@ -38,13 +36,9 @@ M.after = function()
   --     opts.signs.numhl[severity] = 'Diagnostic' .. diagnostic
   --   end
   -- end
-
-  -- TODO: infer this function in load func
   vim.diagnostic.config(opts)
-end
 
-local unused_local = 'smoke test'
-
+-- export status function
 M.status = function()
   local counts = vim.diagnostic.count(0)
   local signs = vim.diagnostic.config().signs

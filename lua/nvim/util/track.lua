@@ -1,3 +1,4 @@
+local util = require('nvim.util')
 local uv = vim.uv
 -- local stats = {}
 local M = {}
@@ -39,8 +40,8 @@ M.track = function(msg, fn)
 end
 
 --- @param ev table
-require('nvim.util').lazyload(function(ev)
+util.lazyload(function(ev)
   track(ev.event)
 end, { 'BufWinEnter', 'VimEnter', 'UIEnter' })
 
-return M
+return track

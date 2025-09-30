@@ -21,19 +21,19 @@ M.enabled = true
 -- TODO: add copilot toggle
 M.after = function()
   -- Snacks.util.on_module('blink.cmp', function()
-    local aug = vim.api.nvim_create_augroup('BlinkCopilot', {})
+  local aug = vim.api.nvim_create_augroup('BlinkCopilot', {})
 
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'BlinkCmpMenuOpen',
-      group = aug,
-      command = 'call copilot#Dismiss() | let b:copilot_enabled = v:false',
-    })
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'BlinkCmpMenuOpen',
+    group = aug,
+    command = 'call copilot#Dismiss() | let b:copilot_enabled = v:false',
+  })
 
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'BlinkCmpMenuClose',
-      group = aug,
-      command = 'let b:copilot_enabled = v:true',
-    })
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'BlinkCmpMenuClose',
+    group = aug,
+    command = 'let b:copilot_enabled = v:true',
+  })
 end
 
 M.status = function()

@@ -29,6 +29,7 @@ local icons = {
       rounded = { left = '', right = '' },
     },
   },
+  -- for mini.icon opts
   mini = {
     file = {
       ['.keep'] = { glyph = '󰊢', hl = 'MiniIconsGrey' },
@@ -55,28 +56,25 @@ local icons = {
       dotenv = { glyph = '', hl = 'MiniIconsYellow' },
     },
   },
+  fticon = function(bufnr_or_ft)
+    local ft = type(bufnr_or_ft) == 'string' and bufnr_or_ft or nil
+    if not ft then
+      local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
+      ft = vim.bo[bufnr].filetype
+    end
+    return (MiniIcons and MiniIcons.get('filetype', ft) or ' ') .. ' '
+  end,
 }
 
--- function M.config()
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
-icons = vim.tbl_deep_extend('force', icons, snacks_icons)
-
+nv.icons = vim.tbl_deep_extend('force', icons, snacks_icons)
 -- add an inverted lookup table for kinds
-if icons.kinds then
+if nv.icons.kinds then
   for name, num in pairs(vim.lsp.protocol.SymbolKind) do
-    if type(name) == 'string' and icons.kinds[name] then
-      icons.kinds[num] = icons.kinds[name]
+    if type(name) == 'string' and nv.icons.kinds[name] then
+      nv.icons.kinds[num] = nv.icons.kinds[name]
     end
   end
-end
-
-icons.fticon = function(bufnr_or_ft)
-  local ft = type(bufnr_or_ft) == 'string' and bufnr_or_ft or nil
-  if not ft then
-    local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
-    ft = vim.bo[bufnr].filetype
-  end
-  return (MiniIcons and MiniIcons.get('filetype', ft) or ' ') .. ' '
 end
 
 return icons

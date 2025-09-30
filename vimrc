@@ -143,7 +143,7 @@ augroup END
 " shortcuts! {{{
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
 nnoremap <BSlash>i <Cmd>e ~/.vim/init.lua<CR>
-nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/init')<CR>
+nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plug')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util')<CR>
@@ -463,6 +463,7 @@ if !has('nvim')
   Plug 'welle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'
 else
+  " Plug 'nvim-mini/mini.nvim'
   " Plug '~/GitHub/rdnajac/vim-lol'
 endif
 call plug#end() " }}}1

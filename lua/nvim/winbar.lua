@@ -12,10 +12,9 @@ local map = {
   terminal = function() return vim.fn["vimline#winbar#terminal"]() end,
 }
 
-function M.winbar()
+M.winbar = function()
   -- - <empty>	normal buffer
-  -- - acwrite
-  -- probably an oil buffer
+  -- - acwrite    nvim-pack, oil
   -- - help	help buffer (do not set this manually)
   -- - nofile	buffer is not related to a file, will not be written
   -- - nowrite	buffer will not be written
@@ -25,9 +24,12 @@ function M.winbar()
   return map[vim.bo.buftype]()
 end
 
-M.after = function()
-  vim.o.winbar = "%{%v:lua.require'nvim.ui'.winbar()%}"
-  xprequire('nvim.util.sourcecode')
-end
+M.config = function()
+  vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+end()
 
-return M
+return setmetatable(M, {
+  __call = function()
+    return M.winbar()
+  end,
+})

@@ -1,6 +1,21 @@
 local M = { 'folke/snacks.nvim' }
 -- TODO: use the snacks.config.merge functions
 
+M.after = function()
+  _G.dd = function(...)
+    require('snacks.debug').inspect(...)
+  end
+  _G.bt = function(...)
+    require('snacks.debug').backtrace(...)
+  end
+  _G.p = function(...)
+    require('snacks.debug').profile(...)
+  end
+  vim._print = function(_, ...)
+    dd(...)
+  end
+end
+
 -- stylua: ignore
 local _enabled = {
   bigfile      = { enabled = true  },
@@ -39,7 +54,7 @@ M.opts = vim.tbl_deep_extend('force', {
     lazygit = { height = 0, width = 0 },
     terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
     notification_history = {
-      wo = { number = false,  winhighlight = 'WinBar:Chromatophore' },
+      wo = { number = false, winhighlight = 'WinBar:Chromatophore' },
       position = 'bottom',
       width = 100,
       height = 0.4,

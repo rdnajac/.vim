@@ -1,10 +1,10 @@
 local M = {}
-
+M.name = 'lsp'
 -- TODO: check whether the configs in after/lsp actually override the default configs
 M.specs = {
   -- 'neovim/nvim-lspconfig',
   'mason-org/mason.nvim',
-  'b0o/SchemaStore.nvim',
+  -- 'b0o/SchemaStore.nvim',
 }
 
 ---@type string[] The list of LSP servers to configure and enable from `lsp/`

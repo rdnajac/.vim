@@ -89,7 +89,10 @@ M.winbar = function(winid)
   return path ~= '' and vim.fn.fnamemodify(path, ':~') or ''
 end
 
-M.keys = { '-', '<Cmd>Oil<CR>' }
+M.keys = {
+  { '-', '<Cmd>Oil --float<CR>' },
+  { '_', '<Cmd>Oil<CR>' },
+}
 
 M.after = function()
   require('nvim.oil.autocmds')

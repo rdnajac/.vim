@@ -5,13 +5,13 @@ local M = {}
 setmetatable(M, {
   __index = function(t, k)
     ---@diagnostic disable-next-line: no-unknown
-    t[k] = require("snacks." .. k)
+    t[k] = require('snacks.' .. k)
     return rawget(t, k)
   end,
 })
 
 _G.Snacks = M
-_G.svim = vim.fn.has("nvim-0.11") == 1 and vim or require("snacks.compat")
+_G.svim = vim.fn.has('nvim-0.11') == 1 and vim or require('snacks.compat')
 
 ---@class snacks.Config.base
 ---@field example? string
@@ -24,21 +24,21 @@ local config = {
   image = {
     -- define these here, so that we don't need to load the image module
     formats = {
-      "png",
-      "jpg",
-      "jpeg",
-      "gif",
-      "bmp",
-      "webp",
-      "tiff",
-      "heic",
-      "avif",
-      "mp4",
-      "mov",
-      "avi",
-      "mkv",
-      "webm",
-      "pdf",
+      'png',
+      'jpg',
+      'jpeg',
+      'gif',
+      'bmp',
+      'webp',
+      'tiff',
+      'heic',
+      'avif',
+      'mp4',
+      'mov',
+      'avi',
+      'mkv',
+      'webm',
+      'pdf',
     },
   },
 }
@@ -56,10 +56,10 @@ M.config = setmetatable({}, {
 })
 
 local is_dict_like = function(v) -- has string and number keys
-  return type(v) == "table" and (vim.tbl_isempty(v) or not svim.islist(v))
+  return type(v) == 'table' and (vim.tbl_isempty(v) or not svim.islist(v))
 end
 local is_dict = function(v) -- has only string keys
-  return type(v) == "table" and (vim.tbl_isempty(v) or not v[1])
+  return type(v) == 'table' and (vim.tbl_isempty(v) or not v[1])
 end
 
 --- Merges the values similar to vim.tbl_deep_extend with the **force** behavior,
@@ -69,7 +69,7 @@ end
 ---@return T
 function M.config.merge(...)
   local ret = select(1, ...)
-  for i = 2, select("#", ...) do
+  for i = 2, select('#', ...) do
     local value = select(i, ...)
     if is_dict_like(ret) and is_dict(value) then
       for k, v in pairs(value) do
@@ -87,14 +87,17 @@ end
 ---@param name string
 ---@param opts? table
 function M.config.example(snack, name, opts)
-  local path = vim.fn.fnamemodify(debug.getinfo(1, "S").source:sub(2), ":h:h:h") .. "/docs/examples/" .. snack .. ".lua"
+  local path = vim.fn.fnamemodify(debug.getinfo(1, 'S').source:sub(2), ':h:h:h')
+    .. '/docs/examples/'
+    .. snack
+    .. '.lua'
   local ok, ret = pcall(function()
-    return loadfile(path)().examples[name] or error(("`%s` not found"):format(name))
+    return loadfile(path)().examples[name] or error(('`%s` not found'):format(name))
   end)
   if not ok then
-    M.notify.error(("Failed to load `%s.%s`:\n%s"):format(snack, name, ret))
+    M.notify.error(('Failed to load `%s.%s`:\n%s'):format(snack, name, ret))
   end
-  return ok and vim.tbl_deep_extend("force", {}, vim.deepcopy(ret), opts or {}) or {}
+  return ok and vim.tbl_deep_extend('force', {}, vim.deepcopy(ret), opts or {}) or {}
 end
 
 ---@generic T: table
@@ -104,9 +107,9 @@ end
 ---@return T
 function M.config.get(snack, defaults, ...)
   local merge, todo = {}, { defaults, config[snack] or {}, ... }
-  for i = 1, select("#", ...) + 2 do
+  for i = 1, select('#', ...) + 2 do
     local v = todo[i] --[[@as snacks.Config.base]]
-    if type(v) == "table" then
+    if type(v) == 'table' then
       if v.example then
         table.insert(merge, vim.deepcopy(M.config.example(snack, v.example)))
         v.example = nil
@@ -115,7 +118,7 @@ function M.config.get(snack, defaults, ...)
     end
   end
   local ret = M.config.merge(unpack(merge))
-  if type(ret.config) == "function" then
+  if type(ret.config) == 'function' then
     ret.config(ret, defaults)
   end
   return ret
@@ -126,7 +129,8 @@ end
 ---@param defaults snacks.win.Config|{}
 ---@return string
 function M.config.style(name, defaults)
-  config.styles[name] = vim.tbl_deep_extend("force", vim.deepcopy(defaults), config.styles[name] or {})
+  config.styles[name] =
+    vim.tbl_deep_extend('force', vim.deepcopy(defaults), config.styles[name] or {})
   return name
 end
 
@@ -136,12 +140,20 @@ M.did_setup_after_vim_enter = false
 ---@param opts snacks.Config?
 function M.setup(opts)
   if M.did_setup then
-    return vim.notify("snacks.nvim is already setup", vim.log.levels.ERROR, { title = "snacks.nvim" })
+    return vim.notify(
+      'snacks.nvim is already setup',
+      vim.log.levels.ERROR,
+      { title = 'snacks.nvim' }
+    )
   end
   M.did_setup = true
 
-  if vim.fn.has("nvim-0.9.4") ~= 1 then
-    return vim.notify("snacks.nvim requires Neovim >= 0.9.4", vim.log.levels.ERROR, { title = "snacks.nvim" })
+  if vim.fn.has('nvim-0.9.4') ~= 1 then
+    return vim.notify(
+      'snacks.nvim requires Neovim >= 0.9.4',
+      vim.log.levels.ERROR,
+      { title = 'snacks.nvim' }
+    )
   end
 
   -- enable all by default when config is passed
@@ -149,14 +161,14 @@ function M.setup(opts)
   for k in pairs(opts) do
     opts[k].enabled = opts[k].enabled == nil or opts[k].enabled
   end
-  config = vim.tbl_deep_extend("force", config, opts or {})
+  config = vim.tbl_deep_extend('force', config, opts or {})
 
   local events = {
-    BufReadPre = { "bigfile", "image" },
-    BufReadPost = { "quickfile", "indent" },
-    BufEnter = { "explorer" },
-    LspAttach = { "words" },
-    UIEnter = { "dashboard", "scroll", "input", "scope", "picker" },
+    BufReadPre = { 'bigfile', 'image' },
+    BufReadPost = { 'quickfile', 'indent' },
+    BufEnter = { 'explorer' },
+    LspAttach = { 'words' },
+    UIEnter = { 'dashboard', 'scroll', 'input', 'scope', 'picker' },
   }
 
   ---@param event string
@@ -177,10 +189,10 @@ function M.setup(opts)
 
   if vim.v.vim_did_enter == 1 then
     M.did_setup_after_vim_enter = true
-    load("UIEnter")
+    load('UIEnter')
   end
 
-  local group = vim.api.nvim_create_augroup("snacks", { clear = true })
+  local group = vim.api.nvim_create_augroup('snacks', { clear = true })
   vim.api.nvim_create_autocmd(vim.tbl_keys(events), {
     group = group,
     once = true,
@@ -191,12 +203,12 @@ function M.setup(opts)
   })
 
   if M.config.image.enabled and #M.config.image.formats > 0 then
-    vim.api.nvim_create_autocmd("BufReadCmd", {
+    vim.api.nvim_create_autocmd('BufReadCmd', {
       once = true,
-      pattern = "*." .. table.concat(M.config.image.formats, ",*."),
+      pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
       group = group,
       callback = function(e)
-        require("snacks.image").setup(e)
+        require('snacks.image').setup(e)
       end,
     })
   end
