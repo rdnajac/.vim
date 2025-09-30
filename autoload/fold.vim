@@ -1,5 +1,9 @@
 scriptencoding utf-8
 
+function! fold#status()
+  verbose set foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?
+endfunction
+
 function! fold#text_lua()
   let l:start = v:foldstart
   let l:lines = v:foldend - l:start + 1

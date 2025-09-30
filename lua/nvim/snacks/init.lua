@@ -64,6 +64,7 @@ M.opts = vim.tbl_deep_extend('force', {
 M.keys = function()
   require('nvim.snacks.toggle') -- set up toggles
   local all = { hidden = true, nofile = true } -- opts for buffers (all)
+  local notifier = _enabled.notifier and _enabled.notifier.enabled == true
 -- stylua: ignore
 local keys = {
 { '<leader><space>', function() Snacks.picker.smart() end,   desc = 'Smart Find Files'              },
@@ -131,7 +132,6 @@ local keys = {
 -- other
 { '<leader>.',  function() Snacks.scratch() end,                     desc = 'Toggle Scratch Buffer' },
 { '<leader>S',  function() Snacks.scratch.select() end,              desc = 'Select Scratch Buffer' },
-{ '<leader>n',  function() Snacks.notifier.show_history() end,       desc = 'Notification History'  },
 { '<leader>un', function() Snacks.notifier.hide() end,               desc = 'Dismiss Notifications' },
 { '<leader>cR', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
 { '<leader>fC', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
@@ -149,7 +149,11 @@ local keys = {
     '<leader>N', function()
       Snacks.zen({win={file=vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}})
     end, desc = 'Neovim News'
-  }
+  },
+  { '<leader>n', function()
+      return (notifier and Snacks.notifier.show_history or Snacks.picker.notifications)()
+    end, desc = 'Notification History'
+  },
 }
 
   --- Create a pair of which-key specs for mapping a file picker and a grep picker

@@ -16,16 +16,11 @@ _G.nv = setmetatable({}, {
 
 Plug = require('nvim.util.plug')
 Plug(nv['snacks'])
-
-for _, plugin in ipairs({
-  -- 'tokyonight',
-  -- 'snacks',
-  'mini',
-  'oil',
-}) do
-  Plug(nv[plugin])
+for _, plugin in ipairs(nv.folke) do
+  Plug(plugin)
 end
-
+Plug(nv.mini)
+Plug(nv.oil)
 Plug(nv.blink)
 Plug(nv.copilot)
 Plug(nv.dial)
@@ -34,10 +29,6 @@ Plug(nv.r)
 Plug(nv['render-markdown'])
 Plug(nv.treesitter)
 Plug(nv.tokyonight)
-
-for _, plugin in ipairs(nv.folke) do
-  Plug(plugin)
-end
 
 require('nvim.config')
 

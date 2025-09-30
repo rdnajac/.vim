@@ -47,8 +47,7 @@ local ft_sources = {
 
 ---@return blink.cmp.SourceList[]
 M.default = function()
-  -- FIXME: sometimes we still get snippets in comments
-  if require('nvim.treesitter').in_comment_node() then
+  if nv.treesitter.in_comment_node() then
     return { 'buffer' }
   end
   return vim.list_extend(vim.tbl_keys(default_providers), ft_sources[vim.bo.filetype] or {})
@@ -57,7 +56,8 @@ end
 M.providers = {
   lazydev = {
     name = 'LazyDev',
-    module = 'nvim.blink.sources.lazydev',
+    -- module = 'lazydev.integrations.blink', -- folke's
+    module = 'nvim.blink.sources.lazydev', -- mine
     score_offset = 100,
   },
   env = {
