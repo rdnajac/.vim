@@ -5,12 +5,13 @@ vim.g.health = { style = 'float' }
 --   vim.g[provider] = 0 -- disable to silence warnings
 -- end
 
-M.commands = function()
+vim.schedule(function()
   require('nvim.config.commands')
-end
+  require('nvim.config.keymaps')
+  require('nvim.config.autocmds')
+  require('nvim.config.diagnostic')
 
-require('nvim.config.keymaps')
-
-vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+  vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+end)
 
 return M
