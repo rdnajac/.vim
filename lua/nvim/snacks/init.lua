@@ -1,6 +1,8 @@
 local M = { 'folke/snacks.nvim' }
 -- TODO: use the snacks.config.merge functions
 
+local skip = {} -- upvalue
+
 M.after = function()
   _G.dd = function(...)
     require('snacks.debug').inspect(...)
@@ -11,9 +13,13 @@ M.after = function()
   _G.p = function(...)
     require('snacks.debug').profile(...)
   end
+  --- @diagnostic disable-next-line: duplicate-set-field
   vim._print = function(_, ...)
     dd(...)
   end
+
+  skip = vim.tbl_keys(Snacks.picker)
+  require('nvim.snacks.terminal')
 end
 
 -- stylua: ignore
@@ -31,13 +37,6 @@ local _enabled = {
   statuscolumn = { enabled = false },
   words        = { enabled = true  },
 }
-local skip = {} -- upvalue
-
-M.on_load = function()
-  skip = vim.tbl_keys(Snacks.picker)
-  require('nvim.snacks.terminal')
-  -- Snacks.util.on_module('which-key', bt)
-end
 
 ---@module "snacks"
 ---@type snacks.config
@@ -59,8 +58,6 @@ M.opts = vim.tbl_deep_extend('force', {
       width = 100,
       height = 0.4,
     },
-    -- TODO: style for notification history window
-    -- TODO: nonumber or signcolumn on preview windows (or norificaiton history)
   },
 }, _enabled)
 
@@ -73,6 +70,8 @@ local keys = {
 { '<leader>,', function() Snacks.picker.buffers() end,       desc = 'Buffers'                       },
 { '<leader>/', function() Snacks.picker.grep() end,          desc = 'Grep'                          },
 { '<leader>e', function() Snacks.explorer() end,             desc = 'File Explorer'                 },
+{ '<leader>p', function() Snacks.picker.resume() end,        desc = 'Resume Picking'                },
+{ '<leader>P', function() Snacks.picker() end,               desc = 'Snacks Pickers'                },
 
 -- buffers
 { ',,',         function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
@@ -135,6 +134,7 @@ local keys = {
 { '<leader>n',  function() Snacks.notifier.show_history() end,       desc = 'Notification History'  },
 { '<leader>un', function() Snacks.notifier.hide() end,               desc = 'Dismiss Notifications' },
 { '<leader>cR', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
+{ '<leader>fC', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
 -- LSP
 { 'grd', function() Snacks.picker.lsp_definitions() end,             desc = 'LSP Definition'        },
 { 'grD', function() Snacks.picker.lsp_declarations() end,            desc = 'LSP Declaration'       },
@@ -181,20 +181,12 @@ local keys = {
     local key, dir, opts = unpack(args)
     vim.list_extend(keys, picker_pair(desc, key, dir, opts))
   end
-  -- no hlsearch on <Esc>
-  -- vimscript: nnoremap <expr> <Esc> ':nohlsearch\<CR><Esc>'
-  -- vim.keymap.set({ 'i', 'n', 's' }, '<Esc>', function()
-  --   vim.cmd.nohlsearch()
-  --   return '<Esc>'
-  -- end, { expr = true, desc = 'Escape and Clear hlsearch' })
 
   -- stylua: ignore start
-  Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
   vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
   vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
   vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
   --stylua: ignore end
-
   return keys
 end
 

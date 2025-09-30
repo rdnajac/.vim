@@ -1,5 +1,5 @@
 M = {}
-
+M.name = 'copilot'
 M.specs = {
   'github/copilot.vim',
   -- TODO:  set this up

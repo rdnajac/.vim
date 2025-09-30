@@ -55,8 +55,11 @@ M.opts = {
   },
 }
 
+-- TODO: keep all ui stuff here?
 M.after = function()
+  vim.fn['chromatophore#setup']()
   vim.cmd.colorscheme('tokyonight')
+  require('nvim.util.sourcecode')
 end
 
 -- FIXME: this function is cached on the first require and

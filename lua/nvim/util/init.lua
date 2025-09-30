@@ -1,5 +1,13 @@
 local M = {}
 
+setmetatable({}, {
+  __index = function(t, k)
+    t[k] = require('nvim.util.' .. k)
+    -- return rawget(t, k)
+    return t[k]
+  end,
+})
+
 M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end

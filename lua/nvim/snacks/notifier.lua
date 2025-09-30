@@ -16,7 +16,7 @@ local function style(buf, notif, ctx)
       { ' ' },
       {
         string.format(
-          '%s:%03d',
+          '%s.%03d',
           os.date('%T', notif.added),
           math.floor((vim.uv.hrtime() / 1e6) % 1000)
         ),

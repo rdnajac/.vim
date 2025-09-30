@@ -1,6 +1,5 @@
 -- TODO: configure debuging with
 -- nvim_eval_statusline()
-track('in vimline')
 -- Escape `%` in str so it doesn't get picked as stl item.
 local vimlineescape = function(str)
   return nv.is_nonempty_str(str) and str:gsub('%%', '%%%%') or str

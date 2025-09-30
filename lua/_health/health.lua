@@ -1,9 +1,5 @@
 local M = {}
 
--- for _, provider in ipairs({ 'node', 'perl', 'ruby' }) do
---   vim.g[provider] = 0 -- disable to silence warnings
--- end
-
 local start = vim.health.start
 local ok = vim.health.ok
 local warn = vim.health.warn

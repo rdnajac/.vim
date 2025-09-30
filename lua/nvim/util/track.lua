@@ -41,7 +41,7 @@ end
 
 --- @param ev table
 util.lazyload(function(ev)
-  track(ev.event)
+  M.track(ev.event)
 end, { 'BufWinEnter', 'VimEnter', 'UIEnter' })
 
-return track
+return M.track

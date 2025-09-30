@@ -1,31 +1,14 @@
 _G.t = { vim.uv.hrtime() }
 
-vim.g.health = { style = 'float' }
-
-_G.info = function(...)
-  return vim.print(vim.inspect(...))
-end
-
 vim.loader.enable()
 
--- initializes vim.g.plugins
+_G.track = require('nvim.util.track')
+
 vim.cmd([[runtime vimrc]])
 
+vim.o.winborder = 'rounded'
+vim.o.cmdheight = 0
+require('vim._extui').enable({})
+
 require('nvim')
-
-require('nvim.util').lazyload(function()
-  vim.fn['chromatophore#setup']()
-  require('nvim.util.sourcecode')
-end)
-
-vim.schedule(function()
-  nv.plug(nv.diagnostic)
-end)
-nv.plug(nv.blink)
-nv.plug(nv.dial)
-nv.plug(nv.lsp)
-nv.plug(nv.r)
-nv.plug(nv['render-markdown'])
-nv.plug(nv.treesitter)
-
--- track('init])')
+track('init.lua')

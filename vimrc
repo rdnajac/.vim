@@ -142,10 +142,9 @@ augroup END
 " Section: keymaps {{{1
 " shortcuts! {{{
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-nnoremap <BSlash>i <Cmd>e ~/.vim/init.lua<CR>
 nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/config/init')<CR>
-nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
-nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plug')<CR>
+nnoremap <BSlash>i <Cmd>call edit#luamod('nvim/init')<CR>
+nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/util/plug')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util')<CR>
 nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/init')<CR>
 
@@ -236,8 +235,6 @@ nnoremap <leader>h <Cmd>Help<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 
-
-
 if has ('nvim')
   " code
   nnoremap <leader>cc <Cmd>CodeCompanion<CR>
@@ -250,11 +247,6 @@ if has ('nvim')
   nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
-  " TODO: move to snacks
-  nnoremap <leader>p <Cmd>lua Snacks.picker.resume()<CR>
-  nnoremap <leader>P <Cmd>lua Snacks.picker()<CR>
-  " file/find/format
-  nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
 endif
 nnoremap <leader>fD <Cmd>Delete!<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
@@ -463,7 +455,6 @@ if !has('nvim')
   Plug 'welle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'
 else
-  " Plug 'nvim-mini/mini.nvim'
   " Plug '~/GitHub/rdnajac/vim-lol'
 endif
 call plug#end() " }}}1

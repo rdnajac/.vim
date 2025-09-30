@@ -48,7 +48,7 @@ local to_spec = function(user_repo, data)
   local spec = {
     src = gh(user_repo),
     name = user_repo:match('([^/]+)$'):gsub('%.nvim$', ''),
-    --- HACK: remove this when treesitter is on main
+    -- HACK: remove this when treesitter is on main
     version = user_repo:match('treesitter') and 'main' or nil,
     data = data,
   }
@@ -136,9 +136,6 @@ function Plugin:setup()
       did.setup[self.name] = pcall(mod.setup, opts)
     end
   end
-  if vim.is_callable(self.on_load) then
-    self.on_load()
-  end
 end
 
 function Plugin:do_after()
@@ -210,6 +207,27 @@ M.commands = function()
       end, vim.pack.get())
     end,
   })
+
+  command('Plugins', function()
+    local active, inactive = {}, {}
+    for _, p in ipairs(vim.pack.get()) do
+      if p.active then
+        table.insert(active, p.spec.name)
+      else
+        table.insert(inactive, p.spec.name)
+      end
+    end
+    print(
+      string.format(
+        'Plugins: %d total (%d active, %d inactive)',
+        #active + #inactive,
+        #active,
+        #inactive
+      )
+    )
+    print('\nActive:\n' .. table.concat(active, '\n'))
+    print('\nInactive:\n' .. table.concat(inactive, '\n'))
+  end, {})
 
   command('PlugClean', function(opts)
     local plugs = #opts.fargs > 0 and opts.fargs or M.unloaded()
