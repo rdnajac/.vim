@@ -107,10 +107,7 @@ function Plugin:init()
   end
 end
 
---- @param fn fun()
---- @param field string   -- field name, also key in did
---- @param cond fun(any):boolean
---- @param event? string
+-- TODO: don't do fn if already done
 -- function Plugin:do(fn, field, cond, event)
 --   local value = self[field]
 --   if cond(value) then
@@ -242,6 +239,7 @@ end
 
 util.lazyload(function()
   M.commands()
+  nv.did = did
 end, 'CmdLineEnter')
 
 return setmetatable(M, {

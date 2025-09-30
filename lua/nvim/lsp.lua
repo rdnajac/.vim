@@ -2,6 +2,7 @@ local M = {}
 
 M.name = 'lsp'
 -- TODO: check whether the configs in after/lsp actually override the default configs
+
 M.specs = {
   -- 'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
