@@ -1,9 +1,5 @@
 local M = { 'nvim-treesitter/nvim-treesitter' }
 
-M.specs = {
-  'nvim-treesitter/nvim-treesitter-textobjects',
-}
-
 -- M.build = 'TSUpdate'
 M.build = function()
   local parsers = require('nvim.treesitter.parsers')
@@ -39,7 +35,6 @@ M.after = function()
   vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection').start() end, { desc = 'Start selection' })
   vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
   vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
-  vim.keymap.set('n', '<leader>uI', function() vim.treesitter.inspect_tree(); vim.api.nvim_input('I') end, { desc = 'Inspect Tree' })
 end
 
 --- Check if the current node is a comment node
