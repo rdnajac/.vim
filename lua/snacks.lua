@@ -11,16 +11,7 @@ setmetatable(M, {
 
 _G.Snacks = M
 _G.svim = vim
--- vim.print(vim.inspect(vim.tbl_keys(Snacks.picker)))
 
---- Config Start [[
----@class snacks.Config.base
----@field example? string
----@field config? fun(opts: table, defaults: table)
-
----@class snacks.Config: snacks.plugins.Config
----@field styles? table<string, snacks.win.Config>
----@field image? snacks.image.Config|{}
 local config = {
   image = {
     -- stylua: ignore
@@ -80,19 +71,8 @@ function M.config.style(name, defaults)
 end
 
 -- Config End ]]
-
--- M.did_setup = false
--- M.did_setup_after_vim_enter = false
-
----@param opts snacks.Config?
--- function M.setup(opts)
--- if M.did_setup then
--- return vim.notify( 'snacks.nvim is already setup', vim.log.levels.ERROR, { title = 'snacks.nvim' })
--- end
--- M.did_setup = true
-
 -- enable all by default when config is passed
--- opts = opts or {}
+---@type snacks.Config?
 opts = require('nvim.snacks').opts
 -- TODO: move opts
 for k in pairs(opts) do
@@ -125,22 +105,16 @@ local function load(event, ev)
   end
 end
 
--- if vim.v.vim_did_enter == 1 then
---   M.did_setup_after_vim_enter = true
---   load('UIEnter')
--- end
-
-local group = vim.api.nvim_create_augroup('snacks', { clear = true })
+-- TODO: use lazyload
 vim.api.nvim_create_autocmd(vim.tbl_keys(events), {
-  group = group,
+  group = vim.api.nvim_create_augroup('snacks', { clear = true }),
   once = true,
-  nested = true,
+  nested = true, -- TODO: add to lazyload
   callback = function(ev)
     load(ev.event, ev)
   end,
 })
 
--- if M.config.image.enabled and #M.config.image.formats > 0 then
 vim.api.nvim_create_autocmd('BufReadCmd', {
   once = true,
   pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
@@ -149,18 +123,14 @@ vim.api.nvim_create_autocmd('BufReadCmd', {
     require('snacks.image').setup(e)
   end,
 })
--- end
 
--- if M.config.statuscolumn.enabled then
---   vim.o.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
--- end
+-- vim.o.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
--- if M.config.notifier.enabled then
 vim.notify = function(msg, level, o)
   vim.notify = Snacks.notifier.notify
   return Snacks.notifier.notify(msg, level, o)
 end
--- end
--- end
 
+M.did_setup = true
+M.did_setup_after_vim_enter = false
 return M
