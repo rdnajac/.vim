@@ -50,7 +50,6 @@ function! vimline#winbar#() abort
     let l:ret .= vimline#flag#('readonly')
     let l:ret .= vimline#flag#('modified')
     let l:ret .= v:lua.nv.lsp.status()
-    let l:ret .= v:lua.nv.copilot.status()
     let l:ret .= v:lua.nv.treesitter.status()
     let l:ret .= v:lua.nv.diagnostic.status()
     let l:ret .= '%#Chromatophore_bc#'

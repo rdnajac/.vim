@@ -1,8 +1,12 @@
 local M = { 'Saghen/blink.cmp' }
 
--- TODO: use the new build ex command `:...`
 -- M.build = 'cargo build --release'
-M.specs = { 'Saghen/blink.compat' }
+-- M.build = ':BlinkCmp build'
+
+M.specs = {
+  'Saghen/blink.compat',
+  -- 'fang2hou/blink-copilot',
+}
 
 -- use the winborder or default to 'single'
 local border = vim.o.winborder == '' and 'single' or nil

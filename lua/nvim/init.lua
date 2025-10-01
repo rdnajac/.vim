@@ -20,7 +20,6 @@ for _, plugin in ipairs(nv.folke) do
   Plug(plugin)
 end
 Plug(nv.blink)
-Plug(nv.copilot)
 Plug(nv.dial)
 Plug(nv.lsp)
 Plug(nv.markdown)

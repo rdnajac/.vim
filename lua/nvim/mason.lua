@@ -2,6 +2,7 @@ local M = {
   'mason-org/mason.nvim',
   opts = {},
 }
+M.build = ':MasonUpdate'
 
 --- commands for the mason-registry
 local api = {
