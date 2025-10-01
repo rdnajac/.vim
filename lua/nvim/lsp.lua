@@ -1,8 +1,8 @@
 local M = {}
 
 M.name = 'lsp'
--- TODO: check whether the configs in after/lsp actually override the default configs
 
+-- TODO: check whether the configs in after/lsp actually override the default configs
 M.specs = {
   -- 'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
@@ -26,35 +26,49 @@ M.config = function()
   end, 'FileType', 'lua')
 end
 
----Find project root using LSP config root_markers for the buffer's filetype.
----@param path? string starting path (defaults to current buffer path)
----@return string|nil
+-- FIXME: this sucks
 M.root = function(path)
-  -- if no path given, use the current buffer path
-  if not path or path == '' then
-    path = vim.api.nvim_buf_get_name(0)
-  end
+  path = path or vim.api.nvim_buf_get_name(0)
   if path == '' then
     return nil
   end
+  path = vim.uv.fs_realpath(path) or path
 
-  -- TODO: maybe we need lspconfig to get the ft mapping?
-  -- maybe mason has it?
-  local cgf = vim.lsp.config[vim.bo.filetype] --- XXX: BAD!
-  if not cgf or not cgf.root_markers then
-    return nil
-  end
-
-  return vim.fs.root(path, lsp_cfg.root_markers)
-end
-
-M.status = function()
-  for _, client in pairs(vim.lsp.get_clients()) do
-    if client.name ~= 'copilot' then
-      return nv.icons.lsp.attached
+  local best
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    if client.root_dir and path:find(client.root_dir, 1, true) == 1 then
+      if not best or #client.root_dir > #best then
+        best = client.root_dir
+      end
     end
   end
-  return nv.icons.lsp.unavailable .. ' '
+  if best then
+    return best
+  end
+
+  local markers = {}
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    local m = client.config and client.config.root_markers
+    if m then
+      vim.list_extend(markers, m)
+    end
+  end
+  if #markers > 0 then
+    return vim.fs.root(path, markers)
+  end
+  return vim.fs.root(path, { '.git' })
+end
+
+-- FIXME: this sucks
+M.status = function()
+  local clients = vim.lsp.get_clients()
+  local names = vim.tbl_map(function(c) return c.name end, clients)
+  return ("%s%s%s"):format(
+    #clients == 0 and nv.icons.lsp.unavailable or "",
+    (#clients > 0 and not (#clients == 1 and vim.tbl_contains(names, "copilot")))
+      and nv.icons.lsp.attached or "",
+    vim.tbl_contains(names, "copilot") and nv.icons.src.copilot or ""
+  )
 end
 
 M.docsymbols = function()
