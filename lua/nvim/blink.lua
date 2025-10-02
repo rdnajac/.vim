@@ -27,7 +27,7 @@ M.opts = {
     },
     list = { selection = { preselect = true, auto_insert = true } },
     menu = {
-      auto_show = true,
+      auto_show = false,
       auto_show_delay_ms = 1000,
       --- @param ctx blink.cmp.Context
       --- @param items blink.cmp.CompletionItem[]
@@ -69,6 +69,12 @@ M.opts = {
         end
       end,
       'snippet_forward',
+      function()
+        return require('sidekick').nes_jump_or_apply()
+      end,
+      function()
+        return vim.lsp.inline_completion.get()
+      end,
       'fallback',
     },
   },

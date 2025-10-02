@@ -62,10 +62,7 @@ M.status = function()
   local names = vim.tbl_map(function(c)
     return c.name
   end, clients)
-  return ('%s%s'):format(
-    (not (#clients == 1 and vim.tbl_contains(names, 'copilot'))) and nv.icons.lsp.attached,
-    vim.tbl_contains(names, 'copilot') and nv.icons.src.copilot or ' '
-  )
+  return (not (#clients == 1 and vim.tbl_contains(names, 'copilot'))) and nv.icons.lsp.attached or nv.icons.lsp.available
 end
 
 M.docsymbols = function()

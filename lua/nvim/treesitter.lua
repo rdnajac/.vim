@@ -7,6 +7,7 @@ M.build = function()
   -- require('nvim-treesitter').install(parsers)
   vim.cmd('TSUpdate')
 end
+-- FIXME
 require('nvim.util.build')('nvim-treesitter', M.build)
 
 local aug = vim.api.nvim_create_augroup('treesitter', {})

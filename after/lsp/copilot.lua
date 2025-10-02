@@ -1,20 +1,14 @@
 -- https://www.npmjs.com/package/@github/copilot-language-server
+local info = {
+  name = 'Neovim',
+  version = tostring(vim.version()),
+}
+
 ---@type vim.lsp.Config
 return {
-  cmd = {
-    'copilot-language-server',
-    '--stdio',
-  },
-  root_markers = { '.git' },
   init_options = {
-    editorInfo = {
-      name = 'Neovim',
-      version = tostring(vim.version()),
-    },
-    editorPluginInfo = {
-      name = 'Neovim',
-      version = tostring(vim.version()),
-    },
+    editorInfo = info,
+    editorPluginInfo = info,
   },
   settings = {
     telemetry = {

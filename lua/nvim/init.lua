@@ -29,6 +29,7 @@ Plug(nv.mason)
 Plug(nv.mini)
 Plug(nv.oil)
 Plug(nv.r)
+Plug(nv.sidekick)
 Plug(nv.tokyonight)
 Plug(nv.treesitter)
 
