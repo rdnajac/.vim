@@ -239,6 +239,7 @@ end
 
 util.lazyload(function()
   M.commands()
+  -- require('nvim.util.build')
   nv.did = did
 end, 'CmdLineEnter')
 
