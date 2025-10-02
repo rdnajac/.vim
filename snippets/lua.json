@@ -92,12 +92,8 @@
 
   "keys": {
     "prefix": "keys",
-    "body": [
-      "keys = {",
-        "  { ${0} },",
-        "},"
-    ],
-    "description": "lazy spec keys"
+    "body": "vim.tbl_keys(${0})",
+    "description": "vim.tbl_keys"
   },
 
   "return": {

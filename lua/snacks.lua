@@ -1,4 +1,3 @@
-print('snack attack!')
 ---@class Snacks: snacks.plugins
 local M = {}
 
@@ -9,16 +8,25 @@ setmetatable(M, {
   end,
 })
 
-_G.Snacks = M
 _G.svim = vim
+_G.Snacks = M
+_G.dd = function(...)
+  Snacks.debug.inspect(...)
+end
+_G.bt = function(...)
+  Snacks.debug.backtrace(...)
+end
+_G.p = function(...)
+  Snacks.debug.profile(...)
+end
+--- @diagnostic disable-next-line: duplicate-set-field
+vim._print = function(_, ...)
+  dd(...)
+end
 
 local config = {
-  image = {
-    -- stylua: ignore
-    formats = { 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff', 'heic', 'avif', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'pdf' },
-  },
+  styles = {},
 }
-config.styles = {}
 
 ---@class snacks.config: snacks.Config
 M.config = setmetatable({}, {
@@ -71,22 +79,53 @@ function M.config.style(name, defaults)
 end
 
 -- Config End ]]
--- enable all by default when config is passed
----@type snacks.Config?
-opts = require('nvim.snacks').opts
--- TODO: move opts
+-- TODO: use the snacks.config.merge functions
+
+---@type snacks.config
+local opts = {
+  bigfile = {},
+  -- dashboard = {},
+  dashboard = require('nvim.snacks.dashboard'),
+  explorer = { replace_netrw = false }, -- using `oil` instead
+    -- stylua: ignore
+  image = { formats = { 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff', 'heic', 'avif', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'pdf' }, },
+  indent = { indent = { only_current = true, only_scope = true } },
+  input = { enabled = true },
+  notifier = require('nvim.snacks.notifier'),
+  picker = require('nvim.snacks.picker'),
+  quickfile = { enabled = true },
+  scratch = { template = 'local x = \n\nprint(x)' },
+  terminal = { start_insert = false, auto_insert = true, auto_close = true },
+  scope = { },
+  scroll = { enabled = false },
+  statuscolumn = { enabled = false },
+  styles = {
+    dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
+    lazygit = { height = 0, width = 0 },
+    terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
+    notification_history = {
+      wo = { number = false, winhighlight = 'WinBar:Chromatophore' },
+      position = 'bottom',
+      width = 100,
+      height = 0.4,
+    },
+  },
+  words = {},
+}
+
 for k in pairs(opts) do
   opts[k].enabled = opts[k].enabled == nil or opts[k].enabled
 end
--- TODO: check config before and after merge
-config = vim.tbl_deep_extend('force', config, opts or {})
+
+config = vim.tbl_deep_extend('force', config, opts)
 
 local events = {
   BufReadPre = { 'bigfile', 'image' },
   BufReadPost = { 'quickfile', 'indent' },
   BufEnter = { 'explorer' },
   LspAttach = { 'words' },
-  UIEnter = { 'dashboard', 'scroll', 'input', 'scope', 'picker' },
+  VimEnter = { 'dashboard' },
+  UIEnter = { 'scroll', 'input', 'scope', 'picker' },
 }
 
 ---@param event string
@@ -100,29 +139,35 @@ local function load(event, ev)
         M[snack].setup(ev)
       elseif M[snack].enable then
         M[snack].enable()
+      else
+        error('No setup or enable function found for snack: ' .. snack)
       end
+    else
+      print('disabled: ' .. snack)
     end
   end
 end
 
--- TODO: use lazyload
+local group = vim.api.nvim_create_augroup('snacks', { clear = true })
 vim.api.nvim_create_autocmd(vim.tbl_keys(events), {
-  group = vim.api.nvim_create_augroup('snacks', { clear = true }),
+  group = group,
   once = true,
-  nested = true, -- TODO: add to lazyload
+  nested = true,
   callback = function(ev)
     load(ev.event, ev)
   end,
 })
 
-vim.api.nvim_create_autocmd('BufReadCmd', {
-  once = true,
-  pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
-  group = group,
-  callback = function(e)
-    require('snacks.image').setup(e)
-  end,
-})
+if M.config.image.enabled and #M.config.image.formats > 0 then
+  vim.api.nvim_create_autocmd('BufReadCmd', {
+    once = true,
+    pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
+    group = group,
+    callback = function(e)
+      require('snacks.image').setup(e)
+    end,
+  })
+end
 
 -- vim.o.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
@@ -133,4 +178,6 @@ end
 
 M.did_setup = true
 M.did_setup_after_vim_enter = false
+
+print('snack attack!')
 return M

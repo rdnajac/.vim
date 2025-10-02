@@ -1,6 +1,5 @@
 local M = { 'nvim-treesitter/nvim-treesitter' }
 
-
 -- M.build = 'TSUpdate'
 M.build = function()
   -- local parsers = require('nvim.treesitter.parsers')

@@ -4,6 +4,7 @@ return {
   --- @type render.md.UserConfig
   opts = {
     file_types = { 'markdown', 'rmd', 'quarto' },
+    latex = { enabled = false },
     bullet = { right_pad = 1 },
     completions = { blink = { enabled = false } },
 

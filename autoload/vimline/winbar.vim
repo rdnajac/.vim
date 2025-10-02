@@ -1,6 +1,7 @@
 function s:fticon() abort
   return ' ' . v:lua.nv.icons.fticon()
 endfunction
+
 function! vimline#winbar#() abort
   let l:is_active_buffer = win_getid() == str2nr(g:actual_curwin)
 

@@ -38,13 +38,13 @@ return function(name, build)
 
       if vim.is_callable(build) then
         local ok, result = pcall(build)
-        dd(name, ok, ok and nil or result)
+        -- dd(name, ok, ok and nil or result)
       elseif type(build) == 'string' then
         local cmd = string.format('cd %s && %s', vim.fn.shellescape(data.spec.dir), build)
         local output = vim.fn.system(cmd)
-        dd(name, vim.v.shell_error == 0, vim.v.shell_error ~= 0 and output or nil)
+        -- dd(name, vim.v.shell_error == 0, vim.v.shell_error ~= 0 and output or nil)
       else
-        dd(name, false, 'Invalid build command type: ' .. type(build))
+        -- dd(name, false, 'Invalid build command type: ' .. type(build))
       end
     end,
   })

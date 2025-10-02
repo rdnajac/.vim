@@ -146,8 +146,7 @@ nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>i <Cmd>call edit#luamod('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/util/plug')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
-nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/itit')<CR>
-nnoremap <BSlash>S <Cmd>call edit#luamod('snacks')<CR>
+nnoremap <BSlash>s <Cmd>call edit#luamod('snacks')<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>

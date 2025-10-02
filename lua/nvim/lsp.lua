@@ -17,7 +17,6 @@ M.config = function()
     vim.lsp.enable(M.servers)
   end)
   require('nvim.lsp.progress')
-  -- require('nvim.lsp.completion')
 end
 
 -- FIXME: this sucks
@@ -56,13 +55,15 @@ end
 -- FIXME: this sucks
 M.status = function()
   local clients = vim.lsp.get_clients()
-  if #clients == 0 then
-    return nv.icons.lsp.unavailable
+  if #clients > 0 then
+    local names = vim.tbl_map(function(c)
+      return c.name
+    end, clients)
+    if not (#clients == 1 and vim.tbl_contains(names, 'copilot')) then
+      return nv.icons.lsp.attached
+    end
   end
-  local names = vim.tbl_map(function(c)
-    return c.name
-  end, clients)
-  return (not (#clients == 1 and vim.tbl_contains(names, 'copilot'))) and nv.icons.lsp.attached or nv.icons.lsp.available
+  return nv.icons.lsp.unavailable
 end
 
 M.docsymbols = function()

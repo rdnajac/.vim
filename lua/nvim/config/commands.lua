@@ -4,7 +4,7 @@ vim.api.nvim_create_user_command('GitBlameLine', function()
   print(vim.system({ 'git', 'blame', '-L', line_number .. ',+1', filename }):wait().stdout)
 end, { desc = 'Print the git blame for the current line' })
 
-snacks_commands = function()
+return function()
   --- assumes input is [a-z],_
   local function to_camel_case(str)
     return str
@@ -15,16 +15,22 @@ snacks_commands = function()
   end
 
   -- add any additional methods to skip creating commands for
-  vim.list_extend(skip, { 'config', 'highlight', 'keymap' })
+  local blacklist = {
+    'config',
+    'highlight',
+    'keymap',
+    'meta',
+    'setup',
+  }
   -- also skip the lazy picker if we're not using lazy.nvim
   if not package.loaded['lazy'] then
-    skip[#skip + 1] = 'lazy'
+    blacklist[#blacklist + 1] = 'lazy'
   end
 
   vim
     .iter(vim.tbl_keys(Snacks.picker))
     :filter(function(name)
-      return not vim.list_contains(skip, name)
+      return not vim.list_contains(blacklist, name)
     end)
     :each(function(name)
       local cmd = to_camel_case(name)

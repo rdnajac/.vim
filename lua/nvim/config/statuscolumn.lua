@@ -257,16 +257,6 @@ function M.get()
   return ''
 end
 
--- ---@private
--- function M.health()
---   local ready = vim.o.statuscolumn:find("snacks.statuscolumn", 1, true)
---   if config.enabled and not ready then
---     Snacks.health.warn(("is not configured\n- `vim.o.statuscolumn = %q`"):format(vim.o.statuscolumn))
---   elseif not config.enabled and ready then
---     Snacks.health.ok(("is manually configured\n- `vim.o.statuscolumn = %q`"):format(vim.o.statuscolumn))
---   end
--- end
-
 -- function M.click_fold()
 --   local pos = vim.fn.getmousepos()
 --   vim.api.nvim_win_set_cursor(pos.winid, { pos.line, 1 })
