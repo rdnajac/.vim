@@ -8,6 +8,7 @@ setmetatable(_G.nv, {
     local mod = nv.xprequire('nvim.' .. k, false)
       or nv.xprequire('nvim.config.' .. k, false)
       or nv.xprequire('nvim.util.' .. k, false)
+      or nv.xprequire('nvim.plugins.' .. k, false)
     rawset(t, k, mod)
     return mod
   end,
@@ -21,16 +22,16 @@ local Plug = nv.plug
 for _, plugin in ipairs(nv.folke) do
   Plug(plugin)
 end
-Plug(nv.blink)
-Plug(nv.dial)
+
+local plugins = vim.tbl_map(function(path)
+  return path:match('^.+/(.+).lua$')
+end, vim.fn.globpath(nv.stdpath.config .. '/lua/nvim/plugins', '*', true, true))
+
+for _, plugin in pairs(plugins) do
+  print(plugin)
+  Plug(nv[plugin])
+end
 Plug(nv.lsp)
-Plug(nv.markdown)
-Plug(nv.mason)
-Plug(nv.mini)
-Plug(nv.oil)
-Plug(nv.r)
-Plug(nv.sidekick)
-Plug(nv.tokyonight)
 Plug(nv.treesitter)
 Plug({
   name = 'nvim_config',

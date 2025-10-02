@@ -12,9 +12,9 @@ return {
 
     vim.schedule(function()
       require('mini.align').setup({})
-      require('nvim.mini.ai')
-      require('nvim.mini.diff')
-      require('nvim.mini.hipatterns')
+      require('nvim.plugins.mini.ai')
+      require('nvim.plugins.mini.diff')
+      require('nvim.plugins.mini.hipatterns')
     end)
   end,
 }

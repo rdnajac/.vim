@@ -82,7 +82,7 @@ M.opts = {
     enabled = true,
     window = { border = border, show_documentation = false },
   },
-  sources = require('nvim.blink.sources'),
+  sources = require('nvim.plugins.blink.sources'),
 }
 
 --- Blink statusline component
