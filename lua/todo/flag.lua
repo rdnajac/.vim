@@ -30,4 +30,3 @@ M.flag = function(opts)
   end
   return toggle
 end
-
