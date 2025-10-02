@@ -1,6 +1,7 @@
-local M = { 'neovim/nvim-lspconfig' }
+local M = {}
 
 M.specs = {
+  'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
 }
 
@@ -8,16 +9,6 @@ M.specs = {
 M.servers = vim.tbl_map(function(path)
   return path:match('^.+/(.+)$'):sub(1, -5)
 end, vim.fn.globpath(vim.fn.stdpath('config') .. '/after/lsp', '*', true, true))
-
-M.config = function()
-  -- TODO: just make sure we schedule the whole config...
-  --- servers don't start on restart, so schedule it
-  vim.schedule(function()
-    vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
-    vim.lsp.enable(M.servers)
-  end)
-  require('nvim.lsp.progress')
-end
 
 -- FIXME: this sucks
 M.root = function(path)
@@ -67,7 +58,40 @@ M.status = function()
 end
 
 M.docsymbols = function()
-  return require('nvim.lsp.docsymbols').get()
+  return require('nvim.plugins.lsp.docsymbols').get()
 end
+
+--- `blink.cmp` will automatically set some capabilities:
+--- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
+--- see `vim.lsp.protocol.make_client_capabilities()` for nvim's defaults
+---
+--- @param client vim.lsp.Client
+--- @param bufnr integer
+local on_attach = function(client, bufnr)
+  -- set this manually in case there is another mapping for `K`
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
+
+  -- client.server_capabilities.documentFormattingProvider = false
+  -- client.server_capabilities.semanticTokensProvider = nil
+  if client:supports_method('textDocument/inlayHint') then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+  end
+
+  if client:supports_method('textDocument/codeLens') then
+    vim.lsp.codelens.refresh()
+    vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+      buffer = bufnr,
+      callback = vim.lsp.codelens.refresh,
+    })
+  end
+  -- if client:supports_method('textDocument/documentSymbol') then
+  require('nvim.plugins.lsp.docsymbols.navic_attach')(client, bufnr)
+  -- TODO: inline completion?
+end
+vim.schedule(function()
+  vim.lsp.config('*', { on_attach = on_attach })
+  vim.lsp.enable(M.servers)
+  require('nvim.plugins.lsp.progress')
+end)
 
 return M

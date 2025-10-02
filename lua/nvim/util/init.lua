@@ -8,6 +8,10 @@ setmetatable({}, {
   end,
 })
 
+-- keep track of stuff
+M.did = vim.defaulttable()
+
+-- cache these to avoid multiple function calls
 M.stdpath = {}
 for d in string.gmatch('cache config data state', '%S+') do
   M.stdpath[d] = vim.fn.stdpath(d)
@@ -61,5 +65,9 @@ M.xprequire = function(module, errexit)
   end
   return mod
 end
+
+--  local gh = function(s)
+--   return s:match('^[%w._-]+/[%w._-]+$') and 'https://github.com/' .. s .. '.git' or s
+-- end
 
 return M

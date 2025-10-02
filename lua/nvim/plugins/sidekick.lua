@@ -31,11 +31,13 @@ return {
     },
     { '<leader>a', '', desc = '+ai', mode = { 'n', 'v' } },
     { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI' },
-    -- { '<leader>as', function() require('sidekick.cli').select() end, mode = { 'n' }, desc = 'Sidekick Select CLI' },
-    { '<leader>as', function() require('sidekick.cli').send()   end, mode = { 'v' }, desc = 'Sidekick Send Visual Selection' },
     { '<leader>ap', function() require('sidekick.cli').prompt() end, mode = { 'n', 'v' }, desc = 'Sidekick Select Prompt'  },
-    { '<C-.>',      function() require('sidekick.cli').focus()  end, mode = { 'n', 'x', 'i', 't' }, desc = 'Sidekick Switch Focus' },
+    { '<leader>as', function() require('sidekick.cli').send()   end, mode = { 'v' }, desc = 'Sidekick Send Visual Selection' },
+    { '<leader>at', function() require('sidekick.cli').send({msg='{this}'}) end, mode = { 'n', 'x' }, desc = 'Send This' },
+    { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
+    { '<C-.>',      function() require('sidekick.cli').focus() end,    mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Switch Focus' },
   },
+
   status =
     -- {
     function()

@@ -113,7 +113,7 @@ return {
   },
   {
     'folke/trouble.nvim',
-    enabled = false,
+    enabled = true,
     opts = {},
     -- stylua: ignore
     keys = {

@@ -2,7 +2,7 @@
 error('this file should not be required directly')
 
 nv.blink = require('nvim.blink')
-nv.lsp = require('nvim.lsp')
+nv.lsp = require('nvim.plugins.lsp')
 nv.mini = require('nvim.mini')
 nv.oil = require('nvim.oil')
 nv.plug = require('nvim.util.plug')

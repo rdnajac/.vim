@@ -74,14 +74,14 @@ local icons = {
 }
 
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
-icons = vim.tbl_deep_extend('force', icons, snacks_icons)
+local ret = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
 -- add an inverted lookup table for kinds
-if icons.kinds then
+if ret.kinds then
   for name, num in pairs(vim.lsp.protocol.SymbolKind) do
-    if type(name) == 'string' and icons.kinds[name] then
-      icons.kinds[num] = icons.kinds[name]
+    if type(name) == 'string' and ret.kinds[name] then
+      ret.kinds[num] = ret.kinds[name]
     end
   end
 end
 
-return icons
+return ret

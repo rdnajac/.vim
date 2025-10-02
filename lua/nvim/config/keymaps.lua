@@ -27,6 +27,8 @@ vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', {
 local all = { hidden = true, nofile = true } -- opts for buffers (all)
 local notifier = true -- TODO:
 
+-- TODO: find missing descriptions
+-- TODO: add groups and icons
 -- stylua: ignore
 local keys = {
 { '<leader><space>', function() Snacks.picker.smart() end,   desc = 'Smart Find Files'              },
@@ -44,6 +46,10 @@ local keys = {
 { '<leader>bg', function() Snacks.picker.grep_buffers() end, desc = 'Grep Open Buffers'             },
 { '<leader>bd', function() Snacks.bufdelete() end,           desc = 'Delete Buffer'                 },
 { '<leader>bD', function() Snacks.bufdelete.other() end,     desc = 'Delete Other Buffers'          },
+
+-- code
+{ '<leader>cd', function() Snacks.picker.diagnostics() end,          desc = 'Diagnostics'           },
+{ '<leader>cD', function() Snacks.picker.diagnostics_buffer() end,   desc = 'Buffer Diagnostics'    },
 
 -- find
 { '<leader>fb', function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
@@ -71,8 +77,6 @@ local keys = {
 { '<leader>sb', function() Snacks.picker.lines() end,                desc = 'Buffer Lines'          },
 { '<leader>sB', function() Snacks.picker.grep_buffers() end,         desc = 'Grep Open Buffers'     },
 { '<leader>sC', function() Snacks.picker.commands() end,             desc = 'Commands'              },
-{ '<leader>sd', function() Snacks.picker.diagnostics() end,          desc = 'Diagnostics'           },
-{ '<leader>sD', function() Snacks.picker.diagnostics_buffer() end,   desc = 'Buffer Diagnostics'    },
 { '<leader>sh', function() Snacks.picker.help() end,                 desc = 'Help Pages'            },
 { '<leader>sH', function() Snacks.picker.highlights() end,           desc = 'Highlights'            },
 { '<leader>si', function() Snacks.picker.icons() end,                desc = 'Icons'                 },

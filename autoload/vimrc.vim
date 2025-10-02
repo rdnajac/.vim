@@ -66,6 +66,9 @@ endfunction
 function! vimrc#init_nvim() abort " {{{
   if !exists('g:nvim_did_init')
     let g:nvim_did_init = v:false
+    " PERF: set theset right away as _extui depends on them
+    set cmdheight=0
+    set winborder=rounded
     call vimrc#on_init(function('vimrc#nvim_config'))
   endif
 endfunction

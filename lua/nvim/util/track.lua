@@ -1,47 +1,50 @@
-local util = require('nvim.util')
-local uv = vim.uv
--- local stats = {}
 local M = {}
---- From vim.loader
---- Tracks the time spent in a function
---- @generic F: function
---- @param f F
---- @return F
-M.track_fn = function(stat, f)
+
+--- log a message with timing info
+---@param msg string
+---@param store? table optional store (defaults to _G.t)
+function M.log(store, msg)
+  store = store or _G.t
+  local now = vim.uv.hrtime()
+  local i = #store
+  local prev = store[i]
+  table.insert(store, now)
+
+  local abs = (now - store[1]) / 1e6
+  local diff = (now - prev) / 1e6
+
+  print(('%2d: %-16s (%7.3f) %+8.3f ms'):format(i, msg, abs, diff))
+end
+
+--- Wrap a function so it logs when called
+---@param label string
+---@param fn function
+---@param store? table
+function M.track_fn(label, fn, store)
   return function(...)
-    local start = uv.hrtime()
-    local r = { f(...) }
-    local stop = uv.hrtime()
-    -- stats[stat] = stats[stat] or { total = 0, time = 0 }
-    -- stats[stat].total = stats[stat].total + 1
-    -- stats[stat].time = stats[stat].time + uv.hrtime() - start
-    print(('%2d: %-12s(%7.3f) %7.3f'):format(stats[stat].total, stat, elapsed(1), elapsed(i)))
-    return unpack(r, 1, table.maxn(r))
+    local ok, result = pcall(fn, ...)
+    if ok then
+      M.log(label, store)
+      return result
+    else
+      error(result)
+    end
+  end
+end
+---
+--- Wrap a function to measure execution time and log it
+---@generic F: function
+---@param label string
+---@param fn F
+---@return F
+function M.track_complex_fn(label, fn)
+  return function(...)
+    local t0 = vim.uv.hrtime()
+    local results = { fn(...) }
+    local dur = (vim.uv.hrtime() - t0) / 1e6
+    print(('%s took %.3f ms'):format(label, dur))
+    return table.unpack(results, 1, #results)
   end
 end
 
--- TODO: work this into custom vim.notify
---- Track time taken with global list of timestamps
-M.track = function(msg, fn)
-  -- TODO: make sure _G.t exists and is a list
-  -- TODO:  log time before/after fn?
-  if vim.is_callable(fn) then
-    fn()
-  end
-
-  local i = #_G.t
-  _G.t[i + 1] = uv.hrtime()
-
-  local function elapsed(idx)
-    return (_G.t[#_G.t] - _G.t[idx]) / 1e6
-  end
-
-  print(('%2d: %-24s(%7.3f) %7.3f'):format(i, msg, elapsed(1), elapsed(i)))
-end
-
---- @param ev table
-util.lazyload(function(ev)
-  M.track(ev.event)
-end, { 'BufWinEnter', 'VimEnter', 'UIEnter' })
-
-return M.track
+return M

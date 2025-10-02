@@ -17,6 +17,7 @@ local map = {
   quickfix = function() return '%q' end,
   terminal = function() return vim.fn["vimline#winbar#terminal"]() end,
 }
+
 return function()
   return vim.bo.filetype == 'snacks_dashboard' and '' or map[vim.bo.buftype]()
 end

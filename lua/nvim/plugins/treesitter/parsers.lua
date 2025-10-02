@@ -56,4 +56,4 @@ local parsers = {
   'yaml',
 }
 
-return vim.tbl_extend('force', defaults, parsers)
+return vim.tbl_extend('force', {}, defaults, parsers)

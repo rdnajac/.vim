@@ -72,7 +72,7 @@ M.keys = {
   {
     '<C-Space>',
     function()
-      require('nvim.treesitter.selection').start()
+      require('nvim.plugins.treesitter.selection').start()
     end,
     desc = 'Start selection',
   },
@@ -81,14 +81,14 @@ M.keys = {
     {
       '<C-Space>',
       function()
-        require('nvim.treesitter.selection').increment()
+        require('nvim.plugins.treesitter.selection').increment()
       end,
       desc = 'Increment selection',
     },
     {
       '<BS>',
       function()
-        require('nvim.treesitter.selection').decrement()
+        require('nvim.plugins.treesitter.selection').decrement()
       end,
       desc = 'Decrement selection',
     },

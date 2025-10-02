@@ -11,17 +11,17 @@ local defer_redraw = function(t)
   end, t or 200)
 end
 
-Snacks.toggle({
-  name = 'MiniDiff Signs',
-  get = function()
-    return vim.g.minidiff_disable ~= true
-  end,
-  set = function(state)
-    vim.g.minidiff_disable = not state
-    diff[state and 'enable' or 'disable'](0)
-    defer_redraw()
-  end,
-}):map('<leader>uS')
+-- Snacks.toggle({
+--   name = 'MiniDiff Signs',
+--   get = function()
+--     return vim.g.minidiff_disable ~= true
+--   end,
+--   set = function(state)
+--     vim.g.minidiff_disable = not state
+--     diff[state and 'enable' or 'disable'](0)
+--     defer_redraw()
+--   end,
+-- }):map('<leader>uS')
 
 Snacks.toggle({
   name = 'MiniDiff Overlay',
@@ -31,6 +31,6 @@ Snacks.toggle({
   end,
   set = function(_)
     diff.toggle_overlay(0)
-    -- defer_redraw()
+    defer_redraw()
   end,
 }):map('<leader>uG')

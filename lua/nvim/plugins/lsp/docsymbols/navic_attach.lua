@@ -1,5 +1,5 @@
 -- https://github.com/SmiteshP/nvim-navic
-local lib = require('nvim.lsp.docsymbols.navic_lib')
+local lib = require('nvim.plugins.lsp.docsymbols.navic_lib')
 
 local awaiting_lsp_response = {}
 local function lsp_callback(for_buf, symbols)

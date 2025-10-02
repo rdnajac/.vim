@@ -84,21 +84,20 @@ end
 ---@type snacks.config
 local opts = {
   bigfile = {},
-  -- dashboard = {},
   dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = false }, -- using `oil` instead
     -- stylua: ignore
   image = { formats = { 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff', 'heic', 'avif', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'pdf' }, },
   indent = { indent = { only_current = true, only_scope = true } },
-  input = { enabled = true },
+  input = {},
   notifier = require('nvim.snacks.notifier'),
   picker = require('nvim.snacks.picker'),
-  quickfile = { enabled = true },
+  quickfile = {},
   scratch = { template = 'local x = \n\nprint(x)' },
   terminal = { start_insert = false, auto_insert = true, auto_close = true },
-  scope = { },
-  scroll = { enabled = false },
-  statuscolumn = { enabled = false },
+  scope = {},
+  scroll = {},
+  -- statuscolumn = { enabled = false },
   styles = {
     dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
     lazygit = { height = 0, width = 0 },
