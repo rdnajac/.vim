@@ -7,6 +7,7 @@ if !exists('g:chromatophore_groups')
 	\ 'StatusLineTermNC',
 	\ 'String',
 	\ 'helpSectionDelim',
+	\  '@markup.raw.markdown_inline'
 	\ ]
 endif
 

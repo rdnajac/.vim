@@ -14,4 +14,5 @@ nnoremap yp <Cmd>let @*=expand('%:p:~') . ':' . line('.')<CR>
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
 " nnoremap <leader>cm :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
 " just edit q
-nnoremap <leader>cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR><Left>
+nnoremap <leader>2 :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
+nnoremap <leader>3 <Cmd><C-r><C-r>="let @q = " . string(getreg('q'))<CR>

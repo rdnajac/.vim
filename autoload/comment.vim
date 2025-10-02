@@ -1,7 +1,7 @@
 " autoload/comment.vim
+" NOTE:  is <ESC>
 function! s:insert_comment(tag, above) abort
-  execute 'normal! ' . (a:above ? 'O' : 'o') . (a:tag !=# '' ? a:tag . ': ' : '')
-  call feedkeys('gccA')
+  execute 'normal ' . (a:above ? 'O' : 'o') . a:tag . 'gcc'
 endfunction
 
 function! comment#above(tag) abort

@@ -145,8 +145,8 @@ nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
 nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>i <Cmd>call edit#luamod('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/util/plug')<CR>
-nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util')<CR>
-nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/init')<CR>
+nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
+nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/itit')<CR>
 nnoremap <BSlash>S <Cmd>call edit#luamod('snacks')<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
@@ -238,13 +238,12 @@ nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 
 if has ('nvim')
   " code
-  nnoremap <leader>cc <Cmd>CodeCompanion<CR>
+  nnoremap <leader>cm <Cmd>Mason<CR>
   " debug
   nnoremap <leader>db <Cmd>Blink status<CR>
   nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
   nnoremap <leader>dd <Cmd>LazyDev debug<CR>
   nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
-  nnoremap <leader>dL <Cmd>=vim.loader._inspect()<CR>
   nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
@@ -261,7 +260,6 @@ nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 
 nnoremap ` ~
 nnoremap ~ `
-vnoremap <BS> d
 
 nnoremap  <leader><Tab> <Cmd>e #<CR>
 
@@ -449,7 +447,7 @@ if !has('nvim')
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'tpope/vim-commentary'
- " Plug 'tpope/vim-scriptease'
+  " Plug 'tpope/vim-scriptease'
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-vinegar'
   Plug 'welle/targets.vim'
