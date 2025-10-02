@@ -8,6 +8,11 @@ setmetatable({}, {
   end,
 })
 
+M.stdpath = {}
+for d in string.gmatch("cache config data state", "%S+") do
+  M.stdpath[d] = vim.fn.stdpath(d)
+end
+
 M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end

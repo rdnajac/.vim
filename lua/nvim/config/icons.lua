@@ -13,6 +13,11 @@ local icons = {
     cmp_r = ' ',
   },
   ft = { octo = ' ' },
+  mason = {
+    package_installed = '✓',
+    package_pending = '➜',
+    package_uninstalled = '✗',
+  },
   misc = { dots = '…' },
   os = { -- from nvim-lualine/lualine.nvim
     unix = '', -- e712

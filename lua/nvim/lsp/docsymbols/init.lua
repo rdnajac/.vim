@@ -1,3 +1,4 @@
+-- TODO: interface with original navic
 local lib = require('nvim.lsp.docsymbols.navic_lib')
 
 local opts = {

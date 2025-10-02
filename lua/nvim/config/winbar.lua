@@ -18,5 +18,5 @@ local map = {
   terminal = function() return vim.fn["vimline#winbar#terminal"]() end,
 }
 return function()
-  return vim.bo.filetype ~= 'snacks_dashboard' and map[vim.bo.buftype]() or ''
+  return vim.bo.filetype ~= 'snacks_dashboard' and map[vim.bo.buftype]()
 end
