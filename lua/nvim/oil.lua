@@ -11,8 +11,8 @@ M.opts = {
   win_options = { conceallevel = 2, number = false, signcolumn = 'yes:2' },
   watch_for_changes = true,
   keymaps = {
-    ['h'] = { 'actions.parent', mode = 'n' },
-    ['l'] = { 'actions.select', mode = 'n' },
+    -- ['h'] = { 'actions.parent', mode = 'n' },
+    -- ['l'] = { 'actions.select', mode = 'n' },
     ['<Left>'] = { 'actions.parent', mode = 'n' },
     ['<Right>'] = { 'actions.select', mode = 'n' },
     ['<Tab>'] = { 'actions.close', mode = 'n' },

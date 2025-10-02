@@ -163,7 +163,7 @@ return {
   },
   {
     'folke/lazydev.nvim',
-    enabled = false,
+    enabled = true,
     ft = 'lua',
     opts = {
       library = {
@@ -175,4 +175,4 @@ return {
     },
   },
 }
--- vim:fdm=expr:fdl=1
+-- vim:fdm=expr:fdl=2

@@ -1,9 +1,8 @@
 local icons = {
-  src = {
+  src = { -- blink sources
     buffer = ' ',
     cmdline = ' ',
     copilot = ' ',
-    codecompanion = ' ',
     env = ' ',
     lazydev = '󰒲 ',
     lsp = ' ',
@@ -12,19 +11,17 @@ local icons = {
     snippets = ' ',
     cmp_r = ' ',
   },
-  ft = { octo = ' ' },
   mason = {
     package_installed = '✓',
     package_pending = '➜',
     package_uninstalled = '✗',
   },
-  misc = { dots = '…' },
   os = { -- from nvim-lualine/lualine.nvim
     unix = '', -- e712
     dos = '', -- e70f
     mac = '', -- e711
   },
-  separators = {
+  separators = { -- useful in statuslines
     component = {
       angle = { left = '', right = '' },
       rounded = { left = '', right = '' },
@@ -34,8 +31,13 @@ local icons = {
       rounded = { left = '', right = '' },
     },
   },
-  -- for mini.icon opts
-  mini = {
+  copilot = { -- sidekick.nvim lualine components
+    Error = { ' ', 'DiagnosticError' },
+    Inactive = { ' ', 'MsgArea' },
+    Warning = { ' ', 'DiagnosticWarn' },
+    Normal = { ' ', 'Special' },
+  },
+  mini = { -- for mini.icon opts
     file = {
       ['.keep'] = { glyph = '󰊢', hl = 'MiniIconsGrey' },
       ['devcontainer.json'] = { glyph = '', hl = 'MiniIconsAzure' },

@@ -23,8 +23,8 @@ local default_providers = {
     should_show_items = function(ctx)
       return ctx.trigger.initial_kind ~= 'trigger_character'
     end,
-    -- transform_items = function(_, items) return vim.tbl_filter(function(item) return is_in_comment() end, items) end,
   },
+  -- TODO: hide all lsp items if lazydev items are present
   lsp = {
     score_offset = -1,
     transform_items = function(_, items)
@@ -47,7 +47,7 @@ local ft_sources = {
 
 ---@return blink.cmp.SourceList[]
 M.default = function()
-  if nv.treesitter.in_comment_node() then
+  if nv.treesitter.is_comment() then
     return { 'buffer' }
   end
   return vim.list_extend(vim.tbl_keys(default_providers), ft_sources[vim.bo.filetype] or {})
@@ -56,8 +56,7 @@ end
 M.providers = {
   lazydev = {
     name = 'LazyDev',
-    -- module = 'lazydev.integrations.blink', -- folke's
-    module = 'nvim.blink.sources.lazydev', -- mine
+    module = 'lazydev.integrations.blink',
     score_offset = 100,
   },
   env = {

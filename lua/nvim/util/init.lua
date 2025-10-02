@@ -9,7 +9,7 @@ setmetatable({}, {
 })
 
 M.stdpath = {}
-for d in string.gmatch("cache config data state", "%S+") do
+for d in string.gmatch('cache config data state', '%S+') do
   M.stdpath[d] = vim.fn.stdpath(d)
 end
 

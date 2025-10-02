@@ -1,50 +1,62 @@
-_G.selected_nodes = {}
-
-local M = {}
+--- @type TSNode[]
+local nodes = {}
+local skip = false
 
 local function select_node(node)
   if node then
-    local start_row, start_col, end_row, end_col = node:range()
-    vim.fn.setpos("'<", { 0, start_row + 1, start_col + 1, 0 })
-    vim.fn.setpos("'>", { 0, end_row + 1, end_col, 0 })
+    local sr, sc, er, ec = node:range()
+    vim.fn.setpos("'<", { 0, sr + 1, sc + 1, 0 })
+    vim.fn.setpos("'>", { 0, er + 1, ec, 0 })
     vim.cmd('normal! gv')
   end
 end
 
-M.start = function()
-  _G.selected_nodes = {}
-  local is_coment = function(node)
-    return vim.tbl_contains(
-      { 'comment', 'line_comment', 'block_comment', 'comment_content' },
-      node:type()
-    )
+local function insert_and_select(node)
+  if node then
+    table.insert(nodes, node)
+    select_node(node)
   end
-  local success, node = pcall(vim.treesitter.get_node)
-  if not success or not node or is_coment(node) then
-    vim.cmd('normal! viW')
-    return
+end
+
+local function pget_node()
+  local ok, node = pcall(vim.treesitter.get_node)
+  return ok and node or nil
+end
+
+local M = {}
+
+M.start = function()
+  nodes = {}
+  local node = pget_node()
+  if not node then
+    return vim.cmd('normal! viW')
   end
 
-  table.insert(_G.selected_nodes, node)
-  select_node(node)
+  if nv.treesitter.is_comment() then
+    -- first time in a comment:juswt select word
+    skip = true
+    return vim.cmd('normal! viW')
+  end
+
+  skip = false
+  insert_and_select(node)
 end
 
 M.increment = function()
-  local current_node = _G.selected_nodes[#_G.selected_nodes]
-  if current_node then
-    local parent = current_node:parent()
-    if parent then
-      table.insert(_G.selected_nodes, parent)
-      select_node(parent)
-    end
+  if skip then
+    skip = false
+    insert_and_select(pget_node())
+    return
   end
+  local cur = nodes[#nodes]
+  insert_and_select(cur and cur:parent() or nil)
 end
 
 M.decrement = function()
-  table.remove(_G.selected_nodes)
-  local current_node = _G.selected_nodes[#_G.selected_nodes]
-  if current_node then
-    select_node(current_node)
+  table.remove(nodes)
+  local prev = nodes[#nodes]
+  if prev then
+    select_node(prev)
   end
 end
 

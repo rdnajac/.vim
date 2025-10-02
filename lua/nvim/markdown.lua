@@ -6,9 +6,11 @@ return {
     file_types = { 'markdown', 'rmd', 'quarto' },
     bullet = { right_pad = 1 },
     completions = { blink = { enabled = false } },
+
     -- checkbox = { enabled = false },
     code = {
       enabled = true,
+      -- highlight_inline = 'Chromatophore',
       -- render_modes = { 'n', 'c', 't', 'i' },
       sign = false,
       conceal_delimiters = false,
@@ -34,14 +36,16 @@ return {
     },
   },
   after = function()
-    Snacks.toggle.new({
-      name = 'Render Markdown',
-      get = function()
-        return require('render-markdown.state').enabled
-      end,
-      set = function(state)
-        require('render-markdown').set(state)
-      end,
-    }):map('<leader>um')
+    Snacks.toggle
+      .new({
+        name = 'Render Markdown',
+        get = function()
+          return require('render-markdown.state').enabled
+        end,
+        set = function(state)
+          require('render-markdown').set(state)
+        end,
+      })
+      :map('<leader>um')
   end,
 }

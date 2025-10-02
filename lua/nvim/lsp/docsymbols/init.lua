@@ -3,7 +3,7 @@ local lib = require('nvim.lsp.docsymbols.navic_lib')
 
 local opts = {
   depth_limit = 0,
-  depth_limit_indicator = nv.icons.misc.dots,
+  depth_limit_indicator = ' ',
   separator = '',
   hl = {
     icon = 'Constant',

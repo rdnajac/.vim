@@ -13,12 +13,11 @@ local aug = vim.api.nvim_create_augroup('navic', { clear = false })
 ---@param client vim.lsp.Client | nil
 ---@param bufnr number
 local M = function(client, bufnr)
-  -- if not client.server_capabilities.documentSymbolProvider then
-  if not client or not client:supports_method('textDocument/documentSymbol') then
-    return
-  end
-
-  if vim.b[bufnr].navic_client_id ~= nil and vim.b[bufnr].navic_client_name ~= client.name then
+  if
+    not client
+    or not client:supports_method('textDocument/documentSymbol')
+    or (vim.b[bufnr].navic_client_id and vim.b[bufnr].navic_client_name ~= client.name)
+  then
     return
   end
 

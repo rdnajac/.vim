@@ -26,21 +26,29 @@ M.config = function()
   autostart({ 'sh', 'zsh' }, 'bash')
 end
 
--- M.keys = function()
---   return {}
--- end
-
-  -- stylua: ignore
-M.after = function()
-  vim.keymap.set('n', '<C-Space>', function() require('nvim.treesitter.selection').start() end, { desc = 'Start selection' })
-  vim.keymap.set('x', '<C-Space>', function() require('nvim.treesitter.selection').increment() end, { desc = 'Increment selection' })
-  vim.keymap.set('x', '<BS>', function() require('nvim.treesitter.selection').decrement() end, { desc = 'Decrement selection' })
-end
-
 --- Check if the current node is a comment node
---- @param pos? integer[] position {line, col} 0-indexed
+--- @param ... any
+---   - no args: use cursor
+---   - (int,int): row,col
+---   - {int,int}: row,col
 --- @return boolean
-M.in_comment_node = function(pos)
+M.is_comment = function(...)
+  local args = { ... }
+  local pos
+
+  if #args == 0 then
+    local cursor = vim.api.nvim_win_get_cursor(0)
+    pos = { cursor[1] - 1, cursor[2] }
+  elseif #args == 1 and type(args[1]) == 'table' then
+    pos = args[1]
+  elseif #args == 2 and type(args[1]) == 'number' and type(args[2]) == 'number' then
+    pos = { args[1], args[2] }
+  elseif #args == 1 and type(args[1]) == 'number' then
+    error('is_comment: single integer is ambiguous, expected {row,col}')
+  else
+    error('is_comment: invalid arguments')
+  end
+
   local ok, node = pcall(vim.treesitter.get_node, {
     bufnr = 0,
     pos = pos,
@@ -48,11 +56,43 @@ M.in_comment_node = function(pos)
   if not ok or not node then
     return false
   end
-  return vim.tbl_contains(
-    { 'comment', 'line_comment', 'block_comment', 'comment_content' },
-    node:type()
-  )
+
+  return vim.tbl_contains({
+    'comment',
+    'line_comment',
+    'block_comment',
+    'comment_content',
+  }, node:type())
 end
+
+M.keys = {
+  {
+    '<C-Space>',
+    function()
+      require('nvim.treesitter.selection').start()
+    end,
+    desc = 'Start selection',
+  },
+  {
+    mode = 'x',
+    {
+      '<C-Space>',
+      function()
+        require('nvim.treesitter.selection').increment()
+      end,
+      desc = 'Increment selection',
+    },
+    {
+      '<BS>',
+      function()
+        require('nvim.treesitter.selection').decrement()
+      end,
+      desc = 'Decrement selection',
+    },
+  },
+  -- stylua: ignore
+  { '<leader>u?', function() dd(M.in_comment_node()) end, mode = 'n', desc = 'Debug in_comment_node' },
+}
 
 -- TODO:  report language
 M.status = function()

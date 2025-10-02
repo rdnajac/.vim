@@ -1,15 +1,7 @@
--- sidekick lualine componenet
-local icons = {
-  Error = { ' ', 'DiagnosticError' },
-  Inactive = { ' ', 'MsgArea' },
-  Warning = { ' ', 'DiagnosticWarn' },
-  Normal = { LazyVim.config.icons.kinds.Copilot, 'Special' },
-}
-
 local sidekick_component = {
   function()
     local status = require('sidekick.status').get()
-    return status and vim.tbl_get(icons, status.kind, 1)
+    return status and vim.tbl_get(nv.icons.copilot, status.kind, 1)
   end,
   cond = function()
     return require('sidekick.status').get() ~= nil
@@ -20,3 +12,4 @@ local sidekick_component = {
     return { fg = Snacks.util.color(hl) }
   end,
 }
+return sidekick_component
