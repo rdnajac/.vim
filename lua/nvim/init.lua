@@ -17,6 +17,10 @@ local Plug = nv.plug
 for _, spec in ipairs(nv.plugins) do
   Plug(spec)
 end
-Plug(nv.config)
+
+-- TODO: replace with lualine...
+vim.schedule(function()
+  vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+end)
 
 t('nvim required!')

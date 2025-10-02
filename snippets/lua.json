@@ -80,16 +80,6 @@
     "description": "lazy spec init"
   },
 
-  "config": {
-    "prefix": "config",
-    "body": [
-      "config = function()",
-      "  ${0}",
-      "end"
-    ],
-    "description": "lazy spec config"
-  },
-
   "keys": {
     "prefix": "keys",
     "body": "vim.tbl_keys(${0})",

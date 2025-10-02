@@ -1,8 +1,9 @@
 local M = {}
 
-local dir = vim.fn.stdpath('config') .. '/lua/nvim/plugins'
+local dir = nv.stdpath.config .. '/lua/nvim/plugins'
 local files = vim.fn.globpath(dir, '*.lua', false, true)
 
+-- load all plugin specs in this directory
 for _, path in ipairs(files) do
   local name = path:match('^.+/(.+)%.lua$')
   if name ~= 'init' then
@@ -14,5 +15,6 @@ for _, path in ipairs(files) do
     end
   end
 end
+
 
 return M

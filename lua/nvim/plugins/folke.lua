@@ -13,6 +13,7 @@ return {
           {
             mode = { 'n', 'v' },
             -- TODO: add each bracket mapping manually
+            -- going through all of the nvim defaults and the ones provided by unimpaired
             { '[', group = 'prev' },
             { ']', group = 'next' },
             { 'g', group = 'goto' },
@@ -117,7 +118,7 @@ return {
     opts = {},
     -- stylua: ignore
     keys = {
-      { '<leader>xt', '<cmd>Trouble todo toggle<CR>', desc = 'Todo (Trouble)' },
+      -- { '<leader>xt', '<cmd>Trouble todo toggle<CR>', desc = 'Todo (Trouble)' },
       { '<leader>xT', '<cmd>Trouble todo toggle filter = {tag = {TODO,FIXME}}<CR>', desc = 'Todo/Fix/Fixme (Trouble)' },
       { '<leader>xx', '<Cmd>Trouble diagnostics toggle<CR>', desc = 'Diagnostics (Trouble)' },
       { '<leader>xX', '<Cmd>Trouble diagnostics toggle filter.buf=0<cr>', desc = 'Buffer Diagnostics (Trouble)' },
@@ -175,4 +176,3 @@ return {
     },
   },
 }
--- vim:fdm=expr:fdl=2

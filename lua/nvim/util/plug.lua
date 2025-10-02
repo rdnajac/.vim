@@ -1,4 +1,4 @@
-vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
+vim.g.plug_home = vim.fs.joinpath(nv.stdpath.data, 'site', 'pack', 'core', 'opt')
 vim.env.PACKDIR = vim.g.plug_home
 
 local M = {}
