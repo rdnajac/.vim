@@ -3,6 +3,7 @@ local M = {}
 M.specs = {
   'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
+  'SmiteshP/nvim-navic',
 }
 
 --- @type string[] The list of LSP servers to configure and enable from `lsp/`

@@ -1,5 +1,4 @@
--- TODO: interface with original navic
-local lib = require('nvim.plugins.lsp.docsymbols.navic_lib')
+local lib = require('nvim-navic.lib')
 
 local opts = {
   depth_limit = 0,
