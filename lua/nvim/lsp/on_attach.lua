@@ -15,19 +15,18 @@
 --- capabilities = require('blink.cmp').get_lsp_capabilities(),
 --- see `vim.lsp.protocol.make_client_capabilities()` for nvim's defaults
 ---
----@param client vim.lsp.Client
----@param bufnr integer
+--- @param client vim.lsp.Client
+--- @param bufnr integer
 local on_attach = function(client, bufnr)
   -- set this manually in case there is another mapping for `K`
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
 
   -- client.server_capabilities.documentFormattingProvider = false
   -- client.server_capabilities.semanticTokensProvider = nil
-  -- see `:h lsp-inlay_hint`
   if client:supports_method('textDocument/inlayHint') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
   end
-  -- see `:h lsp-codelens`
+
   if client:supports_method('textDocument/codeLens') then
     vim.lsp.codelens.refresh()
     vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {

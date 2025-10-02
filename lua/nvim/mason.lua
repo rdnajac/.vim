@@ -1,9 +1,9 @@
+-- TODO: this.
 local M = {
   'mason-org/mason.nvim',
-  opts = {},
+  opts = { ui = { icons = nv.icons.mason } },
+  build = ':MasonUpdate',
 }
-M.build = ':MasonUpdate'
-
 --- commands for the mason-registry
 local api = {
   'get_all_packages',
@@ -13,8 +13,6 @@ local api = {
   'get_all_package_specs',
   'get_installed_package_names',
   'get_all_package_names',
-  '__event_handlers_once',
-  '__event_handlers',
   'update',
   'aliases',
   'is_installed',
@@ -26,24 +24,17 @@ local api = {
 
 local also_install = { 'tree-sitter-cli' }
 
-local example = function()
-  registry.refresh(function()
-    local packages = registry.get_all_packages()
-    -- ...
-  end)
-end
+-- local example = function()
+--   registry.refresh(function()
+--     local packages = registry.get_all_packages()
+--     -- ...
+--   end)
+-- end
 
--- TODO: do we have to cache this ourselves?
--- or does mason do this internally?
-M.reg = function()
-  return require('mason-registry')
-end
-
-function M.install(tools)
-  -- vim validate to ensure tools is a nv.util.is_nonempty_list
-  --- 1. `vim.validate(name, value, validator[, optional][, message])`
-  vim.validate('tools', tools, nv.util.is_nonempty_list, 'Expected a non-empty list of tool names')
-end
+-- stylua: ignore start
+M.reg = function() return require('mason-registry') end
+M.installed = function() return M.reg().get_installed_package_names() end
+-- stylua: ignore end
 
 -- M.install('a')
 -- if 1 then return end
@@ -84,12 +75,7 @@ end
 --     end
 --   end
 -- end
---
--- M.list = function()
---   return M.reg().get_installed_package_names()
--- get_installed_package_names
--- end
---
+
 -- M.map = function()
 --   local _ = require('mason-core.functional')
 --
@@ -113,7 +99,7 @@ end
 --
 --   return mason_map
 -- end
---
+
 -- M.ensure_installed = function()
 --   local map = M.map()
 --
@@ -129,11 +115,5 @@ end
 --
 -- -- TODO:
 -- -- M.ensure_installed_transformed() = vim.tbl_map(
---
--- M.update = function()
---   M.install(M.ensure_installed())
---   -- TODO: update all?
---   -- TODO: build hook on update
--- end
 
 return M

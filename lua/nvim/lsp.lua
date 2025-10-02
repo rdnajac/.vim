@@ -1,29 +1,23 @@
-local M = {}
+local M = { 'neovim/nvim-lspconfig' }
 
-M.name = 'lsp'
-
--- TODO: check whether the configs in after/lsp actually override the default configs
 M.specs = {
-  -- 'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
 }
 
----@type string[] The list of LSP servers to configure and enable from `lsp/`
+--- @type string[] The list of LSP servers to configure and enable from `lsp/`
 M.servers = vim.tbl_map(function(path)
-  return path:match('^.+/(.+)%.lua$')
-end, vim.api.nvim_get_runtime_file('lsp/*.lua', true))
+  return path:match('^.+/(.+)$'):sub(1, -5)
+end, vim.fn.globpath(vim.fn.stdpath('config') .. '/after/lsp', '*', true, true))
 
 M.config = function()
-  --- servers won't start on restart, so schedule it
+  -- TODO: just make sure we schedule the whole config...
+  --- servers don't start on restart, so schedule it
   vim.schedule(function()
     vim.lsp.config('*', { on_attach = require('nvim.lsp.on_attach') })
     vim.lsp.enable(M.servers)
   end)
   require('nvim.lsp.progress')
   -- require('nvim.lsp.completion')
-  nv.util.lazyload(function()
-    require('nvim.lsp.lazydev').config()
-  end, 'FileType', 'lua')
 end
 
 -- FIXME: this sucks
@@ -62,12 +56,15 @@ end
 -- FIXME: this sucks
 M.status = function()
   local clients = vim.lsp.get_clients()
-  local names = vim.tbl_map(function(c) return c.name end, clients)
-  return ("%s%s%s"):format(
-    #clients == 0 and nv.icons.lsp.unavailable or "",
-    (#clients > 0 and not (#clients == 1 and vim.tbl_contains(names, "copilot")))
-      and nv.icons.lsp.attached or "",
-    vim.tbl_contains(names, "copilot") and nv.icons.src.copilot or ""
+  if #clients == 0 then
+    return nv.icons.lsp.unavailable
+  end
+  local names = vim.tbl_map(function(c)
+    return c.name
+  end, clients)
+  return ('%s%s'):format(
+    (not (#clients == 1 and vim.tbl_contains(names, 'copilot'))) and nv.icons.lsp.attached,
+    vim.tbl_contains(names, 'copilot') and nv.icons.src.copilot or ' '
   )
 end
 

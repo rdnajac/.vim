@@ -11,6 +11,7 @@ vim.o.cmdheight = 0
 require('vim._extui').enable({})
 require('snacks')
 
+-- TODO: move to snacks
 _G.dd = function(...)
   require('snacks.debug').inspect(...)
 end
@@ -29,3 +30,4 @@ require('nvim')
 
 -- TODO: use profiler
 track('init.lua')
+-- TODO: how does LazyVim calculate startuptime?
