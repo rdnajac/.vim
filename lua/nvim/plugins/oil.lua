@@ -1,7 +1,7 @@
 local M = { 'stevearc/oil.nvim' }
 
 local detail = 0
-local new_git_status = require('nvim.util.git_status')
+local new_git_status = require('nvim.util.git.status')
 local git_status = new_git_status()
 
 ---@type oil.setupOpts
@@ -99,7 +99,44 @@ M.after = function()
     git_status = new_git_status()
     orig_refresh(...)
   end
-  require('oil_git_exmarks')
+
+  local aug = vim.api.nvim_create_augroup('oil', {})
+
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'OilActionsPost',
+    group = aug,
+    callback = function(ev)
+      if ev.data.actions.type == 'move' then
+        Snacks.rename.on_rename_file(ev.data.actions.src_url, ev.data.actions.dest_url)
+      end
+    end,
+    desc = 'Snacks rename on Oil move',
+  })
+
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'OilActionsPre',
+    group = aug,
+    callback = function(ev)
+      for _, action in ipairs(ev.data.actions) do
+        if action.type == 'delete' then
+          local path = action.url:sub(#'oil://' + 1)
+          Snacks.bufdelete({ file = path, force = true, wipe = true })
+        end
+      end
+    end,
+    desc = 'Delete buffer on Oil delete',
+  })
+
+  -- vim.api.nvim_create_autocmd('BufEnter', {
+  --   pattern = 'oil://*',
+  --   group = aug,
+  --   callback = function()
+  --     require('oil.actions').cd.callback({ silent = true })
+  --   end,
+  --   desc = 'Sync cd with Oil directory on buffer enter',
+  -- })
+
+  require('nvim.util.git.oil_exmarks').setup()
 end
 
 return M
