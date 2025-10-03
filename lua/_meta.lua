@@ -1,7 +1,7 @@
 --- @meta
 error('this file should not be required directly')
 
--- TODO: 
+-- TODO:
 nv.config = require('nvim.plugin')
 nv.plugin = require('nvim.config')
 nv.util = require('nvim.util')

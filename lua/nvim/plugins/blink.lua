@@ -2,7 +2,8 @@ local M = { 'Saghen/blink.cmp' }
 
 -- M.build = 'cargo build --release'
 -- M.build = ':BlinkCmp build'
-
+-- TODO:
+M.event = 'InsertEnter'
 M.specs = {
   'Saghen/blink.compat',
   -- 'fang2hou/blink-copilot',

@@ -1,4 +1,6 @@
 local M = { 'monaqa/dial.nvim' }
+-- TODO:
+M.event = 'InsertEnter'
 
 M.config = function()
   local augend = require('dial.augend')
