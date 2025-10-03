@@ -21,9 +21,9 @@ function! chromatophore#setup() abort
   call vim#hl#set('Chromatophore',    mode_color,  'NONE')
   call vim#hl#set('ChromatophoreB',   mode_color,  'NONE',        'bold')
   call vim#hl#set('Chromatophore_a',  black,        mode_color,   'bold')
-  call vim#hl#set('Chromatophore_y',  mode_color,   black,        'bold')
   call vim#hl#set('Chromatophore_b',  mode_color,   grey,         'bold')
   call vim#hl#set('Chromatophore_c',  mode_color,   eigengrau)
+  call vim#hl#set('Chromatophore_y',  mode_color,   black,        'bold')
   call vim#hl#set('Chromatophore_z',  mode_color,   eigengrau,    'bold')
   call vim#hl#set('Chromatophore_bc', grey,         eigengrau)
 

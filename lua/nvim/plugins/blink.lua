@@ -1,5 +1,6 @@
 local M = { 'Saghen/blink.cmp' }
 
+
 -- M.build = 'cargo build --release'
 -- M.build = ':BlinkCmp build'
 -- TODO:
@@ -18,12 +19,11 @@ local kind = vim.lsp.protocol.SymbolKind
 ---@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
-  -- cmdline = { enabled = false },
+  cmdline = { enabled = false },
   completion = {
-    documentation = {
-      auto_show = false,
-      window = { border = border },
-    },
+    accept = { auto_brackets = { enabled = true } },
+    documentation = { auto_show = false, window = { border = border } },
+    ghost_text = { enabled = false },
     trigger = {
       show_on_keyword = true,
       show_on_accept_on_trigger_character = true,
@@ -88,7 +88,8 @@ M.opts = {
   sources = {
     ---@return blink.cmp.SourceList[]
     default = function()
-      if nv.treesitter.is_comment() then
+      if nv.is_comment() then
+
         return { 'buffer' }
       end
       ---@type table<string, blink.cmp.SourceProviderConfig>
@@ -177,28 +178,6 @@ M.status = function()
       return source_icons[name] or ''
     end)
     :join('')
-end
-
-M.after = function()
-  -- some config can be changed after setup
-  local conf = require('blink.cmp.config')
-
-  conf.cmdline.enabled = false
-
-  local completion = conf.completion
-  completion.accept.auto_brackets.enabled = true
-  completion.ghost_text.enabled = false
-  -- Snacks.util.set_hl({ ghost_text = 'BlinkCmpGhostText',  }, { link = 'MoreMsg', default = true })
-
-  -- local url =
-  -- 'https://raw.githubusercontent.com/bydlw98/blink-cmp-env/refs/heads/main/lua/blink-cmp-env.lua'
-  -- https://raw.githubusercontent.com/mgalliou/blink-cmp-tmux/refs/heads/main/lua/blink-cmp-tmux/init.lua
-  -- local path =
-  -- vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', 'nvim', 'blink', 'sources', 'env.lua')
-  -- if not vim.uv.fs_stat(path) then
-  -- local wget = require('nvim.util.wget')
-  -- wget(url, { outpath = path })
-  -- end
 end
 
 return M

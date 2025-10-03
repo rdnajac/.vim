@@ -50,50 +50,26 @@ M.is_comment = function(...)
     error('is_comment: invalid arguments')
   end
 
-  local ok, node = pcall(vim.treesitter.get_node, {
-    bufnr = 0,
-    pos = pos,
-  })
-  if not ok or not node then
-    return false
-  end
-
-  return vim.tbl_contains({
-    'comment',
-    'line_comment',
-    'block_comment',
-    'comment_content',
-  }, node:type())
+  local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos })
+  return ok
+      and node
+      and vim.tbl_contains({
+        'comment',
+        'line_comment',
+        'block_comment',
+        'comment_content',
+      }, node:type())
+    or false
 end
 
-M.keys = {
-  {
-    '<C-Space>',
-    function()
-      require('nvim.plugins.treesitter.selection').start()
-    end,
-    desc = 'Start selection',
-  },
-  {
-    mode = 'x',
-    {
-      '<C-Space>',
-      function()
-        require('nvim.plugins.treesitter.selection').increment()
-      end,
-      desc = 'Increment selection',
-    },
-    {
-      '<BS>',
-      function()
-        require('nvim.plugins.treesitter.selection').decrement()
-      end,
-      desc = 'Decrement selection',
-    },
-  },
+M.keys = function()
+  local sel = require('nvim.plugins.treesitter.selection')
   -- stylua: ignore
-  { '<leader>u?', function() dd(M.in_comment_node()) end, mode = 'n', desc = 'Debug in_comment_node' },
-}
+  return {
+    { '<C-Space>', sel.start },
+    { mode = 'x', { '<C-Space>', sel.increment }, { '<BS>', sel.decrement } },
+  }
+end
 
 -- TODO:  report language
 M.status = function()

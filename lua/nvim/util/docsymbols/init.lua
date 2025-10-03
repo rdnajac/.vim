@@ -22,22 +22,18 @@ end
 ---@return table|nil
 function M.get_data(bufnr)
   local context_data = lib.get_context_data(bufnr)
-  local ret = {}
-
-  if context_data then
-    for i, v in ipairs(context_data) do
-      if i ~= 1 then
-        table.insert(ret, {
-          kind = v.kind,
-          type = vim.lsp.protocol.SymbolKind[v.kind] or 'Text',
-          name = v.name,
-          icon = nv.icons.kinds[v.kind],
-          scope = v.scope,
-        })
-      end
-    end
+  if not context_data then
+    return nil
   end
-  return ret
+  return vim.tbl_map(function(v)
+    return {
+      kind = v.kind,
+      type = vim.lsp.protocol.SymbolKind[v.kind] or 'Text',
+      name = v.name,
+      icon = nv.icons.kinds[v.kind],
+      scope = v.scope,
+    }
+  end, vim.list_slice(context_data, 2)) -- skip the first element
 end
 
 ---@param data table

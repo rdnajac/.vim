@@ -7,7 +7,7 @@ return {
   --   end
   -- end,
   config = function()
-    local extra_icons = require('nvim.config.icons').mini
+    -- local extra_icons = require('nvim.config.icons').mini
     require('mini.icons').setup(nv.icons.mini)
 
     vim.schedule(function()

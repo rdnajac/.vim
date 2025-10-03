@@ -5,7 +5,7 @@ local M = {}
 
 local in_comment = function(lnum, s_col)
   if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] then
-    return nv.treesitter.is_comment({ lnum, s_col })
+    return nv.is_comment({ lnum, s_col })
   else
     local synid = vim.fn.synID(lnum + 1, s_col + 1, 1)
     local name = vim.fn.synIDattr(synid, 'name')

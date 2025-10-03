@@ -85,9 +85,7 @@ local on_attach = function(client, bufnr)
       callback = vim.lsp.codelens.refresh,
     })
   end
-  -- if client:supports_method('textDocument/documentSymbol') then
-  require('nvim.plugins.lsp.docsymbols.navic_attach')(client, bufnr)
-  -- TODO: inline completion?
+  require('nvim.util.docsymbols.navic_attach')(client, bufnr)
 end
 vim.schedule(function()
   vim.lsp.config('*', { on_attach = on_attach })

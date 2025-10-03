@@ -32,7 +32,7 @@ M.start = function()
     return vim.cmd('normal! viW')
   end
 
-  if nv.treesitter.is_comment() then
+  if nv.is_comment() then
     -- first time in a comment:juswt select word
     skip = true
     return vim.cmd('normal! viW')

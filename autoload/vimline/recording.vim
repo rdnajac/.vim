@@ -1,4 +1,4 @@
-function! vimline#recording#status() abort
+function! vimline#recording#() abort
   let rec = reg_recording()
   let reg = empty(rec) ? get(g:, 'vimline_last_reg', 'q') : rec
   let icon = empty(rec) ? '@' : '󰑋'

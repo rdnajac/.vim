@@ -1,10 +1,11 @@
 return {
   name = 'config',
-  keys = nv.keymaps,
-  commands = nv.commands,
+  keys = require('nvim.config.keymaps'),
+  commands = require('nvim.config.commands'),
   after = function()
     vim.schedule(function()
-      vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+      require('nvim.config.autocmds')
+      require('nvim.config.diagnostic')
       require('nvim.config.sourcecode').setup()
     end)
   end,

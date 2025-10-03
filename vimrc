@@ -143,13 +143,12 @@ augroup END
 " shortcuts! {{{
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
 nnoremap <BSlash>s <Cmd>call edit#luamod('snacks')<CR>
-nnoremap <BSlash>i <Cmd>call edit#luamod('nvim/init')<CR>
+nnoremap <BSlash>i <Cmd>call edit#('~/.config/nvim/init.lua')<CR>
+nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plugins/init')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
-nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>k <Cmd>call edit#luamod('nvim/config/keymaps')<CR>
-nnoremap <BSlash>a <Cmd>call edit#luamod('nvim/config/autocmds')<CR>
-nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/commands')<CR>
+nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/plugins/config')<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
@@ -245,6 +244,7 @@ if has ('nvim')
   nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
   nnoremap <leader>dd <Cmd>LazyDev debug<CR>
   nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
+  nnoremap <leader>dL <Cmd>=require('lualine').get_config()<CR>
   nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
@@ -396,9 +396,6 @@ command! Restart call sesh#restart()
 " set foldcolumn=1
 set signcolumn=number
 " set numberwidth=3
-
-let &laststatus = has('nvim') ? 3 : 2
-set statusline=%!vimline#statusline#()
 
 " }}}1
 " Section: global variables {{{1

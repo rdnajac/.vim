@@ -94,4 +94,6 @@ M.source = function()
   end
 end
 
+M.is_comment = require('nvim.plugins.treesitter').is_comment
+
 return M

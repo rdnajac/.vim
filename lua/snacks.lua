@@ -157,16 +157,14 @@ vim.api.nvim_create_autocmd(vim.tbl_keys(events), {
   end,
 })
 
-if M.config.image.enabled and #M.config.image.formats > 0 then
-  vim.api.nvim_create_autocmd('BufReadCmd', {
-    once = true,
-    pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
-    group = group,
-    callback = function(e)
-      require('snacks.image').setup(e)
-    end,
-  })
-end
+vim.api.nvim_create_autocmd('BufReadCmd', {
+  once = true,
+  pattern = '*.' .. table.concat(M.config.image.formats, ',*.'),
+  group = group,
+  callback = function(e)
+    require('snacks.image').setup(e)
+  end,
+})
 
 -- vim.o.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
@@ -178,5 +176,5 @@ end
 M.did_setup = true
 M.did_setup_after_vim_enter = false
 
-print('snack attack!')
+-- print('snack attack!')
 return M

@@ -1,11 +1,6 @@
 --- @meta
 error('this file should not be required directly')
 
--- TODO:
-nv.config = require('nvim.plugin')
-nv.plugin = require('nvim.config')
-nv.util = require('nvim.util')
-
 -- from: `LazyVim/lua/lazyvim/types.lua`
 ---@class vim.api.create_autocmd.callback.args
 ---@field id number
