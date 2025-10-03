@@ -1,3 +1,4 @@
+" TODO: remove me
 function! quit#buffer(bang) abort
   let l:bufs = filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
 
@@ -17,7 +18,7 @@ function! quit#buffer(bang) abort
   endif
 endfunction
 
-" TODO: remove this?
+" TODO: remove me
 function! quit#oldversion() abort
   if winnr('$') > 1
     bnext | 1wincmd w | q!
@@ -27,14 +28,5 @@ function! quit#oldversion() abort
     else
       quit!
     endif
-  endif
-endfunction
-
-" FIXME
-" automatically delete empty buffers
-" call from an autocmd like `autocmd BufLeave * quit#ifempty(expand('%'))`
-function! quit#ifempty(buf) abort
-  if empty(&buftype) && line('$') == 1 && getline(1) == ''
-    call quit#buffer('')
   endif
 endfunction

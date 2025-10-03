@@ -16,6 +16,4 @@ endfunction
 function! plug#end() abort
   delcommand Plug
   lua vim.pack.add(vim.g.plugins)
-  " lua vim.pack.add(vim.g.plugins, {load = require('_load')})
-  " lua require('nvim.plug').init()
 endfunction

@@ -86,9 +86,9 @@ nnoremap <expr> h fold#open_or_h()
 " nnoremap <silent> / zn/
 
 " sesh {{{
-set sessionoptions-=options   " already default in nvim
+set sessionoptions+=folds
+" set sessionoptions-=options   " already default in nvim
 set sessionoptions-=blank     " like vim-obsession
-set sessionoptions-=folds
 set sessionoptions-=tabpages  " per project, not global
 set sessionoptions-=terminal  " don't save terminals
 set viewoptions-=options      " keep mkview minimal
@@ -218,7 +218,6 @@ nmap zJ ]ekJ
 nmap S viWS
 vmap ` S`
 vmap F Sf
-" nmap ds mm`m
 
 " xmap ga <Plug>(EasyAlign)
 " nmap ga <Plug>(EasyAlign)
@@ -251,7 +250,7 @@ if has ('nvim')
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 endif
-nnoremap <leader>fD <Cmd>Delete!<CR>
+nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>

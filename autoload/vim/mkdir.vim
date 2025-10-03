@@ -1,18 +1,14 @@
+" Matches common URI schemes followed by '://'
 let s:url_scheme_regex = '^[A-Za-z][A-Za-z0-9+.-]*://'
 
-function! bin#mkdir#(file) abort
-  if a:file ==# '' || a:file =~# s:url_scheme_regex
-    return
-  endif
-
-  let l:dir = fnamemodify(a:file, ':p:h')
-
-  if !isdirectory(l:dir)
-    call mkdir(l:dir, 'p')
+function! vim#mkdir#(file) abort
+  if a:file ==# s:url_scheme_regex
+    " from the dirname of the absolut path (including parents if needed)
+    call mkdir(fnamemodify(a:file, ':p:h'), !isdirectory(l:dir) ? 'p' : '')
   endif
 endfunction
 
-function! bin#mkdir#test_regex() abort
+function! vim#mkdir#test_regex() abort
   let l:tests = [
 	\ 'http://example.com',
 	\ 'ftp://example.com',

@@ -8,7 +8,7 @@ endfunction
 
 let s:permlookup = ['---','--x','-w-','-wx','r--','r-x','rw-','rwx']
 
-function! bin#chmod#chmod(bang, perm, ...) abort
+function! vim#chmod#(bang, perm, ...) abort
   let autocmd = 'silent doautocmd <nomodeline> User FileChmodPost'
   let file = a:0 ? expand(join(a:000, ' ')) : @%
   if !a:bang && exists('*setfperm')

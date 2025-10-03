@@ -54,7 +54,7 @@ function! vimline#winbar#acwrite() abort
   let l:ret = '%#Chromatophore_a#'
   if &filetype ==# 'oil'
     let l:ret .=  s:fticon()
-    let l:ret .= fnamemodify(lua#require('oil', 'get_current_dir'), ':~')
+    let l:ret .= fnamemodify(v:lua.require'oil'.get_current_dir(), ':~')
   elseif &filetype ==# 'nvim-pack'
     let l:ret .='  ' " TODO: make this the fticon for nvim-pack
     let l:ret .='TODO: print relevant status info'

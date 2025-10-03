@@ -1,78 +1,85 @@
-local rules = {
-  form = {
-    -- Change function form: local function <name>(...) <-> local <name> = function(...)
-    local_func_to_assign = {
-      regex = '^%s*local%s+function%s+([%w_.]+)%s*%(',
-      transform = 'local %1 = function(',
-    },
-    local_assign_to_func = {
-      regex = '^%s*local%s+([%w_.]+)%s*=%s*function%s*%(',
-      transform = 'local function %1(',
-    },
-    -- Change function form: function M.<name>(...) <-> M.<name> = function(...)
-    -- also handle `:` method notation
-    M_func_to_assign = {
-      regex = '^%s*function%s+M([.:])([%w_.]+)%s*%(',
-      transform = 'M%1%2 = function(',
-    },
-    -- Change back: M.<name> = function(...) -> function M.<name>(...)
-    M_assign_to_func = {
-      regex = '^%s*M([.:])([%w_.]+)%s*=%s*function%s*%(',
-      transform = 'function M%1%2(',
-    },
+local local_patterns = {
+  -- match:  local var = ...
+  -- turn into: M.var = ...
+  scope_to_module = {
+    regex = '^%s*local%s+([%w_.]+)%s*=',
+    transform = 'M.%1 =',
   },
-  scope = {
-    local_to_M = { -- Change scope: local to module (crm)
-      regex = '^%s*local%s+([%w_.]+)',
-      transform = 'M.%1',
-    },
-    M_to_local = {
-      regex = '^%s*M%.([%w_.]+)',
-      transform = 'local %1',
-    },
+  -- match:  local function foo(...)
+  -- turn into: local foo = function(...)
+  func_to_assign = {
+    regex = '^%s*local%s+function%s+([%w_.]+)%s*%(',
+    transform = 'local %1 = function(',
+  },
+  -- match:  local foo = function(...)
+  -- turn into: local function foo(...)
+  assign_to_func = {
+    regex = '^%s*local%s+([%w_.]+)%s*=%s*function%s*%(',
+    transform = 'local function %1(',
   },
 }
 
-local function check_regex()
-  local matches = {}
-  local line = vim.api.nvim_get_current_line()
-  for rule in string.gmatch('scope form', '%S+') do
-    for key, pattern in pairs(rules[rule]) do
-      if line:match(pattern.regex) then
-        table.insert(matches, rule .. ':' .. key)
-      end
-    end
-  end
-  if #matches == 0 then
-    Snacks.notify.warn('No matching patterns found.')
-  else
-    dd(matches)
-  end
-end
+local module_patterns = {
+  -- match:  M.var = ...
+  -- turn into: local var = ...
+  scope_to_local = {
+    regex = '^%s*M%.([%w_.]+)%s*=',
+    transform = 'local %1 =',
+  },
+  -- match:  function M.foo(...) or function M:foo(...)
+  -- turn into: M.foo = function(...) or M:foo = function(...)
+  func_to_assign = {
+    regex = '^%s*function%s+M([.:])([%w_.]+)%s*%(',
+    transform = 'M%1%2 = function(',
+  },
+  -- match:  M.foo = function(...) or M:foo = function(...)
+  -- turn into: function M.foo(...) or function M:foo(...)
+  assign_to_func = {
+    regex = '^%s*M([.:])([%w_.]+)%s*=%s*function%s*%(',
+    transform = 'function M%1%2(',
+  },
+}
 
-local function transform(rule)
-  local line = vim.api.nvim_get_current_line()
-  for _, r in pairs(rules[rule]) do
-    print(r.regex)
+local form_rules = {
+  local_patterns.func_to_assign,
+  local_patterns.assign_to_func,
+  module_patterns.func_to_assign,
+  module_patterns.assign_to_func,
+}
+
+local scope_rules = {
+  local_patterns.scope_to_module,
+  module_patterns.scope_to_local,
+}
+
+local function apply(line, rules)
+  for _, r in ipairs(rules) do
     if line:match(r.regex) then
-      local new = line:gsub(r.regex, r.transform)
-      return vim.api.nvim_set_current_line(new)
+      return line:gsub(r.regex, r.transform)
     end
   end
 end
 
--- stylua: ignore start
-vim.keymap.set('n', 'crr', check_regex, { buffer = true, desc = 'print matched regex keys' })
-vim.keymap.set('n', 'crf', function() transform('form') end, { buffer = true, desc = 'local fn = function() <-> local function f()' })
-vim.keymap.set('n', 'crm', function() transform('scope') end, { buffer = true, desc = 'local var = <-> M.var = ' })
-vim.keymap.set('n', 'crM', 'crfcrm', { buffer = true, remap = true, desc = 'M.fn = function() --> local function fn()' })
-vim.keymap.set('n', 'crF', 'crmcrf', { buffer = true, remap = true, desc = 'local function fn() --> M.fn = function()' })
--- stylua: ignore end
-
-local function fn()
-  -- FIXME:
-  -- crm on `local function toggle_scope(line)`
-  -- returns `M.function toggle_scope(line)`
-  -- instead of `M.toggle_scope = function(line)`
-  print('')
+local function make(rules)
+  return function()
+    local line = vim.api.nvim_get_current_line()
+    local out = apply(line, rules)
+    if out and out ~= line then
+      vim.api.nvim_set_current_line(out)
+    end
+  end
 end
+
+local form = make(form_rules)
+local scope = make(scope_rules)
+
+local function nmap(lhs, rhs, desc)
+  vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
+end
+
+nmap('crf', form, 'local function fn() ↔ local fn = function()')
+nmap('crm', scope, 'local x ↔ M.x')
+-- stylua: ignore start
+nmap('crM', function() form(); scope() end, 'local function foo() → M.foo = function()')
+nmap('crF', function() scope(); form() end, 'M.foo = function() → local function foo()')
+--stylua: ignore end
