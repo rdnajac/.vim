@@ -54,7 +54,7 @@ M.opts_extend = {
     local icon = icon_map[opts.finder]
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
     opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
-    if nv.util.is_nonempty_list(opts.ft) then
+    if nv.is_nonempty_list(opts.ft) then
       opts.title = opts.title
         .. ' '
         .. table.concat(

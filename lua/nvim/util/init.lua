@@ -1,6 +1,6 @@
 local M = {}
 
-setmetatable({}, {
+setmetatable(M, {
   __index = function(t, k)
     t[k] = require('nvim.util.' .. k)
     -- return rawget(t, k)

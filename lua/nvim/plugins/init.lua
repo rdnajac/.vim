@@ -39,6 +39,7 @@ local to_spec = function(user_repo, data)
   return {
     src = src,
     name = name,
+    -- HACK: remove this when treesitter is no longer a special case
     version = user_repo:match('treesitter') and 'main' or nil,
     data = data,
   }
@@ -192,7 +193,7 @@ end
 local dir = nv.stdpath.config .. '/lua/nvim/plugins'
 local files = vim.fn.globpath(dir, '*.lua', false, true)
 
-M = vim
+local M = vim
   .iter(files)
   :map(function(path)
     return path:match('^.+/(.+)%.lua$')
