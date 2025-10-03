@@ -55,7 +55,7 @@ M.status = function()
       return nv.icons.lsp.attached
     end
   end
-  return nv.icons.lsp.unavailable
+  return nv.icons.lsp.unavailable .. ' '
 end
 
 M.docsymbols = function()

@@ -96,7 +96,11 @@ return {
   },
   {
     'folke/todo-comments.nvim',
-    opts = {},
+    opts = {
+      keywords = { Section = { icon = '󰚟', color = 'title' } },
+      -- highlight = { keyword = 'bg', },
+      colors = { title = { '#7DCFFF' } },
+    },
     -- stylua: ignore
     keys = {
       -- TODO: check against vim-unimpaired

@@ -2,19 +2,22 @@ local M = {}
 
 local dir = nv.stdpath.config .. '/lua/nvim/plugins'
 local files = vim.fn.globpath(dir, '*.lua', false, true)
+local iter = vim.iter(files)
 
--- load all plugin specs in this directory
-for _, path in ipairs(files) do
-  local name = path:match('^.+/(.+)%.lua$')
-  if name ~= 'init' then
+iter
+  :map(function(path)
+    return path:match('^.+/(.+)%.lua$')
+  end)
+  :filter(function(name)
+    return name ~= 'init'
+  end)
+  :map(function(name)
     local t = require('nvim.plugins.' .. name)
-    if vim.islist(t) and type(t[1]) ~= 'string' then
-      vim.list_extend(M, t)
-    else
-      table.insert(M, t)
-    end
-  end
-end
-
+    return vim.islist(t) and t or { t }
+  end)
+  :flatten()
+  :each(function(spec)
+    require('nvim.util.plug')(spec)
+  end)
 
 return M
