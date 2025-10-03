@@ -12,7 +12,4 @@ setmetatable(nv, {
   end,
 })
 
-t('nvim required!')
-
 require('nvim.plugins')
-t('plugins required!')

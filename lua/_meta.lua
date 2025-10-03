@@ -1,28 +1,10 @@
 --- @meta
 error('this file should not be required directly')
 
-nv.blink = require('nvim.blink')
-nv.lsp = require('nvim.plugins.lsp')
-nv.mini = require('nvim.mini')
-nv.oil = require('nvim.oil')
-nv.plug = require('nvim.util.plug')
-nv.snacks = require('nvim.snacks')
-nv.treesitter = require('nvim.treesitter')
-nv.ui = require('nvim.ui')
+-- TODO: 
+nv.config = require('nvim.plugin')
+nv.plugin = require('nvim.config')
 nv.util = require('nvim.util')
-nv.copilot = require('nvim.copilot')
-nv.diagnostic = require('nvim.diagnostic')
-nv.dial = require('nvim.dial')
-nv.icon = require('nvim.icon')
-nv.flash = require('nvim.flash')
-nv.mason = require('nvim.lsp.mason')
-nv.md = require('nvim.render-markdown')
-nv.notify = require('nvim.notify')
-nv.oil = require('nvim.oil')
-nv.r = require('nvim.r')
-nv.todo = require('nvim.todo-comments')
-nv.tokyonight = require('nvim.tokyonight')
-nv.wk = require('nvim.which-key')
 
 -- from: `LazyVim/lua/lazyvim/types.lua`
 ---@class vim.api.create_autocmd.callback.args

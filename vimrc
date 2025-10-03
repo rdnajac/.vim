@@ -142,15 +142,14 @@ augroup END
 " Section: keymaps {{{1
 " shortcuts! {{{
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/config/init')<CR>
-nnoremap <BSlash>i <Cmd>call edit#luamod('nvim/init')<CR>
-nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/util/plug')<CR>
-nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
 nnoremap <BSlash>s <Cmd>call edit#luamod('snacks')<CR>
-nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/init')<CR>
+nnoremap <BSlash>i <Cmd>call edit#luamod('nvim/init')<CR>
+nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plugins/init')<CR>
+nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
+nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>k <Cmd>call edit#luamod('nvim/config/keymaps')<CR>
 nnoremap <BSlash>a <Cmd>call edit#luamod('nvim/config/autocmds')<CR>
-nnoremap <BSlash>C <Cmd>call edit#luamod('nvim/config/commands')<CR>
+nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/commands')<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
