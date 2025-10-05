@@ -175,28 +175,12 @@ function Plugin:do_keymaps()
   end
 end
 
-local dir = nv.stdpath.config .. '/lua/nvim/plugins'
-local files = vim.fn.globpath(dir, '*.lua', false, true)
-
-local M = vim
-  .iter(files)
-  :map(function(path)
-    return path:match('^.+/(.+)%.lua$')
-  end)
-  :filter(function(name)
-    return name ~= 'init'
-  end)
-  :map(function(name)
-    local t = require('nvim.plugins.' .. name)
-    return vim.islist(t) and t or { t }
-  end)
-  :flatten()
-  :map(function(spec)
-    local P = Plugin.new(spec)
-    P:init()
-    return P
-  end)
-  :totable()
+-- Export the Plugin class and helper functions for use elsewhere
+local M = {
+  Plugin = Plugin,
+  get = get,
+  to_spec = to_spec,
+}
 
 M.unloaded = function()
   return vim
