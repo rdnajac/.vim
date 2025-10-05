@@ -73,10 +73,17 @@ function M.generate_vim_scheme()
     ]],
     -- :format(colors._style),
   }
-  local names = vim.tbl_filter(function(group)
-    -- filter out treesitter/semantic token highlights
-    return group:sub(1, 1) ~= '@'
-  end, vim.tbl_keys(groups))
+  -- Use vim.iter for filtering and sorting group names
+  local names = vim
+    .iter(groups)
+    :map(function(name, _)
+      return name
+    end)
+    :filter(function(name)
+      -- filter out treesitter/semantic token highlights
+      return name:sub(1, 1) ~= '@'
+    end)
+    :totable()
 
   table.sort(names)
 
@@ -95,32 +102,21 @@ function M.generate_vim_scheme()
         sp = 'guisp',
       }
 
-      -- fg/bg/sp
-      for k, v in pairs(hl) do
-        if mapping[k] then
-          props[#props + 1] = ('%s=%s'):format(mapping[k], v)
-        end
-      end
-      -- TODO: try this
-      -- local props = vim.tbl_map(function(k)
-      --   return ('%s=%s'):format(mapping[k], hl[k])
-      -- end,
-      -- vim.tbl_filter(function(k) return mapping[k] ~= nil end, vim.tbl_keys(hl)))
-      --
+      -- Use vim.iter for fg/bg/sp mapping
+      local color_props = vim
+        .iter(hl)
+        :filter(function(k, _v)
+          return mapping[k] ~= nil
+        end)
+        :map(function(k, v)
+          return ('%s=%s'):format(mapping[k], v)
+        end)
+        :totable()
 
-      -- TODO: or this!
-      -- local props = vim
-      --   .iter(hl)
-      --   :filter(function(k, _v)
-      --     return mapping[k] ~= nil
-      --   end)
-      --   :map(function(k, v)
-      --     return ('%s=%s'):format(mapping[k], v)
-      --   end)
-      --   :totable()
+      vim.list_extend(props, color_props)
 
-      local gui = {}
-      for _, attr in ipairs({
+      -- Use vim.iter for GUI attributes
+      local gui_attrs = {
         'bold',
         'underline',
         'undercurl',
@@ -133,11 +129,15 @@ function M.generate_vim_scheme()
         'standout',
         'nocombine',
         'altfont',
-      }) do
-        if hl[attr] then
-          gui[#gui + 1] = attr
-        end
-      end
+      }
+
+      local gui = vim
+        .iter(gui_attrs)
+        :filter(function(attr)
+          return hl[attr]
+        end)
+        :totable()
+
       if #gui > 0 then
         props[#props + 1] = ('gui=%s'):format(table.concat(gui, ','))
       end
