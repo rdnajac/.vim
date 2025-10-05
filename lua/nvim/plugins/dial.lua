@@ -80,6 +80,7 @@ M.config = function()
       new({ 'opt', 'start' }, false),
       new({ 'autoload', 'plugin' }, false),
     },
+    sh = {},
   }
 
   -- create rmd group as a combination of markdown and r
@@ -92,26 +93,35 @@ M.config = function()
     vim.list_extend(group, default_switches)
   end
 
-  -- Build dials_by_ft from non-default groups
-  local dials_by_ft = {}
-  for name, _ in pairs(groups) do
-    if name ~= 'default' then
-      dials_by_ft[name] = name
-    end
-  end
+  require('dial.config').augends:register_group(groups)
 
-  -- Merge with explicit extensions
-  -- TODO: FIXME
-  local extend = {
+  -- Filetype mappings for dial groups
+  local ft_mappings = {
     sass = 'css',
     scss = 'css',
     quarto = 'rmd',
     zsh = 'sh',
   }
 
-  vim.g.dials_by_ft = vim.tbl_extend('force', dials_by_ft, extend)
-
-  require('dial.config').augends:register_group(groups)
+  -- Set up autocommand to populate vim.b.dials based on filetype
+  vim.api.nvim_create_autocmd({ 'BufEnter', 'FileType' }, {
+    group = vim.api.nvim_create_augroup('dial_buffer_setup', { clear = true }),
+    callback = function()
+      local ft = vim.bo.filetype
+      if ft == '' then
+        return
+      end
+      
+      -- Check if there's an explicit mapping
+      if ft_mappings[ft] then
+        vim.b.dials = ft_mappings[ft]
+      -- Check if there's a group for this filetype
+      elseif groups[ft] then
+        vim.b.dials = ft
+      -- Otherwise, don't set vim.b.dials (will fall back to 'default' in the dial function)
+      end
+    end,
+  })
 
   ---@param increment boolean
   ---@param g? boolean
@@ -124,9 +134,9 @@ M.config = function()
       g and '_g' or '_',
       is_visual and 'visual' or 'normal'
     )
-    -- local group = vim.g.dials_by_ft[vim.bo.filetype] or 'default'
-    -- return require('dial.map')[func](group)
-    return require('dial.map')[func](vim.g.dials_by_ft[vim.bo.filetype] or 'default')
+    -- Use vim.b.dials if set, otherwise default to 'default'
+    local group = vim.b.dials or 'default'
+    return require('dial.map')[func](group)
   end
 
 -- stylua: ignore
