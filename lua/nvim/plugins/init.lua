@@ -21,16 +21,9 @@ local to_spec = function(user_repo, data)
     return user_repo
   end
 
-  local src = 'https://github.com/' .. user_repo .. '.git'
-  local last = user_repo:find('[^/]+$') or 1
-  local name = user_repo:sub(last)
-  if name:sub(-5) == '.nvim' then
-    name = name:sub(1, -6)
-  end
-
   return {
-    src = src,
-    name = name,
+    src = 'https://github.com/' .. user_repo .. '.git',
+    name = src:sub(-5) == '.nvim' and src:sub(1, -6) or src,
     -- HACK: remove this when treesitter is no longer a special case
     version = user_repo:match('treesitter') and 'main' or nil,
     data = data,
