@@ -21,9 +21,11 @@ local to_spec = function(user_repo, data)
     return user_repo
   end
 
+  local src = 'https://github.com/' .. user_repo .. '.git'
+  local name = user_repo:sub(-5) == '.nvim' and user_repo:sub(1, -6) or user_repo
   return {
-    src = 'https://github.com/' .. user_repo .. '.git',
-    name = src:sub(-5) == '.nvim' and src:sub(1, -6) or src,
+    src = src,
+    name = name,
     -- HACK: remove this when treesitter is no longer a special case
     version = user_repo:match('treesitter') and 'main' or nil,
     data = data,
@@ -64,7 +66,7 @@ end
 
 function Plugin:init()
   if self:is_enabled() then
-    self:add()
+    -- Note: add() is now called separately before init()
     self:setup()
     self:do_after()
     -- self:do_build()
@@ -75,11 +77,13 @@ function Plugin:init()
   end
 end
 
-function Plugin:add()
-  if nv.is_nonempty_list(self.specs) then
-    local resolved_specs = vim.tbl_map(to_spec, self.specs)
-    vim.pack.add(resolved_specs)
+--- Collect resolved specs from this plugin if enabled
+--- @return table[] resolved_specs
+function Plugin:get_specs()
+  if self:is_enabled() and nv.is_nonempty_list(self.specs) then
+    return vim.tbl_map(to_spec, self.specs)
   end
+  return {}
 end
 ---
 --- Call the `Plugin`'s `config` function if it exists, otherwise
