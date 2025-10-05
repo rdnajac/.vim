@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function s:fticon() abort
-  return ' ' . v:lua.nv.icons.fticon()
+  return ' ' . v:lua.nv.icons() . ' '
 endfunction
 
 function! vimline#winbar#() abort

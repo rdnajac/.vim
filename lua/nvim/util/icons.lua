@@ -75,7 +75,9 @@ local icons = {
 
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
 local ret = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
+
 -- add an inverted lookup table for kinds
+
 if ret.kinds then
   for name, num in pairs(vim.lsp.protocol.SymbolKind) do
     if type(name) == 'string' and ret.kinds[name] then
@@ -84,4 +86,23 @@ if ret.kinds then
   end
 end
 
-return ret
+-- return ret
+return setmetatable(ret, {
+  -- __index = function(_, key)
+  --   if key == 'kinds' then
+  --     -- add an inverted lookup table for kinds on first access
+  --     local kinds = ret.kinds or {}
+  --     for name, num in pairs(vim.lsp.protocol.symbolkind) do
+  --       if type(name) == 'string' and kinds[name] then
+  --         kinds[num] = kinds[name]
+  --       end
+  --     end
+  --     ret.kinds = kinds
+  --     return kinds
+  --   end
+  --   return ret[key]
+  -- end,
+  __call = function(_, key)
+    return ret.fticon(key)
+  end,
+})

@@ -53,7 +53,7 @@ command('Plugins', function()
 end, {})
 
 command('PlugClean', function(opts)
-  local plugs = #opts.fargs > 0 and opts.fargs or nv.plug.unloaded()
+  local plugs = #opts.fargs > 0 and opts.fargs or nv.plugins.unloaded()
   vim.pack.del(plugs)
 end, {
   nargs = '*',

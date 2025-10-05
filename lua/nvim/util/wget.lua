@@ -13,52 +13,75 @@
 local function wget(url, opts)
   opts = opts or {}
   local outpath = opts.outpath
+  local force = opts.force or false
+  local create_dirs = opts.create_dirs ~= false
   local callback = opts.callback
-    or function(err, resp)
-      if err then
-        vim.notify('wget error: ' .. err, vim.log.levels.ERROR)
-      elseif outpath then
-        vim.notify('Downloaded ' .. url .. ' → ' .. outpath, vim.log.levels.INFO)
-      else
-        vim.notify('Downloaded ' .. url, vim.log.levels.INFO)
-      end
-    end
 
-  -- Skip if file exists and not forcing
-  if outpath and not opts.force and vim.fn.filereadable(outpath) == 1 then
-    callback(nil, { body = true })
-    return
+  local function notify(msg, level)
+    if opts.verbose then
+      vim.notify(msg, level or vim.log.levels.INFO)
+    end
   end
 
-  -- Ensure directories if writing to disk
-  if outpath and opts.create_dirs ~= false then
+  if outpath and not force and vim.fn.filereadable(outpath) == 1 then
+    notify('Skipping download (exists): ' .. outpath)
+    if callback then
+      callback(nil, { body = true })
+    end
+    return true
+  end
+
+  if outpath and create_dirs then
     vim.fn.mkdir(vim.fn.fnamemodify(outpath, ':h'), 'p')
   end
 
-  -- Pass supported options directly to vim.net.request
-  local request_opts = {
+  local done, result, err
+  vim.net.request(url, {
     outpath = outpath,
     retry = opts.retry,
     headers = opts.headers,
     verbose = opts.verbose,
-  }
+  }, function(e, r)
+    err, result = e, r
+    done = true
+  end)
 
-  vim.net.request(
-    url,
-    request_opts,
-    vim.schedule_wrap(function(err, resp)
-      if err then
-        callback('Failed to fetch ' .. url .. ': ' .. tostring(err))
-        return
-      end
+  local start = vim.loop.now()
+  while not done do
+    vim.wait(50)
+  end
 
-      if outpath then
-        callback(nil, { body = true }) -- written to disk
-      else
-        callback(nil, { body = resp and resp.body or '' })
+  if err then
+    local msg = 'Download failed: ' .. tostring(err)
+    notify(msg, vim.log.levels.ERROR)
+    if callback then
+      callback(msg)
+    end
+    error(msg)
+  end
+
+  if outpath then
+    local ok = vim.fn.filereadable(outpath) == 1 and vim.fn.getfsize(outpath) > 0
+    if not ok then
+      local msg = 'Download incomplete: ' .. outpath
+      notify(msg, vim.log.levels.ERROR)
+      if callback then
+        callback(msg)
       end
-    end)
-  )
+      error(msg)
+    end
+    notify('Downloaded ' .. url .. ' → ' .. outpath)
+    if callback then
+      callback(nil, { body = true })
+    end
+    return true
+  else
+    local body = result and result.body or ''
+    if callback then
+      callback(nil, { body = body })
+    end
+    return body
+  end
 end
 
 return wget

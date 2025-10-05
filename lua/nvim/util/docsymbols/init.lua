@@ -4,11 +4,6 @@ local opts = {
   depth_limit = 0,
   depth_limit_indicator = ' ',
   separator = '',
-  hl = {
-    icon = 'Constant',
-    text = 'Chromatophore_y',
-    sep = 'Constant',
-  },
 }
 
 local M = {}
@@ -17,64 +12,47 @@ M.is_available = function(bufnr)
   return vim.b[bufnr or vim.api.nvim_get_current_buf()].navic_client_id ~= nil
 end
 
--- returns table of context or nil
 ---@param bufnr number
----@return table|nil
-function M.get_data(bufnr)
-  local context_data = lib.get_context_data(bufnr)
-  if not context_data then
-    return nil
-  end
-  return vim.tbl_map(function(v)
-    return {
-      kind = v.kind,
-      type = vim.lsp.protocol.SymbolKind[v.kind] or 'Text',
-      name = v.name,
-      icon = nv.icons.kinds[v.kind],
-      scope = v.scope,
-    }
-  end, vim.list_slice(context_data, 2)) -- skip the first element
-end
-
----@param data table
----@param apply_hl? boolean
 ---@return string
-function M.format_data(data, apply_hl)
-  apply_hl = apply_hl or false
+function M.get(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-  local function maybe_hl(hl, text)
-    return apply_hl and ('%#' .. hl .. '#' .. text) or text
-  end
-
-  local function sanitize_name(v)
-    local name = v.name or ''
-    name = name:gsub('%%', '%%%%')
-    name = name:gsub('\n', ' ')
-    return name
-  end
-
-  local location = vim.tbl_map(function(v)
-    return maybe_hl(opts.hl.icon, v.icon) .. maybe_hl(opts.hl.text, sanitize_name(v))
-  end, data)
-
-  if opts.depth_limit > 0 and #location > opts.depth_limit then
-    location = vim.list_slice(location, #location - opts.depth_limit + 1, #location)
-    table.insert(location, 1, maybe_hl(opts.hl.icon, opts.depth_limit_indicator))
-  end
-
-  local sep = maybe_hl(opts.hl.sep, opts.separator)
-  return table.concat(location, sep)
-end
-
-function M.get(opts)
-  local apply_hl = opts and opts.apply_hl or false
-  local bufnr = opts and opts.bufnr or vim.api.nvim_get_current_buf()
-  local data = M.get_data(bufnr)
-
-  if not data or #data == 0 then
+  if not M.is_available(bufnr) then
     return ''
   end
-  return M.format_data(data, apply_hl)
+
+  local ctx = lib.get_context_data(bufnr)
+  if type(ctx) ~= 'table' or vim.tbl_isempty(ctx) then
+    return ''
+  end
+
+  local items = vim
+    .iter(vim.list_slice(ctx, 2))
+    :map(function(v)
+      local kind = v.kind
+      local icon = nv.icons.kinds[kind]
+      if type(icon) ~= 'string' then
+        icon = ''
+      end
+      local name = v.name
+      if type(name) ~= 'string' then
+        name = ''
+      end
+      name = name:gsub('%%', '%%%%'):gsub('\n', ' ')
+      return icon .. name
+    end)
+    :totable()
+
+  if #items == 0 then
+    return ''
+  end
+
+  if opts.depth_limit > 0 and #items > opts.depth_limit then
+    items = vim.list_slice(items, #items - opts.depth_limit + 1, #items)
+    table.insert(items, 1, opts.depth_limit_indicator)
+  end
+
+  return table.concat(items, opts.separator or ' ')
 end
 
 return M

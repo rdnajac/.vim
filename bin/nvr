@@ -1,3 +1,0 @@
-#!/usr/bin/env lua
--- Send remote commands to `neovim`
-print("nvr: send remote commands to neovim")

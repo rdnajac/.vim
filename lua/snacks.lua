@@ -24,9 +24,7 @@ vim._print = function(_, ...)
   dd(...)
 end
 
-local config = {
-  styles = {},
-}
+local config = { styles = {} }
 
 ---@class snacks.config: snacks.Config
 M.config = setmetatable({}, {
@@ -77,9 +75,7 @@ function M.config.style(name, defaults)
     vim.tbl_deep_extend('force', vim.deepcopy(defaults), config.styles[name] or {})
   return name
 end
-
 -- Config End ]]
--- TODO: use the snacks.config.merge functions
 
 ---@type snacks.config
 local opts = {

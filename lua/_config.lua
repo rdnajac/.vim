@@ -47,9 +47,8 @@ end
 ---@param defaults T
 ---@param ... T[]
 ---@return T
--- FIXME: expexts local config table
-function M.get(snack, defaults, ...)
-  local merge, todo = {}, { defaults, config[snack] or {}, ... }
+function M.get(self, snack, defaults, ...)
+  local merge, todo = {}, { defaults, self[snack] or {}, ... }
   for i = 1, select('#', ...) + 2 do
     local v = todo[i] --[[@as snacks.Config.base]]
     if type(v) == 'table' then
