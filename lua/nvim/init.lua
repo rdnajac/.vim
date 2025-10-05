@@ -1,8 +1,8 @@
 _G.nv = require('nvim.util')
 
 -- Load the Plugin class and helpers from nvim.plugins
-local plugin_module = require('nvim.plugins')
-local Plugin = plugin_module.Plugin
+local module = require('nvim.plugins')
+local Plugin = module.Plugin
 
 -- Initialize and process plugins from the lua/nvim/plugins directory
 local plugins_dir = nv.stdpath.config .. '/lua/nvim/plugins'
@@ -29,7 +29,7 @@ nv.plugins = vim
   :totable()
 
 -- Add the unloaded function to nv.plugins
-nv.plugins.unloaded = plugin_module.unloaded
+nv.plugins.unloaded = module.unloaded
 
 local root = 'nvim'
 local dir = nv.stdpath.config .. '/lua/' .. root

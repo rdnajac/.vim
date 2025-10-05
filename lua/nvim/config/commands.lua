@@ -58,7 +58,7 @@ command('PlugClean', function(opts)
 end, {
   nargs = '*',
   complete = function(_, _, _)
-    return nv.plug.unloaded()
+    return nv.plugins.unloaded()
   end,
 })
 
