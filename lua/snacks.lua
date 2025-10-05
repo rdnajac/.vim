@@ -1,15 +1,4 @@
----@class Snacks: snacks.plugins
-local M = {}
-
-setmetatable(M, {
-  __index = function(t, k)
-    t[k] = require('snacks.' .. k)
-    return rawget(t, k)
-  end,
-})
-
 _G.svim = vim
-_G.Snacks = M
 _G.dd = function(...)
   Snacks.debug.inspect(...)
 end
@@ -24,16 +13,30 @@ vim._print = function(_, ...)
   dd(...)
 end
 
-local config = { styles = {} }
+---@class Snacks: snacks.plugins
+local M = setmetatable({}, {
+  __index = function(t, k)
+    t[k] = require('snacks.' .. k)
+    return rawget(t, k)
+  end,
+})
+_G.Snacks = M
+
+-- local config = { styles = {} }
 
 ---@class snacks.config: snacks.Config
-M.config = setmetatable({}, {
-  __index = function(_, k)
-    config[k] = config[k] or {}
-    return config[k]
-  end,
-  __newindex = function(_, k, v)
-    config[k] = v
+-- M.config = setmetatable({}, {
+M.config = setmetatable({ styles = {} }, {
+  -- __index = function(_, k)
+  --   config[k] = config[k] or {}
+  --   return config[k]
+  -- end,
+  -- __newindex = function(_, k, v)
+  --   config[k] = v
+  -- end,
+  __index = function(t, k)
+    rawset(t, k, {})
+    return t[k]
   end,
 })
 
@@ -48,7 +51,7 @@ M.config.example = require('_config').example
 ---@param ... T[]
 ---@return T
 function M.config.get(snack, defaults, ...)
-  local merge, todo = {}, { defaults, config[snack] or {}, ... }
+  local merge, todo = {}, { defaults, M.config[snack] or {}, ... }
   for i = 1, select('#', ...) + 2 do
     local v = todo[i] --[[@as snacks.Config.base]]
     if type(v) == 'table' then
@@ -71,8 +74,8 @@ end
 ---@param defaults snacks.win.Config|{}
 ---@return string
 function M.config.style(name, defaults)
-  config.styles[name] =
-    vim.tbl_deep_extend('force', vim.deepcopy(defaults), config.styles[name] or {})
+  M.config.styles[name] =
+    vim.tbl_deep_extend('force', vim.deepcopy(defaults), M.config.styles[name] or {})
   return name
 end
 -- Config End ]]
@@ -112,7 +115,7 @@ for k in pairs(opts) do
   opts[k].enabled = opts[k].enabled == nil or opts[k].enabled
 end
 
-config = vim.tbl_deep_extend('force', config, opts)
+M.config = vim.tbl_deep_extend('force', M.config, opts)
 
 local events = {
   BufReadPre = { 'bigfile', 'image' },

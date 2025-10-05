@@ -7,6 +7,7 @@ if vim.env.PROF then
   require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
 else
   setmetatable(_G.t, { __call = require('nvim.util.track').log })
+  -- nv.lazyload(function(ev) t(ev.event) end, { 'BufWinEnter', 'VimEnter', 'UIEnter' })
 end
 
 vim.cmd([[runtime vimrc]])
@@ -14,4 +15,3 @@ vim.cmd([[runtime vimrc]])
 require('vim._extui').enable({})
 require('snacks')
 require('nvim')
--- nv.lazyload(function(ev) t(ev.event) end, { 'BufWinEnter', 'VimEnter', 'UIEnter' })

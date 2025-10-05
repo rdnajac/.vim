@@ -453,6 +453,7 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
 else
   Plug 'folke/snacks.nvim'
+  Plug 'saxon1964/neovim-tips'
   " Plug '~/GitHub/rdnajac/vim-lol'
 endif
 call plug#end() " }}}1
