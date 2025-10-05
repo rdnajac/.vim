@@ -13,13 +13,36 @@ local res = vim.api.nvim_exec2('version', { output = true }).output or ''
 local old_version = res:match('^NVIM v([^\n]+)') or 'unknown'
 print('👾 Upgrading Neovim from ' .. old_version .. ' to nightly...')
 
-local wget = require('nvim.util.wget')
+-- Download the nightly release using Neovim's built-in HTTP request
+print('→ Downloading: ' .. URL)
+vim.fn.mkdir(vim.fn.fnamemodify(TARPATH, ':h'), 'p')
 
-wget(URL, {
+local done, result, err
+vim.net.request(URL, {
   outpath = TARPATH,
-  create_dirs = true,
-  force = true,
-})
+}, function(e, r)
+  err, result = e, r
+  done = true
+end)
+
+-- Wait for download to complete
+while not done do
+  vim.wait(50)
+end
+
+-- Check for errors
+if err then
+  io.stderr:write('✗ Download failed: ' .. tostring(err) .. '\n')
+  error('Failed to download Neovim nightly')
+end
+
+-- Verify the file was downloaded successfully
+if vim.fn.filereadable(TARPATH) ~= 1 or vim.fn.getfsize(TARPATH) <= 0 then
+  io.stderr:write('✗ Download incomplete: ' .. TARPATH .. '\n')
+  error('Failed to download Neovim nightly')
+end
+
+print('✓ Downloaded: ' .. TARPATH)
 
 local function run(cmd)
   print('→ Running: ' .. table.concat(cmd, ' '))
