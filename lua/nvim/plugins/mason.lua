@@ -1,3 +1,11 @@
+--- Mason package manager integration
+---
+--- Usage:
+---   Install by name:     nv.mason.install('lua-language-server')
+---   Install by package:  nv.mason.install(pkg)
+---   Get registry:        local reg = nv.mason.reg()
+---   List installed:      local installed = nv.mason.installed()
+
 local M = {
   'mason-org/mason.nvim',
   opts = { ui = { icons = nv.icons.mason } },
