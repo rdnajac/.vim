@@ -1,5 +1,15 @@
 -- Configuration for individual mini.nvim submodules
--- Each can be independently enabled/disabled
+-- Each can be independently enabled/disabled by setting enabled = false
+--
+-- To disable a specific submodule, set its enabled field to false:
+--   icons = { enabled = false, ... },
+--
+-- Available submodules:
+--   - icons: Icon support (required by other plugins like aerial.nvim)
+--   - align: Text alignment with 'ga' operator
+--   - ai: Extended text objects for more intuitive selections
+--   - diff: Git diff integration with inline signs
+--   - hipatterns: Highlight patterns (e.g., hex colors)
 local submodules = {
   icons = {
     enabled = true,
@@ -36,11 +46,18 @@ local submodules = {
 return {
   'nvim-mini/mini.nvim',
   config = function()
-    -- Load enabled submodules
-    for name, submod in pairs(submodules) do
-      if submod.enabled then
-        submod.config()
-      end
+    -- Setup mini.icons first (required by other plugins)
+    if submodules.icons and submodules.icons.enabled then
+      submodules.icons.config()
     end
+
+    -- Load remaining enabled submodules (deferred to ensure dependencies are ready)
+    vim.schedule(function()
+      for name, submod in pairs(submodules) do
+        if name ~= 'icons' and submod.enabled then
+          submod.config()
+        end
+      end
+    end)
   end,
 }
