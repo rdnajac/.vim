@@ -13,28 +13,43 @@ local get = function(field)
   return field
 end
 
----- @param user_repo string plugin (`user/repo`)
----- @param data? any
----- @return string|vim.pack.Spec
-local to_spec = function(user_repo, data)
-  if not nv.is_nonempty_string(user_repo) then
-    return user_repo
+--- Helper function to validate if a value is a non-empty string
+---@param x any
+---@return boolean
+local function is_nonempty_string(x)
+  return type(x) == 'string' and x ~= ''
+end
+
+--- Helper function to validate if a value is a valid version
+---@param x any
+---@return boolean
+local function is_version(x)
+  return type(x) == 'string' or vim.islist(x) and x[1]
+end
+
+--- Normalize a plugin specification
+---@param spec string|table Plugin specification (string or table)
+---@return table Normalized spec with src, name, version, and data fields
+local function normalize_spec(spec)
+  -- Handle user/repo shorthand by converting to GitHub URL
+  if type(spec) == 'string' and spec:match('^[%w._-]+/[%w._-]+$') then
+    spec = 'https://github.com/' .. spec .. '.git'
   end
 
-  local src = 'https://github.com/' .. user_repo .. '.git'
-  local last = user_repo:find('[^/]+$') or 1
-  local name = user_repo:sub(last)
-  if name:sub(-5) == '.nvim' then
+  spec = type(spec) == 'string' and { src = spec } or spec
+  vim.validate('spec', spec, 'table')
+  vim.validate('spec.src', spec.src, is_nonempty_string, false, 'non-empty string')
+  local name = spec.name or spec.src:gsub('%.git$', '')
+  name = (type(name) == 'string' and name or ''):match('[^/]+$') or ''
+
+  -- Trim .nvim suffix using vim.endswith
+  if vim.endswith(name, '.nvim') then
     name = name:sub(1, -6)
   end
 
-  return {
-    src = src,
-    name = name,
-    -- HACK: remove this when treesitter is no longer a special case
-    version = user_repo:match('treesitter') and 'main' or nil,
-    data = data,
-  }
+  vim.validate('spec.name', name, is_nonempty_string, true, 'non-empty string')
+  vim.validate('spec.version', spec.version, is_version, true, 'string or vim.VersionRange')
+  return { src = spec.src, name = name, version = spec.version, data = spec.data }
 end
 
 --- @class Plugin
@@ -56,7 +71,7 @@ Plugin.__index = Plugin
 function Plugin.new(plugin)
   local self = plugin
 
-  local topspec = nv.is_nonempty_string(self[1]) and to_spec(self[1])
+  local topspec = nv.is_nonempty_string(self[1]) and normalize_spec(self[1])
   if topspec then
     self.name = topspec.name
     self.specs = vim.list_extend(self.specs or {}, { topspec })
@@ -84,7 +99,7 @@ end
 
 function Plugin:add()
   if nv.is_nonempty_list(self.specs) then
-    local resolved_specs = vim.tbl_map(to_spec, self.specs)
+    local resolved_specs = vim.tbl_map(normalize_spec, self.specs)
     vim.pack.add(resolved_specs)
   end
 end
