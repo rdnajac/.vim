@@ -6,7 +6,7 @@ return {
     move = {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist
-      -- LazyVim extention to create buffer-local keymaps
+      -- Custom configuration for buffer-local keymaps
       keys = {
         goto_next_start = {
           [']f'] = '@function.outer',
@@ -34,19 +34,25 @@ return {
   config = function(_, opts)
     local TS = require('nvim-treesitter-textobjects')
     if not TS.setup then
-      LazyVim.error('Please use `:Lazy` and update `nvim-treesitter`')
+      vim.notify('Please update `nvim-treesitter`', vim.log.levels.ERROR)
       return
     end
     TS.setup(opts)
 
     vim.api.nvim_create_autocmd('FileType', {
-      group = vim.api.nvim_create_augroup('lazyvim_treesitter_textobjects', { clear = true }),
+      group = vim.api.nvim_create_augroup('treesitter_textobjects', { clear = true }),
       callback = function(ev)
-        if
-          not (
-            vim.tbl_get(opts, 'move', 'enable') and LazyVim.treesitter.have(ev.match, 'textobjects')
-          )
-        then
+        -- Check if move is enabled
+        if not vim.tbl_get(opts, 'move', 'enable') then
+          return
+        end
+        
+        -- Check if treesitter parser and textobjects queries are available for this filetype
+        local lang = vim.treesitter.language.get_lang(ev.match) or ev.match
+        local has_parser = pcall(vim.treesitter.get_parser, ev.buf, lang)
+        local has_queries = has_parser and pcall(vim.treesitter.query.get, lang, 'textobjects')
+        
+        if not (has_parser and has_queries) then
           return
         end
         ---@type table<string, table<string, string>>
