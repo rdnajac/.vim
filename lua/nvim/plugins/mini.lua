@@ -1,20 +1,46 @@
+-- Configuration for individual mini.nvim submodules
+-- Each can be independently enabled/disabled
+local submodules = {
+  icons = {
+    enabled = true,
+    config = function()
+      require('mini.icons').setup(nv.icons.mini)
+    end,
+  },
+  align = {
+    enabled = true,
+    config = function()
+      require('mini.align').setup({})
+    end,
+  },
+  ai = {
+    enabled = true,
+    config = function()
+      require('nvim.plugins.mini.ai')
+    end,
+  },
+  diff = {
+    enabled = true,
+    config = function()
+      require('nvim.plugins.mini.diff')
+    end,
+  },
+  hipatterns = {
+    enabled = true,
+    config = function()
+      require('nvim.plugins.mini.hipatterns')
+    end,
+  },
+}
+
 return {
   'nvim-mini/mini.nvim',
-  -- init = function()
-  --   package.preload['nvim-web-devicons'] = function()
-  --     require('mini.icons').mock_nvim_web_devicons()
-  --     return package.loaded['nvim-web-devicons']
-  --   end
-  -- end,
   config = function()
-    -- local extra_icons = require('nvim.config.icons').mini
-    require('mini.icons').setup(nv.icons.mini)
-
-    vim.schedule(function()
-      require('mini.align').setup({})
-      require('nvim.plugins.mini.ai')
-      require('nvim.plugins.mini.diff')
-      require('nvim.plugins.mini.hipatterns')
-    end)
+    -- Load enabled submodules
+    for name, submod in pairs(submodules) do
+      if submod.enabled then
+        submod.config()
+      end
+    end
   end,
 }
