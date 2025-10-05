@@ -1,4 +1,11 @@
 local M = {}
+local config = nil
+
+--- Set the configuration table reference
+---@param cfg table
+function M.set_config(cfg)
+  config = cfg
+end
 
 local is_dict_like = function(v) -- has string and number keys
   return type(v) == 'table' and (vim.tbl_isempty(v) or not svim.islist(v))
@@ -47,7 +54,10 @@ end
 ---@param defaults T
 ---@param ... T[]
 ---@return T
-function M.get(self, snack, defaults, ...)
+function M.get(snack, defaults, ...)
+  if not config then
+    error('Config not set. Call M.set_config() first')
+  end
   local merge, todo = {}, { defaults, config[snack] or {}, ... }
   for i = 1, select('#', ...) + 2 do
     local v = todo[i] --[[@as snacks.Config.base]]
@@ -70,6 +80,9 @@ end
 ---@param defaults snacks.win.Config|{}
 ---@return string
 function M.style(name, defaults)
+  if not config then
+    error('Config not set. Call M.set_config() first')
+  end
   config.styles[name] =
     vim.tbl_deep_extend('force', vim.deepcopy(defaults), config.styles[name] or {})
   return name

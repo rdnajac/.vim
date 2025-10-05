@@ -22,66 +22,29 @@ local M = setmetatable({}, {
 })
 _G.Snacks = M
 
--- local config = { styles = {} }
-
 ---@class snacks.config: snacks.Config
--- M.config = setmetatable({}, {
 M.config = setmetatable({ styles = {} }, {
-  -- __index = function(_, k)
-  --   config[k] = config[k] or {}
-  --   return config[k]
-  -- end,
-  -- __newindex = function(_, k, v)
-  --   config[k] = v
-  -- end,
   __index = function(t, k)
     rawset(t, k, {})
     return t[k]
   end,
 })
 
-M.config.merge = require('_config').merge
-M.config.example = require('_config').example
--- M.config.get = require('_config').get
--- M.config.style = require('_config').style
+-- Load the _config module
+local config_module = require('_config')
 
----@generic T: table
----@param snack string
----@param defaults T
----@param ... T[]
----@return T
-function M.config.get(snack, defaults, ...)
-  local merge, todo = {}, { defaults, M.config[snack] or {}, ... }
-  for i = 1, select('#', ...) + 2 do
-    local v = todo[i] --[[@as snacks.Config.base]]
-    if type(v) == 'table' then
-      if v.example then
-        table.insert(merge, vim.deepcopy(M.config.example(snack, v.example)))
-        v.example = nil
-      end
-      table.insert(merge, vim.deepcopy(v))
-    end
-  end
-  local ret = M.config.merge(unpack(merge))
-  if type(ret.config) == 'function' then
-    ret.config(ret, defaults)
-  end
-  return ret
-end
+-- Set the config reference for _config module to use
+config_module.set_config(M.config)
 
---- Register a new window style config.
----@param name string
----@param defaults snacks.win.Config|{}
----@return string
-function M.config.style(name, defaults)
-  M.config.styles[name] =
-    vim.tbl_deep_extend('force', vim.deepcopy(defaults), M.config.styles[name] or {})
-  return name
-end
--- Config End ]]
+-- Attach _config module functions to M.config
+M.config.merge = config_module.merge
+M.config.example = config_module.example
+M.config.get = config_module.get
+M.config.style = config_module.style
 
+-- Define default options for snacks
 ---@type snacks.config
-local opts = {
+local default_opts = {
   bigfile = {},
   dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = false }, -- using `oil` instead
@@ -111,11 +74,18 @@ local opts = {
   words = {},
 }
 
-for k in pairs(opts) do
-  opts[k].enabled = opts[k].enabled == nil or opts[k].enabled
+-- Set enabled flag for all options by default
+for k in pairs(default_opts) do
+  if k ~= 'styles' then
+    default_opts[k].enabled = default_opts[k].enabled == nil or default_opts[k].enabled
+  end
 end
 
-M.config = vim.tbl_deep_extend('force', M.config, opts)
+-- Merge default options into config using _config.merge
+M.config = config_module.merge(M.config, default_opts)
+
+-- Update the config reference in _config module after merge
+config_module.set_config(M.config)
 
 local events = {
   BufReadPre = { 'bigfile', 'image' },
