@@ -7,16 +7,8 @@ vim.env.PACKDIR = vim.g.plug_home
 ---@param field T|fun():T
 ---@return T?
 local get = function(field)
-  if type(field) == 'function' then
-    local ok, res = pcall(field)
-    if ok then
-      return res
-    else
-      vim.schedule(function()
-        vim.notify('Error evaluating field: ' .. tostring(res), vim.log.levels.ERROR)
-      end)
-      return nil
-    end
+  if vim.iscallable(field) then
+    return field()
   end
   return field
 end
