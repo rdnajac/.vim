@@ -1,3 +1,5 @@
+local M = {}
+
 local icons = {
   src = { -- blink sources
     buffer = ' ',
@@ -63,46 +65,29 @@ local icons = {
       dotenv = { glyph = '', hl = 'MiniIconsYellow' },
     },
   },
-  fticon = function(bufnr_or_ft)
-    local ft = type(bufnr_or_ft) == 'string' and bufnr_or_ft or nil
-    if not ft then
-      local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
-      ft = vim.bo[bufnr].filetype
-    end
-    return (MiniIcons and MiniIcons.get('filetype', ft) or ' ') .. ' '
-  end,
 }
 
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
-local ret = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
+M = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
 
--- add an inverted lookup table for kinds
+-- -- add an inverted lookup table for kinds
+-- for name, num in pairs(vim.lsp.protocol.SymbolKind) do
+--   if type(name) == 'string' and ret.kinds[name] then
+--     ret.kinds[num] = ret.kinds[name]
+--   end
+-- end
 
-if ret.kinds then
-  for name, num in pairs(vim.lsp.protocol.SymbolKind) do
-    if type(name) == 'string' and ret.kinds[name] then
-      ret.kinds[num] = ret.kinds[name]
-    end
+local fticon = function(bufnr_or_ft)
+  local ft = type(bufnr_or_ft) == 'string' and bufnr_or_ft or nil
+  if not ft then
+    local bufnr = bufnr_or_ft or vim.api.nvim_get_current_buf()
+    ft = vim.bo[bufnr].filetype
   end
+  return (MiniIcons and MiniIcons.get('filetype', ft) or ' ') .. ' '
 end
 
--- return ret
-return setmetatable(ret, {
-  -- __index = function(_, key)
-  --   if key == 'kinds' then
-  --     -- add an inverted lookup table for kinds on first access
-  --     local kinds = ret.kinds or {}
-  --     for name, num in pairs(vim.lsp.protocol.symbolkind) do
-  --       if type(name) == 'string' and kinds[name] then
-  --         kinds[num] = kinds[name]
-  --       end
-  --     end
-  --     ret.kinds = kinds
-  --     return kinds
-  --   end
-  --   return ret[key]
-  -- end,
+return setmetatable(M, {
   __call = function(_, key)
-    return ret.fticon(key)
+    return fticon(key)
   end,
 })
