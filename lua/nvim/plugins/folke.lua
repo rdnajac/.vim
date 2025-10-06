@@ -101,14 +101,9 @@ return {
       -- highlight = { keyword = 'bg', },
       colors = { title = { '#7DCFFF' } },
     },
-    -- stylua: ignore
     keys = {
-      -- TODO: check against vim-unimpaired
-      -- { "]t", function() require("todo-comments").jump_next() end, desc = "Next Todo Comment" },
-      -- { "[t", function() require("todo-comments").jump_prev() end, desc = "Previous Todo Comment" },
+      -- stylua: ignore
       { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
-      -- TODO: use snacks picker instead
-      -- { '<leader>sT', '<cmd>TodoTelescope keywords=TODO,FIXME<CR>', desc = 'Todo/Fixme' },
     },
     after = function()
       for _, cmd in ipairs({ 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }) do

@@ -1,8 +1,7 @@
 local M = {}
 
 -- _G.nv = require('nvim.util')
-M.speclist = {}
-
+M._specs = {}
 M._after = {} ---@type table<string, fun():nil>
 M._keys = {} ---@type table<string, table>
 M._commands = {} ---@type table<string, fun():nil>
@@ -65,25 +64,16 @@ function Plugin.new(plugin)
     self.name = ''
   end
 
+  if nv.is_nonempty_list(self.specs) then
+    -- PERF: redundant to_spec call for [1]
+    local resolved_specs = vim.tbl_map(to_spec, self.specs)
+    vim.list_extend(M._specs, resolved_specs)
+  end
+
   return setmetatable(self, Plugin)
 end
 
-M.Plug = function(plugin)
-  local P = Plugin.new(plugin)
-  if P:is_enabled() then
-    if nv.is_nonempty_list(P.specs) then
-      local resolved_specs = vim.tbl_map(to_spec, P.specs)
-      vim.list_extend(M.speclist, resolved_specs)
-    end
-    if vim.is_callable(P.after) then
-      M._after[P.name] = P.after
-    end
-    if vim.is_callable(P.commands) then
-      M._commands[P.name] = P.commands
-    end
-  end
-  return P
-end
+M.Plug = Plugin.new
 
 function Plugin:is_enabled()
   return get(self.enabled) ~= false
@@ -91,8 +81,21 @@ end
 
 function Plugin:init()
   if self:is_enabled() then
+    -- TODO: move setup to a lazyloader
     self:setup()
-    self:do_keymaps()
+
+    if vim.is_callable(self.after) then
+      M._after[self.name] = self.after
+    end
+
+    if vim.is_callable(self.commands) then
+      M._commands[self.name] = self.commands
+    end
+
+    local keys = get(self.keys)
+    if nv.is_nonempty_list(keys) then
+      vim.list_extend(M._keys, keys)
+    end
   else
     nv.did.disable[#nv.did.disable + 1] = self.name
   end
@@ -114,16 +117,6 @@ function Plugin:setup()
   end
   if vim.is_callable(setup) then
     nv.did.setup[self.name] = pcall(setup)
-  end
-end
-
-function Plugin:do_keymaps()
-  local keys = get(self.keys)
-  if nv.is_nonempty_list(keys) then
-    nv.lazyload(function()
-      local wk = require('which-key')
-      nv.did.wk[self.name] = pcall(wk.add, keys)
-    end)
   end
 end
 

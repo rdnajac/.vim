@@ -1,7 +1,7 @@
 return {
   {
     'stevearc/aerial.nvim',
-    enabled = true,
+    enabled = false,
     opts = {},
     after = function()
       Snacks.util.on_module('mini.icons', function()
