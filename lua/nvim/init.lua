@@ -2,36 +2,40 @@ _G.nv = require('nvim.util')
 
 nv.plugins = require('nvim.plugins')
 
-local root = 'nvim'
-local dir = nv.stdpath.config .. '/lua/' .. root
-local mods = {}
+local Plug = nv.plugins.Plug
+local plugins = {}
+local dir = nv.stdpath.config .. '/lua/nvim/plugins'
+local files = vim.fn.globpath(dir, '*.lua', false, true)
 
--- top-level .lua files
-for _, f in ipairs(vim.fn.globpath(dir, '*.lua', false, true)) do
-  local name = f:match('([^/]+)%.lua$')
-  if name and name ~= 'init' then
-    mods[name] = true
-  end
-end
-
--- one level of subdirs
-for _, d in ipairs(vim.fn.globpath(dir, '*/', false, true)) do
-  local subname = d:match('([^/]+)/$')
-  if subname then
-    local submods = {}
-    for _, f in ipairs(vim.fn.globpath(d, '*.lua', false, true)) do
-      local child = f:match('([^/]+)%.lua$')
-      if child and child ~= 'init' then
-        submods[child] = true
-      end
-    end
-    if next(submods) then
-      mods[subname] = submods
-    else
-      mods[subname] = true
+for _, path in ipairs(files) do
+  local name = path:match('([^/]+)%.lua$')
+  local ok, mod = pcall(require, 'nvim.plugins.' .. name)
+  if ok and mod then
+    local defs = vim.islist(mod) and mod or { mod }
+    for _, spec in ipairs(defs) do
+      table.insert(plugins, Plug(spec))
     end
   end
 end
 
--- dd(mods)
--- _G.nv = vim._defer_require('nvim', mods)
+vim.pack.add(nv.plugins.speclist)
+
+for _, plugin in ipairs(plugins) do
+  plugin:init()
+end
+
+vim.schedule(function()
+  nv.did.after = {}
+  for name, fn in pairs(nv.plugins._after) do
+    nv.did.after[name] = pcall(fn)
+  end
+end)
+
+nv.lazyload(function()
+  nv.did.commands = {}
+  for name, cmd in pairs(nv.plugins._commands) do
+    nv.did.commands[name] = pcall(cmd)
+  end
+end, 'CmdLineEnter')
+
+return nv

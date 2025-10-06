@@ -1,24 +1,17 @@
-vim.g.plug_home = vim.fs.joinpath(nv.stdpath.data, 'site', 'pack', 'core', 'opt')
-vim.env.PACKDIR = vim.g.plug_home
--- TODO: snacks are available; use the, here
+local M = {}
 
---- Safely get a value or evaluate a function field
+-- _G.nv = require('nvim.util')
+M.speclist = {}
+
+M._after = {} ---@type table<string, fun():nil>
+M._keys = {} ---@type table<string, table>
+M._commands = {} ---@type table<string, fun():nil>
+
 ---@generic T
 ---@param field T|fun():T
 ---@return T?
 local get = function(field)
-  if type(field) == 'function' then
-    local ok, res = pcall(field)
-    if ok then
-      return res
-    else
-      vim.schedule(function()
-        vim.notify('Error evaluating field: ' .. tostring(res), vim.log.levels.ERROR)
-      end)
-      return nil
-    end
-  end
-  return field
+  return vim.is_callable(field) and field() or field
 end
 
 ---- @param user_repo string plugin (`user/repo`)
@@ -46,7 +39,7 @@ local to_spec = function(user_repo, data)
 end
 
 --- @class Plugin
---- @field [1]? string
+--- @field [1]?
 --- @field after? fun():nil
 --- @field build? string|fun():nil
 --- @field commands? fun():nil
@@ -68,9 +61,28 @@ function Plugin.new(plugin)
   if topspec then
     self.name = topspec.name
     self.specs = vim.list_extend(self.specs or {}, { topspec })
+  else
+    self.name = ''
   end
 
   return setmetatable(self, Plugin)
+end
+
+M.Plug = function(plugin)
+  local P = Plugin.new(plugin)
+  if P:is_enabled() then
+    if nv.is_nonempty_list(P.specs) then
+      local resolved_specs = vim.tbl_map(to_spec, P.specs)
+      vim.list_extend(M.speclist, resolved_specs)
+    end
+    if vim.is_callable(P.after) then
+      M._after[P.name] = P.after
+    end
+    if vim.is_callable(P.commands) then
+      M._commands[P.name] = P.commands
+    end
+  end
+  return P
 end
 
 function Plugin:is_enabled()
@@ -79,21 +91,10 @@ end
 
 function Plugin:init()
   if self:is_enabled() then
-    self:add()
     self:setup()
-    self:do_after()
-    -- self:do_build()
-    self:do_commands()
     self:do_keymaps()
   else
     nv.did.disable[#nv.did.disable + 1] = self.name
-  end
-end
-
-function Plugin:add()
-  if nv.is_nonempty_list(self.specs) then
-    local resolved_specs = vim.tbl_map(to_spec, self.specs)
-    vim.pack.add(resolved_specs)
   end
 end
 ---
@@ -116,70 +117,6 @@ function Plugin:setup()
   end
 end
 
-function Plugin:do_after()
-  nv.lazyload(function()
-    if vim.is_callable(self.after) then
-      nv.did.after[self.name] = pcall(self.after)
-    end
-  end)
-end
-
-function Plugin:do_build()
-  if not self.build then
-    return
-  end
-
-  local function notify_build(ok, err)
-    local msg = string.format(
-      'Build %s for %s%s',
-      ok and 'succeeded' or 'failed',
-      self.name,
-      err and (': ' .. err) or ''
-    )
-    Snacks.notify(msg, ok and 'info' or 'error')
-  end
-
-  vim.api.nvim_create_autocmd('PackChanged', {
-    callback = function(event)
-      if event.data.kind ~= 'update' then
-        return
-      end
-
-      if vim.is_callable(self.build) then
-        local ok, result = pcall(self.build)
-        notify_build(ok, not ok and result or nil)
-      elseif nv.is_nonempty_string(self.build) then
-        local build_str = self.build
-
-        -- Ex command (e.g. ":Make", "<Cmd>make<CR>")
-        if build_str:match('^:') or build_str:match('^<Cmd>') then
-          build_str = build_str:gsub('^:', '')
-          build_str = build_str:gsub('^<Cmd>', '')
-          build_str = build_str:gsub('<CR>$', '')
-          local ok, err = pcall(vim.cmd, build_str)
-          notify_build(ok, not ok and err or nil)
-        else
-          -- Normalize leading "!" for shell commands
-          build_str = build_str:gsub('^!', '')
-          local cmd = string.format('cd %s && %s', vim.fn.shellescape(data.spec.dir), build_str)
-          local output = vim.fn.system(cmd)
-          notify_build(vim.v.shell_error == 0, vim.v.shell_error ~= 0 and output or nil)
-        end
-      else
-        notify_build(false, 'Invalid build type: ' .. type(self.build))
-      end
-    end,
-  })
-end
-
-function Plugin:do_commands()
-  if vim.is_callable(self.commands) then
-    nv.lazyload(function()
-      nv.did.commands[self.name] = pcall(self.commands)
-    end, 'CmdLineEnter')
-  end
-end
-
 function Plugin:do_keymaps()
   local keys = get(self.keys)
   if nv.is_nonempty_list(keys) then
@@ -190,41 +127,24 @@ function Plugin:do_keymaps()
   end
 end
 
-local dir = nv.stdpath.config .. '/lua/nvim/plugins'
-local files = vim.fn.globpath(dir, '*.lua', false, true)
-
-local M = vim
-  .iter(files)
-  :map(function(path)
-    return path:match('^.+/(.+)%.lua$')
-  end)
-  :filter(function(name)
-    return name ~= 'init'
-  end)
-  :map(function(name)
-    local t = require('nvim.plugins.' .. name)
-    return vim.islist(t) and t or { t }
-  end)
-  :flatten()
-  :map(function(spec)
-    local P = Plugin.new(spec)
-    P:init()
-    return P
-  end)
-  :totable()
-
 M.unloaded = function()
-  return vim
-    .iter(vim.pack.get())
-    --- @param p vim.pack.PlugData
-    :filter(function(p)
-      return p.active == false
-    end)
-    --- @param p vim.pack.PlugData
-    :map(function(p)
-      return p.spec.name
-    end)
-    :totable()
+  local names = {}
+  for _, p in ipairs(vim.pack.get()) do
+    if not p.active then
+      names[#names + 1] = p.spec.name
+    end
+  end
+  return names
+end
+
+M.keys = require('nvim.config.keymaps')
+M.commands = require('nvim.config.commands')
+M.after = function()
+  vim.schedule(function()
+    require('nvim.config.autocmds')
+    require('nvim.config.diagnostic')
+    require('nvim.config.sourcecode').setup()
+  end)
 end
 
 return M

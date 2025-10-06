@@ -248,6 +248,9 @@ if has ('nvim')
   nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
   nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
   nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
+  nnoremap <leader>dD <Cmd>=nv.did<CR>
+  " nnoremap <leader>dD <Cmd>=nv.did<CR>
+  nnoremap <leader>dP <Cmd>=vim.tbl_keys(package.loaded)<CR>
 endif
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>

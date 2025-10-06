@@ -13,7 +13,7 @@ M.diagnostic = function()
     :map(function(severity, count)
       return string.format('%%#%s#%s:%d', signs.numhl[severity], signs.text[severity], count)
     end)
-    :join('') 
+    :join('')
 end
 
 for name in ('blink lsp treesitter sidekick'):gmatch('%S+') do

@@ -167,10 +167,10 @@ vim.api.nvim_create_autocmd('BufReadCmd', {
 
 -- vim.o.statuscolumn = [[%!v:lua.require'snacks.statuscolumn'.get()]]
 
-vim.notify = function(msg, level, o)
-  vim.notify = Snacks.notifier.notify
-  return Snacks.notifier.notify(msg, level, o)
-end
+-- vim.notify = function(msg, level, o)
+--   vim.notify = Snacks.notifier.notify
+--   return Snacks.notifier.notify(msg, level, o)
+-- end
 
 M.did_setup = true
 M.did_setup_after_vim_enter = false

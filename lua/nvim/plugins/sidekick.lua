@@ -37,21 +37,8 @@ return {
     { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
     { '<C-.>',      function() require('sidekick.cli').focus() end,    mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Switch Focus' },
   },
-
-  status =
-    -- {
-    function()
+  status = function()
       local status = require('sidekick.status').get()
-      -- return status and vim.tbl_get(nv.icons.copilot, status.kind, 1)
       return status and nv.icons.copilot[status.kind][1] or nv.icons.copilot.Inactive[1]
     end,
-  --   cond = function()
-  --     return require('sidekick.status').get() ~= nil
-  --   end,
-  --   color = function()
-  --     local status = require('sidekick.status').get()
-  --     local hl = status and (status.busy and 'DiagnosticWarn' or vim.tbl_get(icons, status.kind, 2))
-  --     return { fg = Snacks.util.color(hl) }
-  --   end,
-  -- },
 }

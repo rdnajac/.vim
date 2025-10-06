@@ -4,12 +4,13 @@
       "rev": "5e687b5",
       "src": "https://github.com/stevearc/aerial.nvim.git"
     },
+    "aerial.nvi": [],
     "blink-cmp-env": {
       "rev": "99af62c",
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "a999ddc",
+      "rev": "d918ebd",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -24,6 +25,8 @@
       "rev": "3b03cba",
       "src": "https://github.com/R-nvim/cmp-r.git"
     },
+    "cmp-r.git": [],
+    "conform": [],
     "dial": {
       "rev": "f0404ec",
       "src": "https://github.com/monaqa/dial.nvim.git"
@@ -31,6 +34,10 @@
     "dsf.vim": {
       "rev": "b88e64d",
       "src": "http://github.com/AndrewRadev/dsf.vim.git"
+    },
+    "flash": {
+      "rev": "b68bda0",
+      "src": "https://github.com/folke/flash.nvim.git"
     },
     "golf": {
       "rev": "abf1bc0",
@@ -44,43 +51,58 @@
       "rev": "ad7146a",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
+    "mason.nvi": [],
     "mini": {
-      "rev": "79654ef",
+      "rev": "9a2798a",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
+    "mini.nvi": [],
     "neovim-tips": {
-      "rev": "d69e3ec",
+      "rev": "6c2d8e3",
       "src": "http://github.com/saxon1964/neovim-tips.git"
+    },
+    "noice": {
+      "rev": "0427460",
+      "src": "https://github.com/folke/noice.nvim.git"
     },
     "nvim-lspconfig": {
       "rev": "e688b48",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
+    "nvim-lspconfig.git": [],
     "nvim-navic": {
       "rev": "f887d79",
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
+    "nvim-navic.git": [],
     "nvim-treesitter": {
-      "rev": "01ced749",
+      "rev": "0594d1ba",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
+      "version": "'main'"
+    },
+    "nvim-treesitter.git": {
       "version": "'main'"
     },
     "oil": {
       "rev": "919e155",
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
+    "oil.nvi": [],
     "r": {
       "rev": "43a8c4f",
       "src": "https://github.com/R-nvim/r.nvim.git"
     },
+    "r.nvi": [],
     "render-markdown": {
       "rev": "7e6af36",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
+    "render-markdown.nvi": [],
     "sidekick": {
       "rev": "e869205",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
+    "sidekick.nvi": [],
     "snacks.nvim": {
       "rev": "bfe8c26",
       "src": "http://github.com/folke/snacks.nvim.git"
@@ -96,6 +118,15 @@
     "tokyonight": {
       "rev": "4d15961",
       "src": "https://github.com/folke/tokyonight.nvim.git"
+    },
+    "tokyonight.nvi": [],
+    "trouble": {
+      "rev": "f176232",
+      "src": "https://github.com/folke/trouble.nvim.git"
+    },
+    "ts-comments": {
+      "rev": "1bd9d0b",
+      "src": "https://github.com/folke/ts-comments.nvim.git"
     },
     "vim-dispatch": {
       "rev": "a2ff28a",
@@ -132,6 +163,7 @@
     "which-key": {
       "rev": "904308e",
       "src": "https://github.com/folke/which-key.nvim.git"
-    }
+    },
+    "which-key.nvi": []
   }
 }
