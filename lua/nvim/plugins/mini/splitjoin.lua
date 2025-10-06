@@ -1,7 +1,3 @@
-if 1 then
-  return
-end
-
 require('mini.splitjoin').setup({
   mappings = {
     toggle = 'gS',
