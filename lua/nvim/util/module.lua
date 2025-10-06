@@ -1,5 +1,13 @@
 local M = {}
 
+--- Extract module name from file path
+--- Converts a file path like '/path/to/lua/foo/bar.lua' to 'foo.bar'
+--- @param filepath string
+--- @return string|nil
+function M.modname(filepath)
+  return vim.fn.fnamemodify(filepath, ':r:s?^.*/lua/??')
+end
+
 function M.info(module)
   module = module:gsub('%.', '/')
   local root = vim.fs.root(vim.api.nvim_buf_get_name(0), 'lua') or vim.fn.getcwd()
@@ -50,6 +58,28 @@ M.for_each_module = function(fn, subpath, recursive)
       fn(mod)
     end
   end
+end
+
+--- Load all modules from a directory, returning successfully loaded modules
+--- @param module_dir string Directory path containing Lua modules
+--- @param module_prefix string Module name prefix (e.g., 'nvim.plugins')
+--- @return table<string, any> modules Map of module names to loaded modules
+M.load_modules = function(module_dir, module_prefix)
+  local modules = {}
+  local lua_files = vim.fn.globpath(module_dir, '*.lua', false, true)
+  
+  for _, filepath in ipairs(lua_files) do
+    local filename = filepath:match('([^/]+)%.lua$')
+    if filename and filename ~= 'init' then
+      local module_name = module_prefix .. '.' .. filename
+      local ok, module_result = pcall(require, module_name)
+      if ok and module_result then
+        modules[filename] = module_result
+      end
+    end
+  end
+  
+  return modules
 end
 
 return M

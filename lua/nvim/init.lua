@@ -2,36 +2,32 @@ _G.nv = require('nvim.util')
 
 nv.plugins = require('nvim.plugins')
 
-local Plug = nv.plugins.Plug
-local plugins = {}
-local dir = nv.stdpath.config .. '/lua/nvim/plugins'
-local files = vim.fn.globpath(dir, '*.lua', false, true)
+local plugin_system = nv.plugins
+local plugin_specs = {}
+local plugins_dir = nv.stdpath.config .. '/lua/nvim/plugins'
+local loaded_plugin_modules = nv.module.load_modules(plugins_dir, 'nvim.plugins')
 
-for _, path in ipairs(files) do
-  local name = path:match('([^/]+)%.lua$')
-  local ok, mod = pcall(require, 'nvim.plugins.' .. name)
-  if ok and mod then
-    for _, spec in ipairs(vim.islist(mod) and mod or { mod }) do
-      table.insert(plugins, Plug(spec))
-      -- Plug(spec)
-    end
+for _, plugin_module in pairs(loaded_plugin_modules) do
+  local specs_list = vim.islist(plugin_module) and plugin_module or { plugin_module }
+  for _, plugin_spec in ipairs(specs_list) do
+    table.insert(plugin_specs, plugin_system.Plug(plugin_spec))
   end
 end
 
-vim.pack.add(nv.plugins._specs)
+vim.pack.add(plugin_system._specs)
 
-for _, plugin in ipairs(plugins) do
-  plugin:init() -- calls setup
+for _, plugin_instance in ipairs(plugin_specs) do
+  plugin_instance:init()
 end
 
 vim.schedule(function()
-  require('which-key').add(nv.plugins._keys)
-  for name, fn in pairs(nv.plugins._after) do
-    nv.did.after[name] = pcall(fn)
+  require('which-key').add(plugin_system._keys)
+  for plugin_name, after_fn in pairs(plugin_system._after) do
+    nv.did.after[plugin_name] = pcall(after_fn)
   end
   nv.lazyload(function()
-    for name, cmd in pairs(nv.plugins._commands) do
-      nv.did.commands[name] = pcall(cmd)
+    for plugin_name, command_fn in pairs(plugin_system._commands) do
+      nv.did.commands[plugin_name] = pcall(command_fn)
     end
   end, 'CmdLineEnter')
 end)
