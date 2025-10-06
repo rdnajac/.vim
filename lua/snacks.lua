@@ -22,64 +22,6 @@ local M = setmetatable({}, {
 })
 _G.Snacks = M
 
--- local config = { styles = {} }
-
----@class snacks.config: snacks.Config
--- M.config = setmetatable({}, {
-M.config = setmetatable({ styles = {} }, {
-  -- __index = function(_, k)
-  --   config[k] = config[k] or {}
-  --   return config[k]
-  -- end,
-  -- __newindex = function(_, k, v)
-  --   config[k] = v
-  -- end,
-  __index = function(t, k)
-    rawset(t, k, {})
-    return t[k]
-  end,
-})
-
-M.config.merge = require('_config').merge
-M.config.example = require('_config').example
--- M.config.get = require('_config').get
--- M.config.style = require('_config').style
-
----@generic T: table
----@param snack string
----@param defaults T
----@param ... T[]
----@return T
-function M.config.get(snack, defaults, ...)
-  local merge, todo = {}, { defaults, M.config[snack] or {}, ... }
-  for i = 1, select('#', ...) + 2 do
-    local v = todo[i] --[[@as snacks.Config.base]]
-    if type(v) == 'table' then
-      if v.example then
-        table.insert(merge, vim.deepcopy(M.config.example(snack, v.example)))
-        v.example = nil
-      end
-      table.insert(merge, vim.deepcopy(v))
-    end
-  end
-  local ret = M.config.merge(unpack(merge))
-  if type(ret.config) == 'function' then
-    ret.config(ret, defaults)
-  end
-  return ret
-end
-
---- Register a new window style config.
----@param name string
----@param defaults snacks.win.Config|{}
----@return string
-function M.config.style(name, defaults)
-  M.config.styles[name] =
-    vim.tbl_deep_extend('force', vim.deepcopy(defaults), M.config.styles[name] or {})
-  return name
-end
--- Config End ]]
-
 ---@type snacks.config
 local opts = {
   bigfile = {},
@@ -90,13 +32,13 @@ local opts = {
   indent = { indent = { only_current = true, only_scope = true } },
   input = {},
   notifier = require('nvim.snacks.notifier'),
-  picker = require('nvim.snacks.picker'),
   quickfile = {},
   scratch = { template = 'local x = \n\nprint(x)' },
-  terminal = { start_insert = false, auto_insert = true, auto_close = true },
+  terminal = {},
   scope = {},
   scroll = {},
   -- statuscolumn = { enabled = false },
+  picker = require('nvim.snacks.picker'),
   styles = {
     dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
     lazygit = { height = 0, width = 0 },
@@ -115,7 +57,28 @@ for k in pairs(opts) do
   opts[k].enabled = opts[k].enabled == nil or opts[k].enabled
 end
 
-M.config = vim.tbl_deep_extend('force', M.config, opts)
+---@class snacks.config: snacks.Config
+M.config = setmetatable(opts, {
+  __index = function(t, k)
+    rawset(t, k, {})
+    return t[k]
+  end,
+})
+
+M.config.merge = require('_config').merge
+M.config.example = require('_config').example
+M.config.get = require('_config').get
+-- M.config.style = require('_config').style
+
+--- Register a new window style config.
+---@param name string
+---@param defaults snacks.win.Config|{}
+---@return string
+function M.config.style(name, defaults)
+  M.config.styles[name] =
+    vim.tbl_deep_extend('force', vim.deepcopy(defaults), M.config.styles[name] or {})
+  return name
+end
 
 local events = {
   BufReadPre = { 'bigfile', 'image' },

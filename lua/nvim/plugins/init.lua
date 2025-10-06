@@ -140,11 +140,8 @@ end
 M.keys = require('nvim.config.keymaps')
 M.commands = require('nvim.config.commands')
 M.after = function()
-  vim.schedule(function()
-    require('nvim.config.autocmds')
-    require('nvim.config.diagnostic')
-    require('nvim.config.sourcecode').setup()
-  end)
+  require('nvim.config.diagnostic')
+  require('nvim.config.sourcecode').setup()
 end
 
 return M

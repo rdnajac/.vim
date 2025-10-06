@@ -47,8 +47,8 @@ end
 ---@param defaults T
 ---@param ... T[]
 ---@return T
-function M.get(self, snack, defaults, ...)
-  local merge, todo = {}, { defaults, config[snack] or {}, ... }
+function M.get(snack, defaults, ...)
+  local merge, todo = {}, { defaults, M[snack] or {}, ... }
   for i = 1, select('#', ...) + 2 do
     local v = todo[i] --[[@as snacks.Config.base]]
     if type(v) == 'table' then
@@ -65,13 +65,14 @@ function M.get(self, snack, defaults, ...)
   end
   return ret
 end
+
 --- Register a new window style config.
 ---@param name string
 ---@param defaults snacks.win.Config|{}
 ---@return string
 function M.style(name, defaults)
-  config.styles[name] =
-    vim.tbl_deep_extend('force', vim.deepcopy(defaults), config.styles[name] or {})
+  M.styles[name] =
+    vim.tbl_deep_extend('force', vim.deepcopy(defaults), M.styles[name] or {})
   return name
 end
 
