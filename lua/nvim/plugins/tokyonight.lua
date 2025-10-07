@@ -60,113 +60,104 @@ M.after = function()
   vim.cmd.colorscheme('tokyonight')
 end
 
--- FIXME: this function is cached on the first require and
--- doesn't see changes to M.colors or M.groups
-function M.generate_vim_scheme()
-  M.colors, M.groups, _ = require('tokyonight').load()
-  local colors = M.colors
-  local groups = M.groups
+---@param opts? tokyonight.Config
+---@return string
+function M.generate_vim_scheme(opts)
+  local colors, groups = require('tokyonight').load(opts)
+
   local lines = {
-    [[
-      hi clear
-      let g:colors_name = 'tokyonight'
-    ]],
-    -- :format(colors._style),
+    'hi clear',
+    "let g:colors_name = 'tokyonight'",
   }
-  local names = vim.tbl_filter(function(group)
-    -- filter out treesitter/semantic token highlights
-    return group:sub(1, 1) ~= '@'
-  end, vim.tbl_keys(groups))
+
+  local mapping = { fg = 'guifg', bg = 'guibg', sp = 'guisp' }
+  local attrs = {
+    'bold',
+    'underline',
+    'undercurl',
+    'italic',
+    'strikethrough',
+    'underdouble',
+    'underdotted',
+    'underdashed',
+    'inverse',
+    'standout',
+    'nocombine',
+    'altfont',
+  }
+
+  local names = vim
+    .iter(vim.tbl_keys(groups))
+    :filter(function(n)
+      return n:sub(1, 1) ~= '@' -- skip Treesitter/semantic tokens
+    end)
+    :totable()
 
   table.sort(names)
 
-  local used = {}
-  for _, name in ipairs(names) do
+  -- build highlight definitions
+  vim.iter(names):each(function(name)
     local hl = groups[name]
     if type(hl) == 'string' then
       hl = { link = hl }
     end
-
-    if not hl.link then
-      local props = {}
-      local mapping = {
-        fg = 'guifg',
-        bg = 'guibg',
-        sp = 'guisp',
-      }
-
-      -- fg/bg/sp
-      for k, v in pairs(hl) do
-        if mapping[k] then
-          props[#props + 1] = ('%s=%s'):format(mapping[k], v)
-        end
-      end
-      -- TODO: try this
-      -- local props = vim.tbl_map(function(k)
-      --   return ('%s=%s'):format(mapping[k], hl[k])
-      -- end,
-      -- vim.tbl_filter(function(k) return mapping[k] ~= nil end, vim.tbl_keys(hl)))
-      --
-
-      -- TODO: or this!
-      -- local props = vim
-      --   .iter(hl)
-      --   :filter(function(k, _v)
-      --     return mapping[k] ~= nil
-      --   end)
-      --   :map(function(k, v)
-      --     return ('%s=%s'):format(mapping[k], v)
-      --   end)
-      --   :totable()
-
-      local gui = {}
-      for _, attr in ipairs({
-        'bold',
-        'underline',
-        'undercurl',
-        'italic',
-        'strikethrough',
-        'underdouble',
-        'underdotted',
-        'underdashed',
-        'inverse',
-        'standout',
-        'nocombine',
-        'altfont',
-      }) do
-        if hl[attr] then
-          gui[#gui + 1] = attr
-        end
-      end
-      if #gui > 0 then
-        props[#props + 1] = ('gui=%s'):format(table.concat(gui, ','))
-      end
-
-      if #props > 0 then
-        if not hl.bg then
-          props[#props + 1] = 'guibg=NONE'
-        end
-        table.sort(props)
-        used[name] = true
-        lines[#lines + 1] = ('hi %s %s'):format(name, table.concat(props, ' '))
-      else
-        print('tokyonight: invalid highlight group: ' .. name)
-      end
-    end
-  end
-
-  for _, name in ipairs(names) do
-    local hl = groups[name]
-    if type(hl) == 'string' then
-      hl = { link = hl }
-    end
-
     if hl.link then
-      if hl.link:sub(1, 1) ~= '@' and groups[hl.link] and used[hl.link] then
-        lines[#lines + 1] = ('hi! link %s %s'):format(name, hl.link)
-      end
+      return
     end
-  end
+
+    local props = vim
+      .iter(hl)
+      :filter(function(k, _)
+        return mapping[k] ~= nil
+      end)
+      :map(function(k, v)
+        return ('%s=%s'):format(mapping[k], v)
+      end)
+      :totable()
+
+    local gui = vim
+      .iter(attrs)
+      :filter(function(a)
+        return hl[a] ~= nil
+      end)
+      :totable()
+
+    if #gui > 0 then
+      props[#props + 1] = ('gui=%s'):format(table.concat(gui, ','))
+    end
+
+    if not hl.bg then
+      props[#props + 1] = 'guibg=NONE'
+    end
+
+    if #props > 0 then
+      table.sort(props)
+      lines[#lines + 1] = ('hi %s %s'):format(name, table.concat(props, ' '))
+    else
+      vim.schedule(function()
+        vim.notify(('tokyonight: invalid highlight group: %s'):format(name), vim.log.levels.WARN)
+      end)
+    end
+  end)
+
+  -- build link lines and deduplicate
+  local links = vim
+    .iter(names)
+    :map(function(name)
+      local hl = groups[name]
+      if type(hl) == 'string' then
+        hl = { link = hl }
+      end
+      if hl.link and hl.link:sub(1, 1) ~= '@' and groups[hl.link] then
+        return ('hi! link %s %s'):format(name, hl.link)
+      end
+    end)
+    :filter(function(x)
+      return x ~= nil
+    end)
+    :totable()
+
+  vim.list_extend(lines, vim.list.unique(links))
 
   return table.concat(lines, '\n')
 end
