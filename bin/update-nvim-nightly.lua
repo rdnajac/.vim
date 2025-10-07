@@ -1,59 +1,115 @@
 #!/usr/bin/env -S nvim -l
 
-local URL = 'https://github.com/neovim/neovim/releases/download/nightly/nvim-macos-arm64.tar.gz'
-local TARPATH = vim.fs.joinpath(vim.fn.stdpath('run'), URL:match('([^/]+)$'))
+local NIGHTLY_API = 'https://api.github.com/repos/neovim/neovim/releases/tags/nightly'
+local ASSET = 'nvim-macos-arm64.tar.gz'
+local TAR_BASE = 'https://github.com/neovim/neovim/releases/download/'
 local DATA_HOME = vim.env.XDG_DATA_HOME or vim.fs.joinpath(vim.env.HOME, '.local', 'share')
 local INSTALL_DIR = vim.fs.joinpath(DATA_HOME, 'nvim')
 local LOCALBIN = vim.fs.joinpath(vim.env.HOME, '.local', 'bin')
+local TARPATH = vim.fs.joinpath(vim.fn.stdpath('run'), ASSET)
 
 vim.fn.mkdir(INSTALL_DIR, 'p')
 vim.fn.mkdir(LOCALBIN, 'p')
 
-local res = vim.api.nvim_exec2('version', { output = true }).output or ''
-local old_version = res:match('^NVIM v([^\n]+)') or 'unknown'
-print('👾 Upgrading Neovim from ' .. old_version .. ' to nightly...')
+-- helpers --------------------------------------------------------------------
 
-local wget = require('nvim.util.wget')
-
-wget(URL, {
-  outpath = TARPATH,
-  create_dirs = true,
-  force = true,
-})
-
-local function run(cmd)
-  print('→ Running: ' .. table.concat(cmd, ' '))
-  local result = vim.system(cmd, { text = true }):wait()
-  if result.code ~= 0 then
-    io.stderr:write('✗ Failed: ' .. table.concat(cmd, ' ') .. '\n')
-    if result.stderr and result.stderr ~= '' then
-      io.stderr:write(result.stderr .. '\n')
-      -- print(result.stderr .. '\n')
-    end
-    error('Aborted.')
-  end
-  if result.stdout and result.stdout ~= '' then
-    print(result.stdout)
-  end
-  print('✓ OK: ' .. table.concat(cmd, ' '))
-  return result
+local function die(msg)
+  print('✗ ' .. msg)
+  vim.cmd('cquit 1')
 end
 
-run({ 'xattr', '-c', TARPATH })
-run({ 'rm', '-rf', INSTALL_DIR .. '/bin' })
-run({ 'rm', '-rf', INSTALL_DIR .. '/lib' })
-run({ 'rm', '-rf', INSTALL_DIR .. '/share' })
-run({
-  'tar',
-  '-xzf',
-  TARPATH,
-  '-C',
-  INSTALL_DIR,
-  '--strip-components=1',
-})
-run({ 'ln', '-sfv', INSTALL_DIR .. '/bin/nvim', LOCALBIN .. '/nvim' })
-run({ 'rm', '-fv', TARPATH })
+local function _run(cmd, die_on_fail, die_msg, stdin)
+  local rv = vim.system(cmd, { stdin = stdin, text = true }):wait()
+  if rv.code ~= 0 then
+    if rv.stdout and #rv.stdout > 0 then
+      print(rv.stdout)
+    end
+    if rv.stderr and #rv.stderr > 0 then
+      print(rv.stderr)
+    end
+    if die_on_fail then
+      die(die_msg)
+    end
+    return nil
+  end
+  return rv.stdout
+end
 
-local result = run({ LOCALBIN .. '/nvim', '--version' })
-local new_version = result.stdout:match('^NVIM v([^\n]+)') or 'unknown'
-print('✅ Neovim upgraded from ' .. old_version .. ' to ' .. new_version)
+local function run(cmd, msg, stdin)
+  return assert(_run(cmd, true, msg, stdin))
+end
+
+-- main -----------------------------------------------------------------------
+
+do
+  -- current version + hash
+  local res = vim.api.nvim_exec2('version', { output = true }).output or ''
+  local old_version = res:match('^NVIM v([^\n]+)') or 'unknown'
+  local old_hash = res:match('(%+g[%w]+)') or ''
+
+  print(('→ Local version: %s (%s)'):format(old_version, old_hash))
+
+  -- query GitHub nightly metadata
+  print('→ Querying GitHub nightly metadata...')
+  local done, err, nightly
+  vim.net.request(NIGHTLY_API, {}, function(e, r)
+    err = e
+    if not e and r and r.body then
+      nightly = vim.json.decode(r.body)
+    end
+    done = true
+  end)
+  while not done do
+    vim.wait(100)
+  end
+  if err or not nightly then
+    die('Failed to fetch GitHub nightly metadata: ' .. tostring(err))
+  end
+
+  local tag = nightly.tag_name or 'nightly'
+  local commit = nightly.target_commitish or ''
+  local published = nightly.published_at or '?'
+  local url = TAR_BASE .. tag .. '/' .. ASSET
+
+  print(('→ Remote: %s (%s)'):format(tag, commit))
+
+  -- skip if hashes match (same commit)
+  if old_hash ~= '' and commit ~= '' and old_hash:find(commit:sub(1, 8), 1, true) then
+    print(('Already up-to-date: %s (%s)'):format(old_version, commit))
+    os.exit(0)
+  end
+
+  print(('👾 Upgrading Neovim from %s → %s (%s)'):format(old_version, tag, published))
+
+  -- download nightly tarball
+  print('→ Downloading: ' .. url)
+  local d_done, d_err
+  vim.net.request(url, { outpath = TARPATH }, function(e, _)
+    d_err = e
+    d_done = true
+  end)
+  while not d_done do
+    vim.wait(100)
+  end
+  if d_err then
+    die('Download failed: ' .. tostring(d_err))
+  end
+  if vim.fn.filereadable(TARPATH) ~= 1 or vim.fn.getfsize(TARPATH) <= 0 then
+    die('Downloaded file incomplete')
+  end
+  print('✓ Downloaded: ' .. TARPATH)
+
+  -- extract + install
+  run({ 'xattr', '-c', TARPATH }, 'Failed to clear attrs')
+  for _, sub in ipairs({ 'bin', 'lib', 'share' }) do
+    run({ 'rm', '-rf', vim.fs.joinpath(INSTALL_DIR, sub) }, 'Failed to clean ' .. sub)
+  end
+  run({ 'tar', '-xzf', TARPATH, '-C', INSTALL_DIR, '--strip-components=1' }, 'Extraction failed')
+  run({ 'ln', '-sfv', INSTALL_DIR .. '/bin/nvim', LOCALBIN .. '/nvim' }, 'Symlink failed')
+  run({ 'rm', '-f', TARPATH }, 'Cleanup failed')
+
+  -- verify
+  local out = run({ LOCALBIN .. '/nvim', '--version' }, 'Verification failed')
+  local new_version = out:match('^NVIM v([^\n]+)') or 'unknown'
+  print(('✅ Neovim upgraded from %s → %s'):format(old_version, new_version))
+end
