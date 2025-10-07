@@ -1,4 +1,4 @@
--- FIXME: 
+-- FIXME:
 --- @type TSNode[]
 local nodes = {}
 local skip = false

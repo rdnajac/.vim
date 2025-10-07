@@ -13,7 +13,6 @@ local get = function(field)
   return vim.is_callable(field) and field() or field
 end
 
-
 -- TODO: use data for the plugin class
 
 --- @param user_repo string plugin (`user/repo`)
@@ -123,7 +122,6 @@ function Plugin:setup()
     nv.did.setup[self.name] = pcall(setup)
   end
 end
-
 
 M.keys = require('nvim.config.keymaps')
 M.commands = require('nvim.config.commands')

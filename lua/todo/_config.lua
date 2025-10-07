@@ -71,8 +71,7 @@ end
 ---@param defaults snacks.win.Config|{}
 ---@return string
 function M.style(name, defaults)
-  M.styles[name] =
-    vim.tbl_deep_extend('force', vim.deepcopy(defaults), M.styles[name] or {})
+  M.styles[name] = vim.tbl_deep_extend('force', vim.deepcopy(defaults), M.styles[name] or {})
   return name
 end
 

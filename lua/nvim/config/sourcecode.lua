@@ -1,7 +1,6 @@
 -- highlights `src` in backticks ( ` )
 local ns = vim.api.nvim_create_namespace('src')
 
-
 local in_comment = function(lnum, s_col)
   if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] then
     return nv.treesitter.is_comment({ lnum, s_col })

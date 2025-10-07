@@ -22,7 +22,9 @@ local M = {
       autostart({ 'markdown', 'python' })
       autostart({ 'sh', 'zsh' }, 'bash')
 
-      vim.keymap.set('n', '<C-Space>', function() require('nvim.util.treesitter.selection').start() end, { desc = 'TS Select Node', silent = true })
+      vim.keymap.set('n', '<C-Space>', function()
+        require('nvim.util.treesitter.selection').start()
+      end, { desc = 'TS Select Node', silent = true })
 
       vim.keymap.set('x', '<C-Space>', function()
         require('nvim.util.treesitter.selection').increment()

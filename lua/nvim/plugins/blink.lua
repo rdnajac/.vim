@@ -1,6 +1,5 @@
 local M = { 'Saghen/blink.cmp' }
 
-
 -- M.build = 'cargo build --release'
 -- M.build = ':BlinkCmp build'
 -- TODO:
@@ -89,7 +88,6 @@ M.opts = {
     ---@return blink.cmp.SourceList[]
     default = function()
       if nv.treesitter.is_comment() then
-
         return { 'buffer' }
       end
       ---@type table<string, blink.cmp.SourceProviderConfig>

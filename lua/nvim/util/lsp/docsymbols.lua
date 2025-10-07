@@ -109,7 +109,6 @@ M.attach = function(client, bufnr)
   lib.request_symbol(bufnr, lsp_callback, client)
 end
 
-
 return setmetatable(M, {
-  __call = M.get
+  __call = M.get,
 })
