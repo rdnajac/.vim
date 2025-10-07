@@ -1,29 +1,33 @@
 local M = {}
 
-setmetatable(M, {
-  __index = function(t, k)
-    t[k] = require('nvim.util.' .. k)
-    -- return rawget(t, k)
-    return t[k]
-  end,
-})
-
 -- keep track of stuff
 M.did = vim.defaulttable()
 
 -- cache these to avoid multiple function calls
 M.stdpath = {}
+M.abspath = {}
+
 for d in string.gmatch('cache config data state', '%S+') do
-  M.stdpath[d] = vim.fn.stdpath(d)
+  local stdpath = vim.fn.stdpath(d) ---@cast stdpath string
+  M.stdpath[d] = stdpath
+
+  local real = vim.loop.fs_realpath(stdpath) or stdpath
+  M.abspath[d] = vim.fs.normalize(real)
 end
 
 M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end
 
+-- M.is_user_repo = function(s)
+--   return s:match('^[%w._-]+/[%w._-]+$')
+-- end
+
 M.is_nonempty_list = function(t)
   return vim.islist(t) and #t > 0
 end
+
+M.is_comment = require('nvim.plugins.treesitter').is_comment
 
 local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- Lazy-load a function on its event or on UIEnter by default.
@@ -66,34 +70,48 @@ M.xprequire = function(module, errexit)
   return mod
 end
 
---  local gh = function(s)
---   return s:match('^[%w._-]+/[%w._-]+$') and 'https://github.com/' .. s .. '.git' or s
--- end
-
---- Returns the file path of the first non-self caller.
----@return string|nil
+--- Returns the absolute file path of the first non-self caller.
+--- @return string
 M.source = function()
   local self_path = debug.getinfo(1, 'S').source:sub(2)
-  local self_dir = vim.fn.fnamemodify(self_path, ':h')
+  local self_dir = vim.fs.dirname(self_path)
 
   local i = 2
   while true do
     local info = debug.getinfo(i, 'S')
     if not info then
-      return nil
+      error('Could not `debug.getinfo()`')
     end
 
     local src = info.source
-    if src:sub(1, 1) == '@' then
-      local abs = vim.fn.fnamemodify(src:sub(2), ':p')
-      if not vim.startswith(abs, self_dir) then
-        return abs
-      end
+    src = src:sub(1, 1) == '@' and src:sub(2) or src
+    if not vim.startswith(src, self_dir) then
+      return vim.fs.abspath(src)
     end
     i = i + 1
   end
 end
 
-M.is_comment = require('nvim.plugins.treesitter').is_comment
+---Autoloads submodules based on the caller's path.
+---@param t table
+---@param k string
+---@return any
+function M.autoload(t, k)
+  local caller = M.source()
+  local caller_dir = vim.fs.dirname(caller)
+  local luaroot = vim.fs.joinpath(M.abspath.config, 'lua')
+  local prefix = caller_dir:sub(#luaroot)
 
-return M
+  local mod = require(prefix .. '.' .. k)
+  rawset(t, k, mod)
+  return mod
+end
+
+-- return setmetatable(M, { __index = M.autoload })
+
+return setmetatable(M, {
+  __index = function(t, k)
+    t[k] = require('nvim.util.' .. k)
+    return rawget(t, k)
+  end,
+})

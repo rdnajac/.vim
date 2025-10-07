@@ -1,4 +1,5 @@
 local M = {}
+-- TODO:  move utils to utils
 
 M.specs = {
   'neovim/nvim-lspconfig',
@@ -58,10 +59,6 @@ M.status = function()
   return nv.icons.lsp.unavailable .. ' '
 end
 
-M.docsymbols = function()
-  return require('nvim.plugins.lsp.docsymbols').get()
-end
-
 --- `blink.cmp` will automatically set some capabilities:
 --- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
 --- see `vim.lsp.protocol.make_client_capabilities()` for nvim's defaults
@@ -85,12 +82,14 @@ local on_attach = function(client, bufnr)
       callback = vim.lsp.codelens.refresh,
     })
   end
-  require('nvim.util.docsymbols.navic_attach')(client, bufnr)
+
+  nv.lsp.docsymbols.attach(client, bufnr)
 end
+
 vim.schedule(function()
   vim.lsp.config('*', { on_attach = on_attach })
   vim.lsp.enable(M.servers)
-  require('nvim.plugins.lsp.progress')
+  -- require('nvim.plugins.lsp.progress')
 end)
 
 return M

@@ -19,7 +19,7 @@ function! vimline#winbar#() abort
     let l:ret .= v:lua.nv.status()
     let l:ret .= '%#Chromatophore_bc#'
     let l:ret .= '%#Chromatophore_c#'
-    let l:ret .= v:lua.nv.docsymbols.get()
+    let l:ret .= v:lua.nv.lsp.docsymbols.get()
   else " inactive winbar
     let l:ret .= '%{expand("%:~:.")}'
     let l:ret .= ' '
