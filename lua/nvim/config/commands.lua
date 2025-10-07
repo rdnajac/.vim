@@ -52,13 +52,15 @@ command('Plugins', function()
   print('\nInactive:\n' .. table.concat(inactive, '\n'))
 end, {})
 
+local unloaded = nv.plug.unloaded()
+
 command('PlugClean', function(opts)
-  local plugs = #opts.fargs > 0 and opts.fargs or nv.plugins.unloaded()
+  local plugs = #opts.fargs > 0 and opts.fargs or unloaded
   vim.pack.del(plugs)
 end, {
   nargs = '*',
   complete = function(_, _, _)
-    return nv.plug.unloaded()
+    return unloaded
   end,
 })
 

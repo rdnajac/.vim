@@ -88,7 +88,7 @@ M.opts = {
   sources = {
     ---@return blink.cmp.SourceList[]
     default = function()
-      if nv.is_comment() then
+      if nv.treesitter.is_comment() then
 
         return { 'buffer' }
       end

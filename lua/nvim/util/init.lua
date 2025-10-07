@@ -27,8 +27,6 @@ M.is_nonempty_list = function(t)
   return vim.islist(t) and #t > 0
 end
 
-M.is_comment = require('nvim.plugins.treesitter').is_comment
-
 local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- Lazy-load a function on its event or on UIEnter by default.
 -- TODO:  fix this signature

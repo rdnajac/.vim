@@ -1,12 +1,3 @@
-local M = { 'nvim-treesitter/nvim-treesitter' }
-
--- M.build = 'TSUpdate'
-M.build = function()
-  -- local parsers = require('nvim.treesitter.parsers')
-  -- require('nvim-treesitter').install(parsers)
-  vim.cmd('TSUpdate')
-end
-
 local aug = vim.api.nvim_create_augroup('treesitter', {})
 
 --- @param ft string|string[] filetype or list of filetypes
@@ -22,54 +13,88 @@ local autostart = function(ft, override)
   })
 end
 
-M.config = function()
-  autostart({ 'markdown', 'python' })
-  autostart({ 'sh', 'zsh' }, 'bash')
-end
+local M = {
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    config = function()
+      print('Configuring nvim-treesitter')
+      autostart({ 'markdown', 'python' })
+      autostart({ 'sh', 'zsh' }, 'bash')
 
---- Check if the current node is a comment node
---- @param ... any
----   - no args: use cursor
----   - (int,int): row,col
----   - {int,int}: row,col
---- @return boolean
-M.is_comment = function(...)
-  local args = { ... }
-  local pos
+      vim.keymap.set('n', '<C-Space>', function() require('nvim.util.treesitter.selection').start() end, { desc = 'TS Select Node', silent = true })
 
-  if #args == 0 then
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    pos = { cursor[1] - 1, cursor[2] }
-  elseif #args == 1 and type(args[1]) == 'table' then
-    pos = args[1]
-  elseif #args == 2 and type(args[1]) == 'number' and type(args[2]) == 'number' then
-    pos = { args[1], args[2] }
-  elseif #args == 1 and type(args[1]) == 'number' then
-    error('is_comment: single integer is ambiguous, expected {row,col}')
-  else
-    error('is_comment: invalid arguments')
-  end
+      vim.keymap.set('x', '<C-Space>', function()
+        require('nvim.util.treesitter.selection').increment()
+      end, { desc = 'TS Expand Selection', silent = true })
 
-  local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos })
-  return ok
-      and node
-      and vim.tbl_contains({
-        'comment',
-        'line_comment',
-        'block_comment',
-        'comment_content',
-      }, node:type())
-    or false
-end
+      vim.keymap.set('x', '<BS>', function()
+        require('nvim.util.treesitter.selection').decrement()
+      end, { desc = 'TS Shrink Selection', silent = true })
+    end,
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    enabled = 'false',
+    opts = {
+      move = {
+        enable = true,
+        set_jumps = true, -- whether to set jumps in the jumplist
+        -- LazyVim extention to create buffer-local keymaps
+        keys = {
+          goto_next_start = {
+            [']f'] = '@function.outer',
+            [']c'] = '@class.outer',
+            [']a'] = '@parameter.inner',
+          },
+          goto_next_end = {
+            [']F'] = '@function.outer',
+            [']C'] = '@class.outer',
+            [']A'] = '@parameter.inner',
+          },
+          goto_previous_start = {
+            ['[f'] = '@function.outer',
+            ['[c'] = '@class.outer',
+            ['[a'] = '@parameter.inner',
+          },
+          goto_previous_end = {
+            ['[F'] = '@function.outer',
+            ['[C'] = '@class.outer',
+            ['[A'] = '@parameter.inner',
+          },
+        },
+      },
+    },
+    after = function(_, opts)
+      vim.api.nvim_create_autocmd('FileType', {
+        group = vim.api.nvim_create_augroup('lazyvim_treesitter_textobjects', { clear = true }),
+        callback = function(ev)
+          ---@type table<string, table<string, string>>
+          -- FIXME: move the moves from opts here
+          local moves = vim.tbl_get(opts, 'move', 'keys') or {}
 
-M.keys = function()
-  local sel = require('nvim.plugins.treesitter.selection')
-  -- stylua: ignore
-  return {
-    { '<C-Space>', sel.start },
-    { mode = 'x', { '<C-Space>', sel.increment }, { '<BS>', sel.decrement } },
-  }
-end
+          for method, keymaps in pairs(moves) do
+            for key, query in pairs(keymaps) do
+              local desc = query:gsub('@', ''):gsub('%..*', '')
+              desc = desc:sub(1, 1):upper() .. desc:sub(2)
+              desc = (key:sub(1, 1) == '[' and 'Prev ' or 'Next ') .. desc
+              desc = desc .. (key:sub(2, 2) == key:sub(2, 2):upper() and ' End' or ' Start')
+              if not (vim.wo.diff and key:find('[cC]')) then
+                vim.keymap.set({ 'n', 'x', 'o' }, key, function()
+                  require('nvim-treesitter-textobjects.move')[method](query, 'textobjects')
+                end, {
+                  buffer = ev.buf,
+                  desc = desc,
+                  silent = true,
+                })
+              end
+            end
+          end
+        end,
+      })
+    end,
+  },
+}
 
 -- TODO:  report language
 M.status = function()
@@ -79,34 +104,6 @@ M.status = function()
     return ' '
   end
   return ''
-end
-
-M._installed = nil ---@type table<string,string>?
-
----@param update boolean?
-function M.get_installed(update)
-  if update then
-    M._installed = {}
-    for _, lang in ipairs(require('nvim-treesitter').get_installed('parsers')) do
-      M._installed[lang] = lang
-    end
-  end
-  return M._installed or {}
-end
-
-M.install_cli = function()
-  if vim.fn.executable('tree-sitter') == 1 then
-    return
-  end
-
-  --- @module 'mason'
-  local reg = nv.mason.reg()
-  reg.refresh(function()
-    local p = reg.get_package('tree-sitter-cli')
-    if not p:is_installed() then
-      nv.mason.install(p)
-    end
-  end)
 end
 
 return M

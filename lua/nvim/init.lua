@@ -18,6 +18,7 @@ for _, path in ipairs(files) do
   end
 end
 
+-- TODO:  load func
 vim.pack.add(nv.plugins._specs)
 
 for _, plugin in ipairs(plugins) do

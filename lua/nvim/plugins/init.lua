@@ -13,9 +13,12 @@ local get = function(field)
   return vim.is_callable(field) and field() or field
 end
 
----- @param user_repo string plugin (`user/repo`)
----- @param data? any
----- @return string|vim.pack.Spec
+
+-- TODO: use data for the plugin class
+
+--- @param user_repo string plugin (`user/repo`)
+--- @param data? any
+--- @return string|vim.pack.Spec
 local to_spec = function(user_repo, data)
   if not nv.is_nonempty_string(user_repo) then
     return user_repo
@@ -64,7 +67,7 @@ function Plugin.new(plugin)
     self.name = ''
   end
 
-  if nv.is_nonempty_list(self.specs) then
+  if nv.is_nonempty_list(self.specs) and self.enabled ~= false then
     -- PERF: redundant to_spec call for [1]
     local resolved_specs = vim.tbl_map(to_spec, self.specs)
     vim.list_extend(M._specs, resolved_specs)
@@ -94,6 +97,7 @@ function Plugin:init()
 
     local keys = get(self.keys)
     if nv.is_nonempty_list(keys) then
+      -- table.insert(M._keys, keys)
       vim.list_extend(M._keys, keys)
     end
   else
@@ -120,15 +124,6 @@ function Plugin:setup()
   end
 end
 
-M.unloaded = function()
-  local names = {}
-  for _, p in ipairs(vim.pack.get()) do
-    if not p.active then
-      names[#names + 1] = p.spec.name
-    end
-  end
-  return names
-end
 
 M.keys = require('nvim.config.keymaps')
 M.commands = require('nvim.config.commands')

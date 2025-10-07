@@ -1,11 +1,10 @@
 -- highlights `src` in backticks ( ` )
 local ns = vim.api.nvim_create_namespace('src')
 
-local M = {}
 
 local in_comment = function(lnum, s_col)
   if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] then
-    return nv.is_comment({ lnum, s_col })
+    return nv.treesitter.is_comment({ lnum, s_col })
   else
     local synid = vim.fn.synID(lnum + 1, s_col + 1, 1)
     local name = vim.fn.synIDattr(synid, 'name')
@@ -42,6 +41,8 @@ local function highlight_backticks(bufnr)
     highlight_line(bufnr, lnum - 1, line)
   end
 end
+
+local M = {}
 
 M.setup = function()
   vim.api.nvim_create_autocmd('BufEnter', {
