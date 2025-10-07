@@ -13,7 +13,23 @@ end
 
 vim.cmd([[runtime vimrc]])
 
+local require = require('nvim.util').xprequire
+
 require('vim._extui').enable({})
-require('snacks')
--- require('nvim')
-require('nvim.util').xprequire('nvim')
+require('snacks').setup(require('nvim.snacks'))
+
+_G.dd = function(...)
+  Snacks.debug.inspect(...)
+end
+_G.bt = function(...)
+  Snacks.debug.backtrace(...)
+end
+_G.p = function(...)
+  Snacks.debug.profile(...)
+end
+--- @diagnostic disable-next-line: duplicate-set-field
+vim._print = function(_, ...)
+  dd(...)
+end
+
+require('nvim')

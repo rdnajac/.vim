@@ -1,17 +1,4 @@
 _G.svim = vim
-_G.dd = function(...)
-  Snacks.debug.inspect(...)
-end
-_G.bt = function(...)
-  Snacks.debug.backtrace(...)
-end
-_G.p = function(...)
-  Snacks.debug.profile(...)
-end
---- @diagnostic disable-next-line: duplicate-set-field
-vim._print = function(_, ...)
-  dd(...)
-end
 
 ---@class Snacks: snacks.plugins
 local M = setmetatable({}, {
@@ -23,35 +10,7 @@ local M = setmetatable({}, {
 _G.Snacks = M
 
 ---@type snacks.config
-local opts = {
-  bigfile = {},
-  dashboard = require('nvim.snacks.dashboard'),
-  explorer = { replace_netrw = false }, -- using `oil` instead
-    -- stylua: ignore
-  image = { formats = { 'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp', 'tiff', 'heic', 'avif', 'mp4', 'mov', 'avi', 'mkv', 'webm', 'pdf' }, },
-  indent = { indent = { only_current = true, only_scope = true } },
-  input = {},
-  notifier = require('nvim.snacks.notifier'),
-  quickfile = {},
-  scratch = { template = 'local x = \n\nprint(x)' },
-  terminal = {},
-  scope = {},
-  scroll = {},
-  -- statuscolumn = { enabled = false },
-  picker = require('nvim.snacks.picker'),
-  styles = {
-    dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
-    lazygit = { height = 0, width = 0 },
-    terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
-    notification_history = {
-      wo = { number = false, winhighlight = 'WinBar:Chromatophore' },
-      position = 'bottom',
-      width = 100,
-      height = 0.4,
-    },
-  },
-  words = {},
-}
+local opts = require('opts')
 
 for k in pairs(opts) do
   opts[k].enabled = opts[k].enabled == nil or opts[k].enabled
