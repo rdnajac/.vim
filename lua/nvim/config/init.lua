@@ -2,3 +2,8 @@
 vim.o.cmdheight = 0
 vim.o.winborder = 'rounded'
 require('vim._extui').enable({})
+
+vim.schedule(function()
+  require('nvim.config.diagnostic')
+  require('nvim.config.sourcecode').setup()
+end)

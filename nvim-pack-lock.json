@@ -77,6 +77,10 @@
       "rev": "8b6b736",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
+    "snacks": {
+      "rev": "bfe8c26",
+      "src": "https://github.com/folke/snacks.nvim.git"
+    },
     "snacks.nvim": {
       "rev": "bfe8c26",
       "src": "http://github.com/folke/snacks.nvim.git"

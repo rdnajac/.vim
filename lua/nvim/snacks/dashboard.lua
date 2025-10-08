@@ -38,4 +38,3 @@ return {
   },
   wo = { winbar = '', winhighlight = { 'WinBar:NONE' } },
 }
--- TODO: add startuptime. see lewis6991 dotfiles for reference

@@ -455,6 +455,7 @@ if !has('nvim')
   Plug 'welle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'
 else
+  " FIXME: 
   Plug 'folke/snacks.nvim'
   Plug 'saxon1964/neovim-tips'
   " Plug '~/GitHub/rdnajac/vim-lol'
