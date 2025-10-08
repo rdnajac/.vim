@@ -6,11 +6,12 @@ return {
     file_types = { 'markdown', 'rmd', 'quarto' },
     latex = { enabled = false },
     bullet = { right_pad = 1 },
-    completions = { blink = { enabled = false } },
-
     -- checkbox = { enabled = false },
+    completions = { blink = { enabled = false } },
     code = {
       enabled = true,
+      highlight = '',
+      highlight_border = false,
       -- highlight_inline = 'Chromatophore',
       -- render_modes = { 'n', 'c', 't', 'i' },
       sign = false,
