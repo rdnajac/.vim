@@ -122,18 +122,26 @@ local keys = {
   },
 }
 
---- Create a pair of which-key specs for mapping a file picker and a grep picker
----@param desc string Description of the mapping
----@param key string The key to bind the pickers to (appended to <leader>f and <leader>s)
----@param picker_opts? table Options to pass to the pickers
-local function picker_pair(desc, key, dir, picker_opts)
-  local opts = picker_opts or {}
-  opts.cwd = vim.fn.expand(dir)
-    -- stylua: ignore
-    return {
-      { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc },
-      { '<leader>s' .. key, function() Snacks.picker.grep(opts)  end, desc = desc },
-    }
+--- create a pair of file and grep pickers for a given directory or options
+--- @param desc string description for which-key
+--- @param key string key to use after <leader>f and <leader>s
+--- @param dir_or_opts? string|table directory path or options table
+--- @param picker_opts? snacks.picker.files.Config
+local function picker_pair(desc, key, dir_or_opts, picker_opts)
+  local opts = {}
+
+  if type(dir_or_opts) == 'string' then
+    opts = picker_opts or {}
+    opts.cwd = vim.fn.expand(dir_or_opts)
+  elseif type(dir_or_opts) == 'table' then
+    opts = dir_or_opts
+  end
+
+  -- stylua: ignore
+  return {
+    { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc },
+    { '<leader>s' .. key, function() Snacks.picker.grep(opts) end, desc = desc },
+  }
 end
 
 local picker_pairs = {
@@ -141,9 +149,9 @@ local picker_pairs = {
   DataFiles = { 'd', vim.fn.stdpath('data') },
   GitHubRepos = { 'G', '~/GitHub/' },
   ConfigFiles = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
-  VIM = { 'V', '$VIM', { ft = { 'lua', 'vim' } } },
   VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
   Plugins = { 'P', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
+  Runtime_Paths = { 'V', { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } } },
 }
 
 -- add the mappings to the keys table
