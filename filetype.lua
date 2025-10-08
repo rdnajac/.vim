@@ -4,6 +4,7 @@
 vim.filetype.add({
   extension = {
     ['log'] = 'log',
+    ['nv'] = 'lua',
   },
   pattern = {
     ['.*%.env%..*'] = 'sh',
