@@ -1,5 +1,4 @@
 _G.nv = require('nvim.util')
-nv.config = require('nvim.config')
 nv.plugins = require('nvim.plugins')
 
 local speclist = vim.tbl_map(function(user_repo)
@@ -10,14 +9,35 @@ local speclist = vim.tbl_map(function(user_repo)
   }
 end, nv.plugins.specs)
 
+vim.list_extend(speclist, vim.g.plugins or {})
+
 vim.pack.add(speclist)
 
 for _, setup in pairs(nv.plugins.todo) do
   setup()
 end
 
-nv.lazyload(function()
-  for name, cmd in pairs(nv.plugins.commands) do
-    nv.did.commands[name] = pcall(cmd)
+-- These need to be set before extui is enabled
+vim.o.cmdheight = 0
+vim.o.winborder = 'rounded'
+-- Weird stuff happens when this is enabled before vim.pack.add
+require('vim._extui').enable({})
+
+vim.schedule(function()
+  local dir = vim.fs.joinpath(vim.g.lua_root, 'nvim', 'config')
+  local files = vim.fn.globpath(dir, '*.lua', false, true)
+  for _, file in ipairs(files) do
+    local modname = file:sub(#vim.g.lua_root + 2, -5)
+    -- call each config's setup function
+    require(modname).setup()
   end
-end, 'CmdLineEnter')
+
+  -- defer loading the commands
+  nv.lazyload(function()
+    for name, cmd in pairs(nv.plugins.commands) do
+      nv.did.commands[name] = pcall(cmd)
+    end
+  end, 'CmdLineEnter')
+end)
+
+return nv

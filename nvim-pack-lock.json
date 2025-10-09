@@ -1,11 +1,15 @@
 {
   "plugins": {
+    "R.nvim": {
+      "rev": "43a8c4f",
+      "src": "https://github.com/R-nvim/R.nvim.git"
+    },
     "blink-cmp-env": {
       "rev": "99af62c",
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "8483171",
+      "rev": "2b44b9c",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -65,21 +69,17 @@
       "rev": "919e155",
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
-    "r.nvim": {
-      "rev": "43a8c4f",
-      "src": "https://github.com/R-nvim/r.nvim.git"
-    },
     "render-markdown.nvim": {
       "rev": "2064980",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "cf3d4aa",
+      "rev": "5c7a75d",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "bfe8c26",
-      "src": "http://github.com/folke/snacks.nvim.git"
+      "rev": "dae80fb",
+      "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {
       "rev": "b55d5ba",
@@ -122,7 +122,7 @@
       "src": "http://github.com/tpope/vim-surround.git"
     },
     "vimtex": {
-      "rev": "088ad457",
+      "rev": "5c457a8a",
       "src": "http://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

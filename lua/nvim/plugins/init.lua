@@ -94,13 +94,12 @@ function Plugin:setup()
   end
 end
 
-local luaroot = vim.fs.joinpath(nv.stdpath.config, 'lua')
-local dir = vim.fs.joinpath(luaroot, 'nvim', 'plugins')
+local dir = vim.fs.joinpath(vim.g.lua_root, 'nvim', 'plugins')
 -- HACK: ignore files starting with 'i'
 local files = vim.fn.globpath(dir, '[^i]*.lua', false, true)
 
-for _, path in ipairs(files) do
-  local modname = path:sub(#luaroot + 2, -5)
+for _, file in ipairs(files) do
+  local modname = file:sub(#vim.g.lua_root + 2, -5)
   local mod = require(modname)
   for _, t in ipairs(vim.islist(mod) and mod or { mod }) do
     local P = Plugin.new(t)

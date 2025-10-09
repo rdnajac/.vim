@@ -1,9 +1,5 @@
 -- TODO: this.
-local M = {
-  'mason-org/mason.nvim',
-  opts = { ui = { icons = nv.icons.mason } },
-  build = ':MasonUpdate',
-}
+local M = {}
 
 ---Install or update a Mason package.
 ---@param name_or_pkg string|table
