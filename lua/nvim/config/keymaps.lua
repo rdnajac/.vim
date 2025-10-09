@@ -14,7 +14,7 @@ vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', {
 return {
   setup = function()
     local wk = require('which-key')
-    for name, keys in pairs(nv.todo.keys) do
+    for name, keys in pairs(nv.plugins.keys) do
       nv.did.keys[name] = wk.add(keys)
     end
 

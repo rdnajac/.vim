@@ -39,7 +39,6 @@ return {
     }
   end,
   keys = function()
-    require('nvim.snacks.toggle')
     local all = { hidden = true, nofile = true } -- opts for buffers (all)
     local notifier = true -- TODO:
 
