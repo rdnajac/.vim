@@ -24,15 +24,15 @@ local to_spec = function(user_repo, data)
   end
 
   local src = 'https://github.com/' .. user_repo .. '.git'
-  local last = user_repo:find('[^/]+$') or 1
-  local name = user_repo:sub(last)
-  if name:sub(-5) == '.nvim' then
-    name = name:sub(1, -6)
-  end
+  -- local last = user_repo:find('[^/]+$') or 1
+  -- local name = user_repo:sub(last)
+  -- if name:sub(-5) == '.nvim' then
+  --   name = name:sub(1, -6)
+  -- end
 
   return {
     src = src,
-    name = name,
+    -- name = name,
     -- HACK: remove this when treesitter is no longer a special case
     version = user_repo:match('treesitter') and 'main' or nil,
     data = data,
@@ -40,11 +40,11 @@ local to_spec = function(user_repo, data)
 end
 
 --- @class Plugin
---- @field [1]?
---- @field after? fun():nil
+--- @field [1]? string The plugin name in `user/repo` format.
+--- @field after? fun():nil Commands to run after the plugin is loaded.
 --- @field build? string|fun():nil
---- @field commands? fun():nil
---- @field config? fun():nil
+--- @field commands? fun():nil Ex commands to create.
+--- @field config? fun():nil Function to run to configure the plugin.
 --- @field enabled? boolean|fun():boolean
 --- @field keys? wk.Spec|fun():wk.Spec
 --- @field specs? string[]
@@ -54,32 +54,32 @@ end
 local Plugin = {}
 Plugin.__index = Plugin
 
---- @param plugin table
-function Plugin.new(plugin)
-  local self = plugin
-
-  local topspec = nv.is_nonempty_string(self[1]) and to_spec(self[1])
-  if topspec then
-    self.name = topspec.name
-    self.specs = vim.list_extend(self.specs or {}, { topspec })
-  else
-    self.name = ''
-  end
-
-  if nv.is_nonempty_list(self.specs) and self.enabled ~= false then
-    -- PERF: redundant to_spec call for [1]
-    local resolved_specs = vim.tbl_map(to_spec, self.specs)
-    vim.list_extend(M._specs, resolved_specs)
-  end
-
-  return setmetatable(self, Plugin)
-end
-
-M.Plug = Plugin.new
-
 function Plugin:is_enabled()
   return get(self.enabled) ~= false
 end
+
+--- @param plugin table
+function Plugin.new(t)
+  local self = setmetatable(t, Plugin)
+
+  -- normalize some fields
+  -- this is not the same as the spec name
+  self.name = self[1]:match('[^/]+$'):gsub('%.nvim$', '')
+  -- handles R.nvim
+  -- if #self.name == 1 then
+  -- self.name = self.name:upper()
+  -- end
+  self.specs = vim.list_extend(self.specs or {}, { self[1] })
+
+  -- TODO: move to init when setup loader is ready
+  if self:is_enabled() then
+    vim.list_extend(M._specs, vim.tbl_map(to_spec, self.specs))
+  end
+
+  return self
+end
+
+M.Plug = Plugin.new
 
 function Plugin:init()
   if self:is_enabled() then

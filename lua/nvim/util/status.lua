@@ -16,9 +16,12 @@ M.diagnostic = function()
     :join('')
 end
 
-for name in ('blink lsp treesitter sidekick'):gmatch('%S+') do
+for name in ('blink lsp sidekick'):gmatch('%S+') do
   M[name] = require('nvim.plugins.' .. name).status
 end
+
+M.lsp = require('nvim.util.lsp').status
+M.treesitter = require('nvim.util.treesitter').status
 
 M.status = function()
   local parts = {

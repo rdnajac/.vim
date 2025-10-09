@@ -8,9 +8,10 @@
 -- - terminal	|terminal-emulator| buffer
 -- stylua: ignore
 local map = {
+-- TODO: tuple icon + text
   [''] = function() return  vim.fn['vimline#winbar#']() end,
   acwrite = function() return vim.fn['vimline#winbar#acwrite']() end,
-  help = function() return '%h' end,
+  help = function() return '󰋖  %f' end,
   nofile = function() return '  ' .. os.date('%T') end,
   nowrite = function() return '[NOWRITE]' end,
   prompt = function() return '[PROMPT]' end,

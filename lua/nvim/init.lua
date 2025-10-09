@@ -5,38 +5,19 @@ Plug(require('nvim.snacks')):init()
 
 nv.config = require('nvim.config')
 
-local thisdir = nv.stdpath.config .. '/lua/nvim/'
-local mods = {}
 local plugins = {}
 local dir = nv.stdpath.config .. '/lua/nvim/plugins'
 local files = vim.fn.globpath(dir, '*.lua', false, true)
 
 for _, path in ipairs(files) do
   local name = path:match('([^/]+)%.lua$')
-  local ok, mod = pcall(require, 'nvim.plugins.' .. name)
-  if ok and mod then
-    for _, spec in ipairs(vim.islist(mod) and mod or { mod }) do
-      table.insert(plugins, Plug(spec))
-      -- Plug(spec)
-    end
-  end
-end
-
--- one level of subdirs
-for _, d in ipairs(vim.fn.globpath(dir, '*/', false, true)) do
-  local subname = d:match('([^/]+)/$')
-  if subname then
-    local submods = {}
-    for _, f in ipairs(vim.fn.globpath(d, '*.lua', false, true)) do
-      local child = f:match('([^/]+)%.lua$')
-      if child and child ~= 'init' then
-        submods[child] = true
+  if name ~= 'init' then
+    local ok, mod = pcall(require, 'nvim.plugins.' .. name)
+    if ok and mod then
+      for _, spec in ipairs(vim.islist(mod) and mod or { mod }) do
+      -- for _, spec in ipairs(nv.ensure_list(mod)) do
+        plugins[spec[1]] = Plug(spec)
       end
-    end
-    if next(submods) then
-      mods[subname] = submods
-    else
-      mods[subname] = true
     end
   end
 end
@@ -46,7 +27,7 @@ end
 -- TODO: load func
 vim.pack.add(nv.plugins._specs)
 
-for _, plugin in ipairs(plugins) do
+for _, plugin in pairs(plugins) do
   plugin:init() -- calls setup
 end
 

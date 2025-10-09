@@ -1,3 +1,4 @@
+-- _G.t = { vim.uv.hrtime() }
 local M = {}
 
 --- log a message with timing info
@@ -46,5 +47,8 @@ function M.track_complex_fn(label, fn)
     return table.unpack(results, 1, #results)
   end
 end
+
+-- setmetatable(_G.t, { __call = require('nvim.util.track').log })
+-- nv.lazyload(function(ev) t(ev.event) end, { 'BufWinEnter', 'VimEnter', 'UIEnter' })
 
 return M

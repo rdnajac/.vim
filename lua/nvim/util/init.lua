@@ -27,6 +27,13 @@ M.is_nonempty_list = function(t)
   return vim.islist(t) and #t > 0
 end
 
+--- @generic T
+--- @param x T|T[]
+--- @return T[]
+M.ensure_list = function(x)
+  return type(x) == 'table' and x or { x }
+end
+
 local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- Lazy-load a function on its event or on UIEnter by default.
 -- TODO:  fix this signature
@@ -44,7 +51,6 @@ M.lazyload = function(cb, event, pattern)
     pattern = pattern and pattern or '*',
   })
 end
-
 
 --- Returns the absolute file path of the first non-self caller.
 --- @return string

@@ -1,29 +1,28 @@
 local M = {}
 
--- M.enabled = false
-
 -- Highlight groups for different log levels
 -- 1 = DEBUG, 2 = INFO, 3 = WARN, 4 = ERROR
-local groups = { 'Statement', 'MoreMsg', 'WarningMsg' }
+local groups = { 'Ok', 'More', 'Warning', 'Error' }
 
 --- Override for vim.notify that provides additional highlighting
----@param msg string
----@param level vim.log.levels|nil
----@param opts table|nil
----@diagnostic disable-next-line: unused-local opts
+--- @param msg string
+--- @param level vim.log.levels|nil
+--- @param opts table|nil
 M.notify = function(msg, level, opts)
-  -- if error, index it out of bounds and hl = nil
-  local hl = groups[level]
-  opts = opts or {}
-  opts.err = level == vim.log.levels.ERROR
-
-  vim.api.nvim_echo({ { msg, hl } }, true, opts)
+  vim.api.nvim_echo(
+    { { msg, groups[level or 1] .. 'Msg' } },
+    true,
+    { err = level == vim.log.levels.ERROR }
+  )
 end
 
---- Override vim.notify with custom function
--- M.config = function()
-vim.notify = M.notify
--- end
+M.setup = function()
+  vim.notify = M.notify
+  -- Snacks.notify('Notifier enabled')
+  Snacks.notify.info('Notifier enabled')
+  -- Snacks.notify.warn('Notifier enabled')
+  -- Snacks.notify.error('Notifier enabled')
+end
 
 return setmetatable(M, {
   __call = function(_, ...)

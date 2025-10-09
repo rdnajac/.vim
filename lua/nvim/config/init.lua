@@ -4,6 +4,9 @@ vim.o.winborder = 'rounded'
 require('vim._extui').enable({})
 
 vim.schedule(function()
-  require('nvim.config.diagnostic')
+  require('nvim.config.keymaps')
+  require('nvim.config.diagnostic').setup()
+  require('nvim.config.lsp').setup()
+  require('nvim.config.notify').setup()
   require('nvim.config.sourcecode').setup()
 end)

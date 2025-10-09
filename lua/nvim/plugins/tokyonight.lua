@@ -42,7 +42,8 @@ M.opts = {
     hl['WinBorder'] = { bg = bg.lualine }
     hl['SpecialWindow'] = { bg = bg.eigengrau }
     hl['Green'] = { fg = colors.green }
-    hl['RenderMarkdownCode'] = { bg = bg.tokyonight }
+    -- FIXME: check if this was interfering with something
+    -- hl['RenderMarkdownCode'] = { bg = bg.tokyonight }
   end,
   plugins = {
     all = false,
@@ -162,15 +163,6 @@ function M.generate_vim_scheme(opts)
   return table.concat(lines, '\n')
 end
 
----@param file string
----@param contents string
-local function _write(file, contents)
-  vim.fn.mkdir(vim.fn.fnamemodify(file, ':h'), 'p')
-  local fd = assert(io.open(file, 'w+'))
-  fd:write(contents)
-  fd:close()
-end
-
 -- see ~/.local/share/nvim/site/pack/core/opt/tokyonight/lua/tokyonight/extra/
 local want = {
   ghostty = '',
@@ -216,7 +208,7 @@ M.build = function()
       colors['_name'] = 'tokyonight_' .. style
       colors['_style'] = style
       print('Writing ' .. fname)
-      _write(fname, plugin.generate(colors, groups, opts))
+      require('fileutils').writefile(fname, plugin.generate(colors, groups, opts))
     end
   end
 end

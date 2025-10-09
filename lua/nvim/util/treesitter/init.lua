@@ -1,4 +1,15 @@
 local M = {}
+
+-- TODO:  report language
+M.status = function()
+  local highlighter = require('vim.treesitter.highlighter')
+  local buf = vim.api.nvim_get_current_buf()
+  if highlighter.active[buf] then
+    return ' '
+  end
+  return ''
+end
+
 M._installed = nil ---@type table<string,string>?
 
 ---@param update boolean?
