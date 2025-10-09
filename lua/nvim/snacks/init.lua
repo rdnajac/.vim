@@ -174,6 +174,7 @@ local keys = {
 
     return keys
   end,
+
   commands = function()
     local command = vim.api.nvim_create_user_command
 
