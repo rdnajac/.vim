@@ -35,7 +35,8 @@ return {
       {
         win = 'preview',
         border = borders.topandleft,
-        width = 0.65,
+        width = 0.5,
+        wo = { number = false },
         -- todo: hide preview window if less than 120 cols
       },
     },

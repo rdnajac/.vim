@@ -25,6 +25,7 @@ M.did = vim.defaulttable()
 --- @field build? string|fun():nil Callback after plugin is installed/updated.
 --- @field config? fun():nil Function to run to configure the plugin.
 --- @field enabled? boolean|fun():boolean Whether the plugin is disabled.
+--- @field event? string
 --- @field keys? wk.Spec|fun():wk.Spec Key mappings to create.
 --- @field opts? table|fun():table Options to pass to the plugin's `setup()`.
 --- @field specs? string[] Additional plugin specs in `user/repo` format.
@@ -62,7 +63,13 @@ function Plugin:init()
   end
 
   M.todo[self.name] = function()
-    return self:setup()
+    if self.event then
+      nv.lazyload(function()
+        self:setup()
+      end, self.event)
+    else
+      self:setup()
+    end
   end
 
   -- add keys to queue
@@ -74,7 +81,6 @@ function Plugin:init()
 
   if vim.is_callable(self.after) then
     vim.schedule(function()
-      print('after for ' .. self.name)
       M.did.after = pcall(self.after)
     end)
   end

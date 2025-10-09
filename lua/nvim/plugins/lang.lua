@@ -5,7 +5,7 @@ return {
     'mason-org/mason.nvim',
     opts = function()
       return {
-    -- TODO: 
+        -- TODO:
         -- ui = { nv.icons.mason },
         ui = {
           package_installed = '✓',

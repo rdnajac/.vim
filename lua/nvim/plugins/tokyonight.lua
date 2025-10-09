@@ -56,7 +56,6 @@ M.opts = {
   },
 }
 
-
 ---@param opts? tokyonight.Config
 ---@return string
 function M.generate_vim_scheme(opts)

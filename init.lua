@@ -7,8 +7,10 @@ if vim.env.PROF then
   vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_dir, 'snacks.nvim'))
   --- @type snacks.profiler.Config
   local opts = {
-    startup = { event = 'VimEnter' },
-    threshold = 1, -- ms
+    startup = {
+      event = 'VimEnter',
+      -- threshold = 1, -- ms
+    },
   }
   require('snacks.profiler').startup(opts)
 end

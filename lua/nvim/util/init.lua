@@ -35,7 +35,8 @@ end
 --- @param x T|fun():T
 --- @return T
 M.get = function(x)
-  return vim.is_callable(x) and x() or x
+  return type(x) == 'function' and x() or x
+  -- return vim.is_callable(x) and x() or x
 end
 
 local aug = vim.api.nvim_create_augroup('LazyLoad', {})
@@ -49,9 +50,9 @@ M.lazyload = function(cb, event, pattern)
     callback = type(cb) == 'function' and cb or function()
       vim.cmd(cb)
     end,
-    group = 'LazyLoad',
+    group = aug,
     nested = true,
-    once = true,
+    once = true, -- NOTE: this deletes the autocmd and it won't appear in `:autocmd`
     pattern = pattern and pattern or '*',
   })
 end
@@ -89,7 +90,7 @@ function M.autoload(t, k)
   local prefix = caller_dir:sub(#luaroot)
 
   local mod = require(prefix .. '.' .. k)
-  rawset(t, k, mod)
+  rawset(t, k, modutil)
   return mod
 end
 
