@@ -142,13 +142,13 @@ augroup END
 " Section: keymaps {{{1
 " shortcuts! {{{
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-nnoremap <BSlash>s <Cmd>call edit#luamod('snacks')<CR>
 nnoremap <BSlash>i <Cmd>call edit#('~/.config/nvim/init.lua')<CR>
 nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
+nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/init')<CR>
+nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plugins/init')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
-nnoremap <BSlash>k <Cmd>call edit#luamod('nvim/config/keymaps')<CR>
-nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/plugins/config')<CR>
+" nnoremap <BSlash>k <Cmd>call edit#luamod('nvim/config/keymaps')<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
@@ -192,7 +192,7 @@ nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
-nnoremap cdP :execute 'edit ' . plug_home . '/' \| pwd<CR>
+nnoremap cdP :execute 'edit ' . plug_dir . '/' \| pwd<CR>
 
 nmap <expr> cq change#quote()
 
@@ -322,7 +322,7 @@ nnoremap do     do]c
 " nnoremap <c-w><c-e>  <c-w><c-^>
 nnoremap gV     `[V`]
 
-" lile tmux!
+" like tmux!
 " nnoremap <c-w>-     <c-w>s
 " nnoremap <c-w><bar> <c-w>v
 
@@ -410,11 +410,12 @@ let g:interpreters = {
       \ '.':      '/bin/sh',
       \ 'sh':     '/bin/bash',
       \ 'bash':   'bash',
-      \ 'r':      'Rscript',
-      \ 'zsh':    'zsh',
       \ 'lua':    'lua',
       \ 'python': 'python3',
+      \ 'r':      'Rscript',
       \ 'rmd':    'Rscript',
+      \ 'zsh':    'zsh',
+      \ 'nv':     'nvim -l',
       \ }
 
 " }}}1
