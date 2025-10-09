@@ -30,7 +30,11 @@ return {
       scroll = { enabled = true },
       statuscolumn = { enabled = false },
       picker = require('nvim.snacks.picker'),
-      styles = require('nvim.snacks.styles'),
+      styles = {
+        dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
+        lazygit = { height = 0, width = 0 },
+        terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
+      },
       words = { enabled = true },
     }
   end,

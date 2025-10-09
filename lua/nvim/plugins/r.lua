@@ -9,7 +9,7 @@ local debug_word = function()
   vim.api.nvim_win_set_cursor(0, { row, col })
 end
 local M = {
-  'R-nvim/r.nvim', --- HACK: lowercase `r` to match the modname
+  'R-nvim/R.nvim',
   specs = { 'R-nvim/cmp-r' },
   --- @module "r"
   --- @type RConfigUserOpts

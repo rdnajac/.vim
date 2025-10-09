@@ -6,39 +6,25 @@ _G.nv.todo = {
   keys = {},
 }
 
----@generic T
----@param field T|fun():T
----@return T?
-local get = function(field)
-  return vim.is_callable(field) and field() or field
-end
-
---- @param user_repo string plugin (`user/repo`)
---- @return vim.pack.Spec
-local to_spec = function(user_repo)
-  return {
-    src = 'https://github.com/' .. user_repo .. '.git',
-    -- HACK: remove this when treesitter defaults to `main`
-    version = vim.startswith(user_repo, 'nvim-treesitter') and 'main' or nil,
-  }
-end
+--- @module "which-key"
 
 --- @class Plugin
 --- @field [1] string The plugin name in `user/repo` format.
 --- @field name string The plugin name, derived from [1]
 --- @field after? fun():nil Commands to run after the plugin is loaded.
---- @field build? string|fun():nil
+--- @field build? string|fun():nil Callback after plugin is installed/updated.
 --- @field commands? fun():nil Ex commands to create.
 --- @field config? fun():nil Function to run to configure the plugin.
---- @field enabled? boolean|fun():boolean
---- @field keys? wk.Spec|fun():wk.Spec
---- @field specs? string[]
---- @field opts? table|fun():table
+--- @field enabled? boolean|fun():boolean Whether the plugin is disabled.
+--- @field keys? wk.Spec|fun():wk.Spec Key mappings to create.
+--- @field specs? string[] Additional plugin specs in `user/repo` format.
+--- @field opts? table|fun():table Options to pass to the plugin's `setup()`.
+
 local Plugin = {}
 Plugin.__index = Plugin
 
 function Plugin:is_enabled()
-  return get(self.enabled) ~= false
+  return nv.get(self.enabled) ~= false
 end
 
 --- @param t table
@@ -46,82 +32,74 @@ function Plugin.new(t)
   local self = setmetatable(t, Plugin)
 
   self.name = self[1]:match('[^/]+$'):gsub('%.nvim$', '')
-  -- handles R.nvim
-  -- if #self.name == 1 then
-  -- self.name = self.name:upper()
-  -- end
-  self.specs = vim.list_extend(self.specs or {}, { self[1] })
-  self.specs = vim.list.unique(self.specs)
+  -- handle 'R.nvim'
+  self.name = #self.name == 1 and self.name:lower() or self.name
 
-  -- TODO: move to init when setup loader is ready
+  self.specs = self.specs or {}
+  vim.list_extend(self.specs, { self[1] })
+
   if self:is_enabled() then
-    vim.list_extend(nv.todo.specs, vim.tbl_map(to_spec, self.specs))
+    vim.list_extend(nv.todo.specs, self.specs)
   end
 
   return self
 end
 
-function Plugin:init()
+--- Call the `Plugin`'s `config` function if it exists, otherwise
+--- call the named module's `setup` function with `opts` they exist.
+function Plugin:setup()
   if self:is_enabled() then
-    self:setup()
+    local setup ---@type fun():nil
+    if vim.is_callable(self.config) then
+      setup = self.config
+    else
+      local opts = nv.get(self.opts)
+      if type(opts) == 'table' then
+        setup = function()
+          require(self.name).setup(opts)
+        end
+      end
+    end
 
+    -- call setup
+    if vim.is_callable(setup) then
+      nv.did.setup[self.name] = pcall(setup)
+    end
+
+    -- call after
     if vim.is_callable(self.after) then
       nv.todo.after[self.name] = self.after
     end
 
+    -- add command function to queue
     if vim.is_callable(self.commands) then
       nv.todo.commands[self.name] = self.commands
     end
 
-    local keys = get(self.keys)
+    -- add keys to queue
+    local keys = nv.get(self.keys)
     if nv.is_nonempty_list(keys) then
       nv.todo.keys[self.name] = keys
-    else
-      print(self.name .. ' has no keys')
     end
   else
     nv.did.disable[#nv.did.disable + 1] = self.name
   end
 end
 
---- Call the `Plugin`'s `config` function if it exists, otherwise
---- call the named module's `setup` function with `opts` they exist.
-function Plugin:setup()
-  local setup ---@type fun():nil
-  if vim.is_callable(self.config) then
-    setup = self.config
-  else
-    local opts = get(self.opts)
-    if type(opts) == 'table' then
-      setup = function()
-        require(self.name).setup(opts)
-      end
-    end
-  end
-  if vim.is_callable(setup) then
-    nv.did.setup[self.name] = pcall(setup)
-  end
-end
-
-local dir = nv.stdpath.config .. '/lua/nvim/plugins'
-local files = vim.fn.globpath(dir, '*.lua', false, true)
-
-local M = {}
+--- @type table<string, Plugin>
+local plugins = {}
+local dir = vim.fs.joinpath(nv.stdpath.config, 'lua', 'nvim', 'plugins')
+-- HACK: ignore files starting with 'i'
+local files = vim.fn.globpath(dir, '[^i]*.lua', false, true)
 
 for _, path in ipairs(files) do
   local name = path:match('([^/]+)%.lua$')
-  if name ~= 'init' then
-    local ok, mod = pcall(require, 'nvim.plugins.' .. name)
-    if ok and mod then
-      for _, spec in ipairs(vim.islist(mod) and mod or { mod }) do
-        M[spec[1]] = Plugin.new(spec)
-      end
+  local ok, mod = pcall(require, 'nvim.plugins.' .. name)
+  if ok and mod then
+    for _, t in ipairs(vim.islist(mod) and mod or { mod }) do
+      plugins[t[1]] = Plugin.new(t)
     end
   end
 end
 
-return setmetatable(M, {
-  __call = function(t, k)
-    return Plugin.new(k)
-  end,
-})
+return plugins

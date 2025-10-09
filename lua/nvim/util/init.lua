@@ -23,8 +23,8 @@ end
 --   return s:match('^[%w._-]+/[%w._-]+$')
 -- end
 
-M.is_nonempty_list = function(t)
-  return vim.islist(t) and #t > 0
+M.is_nonempty_list = function(x)
+  return vim.islist(x) and #x > 0
 end
 
 --- @generic T
@@ -32,6 +32,13 @@ end
 --- @return T[]
 M.ensure_list = function(x)
   return type(x) == 'table' and x or { x }
+end
+
+--- @generic T
+--- @param x T|fun():T
+--- @return T
+M.get = function(x)
+  return vim.is_callable(x) and x() or x
 end
 
 local aug = vim.api.nvim_create_augroup('LazyLoad', {})

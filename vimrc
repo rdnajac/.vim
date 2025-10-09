@@ -144,7 +144,7 @@ augroup END
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
 nnoremap <BSlash>i <Cmd>call edit#('~/.config/nvim/init.lua')<CR>
 nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
-nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks/init')<CR>
+nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks')<CR>
 nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plugins/init')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
