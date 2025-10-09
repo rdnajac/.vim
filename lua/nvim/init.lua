@@ -40,4 +40,11 @@ vim.schedule(function()
   end, 'CmdLineEnter')
 end)
 
+local wk = require('which-key')
+-- local bigkeys = vim.tbl_map(function(t)
+-- return t end, nv.plugins.keys)
+for name, keys in pairs(nv.plugins.keys) do
+  nv.did.keys[name] = wk.add(keys)
+end
+
 return nv

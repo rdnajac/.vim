@@ -12,7 +12,13 @@ local M = {
   keys = {},
   specs = {},
   todo = {},
+  names = {}
 }
+
+function M:add(k, plugin)
+  -- local v = plugin[k]
+  self[k][plugin.name] = plugin[k]
+end
 
 --- @class Plugin
 --- @field [1] string The plugin name in `user/repo` format.
@@ -37,6 +43,8 @@ function Plugin.new(t)
   local self = setmetatable(t, Plugin)
   self.name = self[1]:match('[^/]+$'):gsub('%.nvim$', '')
   self.name = #self.name == 1 and self.name:lower() or self.name -- R.nvim
+  self:init()
+  -- TODO: maybe this returns the spec...
   return self
 end
 
@@ -44,20 +52,23 @@ function Plugin:init()
   --__index?
   if self:is_enabled() then
     M.specs[#M.specs + 1] = self[1]
+
+    -- only blink uese specs. mini should too.
     if nv.is_nonempty_list(self.specs) then
       vim.list_extend(M.specs, self.specs)
     end
 
     -- add command function to queue
     if vim.is_callable(self.commands) then
-      M.commands[self.name] = self.commands
+      M:add('commands', self)
     end
 
     -- add keys to queue
     -- PERF: beeeeg table
     local keys = nv.get(self.keys)
     if nv.is_nonempty_list(keys) then
-      M.keys[self.name] = keys
+      vim.list_extend(M.keys, keys)
+      -- M:add('keys', self)
     end
 
     M.todo[self.name] = function()
@@ -103,7 +114,6 @@ for _, file in ipairs(files) do
   local mod = require(modname)
   for _, t in ipairs(vim.islist(mod) and mod or { mod }) do
     local P = Plugin.new(t)
-    P:init()
   end
 end
 

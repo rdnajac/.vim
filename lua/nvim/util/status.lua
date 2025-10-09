@@ -1,5 +1,17 @@
 local M = {}
 
+M.blink = function()
+  local ret = ''
+  local ok, sources = pcall(require, 'blink.cmp.sources.lib')
+  if ok and sources then
+    for _, key in ipairs(vim.tbl_keys(sources.get_enabled_providers('default'))) do
+      ret = ret .. nv.icons.src[key] .. ' '
+    end
+  end
+  return ret
+end
+
+
 M.diagnostic = function()
   local counts = vim.diagnostic.count(0)
   local signs = vim.diagnostic.config().signs
@@ -16,11 +28,8 @@ M.diagnostic = function()
     :join('')
 end
 
-for name in ('blink lsp sidekick'):gmatch('%S+') do
-  M[name] = require('nvim.plugins.' .. name).status
-end
-
 M.lsp = require('nvim.util.lsp').status
+M.sidekick = require('nvim.plugins.sidekick').status
 M.treesitter = require('nvim.util.treesitter').status
 
 M.status = function()

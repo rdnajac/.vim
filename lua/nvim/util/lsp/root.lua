@@ -30,3 +30,10 @@ M.root = function(path)
   end
   return vim.fs.root(path, { '.git' })
 end
+
+-- TODO: check each lspconfig config for how the root is found
+-- TODO: call here::root() on BufEnter for r, rmd, quarto
+-- or use this if its working correctly
+function M.r(buf)
+  return vim.fs.root(buf or 0, { '.here.', { '.Rprofile', '.Rproj', 'DESCRIPTION' }, '.git' })
+end

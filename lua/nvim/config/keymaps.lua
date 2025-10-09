@@ -13,11 +13,6 @@ vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', {
 
 return {
   setup = function()
-    local wk = require('which-key')
-    for name, keys in pairs(nv.plugins.keys) do
-      nv.did.keys[name] = wk.add(keys)
-    end
-
     Snacks.util.on_key('<Esc>', function()
       vim.cmd.nohlsearch()
       if package.loaded['sidekick'] then

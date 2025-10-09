@@ -1,46 +1,5 @@
 return {
   {
-    'folke/which-key.nvim',
-    --- @module "which-key"
-    --- @class wk.Opts
-    opts = {
-      keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
-      preset = 'helix',
-      show_help = false,
-      sort = { 'order', 'alphanum', 'case', 'mod' },
-      spec = {
-        {
-          {
-            mode = { 'n', 'v' },
-            -- TODO: add each bracket mapping manually
-            -- going through all of the nvim defaults and the ones provided by unimpaired
-            { '[', group = 'prev' },
-            { ']', group = 'next' },
-            { 'g', group = 'goto' },
-            { 'z', group = 'fold' },
-          },
-
-          mode = { 'n' },
-          -- TODO: add the other groups
-          { 'co', group = 'comment below' },
-          { 'cO', group = 'comment above' },
-          { '<leader>dp', group = 'profiler' },
-          { '<leader>u', group = 'ui' },
-          { '<leader>x', group = 'diagnostics/quickfix' },
-          { '<localleader>l', group = 'vimtex' },
-
-          -- descriptions
-          { 'gx', desc = 'Open with system app' },
-        },
-        { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
-      },
-    },
-    after = function()
-      local registers = '*+"-:.%/#=_0123456789'
-      require('which-key.plugins.registers').registers = registers
-    end,
-  },
-  {
     'folke/noice.nvim',
     enabled = false,
     opts = {

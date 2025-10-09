@@ -5,7 +5,12 @@ vim.g.lua_root = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua')
 
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_dir, 'snacks.nvim'))
-  require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
+  --- @type snacks.profiler.Config
+  local opts = {
+    startup = { event = 'VimEnter' },
+    threshold = 1, -- ms
+  }
+  require('snacks.profiler').startup(opts)
 end
 
 --- generates vim.g.plugins

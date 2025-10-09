@@ -1,6 +1,5 @@
 return {
   'folke/which-key.nvim',
-  --- @module "which-key"
   --- @class wk.Opts
   opts = {
     keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
@@ -23,6 +22,7 @@ return {
         { 'cO', group = 'comment above' },
         { '<leader>dp', group = 'profiler' },
         { '<localleader>l', group = 'vimtex' },
+        { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
 
         -- descriptions
         { 'gx', desc = 'Open with system app' },

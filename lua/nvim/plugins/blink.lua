@@ -1,21 +1,15 @@
 local M = { 'Saghen/blink.cmp' }
 
--- M.build = 'cargo build --release'
--- M.build = ':BlinkCmp build'
--- TODO:
-M.event = 'InsertEnter'
+M.event = 'InsertEnter' -- TODO:
 M.specs = {
-  'Saghen/blink.compat',
-  -- 'fang2hou/blink-copilot',
   'bydlw98/blink-cmp-env',
+  'Saghen/blink.compat',
+  'R-nvim/cmp-r',
 }
 
 -- use the winborder or default to 'single'
 local border = vim.o.winborder == '' and 'single' or nil
-local kind = vim.lsp.protocol.SymbolKind
--- local kind = require('blink.cmp.types').CompletionItemKind
 
----@module "blink.cmp"
 ---@type blink.cmp.Config
 M.opts = {
   cmdline = { enabled = false },
@@ -32,9 +26,9 @@ M.opts = {
     menu = {
       auto_show = true,
       -- auto_show_delay_ms = 1000,
-      --- @param ctx blink.cmp.Context
-      --- @param items blink.cmp.CompletionItem[]
-      auto_show_delay_ms = function(ctx, items)
+      ---@param ctx blink.cmp.Context
+      ---@returns number the delay in milliseconds
+      auto_show_delay_ms = function(ctx, _)
         if vim.tbl_contains({ '.', '/', "'" }, ctx.trigger.initial_character) then
           return 0
         end
@@ -47,7 +41,7 @@ M.opts = {
           { 'kind_icon' },
           { 'label', 'label_description', gap = 1 },
           { 'source_name' },
-          -- { 'source_id' },
+          { 'source_id' },
         },
         components = {
           kind_icon = {
@@ -113,6 +107,7 @@ M.opts = {
         lsp = {
           score_offset = -1,
           transform_items = function(_, items)
+            local kind = require('blink.cmp.types').CompletionItemKind
             -- FILTER OUT KEYWORDS AND SNIPPETS FROM LSP
             return vim.tbl_filter(function(item)
               return item.kind == kind.Keyword
@@ -157,25 +152,5 @@ M.opts = {
     },
   },
 }
-
-M.status = function()
-  local ok, sources = pcall(require, 'blink.cmp.sources.lib')
-  if not ok then
-    return ''
-  end
-
-  local enabled = sources.get_enabled_providers('default')
-  local source_icons = nv.icons.src
-
-  return vim
-    .iter(sources.get_all_providers())
-    :filter(function(name)
-      return enabled[name] ~= nil
-    end)
-    :map(function(name)
-      return source_icons[name] or ''
-    end)
-    :join('')
-end
 
 return M
