@@ -54,3 +54,6 @@ function! vim#sensible#() abort
     endif
   endif
 endfunction
+
+" nnoremap Y      y$
+" nnoremap '      `

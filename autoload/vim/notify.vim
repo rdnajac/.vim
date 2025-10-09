@@ -30,11 +30,3 @@ endfunction
 function vim#notify#error(msg) abort
   call s:notify('error', a:msg)
 endfunction
-
-" function! vim#notify#setup() abort
-"   for level in ['', 'error', 'info', 'warn']
-" execute printf('function vim#notify#(msg) abort \<Bar> call s:notify("notify", a:msg) \<Bar> endfunction')
-"   endfor
-" endfunction
-"
-" call vim#notify#setup()

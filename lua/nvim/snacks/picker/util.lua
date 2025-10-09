@@ -47,24 +47,24 @@ M.opts_extend = {
     zoxide = zoxide,
   },
   config = function(opts)
-    local icon_map = {
-      grep = '󰱽',
-      files = '',
-    }
-    local icon = icon_map[opts.finder]
+    local icon_map = { grep = '󰱽', files = '' }
+    local icon = icon_map[opts.finder] or ' '
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
-    opts.title = string.format('%s %s [ %s ]', icon, name, vim.fn.fnamemodify(opts.cwd, ':~'))
+    local searchpath = opts.dirs and 'Multiple Paths' or vim.fn.fnamemodify(opts.cwd, ':~')
+    opts.title = string.format('%s %s [ %s ]', icon, name, searchpath)
+
     -- FIXME: fix this and then try removing snacks from nvim
     if nv.is_nonempty_list(opts.ft) then
       opts.title = opts.title
         .. ' '
         .. table.concat(
           vim.tbl_map(function(ft)
-            return nv.icons(ft)
+            return nv.icons(ft) or ft
           end, opts.ft),
           ' '
         )
     end
+
     if not opts.cwd then
       if vim.bo.filetype == 'oil' then
         opts.cwd = require('oil').get_current_dir()

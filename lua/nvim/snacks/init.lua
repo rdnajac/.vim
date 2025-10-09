@@ -35,7 +35,7 @@ return {
     }
   end,
   keys = function()
-    -- require('nvim.snacks.toggle')
+    require('nvim.snacks.toggle')
     local all = { hidden = true, nofile = true } -- opts for buffers (all)
     local notifier = true -- TODO:
 
@@ -162,7 +162,7 @@ local keys = {
       GitHubRepos = { 'G', '~/GitHub/' },
       ConfigFiles = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
       VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
-      Plugins = { 'P', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
+      Plugins = { 'P', vim.g.plug_dir, { ft = { 'lua', 'vim' } } },
       Runtime_Paths = { 'V', { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } } },
     }
 

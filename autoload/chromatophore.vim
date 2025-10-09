@@ -6,6 +6,7 @@ if !exists('g:chromatophore_groups')
 	\ 'StatusLineNC',
 	\ 'StatusLineTermNC',
 	\ 'String',
+	\ 'MsgSeparator',
 	\ 'helpSectionDelim',
 	\  '@markup.raw.markdown_inline'
 	\ ]

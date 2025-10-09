@@ -1,6 +1,5 @@
 #!/usr/bin/env -S nvim -u NONE -l
 
--- vim: ft=lua
 local root = vim.fn.fnamemodify('%', ':p:h')
 for _, name in ipairs({ 'config', 'data', 'state', 'cache' }) do
   vim.env[('XDG_%s_HOME'):format(name:upper())] = root .. '/' .. name
