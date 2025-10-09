@@ -31,6 +31,8 @@ local M = {
         { '<C-Space>', nv.treesitter.selection.increment },
         { '<BS>', nv.treesitter.selection.decrement },
       },
+      -- { mode = 'x', '<C-Space>', nv.treesitter.selection.increment },
+      -- { mode = 'x', '<BS>', nv.treesitter.selection.decrement },
     },
   },
   {

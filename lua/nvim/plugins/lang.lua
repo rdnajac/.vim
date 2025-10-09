@@ -4,7 +4,15 @@ return {
   {
     'mason-org/mason.nvim',
     opts = function()
-      return { ui = { icons = nv.icons.mason } }
+      return {
+    -- TODO: 
+        -- ui = { nv.icons.mason },
+        ui = {
+          package_installed = '✓',
+          package_pending = '➜',
+          package_uninstalled = '✗',
+        },
+      }
     end,
     build = ':MasonUpdate',
   },
@@ -22,7 +30,7 @@ return {
     },
   },
   {
-    'MeanderingProgrammer/render-markdown.nvim',
+    'MeanderingProgramMer/render-markdown.nvim',
     --- @module "render-markdown"
     --- @type render.md.UserConfig
     opts = {

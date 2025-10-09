@@ -147,6 +147,7 @@ nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
 nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks')<CR>
 nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config/init')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/plugins/init')<CR>
+nnoremap <BSlash>m <Cmd>call edit#luamod('nvim/plugins/mini')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
 " nnoremap <BSlash>k <Cmd>call edit#luamod('nvim/config/keymaps')<CR>
 

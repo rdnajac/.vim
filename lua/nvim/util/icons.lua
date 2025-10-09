@@ -37,7 +37,9 @@ local icons = {
       rounded = { left = '', right = '' },
     },
   },
-  copilot = { -- sidekick.nvim lualine components
+  ---@module "sidekick"
+  ---@type table <sidekick.lsp.Status.kind, { icon: string, hl: string }>
+  copilot = {
     Error = { ' ', 'DiagnosticError' },
     Inactive = { ' ', 'MsgArea' },
     Warning = { ' ', 'DiagnosticWarn' },

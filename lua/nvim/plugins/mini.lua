@@ -20,12 +20,8 @@ return {
 
     vim.schedule(function()
       for _, mod in ipairs(minimods) do
-        local ok, _ = pcall(require, 'nvim.plugins.mini.' .. mod)
-        if not ok then
-          require('mini.' .. mod).setup({})
-        else
-          -- print('loaded custom mini.' .. mod)
-        end
+        require('nvim.plugins.mini.' .. mod)
+        -- require('mini.' .. mod).setup({})
       end
     end)
   end,

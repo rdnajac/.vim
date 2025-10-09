@@ -1,8 +1,5 @@
 local M = {}
 
--- keep track of stuff
-M.did = vim.defaulttable()
-
 -- cache these to avoid multiple function calls
 M.stdpath = {}
 M.abspath = {}

@@ -20,3 +20,5 @@ end
 vim.cmd([[runtime vimrc]])
 
 require('nvim')
+
+vim.cmd.colorscheme('tokyonight')

@@ -11,7 +11,6 @@ M.blink = function()
   return ret
 end
 
-
 M.diagnostic = function()
   local counts = vim.diagnostic.count(0)
   local signs = vim.diagnostic.config().signs
@@ -28,8 +27,14 @@ M.diagnostic = function()
     :join('')
 end
 
+M.sidekick = function()
+  local ok, statusmod = pcall(require, 'sidekick.status')
+  local status = ok and statusmod and statusmod.get() or nil
+  local kind = status and status.kind or 'Inactive'
+  return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
+end
+
 M.lsp = require('nvim.util.lsp').status
-M.sidekick = require('nvim.plugins.sidekick').status
 M.treesitter = require('nvim.util.treesitter').status
 
 M.status = function()

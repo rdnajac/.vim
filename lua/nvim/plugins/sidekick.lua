@@ -37,8 +37,4 @@ return {
     { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
     { '<C-.>',      function() require('sidekick.cli').focus() end,    mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Switch Focus' },
   },
-  status = function()
-    local status = require('sidekick.status').get()
-    return status and nv.icons.copilot[status.kind][1] or nv.icons.copilot.Inactive[1]
-  end,
 }

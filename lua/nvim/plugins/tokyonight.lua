@@ -56,10 +56,6 @@ M.opts = {
   },
 }
 
--- TODO: keep all ui stuff here?
-M.after = function()
-  vim.cmd.colorscheme('tokyonight')
-end
 
 ---@param opts? tokyonight.Config
 ---@return string

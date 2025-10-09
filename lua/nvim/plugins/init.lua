@@ -1,31 +1,28 @@
 --- @module "which-key"
 
 --- @class PluginToDo
---- @field after table<string, fun():nil>
 --- @field commands table<string, fun():nil>
 --- @field keys table<string, wk.Spec>
---- @field setup table<string, fun():nil>
+--- @field todo fun()[]
 --- @field specs string[]
 local M = {
-  commands = {},
-  disabled = {},
+  specs = {}, -- packadd
+  todo = {}, -- set up
   keys = {},
-  specs = {},
-  todo = {},
-  names = {}
+  after = {},
+  disabled = {},
 }
 
-function M:add(k, plugin)
-  -- local v = plugin[k]
-  self[k][plugin.name] = plugin[k]
-end
+-- keep track of stuff
+M.did = vim.defaulttable()
+
+-- TODO:  make an opts keyset
 
 --- @class Plugin
 --- @field [1] string The plugin name in `user/repo` format.
 --- @field name string The plugin name, derived from [1]
 --- @field after? fun():nil Commands to run after the plugin is loaded.
 --- @field build? string|fun():nil Callback after plugin is installed/updated.
---- @field commands? fun():nil Ex commands to create.
 --- @field config? fun():nil Function to run to configure the plugin.
 --- @field enabled? boolean|fun():boolean Whether the plugin is disabled.
 --- @field keys? wk.Spec|fun():wk.Spec Key mappings to create.
@@ -34,58 +31,63 @@ end
 local Plugin = {}
 Plugin.__index = Plugin
 
-function Plugin:is_enabled()
-  return nv.get(self.enabled) ~= false
-end
+-- TODO: cache everthing,
+-- recording them in keyed entries
+-- then go through the list, skipping the ones that were disabled?
 
 --- @param t table
 function Plugin.new(t)
-  local self = setmetatable(t, Plugin)
+  local self = t
+  -- normalize the name
   self.name = self[1]:match('[^/]+$'):gsub('%.nvim$', '')
-  self.name = #self.name == 1 and self.name:lower() or self.name -- R.nvim
-  self:init()
-  -- TODO: maybe this returns the spec...
-  return self
+  --`R.nvim` -> `R` -> `r`
+  if #self.name == 1 then
+    self.name = self.name:lower()
+  end
+
+  return setmetatable(self, Plugin)
 end
 
 function Plugin:init()
-  --__index?
-  if self:is_enabled() then
-    M.specs[#M.specs + 1] = self[1]
-
-    -- only blink uese specs. mini should too.
-    if nv.is_nonempty_list(self.specs) then
-      vim.list_extend(M.specs, self.specs)
-    end
-
-    -- add command function to queue
-    if vim.is_callable(self.commands) then
-      M:add('commands', self)
-    end
-
-    -- add keys to queue
-    -- PERF: beeeeg table
-    local keys = nv.get(self.keys)
-    if nv.is_nonempty_list(keys) then
-      vim.list_extend(M.keys, keys)
-      -- M:add('keys', self)
-    end
-
-    M.todo[self.name] = function()
-      return self:setup()
-    end
-  else
+  if nv.get(self.enabled) == false then
     table.insert(M.disabled, self.name)
+    return
+  end
+
+  -- add self, optionally extend specs
+  M.specs[#M.specs + 1] = self[1]
+  -- only blink uses specs. mini should too.
+  if nv.is_nonempty_list(self.specs) then
+    vim.list_extend(M.specs, self.specs)
+  end
+
+  M.todo[self.name] = function()
+    return self:setup()
+  end
+
+  -- add keys to queue
+  -- PERF: use a beeeeg table. or vim.tbl_values?
+  local keys = nv.get(self.keys)
+  if nv.is_nonempty_list(keys) then
+    vim.list_extend(M.keys, keys)
+  end
+
+  if vim.is_callable(self.after) then
+    vim.schedule(function()
+      print('after for ' .. self.name)
+      M.did.after = pcall(self.after)
+    end)
   end
 end
 
 --- Call the `Plugin`'s `config` function if it exists, otherwise
 --- call the named module's `setup` function with `opts` they exist.
+-- PERF: skip trying to get opts if there is a config
+-- TODO: handle config = true and no opts
 function Plugin:setup()
-  local setup ---@type fun():nil
-  if vim.is_callable(self.config) then
-    setup = self.config
-  else
+  local setup = vim.is_callable(self.config) and self.config or nil
+  -- try to guess setup function if opts and no config
+  if not setup then
     local opts = nv.get(self.opts)
     if type(opts) == 'table' then
       setup = function()
@@ -93,15 +95,9 @@ function Plugin:setup()
       end
     end
   end
-
   -- call setup
   if vim.is_callable(setup) then
-    nv.did.setup[self.name] = pcall(setup)
-  end
-
-  -- call after
-  if vim.is_callable(self.after) then
-    nv.did.after[self.name] = pcall(self.after)
+    M.did.setup[self.name] = pcall(setup)
   end
 end
 
@@ -114,6 +110,7 @@ for _, file in ipairs(files) do
   local mod = require(modname)
   for _, t in ipairs(vim.islist(mod) and mod or { mod }) do
     local P = Plugin.new(t)
+    P:init()
   end
 end
 
