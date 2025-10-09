@@ -35,10 +35,8 @@ end
 --- @param t table
 function Plugin.new(t)
   local self = setmetatable(t, Plugin)
-
   self.name = self[1]:match('[^/]+$'):gsub('%.nvim$', '')
   self.name = #self.name == 1 and self.name:lower() or self.name -- R.nvim
-
   return self
 end
 
@@ -96,15 +94,14 @@ function Plugin:setup()
   end
 end
 
--- - @type table<string, Plugin>
--- local plugins = {}
-local dir = vim.fs.joinpath(nv.stdpath.config, 'lua', 'nvim', 'plugins')
+local luaroot = vim.fs.joinpath(nv.stdpath.config, 'lua')
+local dir = vim.fs.joinpath(luaroot, 'nvim', 'plugins')
 -- HACK: ignore files starting with 'i'
 local files = vim.fn.globpath(dir, '[^i]*.lua', false, true)
 
 for _, path in ipairs(files) do
-  local name = path:match('([^/]+)%.lua$')
-  local mod = require('nvim.plugins.' .. name)
+  local modname = path:sub(#luaroot + 2, -5)
+  local mod = require(modname)
   for _, t in ipairs(vim.islist(mod) and mod or { mod }) do
     local P = Plugin.new(t)
     P:init()
