@@ -1,5 +1,31 @@
-local M = {}
---- @module 'snacks'
+---@diagnostic disable-next-line
+local function reopen(picker, overrides)
+  local last = {
+    selected = picker:selected({ fallback = false }),
+    cursor = picker.list.cursor,
+    topline = picker.list.top,
+    input = { filter = vim.deepcopy(picker.input.filter) },
+    live = picker.opts.live,
+    toggles = {},
+    cwd = picker:cwd(),
+    source = picker.opts.source, -- included in opts
+  }
+
+  if picker.opts.toggles then
+    for toggle_name in pairs(picker.opts.toggles) do
+      last.toggles[toggle_name] = picker.opts[toggle_name]
+    end
+  end
+
+  picker:close()
+  Snacks.picker.pick(vim.tbl_extend('force', last, overrides or {}))
+end
+
+-- ---@param picker snacks.Picker
+-- local toggle = function(picker)
+--   local alt = picker.opts.source == 'files' and 'grep' or 'files'
+--   reopen(picker, { source = alt })
+-- end
 
 ---@param picker snacks.Picker
 local toggle = function(picker)
@@ -12,6 +38,17 @@ local toggle = function(picker)
     vim.api.nvim_feedkeys(vim.keycode('<C-R>"'), 'i', false)
   end)
 end
+
+-- ---@param picker snacks.Picker
+-- local zoxide = function(picker)
+--   picker:close()
+--   Snacks.picker.zoxide({
+--     confirm = function(z, item)
+--       z:close()
+--       reopen(picker, { cwd = item.file })
+--     end,
+--   })
+-- end
 
 ---@param picker snacks.Picker
 local zoxide = function(picker)
@@ -26,43 +63,28 @@ local zoxide = function(picker)
   })
 end
 
--- TODO: make jump work for vimscript items
--- TODO: Find command scriptnames picker in git history
-M.pick_conf = {
-  --- @param p snacks.Picker
-  --- @param item snacks.Item
-  confirm = function(p, item)
-    local file = item and item.file
-    if not file or file == '' then
-      Snacks.notify.warn('No file associated with this item')
-      return
-    end
-    p:action('jump', file)
-  end,
-}
+local M = {}
 
-M.opts_extend = {
-  actions = {
-    toggle = toggle,
-    zoxide = zoxide,
-  },
+---@type snacks.picker.Config
+M.extend = {
+  ---@type fun(opts:snacks.picker.Config):snacks.picker.Config?
   config = function(opts)
     local icon_map = { grep = '󰱽', files = '' }
     local icon = icon_map[opts.finder] or ' '
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
     local searchpath = opts.dirs and 'Multiple Paths' or vim.fn.fnamemodify(opts.cwd, ':~')
-    opts.title = string.format('%s %s [ %s ]', icon, name, searchpath)
 
-    -- FIXME: fix this and then try removing snacks from nvim
+    opts.title = string.format('%s %s [ %s ]', icon, name, searchpath)
     if nv.is_nonempty_list(opts.ft) then
-      opts.title = opts.title
-        .. ' '
-        .. table.concat(
+      opts.title = table.concat(
+        vim.list_extend(
+          { opts.title },
           vim.tbl_map(function(ft)
             return nv.icons(ft) or ft
-          end, opts.ft),
-          ' '
-        )
+          end, opts.ft)
+        ),
+        ' '
+      )
     end
 
     if not opts.cwd then
@@ -75,8 +97,18 @@ M.opts_extend = {
         opts.cwd = vim.fn.getcwd()
       end
     end
+
+    -- hide the preview window if the screen is too narrow
+    if vim.o.columns < 100 then
+      opts.layout.auto_hide = { 'preview' }
+    end
+
     return opts
   end,
+  actions = {
+    toggle = toggle,
+    zoxide = zoxide,
+  },
   win = {
     input = {
       keys = {

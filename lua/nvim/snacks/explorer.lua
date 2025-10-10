@@ -1,5 +1,5 @@
 ---@module "snacks"
----@type snacks.dashboard.Config
+---@type snacks.picker.explorer.Config
 return {
   -- cwd = vim.fn.getcwd(),
   ignored = true,
