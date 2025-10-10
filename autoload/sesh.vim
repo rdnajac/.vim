@@ -11,7 +11,7 @@ endfunction
 
 function! sesh#restart() abort
   if has('nvim')
-    let l:sesh = fnameescape(stdpath('state') . '/Session.vim')
+    let l:sesh = fnameescape(g:stdpath['state'] . '/Session.vim')
     execute 'mksession! ' . l:sesh
     let l:cmd = 'silent! source ' . l:sesh
     execute 'confirm restart ' . l:cmd

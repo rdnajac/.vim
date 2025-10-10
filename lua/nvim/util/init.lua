@@ -1,24 +1,8 @@
 local M = {}
 
--- cache these to avoid multiple function calls
-M.stdpath = {}
-M.abspath = {}
-
-for d in string.gmatch('cache config data state', '%S+') do
-  local stdpath = vim.fn.stdpath(d) ---@cast stdpath string
-  M.stdpath[d] = stdpath
-
-  local real = vim.loop.fs_realpath(stdpath) or stdpath
-  M.abspath[d] = vim.fs.normalize(real)
-end
-
 M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end
-
--- M.is_user_repo = function(s)
---   return s:match('^[%w._-]+/[%w._-]+$')
--- end
 
 M.is_nonempty_list = function(x)
   return vim.islist(x) and #x > 0
@@ -78,23 +62,6 @@ M.source = function()
     i = i + 1
   end
 end
-
----Autoloads submodules based on the caller's path.
----@param t table
----@param k string
----@return any
-function M.autoload(t, k)
-  local caller = M.source()
-  local caller_dir = vim.fs.dirname(caller)
-  local luaroot = vim.fs.joinpath(M.abspath.config, 'lua')
-  local prefix = caller_dir:sub(#luaroot)
-
-  local mod = require(prefix .. '.' .. k)
-  rawset(t, k, modutil)
-  return mod
-end
-
--- return setmetatable(M, { __index = M.autoload })
 
 return setmetatable(M, {
   __index = function(t, k)

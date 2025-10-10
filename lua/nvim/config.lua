@@ -12,3 +12,10 @@ vim.schedule(function()
     end
   end)
 end)
+
+return setmetatable({}, {
+  __index = function(t, k)
+    t[k] = require('nvim.config.' .. k)
+    return t[k]
+  end,
+})

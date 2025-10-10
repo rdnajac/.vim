@@ -19,7 +19,6 @@ function! s:edit(file, ...) abort
   let l:extra = a:0 >= 1 ? a:1 : ''
 
   " Check if the file exists, if not prompt to create it
-  " TODO: don't prompt if trying to access a dir
   if !filereadable(l:file)
     let l:maybe_dir = fnamemodify(a:file, ':r')
 
@@ -82,9 +81,10 @@ function! edit#luamod(name) abort
     vim#notify#error('This function is only available in Neovim.')
     return
   endif
-  " TODO: handle /init.lua
-  let l:file = stdpath('config') . '/lua/' . a:name . '.lua'
-
+  let l:file = printf('%s/lua/%s.lua', g:stdpath['config'], a:name)
+  if !filereadable(l:file)
+    let l:file = printf('%s/lua/%s/init.lua', g:stdpath['config'], a:name)|
+  endif
   call s:edit(l:file)
 endfunction
 

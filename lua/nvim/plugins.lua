@@ -1,5 +1,22 @@
-_G.nv = _G.nv or require('nvim.util')
+-- _G.nv = _G.nv or require('nvim.util')
+local lazyload = require('nvim.util').lazyload
+
 -- TODO:  make an opts keyset
+
+--- @class Plugins
+--- @field Plug fun(t:table):Plugin
+--- @field did table<string, boolean> Tracks plugin fun calls
+--- @field specs string[] List of plugins (`user/repo`)
+--- @field disabled string[] List of disabled plugin (`user/repo`)
+--- @field keys table<string, wk.Spec> Key mappings to create
+--- @field todo table<string, fun():nil> Functions to call to setup plugins
+local M = {
+  did = vim.defaulttable(),
+  specs = {},
+  disabled = {},
+  keys = {},
+  todo = {},
+}
 
 --- @class Plugin
 --- @field [1] string The plugin name in `user/repo` format.
@@ -25,21 +42,12 @@ function Plugin.new(t)
   return setmetatable(self, Plugin)
 end
 
---- @class Plugins
---- @field Plug fun(t:table):Plugin
---- @field did table<string, boolean> Tracks plugin fun calls
---- @field specs string[] List of plugins (`user/repo`)
---- @field disabled string[] List of disabled plugin (`user/repo`)
---- @field keys table<string, wk.Spec> Key mappings to create
---- @field todo table<string, fun():nil> Functions to call to setup plugins
-local M = {
-  Plug = Plugin.new,
-  did = vim.defaulttable(),
-  specs = {},
-  disabled = {},
-  keys = {},
-  todo = {},
-}
+setmetatable(M, {
+  -- __call = Plugin.new,
+  __call = function(_, k)
+    return Plugin.new(k)
+  end,
+})
 
 --- @generic T
 --- @param x T|fun():T
@@ -70,7 +78,7 @@ function Plugin:init()
           self:setup()
         end, self.event)
       elseif self.ft then
-        nv.lazyload(function()
+        lazyload(function()
           self:setup()
         end, 'FileType', self.ft)
       else
@@ -106,8 +114,8 @@ function Plugin:setup()
   end
 end
 
-nv.lazyload(function()
-  require('which-key').add(vim.tbl_values(nv.plugins.keys))
+lazyload(function()
+  require('which-key').add(vim.tbl_values(M.keys))
 end)
 
 return M

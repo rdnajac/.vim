@@ -12,7 +12,7 @@ function! vimrc#init() abort
 endfunction
 
 function! vimrc#home() abort
-  return has('nvim') ? stdpath('config') : split(&runtimepath, ',')[0]
+  return has('nvim') ? g:stdpath['config'] : split(&runtimepath, ',')[0]
 endfunction
 
 ""
@@ -40,7 +40,7 @@ endfunction
 function! vimrc#nvim_config() abort " {{{
   set backup
   set backupext=.bak
-  let &backupdir = stdpath('state') . '/backup//'
+  let &backupdir = g:stdpath['state'] . '/backup//'
   let &backupskip .= ',' . escape(expand('$HOME/.cache/*'), '\')
   let &backupskip .= ',' . escape(expand('$HOME/.local/*'), '\')
   set undofile

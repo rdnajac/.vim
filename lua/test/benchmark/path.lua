@@ -7,9 +7,9 @@ local function bench(label, fn)
   print(label, string.format('%.2f ms', elapsed))
 end
 
-local dir = vim.fs.joinpath(nv.stdpath.config, 'lua', 'nvim', 'plugins')
+local dir = vim.fs.joinpath(vim.g.stdpath.config, 'lua', 'nvim', 'plugins')
 local files = vim.fn.globpath(dir, '[^i]*.lua', false, true)
-local base = vim.fs.joinpath(nv.stdpath.config, 'lua')
+local base = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
 
 for _, path in ipairs(files) do
   bench('match', function()

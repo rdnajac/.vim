@@ -161,7 +161,7 @@ local keys = {
 
     local picker_pairs = {
       Dotfiles = { '.', vim.g['chezmoi#source_dir_path'], { hidden = true } },
-      DataFiles = { 'd', vim.fn.stdpath('data') },
+      DataFiles = { 'd', vim.g.stdpath.data },
       GitHubRepos = { 'G', '~/GitHub/' },
       ConfigFiles = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
       VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
