@@ -47,7 +47,7 @@ local register_commands = function()
     print('\nInactive:\n' .. table.concat(inactive, '\n'))
   end, {})
 
-  local unloaded = nv.plug.unloaded()
+  local unloaded = require('nvim.plugins').unloaded()
 
   command('PlugClean', function(opts)
     local plugs = #opts.fargs > 0 and opts.fargs or unloaded

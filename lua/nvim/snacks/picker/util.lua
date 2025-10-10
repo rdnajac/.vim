@@ -68,7 +68,7 @@ M.opts_extend = {
     if not opts.cwd then
       if vim.bo.filetype == 'oil' then
         opts.cwd = require('oil').get_current_dir()
-        -- TODO: write project root func usinglsp
+      -- TODO: write project root func usinglsp
       elseif vim.fn.exists('*git#root') == 1 and vim.fn['git#root']() ~= '' then
         opts.cwd = vim.fn['git#root']()
       else

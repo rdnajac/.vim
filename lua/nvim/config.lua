@@ -5,17 +5,13 @@ vim.o.cmdheight = 0
 vim.o.winborder = 'rounded'
 require('vim._extui').enable({})
 
+local submodules = {}
 vim.schedule(function()
-  nv.for_each_submodule('nvim', 'config', function(mod)
+  nv.for_each_submodule('nvim', 'config', function(mod, name)
+    submodules[name] = mod
     if mod.setup then
       mod.setup()
     end
   end)
 end)
-
-return setmetatable({}, {
-  __index = function(t, k)
-    t[k] = require('nvim.config.' .. k)
-    return t[k]
-  end,
-})
+return submodules

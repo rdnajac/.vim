@@ -252,6 +252,7 @@ if has ('nvim')
   nnoremap <leader>dD <Cmd>=nv.did<CR>
   " nnoremap <leader>dD <Cmd>=nv.did<CR>
   nnoremap <leader>dP <Cmd>=vim.tbl_keys(package.loaded)<CR>
+  nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
 endif
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
@@ -420,7 +421,6 @@ let g:interpreters = {
       \ }
 
 " }}}1
-
 " Section: plugins {{{ 1
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
@@ -466,4 +466,4 @@ if !exists('g:loaded_vimrc')
 else
   let g:loaded_vimrc+= 1 | Info 'Reloaded vimrc [' . g:loaded_vimrc . ']'
 endif
-" vim:fdm=marker
+" vim:foldlevelstart=1:fdm=marker

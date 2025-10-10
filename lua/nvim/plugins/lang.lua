@@ -1,4 +1,3 @@
-vim.g.rout_follow_colorscheme = true
 return {
   { 'neovim/nvim-lspconfig' },
   {
@@ -20,14 +19,18 @@ return {
   -- { 'b0o/SchemaStore.nvim' },
   {
     'R-nvim/R.nvim',
-    --- @module "r"
-    --- @type RConfigUserOpts
-    opts = {
-      R_args = { '--quiet', '--no-save' },
-      pdfviewer = '',
-      user_maps_only = true,
-      quarto_chunk_hl = { highlight = false },
-    },
+    ft = { 'r', 'rmd', 'quarto' },
+    opts = function()
+      vim.g.rout_follow_colorscheme = true
+      ---@module "r"
+      ---@type RConfigUserOpts
+      return {
+        R_args = { '--quiet', '--no-save' },
+        -- pdfviewer = 'skim',
+        user_maps_only = true,
+        quarto_chunk_hl = { highlight = false },
+      }
+    end,
   },
   {
     'MeanderingProgramMer/render-markdown.nvim',

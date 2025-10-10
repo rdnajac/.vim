@@ -12,7 +12,8 @@ vim.g.lua_root = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_dir, 'snacks.nvim'))
   ---@type snacks.profiler.Config
-  local opts = { startup = { event = 'VimEnter' } }
+  local opts = { startup = { event = 'UIEnter' } }
+
   require('snacks.profiler').startup(opts)
 end
 
@@ -21,5 +22,3 @@ vim.cmd([[runtime vimrc]])
 
 -- the rest if the owl
 require('nvim')
-
-vim.cmd.colorscheme('tokyonight')
