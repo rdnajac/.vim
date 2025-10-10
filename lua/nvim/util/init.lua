@@ -24,21 +24,6 @@ M.is_nonempty_list = function(x)
   return vim.islist(x) and #x > 0
 end
 
---- @generic T
---- @param x T|T[]
---- @return T[]
-M.ensure_list = function(x)
-  return type(x) == 'table' and x or { x }
-end
-
---- @generic T
---- @param x T|fun():T
---- @return T
-M.get = function(x)
-  return type(x) == 'function' and x() or x
-  -- return vim.is_callable(x) and x() or x
-end
-
 local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- Lazy-load a function on its event or on UIEnter by default.
 -- TODO:  fix this signature
@@ -55,6 +40,18 @@ M.lazyload = function(cb, event, pattern)
     once = true, -- NOTE: this deletes the autocmd and it won't appear in `:autocmd`
     pattern = pattern and pattern or '*',
   })
+end
+
+M.for_all_files = function(topmod, subdir, callback)
+  local path = vim.fs.joinpath(vim.g.lua_root, topmod, subdir)
+  local files = vim.fn.globpath(path, '*.lua', false, true)
+  for _, file in ipairs(files) do
+    local modname = file:sub(#vim.g.lua_root + 2, -5)
+    local ok, mod = pcall(require, modname)
+    if ok and mod then
+      callback(modname, mod)
+    end
+  end
 end
 
 --- Returns the absolute file path of the first non-self caller.
