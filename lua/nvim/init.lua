@@ -1,27 +1,21 @@
 _G.nv = require('nvim.util')
 nv.plugins = require('nvim.plugins')
 
--- plugins
-nv.for_all_files('nvim', 'plugins', function(_, mod)
-  for _, t in ipairs(vim.islist(mod) and mod or { mod }) do
-  -- for _, t in ipairs(nv.ensure_list(mod)) do
+nv.for_each_submodule('nvim', 'plugins', function(m, name)
+  for _, t in ipairs(vim.islist(m) and m or { m }) do
     nv.plugins.Plug(t):init()
   end
 end)
 
-local speclist = vim.tbl_map(function(user_repo)
-  return {
-    src = 'https://github.com/' .. user_repo .. '.git',
-    -- HACK: remove this when treesitter defaults to `main`
-    version = vim.startswith(user_repo, 'nvim-treesitter') and 'main' or nil,
-  }
-end, nv.plugins.specs)
+vim.pack.add(vim.tbl_map(function(user_repo)
+  local spec = { src = 'https://github.com/' .. user_repo .. '.git' }
+  -- HACK: remove this once default branches become `main`
+  spec.version = vim.startswith(user_repo, 'nvim-treesitter') and 'main' or nil
+  return spec
+end, vim.list_extend(nv.plugins.specs, vim.g.plugins or {})))
 
-vim.list_extend(speclist, vim.g.plugins or {})
-
-vim.pack.add(speclist)
-
--- Weird stuff happens when enabling extui before vim.pack.add
+-- Weird stuff happens if extui enabled before vim.pack.add
+-- but it should be loaded before the plugins' setup functions
 nv.config = require('nvim.config')
 
 for _, setup in pairs(nv.plugins.todo) do

@@ -18,8 +18,8 @@ end
 
 M.setup = function()
   vim.notify = M.notify
-  -- Snacks.notify('Notifier enabled')
-  Snacks.notify.info('Notifier enabled')
+  Snacks.notify('Notifier enabled')
+  -- Snacks.notify.info('Notifier enabled')
   -- Snacks.notify.warn('Notifier enabled')
   -- Snacks.notify.error('Notifier enabled')
 end

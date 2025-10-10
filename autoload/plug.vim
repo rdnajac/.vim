@@ -9,8 +9,8 @@ function! plug#begin() abort
 endfunction
 
 function! plug#(repo, ...) abort
-  " call add(g:plugins, a:repo)
-  call add(g:plugins, 'http://github.com/'.a:repo.'.git')
+  call add(g:plugins, a:repo)
+  " call add(g:plugins, 'http://github.com/'.a:repo.'.git')
 endfunction
 
 function! plug#end() abort

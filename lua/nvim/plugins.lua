@@ -25,6 +25,13 @@ function Plugin.new(t)
   return setmetatable(self, Plugin)
 end
 
+--- @class Plugins
+--- @field Plug fun(t:table):Plugin
+--- @field did table<string, boolean> Tracks plugin fun calls
+--- @field specs string[] List of plugins (`user/repo`)
+--- @field disabled string[] List of disabled plugin (`user/repo`)
+--- @field keys table<string, wk.Spec> Key mappings to create
+--- @field todo table<string, fun():nil> Functions to call to setup plugins
 local M = {
   Plug = Plugin.new,
   did = vim.defaulttable(),
@@ -46,32 +53,36 @@ function Plugin:is_enabled()
 end
 
 function Plugin:init()
-  local specs = { self[1] }
-  if vim.islist(self.specs) then
-    vim.list_extend(specs, self.specs)
-  end
-
   local enabled = self:is_enabled()
+  local speclist = { self[1] }
+
+  if vim.islist(self.specs) then
+    vim.list_extend(speclist, self.specs)
+  end
+  vim.list_extend(M[enabled and 'specs' or 'disabled'], speclist)
+
   if enabled then
+    M.keys[self.name] = get(self.keys) or nil
     M.todo[self.name] = function()
+      -- TODO: if lazy = true, lazyload with default nil param
       if self.event then
         nv.lazyload(function()
           self:setup()
         end, self.event)
+      elseif self.ft then
+        nv.lazyload(function()
+          self:setup()
+        end, 'FileType', self.ft)
       else
         self:setup()
       end
     end
-
-    M.keys[self.name] = get(self.keys) or nil
-
     if vim.is_callable(self.after) then
       vim.schedule(function()
         M.did.after[self.name] = pcall(self.after)
       end)
     end
   end
-  vim.list_extend(M[enabled and 'specs' or 'disabled'], specs)
 end
 
 --- Call the `Plugin`'s `config` function if it exists, otherwise
