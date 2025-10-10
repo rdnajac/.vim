@@ -54,4 +54,29 @@ function M.track_complex_fn(label, fn)
   end
 end
 
+-- --@alias LazyProfile {data: string|{[string]:string}, time: number, [number]:LazyProfile}
+-- ---@type LazyProfile[]
+-- M._profiles = { { name = "lazy" } }
+-- ---@param data (string|{[string]:string})?
+-- ---@param time number?
+-- function M.track(data, time)
+--   if data then
+--     local entry = {
+--       data = data,
+--       time = time or vim.uv.hrtime(),
+--     }
+--     table.insert(M._profiles[#M._profiles], entry)
+--
+--     if not time then
+--       table.insert(M._profiles, entry)
+--     end
+--     return entry
+--   else
+--     ---@type LazyProfile
+--     local entry = table.remove(M._profiles)
+--     entry.time = vim.uv.hrtime() - entry.time
+--     return entry
+--   end
+-- end
+
 return M
