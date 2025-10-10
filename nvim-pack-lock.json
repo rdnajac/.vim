@@ -9,7 +9,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "2b44b9c",
+      "rev": "cc8c9b7",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -45,11 +45,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "fbb6ad0",
+      "rev": "57c1611",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "6c2d8e3",
+      "rev": "523156e",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
@@ -70,15 +70,15 @@
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
     "render-markdown.nvim": {
-      "rev": "2064980",
+      "rev": "d538564",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "5c7a75d",
+      "rev": "819470b",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "dae80fb",
+      "rev": "94f1053",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {
