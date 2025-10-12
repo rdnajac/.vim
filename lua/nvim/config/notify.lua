@@ -16,9 +16,9 @@ end
 
 M.setup = function()
   vim.notify = M.notify
-  for level in string.gmatch('notify info warn error', '%S+') do
-    Snacks.notify[level]('Notifier enabled!')
-  end
+  -- for level in string.gmatch('notify info warn error', '%S+') do
+  --   Snacks.notify[level]('Notifier enabled!')
+  -- end
 end
 
 return setmetatable(M, {
