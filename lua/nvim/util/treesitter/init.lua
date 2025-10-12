@@ -11,7 +11,6 @@ M.status = function()
 end
 
 M._installed = nil ---@type table<string,string>?
-
 ---@param update boolean?
 function M.get_installed(update)
   if update then

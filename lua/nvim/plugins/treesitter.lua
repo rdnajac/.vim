@@ -1,47 +1,14 @@
-local aug = vim.api.nvim_create_augroup('treesitter', {})
-
---- @param ft string|string[] filetype or list of filetypes
---- @param override string|nil optional override parser lang
-local autostart = function(ft, override)
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = ft,
-    group = aug,
-    callback = function(args)
-      vim.treesitter.start(args.buf, override)
-    end,
-    desc = 'Automatically start tree-sitter with optional language override',
-  })
-end
-
-local autostart_filetypes = {
-  'markdown',
-  'python',
-  'yaml',
-  'json',
-  'html',
-  'css',
-  'javascript',
-  'typescript',
-  'toml',
-}
-
 local M = {
   {
     'nvim-treesitter/nvim-treesitter',
     build = vim.cmd.TSUpdate,
-    config = function()
-      autostart(autostart_filetypes)
-      autostart({ 'sh', 'zsh' }, 'bash')
-    end,
+    -- build = function()
+    --   require('nvim-treesitter').update(nil, { summary = true })
+    -- end,
     keys = {
       { '<C-Space>', nv.treesitter.selection.start },
-      {
-        mode = 'x',
-        { '<C-Space>', nv.treesitter.selection.increment },
-        { '<BS>', nv.treesitter.selection.decrement },
-      },
-      -- { mode = 'x', '<C-Space>', nv.treesitter.selection.increment },
-      -- { mode = 'x', '<BS>', nv.treesitter.selection.decrement },
+      { mode = 'x', '<C-Space>', nv.treesitter.selection.increment },
+      { mode = 'x', '<BS>', nv.treesitter.selection.decrement },
     },
   },
   {

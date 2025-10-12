@@ -196,7 +196,7 @@ nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
-nnoremap cdP :execute 'edit ' . plug_dir . '/' \| pwd<CR>
+nnoremap cdP :execute 'edit ' . plugdir . '/' \| pwd<CR>
 
 nmap <expr> cq change#quote()
 

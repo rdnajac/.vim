@@ -22,6 +22,19 @@ local map = {
 -- snacks scratch? buftype = ''
 -- noflisted
 
-return function()
+local M = setmetatable({}, {
+  __call = function(M, ...)
+    return M.winbar(...)
+  end,
+})
+
+function M.winbar()
   return vim.bo.filetype == 'snacks_dashboard' and '' or map[vim.bo.buftype]()
 end
+
+function M.setup()
+  nv.winbar = M.winbar
+  vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+end
+
+return M
