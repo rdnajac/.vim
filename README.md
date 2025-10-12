@@ -44,6 +44,15 @@ Both pages are offline...
 
 Luckily they have been cached by the Internet Archive.
 
+### [Vim Galore](https://github.com/mhinz/vim-galore?tab=readme-ov-file#editing-remote-files)
+
+There is a section on editing remote files that suggests
+reading these help files:
+
+- `:h netrw-netrc`
+- `:h netrw-ssh-hack`
+- `:h netrw_ssh_cmd`
+
 ## Spell Checking
 
 Download [cspell](http://streetsidesoftware.github.io/cspell/)
