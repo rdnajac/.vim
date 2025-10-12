@@ -4,7 +4,7 @@ let g:maplocalleader = '\'
 call vimrc#init()
 
 let &laststatus = has('nvim') ? 3 : 2
-" set statusline=%!vimline#statusline()
+set statusline=%!vimline#statusline()
 
 " Section: settings {{{1
 set noswapfile

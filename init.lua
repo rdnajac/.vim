@@ -21,5 +21,10 @@ end
 --- loads vim settings and exports vim.g.plugins
 vim.cmd([[runtime vimrc]])
 
+-- These must be set before extui is enabled
+vim.o.cmdheight = 0
+vim.o.winborder = 'rounded'
+require('vim._extui').enable({})
+
 -- the rest if the owl
 require('nvim')

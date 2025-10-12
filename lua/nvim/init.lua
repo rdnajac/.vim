@@ -1,5 +1,4 @@
 _G.nv = _G.nv or require('nvim.util')
-nv.config = require('nvim.config')
 nv.specs = vim.g.plugins or {}
 nv.keys = {}
 
@@ -27,3 +26,10 @@ local function _load(plug_data)
 end
 
 vim.pack.add(nv.specs, { load = _load })
+
+vim.schedule(function()
+  nv.for_each_submodule('nvim', 'config', function(mod, _)
+    mod.setup()
+  end)
+  vim.o.winbar = [[%{%v:lua.nv.winbar()%}]]
+end)
