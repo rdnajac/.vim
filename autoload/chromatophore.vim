@@ -3,6 +3,7 @@ if !exists('g:chromatophore_groups')
 	\ 'FloatBorder',
 	\ 'Folded',
 	\ 'MsgArea',
+	\ 'Pmenu',
 	\ 'StatusLineNC',
 	\ 'StatusLineTermNC',
 	\ 'String',

@@ -47,9 +47,6 @@ function! vimrc#nvim_config() abort " {{{
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
 
-  " enable the shipped undotree plugin
-  packadd! nvim.undotree
-
   let g:nvim_did_init = v:true
 endfunction
 

@@ -15,6 +15,16 @@ M.is_nonempty_list = function(x)
   return vim.islist(x) and #x > 0
 end
 
+--- @param subdir string subdirectory of `nvim/` to search
+--- @return string[] list of module names ready for `require()`
+M.submodules = function(subdir)
+  local path = vim.fs.joinpath(vim.g.luaroot, 'nvim', subdir)
+  local files = vim.fn.globpath(path, '*.lua', false, true)
+  return vim.tbl_map(function(f)
+    return f:sub(#vim.g.luaroot + 2, -5)
+  end, files)
+end
+
 local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- Lazy-load a function on its event or on UIEnter by default.
 --- Runs the callback once and then deletes the autocmd.

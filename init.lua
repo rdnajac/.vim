@@ -1,5 +1,5 @@
 vim.loader.enable()
-require('nvim.util.track')
+-- require('nvim.util.track')
 
 local _stdpath = {} -- PERF: cache stdpath results
 for d in string.gmatch('cache config data state', '%S+') do
@@ -36,12 +36,7 @@ vim._print = function(_, ...)
 end
 
 --- loads vim settings and exports vim.g.plugins
-vim.cmd([[runtime vimrc]])
-
--- These must be set before extui is enabled
-vim.o.cmdheight = 0
-vim.o.winborder = 'rounded'
-require('vim._extui').enable({})
+vim.cmd([[runtime vimrc | packadd! nvim.undotree]])
 
 -- the rest if the owl
 require('nvim')
