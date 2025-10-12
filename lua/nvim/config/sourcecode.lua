@@ -1,36 +1,36 @@
 -- highlights `src` in backticks ( ` )
 local ns = vim.api.nvim_create_namespace('src')
 
-local in_comment = function(lnum, s_col)
+local function in_comment(lnum, s_col)
   if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] then
     return nv.treesitter.is_comment({ lnum, s_col })
-  else
-    local synid = vim.fn.synID(lnum + 1, s_col + 1, 1)
-    local name = vim.fn.synIDattr(synid, 'name')
-    return name and name:find('Comment') ~= nil
   end
+  local synid = vim.fn.synID(lnum + 1, s_col + 1, 1)
+  local name = vim.fn.synIDattr(synid, 'name')
+  return name and name:find('Comment') ~= nil
 end
 
 local function highlight_line(bufnr, lnum, line)
   vim.api.nvim_buf_clear_namespace(bufnr, ns, lnum, lnum + 1)
 
-  if not line:match('`.*`') then
-    return
-  end
+  local s_col = 0
+  while true do
+    local s, e = line:find('`[^`\n]+`', s_col + 1)
+    if not s then
+      break
+    end
 
-  for start_col, text in line:gmatch('()`([^`\n]+)`()') do
-    local s_col = start_col - 1
-    local e_col = s_col + #text + 2
-
-    if in_comment(lnum, s_col) then
-      vim.api.nvim_buf_set_extmark(bufnr, ns, lnum, s_col, {
-        end_col = e_col,
+    -- highlight inside comment only
+    if in_comment(lnum, s - 1) then
+      vim.api.nvim_buf_set_extmark(bufnr, ns, lnum, s - 1, {
+        end_col = e,
         hl_group = 'Chromatophore',
         hl_mode = 'combine',
         spell = false,
         priority = 10000,
       })
     end
+    s_col = e
   end
 end
 
@@ -43,7 +43,7 @@ end
 
 local M = {}
 
-M.setup = function()
+function M.setup()
   vim.api.nvim_create_autocmd('BufEnter', {
     nested = true,
     callback = function(args)
@@ -52,14 +52,13 @@ M.setup = function()
       end
       highlight_backticks(args.buf)
 
-      -- register another autocmd
       vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
-        callback = function(args)
-          local cursor = vim.api.nvim_win_get_cursor(0)
-          local lnum = cursor[1] - 1
-          local line = vim.api.nvim_buf_get_lines(args.buf, lnum, lnum + 1, false)[1]
+        buffer = args.buf,
+        callback = function(a)
+          local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
+          local line = vim.api.nvim_buf_get_lines(a.buf, lnum, lnum + 1, false)[1]
           if line then
-            highlight_line(args.buf, lnum, line)
+            highlight_line(a.buf, lnum, line)
           end
         end,
       })

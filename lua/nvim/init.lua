@@ -28,7 +28,7 @@ end
 vim.pack.add(nv.specs, { load = _load })
 
 vim.schedule(function()
-  nv.for_each_submodule('nvim', 'config', function(mod, _)
+  nv.for_each_submodule('nvim', 'config', function(mod, name)
     mod.setup()
   end)
   vim.o.winbar = [[%{%v:lua.nv.winbar()%}]]
