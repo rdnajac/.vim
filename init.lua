@@ -1,5 +1,5 @@
 vim.loader.enable()
--- require('nvim.util.track')
+require('nvim.util.track')
 
 local _stdpath = {} -- PERF: cache stdpath results
 for d in string.gmatch('cache config data state', '%S+') do

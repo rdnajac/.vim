@@ -7,6 +7,7 @@ return {
     after = function()
       vim.lsp.enable('copilot')
       vim.lsp.inline_completion.enable()
+
       Snacks.toggle({
         name = 'Inline Completion',
         get = function()
@@ -17,27 +18,34 @@ return {
         end,
       }):map('<leader>ai')
 
-      local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
-      vim.api.nvim_create_autocmd('User', {
-        group = aug,
-        pattern = 'BlinkCmpMenuOpen',
-        callback = function()
-          if vim.lsp.inline_completion.is_enabled() then
-            vim.b.inline_completion_toggle = 1
-            vim.lsp.inline_completion.enable(false)
-          end
-        end,
-      })
-      vim.api.nvim_create_autocmd('User', {
-        pattern = 'BlinkCmpMenuClose',
-        group = aug,
-        callback = function()
-          if vim.b.inline_completion_toggle then
-            vim.lsp.inline_completion.enable(true)
-            vim.b.inline_completion_toggle = nil
-          end
-        end,
-      })
+      -- FIXME:
+      -- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
+      --
+      -- local function has_inline()
+      --   return vim.lsp and vim.lsp.inline_completion
+      -- end
+      --
+      -- vim.api.nvim_create_autocmd('User', {
+      --   group = aug,
+      --   pattern = 'BlinkCmpMenuOpen',
+      --   callback = function()
+      --     if has_inline() and vim.lsp.inline_completion.is_enabled() then
+      --       vim.b.inline_completion_toggle = true
+      --       vim.lsp.inline_completion.enable(false)
+      --     end
+      --   end,
+      -- })
+      --
+      -- vim.api.nvim_create_autocmd('User', {
+      --   group = aug,
+      --   pattern = 'BlinkCmpMenuClose',
+      --   callback = function()
+      --     if has_inline() and vim.b.inline_completion_toggle then
+      --       vim.lsp.inline_completion.enable(true)
+      --       vim.b.inline_completion_toggle = nil
+      --     end
+      --   end,
+      -- })
     end,
   -- stylua: ignore
       keys = {
