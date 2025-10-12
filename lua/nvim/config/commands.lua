@@ -1,5 +1,3 @@
-local nv = _G.nv or require('nvim.util')
-
 local register_commands = function()
   local command = vim.api.nvim_create_user_command
 

@@ -33,6 +33,7 @@ function Plugin.new(t)
     return self:setup()
   end
   data.build = self.build
+  data.keys = self.keys
   self.data = data
 
   return setmetatable(self, Plugin)
