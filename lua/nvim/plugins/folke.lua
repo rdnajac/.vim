@@ -39,6 +39,47 @@ return {
     },
   },
   {
+    'folke/todo-comments.nvim',
+    lazy = true,
+    opts = {
+      keywords = { Section = { icon = '󰚟', color = 'title' } },
+      -- highlight = { keyword = 'bg', },
+      colors = { title = { '#7DCFFF' } },
+    },
+    keys = {
+      -- stylua: ignore
+      { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
+    },
+    after = function()
+      for _, cmd in ipairs({ 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }) do
+        vim.cmd.delcommand(cmd)
+      end
+    end,
+  },
+  {
+    'folke/flash.nvim',
+    enabled = false,
+    opts = {},
+    -- stylua: ignore
+    keys = {
+      { 'gj', mode = { 'n', 'o', 'x' }, function() require('flash').jump() end,       desc = 'Flash'                    },
+      { 's',  mode = { 'n', 'o', 'x' }, function() require('flash').treesitter() end, desc = 'Flash Treesitter'         },
+      { 'R',  mode = {      'o', 'x' }, function() require('flash').treesitter_search() end, desc = 'Treesitter Search' },
+      { 'J',  mode = {           'x' }, function() require('flash').remote() end,     desc = 'Remote Flash'             },
+      -- { '<C-s>', mode = { 'c' }, function() require('flash').toggle() end, desc = 'Toggle Flash Search' },
+    },
+    after = function()
+      vim.keymap.set({ 'n', 'o', 'x' }, '<C-Space>', function()
+        require('flash').treesitter({
+          actions = {
+            ['<C-Space>'] = 'next',
+            ['<BS>'] = 'prev',
+          },
+        })
+      end, { desc = 'Treesitter incremental selection' })
+    end,
+  },
+  {
     'folke/noice.nvim',
     enabled = false,
     opts = {
@@ -69,57 +110,8 @@ return {
       },
     },
   },
-  {
-    'folke/flash.nvim',
-    enabled = false,
-    opts = {},
-    -- stylua: ignore
-    keys = {
-      { 'gj', mode = { 'n', 'o', 'x' }, function() require('flash').jump() end,       desc = 'Flash'                    },
-      { 's',  mode = { 'n', 'o', 'x' }, function() require('flash').treesitter() end, desc = 'Flash Treesitter'         },
-      { 'J',  mode = {           'x' }, function() require('flash').remote() end,     desc = 'Remote Flash'             },
-      { 'R',  mode = {      'o', 'x' }, function() require('flash').treesitter_search() end, desc = 'Treesitter Search' },
-      -- { '<C-s>', mode = { 'c' }, function() require('flash').toggle() end, desc = 'Toggle Flash Search' },
-    },
-    after = function()
-      vim.keymap.set({ 'n', 'o', 'x' }, '<C-Space>', function()
-        require('flash').treesitter({
-          actions = {
-            ['<C-Space>'] = 'next',
-            ['<BS>'] = 'prev',
-          },
-        })
-      end, { desc = 'Treesitter incremental selection' })
-    end,
-  },
-  {
-    'folke/todo-comments.nvim',
-    lazy = true,
-    opts = {
-      keywords = { Section = { icon = '󰚟', color = 'title' } },
-      -- highlight = { keyword = 'bg', },
-      colors = { title = { '#7DCFFF' } },
-    },
-    keys = {
-      -- stylua: ignore
-      { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
-    },
-    after = function()
-      for _, cmd in ipairs({ 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }) do
-        vim.cmd.delcommand(cmd)
-      end
-    end,
-  },
-  {
-    'folke/trouble.nvim',
-    enabled = false,
-    opts = {},
-  },
-  {
-    'folke/ts-comments.nvim',
-    enabled = false,
-    opts = {},
-  },
+  { 'folke/trouble.nvim', enabled = false, opts = {} },
+  { 'folke/ts-comments.nvim', enabled = false, opts = {} },
   {
     'folke/lazydev.nvim',
     enabled = true,

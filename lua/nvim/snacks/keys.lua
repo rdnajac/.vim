@@ -1,46 +1,5 @@
-return {
-  'folke/snacks.nvim',
-  opts = function()
-    _G.dd = function(...)
-      Snacks.debug.inspect(...)
-    end
-    _G.bt = function(...)
-      Snacks.debug.backtrace(...)
-    end
-    _G.p = function(...)
-      Snacks.debug.profile(...)
-    end
-    --- @diagnostic disable-next-line: duplicate-set-field
-    vim._print = function(_, ...)
-      dd(...)
-    end
-    --- @type snacks.Config
-    return {
-      bigfile = { enabled = true },
-      dashboard = require('nvim.snacks.dashboard'),
-      explorer = { replace_netrw = false }, -- using `oil` instead
-      indent = { indent = { only_current = true, only_scope = true } },
-      input = { enabled = true },
-      notifier = { enabled = false },
-      -- notifier = require('nvim.snacks.notifier'),
-      quickfile = { enabled = true },
-      scratch = { template = 'local x = \n\nprint(x)' },
-      terminal = { enabled = true },
-      scope = { enabled = true },
-      scroll = { enabled = true },
-      statuscolumn = { enabled = false },
-      picker = require('nvim.snacks.picker'),
-      styles = {
-        dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
-        lazygit = { height = 0, width = 0 },
-        terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
-      },
-      words = { enabled = true },
-    }
-  end,
-  keys = function()
-    local all = { hidden = true, nofile = true } -- opts for buffers (all)
-    local notifier = true -- TODO:
+local all = { hidden = true, nofile = true } -- opts for buffers (all)
+local notifier = true -- TODO: dynamic keymaps for message history
 
 -- TODO: find missing descriptions
 -- TODO: add groups and icons
@@ -142,47 +101,45 @@ local keys = {
   },
 }
 
-    --- create a pair of file and grep pickers for a given directory or options
-    --- @param desc string description for which-key
-    --- @param key string key to use after <leader>f and <leader>s
-    --- @param dir_or_opts? string|table directory path or options table
-    --- @param picker_opts? snacks.picker.files.Config
-    local function picker_pair(desc, key, dir_or_opts, picker_opts)
-      local opts = {}
+--- create a pair of file and grep pickers for a given directory or options
+--- @param desc string description for which-key
+--- @param key string key to use after <leader>f and <leader>s
+--- @param dir_or_opts? string|table directory path or options table
+--- @param picker_opts? snacks.picker.files.Config
+local function picker_pair(desc, key, dir_or_opts, picker_opts)
+  local opts = {}
 
-      if type(dir_or_opts) == 'string' then
-        opts = picker_opts or {}
-        opts.cwd = vim.fn.expand(dir_or_opts)
-      elseif type(dir_or_opts) == 'table' then
-        opts = dir_or_opts
-      end
+  if type(dir_or_opts) == 'string' then
+    opts = picker_opts or {}
+    opts.cwd = vim.fn.expand(dir_or_opts)
+  elseif type(dir_or_opts) == 'table' then
+    opts = dir_or_opts
+  end
 
   -- stylua: ignore
   return {
     { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc },
     { '<leader>s' .. key, function() Snacks.picker.grep(opts) end, desc = desc },
   }
-    end
+end
 
-    local picker_pairs = {
-      Dotfiles = { '.', vim.g['chezmoi#source_dir_path'], { hidden = true } },
-      DataFiles = { 'd', vim.g.stdpath.data },
-      GitHubRepos = { 'G', '~/GitHub/' },
-      ConfigFiles = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
-      VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
-      Plugins = { 'P', vim.g.plugdir, { ft = { 'lua', 'vim' } } },
-      Runtime_Paths = {
-        'V',
-        { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } },
-      },
-    }
-
-    -- add the mappings to the keys table
-    for desc, args in pairs(picker_pairs) do
-      local key, dir, opts = unpack(args)
-      vim.list_extend(keys, picker_pair(desc, key, dir, opts))
-    end
-
-    return keys
-  end,
+local picker_pairs = {
+  Dotfiles = { '.', vim.g['chezmoi#source_dir_path'], { hidden = true } },
+  DataFiles = { 'd', vim.g.stdpath.data },
+  GitHubRepos = { 'G', '~/GitHub/' },
+  ConfigFiles = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
+  VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
+  Plugins = { 'P', vim.g.plugdir, { ft = { 'lua', 'vim' } } },
+  Runtime_Paths = {
+    'V',
+    { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } },
+  },
 }
+
+-- add the mappings to the keys table
+for desc, args in pairs(picker_pairs) do
+  local key, dir, opts = unpack(args)
+  vim.list_extend(keys, picker_pair(desc, key, dir, opts))
+end
+
+return keys

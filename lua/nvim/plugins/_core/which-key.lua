@@ -25,8 +25,8 @@ return {
 
         -- descriptions
         { 'gx', desc = 'Open with system app' },
-    { 'ga', mode = 'x', desc = 'Align' },
-    { 'gA', mode = 'x', desc = 'Align (preview)' },
+        { 'ga', mode = 'x', desc = 'Align' },
+        { 'gA', mode = 'x', desc = 'Align (preview)' },
       },
       { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
     },
