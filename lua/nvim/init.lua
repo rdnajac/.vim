@@ -1,14 +1,21 @@
 _G.nv = _G.nv or require('nvim.util')
 
-local path = vim.fs.joinpath(vim.g.luaroot, 'nvim', 'plugins')
-local files = vim.fn.globpath(path, '*.lua', false, true)
-local iter = vim.iter(files)
+--- List all lua files in a subdirectory of `lua/nvim/` as module names
+--- @param nvim_subdir string subdirectory of `nvim/` to search
+--- @return string[] list of module names ready for `require()`
+local function submodules(subdir)
+  local path = vim.fs.joinpath(vim.g.luaroot, 'nvim', subdir)
+  local files = vim.fn.globpath(path, '*.lua', false, true)
+  return vim.tbl_map(function(f)
+    return f:sub(#vim.g.luaroot + 2, -5)
+  end, files)
+end
 
 nv.keys = {}
-nv.specs = iter
-  :map(function(file)
-    local modname = file:sub(#vim.g.luaroot + 2, -5)
-    return require(modname)
+nv.specs = vim
+  .iter(submodules('plugins'))
+  :map(function(submod)
+    return require(submod)
   end)
   :map(function(mod)
     return vim.islist(mod) and mod or { mod }
@@ -23,29 +30,30 @@ nv.specs = iter
   end)
   :totable()
 
-vim.pack.add(nv.specs, {
+vim.pack.add(vim.list_extend(nv.specs, vim.g.plugins or {}), {
   ---@param plug_data { spec: vim.pack.Spec, path: string }
   load = function(plug_data)
     local spec = plug_data.spec
-    -- local path = plug_data.path
     vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-    -- local setup = spec.data and spec.data.setup
-    if not spec.data then
-      return
+
+    if spec.data then
+      if vim.is_callable(spec.data.setup) then
+        spec.data.setup()
+      end
+      nv.keys[spec.name] = spec.data.keys
     end
-    if vim.is_callable(spec.data.setup) then
-      spec.data.setup()
-      -- dd(spec.name) -- earliest `Snacks` are available
-    end
-    nv.keys[spec.name] = spec.data.keys
   end,
 })
 
 -- run all `setup` functions in `nvim/config/*.lua` after startup
--- nv.config = {}
 vim.schedule(function()
-  nv.for_each_submodule('nvim', 'config', function(mod, name)
-    mod.setup()
-    -- nv.config[name] = mod
+  nv.config = vim.iter(submodules('config')):fold({}, function(acc, submod)
+    local mod = require(submod)
+    if type(mod.setup) == 'function' then
+      mod.setup()
+    end
+    acc[submod:match('[^/]+$')] = mod
+    return acc
   end)
 end)
+return nv
