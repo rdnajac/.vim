@@ -16,7 +16,8 @@ return {
   },
   config = function()
     -- local extra_icons = require('nvim.config.icons').mini
-    require('mini.icons').setup(nv.icons.mini)
+    -- require('mini.icons').setup(nv.icons.mini)
+    require('mini.icons').setup()
 
     vim.schedule(function()
       for _, mod in ipairs(minimods) do

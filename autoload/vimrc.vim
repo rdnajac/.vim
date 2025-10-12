@@ -1,12 +1,3 @@
-""
-" @section Introduction, intro
-" @stylized rdnajac/.vim
-" @library
-" @order intro version
-" A vimscript library that hides the worst parts of vimscript and helps you
-" provide consistent plugins.
-"
-
 function! vimrc#init() abort
   execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
 endfunction
@@ -46,18 +37,18 @@ function! vimrc#nvim_config() abort " {{{
   set undofile
 
   " nvim-specific settings
+  " try running `:options`
   set pumblend=0
   set smoothscroll
   set jumpoptions+=view
   set mousescroll=hor:0
   set nocdhome
-  " NOTE: also try running `:options`
 
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
 
-  " -- initialize tabline
-  call vimline#tabline#()
+  " enable the shipped undotree plugin
+  packadd! nvim.undotree
 
   let g:nvim_did_init = v:true
 endfunction

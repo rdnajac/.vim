@@ -1,5 +1,12 @@
 local M = {}
 
+--- @generic T
+--- @param x T|fun():T
+--- @return T
+M.get = function(x)
+  return type(x) == 'function' and x() or x
+end
+
 M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end
@@ -34,14 +41,15 @@ end
 --- Iterates over all lua files in a subdirectory of a top-level module.
 --- Requires each module and calls the callback with the module and its name.
 M.for_each_submodule = function(topmod, subdir, callback)
-  local path = vim.fs.joinpath(vim.g.lua_root, topmod, subdir)
+  local path = vim.fs.joinpath(vim.g.luaroot, topmod, subdir)
   local files = vim.fn.globpath(path, '*.lua', false, true)
   for _, file in ipairs(files) do
-    local modname = file:sub(#vim.g.lua_root + 2, -5)
-    local ok, mod = pcall(require, modname)
-    if ok and mod then
-      callback(mod, modname)
-    end
+    local modname = file:sub(#vim.g.luaroot + 2, -5)
+    local mod = require(modname)
+    -- local ok, mod = pcall(require, modname)
+    -- if ok and mod then
+    callback(mod, modname)
+    -- end
   end
 end
 

@@ -51,17 +51,22 @@
   "mfunc": {
     "prefix": "mfunc",
     "body": [
-      "local M = {}\n",
+      "local M = setmetatable({}, {",
+      "  __call = function(M, ...)",
+      "    return M.${TM_FILENAME_BASE}(...)",
+      "  end,",
+      "})",
+      "",
       "function M.${TM_FILENAME_BASE}($1)",
       "  $0",
       "end\n",
-      "return setmetatable(M, {\n  __call = M.${TM_FILENAME_BASE}\n})"
+      "return M"
     ],
     "description": "Module function skeleton with callable module and function"
   },
 
   "M.func": {
-    "prefix": "M.func",
+    "prefix": "function M.",
     "body": [
       "function M.${1}($2)",
       "  $0",

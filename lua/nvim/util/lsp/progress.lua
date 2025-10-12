@@ -1,5 +1,6 @@
 local M = {}
 
+-- TODO:  don't show up in history?
 local progress = vim.defaulttable()
 
 ---@param ev {data: {client_id: integer, params: lsp.ProgressParams}}

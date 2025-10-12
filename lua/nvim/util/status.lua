@@ -1,3 +1,4 @@
+local nv = _G.nv or require('nvim.util')
 local M = {}
 
 M.blink = function()
@@ -34,8 +35,8 @@ M.sidekick = function()
   return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
 end
 
-M.lsp = require('nvim.util.lsp').status
-M.treesitter = require('nvim.util.treesitter').status
+M.lsp = nv.lsp.status
+M.treesitter = nv.treesitter.status
 
 M.status = function()
   local parts = {

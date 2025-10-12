@@ -1,6 +1,7 @@
 return {
   {
     'folke/sidekick.nvim',
+    lazy = true,
     --- @type sidekick.Config
     opts = {},
     after = function()
@@ -93,6 +94,7 @@ return {
   },
   {
     'folke/todo-comments.nvim',
+    lazy = true,
     opts = {
       keywords = { Section = { icon = '󰚟', color = 'title' } },
       -- highlight = { keyword = 'bg', },

@@ -13,5 +13,6 @@ vim.schedule(function()
       mod.setup()
     end
   end)
+  vim.o.winbar = [[%{%v:lua.nv.winbar()%}]]
 end)
 return submodules

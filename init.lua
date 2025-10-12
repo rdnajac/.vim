@@ -6,14 +6,15 @@ for d in string.gmatch('cache config data state', '%S+') do
   _stdpath[d] = vim.fn.stdpath(d)
 end
 vim.g.stdpath = _stdpath
-vim.g.plug_dir = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
-vim.g.lua_root = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
+vim.g.luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
+vim.g.plugdir = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
 
 if vim.env.PROF then
-  vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_dir, 'snacks.nvim'))
+  vim.opt.rtp:append(vim.fs.joinpath(vim.g.plugdir, 'snacks.nvim'))
   ---@type snacks.profiler.Config
-  local opts = { startup = { event = 'UIEnter' } }
-
+  local opts = {
+    -- startup = { event = 'UIEnter' },
+  }
   require('snacks.profiler').startup(opts)
 end
 

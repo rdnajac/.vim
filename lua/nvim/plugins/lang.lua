@@ -13,25 +13,31 @@ return {
         },
       }
     end,
-    build = ':MasonUpdate',
+    -- build = ':MasonUpdate',
+    build = vim.cmd.MasonUpdate,
   },
   { 'SmiteshP/nvim-navic' },
   -- { 'b0o/SchemaStore.nvim' },
   {
     'R-nvim/R.nvim',
     ft = { 'r', 'rmd', 'quarto' },
-    opts = function()
+    config = function()
       vim.g.rout_follow_colorscheme = true
       ---@module "r"
       ---@type RConfigUserOpts
-      return {
+      local opts = {
         R_args = { '--quiet', '--no-save' },
         -- pdfviewer = 'skim',
         user_maps_only = true,
         quarto_chunk_hl = { highlight = false },
       }
+      require('r').setup(opts)
     end,
   },
+  -- blink extensions WIP
+  { 'bydlw98/blink-cmp-env' },
+  { 'Saghen/blink.compat' },
+  { 'R-nvim/cmp-r' },
   {
     'MeanderingProgramMer/render-markdown.nvim',
     --- @module "render-markdown"

@@ -13,13 +13,22 @@ local autostart = function(ft, override)
   })
 end
 
-local autostart_filetypes =
-  { 'markdown', 'python', 'yaml', 'json', 'html', 'css', 'javascript', 'typescript', 'toml' }
+local autostart_filetypes = {
+  'markdown',
+  'python',
+  'yaml',
+  'json',
+  'html',
+  'css',
+  'javascript',
+  'typescript',
+  'toml',
+}
 
 local M = {
   {
     'nvim-treesitter/nvim-treesitter',
-    build = ':TSUpdate',
+    build = vim.cmd.TSUpdate,
     config = function()
       autostart(autostart_filetypes)
       autostart({ 'sh', 'zsh' }, 'bash')

@@ -19,6 +19,9 @@ local map = {
   terminal = function() return vim.fn["vimline#winbar#terminal"]() end,
 }
 
+-- snacks scratch? buftype = ''
+-- noflisted
+
 return function()
   return vim.bo.filetype == 'snacks_dashboard' and '' or map[vim.bo.buftype]()
 end

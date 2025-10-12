@@ -18,8 +18,9 @@ function M.log(store, msg)
 end
 
 setmetatable(_G.t, { __call = M.log })
+
 --- @param ev table event data
-require('nvim.util').lazyload(function(ev)
+nv.lazyload(function(ev)
   t(ev.event)
 end, { 'BufWinEnter', 'VimEnter', 'UIEnter' })
 

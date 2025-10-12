@@ -1,3 +1,5 @@
+local nv = _G.nv or require('nvim.util')
+
 local register_commands = function()
   local command = vim.api.nvim_create_user_command
 
@@ -47,7 +49,7 @@ local register_commands = function()
     print('\nInactive:\n' .. table.concat(inactive, '\n'))
   end, {})
 
-  local unloaded = require('nvim.plugins').unloaded()
+  local unloaded = nv.plug.unloaded()
 
   command('PlugClean', function(opts)
     local plugs = #opts.fargs > 0 and opts.fargs or unloaded

@@ -30,12 +30,12 @@ Snacks.picker({
   items = items,
   format = function(item, picker)
     local ret = {} ---@type snacks.picker.Highlight[]
-    local idx = string.format("%3d", item.idx or 0)
+    local idx = string.format('%3d', item.idx or 0)
     -- prepend index with highlight and space
-    ret[#ret + 1] = { idx, "SnacksPickerIdx" }
-    ret[#ret + 1] = { " " }
+    ret[#ret + 1] = { idx, 'SnacksPickerIdx' }
+    ret[#ret + 1] = { ' ' }
     -- reuse Snacks’ built-in filename formatter for consistent styling
-    vim.list_extend(ret, require("snacks.picker.formatters").filename(item, picker))
+    vim.list_extend(ret, require('snacks.picker.formatters').filename(item, picker))
     return ret
   end,
   layout = { preset = 'vscode' },

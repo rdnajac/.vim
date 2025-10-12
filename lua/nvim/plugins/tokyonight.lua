@@ -9,6 +9,9 @@ local bg = {
 }
 vim.g.transparent = true
 
+M.after = function()
+  vim.cmd.colorscheme('tokyonight')
+end
 --- @type ColorScheme
 M.colors = nil
 --- @type tokyonight.Highlights

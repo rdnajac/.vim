@@ -105,10 +105,11 @@ function M.buf_signs(buf)
     if mark.pos[1] == buf and mark.mark:match('[a-zA-Z]') then
       local lnum = mark.pos[2]
       signs[lnum] = signs[lnum] or {}
-      table.insert(
-        signs[lnum],
-        { text = mark.mark:sub(2), texthl = 'SnacksStatusColumnMark', type = 'mark' }
-      )
+      table.insert(signs[lnum], {
+        text = mark.mark:sub(2),
+        texthl = 'SnacksStatusColumnMark',
+        type = 'mark',
+      })
     end
   end
 
@@ -132,8 +133,11 @@ function M.line_signs(win, buf, lnum)
   -- Get fold signs
   vim.api.nvim_win_call(win, function()
     if vim.fn.foldclosed(lnum) >= 0 then
-      signs[#signs + 1] =
-        { text = vim.opt.fillchars:get().foldclose or '', texthl = 'Folded', type = 'fold' }
+      signs[#signs + 1] = {
+        text = vim.opt.fillchars:get().foldclose or '',
+        texthl = 'Folded',
+        type = 'fold',
+      }
     elseif config.folds.open and vim.fn.foldlevel(lnum) > vim.fn.foldlevel(lnum - 1) then
       signs[#signs + 1] = { text = vim.opt.fillchars:get().foldopen or '', type = 'fold' }
     end

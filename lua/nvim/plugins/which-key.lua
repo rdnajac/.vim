@@ -31,6 +31,8 @@ return {
     },
   },
   after = function()
+    -- HACK: global keys
+    require('which-key').add(vim.tbl_map(nv.get, vim.tbl_values(nv.keys)))
     local registers = '*+"-:.%/#=_0123456789'
     require('which-key.plugins.registers').registers = registers
   end,
