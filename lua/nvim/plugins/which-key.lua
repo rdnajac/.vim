@@ -8,15 +8,14 @@ return {
     sort = { 'order', 'alphanum', 'case', 'mod' },
     spec = {
       {
-        {
-          mode = { 'n', 'v' },
-          -- TODO: add each bracket mapping manually
-          { '[', group = 'prev' },
-          { ']', group = 'next' },
-          { 'g', group = 'goto' },
-          { 'z', group = 'fold' },
-        },
-
+        mode = { 'n', 'v' },
+        -- TODO: add each bracket mapping manually
+        { '[', group = 'prev' },
+        { ']', group = 'next' },
+        { 'g', group = 'goto' },
+        { 'z', group = 'fold' },
+      },
+      {
         mode = { 'n' },
         { 'co', group = 'comment below' },
         { 'cO', group = 'comment above' },
@@ -26,6 +25,8 @@ return {
 
         -- descriptions
         { 'gx', desc = 'Open with system app' },
+    { 'ga', mode = 'x', desc = 'Align' },
+    { 'gA', mode = 'x', desc = 'Align (preview)' },
       },
       { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
     },
