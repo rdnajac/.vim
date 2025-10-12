@@ -16,6 +16,28 @@ return {
           vim.lsp.inline_completion.enable(state)
         end,
       }):map('<leader>ai')
+
+      local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
+      vim.api.nvim_create_autocmd('User', {
+        group = aug,
+        pattern = 'BlinkCmpMenuOpen',
+        callback = function()
+          if vim.lsp.inline_completion.is_enabled() then
+            vim.b.inline_completion_toggle = 1
+            vim.lsp.inline_completion.enable(false)
+          end
+        end,
+      })
+      vim.api.nvim_create_autocmd('User', {
+        pattern = 'BlinkCmpMenuClose',
+        group = aug,
+        callback = function()
+          if vim.b.inline_completion_toggle then
+            vim.lsp.inline_completion.enable(true)
+            vim.b.inline_completion_toggle = nil
+          end
+        end,
+      })
     end,
   -- stylua: ignore
       keys = {

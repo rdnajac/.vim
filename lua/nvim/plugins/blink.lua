@@ -24,13 +24,33 @@ return {
         -- auto_show_delay_ms = 1000,
         ---@param ctx blink.cmp.Context
         ---@returns number the delay in milliseconds
-        auto_show_delay_ms = function(ctx, _)
-          if vim.tbl_contains({ '.', '/', "'" }, ctx.trigger.initial_character) then
-            return 0
+        -- auto_show_delay_ms = function(ctx, _)
+        --   if vim.tbl_contains({ '.', '/', "'" }, ctx.trigger.initial_character) then
+        --     return 0
+        --   end
+        --   return 1337
+        -- end,
+        -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
+        direction_priority = function()
+          local ctx = require('blink.cmp').get_context()
+          local item = require('blink.cmp').get_selected_item()
+          if ctx == nil or item == nil then
+            return { 's', 'n' }
           end
-          return 1337
+
+          local item_text = item.textEdit ~= nil and item.textEdit.newText
+            or item.insertText
+            or item.label
+          local is_multi_line = item_text:find('\n') ~= nil
+
+          -- after showing the menu upwards, we want to maintain that direction
+          -- until we re-open the menu, so store the context id in a global variable
+          if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
+            vim.g.blink_cmp_upwards_ctx_id = ctx.id
+            return { 'n', 's' }
+          end
+          return { 's', 'n' }
         end,
-        -- border = border,
         draw = {
           treesitter = { 'lsp' },
           columns = {
@@ -77,80 +97,6 @@ return {
         show_documentation = false,
       },
     },
-    sources = {
-      ---@return blink.cmp.SourceList[]
-      default = function()
-        if nv.treesitter.is_comment() then
-          return { 'buffer' }
-        end
-        ---@type table<string, blink.cmp.SourceProviderConfig>
-        local default_providers = {
-          path = {
-            score_offset = 100,
-            opts = {
-              get_cwd = function(_)
-                return vim.fn.getcwd()
-              end,
-              show_hidden_files_by_default = true,
-            },
-          },
-          snippets = {
-            score_offset = 99,
-            opts = { friendly_snippets = false },
-            -- HIDE SNIPPETS AFTER TRIGGER CHARACTER ~
-            should_show_items = function(ctx)
-              return ctx.trigger.initial_kind ~= 'trigger_character'
-            end,
-          },
-          -- Don't use LSP for:
-          -- lua: just use lazydev
-          -- r, rmd, quarto: use cmp_r
-          -- lsp = {
-          --   score_offset = -1,
-          --   transform_items = function(_, items)
-          --     local kind = require('blink.cmp.types').CompletionItemKind
-          --     -- FILTER OUT KEYWORDS AND SNIPPETS FROM LSP
-          --     return vim.tbl_filter(function(item)
-          --       return item.kind == kind.Keyword
-          --         and item.kind == kind.Snippet
-          --         and item.kind == kind.Text
-          --     end, items)
-          --   end,
-          -- },
-        }
-        local ft_sources = {
-          lua = { 'lazydev' },
-          r = { 'cmp_r' },
-          rmd = { 'cmp_r' },
-          quarto = { 'cmp_r' },
-          sh = { 'env', 'lsp' },
-          vim = { 'env', 'lsp' },
-        }
-        return vim.list_extend(vim.tbl_keys(default_providers), ft_sources[vim.bo.filetype] or {})
-      end,
-      providers = {
-        lazydev = {
-          name = 'LazyDev',
-          module = 'lazydev.integrations.blink',
-          score_offset = 100,
-        },
-        env = {
-          name = 'env',
-          module = 'blink-cmp-env',
-          score_offset = -5,
-          opts = {
-            item_kind = function()
-              return require('blink.cmp.types').CompletionItemKind.Variable
-            end,
-            show_braces = false,
-            show_documentation_window = true,
-          },
-        },
-        cmp_r = {
-          name = 'cmp_r',
-          module = 'blink.compat.source',
-        },
-      },
-    },
-  },
+    sources = require('nvim.blink_sources')
+  }
 }
