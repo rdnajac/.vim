@@ -116,6 +116,72 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
   end,
 })
 
+local register_commands = function()
+  local command = vim.api.nvim_create_user_command
+
+  -- plug commands
+  command('PlugUpdate', function(opts)
+    local plugs = #opts.fargs > 0 and opts.fargs or nil
+    vim.pack.update(plugs, { force = opts.bang })
+  end, {
+    nargs = '*',
+    bang = true,
+    complete = function()
+      return vim.tbl_map(function(p)
+        return p.spec.name
+      end, vim.pack.get())
+    end,
+  })
+  command('PlugStatus', function(opts)
+    local plugin = nv.is_nonempty_string(opts.fargs) and opts.fargs or nil
+    vim._print(true, vim.pack.get(plugin, { info = opts.bang }))
+  end, {
+    bang = true,
+    nargs = '*',
+    complete = function()
+      return vim.tbl_map(function(p)
+        return p.spec.name
+      end, vim.pack.get())
+    end,
+  })
+  command('Plugins', function()
+    local active, inactive = {}, {}
+    for _, p in ipairs(vim.pack.get()) do
+      if p.active then
+        table.insert(active, p.spec.name)
+      else
+        table.insert(inactive, p.spec.name)
+      end
+    end
+    print(
+      string.format(
+        'Plugins: %d total (%d active, %d inactive)',
+        #active + #inactive,
+        #active,
+        #inactive
+      )
+    )
+    print('\nActive:\n' .. table.concat(active, '\n'))
+    print('\nInactive:\n' .. table.concat(inactive, '\n'))
+  end, {})
+
+  local unloaded = nv.plug.unloaded()
+
+  command('PlugClean', function(opts)
+    local plugs = #opts.fargs > 0 and opts.fargs or unloaded
+    vim.pack.del(plugs)
+  end, {
+    nargs = '*',
+    complete = function(_, _, _)
+      return unloaded
+    end,
+  })
+end
+
+nv.lazyload(function()
+  register_commands()
+end, 'CmdLineEnter')
+
 return setmetatable(M, {
   __call = function(_, k)
     return Plugin.new(k)
