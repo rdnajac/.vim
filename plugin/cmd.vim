@@ -14,6 +14,7 @@ cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lu
 cnoreabbrev <expr> snacks getcmdtype() == ':' && getcmdline() =~ '^snacks' ? 'lua Snacks' : 'snacks'
 
 function! s:cab(from, to, exact) abort
+  " TODO: also check strlen
   let l:pattern = a:exact ? '^' . a:from . '\s*$' : '^' . a:from
   execute printf(
 	\ 'cnoreabbrev <expr> %s (getcmdtype() ==# ":" && getcmdline() =~# "%s") ? "%s" : "%s"',

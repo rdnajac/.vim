@@ -24,7 +24,7 @@ endfunction
 " CTRL-W gF works but doesnt open a new window
 "
 
-nnoremap gf :call <SID>gf(expand('<cWORD>'))<CR>
+" nnoremap gf :call <SID>gf(expand('<cWORD>'))<CR>
 
 " augroup gf
 "   autocmd!

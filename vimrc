@@ -99,6 +99,7 @@ set viewoptions-=options      " keep mkview minimal
 " Section: autocmds {{{1
 augroup vimrc
   autocmd!
+  au BufWritePre * call vim#mkdir#(expand('<afile>'))
   au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
@@ -407,18 +408,8 @@ set signcolumn=number
 
 " }}}1
 
-" Section: global variables {{{1
+" TODO: find me a home
 let g:vimtex_format_enabled = 1
-let g:eunuch_interpreters = {
-      \ '.':      '/bin/sh',
-      \ 'sh':     'bash',
-      \ 'bash':   'bash',
-      \ 'lua':    'nvim -l',
-      \ 'python': 'python3',
-      \ 'r':      'Rscript',
-      \ 'rmd':    'Rscript',
-      \ 'zsh':    'zsh',
-      \ }
 
 " }}}1
 " Section: plugins {{{ 1

@@ -2,6 +2,7 @@
 " NOTE:  is <ESC>
 function! s:insert_comment(tag, above) abort
   execute 'normal ' . (a:above ? 'O' : 'o') . a:tag . 'gcc'
+  execute 'normal! A' " FIXME: doesn't append...
 endfunction
 
 function! comment#above(tag) abort
