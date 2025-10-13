@@ -30,14 +30,25 @@ function M.check()
     ensure_installed(cmd)
   end
 
-  local nvim_ver = vim.version()
-  local major, minor = nvim_ver.major, nvim_ver.minor
-  if major > 0 or minor >= 12 then
-    ok('Using Neovim >= 0.12.0')
-  elseif minor == 11 then
-    warn('Using Neovim 0.11.0 — recommended 0.12.0 or higher')
+  local ver = vim.version()
+  if ver and not ver.prerelease then
+    if ver.major > 0 or ver.minor >= 12 then
+      warn('Using Neovim >= 0.12.0, but the prerelease version is recommended')
+    else
+      error('Neovim >= 0.12.0 is required')
+    end
   else
-    error('Neovim >= 0.11.0 is required')
+    ok(
+      'Using a prerelease version of Neovim: '
+        .. ver.major
+        .. '.'
+        .. ver.minor
+        .. '.'
+        .. ver.patch
+        .. ' (build '
+        .. ver.build
+        .. ')'
+    )
   end
 end
 
