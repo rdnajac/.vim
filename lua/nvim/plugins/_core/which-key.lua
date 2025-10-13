@@ -19,7 +19,6 @@ return {
         mode = { 'n' },
         { 'co', group = 'comment below' },
         { 'cO', group = 'comment above' },
-        { '<leader>dp', group = 'profiler' },
         { '<localleader>l', group = 'vimtex' },
         { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
 

@@ -25,9 +25,11 @@ local function combine(b1, b2)
   return res
 end
 
+---@type table<string, snacks.picker.layout.Config>
+local M = {}
+
 ---@module 'snacks'
----@type snacks.picker.layout.Config
-return {
+M.mydefault = {
   preset = 'ivy',
   reverse = true,
   ---@type snacks.layout.Box[]
@@ -61,3 +63,21 @@ return {
     },
   },
 }
+
+M.insert = {
+  layout = {
+    reverse = true,
+    relative = 'cursor',
+    row = 1,
+    width = 0.3,
+    min_width = 48,
+    height = 0.3,
+    border = 'none',
+    box = 'vertical',
+    { win = 'input', height = 1, border = 'rounded', wo = { cursorline = false } },
+    { win = 'list', border = 'rounded' },
+  },
+}
+
+
+return M

@@ -34,10 +34,6 @@ return {
       require('r').setup(opts)
     end,
   },
-  -- blink extensions WIP
-  { 'bydlw98/blink-cmp-env' },
-  { 'Saghen/blink.compat' },
-  { 'R-nvim/cmp-r' },
   {
     'MeanderingProgramMer/render-markdown.nvim',
     --- @module "render-markdown"

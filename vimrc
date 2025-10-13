@@ -406,21 +406,18 @@ set signcolumn=number
 " set numberwidth=3
 
 " }}}1
+
 " Section: global variables {{{1
 let g:vimtex_format_enabled = 1
-
-" FIXME: doesn't work well with r files
-" https://github.com/tpope/vim-eunuch/blob/master/doc/eunuch.txt
-let g:interpreters = {
+let g:eunuch_interpreters = {
       \ '.':      '/bin/sh',
-      \ 'sh':     '/bin/bash',
+      \ 'sh':     'bash',
       \ 'bash':   'bash',
-      \ 'lua':    'lua',
+      \ 'lua':    'nvim -l',
       \ 'python': 'python3',
       \ 'r':      'Rscript',
       \ 'rmd':    'Rscript',
       \ 'zsh':    'zsh',
-      \ 'nv':     'nvim -l',
       \ }
 
 " }}}1

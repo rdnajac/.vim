@@ -21,12 +21,6 @@ local function reopen(picker, overrides)
   Snacks.picker.pick(vim.tbl_extend('force', last, overrides or {}))
 end
 
--- ---@param picker snacks.Picker
--- local toggle = function(picker)
---   local alt = picker.opts.source == 'files' and 'grep' or 'files'
---   reopen(picker, { source = alt })
--- end
-
 ---@param picker snacks.Picker
 local toggle = function(picker)
   vim.cmd('norm! dd')
@@ -34,39 +28,28 @@ local toggle = function(picker)
   local alt = picker.opts.source == 'grep' and 'files' or 'grep'
   picker:close()
   Snacks.picker(alt, opts)
+  -- reopen(picker, { source = alt })
   vim.schedule(function()
     vim.api.nvim_feedkeys(vim.keycode('<C-R>"'), 'i', false)
   end)
 end
 
--- ---@param picker snacks.Picker
--- local zoxide = function(picker)
---   picker:close()
---   Snacks.picker.zoxide({
---     confirm = function(z, item)
---       z:close()
---       reopen(picker, { cwd = item.file })
---     end,
---   })
--- end
-
 ---@param picker snacks.Picker
 local zoxide = function(picker)
-  local opts = picker.opts
+  local opts = picker.opts -- deepcopy?
   picker:close()
   Snacks.picker.zoxide({
     confirm = function(z, item)
       z:close()
       opts.cwd = item.file
       Snacks.picker(opts)
+      -- reopen(picker, { cwd = item.file })
     end,
   })
 end
 
-local M = {}
-
 ---@type snacks.picker.Config
-M.extend = {
+return {
   ---@type fun(opts:snacks.picker.Config):snacks.picker.Config?
   config = function(opts)
     local icon_map = { grep = '󰱽', files = '' }
@@ -124,5 +107,3 @@ M.extend = {
     },
   },
 }
-
-return M

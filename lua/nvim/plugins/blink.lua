@@ -210,4 +210,9 @@ M.opts.sources = {
   }),
 }
 
-return M
+return {
+  M,
+  { 'bydlw98/blink-cmp-env' },
+  { 'Saghen/blink.compat' }, -- must be loaded before any cmp sources
+  { 'R-nvim/cmp-r' },
+}

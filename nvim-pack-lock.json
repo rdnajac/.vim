@@ -9,7 +9,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "cc8c9b7",
+      "rev": "ddeab4c",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "d048db2",
+      "rev": "5e1dd6e",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -78,7 +78,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "aaab014",
+      "rev": "b8d838d",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {
@@ -122,7 +122,7 @@
       "src": "http://github.com/tpope/vim-surround.git"
     },
     "vimtex": {
-      "rev": "5c457a8a",
+      "rev": "7c7880d8",
       "src": "http://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {
