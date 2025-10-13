@@ -3,10 +3,12 @@ if !executable('chezmoi')
 endif
 
 let g:chezmoi#use_tmp_buffer = 1
-let g:chezmoi#source_dir_path =
-      \ exists('$CHEZMOI_SOURCE_DIR')
-      \ ? expand('$CHEZMOI_SOURCE_DIR')
-      \ : fnameescape(trim(system('chezmoi source-path')))
+" PERF: these take a while to compute, so hardcode for now
+let g:chezmoi#source_dir_path = '/Users/rdn/.local/share/chezmoi'
+" let g:chezmoi#source_dir_path =
+"       \ exists('$CHEZMOI_SOURCE_DIR')
+"       \ ? expand('$CHEZMOI_SOURCE_DIR')
+"       \ : fnameescape(trim(system('chezmoi source-path')))
 
 augroup chezmoi
   autocmd!

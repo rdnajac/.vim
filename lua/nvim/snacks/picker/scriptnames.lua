@@ -35,7 +35,7 @@ Snacks.picker({
     ret[#ret + 1] = { idx, 'SnacksPickerIdx' }
     ret[#ret + 1] = { ' ' }
     -- reuse Snacks’ built-in filename formatter for consistent styling
-    vim.list_extend(ret, require('snacks.picker.formatters').filename(item, picker))
+    vim.list_extend(ret, require('snacks.picker.format').filename(item, picker))
     return ret
   end,
   layout = { preset = 'vscode' },

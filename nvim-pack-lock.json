@@ -117,6 +117,10 @@
       "rev": "6584602",
       "src": "http://github.com/tpope/vim-repeat.git"
     },
+    "vim-startuptime": {
+      "rev": "b6f0d93",
+      "src": "http://github.com/dstein64/vim-startuptime.git"
+    },
     "vim-surround": {
       "rev": "3d188ed",
       "src": "http://github.com/tpope/vim-surround.git"

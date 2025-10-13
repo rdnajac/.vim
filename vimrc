@@ -442,6 +442,7 @@ Plug 'tpope/vim-surround'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
+Plug 'dstein64/vim-startuptime'
 " ruby
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
