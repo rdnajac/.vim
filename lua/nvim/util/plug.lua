@@ -22,23 +22,38 @@ local nv = _G.nv or require('nvim.util')
 local Plugin = {}
 Plugin.__index = Plugin
 
-function Plugin.new(t)
-  local self = t
-  self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
-  self.did_setup = false
+-- shared table of keys for all plugins
+local keys = {}
 
-  -- store things to be passed to `vim.pack.Spec.data`
-  local data = {}
-  data.setup = function()
-    return self:setup()
-  end
-  data.build = self.build
-  data.keys = self.keys
-  self.data = data
-
-  return setmetatable(self, Plugin)
+function Plugin:register_keys()
+  keys[self.name] = self.keys
 end
 
+function Plugin:schedule_after()
+  if vim.is_callable(self.after) then
+    vim.schedule(self.after)
+  end
+end
+
+function Plugin.new(t)
+  local self = setmetatable(t, Plugin)
+  self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
+  -- store things to be passed to `vim.pack.Spec.data`
+  self.data = {
+    build = self.build,
+    setup = function()
+      return self:setup()
+    end,
+  }
+  self.did_setup = false
+  if not self.opts and self.config == true then
+    self.opts = {} -- HACK: handles `config = true`
+  end
+  return self
+end
+
+--- Convert the `Plugin` to a `vim.pack.Spec` for use with `vim.pack`.
+--- The `spec`'s `data` field will contain the `build` and `setup` functions.
 --- @return vim.pack.Spec
 function Plugin:tospec()
   local spec = { src = 'https://github.com/' .. self[1] .. '.git' }
@@ -49,25 +64,23 @@ function Plugin:tospec()
   return spec
 end
 
+--- Call the `Plugin`'s `config` function if it exists, otherwise
+--- call the named module's `setup` function with `opts` if they exist.
+--- Also schedules the `after` function if it exists.
 function Plugin:_setup()
   if self.did_setup then
     return
   end
-  local opts = nv.get(self.opts) or (self.config == true and {})
-  if type(opts) ~= 'table' then -- maybe run config
-    if type(self.config) ~= 'function' then
-      return -- bail, nothing to do
-    end
-    self.config()
-  else
+  -- PERF: only evaluate opts once
+  local opts = nv.get(self.opts)
+  if type(opts) == 'table' then
     local modname = self.name:gsub('%.nvim$', '')
     require(modname).setup(opts)
+  elseif vim.is_callable(self.config) then
+    self.config()
   end
-  -- either config or setup was called
+  self:schedule_after()
   self.did_setup = true
-  if vim.is_callable(self.after) then
-    vim.schedule(self.after)
-  end
 end
 
 --- Call the `Plugin`'s `config` function if it exists, otherwise
@@ -78,25 +91,15 @@ function Plugin:setup()
   end
   -- if no lazy-loading, call setup now
   if not (self.event or self.ft or self.lazy == true) then
-    return self:_setup()
-  end
-  local event = self.event and self.event or self.ft and 'FileType' or 'VimEnter'
-  nv.lazyload(function()
     self:_setup()
-  end, event, self.ft)
+  else
+    local event = self.event and self.event or self.ft and 'FileType' or 'VimEnter'
+    nv.lazyload(function()
+      self:_setup()
+    end, event, self.ft)
+  end
+  self:register_keys()
 end
-
-M = {
-  unloaded = function()
-    local names = {}
-    for _, p in ipairs(vim.pack.get()) do
-      if not p.active then
-        names[#names + 1] = p.spec.name
-      end
-    end
-    return names
-  end,
-}
 
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
   callback = function(event)
@@ -110,11 +113,29 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
     local build = spec.data and spec.data.build
     if type(build) == 'function' then
       build()
+      Snacks.notify.info('Build function executed for ' .. spec.name)
     elseif type(build) == 'string' then
       Snacks.notify.warn('Build strings are not supported: ' .. build)
     end
   end,
 })
+
+local M = {
+  unloaded = function()
+    local names = {}
+    for _, p in ipairs(vim.pack.get()) do
+      if not p.active then
+        names[#names + 1] = p.spec.name
+      end
+    end
+    return names
+  end,
+  get_keys = function()
+    return vim.tbl_map(function(k)
+      return nv.get(k)
+    end, vim.tbl_values(keys))
+  end,
+}
 
 local register_commands = function()
   local command = vim.api.nvim_create_user_command

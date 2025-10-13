@@ -36,7 +36,8 @@ vim._print = function(_, ...)
 end
 
 --- loads vim settings and exports vim.g.plugins
-vim.cmd([[runtime vimrc | packadd! nvim.undotree]])
+vim.cmd([[runtime vimrc]])
 
 -- the rest if the owl
 require('nvim')
+

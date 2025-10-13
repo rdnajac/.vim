@@ -16,6 +16,8 @@
 " 	Keep in mind that only one of the tab pages is the current one, others
 " 	are invisible and you can't jump to their windows.
 
+" Check the 'columns' option for the space available.
+
 ""
 " Since the number of tab labels will vary,
 " you need to use an expression for the whole option.
@@ -66,4 +68,3 @@ function vimline#tabline#() abort
   " dummy
 endfunction
 
-  " TODO: Check the 'columns' option for the space available.

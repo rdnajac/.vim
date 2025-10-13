@@ -3,7 +3,7 @@ local minimods = {
   'ai',
   'diff',
   'hipatterns',
-  'icons',
+  -- 'icons', -- setup in main config to avoid issues with other plugins using mini icons
   -- 'splitjoin',
   -- 'surround',
 }
@@ -31,6 +31,7 @@ end
 return {
   'nvim-mini/mini.nvim',
   config = function()
+    require('mini.icons').setup(require('nvim.icons.mini'))
     vim.schedule(function()
       vim.tbl_map(minisetup, minimods)
     end)

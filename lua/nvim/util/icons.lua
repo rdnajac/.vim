@@ -76,7 +76,6 @@ local icons = {
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
 M = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
 
--- TODO: make this a metemethod
 -- add an inverted lookup table for kinds
 for name, num in pairs(vim.lsp.protocol.SymbolKind) do
   if type(name) == 'string' and M.kinds[name] then

@@ -20,7 +20,9 @@ M.opts = {
       function()
         local path = require('oil').get_cursor_entry().parsed_name
         if path then
-          vim.fn.system({ 'open', path })
+          local abs_path = vim.fn.fnamemodify(path, ':p')
+          dd('Opening ' .. abs_path)
+          vim.fn.system({ 'open', abs_path })
         end
       end,
     },

@@ -1,5 +1,4 @@
 --- Utility functions for file I/O operations
-
 local M = {}
 
 ---@param file string
@@ -25,6 +24,8 @@ M.readlines = function(path)
   return lines
 end
 
+---@param path string
+---@return table
 M.import_json = function(path)
   local f = assert(io.open(path, 'r'))
   local t = vim.json.decode(f:read('*a'))

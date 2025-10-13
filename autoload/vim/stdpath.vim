@@ -1,13 +1,11 @@
 " Vim script to get standard paths in Vim
 " for compatibility with Neovim's stdpath function
 " since Vim does not have a built-in stdpath function
-" TODO: move all stdpath stuff here s.t. paths are autoloaded
-" when needed and accessible over the lua-vimscript bridge
 
-if has('nvim')
-  " TODO: check if g:stdpath dictionary is setup
+if has('nvim') && exists('g:stdpath')
   finish
 endif
+echom "Loading stdpath.vim"
 
 let s:defaults = {
       \ 'config': $HOME . '/.config',

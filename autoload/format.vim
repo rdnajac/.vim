@@ -19,7 +19,6 @@ function! format#buffer() abort
   endif
 endfunction
 
-" TODO: move to substitute.vim
 function! s:substitute(pattern, replacement, ...) abort
   " see `:h :s_flags`
   let l:flags = 'ge' . (a:0 ? a:1 : '')

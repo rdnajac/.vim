@@ -3,17 +3,8 @@ return {
   {
     'mason-org/mason.nvim',
     opts = function()
-      return {
-        -- TODO:
-        -- ui = { nv.icons.mason },
-        ui = {
-          package_installed = '✓',
-          package_pending = '➜',
-          package_uninstalled = '✗',
-        },
-      }
+      return { ui = { icons = nv.icons.mason } }
     end,
-    -- build = ':MasonUpdate',
     build = vim.cmd.MasonUpdate,
   },
   { 'SmiteshP/nvim-navic' },

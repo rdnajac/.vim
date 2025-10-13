@@ -5,7 +5,7 @@ let s:url_scheme_regex = '^[A-Za-z][A-Za-z0-9+.-]*://'
 " Create parent directories if they do not exist when saving a file
 " but skip if the file path looks like a URI (e.g. scp://, oil://)
 function! vim#mkdir#(file) abort
-  if empty(getbufvar(a:buf, '&buftype')) && a:file ==# s:url_scheme_regex
+  if empty('&buftype') && a:file ==# s:url_scheme_regex
     let l:dir = fnamemodify(a:file, ':p:h')
     if !isdirectory(l:dir)
       call mkdir(l:dir, 'p')

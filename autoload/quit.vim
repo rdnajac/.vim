@@ -1,4 +1,4 @@
-" TODO: remove me
+" XXX: remove me
 function! quit#buffer(bang) abort
   let l:bufs = filter(range(1, bufnr('$')), 'bufexists(v:val) && buflisted(v:val)')
 
@@ -18,7 +18,7 @@ function! quit#buffer(bang) abort
   endif
 endfunction
 
-" TODO: remove me
+" XXX: remove me
 function! quit#oldversion() abort
   if winnr('$') > 1
     bnext | 1wincmd w | q!

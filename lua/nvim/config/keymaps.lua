@@ -22,9 +22,6 @@ vim.keymap.set('n', '<leader>xq', function()
 end, { desc = 'Quickfix List' })
 
 -- stylua: ignore start
--- vim.keymap.set('n', '<leader>xl', function() toggle_list('loc', 'l') end, { desc = 'Location List' })
--- vim.keymap.set('n', '<leader>xq', function() toggle_list('qf', 'c') end, { desc = 'Quickfix List' })
-
 vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
 vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
 vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })

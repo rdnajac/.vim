@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "b8cbe74",
+      "rev": "219e208",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "blink-cmp-env": {
@@ -9,7 +9,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "ddeab4c",
+      "rev": "5037cfa",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "5e1dd6e",
+      "rev": "6a224dd",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {

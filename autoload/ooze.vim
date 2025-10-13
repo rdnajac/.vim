@@ -55,7 +55,6 @@ function! ooze#file() abort
 endfunction
 
 function! ooze#range(...) range abort
-  " TODO: replace newlines with spaces if lua
   call ooze#send(join(getline(a:firstline, a:lastline), "\n"))
 endfunction
 

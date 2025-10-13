@@ -7,10 +7,6 @@ let &laststatus = has('nvim') ? 3 : 2
 set statusline=%!vimline#statusline()
 
 " Section: settings {{{1
-set noswapfile
-" set autowrite autowriteall
-" set confirm
-
 set mouse=a
 set report=0
 set scrolloff=8
@@ -400,6 +396,8 @@ command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 command! Restart call sesh#restart()
 
+command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
+
 " }}}1
 " Section: ui {{{1
 " set foldcolumn=1
@@ -413,6 +411,23 @@ let g:vimtex_format_enabled = 1
 
 " }}}1
 " Section: plugins {{{ 1
+if !has('nvim')
+  " BUG: still does not work with the version of vim on homebrew
+  " VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Oct 12 2025 14:37:02)
+  " macOS version - arm64
+  " Included patches: 1-1850
+  packadd comment
+  " see `:h package-comment`
+  " issue: https://github.com/vim/vim/issues/14171
+  " commit: https://github.com/vim/vim/commit/fa6300872732f80b770a768e785ae2b189d3e684
+  " suspect: import autoload 'comment.vim'
+  " but it works if:
+  source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
+  finish
+else
+  packadd! nvim.undotree
+endif
+
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
@@ -429,7 +444,6 @@ Plug 'tpope/vim-repeat'
 " Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
 " Plug 'tpope/vim-tbone'
-" Plug 'tpope/vim-unimpaired'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
@@ -441,9 +455,10 @@ if !has('nvim')
   Plug 'dense-analysis/ale'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
-  Plug 'tpope/vim-commentary'
+  " Plug 'tpope/vim-commentary'
   " Plug 'tpope/vim-scriptease'
   " Plug 'tpope/vim-sensible'
+  Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-vinegar'
   Plug 'welle/targets.vim'
   Plug 'welle/tmux-complete.vim'

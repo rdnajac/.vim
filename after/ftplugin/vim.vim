@@ -7,7 +7,8 @@ nnoremap <leader>ch <Cmd>call edit#ch()<CR>
 inoremap <buffer> enc scriptencoding utf-8
 
 " Scriptease help and lsp hover collide
-nmap <silent><buffer> <leader>K <Plug>ScripteaseHelp
+" leader K is normal! K but its hyperlink in markdown
+nmap <silent><buffer> <localleader>K <Plug>ScripteaseHelp
 
 " nnoremap <buffer> K <Cmd>lua vim.lsp.buf.hover()<CR>
 " BUG: hover doesn't work on settings prefixed with 'no'
