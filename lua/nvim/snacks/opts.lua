@@ -2,21 +2,23 @@
 ---@type snacks.Config
 return {
   -- bigfile = { enabled = true },
-bigfile = {
-  ---@param ctx {buf: number, ft:string}
-  setup = function(ctx)
-    if vim.fn.exists(":NoMatchParen") ~= 0 then
-      vim.cmd([[NoMatchParen]])
-    end
-    Snacks.util.wo(0, { foldmethod = "manual", statuscolumn = "", conceallevel = 0 })
-    vim.b.minianimate_disable = true
-    vim.schedule(function()
-      if vim.api.nvim_buf_is_valid(ctx.buf) then
-        vim.bo[ctx.buf].syntax = ctx.ft
+  bigfile = {
+    ---@param ctx {buf: number, ft:string}
+    setup = function(ctx)
+      if vim.fn.exists(':NoMatchParen') == 2 then
+        vim.cmd.NoMatchParen()
       end
-    end)
-  end,
-},
+      vim.cmd.setlocal('foldmethod=manual', 'statuscolumn=', 'conceallevel=0')
+      -- Snacks.util.wo(0, { foldmethod = 'manual', statuscolumn = '', conceallevel = 0 })
+      vim.schedule(function()
+        if vim.api.nvim_buf_is_valid(ctx.buf) then
+          -- for json files, keep the filetype as json
+          -- for other files, set the syntax to the detected filetype
+          vim.bo[ctx.buf][ctx.ft == 'json' and 'filetype' or 'syntax'] = ctx.ft
+        end
+      end)
+    end,
+  },
   dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = false }, -- using `oil` instead
   image = { enabled = true },
@@ -67,3 +69,4 @@ bigfile = {
   },
   words = { enabled = true },
 }
+-- vim:fdm=expr:fdl=1
