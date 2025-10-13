@@ -5,7 +5,26 @@ vim.keymap.set('n', '<leader>uI', function()
   vim.api.nvim_input('I')
 end, { desc = 'Inspect Tree' })
 
+vim.keymap.set('n', '<leader>xl', function()
+  local success, err =
+    pcall(vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and vim.cmd.lclose or vim.cmd.lopen)
+  if not success and err then
+    vim.notify(err, vim.log.levels.ERROR)
+  end
+end, { desc = 'Location List' })
+
+vim.keymap.set('n', '<leader>xq', function()
+  local success, err =
+    pcall(vim.fn.getqflist({ winid = 0 }).winid ~= 0 and vim.cmd.cclose or vim.cmd.copen)
+  if not success and err then
+    vim.notify(err, vim.log.levels.ERROR)
+  end
+end, { desc = 'Quickfix List' })
+
 -- stylua: ignore start
+-- vim.keymap.set('n', '<leader>xl', function() toggle_list('loc', 'l') end, { desc = 'Location List' })
+-- vim.keymap.set('n', '<leader>xq', function() toggle_list('qf', 'c') end, { desc = 'Quickfix List' })
+
 vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
 vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
 vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
