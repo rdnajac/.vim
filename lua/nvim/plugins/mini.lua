@@ -17,12 +17,11 @@ end
 
 -- PERF: only plug the individual modules
 if vim.g.mini_exclusive == true then
-  -- setup()
   return {
     vim.tbl_map(function(m)
       return {
         'nvim-mini/mini.' .. m,
-        config = minisetup(m),
+        config = minisetup(m)
       }
     end, minimods),
   }

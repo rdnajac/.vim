@@ -41,7 +41,9 @@ local function lsp_progress_callback(ev)
     opts = function(notif)
       notif.style = 'compact' --- use a style without a timestamp
       -- TODO: get the filetype assosciated withthe lsp, not the buffer
-      notif.icon = #progress[client.id] == 0 and nv.icons() or Snacks.util.spinner()
+      -- local lsp_filetype = client.config.filetypes and client.config.filetypes[1] or 'txt'
+      -- notif.icon = #progress[client.id] == 0 and nv.filetype.icons(lsp_filetype)
+      notif.icon = #progress[client.id] == 0 and nv.icons.filetype[vim.bo.filetype] or Snacks.util.spinner()
     end,
   })
 end

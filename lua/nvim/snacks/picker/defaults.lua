@@ -50,7 +50,7 @@ end
 
 ---@type snacks.picker.Config
 return {
-  ---@type fun(opts:snacks.picker.Config):snacks.picker.Config?
+  ---@param opts snacks.picker.Config
   config = function(opts)
     local icon_map = { grep = '󰱽', files = '' }
     local icon = icon_map[opts.finder] or ' '
@@ -63,7 +63,7 @@ return {
         vim.list_extend(
           { opts.title },
           vim.tbl_map(function(ft)
-            return nv.icons(ft) or ft
+            return nv.icons.filetype[ft]
           end, opts.ft)
         ),
         ' '

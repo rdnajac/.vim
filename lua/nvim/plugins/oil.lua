@@ -51,9 +51,11 @@ M.opts = {
   },
   -- win_options = { signcolumn = 'yes:2' },
   float = {
-    ---@type fun(winid: integer): string
+    -- win_options = { winbar = '' },
     get_win_title = function(winid)
-      return ' ' .. M.winbar(winid) .. ' '
+      -- return vim.fn['vimline#winbar#acwrite']()
+      return '󰙅  ' .. M.winbar(winid) .. ' '
+      -- return ''
     end,
   },
   view_options = {
@@ -84,7 +86,6 @@ M.winbar = function(winid)
   if not buf then
     return ''
   end
-
   local path = require('oil').get_current_dir(buf) or vim.api.nvim_buf_get_name(buf)
   return path ~= '' and vim.fn.fnamemodify(path, ':~') or ''
 end

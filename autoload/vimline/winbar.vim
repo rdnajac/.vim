@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function s:fticon() abort
-  return ' ' . v:lua.nv.icons() . ' '
+  return luaeval('nv.icons.filetype[_A]', &filetype) . '  '
 endfunction
 
 function! vimline#winbar#() abort
@@ -61,6 +61,3 @@ function! vimline#winbar#acwrite() abort
   endif
   return l:ret
 endfunction
-
-
-
