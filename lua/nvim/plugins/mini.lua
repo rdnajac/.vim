@@ -21,7 +21,7 @@ if vim.g.mini_exclusive == true then
     vim.tbl_map(function(m)
       return {
         'nvim-mini/mini.' .. m,
-        config = minisetup(m)
+        config = minisetup(m),
       }
     end, minimods),
   }
@@ -30,6 +30,7 @@ end
 return {
   'nvim-mini/mini.nvim',
   config = function()
+    require('mini.misc').setup_termbg_sync()
     require('mini.icons').setup(require('nvim.icons.mini'))
     vim.schedule(function()
       vim.tbl_map(minisetup, minimods)

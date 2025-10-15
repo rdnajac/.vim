@@ -16,7 +16,7 @@ vim.api.nvim_create_autocmd({ 'TermRequest' }, {
       -- OSC 7: dir-change
       local dir = val
       if vim.fn.isdirectory(dir) == 0 then
-        vim.notify('invalid dir: '..dir)
+        vim.notify('invalid dir: ' .. dir)
         return
       end
       vim.b[ev.buf].osc7_dir = dir
@@ -24,8 +24,7 @@ vim.api.nvim_create_autocmd({ 'TermRequest' }, {
         vim.cmd.lcd(dir)
       end
     end
-  end
+  end,
 })
 
-   -- printf "\033]7;file://./foo/bar\033\\"
-
+-- printf "\033]7;file://./foo/bar\033\\"

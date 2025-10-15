@@ -40,4 +40,3 @@ vim.cmd([[runtime vimrc]])
 
 -- the rest if the owl
 require('nvim')
-

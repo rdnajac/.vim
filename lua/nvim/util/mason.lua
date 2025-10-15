@@ -2,7 +2,7 @@
 local tools = {
   'actionlint', -- code action linter
   'mmdc', -- mermaid diagrams
-  'tree-sitter-cli'
+  'tree-sitter-cli',
 }
 
 local M = {}

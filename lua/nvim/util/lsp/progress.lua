@@ -43,7 +43,8 @@ local function lsp_progress_callback(ev)
       -- TODO: get the filetype assosciated withthe lsp, not the buffer
       -- local lsp_filetype = client.config.filetypes and client.config.filetypes[1] or 'txt'
       -- notif.icon = #progress[client.id] == 0 and nv.filetype.icons(lsp_filetype)
-      notif.icon = #progress[client.id] == 0 and nv.icons.filetype[vim.bo.filetype] or Snacks.util.spinner()
+      notif.icon = #progress[client.id] == 0 and nv.icons.filetype[vim.bo.filetype]
+        or Snacks.util.spinner()
     end,
   })
 end
