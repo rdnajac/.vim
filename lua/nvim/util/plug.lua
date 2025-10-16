@@ -203,6 +203,16 @@ nv.lazyload(function()
   register_commands()
 end, 'CmdLineEnter')
 
+--- what junegunn/vim-plug returns as `g:plugs`
+---@class vimPlugSpec
+---@field uri string Git URL of the plugin repository.
+---@field dir string Local directory where the plugin is installed.
+---@field frozen integer Whether the plugin is frozen (0 or 1).
+---@field branch string Branch name if specified.
+
+---@alias PluginTable table<string, vimPlugSpec>
+vim.g.plugs = vim.g.plugs or {}
+
 return setmetatable(M, {
   __call = function(_, k)
     return Plugin.new(k)
