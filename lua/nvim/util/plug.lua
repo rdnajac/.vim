@@ -19,6 +19,7 @@ local nv = _G.nv or require('nvim.util')
 --- @field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
 --- @field keys? table|fun():table Keymaps to bind for the plugin.
 --- @field opts? table|fun():table Options to pass to the plugin's `setup()`.
+--- @field data? any additional data to pass to `vim.pack.add()`
 local Plugin = {}
 Plugin.__index = Plugin
 
@@ -56,7 +57,8 @@ end
 --- The `spec`'s `data` field will contain the `build` and `setup` functions.
 --- @return vim.pack.Spec
 function Plugin:tospec()
-  local spec = { src = 'https://github.com/' .. self[1] .. '.git' }
+  -- local spec = { src = 'https://github.com/' .. self[1] .. '.git' }
+  local spec = { src = 'https://git::@github.com/' .. self[1] .. '.git' }
   -- HACK: remove this once default branches become `main`
   spec.version = vim.startswith(self[1], 'nvim-treesitter') and 'main' or nil
   spec.name = self.name
@@ -101,6 +103,7 @@ function Plugin:setup()
   self:register_keys()
 end
 
+-- breaks on initial install
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
   callback = function(event)
     ---@type "install"|"update"|"delete"
@@ -112,10 +115,16 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
     local spec = event.data.spec
     local build = spec.data and spec.data.build
     if type(build) == 'function' then
+      if vim.v.vim_did_enter == 0 then
+        -- TODO:
+        -- defer build until after startup
+        -- vim.schedule(function() build() end)
+        print('Build function deferred for ' .. spec.name)
+      end
       build()
-      Snacks.notify.info('Build function executed for ' .. spec.name)
+      print('Build function executed for ' .. spec.name)
     elseif type(build) == 'string' then
-      Snacks.notify.warn('Build strings are not supported: ' .. build)
+      print('Build strings are not supported: ' .. build)
     end
   end,
 })

@@ -3,9 +3,6 @@ let g:mapleader = ' '
 let g:maplocalleader = '\'
 call vimrc#init()
 
-let &laststatus = has('nvim') ? 3 : 2
-set statusline=%!vimline#statusline()
-
 " Section: settings {{{1
 set mouse=a
 set report=0
@@ -388,6 +385,9 @@ command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 " }}}1
 " Section: ui {{{1
+let &laststatus = has('nvim') ? 3 : 2
+set statusline=%!vimline#statusline()
+
 " set foldcolumn=1
 set signcolumn=number
 " set numberwidth=3
@@ -399,23 +399,6 @@ let g:vimtex_format_enabled = 1
 
 " }}}1
 " Section: plugins {{{ 1
-if !has('nvim')
-  source ~/GitHub/junegunn/vim-plug/plug.vim
-  " BUG: still does not work with the version of vim on homebrew
-  " VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Oct 12 2025 14:37:02)
-  " macOS version - arm64
-  " Included patches: 1-1850
-  packadd comment
-  " see `:h package-comment`
-  " issue: https://github.com/vim/vim/issues/14171
-  " commit: https://github.com/vim/vim/commit/fa6300872732f80b770a768e785ae2b189d3e684
-  " suspect: import autoload 'comment.vim'
-  " but it works if:
-  source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
-else
-  packadd! nvim.undotree
-endif
-
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'lervag/vimtex'
@@ -456,9 +439,11 @@ else
 endif
 call plug#end() " }}}1
 
+
 if !exists('g:loaded_vimrc')
   let g:loaded_vimrc = 1
 else
   let g:loaded_vimrc+= 1 | Info 'Reloaded vimrc [' . g:loaded_vimrc . ']'
 endif
+
 " vim:foldlevelstart=1:fdm=marker

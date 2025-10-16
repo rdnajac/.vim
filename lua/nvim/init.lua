@@ -1,7 +1,8 @@
 _G.nv = _G.nv or require('nvim.util')
 
-require('nvim.config')
+local M = {}
 
+---@type vim.pack.Spec[]
 nv.specs = vim
   .iter(nv.submodules('plugins'))
   :map(function(submod)
@@ -12,15 +13,25 @@ nv.specs = vim
   end)
   :flatten()
   :map(nv.plug)
-  :filter(function(p)
+  :filter(function(p) ---@param p Plugin
     return p.enabled ~= false
   end)
-  :map(function(p)
+  :map(function(p) ---@param p Plugin
     return p:tospec()
   end)
   :totable()
 
-vim.pack.add(vim.list_extend(nv.specs, vim.g.plugs or {}), {
+local plugins = {}
+if vim.islist(vim.g.plugs) then
+  plugins = vim.g.plugs or {}
+else
+  -- support vim-plug
+  plugins = vim.tbl_map(function(p)
+    return p.uri
+  end, vim.tbl_values(vim.g.plugs) or {})
+end
+
+vim.pack.add(vim.list_extend(nv.specs, plugins or {}), {
   ---@param plug_data { spec: vim.pack.Spec, path: string }
   load = function(plug_data)
     local spec = plug_data.spec
@@ -33,26 +44,6 @@ vim.pack.add(vim.list_extend(nv.specs, vim.g.plugs or {}), {
   end,
 })
 
-Snacks.picker.scriptnames = function()
-  require('nvim.snacks.picker.scriptnames')
-end
+M.init = function() end
 
--- TODO: move to util module
-local print_debug = function()
-  local ft = vim.bo.filetype
-  local word = vim.fn.expand('<cword>')
-  local row = vim.api.nvim_win_get_cursor(0)[1]
-  local templates = {
-    -- lua = string.format("print('%s = ' .. vim.inspect(%s))", word, word),
-    lua = 'print(' .. word .. ')',
-    c = string.format('printf("+++ %d %s: %%d\\n", %s);', row, word, word),
-    sh = string.format('echo "+++ %d %s: $%s"', row, word, word),
-  }
-  local print_line = templates[ft]
-  if not print_line then
-    return
-  end
-  vim.api.nvim_buf_set_lines(0, row, row, true, { print_line })
-end
-
-vim.keymap.set('n', 'yu', print_debug, { desc = 'Debug <cword>' })
+return M

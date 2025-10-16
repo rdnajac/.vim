@@ -1,7 +1,7 @@
 if exists('g:loaded_apathy')
   finish
 endif
-let g:loaded_apathy = 1
+let g:loaded_apathy = v:true
 
 " vim sets defaults that are only useful for C/C++
 if !has('nvim')
@@ -39,6 +39,4 @@ endfunction
 augroup apathy
   autocmd!
   autocmd VimEnter * call s:set_repo_path()
-  autocmd FileType javascript,javascriptreact call apathy#javascript#setup()
-  autocmd FileType typescript,typescriptreact call apathy#javascript#setup()
 augroup END

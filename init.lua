@@ -7,10 +7,10 @@ vim.tbl_map(function(d)
 end, { 'cache', 'config', 'data', 'state' })
 vim.g.stdpath = stdpath_dict
 vim.g.luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
-vim.g.plugdir = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
+vim.g.plug_home = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
 
 if vim.env.PROF then
-  vim.opt.rtp:append(vim.fs.joinpath(vim.g.plugdir, 'snacks.nvim'))
+  vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_home, 'snacks.nvim'))
   ---@type snacks.profiler.Config
   local opts = {
     -- startup = { event = 'UIEnter' },
@@ -38,9 +38,9 @@ end
 --- loads vim settings and exports vim.g.plugins
 vim.cmd([[
 runtime vimrc
-
 hi link vimMap @keyword
 ]])
 
 -- the rest if the owl
-require('nvim')
+require('nvim').init()
+require('nvim.config')

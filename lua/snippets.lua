@@ -32,7 +32,6 @@ vim.api.nvim_create_autocmd({'${1:event}'}, {
 
 print(text)
 
-
 local lines = vim.tbl_map(function(line)
   return line
 end, vim.split(text, '\n', { plain = true, trimempty = false }))
