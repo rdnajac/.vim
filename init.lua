@@ -40,7 +40,6 @@ vim.cmd([[
 runtime vimrc
 
 hi link vimMap @keyword
-" hi link PmenuSel C
 ]])
 
 -- the rest if the owl

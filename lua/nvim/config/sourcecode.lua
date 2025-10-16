@@ -35,6 +35,7 @@ local function highlight_line(bufnr, lnum, line)
 end
 
 local function highlight_backticks(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   for lnum, line in ipairs(lines) do
     highlight_line(bufnr, lnum - 1, line)
@@ -44,6 +45,9 @@ end
 local M = {}
 
 function M.setup()
+  if vim.bo[0].filetype ~= 'bigfile' then
+    highlight_backticks()
+  end
   vim.api.nvim_create_autocmd('BufEnter', {
     nested = true,
     callback = function(args)

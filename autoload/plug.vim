@@ -5,7 +5,6 @@ endif
 let g:loaded_plug = v:true
 
 function! plug#begin() abort
-  Warn 'inside plug#begin'
   let g:plugs = []
   command! -nargs=+ -bar Plug call plug#(<args>)
 endfunction
