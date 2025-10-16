@@ -25,11 +25,10 @@ local keys = {
 { '<leader>cd', function() Snacks.picker.diagnostics() end,          desc = 'Diagnostics'           },
 { '<leader>cD', function() Snacks.picker.diagnostics_buffer() end,   desc = 'Buffer Diagnostics'    },
 
--- debug 
-{ '<leader>d', group = 'debug', icon = {icon = ' ' }},
 -- profiler
 { '<leader>dp', group = 'profiler', icon = {icon = '⚡' }},
 { '<leader>dps>', function() Snacks.profiler.scratch() end, desc = '' },
+
 -- find
 { '<leader>fb', function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
 { '<leader>ff', function() Snacks.picker.files() end,        desc = 'Find Files'                    },
