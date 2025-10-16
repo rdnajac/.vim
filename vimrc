@@ -140,6 +140,10 @@ augroup vimrc_filetype
 augroup END
 " }}}1
 " Section: keymaps {{{1
+
+nnoremap ` ~
+nnoremap ~ `
+
 " shortcuts! {{{
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
 nnoremap <BSlash>i <Cmd>call edit#('~/.config/nvim/init.lua')<CR>
@@ -187,6 +191,7 @@ nnoremap <C-w><Bar> <C-w>v
 " yc `yd` ym `yo` `yp` yq yr `ys` yu yx yz
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
 
+
 nnoremap ZX <Cmd>Zoxide<CR>
 
 nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
@@ -225,7 +230,6 @@ vmap F Sf
 " vim.lsp.hover overrides the default K mapping
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>r <Cmd>call sesh#restart()<CR>
-
 nnoremap <leader>R <Cmd>restart!<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
 nnoremap <leader>m <Cmd>messages<CR>
@@ -240,24 +244,6 @@ nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 nnoremap <leader>q :q!<CR>
 " nnoremap <leader>Q <Cmd>Quit!<CR>
 nnoremap <leader>Q :wqa<CR>
-
-if has ('nvim')
-  " code
-  nnoremap <leader>cm <Cmd>Mason<CR>
-  " debug
-  nnoremap <leader>db <Cmd>Blink status<CR>
-  nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
-  nnoremap <leader>dd <Cmd>LazyDev debug<CR>
-  nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
-  nnoremap <leader>dL <Cmd>=require('lualine').get_config()<CR>
-  nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
-  nnoremap <leader>dS <Cmd>=require('snacks').meta.get()<CR>
-  nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
-  nnoremap <leader>dD <Cmd>=nv.did<CR>
-  " nnoremap <leader>dD <Cmd>=nv.did<CR>
-  nnoremap <leader>dP <Cmd>=vim.tbl_keys(package.loaded)<CR>
-  nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
-endif
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
@@ -267,9 +253,6 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 nnoremap <leader>ga <Cmd>!git add %<CR>
 nnoremap <leader>gN <Cmd>execute '!open' git#url('neovim/neovim')<CR>
 nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
-
-nnoremap ` ~
-nnoremap ~ `
 
 nnoremap  <leader><Tab> <Cmd>e #<CR>
 
@@ -416,6 +399,7 @@ let g:vimtex_format_enabled = 1
 " }}}1
 " Section: plugins {{{ 1
 if !has('nvim')
+  source ~/GitHub/junegunn/vim-plug/plug.vim
   " BUG: still does not work with the version of vim on homebrew
   " VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Oct 12 2025 14:37:02)
   " macOS version - arm64
@@ -427,7 +411,6 @@ if !has('nvim')
   " suspect: import autoload 'comment.vim'
   " but it works if:
   source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
-  finish
 else
   packadd! nvim.undotree
 endif
@@ -464,8 +447,8 @@ if !has('nvim')
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-vinegar'
-  Plug 'welle/targets.vim'
-  Plug 'welle/tmux-complete.vim'
+  Plug 'wellle/targets.vim'
+  Plug 'wellle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'
 else
   Plug 'saxon1964/neovim-tips'

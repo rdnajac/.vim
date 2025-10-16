@@ -4,6 +4,7 @@ if !exists('g:chromatophore_groups')
 	\ 'Folded',
 	\ 'MsgArea',
 	\ 'Pmenu',
+	\ 'Pmenusbar',
 	\ 'StatusLineNC',
 	\ 'StatusLineTermNC',
 	\ 'String',
@@ -31,8 +32,8 @@ function! chromatophore#setup() abort
 
   call vim#hl#link('Chromatophore', g:chromatophore_groups)
   call vim#hl#link('Chromatophore_a', 'FloatTitle')
+  call vim#hl#link('Chromatophore_a', 'PmenuThumb')
   call vim#hl#link('Chromatophore_a', 'StatusLine')
-  " call vim#hl#link('Chromatophore_a', 'FloatTitle')
 endfunction
 
 ""

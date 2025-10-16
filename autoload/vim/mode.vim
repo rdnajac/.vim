@@ -2,14 +2,14 @@
 
 " TODO: link to highlight group
 let s:ModeColor = {
-      \ 'normal':   '#9ECE6A',
-      \ 'insert':   '#39FF14',
+      \ 'insert':   '#9ECE6A',
+      \ 'normal':   '#39FF14',
       \ 'visual':   '#F7768E',
       \ 'select':   '#FF9E64',
       \ 'replace':  '#FF007C',
-      \ 'command':  '#E0AF68',
+      \ 'pending':  '#E0AF68',
       \ 'terminal': '#BB9AF7',
-      \ 'pending':  '#FFFFFF',
+      \ 'command':  '#FFFFFF',
       \ 'shell':    '#14AEFF',
       \ }
 

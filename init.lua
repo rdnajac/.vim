@@ -1,11 +1,11 @@
 vim.loader.enable()
-require('nvim.util.track')
+-- require('nvim.util.track')
 
-local _stdpath = {} -- PERF: cache stdpath results
-for d in string.gmatch('cache config data state', '%S+') do
-  _stdpath[d] = vim.fn.stdpath(d)
-end
-vim.g.stdpath = _stdpath
+local stdpath_dict = {}
+vim.tbl_map(function(d)
+  stdpath_dict[d] = vim.fn.stdpath(d)
+end, { 'cache', 'config', 'data', 'state' })
+vim.g.stdpath = stdpath_dict
 vim.g.luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
 vim.g.plugdir = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
 
@@ -36,7 +36,12 @@ vim._print = function(_, ...)
 end
 
 --- loads vim settings and exports vim.g.plugins
-vim.cmd([[runtime vimrc]])
+vim.cmd([[
+runtime vimrc
+
+hi link vimMap @keyword
+" hi link PmenuSel C
+]])
 
 -- the rest if the owl
 require('nvim')
