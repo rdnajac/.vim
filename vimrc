@@ -224,11 +224,10 @@ vmap F Sf
 
 " vim.lsp.hover overrides the default K mapping
 nnoremap <leader>K <Cmd>norm! K<CR>
-nnoremap <leader>r <Cmd>Restart<CR>
+nnoremap <leader>r <Cmd>call sesh#restart()<CR>
+
 nnoremap <leader>R <Cmd>restart!<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
-nnoremap <leader>q <Cmd>quit<CR>
-nnoremap <leader>Q <Cmd>Quit!<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 nnoremap <leader>N <Cmd>lua Snacks.picker.notifications()<CR>
 " nnoremap <leader>N <Cmd>lua Snacks.notifier.show_history()<CR>
@@ -236,6 +235,11 @@ nnoremap <leader>N <Cmd>lua Snacks.picker.notifications()<CR>
 nnoremap <leader>h <Cmd>Help<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
+
+" nnoremap <leader>q <Cmd>quit<CR>
+nnoremap <leader>q :q!<CR>
+" nnoremap <leader>Q <Cmd>Quit!<CR>
+nnoremap <leader>Q :wqa<CR>
 
 if has ('nvim')
   " code
@@ -394,7 +398,7 @@ iabbrev m- —
 command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
-command! Restart call sesh#restart()
+
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 

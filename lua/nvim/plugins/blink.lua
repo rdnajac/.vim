@@ -28,7 +28,7 @@ local M = {
       list = { selection = { preselect = true, auto_insert = true } },
       menu = {
         auto_show = true,
-        -- auto_show_delay_ms = 1000,
+        auto_show_delay_ms = 1000,
         ---@param ctx blink.cmp.Context
         ---@returns number the delay in milliseconds
         -- auto_show_delay_ms = function(ctx, _)

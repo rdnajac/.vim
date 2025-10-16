@@ -20,7 +20,7 @@ local function capture_tmux_keys()
   local keys = vim.tbl_map(function(k)
     local prefix, lhs, desc = k:match('^(%S+)%s+(%S+)%s+(.+)$')
     lhs = #lhs > 1 and '<' .. lhs .. '>' or lhs
-    -- lhs = '<C-b>' .. lhs
+    lhs = '<' .. prefix .. '>' .. lhs
     -- return { keymap = lhs, action = desc }
     return { [lhs] = desc }
   end, capture_external_keybinds('tmux'))
