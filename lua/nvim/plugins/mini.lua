@@ -30,9 +30,9 @@ end
 return {
   'nvim-mini/mini.nvim',
   config = function()
-    require('mini.misc').setup_termbg_sync()
     require('mini.icons').setup(require('nvim.icons.mini'))
     vim.schedule(function()
+      require('mini.misc').setup_termbg_sync()
       vim.tbl_map(minisetup, minimods)
     end)
   end,

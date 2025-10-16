@@ -128,7 +128,7 @@ local picker_pairs = {
   GitHubRepos = { 'G', '~/GitHub/' },
   ConfigFiles = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
   VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
-  Plugins = { 'P', vim.g.plugdir, { ft = { 'lua', 'vim' } } },
+  Plugins = { 'P', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
   Runtime_Paths = {
     'V',
     { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } },

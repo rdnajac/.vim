@@ -3,8 +3,8 @@
 let g:esc_j_lasttime = 0
 let g:esc_k_lasttime = 0
 
-let s:escape ="\<BS>\<Esc>"
-let s:term_escape ="\<BS>\<C-\>\<C-N>"
+let s:escape = "\<BS>\<Esc>"
+let s:term_escape = "\<BS>\<C-\>\<C-N>"
 
 ""
 " Function to handle the escape mapping

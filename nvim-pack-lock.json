@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "8e77bf1",
+      "rev": "fef9903",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "blink-cmp-env": {
@@ -45,11 +45,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "89eecd8",
+      "rev": "8a7cf7e",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "523156e",
+      "rev": "e480bcd",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "0606c7a9",
+      "rev": "63fac0a5",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -70,11 +70,11 @@
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
     "render-markdown.nvim": {
-      "rev": "691651d",
-      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
+      "rev": "ce7af44",
+      "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "cab3ec4",
+      "rev": "80d1604",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {

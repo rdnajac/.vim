@@ -180,7 +180,7 @@ local want = {
   -- TODO: use the gen function in this module
 }
 
-M.build = function()
+local build = function()
   -- TODO: make sure config is loaded
   local extras = require('tokyonight.extra').extras
   local style = 'midnight'
@@ -217,5 +217,7 @@ M.build = function()
     end
   end
 end
+
+-- M.build = build
 
 return M

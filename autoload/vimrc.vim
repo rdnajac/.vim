@@ -6,8 +6,16 @@ function! vimrc#home() abort
   return has('nvim') ? g:stdpath['config'] : split(&runtimepath, ',')[0]
 endfunction
 
-""
-" configure vim-specific settings (these are only run once)
+" execute a function on VimEnter or immediately if already entered
+function! vimrc#on_init(fn) abort " {{{
+  if v:vim_did_enter
+    call call(a:fn, [])
+  else
+    execute 'autocmd VimEnter * call ' . string(a:fn) . '()'
+  endif
+endfunction
+
+" }}}
 function! vimrc#init_vim() abort " {{{
   let l:home = vimrc#home()
   let &viminfofile = home . '.viminfo'
@@ -25,6 +33,28 @@ function! vimrc#init_vim() abort " {{{
   call vim#sensible#()
   call vim#toggle#()
   color scheme " set the default colorscheme once
+
+  " BUG: still does not work with the version of vim on homebrew
+  " VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Oct 12 2025 14:37:02)
+  " macOS version - arm64
+  " Included patches: 1-1850
+  packadd comment
+  " see `:h package-comment`
+  " issue: https://github.com/vim/vim/issues/14171
+  " commit: https://github.com/vim/vim/commit/fa6300872732f80b770a768e785ae2b189d3e684
+  " suspect: import autoload 'comment.vim'
+  " HACK: this works...?
+  source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
+endfunction
+
+" }}}
+function! vimrc#init_nvim() abort " {{{
+  if !exists('g:nvim_did_init')
+    let g:nvim_did_init = v:false
+    packadd! nvim.difftool
+    packadd! nvim.undotree
+    call vimrc#on_init(function('vimrc#nvim_config'))
+  endif
 endfunction
 
 " }}}
@@ -38,7 +68,6 @@ function! vimrc#nvim_config() abort " {{{
 
   " nvim-specific settings
   " try running `:options`
-  set pumblend=0
   set smoothscroll
   set jumpoptions+=view
   set mousescroll=hor:0
@@ -48,25 +77,6 @@ function! vimrc#nvim_config() abort " {{{
   aunmenu PopUp | autocmd! nvim.popupmenu
 
   let g:nvim_did_init = v:true
-endfunction
-
-" }}}
-function! vimrc#init_nvim() abort " {{{
-  if !exists('g:nvim_did_init')
-    let g:nvim_did_init = v:false
-    call vimrc#on_init(function('vimrc#nvim_config'))
-  endif
-endfunction
-
-" }}}
-""
-" execute a function on VimEnter or immediately if already entered
-function! vimrc#on_init(fn) abort " {{{
-  if v:vim_did_enter
-    call call(a:fn, [])
-  else
-    execute 'autocmd VimEnter * call ' . string(a:fn) . '()'
-  endif
 endfunction
 
 " }}}
