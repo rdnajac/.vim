@@ -12,3 +12,5 @@ vim.bo.syntax = 'ON'
 vim.cmd([[
  setlocal nonumber signcolumn=yes:1
 ]])
+
+vim.keymap.set('n', 'yu', nv.debug, { desc = 'Debug <cword>' })
