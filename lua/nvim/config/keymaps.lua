@@ -21,6 +21,8 @@ vim.keymap.set('n', '<leader>xq', function()
   end
 end, { desc = 'Quickfix List' })
 
+vim.keymap.set('n', 'yu', nv.debug.print, { desc = 'Debug print <cword>' })
+
 -- stylua: ignore start
 vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
 vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)

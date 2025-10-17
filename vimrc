@@ -394,10 +394,9 @@ set signcolumn=number
 
 " }}}1
 
-" TODO: find me a home
-let g:vimtex_format_enabled = 1
 
 " }}}1
+
 " Section: plugins {{{ 1
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
@@ -418,7 +417,6 @@ Plug 'tpope/vim-surround'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
-Plug 'dstein64/vim-startuptime'
 " ruby
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -434,6 +432,7 @@ if !has('nvim')
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'
+  Plug 'dstein64/vim-startuptime'
 else
   Plug 'saxon1964/neovim-tips'
 endif

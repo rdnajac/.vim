@@ -38,13 +38,9 @@
     "description": "print inspect"
   },
 
-  "module": {
+  "M": {
     "prefix": "local M",
-    "body": [
-      "local M = {}\n",
-      "$0\n",
-      "return M"
-    ],
+    "body": "local M = {}\n\n$0\n\nreturn M",
     "description": "Module skeleton"
   },
 
@@ -52,15 +48,15 @@
     "prefix": "mfunc",
     "body": [
       "local M = setmetatable({}, {",
-      "  __call = function(M, ...)",
-      "    return M.${TM_FILENAME_BASE}(...)",
-      "  end,",
-      "})",
-      "",
-      "function M.${TM_FILENAME_BASE}($1)",
-      "  $0",
-      "end\n",
-      "return M"
+        "  __call = function(M, ...)",
+        "    return M.${TM_FILENAME_BASE}(...)",
+        "  end,",
+        "})",
+        "",
+        "function M.${TM_FILENAME_BASE}($1)",
+        "  $0",
+        "end\n",
+        "return M"
     ],
     "description": "Module function skeleton with callable module and function"
   },
@@ -73,16 +69,6 @@
       "end\n"
     ],
     "description": "Module function"
-  },
-
-  "init": {
-    "prefix": "init",
-    "body": [
-      "init = function()",
-      "  ${0}",
-      "end"
-    ],
-    "description": "lazy spec init"
   },
 
   "keys": {
