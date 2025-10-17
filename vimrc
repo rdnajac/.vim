@@ -203,6 +203,8 @@ nmap <expr> cq change#quote()
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
 
+nnoremap <expr> gf keymap#gf#()
+
 " `fugitive`
 nnoremap gcd :Gcd<Bar>pwd<CR>
 
@@ -379,7 +381,6 @@ iabbrev m- —
 command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
-
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
