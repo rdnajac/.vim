@@ -49,7 +49,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "e480bcd",
+      "rev": "5b89548",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "63fac0a5",
+      "rev": "846d5113",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -70,11 +70,11 @@
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
     "render-markdown.nvim": {
-      "rev": "ce7af44",
+      "rev": "475d3ad",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "80d1604",
+      "rev": "cefee0d",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
