@@ -130,7 +130,7 @@ augroup END
 
 augroup vimrc_filetype
   autocmd!
-  au FileType json,jsonc,json5 setlocal conceallevel=0 expandtab
+  au FileType json,jsonc,json5 setlocal cole=0 et fex=v:lua.nv.json.format()
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
   au FileType lua,json call vim#auto#braces()
 

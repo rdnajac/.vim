@@ -1,106 +1,106 @@
 {
-  "autocmd": {
-    "prefix": "autocmd",
-    "body": [
-      "vim.api.nvim_create_autocmd({'${1:event}'}, {",
-        "  pattern = { '${2:*}' },",
-        "  group = aug,",
-        "  callback = function()",
-        "    ${0}",
-        "  end,",
-        "  desc = '${4}',",
-        "})"
-    ],
-    "description": "autocmd"
-  },
-
-  "pcall": {
-    "prefix": "pcall",
-    "body": "local ok, ${1:result} = pcall(${0})",
-    "description": "pcall"
-  },
-
-  "for": {
-    "prefix": "for",
-    "body": " for ${1:_}, ${2:v} in ipairs($3) do\n$0\nend",
-    "description": "for loop"
-  },
-
-  "augroup": {
-    "prefix": "augroup",
-    "body": "local aug = vim.api.nvim_create_augroup('$0', {})",
-    "description": "Create augroup"
-  },
-
-  "pr": {
-    "prefix": "pr",
-    "body": "print(vim.inspect(${0}))",
-    "description": "print inspect"
-  },
-
   "M": {
-    "prefix": "local M",
     "body": "local M = {}\n\n$0\n\nreturn M",
-    "description": "Module skeleton"
+    "description": "Module skeleton",
+    "prefix": "local M"
   },
-
-  "mfunc": {
-    "prefix": "mfunc",
-    "body": [
-      "local M = setmetatable({}, {",
-        "  __call = function(M, ...)",
-        "    return M.${TM_FILENAME_BASE}(...)",
-        "  end,",
-        "})",
-        "",
-        "function M.${TM_FILENAME_BASE}($1)",
-        "  $0",
-        "end\n",
-        "return M"
-    ],
-    "description": "Module function skeleton with callable module and function"
-  },
-
   "M.func": {
-    "prefix": "function M.",
     "body": [
       "function M.${1}($2)",
       "  $0",
       "end\n"
     ],
-    "description": "Module function"
+    "description": "Module function",
+    "prefix": "function M."
   },
-
-  "keys": {
-    "prefix": "keys",
-    "body": "vim.tbl_keys(${0})",
-    "description": "vim.tbl_keys"
-  },
-
-  "return": {
-    "prefix": "return",
-    "body": ["return ${1:M}$0"],
-    "description": "return value"
-  },
-
   "assigment": {
-    "prefix": "local",
-    "body": ["local ${1:varName} = ${0:value}"],
-    "description": "define a variable"
+    "body": [
+      "local ${1:varName} = ${0:value}"
+    ],
+    "description": "define a variable",
+    "prefix": "local"
   },
-
-  "if": {
-    "prefix": "if",
-    "body": ["if ${1:true} then", "\t$0", "end"]
+  "augroup": {
+    "body": "local aug = vim.api.nvim_create_augroup('$0', {})",
+    "description": "Create augroup",
+    "prefix": "augroup"
   },
-
+  "autocmd": {
+    "body": [
+      "vim.api.nvim_create_autocmd({'${1:event}'}, {",
+      "  pattern = { '${2:*}' },",
+      "  group = aug,",
+      "  callback = function()",
+      "    ${0}",
+      "  end,",
+      "  desc = '${4}',",
+      "})"
+    ],
+    "description": "autocmd",
+    "prefix": "autocmd"
+  },
   "elseif": {
-    "prefix": "elseif",
-    "body": ["elseif ${1:true} then", "\t$0"]
+    "body": [
+      "elseif ${1:true} then",
+      "\t$0"
+    ],
+    "prefix": "elseif"
   },
-
+  "for": {
+    "body": " for ${1:_}, ${2:v} in ipairs($3) do\n$0\nend",
+    "description": "for loop",
+    "prefix": "for"
+  },
+  "if": {
+    "body": [
+      "if ${1:true} then",
+      "\t$0",
+      "end"
+    ],
+    "prefix": "if"
+  },
+  "keys": {
+    "body": "vim.tbl_keys(${0})",
+    "description": "vim.tbl_keys",
+    "prefix": "keys"
+  },
+  "mfunc": {
+    "body": [
+      "local M = setmetatable({}, {",
+      "  __call = function(M, ...)",
+      "    return M.${TM_FILENAME_BASE}(...)",
+      "  end,",
+      "})",
+      "",
+      "function M.${TM_FILENAME_BASE}($1)",
+      "  $0",
+      "end\n",
+      "return M"
+    ],
+    "description": "Module function skeleton with callable module and function",
+    "prefix": "mfunc"
+  },
+  "pcall": {
+    "body": "local ok, ${1:result} = pcall(${0})",
+    "description": "pcall",
+    "prefix": "pcall"
+  },
+  "pr": {
+    "body": "print(vim.inspect(${0}))",
+    "description": "print inspect",
+    "prefix": "pr"
+  },
   "print": {
-    "prefix": "print",
-    "body": ["print(${0})"]
+    "body": [
+      "print(${0})"
+    ],
+    "prefix": "print"
+  },
+  "return": {
+    "body": [
+      "return ${1:M}$0"
+    ],
+    "description": "return value",
+    "prefix": "return"
   }
 }
