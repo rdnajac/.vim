@@ -1,11 +1,10 @@
-finish
 " scriptease.vim - An amalgamation of crap for editing runtime files
 " Maintainer:   Tim Pope <http://tpo.pe/>
 " Version:      1.1
 
-if exists('g:loaded_scriptease') || &cp
+" if exists('g:loaded_scriptease') || &cp
   finish
-endif
+" endif
 let g:loaded_scriptease = 1
 
 " Section: Commands
