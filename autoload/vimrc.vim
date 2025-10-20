@@ -80,3 +80,16 @@ function! vimrc#nvim_config() abort " {{{
 endfunction
 
 " }}}
+
+function! vimrc#autosection() abort " {{{
+  let l:vimrc = vimrc#home() . '/vimrc'
+  for l:line in readfile(l:vimrc)
+    if l:line =~? '^"\s*Section:\s*'
+      let l:idx = matchend(l:line, '^"\s*Section:\s*')
+      let l:ch  = strcharpart(l:line, l:idx, 1)
+      execute printf("nnoremap <silent> <leader>v%s :call edit#vimrc('\+\/Section:\\ %s')<CR>", l:ch, l:ch)
+    endif
+  endfor
+endfunction
+
+" }}}

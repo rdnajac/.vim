@@ -1,5 +1,5 @@
 " https://gist.github.com/romainl/b00ccf58d40f522186528012fd8cd13d
-function! Substitute(type, ...)
+function! keymap#opfunc#substitute(type, ...)
   let cur = getpos("''")
   call cursor(cur[1], cur[2])
   let cword = expand('<cword>')
@@ -21,20 +21,15 @@ nmap <silent> gs m':set opfunc=Substitute<CR>g@
 "   <key>?bar<CR>bar<CR>   Diff, from previous occurrence of 'bar'
 "                          to current line
 
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
-xnoremap s :s/\%V<C-R><C-W>/
 
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
-nnoremap g. :%s//<c-r>./g<esc>
-
-" " a global function with a distinct name
-" function! BufSubstituteAll(find, replace) abort
-"   " escape any slash or backslash in the arguments
-"   let l:find    = escape(a:find,    '/\')
-"   let l:replace = escape(a:replace, '/\')
-"   " run the substitute in every buffer, then write if changed
-"   execute 'bufdo %s/\V' . l:find . '/' . l:replace . '/g | update'
-" endfunction
-"
-" " the user‐facing command calls that function
-" command! -nargs=2 Sall call BufSubstituteAll(<f-args>)
+function! keymap#opfunc#format(type, ...)
+  if !empty(&formatprg)
+    normal! '[v']gq
+    call s:err_undo()
+  else
+    normal! '[v']=
+    call format#clean_whitespace()
+  endif
+  call winrestview(w:gqview)
+  unlet w:gqview
+endfunction

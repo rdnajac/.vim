@@ -19,7 +19,6 @@ let g:vimtex_format_enabled = 1
 let g:vimtex_mappings_disable = {'n': ['K']}
 
 if exists('g:chezmoi#source_dir_path')
-  Info 'we good'
   " let g:chezmoi#source_dir_path = expand('~/.local/share/chezmoi')
   let g:chezmoi#use_tmp_buffer = 1
 
@@ -28,6 +27,7 @@ if exists('g:chezmoi#source_dir_path')
     " Automatically `chezmoi add` aliases and binfiles
     au BufWritePost ~/.bash_aliases,~/bin/* sil! exe
 	  \ '!chezmoi add "%" --no-tty >/dev/null 2>&1' | redr!
+
     " Immediately `chezmoi apply` changes when writing to a chezmoi file
     exec 'au BufWritePost '.g:chezmoi#source_dir_path.'/* ' .
 	  \ '!chezmoi apply --force --no-tty --source-path "%"'
