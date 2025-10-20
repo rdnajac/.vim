@@ -23,6 +23,7 @@ local autostart_filetypes = {
   'javascript',
   'typescript',
   'toml',
+  'vim',
 }
 
 return {
