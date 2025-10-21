@@ -74,7 +74,7 @@ M.config = function()
   require('tokyonight').setup(opts)
   M.colors, M.groups = require('tokyonight').load(M.opts)
   -- `load()` does no trigger ColorScheme autocommands, so do it here
-vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+  vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 
 ---@param opts? tokyonight.Config
