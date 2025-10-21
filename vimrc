@@ -36,9 +36,9 @@ set softtabstop=2
 
 augroup vimrc_indent
   autocmd!
-  autocmd FileType markdown,tex    setlocal shiftwidth=2 softtabstop=2
-  autocmd FileType cpp,cuda,python setlocal shiftwidth=4 softtabstop=4
-  autocmd FileType c,sh,zsh        setlocal shiftwidth=8 softtabstop=8
+  " autocmd FileType markdown,tex    setl sw=2 sts=2
+  autocmd FileType cpp,cuda,python setl sw=4 sts=4
+  autocmd FileType c,sh,zsh        setl sw=8 sts=8
 augroup END
 
 " ui

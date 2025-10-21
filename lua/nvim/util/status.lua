@@ -49,11 +49,19 @@ M.treesitter = nv.treesitter.status
 
 M.status = function()
   local parts = {
-    M.treesitter(),
-    M.lsp(),
+    ' B:' .. vim.api.nvim_get_current_buf(),
+    '  ',
+    -- '󰐣 ' .. vim.api.nvim_get_current_buf(),
+    -- nv.icons.separators.section.rounded.left,
+    'TS: ' .. M.treesitter(),
+    '  ',
+    'LSP: ',
     M.sidekick(),
-    M.diagnostic(),
-    M.term(),
+     ' ',
+    M.lsp(),
+    -- '  ',
+    M.diagnostic() ~= '' and ('  ' .. M.diagnostic()) or '',
+    M.term() ~= nil and ('  ' .. M.term()) or '',
   }
 
   if vim.fn.mode():sub(1, 1) == 'i' then

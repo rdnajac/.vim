@@ -46,11 +46,14 @@ add('file', 'dot_Rprofile', '󰟔 ', 'Blue')
 add('file', 'dot_bash_aliases', ' ', 'Blue')
 
 local todo = {
-  { 'extension', 'fastq', '󰚄 ', 'Purple' },
-  { 'extension', 'fastq.gz', '󰚄 ', 'Red' },
+  { 'extension', 'fastq', '󰚄', 'Purple' },
+  { 'extension', 'fastq.gz', '󰚄', 'Red' },
   { 'filetype', 'dotenv', ' ', 'Yellow' },
   { 'filetype', 'snacks_terminal', '🍬', '' },
-  { 'filetype', 'nvim-pack', ' ', 'Green' },
+  { 'filetype', 'nvim-pack', '', 'Green' },
+  -- HACK: treesitter status icons
+  { 'filetype', 'printf', '', 'Orange' },
+  { 'filetype', 'regex', '', 'Orange' },
 }
 
 for _, v in ipairs(todo) do

@@ -13,17 +13,38 @@ local function section(sec, parts)
 end
 
 function M.render(a, b, c)
-  local sec_a = section('a', a) .. '%#Chromatophore_ab#'
-  local sec_b = section('b', b) .. '%#Chromatophore_bc#'
-  local sec_c = section('c', c)
   local sep = nv.icons.separators.component.rounded.left
-  return table.concat({ sec_a, sec_b, sec_c }, sep)
+  local sec_a = a and (section('a', a) .. '%#Chromatophore_ab#' .. sep) or ''
+  local sec_b = b and (section('b', b) .. '%#Chromatophore_bc#' .. sep) or ''
+  local sec_c = section('c', c)
+  return sec_a .. sec_b .. sec_c
+  -- return table.concat({ sec_a, sec_b, sec_c })
 end
 
----@param path string
+local function is_active_win()
+  return vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin)
+end
+
+---@param path string|nil
 local function buffer_components(path)
+  local bt = vim.bo.buftype
+  if bt == 'help' then
+    path = '%h ' .. nv.icons.separators.section.angle.left .. ' %t'
+  elseif bt ~= '' then
+    local ft = vim.bo.filetype
+    if ft == 'oil' then
+      path = require('oil').get_current_dir()
+    elseif ft == 'nvim-pack' then
+      path = vim.g.plug_home
+    elseif bt == 'terminal' then
+      path = vim.fn.getcwd()
+    end
+    path = path and vim.fn.fnamemodify(path, ':~') or ''
+  else
+    path = is_active_win() and '%t' or '%f' or ''
+  end
+
   return (' %s %s%s%s'):format(
-  -- return {
     path,
     nv.icons.filetype[vim.bo.filetype],
     vim.bo.modified and ' ' or '',
@@ -31,36 +52,12 @@ local function buffer_components(path)
   )
 end
 
-local function is_active()
-  return vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin)
-end
-
-local buf_map = {
-  [''] = function()
-    return buffer_components(is_active() and '%t' or '%f')
-  end,
-  acwrite = function(ft)
-    local path
-    if ft == 'oil' then
-      path = require('oil').get_current_dir()
-    elseif ft == 'nvim-pack' then
-      path = vim.g.plug_home
-    end
-    if path then
-      return buffer_components(vim.fn.fnamemodify(path, ':~'))
-    end
-    return ''
-  end,
-  -- stylua: ignore start
-  help = function() return { '󰋖 ', '%f' } end,
-  nofile = function() return { '[NOFILE]' } end,
-  nowrite = function() return { '[NOWRITE]' } end,
-  prompt = function() return { '[PROMPT]' } end,
-  quickfix = function() return { '%q' } end,
-  --stylua: ignore end
-  terminal = function(ft)
-    return buffer_components(vim.fn.fnamemodify(vim.fn.getcwd(), ':~'))
-  end,
+  -- stylua: ignore
+local bt_map = {
+  nofile   =  '[NOFILE]' ,
+  nowrite  =  '[NOWRITE]',
+  prompt   =  '[PROMPT]' ,
+  quickfix =  '%q'       ,
 }
 
 M.winbar = function()
@@ -70,21 +67,16 @@ M.winbar = function()
   end
 
   local bt = vim.bo.buftype
-  if bt == '' or bt == 'acwrite' or bt == 'terminal' then
-    if not is_active() then
-      return section('c', buf_map[bt](ft))
-    end
-    -- local a = buf_map[bt](ft)
-    local a = buf_map[bt](ft)
-    local b = nv.status()
-    local c = nv.lsp.docsymbols()
-    return M.render(a, b, c)
+  if vim.tbl_contains(vim.tbl_keys(bt_map), bt) then
+    return bt_map[bt]
   end
-end
-
-function M.setup()
-  nv.winbar = M.winbar
-  vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+  if not is_active_win() then
+    return section('c', buffer_components())
+  end
+  local a = buffer_components()
+  local b = nv.status()
+  local c = nv.lsp.docsymbols()
+  return M.render(a, b, c)
 end
 
 return setmetatable(M, {
