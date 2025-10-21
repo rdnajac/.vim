@@ -54,7 +54,7 @@ function M.get(bufnr)
     table.insert(items, 1, opts.depth_limit_indicator)
   end
 
-  return ' ' .. table.concat(items, opts.separator or ' ')
+  return table.concat(items, opts.separator)
 end
 
 local aug = vim.api.nvim_create_augroup('navic', { clear = false })
@@ -110,5 +110,7 @@ M.attach = function(client, bufnr)
 end
 
 return setmetatable(M, {
-  __call = M.get,
+  __call = function(_, ...)
+    return M.get(...)
+  end,
 })

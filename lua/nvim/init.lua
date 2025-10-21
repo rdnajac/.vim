@@ -40,6 +40,6 @@ return {
   init = function()
     _G.dd = function(...) Snacks.debug.inspect(...) end
     _G.bt = function(...) Snacks.debug.backtrace(...) end
-    _G.p = function(...) Snacks.debug.profile(...) end
+    _G.p  = function(...) Snacks.debug.profile(...) end
   end,
 }

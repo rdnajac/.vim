@@ -11,6 +11,8 @@ require('vim._extui').enable({})
 
 -- run all `setup` functions in `nvim/config/*.lua` after startup
 vim.schedule(function()
+  vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+
   _G.nv = _G.nv or require('nvim.util')
   nv.config = vim.iter(nv.submodules('config')):fold({}, function(acc, submod)
     local mod = require(submod)

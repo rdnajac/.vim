@@ -35,6 +35,15 @@ M.sidekick = function()
   return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
 end
 
+M.term = function()
+  if vim.bo.buftype ~= 'terminal' then
+    return nil
+  end
+  local icon = (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' '
+    or ' '
+  return icon .. ' ' .. vim.bo.channel
+end
+
 M.lsp = nv.lsp.status
 M.treesitter = nv.treesitter.status
 
@@ -44,6 +53,7 @@ M.status = function()
     M.lsp(),
     M.sidekick(),
     M.diagnostic(),
+    M.term(),
   }
 
   if vim.fn.mode():sub(1, 1) == 'i' then
