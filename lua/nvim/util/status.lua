@@ -44,7 +44,6 @@ M.status = function()
     M.lsp(),
     M.sidekick(),
     M.diagnostic(),
-    ' %#Chromatophore_b#',
   }
 
   if vim.fn.mode():sub(1, 1) == 'i' then

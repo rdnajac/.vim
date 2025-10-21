@@ -39,7 +39,6 @@ augroup vimrc_indent
   autocmd FileType markdown,tex    setlocal shiftwidth=2 softtabstop=2
   autocmd FileType cpp,cuda,python setlocal shiftwidth=4 softtabstop=4
   autocmd FileType c,sh,zsh        setlocal shiftwidth=8 softtabstop=8
-  autocmd FileType lua             setlocal expandtab
 augroup END
 
 " ui
@@ -119,7 +118,7 @@ augroup END
 nnoremap ` ~
 nnoremap ~ `
 
-" you know what I mean
+" you know what i mean
 nmap gcap gcip
 
 
@@ -130,6 +129,7 @@ nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
 nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks')<CR>
 nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config')<CR>
 nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/util/plug')<CR>
+nnoremap <BSlash>P <Cmd>call edit#luamod('nvim/plugins/init')<CR>
 nnoremap <BSlash>m <Cmd>call edit#luamod('nvim/plugins/mini')<CR>
 nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
 " nnoremap <BSlash>k <Cmd>call edit#luamod('nvim/config/keymaps')<CR>

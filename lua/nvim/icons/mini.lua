@@ -49,6 +49,8 @@ local todo = {
   { 'extension', 'fastq', '󰚄 ', 'Purple' },
   { 'extension', 'fastq.gz', '󰚄 ', 'Red' },
   { 'filetype', 'dotenv', ' ', 'Yellow' },
+  { 'filetype', 'snacks_terminal', '🍬', '' },
+  { 'filetype', 'nvim-pack', ' ', 'Green' },
 }
 
 for _, v in ipairs(todo) do

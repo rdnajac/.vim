@@ -13,4 +13,3 @@ vim.bo.syntax = 'ON'
 vim.cmd([[
  setlocal nonumber signcolumn=yes:1
 ]])
-
