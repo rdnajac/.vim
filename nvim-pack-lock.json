@@ -9,7 +9,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "cb87357",
+      "rev": "2cb0a71",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "8a7cf7e",
+      "rev": "14145d3",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -53,7 +53,7 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "ac98db2",
+      "rev": "e5c61b0",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-navic": {
@@ -61,12 +61,12 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "846d5113",
+      "rev": "71bf1665",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
     "oil.nvim": {
-      "rev": "7194872",
+      "rev": "7e1cd77",
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
     "render-markdown.nvim": {
@@ -74,11 +74,11 @@
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "cefee0d",
+      "rev": "9941a1c",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "454ba02",
+      "rev": "6c87fde",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {
@@ -90,7 +90,7 @@
       "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
-      "rev": "d14614c",
+      "rev": "e63c42a",
       "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-dispatch": {
@@ -116,10 +116,6 @@
     "vim-repeat": {
       "rev": "6584602",
       "src": "http://github.com/tpope/vim-repeat.git"
-    },
-    "vim-startuptime": {
-      "rev": "b6f0d93",
-      "src": "http://github.com/dstein64/vim-startuptime.git"
     },
     "vim-surround": {
       "rev": "3d188ed",
