@@ -7,11 +7,7 @@ local M = {
       table.insert(ret, nv.icons.filetype[ft] .. ' ')
       table.insert(ret, nv.icons.separators.section.rounded.left .. ' ')
     end
-    if vim.islist(parts) then
-      vim.list_extend(ret, parts)
-    else
-      table.insert(ret, parts)
-    end
+    vim.list_extend(ret, vim.islist(parts) and parts or { parts })
     table.insert(ret, '%#Chromatophore_b#')
     table.insert(ret, nv.icons.separators.component.rounded.left)
     return ret
