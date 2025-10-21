@@ -1,5 +1,4 @@
 vim.loader.enable()
--- require('nvim.util.track')
 
 local stdpath_dict = {}
 vim.tbl_map(function(d)
@@ -18,27 +17,11 @@ if vim.env.PROF then
   require('snacks.profiler').startup(opts)
 end
 
-_G.dd = function(...)
-  Snacks.debug.inspect(...)
-  -- require('snacks.debug').inspect(...)
-end
-_G.bt = function(...)
-  Snacks.debug.backtrace(...)
-  -- require('snacks.debug').profile(...)
-end
-_G.p = function(...)
-  Snacks.debug.profile(...)
-  -- require('snacks.debug').backtrace(...)
-end
---- @diagnostic disable-next-line: duplicate-set-field
-vim._print = function(_, ...)
-  dd(...)
-end
-
 --- loads vim settings and exports vim.g.plugins
 vim.cmd([[
 runtime vimrc
 hi link vimMap @keyword
+" let s:me = resolve(expand('<sfile>:p')) | echom s:me
 ]])
 
 -- the rest if the owl

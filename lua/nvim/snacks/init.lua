@@ -1,6 +1,8 @@
 ---@module "snacks"
----@type snacks.Config
 return {
+---@type snacks.Config
+  'folke/snacks.nvim',
+  opts = {
   -- bigfile = { enabled = true },
   bigfile = {
     ---@param ctx {buf: number, ft:string}
@@ -24,8 +26,8 @@ return {
   image = { enabled = true },
   indent = { indent = { only_current = true, only_scope = true } },
   input = { enabled = true },
-  notifier = { enabled = false },
-  -- notifier = require('nvim.snacks.notifier'),
+  -- notifier = { enabled = false },
+  notifier = require('nvim.snacks.notifier'),
   quickfile = { enabled = true },
   scratch = { template = 'local x = \n\nprint(x)' },
   terminal = { enabled = true },
@@ -69,4 +71,13 @@ return {
   },
   words = { enabled = true },
 }
--- vim:fdm=expr:fdl=1
+,
+  keys = function()
+    return require('nvim.snacks.keys')
+  end,
+  after = function()
+    require('nvim.snacks.commands')
+    require('nvim.snacks.toggles')
+  end,
+}
+-- vim:fdm=expr:fdl=2

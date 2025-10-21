@@ -3,8 +3,7 @@
 return {
   sections = {
     { section = 'header' },
-    -- TODO: add plug commands, mason? treesitter?
-    { section = 'recent_files', limit = 10, indent = 2 },
+    { section = 'recent_files', limit = 5, indent = 2 },
     { padding = 1 },
   },
   formats = {
