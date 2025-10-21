@@ -1,7 +1,8 @@
 if !exists('g:chromatophore_groups')
   let g:chromatophore_groups = [
 	\ 'FloatBorder',
-	\ 'Folded',
+	\ 'FloatFooter',
+	\ 'FloatFooter',
 	\ 'MsgArea',
 	\ 'Pmenu',
 	\ 'Pmenusbar',
@@ -10,7 +11,8 @@ if !exists('g:chromatophore_groups')
 	\ 'String',
 	\ 'MsgSeparator',
 	\ 'helpSectionDelim',
-	\  '@markup.raw.markdown_inline'
+	\ 'SnacksScratchTitle',
+	\  '@markup.raw.markdown_inline',
 	\ ]
 endif
 
