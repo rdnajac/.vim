@@ -1,4 +1,14 @@
-local M = { 'folke/tokyonight.nvim' }
+vim.g.transparent = true
+
+local M = {
+  'folke/tokyonight.nvim',
+  --- @type ColorScheme
+  colors = nil,
+  --- @type tokyonight.Highlights
+  groups = nil,
+  --- @type tokyonight.Config
+  opts = nil,
+}
 
 local bg = {
   black = '#000000',
@@ -7,17 +17,10 @@ local bg = {
   tokyonight = '#24283b',
   lualine = '#3b4261',
 }
-vim.g.transparent = true
 
-M.after = function()
-  vim.cmd.colorscheme('tokyonight')
-end
---- @type ColorScheme
-M.colors = nil
---- @type tokyonight.Highlights
-M.groups = nil
---- @type tokyonight.Config
-M.opts = {
+local normal_bg = bg.black
+
+local opts = {
   style = 'night',
   transparent = vim.g.transparent == true,
 
@@ -35,7 +38,7 @@ M.opts = {
   end,
   on_highlights = function(hl, colors)
     -- TODO:
-    -- hl['Normal'] = { bg = bg.eigengrau }
+    hl['Normal'] = (normal_bg and { bg = normal_bg }) or nil
     -- hl['LineNr'] = { fg = '#3B4261', bg = '#111111' }
     hl['Cmdline'] = { bg = bg.black }
     hl['Statement'] = { fg = colors.red }
@@ -65,6 +68,14 @@ M.opts = {
     ['which-key'] = true,
   },
 }
+
+M.config = function()
+  -- optionally, run setup to cache colors and groups inside tokyonight module
+  require('tokyonight').setup(opts)
+  M.colors, M.groups = require('tokyonight').load(M.opts)
+  -- `load()` does no trigger ColorScheme autocommands, so do it here
+vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+end
 
 ---@param opts? tokyonight.Config
 ---@return string

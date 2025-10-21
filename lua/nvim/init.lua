@@ -1,17 +1,10 @@
 _G.nv = _G.nv or require('nvim.util')
 
-local M = {}
+local plugins = require('nvim.plugins')
 
 ---@type vim.pack.Spec[]
 nv.specs = vim
-  .iter(nv.submodules('plugins'))
-  :map(function(submod)
-    return require(submod)
-  end)
-  :map(function(mod)
-    return vim.islist(mod) and mod or { mod }
-  end)
-  :flatten()
+  .iter(plugins)
   :map(nv.plug)
   :filter(function(p) ---@param p Plugin
     return p.enabled ~= false
@@ -21,29 +14,37 @@ nv.specs = vim
   end)
   :totable()
 
-local plugins = {}
-if vim.islist(vim.g.plugs) then
-  plugins = vim.g.plugs or {}
-else
-  -- support vim-plug
-  plugins = vim.tbl_map(function(p)
-    return p.uri
-  end, vim.tbl_values(vim.g.plugs) or {})
+-- local vim_plugins = vim.is_list(vim.g.plugs) and vim.g.plugs
+-- or vim.tbl_map(function(plug)
+--   return plug.uri
+-- end, vim.tbl_values(vim.g.plugs or {}))
+
+local vim_plugins = vim.tbl_map(function(plug)
+  return 'http://github.com/' .. plug .. '.git'
+end, vim.g.plugs_order or {})
+
+---@param plug_data { spec: vim.pack.Spec, path: string }
+local load = function(plug_data)
+  local spec = plug_data.spec
+
+  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
+
+  if spec.data and vim.is_callable(spec.data.setup) then
+    spec.data.setup()
+  end
 end
 
-vim.pack.add(vim.list_extend(nv.specs, plugins or {}), {
-  ---@param plug_data { spec: vim.pack.Spec, path: string }
-  load = function(plug_data)
-    local spec = plug_data.spec
-
-    vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-
-    if spec.data and vim.is_callable(spec.data.setup) then
-      spec.data.setup()
-    end
-  end,
+vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}), {
+  load = load,
 })
 
-M.init = function() end
-
-return M
+return {
+  -- stylua: ignore
+  init = function()
+  _G.dd = function(...) Snacks.debug.inspect(...) end
+  _G.bt = function(...) Snacks.debug.backtrace(...) end
+  _G.p = function(...) Snacks.debug.profile(...) end
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim._print = function(_, ...) dd(...) end
+  end,
+}

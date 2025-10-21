@@ -46,6 +46,7 @@ local function lsp_progress_callback(ev)
       notif.icon = #progress[client.id] == 0 and nv.icons.filetype[vim.bo.filetype]
         or Snacks.util.spinner()
     end,
+    history = false, --- do not store in history
   })
 end
 

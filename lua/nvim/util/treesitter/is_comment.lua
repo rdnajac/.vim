@@ -21,6 +21,9 @@ return function(...)
     error('is_comment: invalid arguments')
   end
 
+  -- HACK: subtract 1 from col to avoid edge cases
+  pos[2] = math.max(0, pos[2] - 1)
+
   local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos })
   return ok
       and node
