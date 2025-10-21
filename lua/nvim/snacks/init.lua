@@ -1,5 +1,5 @@
 return {
----@module "snacks"
+  ---@module "snacks"
   ---@type snacks.Config
   'folke/snacks.nvim',
   opts = {

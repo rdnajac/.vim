@@ -58,7 +58,7 @@ local function get_mini_icon(_, key, lookup)
   if not _G.MiniIcons then
     return ' '
   end
-  return _G.MiniIcons.get(key, lookup) or ' '
+  return _G.MiniIcons.get(key, lookup) .. ' ' or ' '
 end
 
 for _, category in ipairs(mini_icon_keys) do

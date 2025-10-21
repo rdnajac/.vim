@@ -349,7 +349,7 @@ command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 " }}}1
 " Section: ui {{{1
 let &laststatus = has('nvim') ? 3 : 2
-set statusline=%!vimline#statusline()
+set statusline=%!vimline#statusline#()
 
 " set foldcolumn=1
 set signcolumn=number

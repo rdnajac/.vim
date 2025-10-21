@@ -4,7 +4,7 @@
 --- `lazy.nvim`'s LazySpec
 
 local M = {
-  require('nvim.colorscheme'),
+  require('nvim.tokyonight'),
   require('nvim.snacks'),
 }
 

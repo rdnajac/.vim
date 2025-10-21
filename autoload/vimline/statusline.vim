@@ -1,16 +1,7 @@
 scriptencoding utf-8
 let s:left_sep = '🭛'
-let s:flags = {
-      \ 'modified': { -> &modified ? ' ' : '' },
-      \ 'readonly': { -> &readonly ? ' ' : '' },
-      \ 'busy': { -> &busy ? '◐ ' : '' },
-      \ }
 
-function! vimline#flag(name) abort
-  return has_key(s:flags, a:name) ? s:flags[a:name]() : ''
-endfunction
-
-function! vimline#file() abort
+function! s:file() abort
   let [l:root, l:suffix] = path#relative_parts()
   let l:prefix = l:root !=# '' ? ' 󱉭  ' . l:root . '/' : ''
   let l:ret = ''
@@ -23,7 +14,7 @@ function! vimline#file() abort
   return l:ret
 endfunction
 
-function! vimline#statusline() abort
+function! vimline#statusline#() abort
   let l:state = state()
   let l:mode = mode()
 
@@ -34,6 +25,6 @@ function! vimline#statusline() abort
   let l:ret .= vimline#indicator#searchcount()
   " let l:ret .= vimline#recording()
   let l:ret .= '%S '
-  let l:ret .= vimline#file()
+  let l:ret .= s:file()
   return l:ret
 endfunction

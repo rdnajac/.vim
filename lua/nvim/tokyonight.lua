@@ -196,9 +196,10 @@ local build = function()
   local extras = require('tokyonight.extra').extras
   local style = 'midnight'
   local style_name = ''
-  local colors = M.colors
-  local groups = M.groups
-  local opts = M.opts
+  -- local colors = M.colors
+  -- local groups = M.groups
+  -- local opts = M.opts
+  local colors, groups = require('tokyonight').load(opts)
   local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'tokyonight')
 
   for name, location in pairs(want) do
@@ -224,7 +225,7 @@ local build = function()
       colors['_name'] = 'tokyonight_' .. style
       colors['_style'] = style
       print('Writing ' .. fname)
-      require('fileutils').writefile(fname, plugin.generate(colors, groups, opts))
+      require('myfile').writefile(fname, plugin.generate(colors, groups, opts))
     end
   end
 end

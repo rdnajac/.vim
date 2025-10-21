@@ -2,86 +2,75 @@ local M = {
   a = function(parts)
     local ret = {}
     table.insert(ret, '%#Chromatophore_a#')
-    local ft = vim.bo.filetype
-    if ft then
-      table.insert(ret, nv.icons.filetype[ft] .. ' ')
-      table.insert(ret, nv.icons.separators.section.rounded.left .. ' ')
-    end
+    table.insert(ret, nv.icons.filetype[vim.bo.filetype])
     vim.list_extend(ret, vim.islist(parts) and parts or { parts })
-    table.insert(ret, '%#Chromatophore_b#')
-    table.insert(ret, nv.icons.separators.component.rounded.left)
-    return ret
+    return table.concat(ret, ' ') .. '%#Chromatophore_b#'
   end,
-  b = function() end,
-  c = function() end,
+  b = function(s)
+    return '%#Chromatophore_b#' .. s .. '%#Chromatophore_bc#'
+  end,
+  c = function(s)
+    return '%#Chromatophore_c#' .. s
+  end,
   inactive = function() end,
 }
+
+function M.render(a, b, c)
+  return table.concat({ a or '', b or '', c or '' }, nv.icons.separators.component.rounded.left)
+end
 
 local function is_active()
   return vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin)
 end
 
+---@param path string
+---@return string
+local function buffer_component(path)
+  return ('%s %s%s'):format(
+    path,
+    vim.bo.modified and ' ' or '',
+    vim.bo.readonly and ' ' or ''
+  )
+end
+
 local map = {
   [''] = function()
     if not is_active() then
-      return {
-        '%#Chromatophore_c#',
-        vim.fn.expand('%:~:.'),
-        ' ',
-        vim.fn['vimline#flag']('readonly'),
-        vim.fn['vimline#flag']('modified'),
-      }
+      return M.c(buffer_component(vim.fn.expand('%:~:.')))
     end
-    local ret = M.a('%t')
-    return vim.list_extend(ret, {
-      vim.fn['vimline#flag']('readonly'),
-      vim.fn['vimline#flag']('modified'),
-      nv.status(),
-      '%#Chromatophore_bc#',
-      nv.icons.separators.component.rounded.left,
-      '',
-      '%#Chromatophore_c#',
-      nv.lsp.docsymbols.get(),
-    })
+    local a = M.a(buffer_component('%t'))
+    local b = M.b(nv.status())
+    local c = M.c(nv.lsp.docsymbols.get())
+    return M.render(a, b, c)
   end,
   acwrite = function()
-    local ret = {}
-    table.insert(ret, '%#Chromatophore_a#')
+    -- local a, b, c
+    local path
     local ft = vim.bo.filetype
-    if ft then
-      table.insert(ret, nv.icons.filetype[ft] .. ' ')
-      if ft == 'oil' then
-        local dir = require('oil').get_current_dir()
-        if dir then
-          table.insert(ret, vim.fn.fnamemodify(dir, ':~'))
-        end
-      elseif ft == 'nvim-pack' then
-        print('ok')
-        table.insert(ret, 'TODO: print relevant status info')
-      end
+    if ft == 'oil' then
+      path = require('oil').get_current_dir()
+    elseif ft == 'nvim-pack' then
+      path = vim.g.plug_home
     end
-    return ret
+    if path then
+      return M.a(vim.fn.fnamemodify(path, ':~'))
+    end
   end,
   -- stylua: ignore start
-  help = function() return { '󰋖  %f' } end,
+  help = function() return { '󰋖 ', '%f' } end,
   nofile = function() return { '[NOFILE]' } end,
   nowrite = function() return { '[NOWRITE]' } end,
   prompt = function() return { '[PROMPT]' } end,
   quickfix = function() return { '%q' } end,
   --stylua: ignore end
   terminal = function()
-    return {
-      '%#Chromatophore_a#',
-      '',
-      vim.fn.fnamemodify(vim.fn.getcwd(), ':~'),
-      ' ',
-      '%#Chromatophore_b#',
-      '',
-      ' ',
-      (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' ' or ' ',
-      vim.bo.channel,
-      ' %#Chromatophore_bc# ',
-    }
+    return M.render(
+      M.a(vim.fn.fnamemodify(vim.fn.getcwd(), ':~')),
+      M.b(
+        (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' '
+          or ' ' .. vim.bo.channel
+      )
+    )
   end,
 }
 
@@ -89,7 +78,7 @@ M.winbar = function()
   if vim.bo.filetype == 'snacks_dashboard' then
     return '' -- TODO: put startuptime here?
   end
-  return table.concat(map[vim.bo.buftype]())
+  return map[vim.bo.buftype]()
 end
 
 function M.setup()

@@ -61,7 +61,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "71bf1665",
+      "rev": "30c466ad",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -74,11 +74,11 @@
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "9941a1c",
+      "rev": "2cb7359",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "6c87fde",
+      "rev": "5173e96",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {

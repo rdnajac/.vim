@@ -1,4 +1,8 @@
 vim.loader.enable()
+---@diagnostic disable-next-line: duplicate-set-field
+function vim.print(...)
+  return vim._print(true, ...)
+end
 
 local stdpath_dict = {}
 vim.tbl_map(function(d)

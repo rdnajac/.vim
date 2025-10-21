@@ -38,10 +38,8 @@ vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}), { load = load })
 return {
   -- stylua: ignore
   init = function()
-  _G.dd = function(...) Snacks.debug.inspect(...) end
-  _G.bt = function(...) Snacks.debug.backtrace(...) end
-  _G.p = function(...) Snacks.debug.profile(...) end
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim._print = function(_, ...) dd(...) end
+    _G.dd = function(...) Snacks.debug.inspect(...) end
+    _G.bt = function(...) Snacks.debug.backtrace(...) end
+    _G.p = function(...) Snacks.debug.profile(...) end
   end,
 }
