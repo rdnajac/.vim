@@ -2,9 +2,26 @@ function! s:subarrows(str) abort
   let ret = a:str
   let mydict = {'<Up>':' ', '<Down>':' ', '<Left>':' ', '<Right>':' '}
   for [k,v] in items(mydict)
-     execute $"let ret = substitute(ret, '{k}', '{v}', 'g')"
+    execute $"let ret = substitute(ret, '{k}', '{v}', 'g')"
   endfor
   return ret
+endfunction
+
+function! s:subkeys(str) abort
+  let ret = a:str
+  let mydict = {'%':'%%', '\':'<Bslash>', '|':'<Bar>'}
+  for [k,v] in items(mydict)
+    execute $"let ret = substitute(ret, '{k}', '{v}', 'g')"
+  endfor
+  return ret
+endfunction
+
+function! s:sanitize_reg_contents(str) abort
+  let contents = a:str
+  let contents = keytrans(contents)
+  let contents = s:subarrows(contents)
+  let contents = s:subkeys(contents)
+  return contents
 endfunction
 
 function! vimline#recording#() abort
@@ -16,24 +33,14 @@ function! vimline#recording#() abort
   let reg = empty(rec) ? g:vimline_last_reg : rec
   let icon = empty(rec) ? '@' : '󰑋'
 
-  " Get and sanitize register contents
-  let contents = getreg(reg)
-  let contents = escape(contents, '%\|')
-  let contents = keytrans(contents)
-  let contents = substitute(contents, ' ', '<SPACE>', 'g')
-  let contents = s:subarrows(contents)
+  let contents = s:sanitize_reg_contents(getreg(reg))
 
-  return printf('%s [%s%s] ', contents, icon, reg)
+  return printf('%%<%s [%s%s] ', contents, icon, reg)
 endfunction
-
-let g:contents = getreg('Z')
-echom contents
 
 augroup vimline_recording
   autocmd!
-  " clear the register
-  " autocmd VimEnter * Info getreg('0')
-  " autocmd VimEnter * setreg('0', '')
+  " au VimEnter * call setreg('z', '')
   if exists('##RecordingEnter') && exists('##RecordingLeave')
     autocmd RecordingEnter *
 	  \ let reg = reg_recording() |

@@ -33,7 +33,7 @@ return {
   after = function()
     -- HACK: global keys
     require('which-key').add(nv.plug.get_keys())
-    local registers = '*+"-:.%/#=_0123456789'
+    local registers = '*+"-:.%/#=_0123456789qZ'
     require('which-key.plugins.registers').registers = registers
   end,
   keys = {
