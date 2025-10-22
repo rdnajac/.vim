@@ -1,15 +1,19 @@
 local nv = _G.nv or require('nvim.util')
+
 local M = {}
 
 M.blink = function()
-  local ret = ''
   local ok, sources = pcall(require, 'blink.cmp.sources.lib')
-  if ok and sources then
-    for _, key in ipairs(vim.tbl_keys(sources.get_enabled_providers('default'))) do
-      ret = ret .. nv.icons.src[key] .. ' '
-    end
+  if not ok or not sources then
+    return ''
   end
-  return ret
+
+  return vim
+    .iter(vim.tbl_keys(sources.get_enabled_providers('default')))
+    :map(function(key)
+      return nv.icons.src[key]
+    end)
+    :join(' ')
 end
 
 M.diagnostic = function()
@@ -41,7 +45,7 @@ M.term = function()
   end
   local icon = (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' '
     or ' '
-  return icon .. ' ' .. vim.bo.channel
+  return ' ' .. icon .. vim.bo.channel
 end
 
 M.lsp = nv.lsp.status
@@ -49,26 +53,12 @@ M.treesitter = nv.treesitter.status
 
 M.status = function()
   local parts = {
-    ' B:' .. vim.api.nvim_get_current_buf(),
-    '  ',
-    -- '󰐣 ' .. vim.api.nvim_get_current_buf(),
-    -- nv.icons.separators.section.rounded.left,
-    'TS: ' .. M.treesitter(),
-    '  ',
-    'LSP: ',
-    M.sidekick(),
-     ' ',
-    M.lsp(),
-    -- '  ',
-    M.diagnostic() ~= '' and ('  ' .. M.diagnostic()) or '',
-    M.term() ~= nil and ('  ' .. M.term()) or '',
+    ' B󰐣 %n',
+    'TS ' .. M.treesitter(),
+    'LSP ' .. M.sidekick() .. ' ' .. M.lsp(),
+    vim.fn.mode():sub(1, 1) == 'i' and M.blink() or nil,
   }
-
-  if vim.fn.mode():sub(1, 1) == 'i' then
-    table.insert(parts, M.blink()) -- put blink first
-  end
-
-  return table.concat(parts)
+  return table.concat(parts, '  ')
 end
 
 return setmetatable(M, {

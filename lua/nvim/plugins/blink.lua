@@ -1,5 +1,6 @@
 -- use the winborder or default to 'single'
 -- local border = vim.o.winborder == '' and 'single' or nil
+-- TODO: make a toggle v vim.b.completion with nv.munchies.flag
 
 -- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
 ---@param ctx blink.cmp.DrawItemContext

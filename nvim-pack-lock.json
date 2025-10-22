@@ -45,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "14145d3",
+      "rev": "cf32454",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -78,7 +78,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "5173e96",
+      "rev": "d293b21",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {

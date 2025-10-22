@@ -93,7 +93,9 @@ augroup vimrc
   " au WinLeave * setlocal nocursorline
 
   " Hide the statusline while in command mode
-  au CmdlineEnter * if &ls != 0            | let g:last_ls = &ls | set ls=0        | endif
+  au BufEnter * if &ft ==# 'qf' && &ls | let g:last_ls = &ls | set ls=0 | endif
+  au CmdlineEnter * if &ls | let g:last_ls = &ls | set ls=0 | endif
+  au BufLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
