@@ -82,7 +82,7 @@ return {
     end
 
     -- hide the preview window if the screen is too narrow
-    if vim.o.columns < 100 then
+    if vim.o.columns < 100 or opts.finder == 'grep' then
       opts.layout.auto_hide = { 'preview' }
     end
 

@@ -5,7 +5,7 @@ local M = {}
 M.blink = function()
   local ok, sources = pcall(require, 'blink.cmp.sources.lib')
   if not ok or not sources then
-    return ''
+    return {}
   end
 
   return vim
@@ -13,11 +13,14 @@ M.blink = function()
     :map(function(key)
       return nv.icons.src[key]
     end)
-    :join(' ')
+    :totable()
 end
 
-M.diagnostic = function()
-  local counts = vim.diagnostic.count(0)
+---@param bufnr? number
+---@return string
+M.diagnostic = function(bufnr)
+  bufnr = bufnr or 0
+  local counts = vim.diagnostic.count(bufnr)
   local signs = vim.diagnostic.config().signs
 
   if not signs or vim.tbl_isempty(counts) then
@@ -27,16 +30,47 @@ M.diagnostic = function()
   return vim
     .iter(pairs(counts))
     :map(function(severity, count)
-      return string.format('%%#%s#%s:%d', signs.numhl[severity], signs.text[severity], count)
+      return string.format('%%#%s#%s:%d%%*', signs.numhl[severity], signs.text[severity], count)
     end)
     :join('')
 end
 
-M.sidekick = function()
-  local ok, statusmod = pcall(require, 'sidekick.status')
-  local status = ok and statusmod and statusmod.get() or nil
-  local kind = status and status.kind or 'Inactive'
-  return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
+---@return string[] List of status icons for the statusline
+M.lsp = function()
+  local clients = vim.lsp.get_clients()
+  if #clients == 0 then
+    return { nv.icons.lsp.unavailable .. ' ' }
+  end
+
+  return vim
+    .iter(clients)
+    :map(function(c)
+      if c.name == 'copilot' and package.loaded['sidekick'] then
+        local ok, statusmod = pcall(require, 'sidekick.status')
+        if ok and statusmod then
+          local status = statusmod.get()
+          local kind = status and status.kind or 'Inactive'
+          return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
+        end
+        return nv.icons.copilot.Inactive[1]
+      else
+        return nv.icons.lsp.attached
+      end
+    end)
+    :totable()
+end
+
+---@param bufnr? number
+---@return string[]
+M.treesitter = function(bufnr)
+  local highlighter = require('vim.treesitter.highlighter')
+  local hl = highlighter.active[bufnr or vim.api.nvim_get_current_buf()]
+  return vim
+    .iter(hl and vim.tbl_keys(hl._queries) or {})
+    :map(function(lang)
+      return nv.icons.filetype[lang]
+    end)
+    :totable()
 end
 
 M.term = function()
@@ -46,19 +80,6 @@ M.term = function()
   local icon = (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' '
     or ' '
   return ' ' .. icon .. vim.bo.channel
-end
-
-M.lsp = nv.lsp.status
-M.treesitter = nv.treesitter.status
-
-M.status = function()
-  local parts = {
-    ' B󰐣 %n',
-    'TS ' .. M.treesitter(),
-    'LSP ' .. M.sidekick() .. ' ' .. M.lsp(),
-    vim.fn.mode():sub(1, 1) == 'i' and M.blink() or nil,
-  }
-  return table.concat(parts, '  ')
 end
 
 return setmetatable(M, {

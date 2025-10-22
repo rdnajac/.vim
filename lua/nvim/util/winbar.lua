@@ -1,10 +1,20 @@
+---@class component
+---@field [1] fun():string[]|string[]
+---@field cond? fun():boolean
+---@field color? any
+
 ---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
 -- TODO: use a buftype map. IT WORKS
 
 local M = {}
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end
--- M.debug = function(str, opts) return vim.api.nvim_eval_statusline(str, opts) end
+---@param opts? vim.api.keyset.eval_statusline
+M.debug = function(opts)
+  opts = opts or {}
+  opts.use_winbar = true
+  return vim.api.nvim_eval_statusline(nv.winbar(0, 0, true), opts)
+end
 
 function M.render(a, b, c)
   -- stylua: ignore start
@@ -12,44 +22,69 @@ function M.render(a, b, c)
   local function sec(s, str) return hl(s) .. str end
   --stylua: ignore end
   local sep = nv.icons.separators.component.rounded.left
-  local sec_a = a and sec('a', a) .. sec('ab', sep) or ''
-  local sec_b = b and sec('b', b) .. sec('bc', sep) or ''
-  return sec_a .. sec_b .. sec('c', c)
+  local sec_a = a and sec('a', a) or ''
+  local sec_b = b and sec('ab', sep) .. sec('b', b) .. sec('bc', sep) or sec('c', sep)
+  -- return sec_a .. sec_b .. sec('c', c)
+  return string.format('%s%s%s', sec_a, sec_b, sec('c', c))
 end
 
-local path_from_ft = {
-  help = '%h ' .. nv.icons.separators.section.angle.left .. ' %t',
-  ['nvim-pack'] = vim.g.plug_home,
-  oil = require('oil').get_current_dir,
-  qf = '%q',
-}
+local buffer_status = function(bt)
+  bt = bt or vim.bo.buftype
+  if bt ~= '' then
+    if bt == 'terminal' then
+      return nv.status.term()
+    end
+    return nil -- otherwise
+  end
 
-local pathfunc = function(active, bt, ft)
-  local path
-  if bt == '' then
-    path = active and '%t' or '%f'
-  elseif path_from_ft[ft] then
-    path = nv.get(path_from_ft[ft])
-  end
-  if path and vim.startswith(path, '%') then
-    return path
-  end
-  return vim.fn.fnamemodify(path or vim.fn.getcwd(), ':~')
+  local parts = {
+    -- TODO: add bufhidden/buflisted etc
+    ' bufnr = %n',
+    -- 'TS ' ..
+    table.concat(nv.status.treesitter(), ' '),
+    -- 'LSP ' ..
+    table.concat(nv.status.lsp(), ' '),
+    vim.fn.mode():sub(1, 1) == 'i' and table.concat(nv.status.blink(), ' ') or nil,
+  }
+
+  return table.concat(parts, '  ')
 end
 
----@param active boolean
----@param bt string
----@param ft string
-local function buffer_components(active, bt, ft)
-  return (' %s %s%s%s'):format(
-    pathfunc(active, bt, ft),
-    active and bt ~= 'nofile' and nv.icons.filetype[ft] or '',
-    vim.bo.modified and ' ' or '',
-    vim.bo.readonly and ' ' or ''
+---@param bufnr? number
+---@param ft? string
+---@return string
+local stl_icons = function(bufnr, ft)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  ft = ft or vim.bo[bufnr].filetype
+  return table.concat({
+    -- vim.bo.modifiable == false and '󱙄 ' or vim.bo.modified and '󰳼 ' or '',
+    vim.bo[bufnr].modified and '󰳼 ' or '',
+    vim.bo[bufnr].readonly and ' ' or '',
+    vim.bo[bufnr].busy > 0 and '◐ ' or '',
     -- TODO: add ff, fenc, etc
-  )
+    nv.icons.filetype[ft],
+  })
 end
 
+local buffer_path = function(active, bt, ft)
+  local path = { '%h%w%q' }
+  if bt == '' then
+    table.insert(path, active and '%t' or '%f')
+  elseif bt == 'acwrite' then
+    local ins
+    if ft == 'nvim-pack' then
+      ins = vim.g.plug_home
+    elseif ft == 'oil' then
+      ins = require('oil').get_current_dir()
+    end
+    table.insert(path, vim.fn.fnamemodify(ins or vim.fn.getcwd(), ':~'))
+  end
+  table.insert(path, stl_icons(nil, ft))
+  return table.concat(path, ' ')
+end
+
+-- nofile: snacks_
+-- if bt == 'nofile' then return '' end
 local winbar_by_bt = {
   [''] = function(ft) end,
   acwrite = function(ft) end,
@@ -61,27 +96,29 @@ local winbar_by_bt = {
   prompt = function(ft) end,
 }
 
-M.winbar = function()
-  local bt = vim.bo.buftype
-  local ft = vim.bo.filetype
-  local active = vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin)
-  local bufcomp = buffer_components(active, bt, ft)
-
-  -- nofile: snacks_
-  -- if bt == 'nofile' then return '' end
-
-  if not active or bt == 'nofile' then
-    return M.render(nil, nil, bufcomp)
+---@param bufnr? number
+local buffer_details = function(bufnr)
+  local diagnostic = nv.status.diagnostic(bufnr)
+  if diagnostic ~= '' then
+    return diagnostic
   end
+  return '%<' .. nv.lsp.docsymbols()
+end
 
-  local a = bufcomp
-  local b
-  if bt == '' then
-    b = nv.status()
-  elseif bt == 'terminal' then
-    b = nv.status.term()
+M.winbar = function(bufnr, win, active)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  win = win or vim.api.nvim_get_current_win()
+  active = active or (win == tonumber(vim.g.actual_curwin))
+
+  local bt = vim.bo[bufnr].buftype
+  local ft = vim.bo[bufnr].filetype
+
+  local a = buffer_path(active, bt, ft)
+  if not active then
+    return a
   end
-  local c = nv.status.diagnostic() ~= '' and nv.status.diagnostic() or nv.lsp.docsymbols()
+  local b = buffer_status(bt)
+  local c = buffer_details(bufnr)
   return M.render(a, b, c)
 end
 

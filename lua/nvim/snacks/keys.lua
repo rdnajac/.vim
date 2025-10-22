@@ -126,13 +126,13 @@ local picker_pairs = {
   Dotfiles = { '.', vim.g['chezmoi#source_dir_path'], { hidden = true } },
   DataFiles = { 'd', vim.g.stdpath.data },
   GitHubRepos = { 'G', '~/GitHub/' },
-  ConfigFiles = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
+
+  config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
   VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
-  Plugins = { 'P', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
-  Runtime_Paths = {
-    'V',
-    { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } },
-  },
+  plugins = { 'p', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
+  Plugins = { 'P', vim.g.plug_home },
+  everything = { 'e', { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } } },
+  Everything = { 'E', { dirs = vim.api.nvim_list_runtime_paths() } },
 }
 
 -- add the mappings to the keys table
