@@ -1,4 +1,12 @@
 scriptencoding utf-8
+
+let s:default = "%<%f %h%w%m%r "
+let s:default.= "%=%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}"
+let s:default.= "%{% exists('b:keymap_name') ? '<'..b:keymap_name..'> ' : '' %}"
+let s:default.= "%{% &busy > 0 ? '◐ ' : '' %}"
+let s:default.= "%(%{luaeval('(package.loaded[''vim.diagnostic''] and vim.diagnostic.status()) or '''' ')} %)"
+let s:default.= "%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rulerformat ) : '' %}"
+
 let s:left_sep = '🭛'
 
 function! vimline#statusline#() abort

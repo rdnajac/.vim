@@ -1,17 +1,18 @@
 let g:chromatophore_groups = [
-      \ 'FloatBorder',
-      \ 'FloatFooter',
-      \ 'FloatFooter',
       \ 'MsgArea',
       \ 'Pmenu',
       \ 'Pmenusbar',
-      \ 'StatusLineNC',
-      \ 'StatusLineTermNC',
       \ 'String',
+      \ 'FloatBorder',
+      \ 'FloatFooter',
+      \ 'FloatFooter',
       \ 'MsgSeparator',
+      \ 'WinBar',
       \ 'helpSectionDelim',
       \ 'SnacksScratchTitle',
       \  '@markup.raw.markdown_inline',
+      \ 'StatusLineNC',
+      \ 'StatusLineTermNC',
       \ ]
 
 augroup chromatophore

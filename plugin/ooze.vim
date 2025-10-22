@@ -37,7 +37,7 @@ endfunction
 
 
 " nnoremap <leader><CR> <Cmd>call ooze#init()<CR>
-" nnoremap <M-CR> <Cmd>call ooze#file()<CR>
+nnoremap <M-CR> <Cmd>call ooze#file()<CR>
 " nnoremap <expr> <CR> CRooze() > 0 ? '' : "\<CR>"
 
 augroup ooze
