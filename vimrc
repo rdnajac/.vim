@@ -93,9 +93,7 @@ augroup vimrc
   " au WinLeave * setlocal nocursorline
 
   " Hide the statusline while in command mode
-  au BufEnter * if &ft ==# 'qf' && &ls | let g:last_ls = &ls | set ls=0 | endif
-  au CmdlineEnter * if &ls | let g:last_ls = &ls | set ls=0 | endif
-  au BufLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
+  au CmdlineEnter * if &ls != 0            | let g:last_ls = &ls | set ls=0        | endif
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
@@ -120,6 +118,23 @@ augroup END
 nnoremap ` ~
 nnoremap ~ `
 
+" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
+xnoremap s :s/\%V<C-R><C-W>/
+
+" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
+nnoremap g. :%s//<c-r>./g<esc>
+
+" " a global function with a distinct name
+" function! BufSubstituteAll(find, replace) abort
+"   " escape any slash or backslash in the arguments
+"   let l:find    = escape(a:find,    '/\')
+"   let l:replace = escape(a:replace, '/\')
+"   " run the substitute in every buffer, then write if changed
+"   execute 'bufdo %s/\V' . l:find . '/' . l:replace . '/g | update'
+" endfunction
+"
+" " the user‐facing command calls that function
+" command! -nargs=2 Sall call BufSubstituteAll(<f-args>)
 " you know what i mean
 nmap gcap gcip
 
@@ -226,26 +241,20 @@ nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 nnoremap  <leader><Tab> <Cmd>e #<CR>
 
 " resize splits
-nnoremap <C-W><Up>    :resize +10<CR>
-nnoremap <C-W><Down>  :resize -10<CR>
+nnoremap <C-W><Up>    :         resize +10<CR>
+nnoremap <C-W><Down>  :         resize -10<CR>
 nnoremap <C-W><Left>  :vertical resize +10<CR>
 nnoremap <C-W><Right> :vertical resize -10<CR>
 
 " smarter j/k
-nnoremap <expr> j      v:count == 0 ? 'gj' : 'j'
-xnoremap <expr> j      v:count == 0 ? 'gj' : 'j'
-nnoremap <expr> k      v:count == 0 ? 'gk' : 'k'
-xnoremap <expr> k      v:count == 0 ? 'gk' : 'k'
-nnoremap <expr> <Down> v:count == 0 ? 'gj' : 'j'
-xnoremap <expr> <Down> v:count == 0 ? 'gj' : 'j'
-nnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
-xnoremap <expr> <Up>   v:count == 0 ? 'gk' : 'k'
-
-" TODO: check == 0 viml rule
-" nnoremap <expr> j v:count ? 'j' : 'gj'
-" nnoremap <expr> k v:count ? 'k' : 'gk'
-" xnoremap <expr> j v:count ? 'j' : 'gj'
-" xnoremap <expr> k v:count ? 'k' : 'gk'
+" handle wrapped lines better by preferring `gj` and `gk`
+let s:keys = [ 'j', 'k' , '<Down>', '<Up>']
+for [i, key] in items(s:keys)
+  let dir = s:keys[i % 2] " limit dir to only j/k
+  execute printf("nnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
+  execute printf("xnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
+endfor
+unlet s:keys
 
 " better n/N
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
@@ -354,6 +363,7 @@ let &laststatus = has('nvim') ? 3 : 2
 set statusline=%!vimline#statusline#()
 
 " set foldcolumn=1
+" set number
 set signcolumn=number
 " set numberwidth=3
 
@@ -374,22 +384,23 @@ Plug 'tpope/vim-git'
 Plug 'tpope/vim-repeat'
 " Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-tbone'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 Plug 'vuciv/golf'
 " ruby
 Plug 'AndrewRadev/dsf.vim'
 Plug 'AndrewRadev/splitjoin.vim'
+" forks
+" Plug 'tpope/vim-tbone'
+" Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-sensible'
+" Plug 'tpope/vim-scriptease'
 if !has('nvim')
   Plug 'dense-analysis/ale'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   " Plug 'tpope/vim-commentary'
-  " Plug 'tpope/vim-scriptease'
-  " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-unimpaired'
-  Plug 'tpope/vim-vinegar'
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'Konfekt/FastFold'

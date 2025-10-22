@@ -36,14 +36,15 @@ function! CRooze() abort
 endfunction
 
 
-nnoremap <leader><CR> <Cmd>call ooze#init()<CR>
-nnoremap <M-CR> <Cmd>call ooze#file()<CR>
-nnoremap <expr> <CR> CRooze() > 0 ? '' : "\<CR>"
+" nnoremap <leader><CR> <Cmd>call ooze#init()<CR>
+" nnoremap <M-CR> <Cmd>call ooze#file()<CR>
+" nnoremap <expr> <CR> CRooze() > 0 ? '' : "\<CR>"
 
 augroup ooze
   autocmd!
   autocmd TermOpen * let g:ooze_channel = &channel
   autocmd TermOpen * let g:ooze_buffer = bufnr('%')
+  " TODO: move to R
   autocmd Filetype r,rmd,quarto nnoremap <buffer> <CR> <Plug>RDSendLine
   " autocmd Filetype vim,lua nnoremap <buffer> <CR> <Cmd>call CRooze()<CR>
   " autocmd Filetype r,rmd nnoremap <buffer> <CR> <Cmd>call ooze#send(getline('.'))<CR>
