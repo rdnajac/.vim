@@ -21,4 +21,5 @@ function vim.api.nvim_create_autocmd(event, opts) end
 
 
 -- these should be generated automatically...
+nv.lsp = require('nvim.util.lsp')
 nv.status = require('nvim.util.status')

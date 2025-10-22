@@ -1,56 +1,48 @@
 ---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
+-- TODO: use a buftype map. IT WORKS
 
 local M = {}
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end
 -- M.debug = function(str, opts) return vim.api.nvim_eval_statusline(str, opts) end
 
-local function hl(subscript)
-  return '%#Chromatophore_' .. subscript .. '#'
-end
-
 function M.render(a, b, c)
+  -- stylua: ignore start
+  local function hl(s) return '%#Chromatophore_' .. s .. '#' end
+  local function sec(s, str) return hl(s) .. str end
+  --stylua: ignore end
   local sep = nv.icons.separators.component.rounded.left
-  local sec_a = a and string.format('%s%s%s%s', hl('a'), a, hl('ab'), sep) or ''
-  local sec_b = b and string.format('%s%s%s%s', hl('b'), b, hl('bc'), sep) or ''
-  local sec_c = string.format('%s%s', hl('c'), c)
-  return sec_a .. sec_b .. sec_c
-end
-
-local function is_active_win()
-  return vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin)
+  local sec_a = a and sec('a', a) .. sec('ab', sep) or ''
+  local sec_b = b and sec('b', b) .. sec('bc', sep) or ''
+  return sec_a .. sec_b .. sec('c', c)
 end
 
 local path_from_ft = {
-  oil = require('oil').get_current_dir,
+  help = '%h ' .. nv.icons.separators.section.angle.left .. ' %t',
   ['nvim-pack'] = vim.g.plug_home,
+  oil = require('oil').get_current_dir,
+  qf = '%q',
 }
+
+local pathfunc = function(active, bt, ft)
+  local path
+  if bt == '' then
+    path = active and '%t' or '%f'
+  elseif path_from_ft[ft] then
+    path = nv.get(path_from_ft[ft])
+  end
+  if path and vim.startswith(path, '%') then
+    return path
+  end
+  return vim.fn.fnamemodify(path or vim.fn.getcwd(), ':~')
+end
 
 ---@param active boolean
 ---@param bt string
 ---@param ft string
 local function buffer_components(active, bt, ft)
-  local path
-  ---@type (''|'acwrite'|'help'|'nowrite'|'terminal') | 'nofile'
-
-  if active then
-    path = '%h' .. (ft == 'help' and (' ' .. nv.icons.separators.section.angle.left .. ' ') or '') .. '%t'
-  else
-    path = '%f'
-  end
-
-    if ft == 'oil' then
-      path = require('oil').get_current_dir()
-    elseif ft == 'nvim-pack' then
-      path = vim.g.plug_home
-    end
-
-  if bt ~= '' and bt ~= 'help' then
-    path = vim.fn.fnamemodify(path or vim.fn.getcwd(), ':~')
-  end
-
   return (' %s %s%s%s'):format(
-    path,
+    pathfunc(active, bt, ft),
     active and bt ~= 'nofile' and nv.icons.filetype[ft] or '',
     vim.bo.modified and ' ' or '',
     vim.bo.readonly and ' ' or ''
@@ -58,26 +50,38 @@ local function buffer_components(active, bt, ft)
   )
 end
 
+local winbar_by_bt = {
+  [''] = function(ft) end,
+  acwrite = function(ft) end,
+  help = function(ft) end,
+  nofile = function(ft) end,
+  nowrite = function(ft) end,
+  quickfix = function(ft) end,
+  terminal = function(ft) end,
+  prompt = function(ft) end,
+}
+
 M.winbar = function()
   local bt = vim.bo.buftype
-  if vim.tbl_contains({ 'quickfix', 'prompt' }, bt) then
-    return ''
-  end
-
-  ---@alias buftype_1 ''|'acwrite'|'help'|'nofile'|'nowrite'|'terminal'
-
-  local active = is_active_win()
   local ft = vim.bo.filetype
+  local active = vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin)
   local bufcomp = buffer_components(active, bt, ft)
+
+  -- nofile: snacks_
+  -- if bt == 'nofile' then return '' end
 
   if not active or bt == 'nofile' then
     return M.render(nil, nil, bufcomp)
   end
 
-  ---@alias buftype_2a ''|'acwrite'|'help'|'nowrite'|'terminal'
   local a = bufcomp
-  local b = nv.status()
-  local c = nv.lsp.docsymbols()
+  local b
+  if bt == '' then
+    b = nv.status()
+  elseif bt == 'terminal' then
+    b = nv.status.term()
+  end
+  local c = nv.status.diagnostic() ~= '' and nv.status.diagnostic() or nv.lsp.docsymbols()
   return M.render(a, b, c)
 end
 
