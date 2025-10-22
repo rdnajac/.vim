@@ -1,36 +1,21 @@
 if !exists('g:chromatophore_groups')
-  let g:chromatophore_groups = [
-	\ 'FloatBorder',
-	\ 'FloatFooter',
-	\ 'FloatFooter',
-	\ 'MsgArea',
-	\ 'Pmenu',
-	\ 'Pmenusbar',
-	\ 'StatusLineNC',
-	\ 'StatusLineTermNC',
-	\ 'String',
-	\ 'MsgSeparator',
-	\ 'helpSectionDelim',
-	\ 'SnacksScratchTitle',
-	\  '@markup.raw.markdown_inline',
-	\ ]
+  let g:chromatophore_groups = [ 'String' ]
 endif
 
 function! chromatophore#setup() abort
   let black      = '#000000'
-  let grey       = '#3b4261'
   let eigengrau  = '#16161d'
+  let grey       = '#3b4261'
   let mode_color = vim#mode#color()
 
   highlight! Black guifg=black
   call vim#hl#set('Chromatophore',    mode_color, 'NONE')
-  call vim#hl#set('ChromatophoreB',   mode_color, 'NONE',        'bold')
-  call vim#hl#set('Chromatophore_a',  mode_color, black, 'reverse,bold')
-  call vim#hl#set('Chromatophore_b',  mode_color, grey,          'bold')
-  call vim#hl#set('Chromatophore_c',  mode_color, eigengrau            )
-  call vim#hl#set('Chromatophore_z',  mode_color, eigengrau,     'bold')
+  call vim#hl#set('ChromatophoreB',   mode_color, 'NONE',    'bold')
+  call vim#hl#set('Chromatophore_a',  mode_color, black,     'bold,reverse')
+  call vim#hl#set('Chromatophore_b',  mode_color, grey,      'bold')
+  call vim#hl#set('Chromatophore_c',  mode_color, eigengrau)
+  call vim#hl#set('Chromatophore_z',  mode_color, eigengrau, 'bold')
   call vim#hl#set('Chromatophore_ab', mode_color, grey)
-
   call vim#hl#set('Chromatophore_bc', grey,       eigengrau)
 
   call vim#hl#link('Chromatophore', g:chromatophore_groups)

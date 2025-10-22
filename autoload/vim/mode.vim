@@ -1,46 +1,40 @@
-" autoload/vim/mode.vim
-
-" TODO: link to highlight group
-let s:ModeColor = {
-      \ 'insert':   '#9ECE6A',
+let s:mode_color_map = {
       \ 'normal':   '#39FF14',
       \ 'visual':   '#F7768E',
       \ 'select':   '#FF9E64',
       \ 'replace':  '#FF007C',
-      \ 'pending':  '#E0AF68',
       \ 'terminal': '#BB9AF7',
-      \ 'command':  '#FFFFFF',
       \ 'shell':    '#14AEFF',
+      \ 'pending':  '#E0AF68',
+      \ }
+" \ 'command':  '#FFFFFF',
+" \ 'insert':   '#9ECE6A',
+
+" Map Vim mode chars to normalized mode keys
+let s:mode_map = {
+      \ 'n': 'normal',
+      \ 'i': 'insert',
+      \ 'v': 'visual',
+      \ 'V': 'visual',
+      \ "\<C-V>": 'visual',
+      \ 's': 'select',
+      \ "\<C-S>": 'select',
+      \ 'R': 'replace',
+      \ 'c': 'command',
+      \ 'r': 'command',
+      \ 't': 'terminal',
+      \ '!': 'shell',
       \ }
 
 function! vim#mode#(...) abort
-  let m = a:0 ? a:1 : mode(1)
-
+  let l:mode = a:0 ? a:1 : mode(1)
   " Detect true operator-pending only if we're still waiting
-  " if m =~# '^no' && getchar(1)
-  if m =~# '^no' && getchar(1) == 0
+  if l:mode =~# '^no' && getchar(1) == 0
     return 'pending'
-  elseif m[0] ==# 'n'
-    return 'normal'
-  elseif m[0] ==? 'v' || m =~# ''
-    return 'visual'
-  elseif m[0] ==? 's'|| m =~# '^\<C-S>'
-    return 'select'
-  elseif m[0] ==# 'i'
-    return 'insert'
-  elseif m[0] ==# 'R'
-    return 'replace'
-  elseif m[0] ==# 'c' || m[0] ==# 'r'
-    return 'command'
-  elseif m[0] ==# 't'
-    return 'terminal'
-  elseif m[0] ==# '!'
-    return 'shell'
   endif
-
-  return 'normal'
+  return get(s:mode_map, l:mode[0], 'normal')
 endfunction
 
 function! vim#mode#color() abort
-  return get(s:ModeColor, vim#mode#(), s:ModeColor.normal)
+  return get(s:mode_color_map, vim#mode#(), s:mode_color_map.normal)
 endfunction
