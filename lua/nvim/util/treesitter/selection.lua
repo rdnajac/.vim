@@ -1,4 +1,3 @@
--- FIXME:
 --- @type TSNode[]
 local nodes = {}
 local skip = false
@@ -34,7 +33,6 @@ M.start = function()
   end
 
   if nv.treesitter.is_comment() then
-    -- first time in a comment:juswt select word
     skip = true
     return vim.cmd('normal! viW')
   end

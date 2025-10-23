@@ -37,7 +37,7 @@
       "src": "http://github.com/vuciv/golf.git"
     },
     "lazydev.nvim": {
-      "rev": "e28ce52",
+      "rev": "01bc2aa",
       "src": "https://github.com/folke/lazydev.nvim.git"
     },
     "mason.nvim": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "cf32454",
+      "rev": "64a23d0",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -53,7 +53,7 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "52a8932",
+      "rev": "ececa53",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-navic": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "30c466ad",
+      "rev": "8fecb462",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -74,11 +74,11 @@
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "b67050d",
+      "rev": "7568825",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "889515a",
+      "rev": "7229dca",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {
@@ -90,7 +90,7 @@
       "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
-      "rev": "8734a4e",
+      "rev": "1199c0e",
       "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-dispatch": {

@@ -31,3 +31,5 @@ hi link vimMap @keyword
 -- the rest if the owl
 require('nvim').init()
 require('nvim.config')
+require('nvim.util.osc7')
+

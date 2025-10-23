@@ -1,19 +1,8 @@
--- default parsers bundled with neovim can be found at: `~/.local/share/nvim/lib/nvim/parser/`
-local defaults = {
-  'c',
-  'lua',
-  'markdown',
-  'markdown_inline',
-  'query',
-  'vim',
-  'vimdoc',
-}
+-- default tree-sitter parsers bundled with neovim: `~/.local/share/nvim/lib/nvim/parser/`
+local defaults = { 'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
 
--- Table of parsers to automatically install with nvim-treesitter
--- NOTE: They still have to be manually enabled for most filetypes
--- see `<url>` for available parsers
--- also check `~/.local/share/nvim/site/` for the following directories:
--- - `parser/`: contains the parsers
+-- `~/.local/share/nvim/site/`
+-- - `parser/`: contains the parsers (`.so` files)
 -- - `parser-info/`: contains the download information
 -- - `query/`: installed queries for the syntax highlighting
 local parsers = {
@@ -42,8 +31,6 @@ local parsers = {
   -- 'json5',
   'latex', -- Snacks.image
   -- 'llvm',
-  -- 'luadoc',
-  -- 'luap',
   -- 'make',
   -- 'ocaml',
   'printf',
@@ -56,4 +43,5 @@ local parsers = {
   'yaml',
 }
 
+-- local snacks_image_supported_filetypes = Snacks.image.langs()
 return vim.tbl_extend('force', {}, defaults, parsers)

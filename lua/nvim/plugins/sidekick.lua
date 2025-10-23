@@ -1,3 +1,15 @@
+-- hotfix for ~/.local/share/nvim/site/pack/core/opt/sidekick.nvim/lua/sidekick/cli/scrollback.lua:38
+package.preload['sidekick.cli.scrollback'] = function()
+  local orig = dofile(vim.api.nvim_get_runtime_file('lua/sidekick/cli/scrollback.lua', false)[1])
+  local orig_is_enabled = orig.is_enabled
+
+  function orig.is_enabled(terminal)
+    return terminal.parent ~= nil and orig_is_enabled(terminal)
+    -- return terminal.parent and terminal.parent.dump ~= nil and not terminal.tool.native_scroll
+  end
+  return orig
+end
+
 return {
   'folke/sidekick.nvim',
   lazy = true,
@@ -49,17 +61,14 @@ return {
   end,
   -- stylua: ignore
       keys = {
-      -- nes is also useful in normal mode
-      { mode = 'n', '<Tab>',
+      { mode = 'n', expr = true, '<Tab>',
         function()
-          --if not require('sidekick').nes_jump_or_apply() then return '<Tab>' end
          return require('sidekick').nes_jump_or_apply() or '<Tab>'
         end,
-        expr = true,
-        desc = "Goto/Apply Next Edit Suggestion",
       },
       { '<leader>a', '', desc = '+ai', mode = { 'n', 'v' } },
       { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI' },
+      { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI' },
       { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session' },
       { '<leader>ap', function() require('sidekick.cli').prompt() end, mode = { 'n', 'x' }, desc = 'Sidekick Select Prompt'  },
       { '<leader>at', function() require('sidekick.cli').send({msg='{this}'}) end, mode = { 'n', 'x' }, desc = 'Send This' },
@@ -68,16 +77,3 @@ return {
       { '<C-.>',      function() require('sidekick.cli').toggle('copilot') end,    mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Toggle' },
     },
 }
-
--- table.insert(opts.sections.lualine_x, 2, {
---   function()
---     local status = require("sidekick.status").cli()
---     return " " .. (#status > 1 and #status or "")
---   end,
---   cond = function()
---     return #require("sidekick.status").cli() > 0
---   end,
---   color = function()
---     return "Special"
---   end,
--- })

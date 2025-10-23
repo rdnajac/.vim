@@ -1,20 +1,45 @@
+---@class nv.status.Component
+---@field [1] fun():string[]|string[]
+---@field cond? fun():boolean
+---@field color? any
+
 local nv = _G.nv or require('nvim.util')
 
 local M = {}
 
-M.blink = function()
-  local ok, sources = pcall(require, 'blink.cmp.sources.lib')
-  if not ok or not sources then
-    return {}
+M.buffer = function(bufnr, buftype)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  buftype = buftype or vim.bo[bufnr].buftype
+  if buftype == 'terminal' then
+    local icon = (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' '
+      or ' '
+    return { icon, vim.bo.channel }
   end
-
-  return vim
-    .iter(vim.tbl_keys(sources.get_enabled_providers('default')))
-    :map(function(key)
-      return nv.icons.src[key]
-    end)
-    :totable()
+  return {
+    'bufnr=%n',
+    '%{&bufhidden ? "" : "󰘓"}',
+    '%{&buflisted ? "" :  "󱪟 &bufhidden"}',
+  }
 end
+
+M.blink = {
+  function()
+    local ok, sources = pcall(require, 'blink.cmp.sources.lib')
+    if not ok or not sources then
+      return {}
+    end
+
+    return vim
+      .iter(vim.tbl_keys(sources.get_enabled_providers('default')))
+      :map(function(key)
+        return nv.icons.src[key]
+      end)
+      :totable()
+  end,
+  cond = function()
+    return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
+  end,
+}
 
 ---@param bufnr? number
 ---@return string
@@ -71,15 +96,6 @@ M.treesitter = function(bufnr)
       return nv.icons.filetype[lang]
     end)
     :totable()
-end
-
-M.term = function()
-  if vim.bo.buftype ~= 'terminal' then
-    return nil
-  end
-  local icon = (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' '
-    or ' '
-  return ' ' .. icon .. vim.bo.channel
 end
 
 return setmetatable(M, {
