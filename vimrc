@@ -1,13 +1,9 @@
 scriptencoding utf-8
-let g:mapleader = ' '
-let g:maplocalleader = '\'
-
-" Section: settings {{{1
 if !has('nvim')
   call vimrc#init_vim()
 endif
 
-" general
+" Section: settings {{{1
 set jumpoptions+=stack
 set mouse=a
 set report=0
@@ -115,14 +111,12 @@ augroup vimrc_filetype
   au FileType man setlocal nobuflisted
 augroup END
 
+" }}}1
 " Section: keymaps {{{1
-vmap  :sort<CR>
+let g:mapleader = ' '
+let g:maplocalleader = '\'
 
-nnoremap <S-Down>  <Cmd>wincmd j<CR>
-nnoremap <S-Up>    <Cmd>wincmd k<CR>
-nnoremap <S-Left>  <Cmd>wincmd h<CR>
-nnoremap <S-Right> <Cmd>wincmd l<CR>
-nnoremap <S-Tab>   <Cmd>wincmd w<CR>
+vmap  :sort<CR>
 
 " quit stuff
 nnoremap <C-q> <Cmd>wincmd c<CR>
@@ -138,7 +132,6 @@ nnoremap ~ `
 " stop using <BS> for buffer navigation...
 nmap <BS> ciw
 
-
 " you know what I mean...
 nmap gcap gcip
 
@@ -149,7 +142,6 @@ xnoremap s :s/\%V<C-R><C-W>/
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
 nnoremap g. :%s//<c-r>./g<esc>
 
-" " a global function with a distinct name
 " function! BufSubstituteAll(find, replace) abort
 "   " escape any slash or backslash in the arguments
 "   let l:find    = escape(a:find,    '/\')
@@ -157,24 +149,32 @@ nnoremap g. :%s//<c-r>./g<esc>
 "   " run the substitute in every buffer, then write if changed
 "   execute 'bufdo %s/\V' . l:find . '/' . l:replace . '/g | update'
 " endfunction
-"
-" " the user‐facing command calls that function
-" command! -nargs=2 Sall call BufSubstituteAll(<f-args>)
+" command! -nargs=2 call BufSubstituteAll(<f-args>)
 
 " bookmarks {{{2
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
+nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 
-nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
-nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
-nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
+" windows {{{2
+nnoremap <S-Down>  <Cmd>wincmd j<CR>
+nnoremap <S-Up>    <Cmd>wincmd k<CR>
+nnoremap <S-Left>  <Cmd>wincmd h<CR>
+nnoremap <S-Right> <Cmd>wincmd l<CR>
+nnoremap <S-Tab>   <Cmd>wincmd w<CR>
 
 " just like tmux!
 " nnoremap <C-w>-     <C-w>s
 " nnoremap <C-w><Bar> <C-w>v
 
-" key pairs in normal mode
+" resize splits
+nnoremap <C-W><Up>    :         resize +10<CR>
+nnoremap <C-W><Down>  :         resize -10<CR>
+nnoremap <C-W><Left>  :vertical resize +10<CR>
+nnoremap <C-W><Right> :vertical resize -10<CR>
+
+" key pairs in normal mode {{{2
 " `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
 
 " `cd` cm co cp `cq` `cr` `cs` cu cx cy cz
@@ -220,6 +220,7 @@ vmap F Sf
 " xmap ga <Plug>(EasyAlign)
 " nmap ga <Plug>(EasyAlign)
 
+" <leader> {{{2
 " vim.lsp.hover overrides the default K mapping
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>r <Cmd>call sesh#restart()<CR>
@@ -227,15 +228,17 @@ nnoremap <leader>R <Cmd>restart!<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 nnoremap <leader>N <Cmd>lua Snacks.picker.notifications()<CR>
-" nnoremap <leader>N <Cmd>lua Snacks.notifier.show_history()<CR>
-" nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
 nnoremap <leader>h <Cmd>Help<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 
+" file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
-nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
+nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
+nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
+nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " git
@@ -243,23 +246,7 @@ nnoremap <leader>ga <Cmd>!git add %<CR>
 nnoremap <leader>gN <Cmd>execute '!open' git#url('neovim/neovim')<CR>
 nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 
-" resize splits
-nnoremap <C-W><Up>    :         resize +10<CR>
-nnoremap <C-W><Down>  :         resize -10<CR>
-nnoremap <C-W><Left>  :vertical resize +10<CR>
-nnoremap <C-W><Right> :vertical resize -10<CR>
-
-" smarter j/k
-" handle wrapped lines better by preferring `gj` and `gk`
-let s:keys = [ 'j', 'k' , '<Down>', '<Up>']
-for [i, key] in items(s:keys)
-  let dir = s:keys[i % 2] " limit dir to only j/k
-  execute printf("nnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
-  execute printf("xnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
-endfor
-unlet s:keys
-
-" better n/N
+" more intutive navigation and centering
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
 nmap n nzz
 " nnoremap <expr> n  'Nn'[v:searchforward]
@@ -277,28 +264,25 @@ nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 
-" lervag/dotfiles
-" already in nivm
-" nnoremap Y      y$
-" nnoremap '      `
+nnoremap J      mzJ`z
 
 " TODO:
-nnoremap J      mzJ`z
 nnoremap dp     dp]c
 nnoremap do     do]c
 
 nnoremap gV     `[V`]
 
-" Buffer navigation
-" nnoremap <silent> gb    :bnext<cr>
-" nnoremap <silent> gB    :bprevious<cr>
+" buffer navigation {{{2
+" nnoremap <silent> gb    <Cmd>bnext<CR>
+" nnoremap <silent> gB    <Cmd>bprevious<CR>
 
 " `<C-e>` scrolls the window downwards by [count] lines;
 " `<C-^>` (`<C-6>`) which edits the alternate  buffer`:e #`
 nnoremap <C-e>            <C-^>
 nnoremap <C-w><C-e>  <C-w><C-^>
 
-" Utility maps for repeatable quickly change/delete current word
+" TODO: test me!
+" change/delete current word {{{2
 nnoremap c*   *``cgn
 nnoremap c#   *``cgN
 nnoremap cg* g*``cgn
@@ -308,18 +292,18 @@ nnoremap d#   *``dgN
 nnoremap dg* g*``dgn
 nnoremap dg# g*``dgN
 
-" better indenting
+" better indenting {{{2
 vnoremap < <gv
 vnoremap > >gv
 nnoremap > V`]>
 nnoremap < V`]<
 
-" insert mode undo breakpoints
+" insert mode undo breakpoints {{{2
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
 
-" easier completion
+" easier completion  {{{2
 inoremap <silent> ,o <C-x><C-o>
 " inoremap <silent> ,f <C-x><C-f>
 " inoremap <silent> ,i <C-x><C-i>
@@ -329,11 +313,13 @@ inoremap <silent> ,o <C-x><C-o>
 " inoremap <silent> ,u <C-x><C-u>
 inoremap <silent> ,i <Cmd>Icons<CR>
 
-" add chars to EOL
+" add chars to EOL easily {{{2
 nnoremap <Bslash>, mzA,<Esc>;`z
 nnoremap <Bslash>; mzA;<Esc>;`z
+nnoremap <Bslash>. mzA.<Esc>;`z
 
-" unimpaired
+
+" unimpaired  {{{2
 " exchange lines
 nnoremap ]e :execute 'move .+' . v:count1<CR>==
 " inoremap ]e <Esc>:m .+1<CR>==gi
@@ -342,12 +328,12 @@ nnoremap [e :execute 'move .-' . (v:count1 + 1)<CR>==
 " inoremap [e <Esc>:m .-2<CR>==gi
 vnoremap [e :<C-u>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv
 
-" insert special chars
+" insert special chars {{{2
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
-
+" }}}1
 " Section: commands {{{1
 command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))

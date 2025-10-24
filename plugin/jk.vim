@@ -6,8 +6,6 @@ let g:esc_k_lasttime = 0
 let s:escape = "\<BS>\<Esc>"
 let s:term_escape = "\<BS>\<C-\>\<C-N>"
 
-""
-" Function to handle the escape mapping
 function! s:escape(key)
   let l:now = reltimefloat(reltime())
   if a:key ==# 'j'
@@ -31,3 +29,12 @@ for mode in ['i', 'v', 'c', 't']
     execute mode . 'noremap <expr> ' . key . ' <SID>escape(''' . key . ''')'
   endfor
 endfor
+
+" handle wrapped lines better by preferring `gj` and `gk`
+let s:keys = [ 'j', 'k' , '<Down>', '<Up>']
+for [i, key] in items(s:keys)
+  let dir = s:keys[i % 2] " limit dir to only j/k
+  execute printf("nnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
+  execute printf("xnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
+endfor
+unlet s:keys

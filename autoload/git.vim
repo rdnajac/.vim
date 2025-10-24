@@ -10,4 +10,5 @@ endfunction
 
 function! git#url(user_repo) abort
   return 'http://github.com/' . a:user_repo . '.git'
+  " return 'https://git::@github.com/' .. plug .. '.git'
 endfunction

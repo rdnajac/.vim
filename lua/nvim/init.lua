@@ -5,7 +5,8 @@ nv.specs = vim.tbl_values(vim.tbl_map(function(plugin)
 end, require('nvim.plugins')))
 
 local vim_plugins = vim.tbl_map(function(plug)
-  return 'http://github.com/' .. plug .. '.git'
+  return 'https://git::@github.com/' .. plug .. '.git'
+  -- return 'http://github.com/' .. plug .. '.git'
 end, vim.g.plugs_order or {})
 
 ---@param plug_data { spec: vim.pack.Spec, path: string }
