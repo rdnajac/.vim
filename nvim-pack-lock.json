@@ -45,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "64a23d0",
+      "rev": "5121416",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "8fecb462",
+      "rev": "4a9f5797",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -74,11 +74,11 @@
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "7568825",
+      "rev": "bd1f79a",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "7229dca",
+      "rev": "4d9666e",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {
@@ -90,7 +90,7 @@
       "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
-      "rev": "1199c0e",
+      "rev": "4fe1b0c",
       "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-dispatch": {

@@ -83,3 +83,9 @@ function! vimrc#autosection() abort " {{{
 endfunction
 
 " }}}
+" if !exists('g:loaded_vimrc')
+"   let g:loaded_vimrc = 1
+" else
+"   let g:loaded_vimrc+= 1 | Info 'Reloaded vimrc [' . g:loaded_vimrc . ']'
+" endif
+

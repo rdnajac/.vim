@@ -1,9 +1,6 @@
-local M = {}
-
--- TODO:  don't show up in history?
 local progress = vim.defaulttable()
 
----@param ev {data: {client_id: integer, params: lsp.ProgressParams}}
+---@param ev { data:  { client_id: integer, params: lsp.ProgressParams } }
 local function lsp_progress_callback(ev)
   local client = vim.lsp.get_client_by_id(ev.data.client_id)
   local value = ev.data.params.value --[[@as {percentage?: number, title?: string, message?: string, kind: "begin" | "report" | "end"}]]
@@ -50,10 +47,6 @@ local function lsp_progress_callback(ev)
   })
 end
 
-M.setup = function()
-  vim.api.nvim_create_autocmd('LspProgress', {
-    callback = lsp_progress_callback,
-  })
-end
-
-return M
+vim.api.nvim_create_autocmd('LspProgress', {
+  callback = lsp_progress_callback,
+})
