@@ -1,27 +1,23 @@
-local hl = {}
-local icons = {}
-
-for k, v in ipairs(vim.diagnostic.severity) do
-  local diagnostic = v:sub(1, 1) .. v:sub(2):lower()
-  hl[k] = 'Diagnostic' .. diagnostic
-  icons[k] = nv.icons.diagnostics[diagnostic]
-end
-
-local M = {}
-
 ---@type vim.diagnostic.Opts
-M.opts = {
+local opts = {
   float = { source = true },
   underline = false,
   virtual_text = false,
   severity_sort = true,
-  signs = { text = icons, numhl = hl },
+  signs = (function()
+    local icon, hl = {}, {}
+    ---@param k number
+    ---@param v string
+    for k, v in ipairs(vim.diagnostic.severity) do
+      ---@type string
+      local diagnostic = v:sub(1, 1) .. v:sub(2):lower()
+      icon[k] = nv.icons.diagnostics[diagnostic]
+      hl[k] = 'Diagnostic' .. diagnostic
+    end
+    return { text = icon, numhl = hl }
+  end)(),
 }
 
 local unused = 'smoke test'
 
-M.setup = function()
-  vim.diagnostic.config(M.opts)
-end
-
-return M
+vim.diagnostic.config(opts)

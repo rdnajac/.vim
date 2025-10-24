@@ -23,9 +23,9 @@ end
 
 --- loads vim settings and exports vim.g.plugins
 vim.cmd([[
-runtime vimrc
-hi link vimMap @keyword
-" let s:me = resolve(expand('<sfile>:p')) | echom s:me
+  runtime vimrc
+  let s:me = resolve(expand('<sfile>:p'))
+  " echom s:me
 ]])
 
 -- the rest if the owl

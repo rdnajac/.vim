@@ -31,11 +31,5 @@ opts.on_attach = function(client, bufnr)
   end
 end
 
-return {
-  opts = opts,
-  setup = function()
-    vim.lsp.config('*', opts)
-    vim.lsp.enable(nv.lsp.servers)
-    nv.lsp.progress.setup()
-  end,
-}
+vim.lsp.config('*', opts)
+vim.lsp.enable(nv.lsp.servers)

@@ -4,37 +4,21 @@
 ---@field color? any
 
 local nv = _G.nv or require('nvim.util')
+local icons = nv.icons
 
 local M = {}
 
-M.buffer = function(bufnr, buftype)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  buftype = buftype or vim.bo[bufnr].buftype
-  if buftype == 'terminal' then
-    local icon = (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' '
-      or ' '
-    return { icon, vim.bo.channel }
+M.buffer = function()
+  if vim.bo.buftype == 'terminal' then
+    return [[ %{&channel}]]
   end
-  return {
-    'bufnr=%n',
-    '%{&bufhidden ? "" : "󰘓"}',
-    '%{&buflisted ? "" :  "󱪟 &bufhidden"}',
-  }
+  return "%{% &buflisted ? '%n' : '󱪟 ' %}" .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
 end
 
 ---@type nv.status.Component
 M.blink = {
   function()
-    local ok, sources = pcall(require, 'blink.cmp.sources.lib')
-    if ok and sources then
-      return vim
-        .iter(vim.tbl_keys(sources.get_enabled_providers('default')))
-        :map(function(key)
-          return nv.icons.src[key]
-        end)
-        :totable()
-    end
-    return {}
+    return vim.tbl_map(icons.blink, nv.blink.get_providers())
   end,
   cond = function()
     return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
@@ -69,7 +53,7 @@ M.diagnostic = {
 M.lsp = function()
   local clients = vim.lsp.get_clients()
   if #clients == 0 then
-    return { nv.icons.lsp.unavailable .. ' ' }
+    return { icons.lsp.unavailable .. ' ' }
   end
 
   return vim
@@ -80,11 +64,11 @@ M.lsp = function()
         if ok and statusmod then
           local status = statusmod.get()
           local kind = status and status.kind or 'Inactive'
-          return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
+          return (icons.copilot[kind] or icons.copilot.Inactive)[1]
         end
-        return nv.icons.copilot.Inactive[1]
+        return icons.copilot.Inactive[1]
       else
-        return nv.icons.lsp.attached
+        return icons.lsp.attached
       end
     end)
     :totable()
@@ -95,12 +79,12 @@ end
 M.treesitter = function(bufnr)
   local highlighter = require('vim.treesitter.highlighter')
   local hl = highlighter.active[bufnr or vim.api.nvim_get_current_buf()]
-  return vim
-    .iter(hl and vim.tbl_keys(hl._queries) or {})
-    :map(function(lang)
-      return nv.icons.filetype[lang]
-    end)
-    :totable()
+  ---@diagnostic disable-next-line: invisible
+  local queries = hl and hl._queries
+  if type(queries) == 'table' then
+    return vim.tbl_map(icons.filetype, vim.tbl_keys(queries))
+  end
+  return {}
 end
 
 return setmetatable(M, {

@@ -1,42 +1,36 @@
 ---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
--- TODO: use a buftype map. IT WORKS
-
----@param bufnr? number
----@param ft? string
----@return string
-local stl_icons = function(bufnr, ft)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  ft = ft or vim.bo[bufnr].filetype
-  return table.concat({
-    -- vim.bo.modifiable == false and '󱙄 ' or vim.bo.modified and '󰳼 ' or '',
-    vim.bo[bufnr].readonly and ' ' or '',
-    vim.bo[bufnr].busy > 0 and '◐ ' or '',
-    -- TODO: add ff, fenc, etc
-    nv.icons.filetype[ft],
-  })
-end
 
 local M = {
-  a = function(active, bt, ft)
-    local path = { '%h%w%q' }
+  a = function(opts)
+    local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
+    local win = opts.win or vim.api.nvim_get_current_win()
+    local bt = opts.bt or vim.bo[bufnr].buftype
+    -- help/preview/quickfix
+    local prefix = '%h%w%q'
+
+    local path
     if bt == '' then
-      table.insert(path, active and '%t' or '%f')
-    elseif bt == 'terminal' then
-      table.insert(
-        path,
-        vim.fn.fnamemodify(vim.b[vim.api.nvim_get_current_buf()].osc7_dir or vim.fn.getcwd(), ':~')
-      )
-    elseif bt == 'acwrite' then
-      local ins
-      if ft == 'nvim-pack' then
-        ins = vim.g.plug_home
-      elseif ft == 'oil' then
-        ins = require('oil').get_current_dir()
+      local active = opts.active or (win == tonumber(vim.g.actual_curwin))
+      path = active and '%t' or '%f'
+    else
+      local dirty_path
+      -- stylua: ignore
+      if bt == 'acwrite' then
+        local ft = opts.ft or vim.bo[bufnr].filetype
+        if ft == 'nvim-pack' then dirty_path = vim.g.plug_home
+        elseif ft == 'oil' then dirty_path = require('oil').get_current_dir() end
+      elseif bt == 'terminal' then
+        dirty_path = vim.b[vim.api.nvim_get_current_buf()].osc7_dir
       end
-      table.insert(path, vim.fn.fnamemodify(ins or vim.fn.getcwd(), ':~'))
+      path = prefix .. ' ' .. vim.fn.fnamemodify(dirty_path or vim.fn.getcwd(), ':~')
     end
-    table.insert(path, stl_icons(nil, ft))
-    return table.concat(path, ' ')
+
+    return table.concat({
+      path,
+      "%{% &readonly ? ' ' : '%M' %}",
+      "%{% &busy     ? '◐ ' : ''   %}",
+      -- TODO: add ff, fenc, etc
+    })
   end,
 
   b = function()

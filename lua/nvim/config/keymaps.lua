@@ -40,25 +40,21 @@ local shortcuts = {
   k = 'nvim/config/keymaps',
 }
 
-return {
-  setup = function()
-    for key, mod in pairs(shortcuts) do
-      vim.keymap.set('n', '<Bslash>' .. key, function()
-        vim.fn['edit#luamod'](mod)
-      end, { desc = 'Edit ' .. mod })
-    end
+for key, mod in pairs(shortcuts) do
+  vim.keymap.set('n', '<Bslash>' .. key, function()
+    vim.fn['edit#luamod'](mod)
+  end, { desc = 'Edit ' .. mod })
+end
 
-    Snacks.util.on_key('<Esc>', function()
-      vim.cmd.nohlsearch()
-      if package.loaded['sidekick'] then
-        require('sidekick').clear()
-      end
-    end)
+Snacks.util.on_key('<Esc>', function()
+  vim.cmd.nohlsearch()
+  if package.loaded['sidekick'] then
+    require('sidekick').clear()
+  end
+end)
 
-    Snacks.util.on_key('<C-Space>', function()
-      if package.loaded['sidekick'] then
-        require('sidekick').clear()
-      end
-    end)
-  end,
-}
+Snacks.util.on_key('<C-Space>', function()
+  if package.loaded['sidekick'] then
+    require('sidekick').clear()
+  end
+end)

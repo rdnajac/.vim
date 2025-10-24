@@ -1,10 +1,11 @@
 scriptencoding utf-8
 let g:mapleader = ' '
 let g:maplocalleader = '\'
-execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
-" TODO: find thecode for automatic marks
-call vimrc#autosection()
+
 " Section: settings {{{1
+if !has('nvim')
+  call vimrc#init_vim()
+endif
 
 " general
 set jumpoptions+=stack
@@ -26,14 +27,13 @@ set ignorecase
 set showmatch
 set smartcase
 
-" text
+" editor
 set breakindent
 set linebreak
 set nowrap
 set shiftround
-" don't change tabstop! use `sw` and `sts`
-set shiftwidth=2
-set softtabstop=2
+" don't change tabstop!
+set shiftwidth=2 softtabstop=2
 
 augroup vimrc_indent
   autocmd!
@@ -72,6 +72,7 @@ augroup vimrc
   au BufWritePre * call vim#mkdir#(expand('<afile>'))
   au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
+  au BufReadPost vimrc call vimrc#setmarks()
 
   " restore cursor position
   au BufWinEnter * exec "silent! normal! g`\"zv"
@@ -115,6 +116,7 @@ augroup vimrc_filetype
 augroup END
 
 " Section: keymaps {{{1
+vmap  :sort<CR>
 
 " quit stuff
 nnoremap <C-q> <Cmd>wincmd c<CR>
@@ -129,6 +131,7 @@ nnoremap ~ `
 " nmap  ciw
 " stop using <BS> for buffer navigation...
 nmap <BS> ciw
+
 
 " you know what I mean...
 nmap gcap gcip
@@ -160,8 +163,6 @@ nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
 nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
-
-vmap  :sort<CR>
 
 " just like tmux!
 " nnoremap <C-w>-     <C-w>s
@@ -235,8 +236,6 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 nnoremap <leader>ga <Cmd>!git add %<CR>
 nnoremap <leader>gN <Cmd>execute '!open' git#url('neovim/neovim')<CR>
 nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
-
-nnoremap  <leader><Tab> <Cmd>e #<CR>
 
 " resize splits
 nnoremap <C-W><Up>    :         resize +10<CR>
@@ -362,11 +361,11 @@ set signcolumn=auto
 
 " }}}1
 " Section: plugins  {{{1
-call plug#begin()
+call plug#begin()" {{{}}}
 Plug 'alker0/chezmoi.vim'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
-Plug 'lervag/vimtex'
+Plug 'leRvag/vimtex'
 " Plug 'lervag/wiki.vim.git'
 " Plug 'tpope/vim-abolish'
 " Plug 'tpope/vim-capslock'
@@ -397,8 +396,27 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
+  call plug#end()
 else
   Plug 'saxon1964/neovim-tips'
+
+  hi link vimMap @keyword
+  packadd! nvim.difftool
+  packadd! nvim.undotree
+
+  set backup backupext=.bak
+  let &backupdir = g:stdpath['state'] . '/backup//'
+  let &backupskip .= ',' . expand('$HOME/.cache/*')
+  let &backupskip .= ',' . expand('$HOME/.local/*')
+  set undofile
+
+  " try running `:options`
+  set smoothscroll
+  set jumpoptions+=view
+  set mousescroll=hor:0
+  set nocdhome
+
+  " disable the default popup menu
+  aunmenu PopUp | autocmd! nvim.popupmenu
 endif
-call plug#end()
 " vim: foldlevelstart=1 foldmethod=marker

@@ -45,6 +45,12 @@ local icons = {
   },
 }
 
+-- setmetatable(icons.src({
+--   __call = function(_, key)
+--     return icons.src[key]
+--   end,
+-- }))
+
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
 local M = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
 
@@ -77,6 +83,10 @@ for _, category in ipairs(mini_icon_keys) do
     __index = _get_mini_icon,
     __call = _get_mini_icon,
   })
+end
+
+M.blink = function(src)
+  return M.src[src] or ' '
 end
 
 return M

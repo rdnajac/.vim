@@ -1,5 +1,5 @@
 " execute a function on VimEnter or immediately if did enter
-function! vimrc#onVimEnter(fn) abort " {{{
+function! vimrc#onVimEnter(fn) abort
   if v:vim_did_enter
     call call(a:fn, [])
   else
@@ -7,8 +7,7 @@ function! vimrc#onVimEnter(fn) abort " {{{
   endif
 endfunction
 
-" }}}
-function! vimrc#init_vim() abort " {{{
+function! vimrc#init_vim() abort
   let &viminfofile = g:vimrc#home . '.viminfo'
   let &verbosefile = g:vimrc#home . '.vimlog.txt'
 
@@ -38,54 +37,11 @@ function! vimrc#init_vim() abort " {{{
   source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
 endfunction
 
-" }}}
-function! vimrc#init_nvim() abort " {{{
-  if !exists('g:nvim_did_init')
-    let g:nvim_did_init = v:false
-    packadd! nvim.difftool
-    packadd! nvim.undotree
-    call vimrc#onVimEnter(function('vimrc#nvim_config'))
-  endif
-endfunction
-
-" }}}
-function! vimrc#nvim_config() abort " {{{
-  set backup
-  set backupext=.bak
-  let &backupdir = g:stdpath['state'] . '/backup//'
-  let &backupskip .= ',' . escape(expand('$HOME/.cache/*'), '\')
-  let &backupskip .= ',' . escape(expand('$HOME/.local/*'), '\')
-  set undofile
-
-  " nvim-specific settings
-  " try running `:options`
-  set smoothscroll
-  set jumpoptions+=view
-  set mousescroll=hor:0
-  set nocdhome
-
-  " disable the default popup menu
-  aunmenu PopUp | autocmd! nvim.popupmenu
-
-  let g:nvim_did_init = v:true
-endfunction
-
-" }}}
-
-function! vimrc#autosection() abort " {{{
-  for l:line in readfile(g:my#vimrc)
-    if l:line =~? '^"\s*Section:\s*'
-      let l:idx = matchend(l:line, '^"\s*Section:\s*')
-      let l:ch  = strcharpart(l:line, l:idx, 1)
-      execute printf("nnoremap <silent> <leader>v%s :call edit#vimrc('\+\/Section:\\ %s')<CR>", l:ch, l:ch)
+function! vimrc#setmarks() abort
+  for l:num in range(1, line('$'))
+    if getline(l:num) =~? '^"\s*Section:\s*\zs.'
+      let l:char = matchstr(getline(l:num), '^"\s*Section:\s*\zs.')
+      call setpos("'" . toupper(l:char), [0, l:num, 1, 0])
     endif
   endfor
 endfunction
-
-" }}}
-" if !exists('g:loaded_vimrc')
-"   let g:loaded_vimrc = 1
-" else
-"   let g:loaded_vimrc+= 1 | Info 'Reloaded vimrc [' . g:loaded_vimrc . ']'
-" endif
-

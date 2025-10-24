@@ -35,28 +35,23 @@ local function highlight_line(bufnr, lnum, line)
 end
 
 local function highlight_backticks(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   for lnum, line in ipairs(lines) do
     highlight_line(bufnr, lnum - 1, line)
   end
 end
 
-local M = {}
+local aug = vim.api.nvim_create_augroup('sourcecode', {})
 
-function M.setup()
-  if vim.bo[0].filetype ~= 'bigfile' then
-    highlight_backticks()
-  end
-  vim.api.nvim_create_autocmd('BufEnter', {
-    nested = true,
-    callback = function(args)
-      if vim.bo[args.buf].filetype == 'bigfile' then
-        return
-      end
+vim.api.nvim_create_autocmd('BufEnter', {
+  group = aug,
+  nested = true,
+  callback = function(args)
+    if vim.bo[args.buf].filetype ~= 'bigfile' then
       highlight_backticks(args.buf)
 
       vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
+        group = aug,
         buffer = args.buf,
         callback = function(a)
           local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
@@ -66,8 +61,6 @@ function M.setup()
           end
         end,
       })
-    end,
-  })
-end
-
-return M
+    end
+  end,
+})

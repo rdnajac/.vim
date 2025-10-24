@@ -15,7 +15,7 @@ function! CRooze() abort
   let l:line = getline('.')
 
   if l:ft ==# 'qf\|pager'
-   return 0
+    return 0
   endif
 
   if l:line[0] ==# '#' && l:line[1] ==# '!'
@@ -51,3 +51,5 @@ augroup ooze
   " autocmd Filetype vim,lua nnoremap <buffer> <CR> <Cmd>call ooze#send()<CR>
   " autocmd TermClose * unlet! g:ooze_channel
 augroup END
+
+" -- local icon = (vim.g.ooze_channel ~= nil and vim.g.ooze_channel == vim.bo.channel) and ' ' or ' '

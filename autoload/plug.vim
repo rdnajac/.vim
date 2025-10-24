@@ -1,5 +1,4 @@
-source ~/GitHub/junegunn/vim-plug/plug.vim
-
+silent! source ~/GitHub/junegunn/vim-plug/plug.vim
 
 function! plug#begin(...)
   if a:0 > 0
@@ -20,9 +19,9 @@ function! s:define_commands()
   " command! -nargs=* -bar -bang -complete=customlist,s:names PlugUpdate  call s:update(<bang>0, [<f-args>])
   " command! -nargs=0 -bar -bang PlugClean call s:clean(<bang>0)
   " command! -nargs=0 -bar PlugUpgrade if s:upgrade() | execute 'source' s:esc(s:me) | endif
-" command! -nargs=0 -bar PlugStatus  call s:status()
-" command! -nargs=0 -bar PlugDiff    call s:diff()
-" command! -nargs=? -bar -bang -complete=file PlugSnapshot call s:snapshot(<bang>0, <f-args>)
+  " command! -nargs=0 -bar PlugStatus  call s:status()
+  " command! -nargs=0 -bar PlugDiff    call s:diff()
+  " command! -nargs=? -bar -bang -complete=file PlugSnapshot call s:snapshot(<bang>0, <f-args>)
 endfunction
 
 function! s:trim(str) abort
@@ -33,19 +32,7 @@ function! s:trim(str) abort
   return ret
 endfunction
 
-function! plug#helptags() abort
-  silent! helptags ALL
-endfunction
-
-if !has('nvim')
-  finish
-endif
-
-function! plug#end() abort
-  call plug#helptags()
-endfunction
-
-if !exists('g:loaded_plug') || !exists('*plug#')
+if has('nvim') && !exists('g:loaded_plug') || !exists('*plug#')
   function! plug#(repo, ...)
     if a:0 > 1
       return s:err('Invalid number of arguments (1..2)')
