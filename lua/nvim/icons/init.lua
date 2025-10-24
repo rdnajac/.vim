@@ -15,6 +15,7 @@ local icons = {
     snippets = ' ',
     cmp_r = ' ',
   },
+  diff = { add = '▎', change = '▎', delete = '' },
   mason = {
     package_installed = '✓',
     package_pending = '➜',

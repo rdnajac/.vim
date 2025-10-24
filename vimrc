@@ -152,8 +152,9 @@ nnoremap g. :%s//<c-r>./g<esc>
 " " the user‐facing command calls that function
 " command! -nargs=2 Sall call BufSubstituteAll(<f-args>)
 
-" bookmarks {{{2 
+" bookmarks {{{2
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
+nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
@@ -355,14 +356,16 @@ let &laststatus = has('nvim') ? 3 : 2
 set statusline=%!vimline#statusline#()
 
 " set foldcolumn=1
-" set number
-set signcolumn=number
+" set signcolumn=number
+set signcolumn=auto
 " set numberwidth=3
 
 " }}}1
 " Section: plugins  {{{1
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
+" Plug 'andymass/vim-matchup'
+" Plug 'bullets-vim/bullets.vim'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
 " Plug 'tpope/vim-abolish'
@@ -373,15 +376,7 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
-Plug 'tpope/vim-repeat'
 " Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-surround'
-" Plug 'andymass/vim-matchup'
-" Plug 'bullets-vim/bullets.vim'
-Plug 'vuciv/golf'
-" ruby
-Plug 'AndrewRadev/dsf.vim'
-Plug 'AndrewRadev/splitjoin.vim'
 " forks
 " Plug 'tpope/vim-tbone'
 " Plug 'tpope/vim-vinegar'
@@ -389,14 +384,19 @@ Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'tpope/vim-scriptease'
 if !has('nvim')
   Plug 'dense-analysis/ale'
+  Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
-  " Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-unimpaired'
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-surround'
+  " Plug 'tpope/vim-commentary'
+  Plug 'AndrewRadev/dsf.vim'
+  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
-  Plug 'dstein64/vim-startuptime'
+  Plug 'vuciv/golf'
 else
   Plug 'saxon1964/neovim-tips'
 endif
