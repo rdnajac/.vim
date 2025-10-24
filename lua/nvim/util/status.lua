@@ -28,7 +28,7 @@ M.blink = {
     local ok, sources = pcall(require, 'blink.cmp.sources.lib')
     if ok and sources then
       return vim
-        .iter(vim.tbl_keys(sources.get_enabled_providers('default')) or {})
+        .iter(vim.tbl_keys(sources.get_enabled_providers('default')))
         :map(function(key)
           return nv.icons.src[key]
         end)

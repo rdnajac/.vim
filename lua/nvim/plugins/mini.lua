@@ -4,8 +4,8 @@ local minimods = {
   'diff',
   'hipatterns',
   -- 'icons', -- setup in main config to avoid issues with other plugins using mini icons
-  -- 'splitjoin',
-  -- 'surround',
+  'splitjoin',
+  'surround',
 }
 
 local minisetup = function(minimod)

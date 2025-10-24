@@ -82,7 +82,7 @@ local M = {
     if nv.status.diagnostic.cond(vim.api.nvim_get_current_buf()) then
       return nv.status.diagnostic[1]()
     end
-    return '%<' .. table.concat(nv.lsp.docsymbols(), nv.icons.sep.item.right)
+    return '%<' .. table.concat(require('nvim.util.lsp.docsymbols')(), nv.icons.sep.item.right)
   end,
 }
 

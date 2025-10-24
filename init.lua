@@ -30,4 +30,3 @@ hi link vimMap @keyword
 
 -- the rest if the owl
 require('nvim').init()
-

@@ -8,13 +8,13 @@ return {
       section = 'terminal',
       cmd = '$HOME/.vim/bin/cowsay-vim-fortunes #' .. os.time(),
       -- cmd = '~/.vim/etc/learn-something | cowsay #' .. os.time(),
-      padding = 1 ,
+      padding = 1,
     },
     { padding = 1 },
   },
   formats = {
     -- header = { '%s', align = 'center', hl = 'Chromatophore' },
-    header = { '%s',  hl = 'Chromatophore' },
+    header = { '%s', hl = 'Chromatophore' },
     key = function(item)
       return { item.key, hl = 'Chromatophore' }
     end,

@@ -1,3 +1,7 @@
+Snacks.picker.scriptnames = function()
+  require('nvim.snacks.picker.scriptnames')
+end
+
 -- assumes input is [a-z],_
 local function to_camel_case(str)
   return str
