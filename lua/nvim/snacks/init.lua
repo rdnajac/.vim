@@ -66,6 +66,7 @@ return {
     },
     styles = {
       dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
+      -- sidebar = { wo = { winhighlight = 'WinBar:NONE' } },
       lazygit = { height = 0, width = 0 },
       terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
     },
@@ -79,4 +80,4 @@ return {
     require('nvim.snacks.toggles')
   end,
 }
--- vim:fdm=expr:fdl=2
+

@@ -1,24 +1,8 @@
 _G.nv = _G.nv or require('nvim.util')
 
-local plugins = require('nvim.plugins')
-
--- ---@type vim.pack.Spec[]
--- nv.specs = vim
---   .iter(plugins)
---   :map(function(p)
---     return nv.plug(p):tospec()
---   end)
---   :totable()
-
--- PERF:
 nv.specs = vim.tbl_values(vim.tbl_map(function(plugin)
   return nv.plug(plugin):tospec()
-end, plugins))
-
--- local vim_plugins = vim.is_list(vim.g.plugs) and vim.g.plugs
--- or vim.tbl_map(function(plug)
---   return plug.uri
--- end, vim.tbl_values(vim.g.plugs or {}))
+end, require('nvim.plugins')))
 
 local vim_plugins = vim.tbl_map(function(plug)
   return 'http://github.com/' .. plug .. '.git'
@@ -27,7 +11,8 @@ end, vim.g.plugs_order or {})
 ---@param plug_data { spec: vim.pack.Spec, path: string }
 local load = function(plug_data)
   local spec = plug_data.spec
-  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
+  local name = spec.name
+  vim.cmd.packadd({ args = { name }, bang = true, magic = { file = false } })
   if spec.data and vim.is_callable(spec.data.setup) then
     spec.data.setup()
   end

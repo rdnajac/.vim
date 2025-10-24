@@ -1,14 +1,11 @@
--- hotfix for ~/.local/share/nvim/site/pack/core/opt/sidekick.nvim/lua/sidekick/cli/scrollback.lua:38
-package.preload['sidekick.cli.scrollback'] = function()
-  local orig = dofile(vim.api.nvim_get_runtime_file('lua/sidekick/cli/scrollback.lua', false)[1])
-  local orig_is_enabled = orig.is_enabled
-
-  function orig.is_enabled(terminal)
-    return terminal.parent ~= nil and orig_is_enabled(terminal)
-    -- return terminal.parent and terminal.parent.dump ~= nil and not terminal.tool.native_scroll
+-- -- hotfix for ~/.local/share/nvim/site/pack/core/opt/sidekick.nvim/lua/sidekick/cli/scrollback.lua:38
+nv = _G.nv or require('nvim.utils')
+nv.hotfix('sidekick.cli.scrollback', function(m)
+  local orig_is_enabled = m.is_enabled
+  function m.is_enabled(terminal)
+    return terminal.parent and orig_is_enabled(terminal)
   end
-  return orig
-end
+end)
 
 return {
   'folke/sidekick.nvim',
@@ -18,16 +15,6 @@ return {
   after = function()
     vim.lsp.enable('copilot')
     vim.lsp.inline_completion.enable()
-
-    Snacks.toggle({
-      name = 'Inline Completion',
-      get = function()
-        return vim.lsp.inline_completion.is_enabled()
-      end,
-      set = function(state)
-        vim.lsp.inline_completion.enable(state)
-      end,
-    }):map('<leader>ai')
 
     local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
 

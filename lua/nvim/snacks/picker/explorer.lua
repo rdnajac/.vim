@@ -4,6 +4,7 @@ return {
   -- cwd = vim.fn.getcwd(),
   ignored = true,
   win = {
+    -- wo = { winhighlight = 'WinBar:NONE' },
     list = {
       keys = {
         -- ['<Up>'] = 'explorer_up',

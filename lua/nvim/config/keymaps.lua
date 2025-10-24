@@ -37,12 +37,11 @@ local shortcuts = {
   P = 'nvim/plugins/init',
   m = 'nvim/plugins/mini',
   u = 'nvim/util/init',
-  -- k = 'nvim/config/keymaps',
+  k = 'nvim/config/keymaps',
 }
 
 return {
   setup = function()
-    -- map t o bslash key and call vim.fn edit#luamod
     for key, mod in pairs(shortcuts) do
       vim.keymap.set('n', '<Bslash>' .. key, function()
         vim.fn['edit#luamod'](mod)

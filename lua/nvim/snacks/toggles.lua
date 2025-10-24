@@ -14,10 +14,18 @@ Snacks.toggle.treesitter():map('<leader>ut')
 Snacks.toggle.words():map('<leader>uW')
 Snacks.toggle.zoom():map('<leader>uZ')
 
----@type { [string]: snacks.toggle.Opts }[]
+---@type table<string, snacks.toggle.Opts>
 local toggles = {
+  ['<leader>ai'] = {
+    name = 'Inline Completion',
+    get = function()
+      return vim.lsp.inline_completion.is_enabled()
+    end,
+    set = function(state)
+      vim.lsp.inline_completion.enable(state)
+    end,
+  },
   ['<leader>u\\'] = {
-    id = 'colorcolumn',
     name = 'ColorColumn',
     get = function()
       ---@diagnostic disable-next-line: undefined-field
@@ -33,7 +41,6 @@ local toggles = {
     end,
   },
   ['<leader>uv'] = {
-    id = 'virtual_text',
     name = 'Virtual Text',
     get = function()
       return vim.diagnostic.config().virtual_text ~= false
@@ -43,7 +50,6 @@ local toggles = {
     end,
   },
   ['<leader>ub'] = {
-    id = 'translucency',
     name = 'Translucency',
     get = Snacks.util.is_transparent,
     set = function(state)
@@ -53,7 +59,6 @@ local toggles = {
     end,
   },
   ['<leader>uu'] = {
-    id = 'laststatus',
     name = 'LastStatus',
     get = function()
       return vim.o.laststatus > 0
@@ -69,6 +74,14 @@ local toggles = {
   },
 }
 
-for k, v in pairs(toggles) do
-  Snacks.toggle.new(v):map(k)
+for key, opts in pairs(toggles) do
+  Snacks.toggle.new(opts):map(key)
+end
+
+local options = {
+  autochdir = '<leader>ac',
+}
+
+for opt, key in pairs(options) do
+  Snacks.toggle.option(opt):map(key)
 end

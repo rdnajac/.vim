@@ -1,7 +1,7 @@
 require('mini.splitjoin').setup({
   mappings = {
-    toggle = '',
-    split = 'gS',
+    toggle = 'gS',
+    split = '',
     join = 'gJ',
   },
 

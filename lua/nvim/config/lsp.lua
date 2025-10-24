@@ -13,9 +13,6 @@ opts.on_attach = function(client, bufnr)
 
   -- client.server_capabilities.documentFormattingProvider = false
   -- client.server_capabilities.semanticTokensProvider = nil
-  if client:supports_method('textDocument/inlayHint') then
-    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-  end
 
   if client:supports_method('textDocument/codeLens') then
     vim.lsp.codelens.refresh()
@@ -25,7 +22,13 @@ opts.on_attach = function(client, bufnr)
     })
   end
 
-  nv.lsp.docsymbols.attach(client, bufnr)
+  if client:supports_method('textDocument/documentSymbol') then
+    nv.lsp.docsymbols.attach(client, bufnr)
+  end
+
+  if client:supports_method('textDocument/inlayHint') then
+    vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+  end
 end
 
 return {
