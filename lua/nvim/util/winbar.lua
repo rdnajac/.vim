@@ -5,8 +5,6 @@ local M = {
     local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
     local win = opts.win or vim.api.nvim_get_current_win()
     local bt = opts.bt or vim.bo[bufnr].buftype
-    -- help/preview/quickfix
-    local prefix = '%h%w%q'
 
     local path
     if bt == '' then
@@ -22,10 +20,11 @@ local M = {
       elseif bt == 'terminal' then
         dirty_path = vim.b[vim.api.nvim_get_current_buf()].osc7_dir
       end
-      path = prefix .. ' ' .. vim.fn.fnamemodify(dirty_path or vim.fn.getcwd(), ':~')
+      path = vim.fn.fnamemodify(dirty_path or vim.fn.getcwd(), ':~')
     end
 
     return table.concat({
+      ' %h%w%q ', -- help/preview/quickfix
       path,
       "%{% &readonly ? ' ' : '%M' %}",
       "%{% &busy     ? '◐ ' : ''   %}",

@@ -118,6 +118,12 @@ augroup END
 " Section: keymaps {{{1
 vmap  :sort<CR>
 
+nnoremap <S-Down>  <Cmd>wincmd j<CR>
+nnoremap <S-Up>    <Cmd>wincmd k<CR>
+nnoremap <S-Left>  <Cmd>wincmd h<CR>
+nnoremap <S-Right> <Cmd>wincmd l<CR>
+nnoremap <S-Tab>   <Cmd>wincmd w<CR>
+
 " quit stuff
 nnoremap <C-q> <Cmd>wincmd c<CR>
 nnoremap <leader>q :q!<CR>
