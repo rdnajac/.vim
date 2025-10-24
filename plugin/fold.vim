@@ -27,7 +27,7 @@ nnoremap <expr> <Left> fold#open_or_h()
 
 augroup vimrc_fold
   au!
-  au FileType lua setl fdm=expr fdl=99 fml=3 fdt=
+  au FileType lua setl fdm=expr fdl=99 fml=5
   au FileType sh  setl fdm=expr
   " au FileType vim setl fdm=marker
 augroup END

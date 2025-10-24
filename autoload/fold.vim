@@ -11,18 +11,16 @@ function! fold#text_lua()
   let l:next = getline(l:start + 1)
 
   if indent(l:start + 1) > indent(l:start)
-    let l:prefix = substitute(l:open, '{\s*$', '', '')
-    return l:prefix . '{ ~ ' . l:lines . ' lines ~ },'
+    return substitute(l:open, '{\s*$', '', '')
   endif
-
   return l:open
 endfunction
 
 " TODO: trim trailing dots after closing bar
 function! fold#text() abort
-  " if &ft ==# 'lua'
-  "   return fold#text_lua()
-  " endif
+  if &ft ==# 'lua'
+    return fold#text_lua()
+  endif
   let s:foldchar = '.'
   let l:line1 = getline(v:foldstart)
 
@@ -58,8 +56,6 @@ function! fold#open_or_h() abort
   endif
 endfunction
 
-
-" TODO: needs testing
 function! fold#pause() abort
   if &foldenable
     let b:fold_was_enabled = 1
@@ -75,28 +71,21 @@ function! fold#unpause() abort
   endif
 endfunction
 
-finish
+finish " TODO: needs testing
+" https://www.reddit.com/r/neovim/comments/1534jt3/showcase_your_folds/
+function! fold#setup_search_pause() abort
+  nnoremap <silent> / zn/
+  nnoremap <silent> ? zn?
 
-lua << EOF
--- https://www.reddit.com/r/neovim/comments/1534jt3/showcase_your_folds/
-vim.keymap.set('n', '/', 'zn/', { desc = 'Search & Pause Folds' })
+  for key in ['n', 'N', '*', '#']
+    execute $'nnoremap <silent> {key} <Cmd>call fold#pause()<CR>{key}'
+  endfor
 
-vim.on_key(function(char)
-local key = vim.fn.keytrans(char)
-local searchKeys = { 'n', 'N', '*', '#', '/', '?' }
-local searchConfirmed = (key == '<CR>' and vim.fn.getcmdtype():find('[/?]') ~= nil)
-if not (searchConfirmed or vim.fn.mode() == 'n') then
-  return
-  end
-  local searchKeyUsed = searchConfirmed or (vim.tbl_contains(searchKeys, key))
-
-  local pauseFold = vim.opt.foldenable:get() and searchKeyUsed
-  local unpauseFold = not (vim.opt.foldenable:get()) and not searchKeyUsed
-  if pauseFold then
-    vim.opt.foldenable = false
-  elseif unpauseFold then
-    vim.opt.foldenable = true
-    vim.cmd.normal('zv') -- after closing folds, keep the *current* fold open
-    end
-    end, vim.api.nvim_create_namespace('auto_pause_folds'))
-    EOF
+  augroup fold_search_pause
+    autocmd!
+    autocmd CmdlineEnter [/?] call fold#pause()
+    autocmd CmdlineLeave [/?] call fold#unpause()
+    autocmd CursorMoved * if exists('b:fold_was_enabled') | call fold#unpause() | endif
+    autocmd InsertEnter * if exists('b:fold_was_enabled') | call fold#unpause() | endif
+  augroup END
+endfunction

@@ -1,12 +1,7 @@
-function! s:close_other_buffer() abort
-  if has('nvim')
-    if exists('v:lua.package') && luaeval("package.loaded['snacks'] ~= nil")
-      if luaeval("require('snacks.util').is_float()")
-	quit
-      else
-	bdelete
-      endif
-    endif
+" TODO: do i want this
+function! s:nvim_close_float() abort
+  if luaeval("require('snacks.util').is_float()")
+    quit
   endif
 endfunction
 
@@ -65,15 +60,16 @@ function! s:edit(file, ...) abort
   let l:cmd .= (!empty(l:extra) ? l:extra . ' ' : '') . l:file
 
   " If we're focused on a floating window, close it
-  call s:close_other_buffer()
+  if has ('nvim')
+    call s:nvim_close_float()
+  endif
 
   execute l:cmd
   normal! zvzz
 endfunction
 
-let s:myvimrc = vimrc#home() . '/vimrc'
 function! edit#vimrc(...) abort
-  call call('s:edit', extend([s:myvimrc], a:000))
+  call call('s:edit', extend([g:my#vimrc], a:000))
 endfunction
 
 function! edit#luamod(name) abort
@@ -88,18 +84,28 @@ function! edit#luamod(name) abort
   call s:edit(l:file)
 endfunction
 
-" Optional parameters:
-" - a:1 = dir (default: vim#home . '/after/ftplugin')
-" - a:2 = ext (default: '.vim')
 function! edit#filetype(...) abort
   if &filetype ==# ''
-    call vim#notify#error('filetype is empty')
+    call vim#notify#error('`filetype` is empty!')
+    return
   endif
-  let l:dir = vimrc#home() . (a:0 >= 1 ? '/' . a:1 : '/after/ftplugin')
-  let l:ext = a:0 >= 2 ? a:2 : '.vim'
-  let l:file = l:dir . '/' . &filetype . l:ext
 
-  call s:edit(l:file)
+  let l:dir = 'after/ftplugin'
+  let l:ext = '.vim'
+
+  if a:0 >= 1 && a:1 =~# '^\.'      " first arg is extension
+    let l:ext = a:1
+  elseif a:0 >= 1
+    let l:dir = a:1
+  endif
+
+  if a:0 >= 2 && a:2 =~# '^\.'      " second arg is extension
+    let l:ext = a:2
+  elseif a:0 >= 2
+    let l:dir = a:2
+  endif
+
+  call s:edit(join([g:my#vimdir, l:dir, &filetype . l:ext], '/'))
 endfunction
 
 " TODO: move this to vim ftplugin

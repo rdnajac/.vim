@@ -1,13 +1,5 @@
-function! vimrc#init() abort
-  execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
-endfunction
-
-function! vimrc#home() abort
-  return has('nvim') ? g:stdpath['config'] : split(&runtimepath, ',')[0]
-endfunction
-
-" execute a function on VimEnter or immediately if already entered
-function! vimrc#on_init(fn) abort " {{{
+" execute a function on VimEnter or immediately if did enter
+function! vimrc#onVimEnter(fn) abort " {{{
   if v:vim_did_enter
     call call(a:fn, [])
   else
@@ -17,9 +9,8 @@ endfunction
 
 " }}}
 function! vimrc#init_vim() abort " {{{
-  let l:home = vimrc#home()
-  let &viminfofile = home . '.viminfo'
-  let &verbosefile = home . '.vimlog.txt'
+  let &viminfofile = g:vimrc#home . '.viminfo'
+  let &verbosefile = g:vimrc#home . '.vimlog.txt'
 
   " some settings are already default in nvim
   set wildoptions=pum,tagfile
@@ -53,7 +44,7 @@ function! vimrc#init_nvim() abort " {{{
     let g:nvim_did_init = v:false
     packadd! nvim.difftool
     packadd! nvim.undotree
-    call vimrc#on_init(function('vimrc#nvim_config'))
+    call vimrc#onVimEnter(function('vimrc#nvim_config'))
   endif
 endfunction
 
@@ -82,8 +73,7 @@ endfunction
 " }}}
 
 function! vimrc#autosection() abort " {{{
-  let l:vimrc = vimrc#home() . '/vimrc'
-  for l:line in readfile(l:vimrc)
+  for l:line in readfile(g:my#vimrc)
     if l:line =~? '^"\s*Section:\s*'
       let l:idx = matchend(l:line, '^"\s*Section:\s*')
       let l:ch  = strcharpart(l:line, l:idx, 1)

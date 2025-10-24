@@ -1,12 +1,13 @@
 scriptencoding utf-8
 let g:mapleader = ' '
 let g:maplocalleader = '\'
-call vimrc#init()
+execute 'call vimrc#init_' . (has('nvim') ? 'n' : '') . 'vim()'
 " TODO: find thecode for automatic marks
 call vimrc#autosection()
 " Section: settings {{{1
 
 " general
+set jumpoptions+=stack
 set mouse=a
 set report=0
 set scrolloff=8
@@ -17,8 +18,8 @@ set splitkeep=screen
 set startofline
 set timeoutlen=420
 set updatetime=69
-set whichwrap+=<,>,[,],h,l
 set virtualedit=block
+set whichwrap+=<,>,[,],h,l
 
 " searching
 set ignorecase
@@ -46,7 +47,7 @@ set lazyredraw
 set termguicolors
 set fillchars= " reset
 set fillchars+=diff:╱
-set fillchars+=eob:\ ,
+set fillchars+=eob:,
 set fillchars+=stl:\ ,
 set list
 set listchars= " reset
@@ -115,9 +116,24 @@ augroup END
 
 " Section: keymaps {{{1
 
+" quit stuff
+nnoremap <C-q> <Cmd>wincmd c<CR>
+nnoremap <leader>q :q!<CR>
+
+" make it easier to toggle letter case
 nnoremap ` ~
+" use `'` to go to mark instead
 nnoremap ~ `
 
+" <C-c> is a dangerous key to use frequently
+" nmap  ciw
+" stop using <BS> for buffer navigation...
+nmap <BS> ciw
+
+" you know what I mean...
+nmap gcap gcip
+
+" TODO: substitute: TODO...
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
 xnoremap s :s/\%V<C-R><C-W>/
 
@@ -135,35 +151,20 @@ nnoremap g. :%s//<c-r>./g<esc>
 "
 " " the user‐facing command calls that function
 " command! -nargs=2 Sall call BufSubstituteAll(<f-args>)
-" you know what i mean
-nmap gcap gcip
 
-
-" shortcuts!
-nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-nnoremap <BSlash>i <Cmd>call edit#('~/.config/nvim/init.lua')<CR>
-nnoremap <BSlash>n <Cmd>call edit#luamod('nvim/init')<CR>
-nnoremap <BSlash>s <Cmd>call edit#luamod('nvim/snacks')<CR>
-nnoremap <BSlash>c <Cmd>call edit#luamod('nvim/config')<CR>
-nnoremap <BSlash>p <Cmd>call edit#luamod('nvim/util/plug')<CR>
-nnoremap <BSlash>P <Cmd>call edit#luamod('nvim/plugins/init')<CR>
-nnoremap <BSlash>m <Cmd>call edit#luamod('nvim/plugins/mini')<CR>
-nnoremap <BSlash>u <Cmd>call edit#luamod('nvim/util/init')<CR>
-" nnoremap <BSlash>k <Cmd>call edit#luamod('nvim/config/keymaps')<CR>
-
-nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
-nnoremap <leader>fT <Cmd>call edit#filetype('/after/ftplugin/', '.lua')<CR>
-nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
-
+" bookmarks {{{2 
+nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 
-nmap  ciw
-vmap  :sort<CR>
-nmap <silent> <C-q> <Cmd>bd<CR>
+nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
+nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
 
-nnoremap <C-w>- <C-w>s
-nnoremap <C-w><Bar> <C-w>v
-" nnoremap <C-w>
+vmap  :sort<CR>
+
+" just like tmux!
+" nnoremap <C-w>-     <C-w>s
+" nnoremap <C-w><Bar> <C-w>v
 
 " key pairs in normal mode
 " `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
@@ -224,10 +225,6 @@ nnoremap <leader>h <Cmd>Help<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 
-" nnoremap <leader>q <Cmd>quit<CR>
-nnoremap <leader>q :q!<CR>
-" nnoremap <leader>Q <Cmd>Quit!<CR>
-nnoremap <leader>Q :wqa<CR>
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
@@ -284,21 +281,16 @@ nnoremap J      mzJ`z
 nnoremap dp     dp]c
 nnoremap do     do]c
 
-" TODO: vim
-" nnoremap <c-e>       <c-^>
-" nnoremap <c-w><c-e>  <c-w><c-^>
 nnoremap gV     `[V`]
-
-" like tmux!
-" nnoremap <c-w>-     <c-w>s
-" nnoremap <c-w><bar> <c-w>v
 
 " Buffer navigation
 " nnoremap <silent> gb    :bnext<cr>
 " nnoremap <silent> gB    :bprevious<cr>
 
-" Backspace and return for improved navigation
-nnoremap        <bs> <c-o>zvzz
+" `<C-e>` scrolls the window downwards by [count] lines;
+" `<C-^>` (`<C-6>`) which edits the alternate  buffer`:e #`
+nnoremap <C-e>            <C-^>
+nnoremap <C-w><C-e>  <C-w><C-^>
 
 " Utility maps for repeatable quickly change/delete current word
 nnoremap c*   *``cgn

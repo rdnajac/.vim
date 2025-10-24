@@ -29,8 +29,26 @@ vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
 vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
 -- stylua: ignore end
 
+local shortcuts = {
+  n = 'nvim/init',
+  s = 'nvim/snacks',
+  c = 'nvim/config',
+  p = 'nvim/util/plug',
+  P = 'nvim/plugins/init',
+  m = 'nvim/plugins/mini',
+  u = 'nvim/util/init',
+  -- k = 'nvim/config/keymaps',
+}
+
 return {
   setup = function()
+    -- map t o bslash key and call vim.fn edit#luamod
+    for key, mod in pairs(shortcuts) do
+      vim.keymap.set('n', '<Bslash>' .. key, function()
+        vim.fn['edit#luamod'](mod)
+      end, { desc = 'Edit ' .. mod })
+    end
+
     Snacks.util.on_key('<Esc>', function()
       vim.cmd.nohlsearch()
       if package.loaded['sidekick'] then

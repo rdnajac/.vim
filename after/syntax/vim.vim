@@ -18,3 +18,7 @@ augroup End
 " highlight source code inside comments
 syntax region Chromatophore start=/`/ end=/`/ contained containedin=.*Comment
 " side effect? also highlights vimCommentString
+
+" Recursive syntax highlighting in interpolated strings
+" syn cluster vimStringInterpolation contains=vimStringInterpolationExpr,vimStringInterpolationBrace
+" syn region vimStringInterpolationExpr oneline contained matchgroup=vimSep start=+{+ end=+}+ contains=@vimExprList,vimString,vimOper,vimVar,@vimFunc
