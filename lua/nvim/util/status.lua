@@ -22,43 +22,48 @@ M.buffer = function(bufnr, buftype)
   }
 end
 
+---@type nv.status.Component
 M.blink = {
   function()
     local ok, sources = pcall(require, 'blink.cmp.sources.lib')
-    if not ok or not sources then
-      return {}
+    if ok and sources then
+      return vim
+        .iter(vim.tbl_keys(sources.get_enabled_providers('default')) or {})
+        :map(function(key)
+          return nv.icons.src[key]
+        end)
+        :totable()
     end
-
-    return vim
-      .iter(vim.tbl_keys(sources.get_enabled_providers('default')))
-      :map(function(key)
-        return nv.icons.src[key]
-      end)
-      :totable()
+    return {}
   end,
   cond = function()
     return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
   end,
 }
 
----@param bufnr? number
----@return string
-M.diagnostic = function(bufnr)
-  bufnr = bufnr or 0
-  local counts = vim.diagnostic.count(bufnr)
-  local signs = vim.diagnostic.config().signs
-
-  if not signs or vim.tbl_isempty(counts) then
-    return ''
-  end
-
-  return vim
-    .iter(pairs(counts))
-    :map(function(severity, count)
-      return string.format('%%#%s#%s:%d%%*', signs.numhl[severity], signs.text[severity], count)
-    end)
-    :join('')
-end
+M.diagnostic = {
+  ---@param bufnr? number
+  ---@return string
+  function(bufnr)
+    bufnr = bufnr or 0
+    local counts = vim.diagnostic.count(bufnr)
+    local signs = vim.diagnostic.config().signs
+    return vim
+      .iter(pairs(counts))
+      :map(function(severity, count)
+        return string.format(
+          '%%#%s#%s:%d%%*',
+          signs and signs.numhl[severity] or '',
+          signs and signs.text[severity] or '',
+          count or ''
+        )
+      end)
+      :join('')
+  end,
+  cond = function(bufnr)
+    return not vim.tbl_isempty(vim.diagnostic.count(bufnr or 0))
+  end,
+}
 
 ---@return string[] List of status icons for the statusline
 M.lsp = function()

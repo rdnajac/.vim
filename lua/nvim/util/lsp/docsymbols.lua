@@ -1,9 +1,5 @@
 local lib = require('nvim-navic.lib')
-local opts = {
-  depth_limit = 0,
-  depth_limit_indicator = ' ',
-  separator = ' ',
-}
+
 local awaiting_lsp_response = {}
 local function lsp_callback(for_buf, symbols)
   awaiting_lsp_response[for_buf] = false
@@ -24,55 +20,39 @@ function M.get_data(bufnr)
 end
 
 --- @param bufnr? number defaults to current buffer
---- @return string docsymbols statusline component
 function M.get(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
   local data = M.get_data(bufnr)
   local iter = vim.iter(data)
   return iter
     -- WARN: unsafe?
     :map(function(v)
-      -- local kind = v.kind ---@type number
-      -- uses reverse lookup
-      -- local icon = nv.icons.kinds[kind]
       local icon = nv.icons.kinds[v.kind]
       local name = v.name:gsub('%%', '%%%%')
-      -- if type(icon) ~= 'string' then icon = '' end
-      -- if type(name) ~= 'string' then name = '' end
       return icon .. name
     end)
-    :join(opts.separator)
+    :totable()
 end
 
 local aug = vim.api.nvim_create_augroup('navic', { clear = false })
 
 -- Attach to the given buffer if the client supports document symbols
----@param client vim.lsp.Client|nil
----@param bufnr number
+---@param client vim.lsp.Client
+---@param bufnr? number
 M.attach = function(client, bufnr)
-  if
-    not client
-    or not client:supports_method('textDocument/documentSymbol')
-    or (vim.b[bufnr].navic_client_id and vim.b[bufnr].navic_client_name ~= client.name)
-  then
-    return
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+  if vim.b[bufnr].navic_client_id and vim.b[bufnr].navic_client_name ~= client.name then
+    return -- already attached to another client
   end
 
   vim.b[bufnr].navic_client_id = client.id
   vim.b[bufnr].navic_client_name = client.name
   local changedtick = 0
 
-  vim.api.nvim_clear_autocmds({
-    buffer = bufnr,
-    group = aug,
-  })
+  vim.api.nvim_clear_autocmds({ buffer = bufnr, group = aug })
 
   local au = function(events, cb)
-    vim.api.nvim_create_autocmd(events, {
-      callback = cb,
-      group = aug,
-      buffer = bufnr,
-    })
+    vim.api.nvim_create_autocmd(events, { callback = cb, group = aug, buffer = bufnr })
   end
 
   au({ 'InsertLeave', 'BufEnter', 'CursorHold' }, function()
@@ -82,11 +62,9 @@ M.attach = function(client, bufnr)
       lib.request_symbol(bufnr, lsp_callback, client)
     end
   end)
-
   au({ 'CursorHold', 'CursorMoved' }, function()
     lib.update_context(bufnr)
   end)
-
   au('BufDelete', function()
     lib.clear_buffer_data(bufnr)
   end)

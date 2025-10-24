@@ -44,9 +44,40 @@ M.lazyload = function(cb, event, pattern)
   })
 end
 
+M.hotfix = function(mod, fun)
+  package.preload[mod] = function()
+    local mp = mod:gsub('%.', '/')
+    local path = vim.api.nvim_get_runtime_file('lua/' .. mp .. '.lua', false)[1]
+      or vim.api.nvim_get_runtime_file('lua/' .. mp .. '/init.lua', false)[1]
+    if not path then
+      error('Module ' .. mod .. ' not found')
+    end
+    local loader, err = loadfile(path)
+    if not loader then
+      error(err)
+    end
+    local orig = loader()
+    fun(orig)
+    return orig
+  end
+end
+
+local prefixes = {
+  'nvim.util',
+  'nvim',
+  'nvim.config',
+  'nvim.plugins',
+}
+
 return setmetatable(M, {
   __index = function(t, k)
-    t[k] = require('nvim.util.' .. k)
-    return rawget(t, k)
+    for _, prefix in ipairs(prefixes) do
+      local ok, mod = pcall(require, prefix .. '.' .. k)
+      if ok then
+        t[k] = mod
+        return mod
+      end
+    end
+    return nil
   end,
 })
