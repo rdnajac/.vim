@@ -1,3 +1,18 @@
+" keywordprg.vim - Configure keywordprg for various filetypes
+" This plugin sets up the 'keywordprg' option to enable looking up
+" documentation with the K key for different file types.
+"
+" Supported filetypes:
+"   - lua: Uses Vim's :help command
+"   - sh: Uses :Man command directly
+"   - kitty, tmux, ssh, ghostty, alacritty: Terminal/SSH configs
+"   - dockerfile: Docker configuration files
+"   - gitconfig: Git configuration files
+"   - make: Makefiles
+"   - nginx: Nginx configuration files
+"   - apache: Apache configuration files
+"   - crontab: Crontab files
+
 if exists('g:loaded_mykeywordprg')
   finish
 endif
