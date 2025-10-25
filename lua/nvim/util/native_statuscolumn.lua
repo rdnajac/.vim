@@ -78,7 +78,7 @@ function M.is_git_sign(name)
   return false
 end
 
--- Returns a list of regular and extmark signs sorted by priority (low to high)
+-- Returns a list of regular and extmark signs (unsorted)
 ---@private
 ---@return table<number, native.statuscolumn.Sign[]>
 ---@param buf number
@@ -140,7 +140,7 @@ function M.line_signs(win, buf, lnum)
   vim.api.nvim_win_call(win, function()
     if vim.fn.foldclosed(lnum) >= 0 then
       signs[#signs + 1] = {
-        text = vim.opt.fillchars:get().foldclose or '',
+        text = vim.opt.fillchars:get().foldclose or '▶',
         texthl = 'Folded',
         type = 'fold',
         name = 'fold_closed',
@@ -148,7 +148,7 @@ function M.line_signs(win, buf, lnum)
       }
     elseif config.folds.open and vim.fn.foldlevel(lnum) > vim.fn.foldlevel(lnum - 1) then
       signs[#signs + 1] = {
-        text = vim.opt.fillchars:get().foldopen or '',
+        text = vim.opt.fillchars:get().foldopen or '▼',
         type = 'fold',
         name = 'fold_open',
         priority = 5,
