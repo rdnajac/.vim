@@ -1,13 +1,9 @@
-local function bench(label, fn)
-  local start = vim.loop.hrtime()
-  for i = 1, 999 do
-    fn()
-  end
-  local elapsed = (vim.loop.hrtime() - start) / 1e6
-  print(label, string.format('%.2f ms total | %.4f ms avg', elapsed, elapsed / 999))
-end
+--- Benchmark comparing vim.iter vs plain for loop vs vim.tbl_*
+--- Refactored to use the standardized benchmark framework
 
--- test data
+local benchmark = require('test.util.benchmark')
+
+-- Test data
 local plugs = vim.pack.get()
 
 -- 1. vim.iter chain
@@ -44,6 +40,19 @@ local function tbl_ver()
   end, filtered)
 end
 
-bench('iter', iter_ver)
-bench('for', for_ver)
-bench('tbl', tbl_ver)
+-- Define benchmarks
+local benchmarks = {
+  { name = 'iter', fn = iter_ver },
+  { name = 'for', fn = for_ver },
+  { name = 'tbl', fn = tbl_ver },
+}
+
+-- Run benchmarks with standardized settings
+local results = benchmark.run(benchmarks, {
+  iterations = 999,
+  warmup_iterations = 10,
+  show_stats = true,
+  sort_by = 'mean',
+})
+
+benchmark.print_results(results)
