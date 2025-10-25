@@ -8,7 +8,8 @@ local header = [[
 
 ]]
 
-local cowsay = vim.system({ 'cowsay-dash' }):wait().stdout
+ local dijkstra = "The computing scientist's main challenge is not to get confused by the complexities of his own making."
+ local cowsay = vim.system({ 'cowsay', dijkstra }):wait().stdout
 
 ---@module "snacks"
 ---@class snacks.dashboard.Config
