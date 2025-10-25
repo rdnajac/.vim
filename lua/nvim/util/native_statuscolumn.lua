@@ -1,3 +1,14 @@
+-- Native statuscolumn implementation without snacks dependency
+-- 
+-- This module provides a statuscolumn that displays:
+-- - Line numbers (respecting 'number' and 'relativenumber' settings)
+-- - Sign column with marks, signs, folds, and git signs
+-- 
+-- Visual mode behavior:
+-- The statuscolumn automatically respects the 'relativenumber' setting which
+-- is controlled by autocmds in vimrc (lines 82-85) that enable relative
+-- numbers when in visual mode.
+
 ---@class native.statuscolumn
 ---@overload fun(): string
 local M = setmetatable({}, {
