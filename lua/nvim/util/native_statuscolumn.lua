@@ -122,7 +122,8 @@ function M.buf_signs(buf)
   return signs
 end
 
--- Returns a list of regular and extmark signs sorted by priority (high to low)
+-- Returns a list of signs for a specific line, sorted by priority (high to low)
+-- Higher priority signs are displayed first
 ---@private
 ---@param win number
 ---@param buf number
@@ -157,7 +158,7 @@ function M.line_signs(win, buf, lnum)
     end
   end)
 
-  -- Sort by priority
+  -- Sort by priority (high to low) - higher priority signs are preferred
   table.sort(signs, function(a, b)
     return (a.priority or 0) > (b.priority or 0)
   end)
