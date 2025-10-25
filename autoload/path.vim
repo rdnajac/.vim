@@ -1,5 +1,27 @@
-""
-" Utility functions for manipulating filesystem paths.
+" autoload/path.vim
+" utility functions for manipulating filesystem paths
+
+" augroup SetLocalPath
+"   autocmd!
+"   let s:default_path = escape(&path, '\ ') " store default value of 'path'
+"
+"   " Always add the current file's directory to the path and tags list if not
+"   " already there. Add it to the beginning to speed up searches.
+"   autocmd BufRead ~/
+" 	\ let s:tempPath = escape(escape(expand("%:p:h"), ' '), '\ ') |
+" 	\ exec "set path-=" . s:tempPath |
+" 	\ exec "set path-=" . s:default_path |
+" 	\ exec "set path^=" . s:tempPath |
+" 	\ exec "set path^=" . s:default_path
+" augroup END
+
+function! s:set_repo_path() abort
+  let l:root = git#root()
+  if !empty(l:root)
+    " let &path = escape(l:root, ' ,')
+    execute 'set path^=' . l:root . '/**'
+  endif
+endfunction
 
 " Split a path into its components, removing any trailing slashes
 function! s:split(path) abort

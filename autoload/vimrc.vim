@@ -1,25 +1,5 @@
-" execute a function on VimEnter or immediately if did enter
-function! vimrc#onVimEnter(fn) abort
-  if v:vim_did_enter
-    call call(a:fn, [])
-  else
-    execute 'autocmd VimEnter * call ' . string(a:fn) . '()'
-  endif
-endfunction
-
 function! vimrc#init_vim() abort
-  let &viminfofile = g:vimrc#home . '.viminfo'
-  let &verbosefile = g:vimrc#home . '.vimlog.txt'
-
-  " some settings are already default in nvim
-  set wildoptions=pum,tagfile
-
-  " use ripgrep for searching
-  if executable('rg')
-    set grepprg=rg\ --vimgrep\ --uu
-    set grepformat=%f:%l:%c:%m
-  endif
-
+  call vim#defaults#()
   call vim#sensible#()
   call vim#toggle#()
   color scheme " set the default colorscheme once

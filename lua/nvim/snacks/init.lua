@@ -76,6 +76,7 @@ return {
       dashboard = { wo = { winhighlight = 'WinBar:NONE' } },
       -- sidebar = { wo = { winhighlight = 'WinBar:NONE' } },
       lazygit = { height = 0, width = 0 },
+      -- TODO: fix colors
       terminal = { wo = { winbar = '', winhighlight = 'Normal:Character' } },
     },
     words = { enabled = true },

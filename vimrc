@@ -1,9 +1,10 @@
 scriptencoding utf-8
-if !has('nvim')
-  call vimrc#init_vim()
-endif
 
 " Section: settings {{{1
+setglobal isfname+=@-@ " from `vim-apathy`
+" default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
+
+" general {{{2
 set jumpoptions+=stack
 set mouse=a
 set report=0
@@ -12,18 +13,17 @@ set shortmess+=aAcCI
 set shortmess-=o
 set splitbelow splitright
 set splitkeep=screen
-set startofline
 set timeoutlen=420
 set updatetime=69
 set virtualedit=block
 set whichwrap+=<,>,[,],h,l
 
-" searching
+" searching {{{2
 set ignorecase
 set showmatch
 set smartcase
 
-" editor
+" editor {{{2
 set breakindent
 set linebreak
 set nowrap
@@ -38,7 +38,23 @@ augroup vimrc_indent
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
 augroup END
 
-" ui
+" sesh {{{2
+set sessionoptions+=folds
+" set sessionoptions-=options   " already default in nvim
+set sessionoptions-=blank     " like vim-obsession
+set sessionoptions-=tabpages  " per project, not global
+set sessionoptions-=terminal  " don't save terminals
+set viewoptions-=options      " keep mkview minimal
+
+" ui {{{2
+let &laststatus = has('nvim') ? 3 : 2
+set statusline=%!vimline#statusline#()
+
+" set foldcolumn=1
+" set signcolumn=number
+set signcolumn=auto
+" set numberwidth=3
+
 set lazyredraw
 set termguicolors
 set fillchars= " reset
@@ -53,14 +69,43 @@ set listchars+=extends:…,
 set listchars+=precedes:…,
 set listchars+=nbsp:+
 
-" sesh
-set sessionoptions+=folds
-" set sessionoptions-=options   " already default in nvim
-set sessionoptions-=blank     " like vim-obsession
-set sessionoptions-=tabpages  " per project, not global
-set sessionoptions-=terminal  " don't save terminals
-set viewoptions-=options      " keep mkview minimal
 
+augroup vimrc_ui
+  " no cursorline in insert mode
+  au InsertLeave,WinEnter * setlocal cursorline
+  au InsertEnter,WinLeave * setlocal nocursorline
+
+  " Hide the statusline while in command mode
+  au CmdlineEnter * if &ls != 0            | let g:last_ls = &ls | set ls=0        | endif
+  au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
+
+  " relative numbers in visual mode only if number is already set
+  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+augroup END
+
+" }}}1
+" Section: neovim {{{1
+if !has('nvim')
+  call vimrc#init_vim()
+else
+  set backup backupext=.bak
+  let &backupdir = g:stdpath['state'] . '/backup//'
+  let &backupskip .= ',' . expand('$HOME/.cache/*')
+  let &backupskip .= ',' . expand('$HOME/.local/*')
+  set undofile
+
+  set smoothscroll
+  set jumpoptions+=view
+  set mousescroll=hor:0
+  set nocdhome
+
+  " default on in vim
+  set startofline
+
+  " try running `:options` for more...
+endif
 " }}}1
 " Section: autocmds {{{1
 augroup vimrc
@@ -82,23 +127,6 @@ augroup vimrc
   " automatically resize splits when the window is resized
   au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet t
 
-  " no cursorline in insert mode
-  au InsertLeave,WinEnter * setlocal cursorline
-  au InsertEnter,WinLeave * setlocal nocursorline
-
-  " no numbers in split
-  " au WinEnter * setlocal number
-  " au WinLeave * setlocal nocursorline
-
-  " Hide the statusline while in command mode
-  au CmdlineEnter * if &ls != 0            | let g:last_ls = &ls | set ls=0        | endif
-  au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
-
-  " relative numbers in visual mode only if number is already set
-  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-
   au VimLeave * if v:dying | echom "help im dying: " . v:dying | endif
 augroup END
 
@@ -112,116 +140,31 @@ augroup vimrc_filetype
 augroup END
 
 " }}}1
+" Section: commands {{{1
+command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
+command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
+command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
+
+command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
+
+" }}}1
 " Section: keymaps {{{1
 let g:mapleader = ' '
 let g:maplocalleader = '\'
-
-vmap  :sort<CR>
-
-" quit stuff
-nnoremap <C-q> <Cmd>wincmd c<CR>
-nnoremap <leader>q :q!<CR>
-
 " make it easier to toggle letter case
 nnoremap ` ~
 " use `'` to go to mark instead
 nnoremap ~ `
+vmap  :sort<CR>
 
 " <C-c> is a dangerous key to use frequently
 " nmap  ciw
 " stop using <BS> for buffer navigation...
 nmap <BS> ciw
 
-" you know what I mean...
-nmap gcap gcip
-
-" TODO: substitute: TODO...
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
-xnoremap s :s/\%V<C-R><C-W>/
-
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
-nnoremap g. :%s//<c-r>./g<esc>
-
-" function! BufSubstituteAll(find, replace) abort
-"   " escape any slash or backslash in the arguments
-"   let l:find    = escape(a:find,    '/\')
-"   let l:replace = escape(a:replace, '/\')
-"   " run the substitute in every buffer, then write if changed
-"   execute 'bufdo %s/\V' . l:find . '/' . l:replace . '/g | update'
-" endfunction
-" command! -nargs=2 call BufSubstituteAll(<f-args>)
-
-" bookmarks {{{2
-nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
-nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
-nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
-nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
-
-" windows {{{2
-nnoremap <S-Down>  <Cmd>wincmd j<CR>
-nnoremap <S-Up>    <Cmd>wincmd k<CR>
-nnoremap <S-Left>  <Cmd>wincmd h<CR>
-nnoremap <S-Right> <Cmd>wincmd l<CR>
-nnoremap <S-Tab>   <Cmd>wincmd w<CR>
-
-" just like tmux!
-" nnoremap <C-w>-     <C-w>s
-" nnoremap <C-w><Bar> <C-w>v
-
-" resize splits
-nnoremap <C-W><Up>    :         resize +10<CR>
-nnoremap <C-W><Down>  :         resize -10<CR>
-nnoremap <C-W><Left>  :vertical resize +10<CR>
-nnoremap <C-W><Right> :vertical resize -10<CR>
-
-" key pairs in normal mode {{{2
-" `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
-
-" `cd` cm co cp `cq` `cr` `cs` cu cx cy cz
-" dc dm dq dr `ds`  du dx `dy` dz
-" `gb` `gc` `gl` `gs` `gy`
-" vm vo vq `vv` vz
-" yc `yd` ym `yo` `yp` yq yr `ys` yu yx yz
-" `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
-
-nnoremap ZX <Cmd>Zoxide<CR>
-
-nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
-nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
-nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
-
-nnoremap cdP :execute 'edit ' . plug_home . '/' \| pwd<CR>
-
-nmap <expr> cq change#quote()
-
-nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
-xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
-
-nnoremap <expr> gf keymap#g#f()
-
-" `fugitive`
-nnoremap gcd :Gcd<Bar>pwd<CR>
-
-nnoremap zq <Cmd>Format<CR>
-
-" resursive keymaps
-nmap gy "xyygcc"xp<Up>
-nmap gY "xyygcc"xP
-nmap vv Vgc
-
-" `unimpaired`
-nmap zJ ]ekJ
-
-" `surround`
-nmap S viWS
-vmap ` S`
-vmap F Sf
-
-" xmap ga <Plug>(EasyAlign)
-" nmap ga <Plug>(EasyAlign)
-
 " <leader> {{{2
 " vim.lsp.hover overrides the default K mapping
+nnoremap <leader>q :q!<CR>
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>r <Cmd>call sesh#restart()<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
@@ -270,7 +213,80 @@ nnoremap J      mzJ`z
 nnoremap dp     dp]c
 nnoremap do     do]c
 
-nnoremap gV     `[V`]
+
+" bookmarks {{{2
+nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
+nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
+nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
+nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
+
+" windows {{{2
+nnoremap <S-Down>  <Cmd>wincmd j<CR>
+nnoremap <S-Up>    <Cmd>wincmd k<CR>
+nnoremap <S-Left>  <Cmd>wincmd h<CR>
+nnoremap <S-Right> <Cmd>wincmd l<CR>
+nnoremap <S-Tab>   <Cmd>wincmd w<CR>
+nnoremap <C-q>     <Cmd>wincmd c<CR>
+
+" just like tmux!
+" nnoremap <C-w>-     <C-w>s
+" nnoremap <C-w><Bar> <C-w>v
+
+" resize splits
+nnoremap <C-W><Up>    :         resize +10<CR>
+nnoremap <C-W><Down>  :         resize -10<CR>
+nnoremap <C-W><Left>  :vertical resize +10<CR>
+nnoremap <C-W><Right> :vertical resize -10<CR>
+
+" key pairs in normal mode {{{2
+" `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
+
+" `cd` cm co cp `cq` `cr` `cs` cu cx cy cz
+" dc dm dq dr `ds`  du dx `dy` dz
+" `gb` `gc` `gl` `gs` `gy`
+" vm vo vq `vv` vz
+" yc `yd` ym `yo` `yp` yq yr `ys` yu yx yz
+" `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
+
+nnoremap ZX <Cmd>Zoxide<CR>
+
+nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
+nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
+nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
+
+nnoremap cdP :execute 'edit ' . plug_home . '/' \| pwd<CR>
+
+nmap <expr> cq change#quote()
+
+nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
+xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
+
+" more intuitive `gf` that habdles line numbers
+nnoremap <expr> gf keymap#g#f()
+
+" select last changed text (ie pasted text)
+nnoremap gV `[V`]
+
+" `fugitive`
+nnoremap gcd :Gcd<Bar>pwd<CR>
+
+nnoremap zq <Cmd>Format<CR>
+
+" resursive keymaps
+nmap gy "xyygcc"xp<Up>
+nmap gY "xyygcc"xP
+nmap vv Vgc
+
+" `unimpaired`
+nmap zJ ]ekJ
+
+" `surround`
+nmap S viWS
+vmap ` S`
+vmap F Sf
+
+" xmap ga <Plug>(EasyAlign)
+" nmap ga <Plug>(EasyAlign)
 
 " buffer navigation {{{2
 " nnoremap <silent> gb    <Cmd>bnext<CR>
@@ -280,6 +296,8 @@ nnoremap gV     `[V`]
 " `<C-^>` (`<C-6>`) which edits the alternate  buffer`:e #`
 nnoremap <C-e>            <C-^>
 nnoremap <C-w><C-e>  <C-w><C-^>
+" see `:h sbp`
+nnoremap <leader>E <Cmd>sbp<CR>
 
 " TODO: test me!
 " change/delete current word {{{2
@@ -318,7 +336,6 @@ nnoremap <Bslash>, mzA,<Esc>;`z
 nnoremap <Bslash>; mzA;<Esc>;`z
 nnoremap <Bslash>. mzA.<Esc>;`z
 
-
 " unimpaired  {{{2
 " exchange lines
 nnoremap ]e :execute 'move .+' . v:count1<CR>==
@@ -333,31 +350,16 @@ inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
-" }}}1
-" Section: commands {{{1
-command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
-command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
-command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
-
-command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
+" you know what I mean... {{{2
+nmap gcap gcip
 
 " }}}1
-" Section: ui {{{1
-let &laststatus = has('nvim') ? 3 : 2
-set statusline=%!vimline#statusline#()
 
-" set foldcolumn=1
-" set signcolumn=number
-set signcolumn=auto
-" set numberwidth=3
-
-" }}}1
-" Section: plugins  {{{1
-call plug#begin()" {{{}}}
+call plug#begin()
 Plug 'alker0/chezmoi.vim'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
-Plug 'leRvag/vimtex'
+Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
 " Plug 'tpope/vim-abolish'
 " Plug 'tpope/vim-capslock'
@@ -388,26 +390,13 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
-  call plug#end()
+  call plug#end() " don't plug#end() if neovim...
 else
   Plug 'saxon1964/neovim-tips'
-
-  hi link vimMap @keyword
   packadd! nvim.difftool
   packadd! nvim.undotree
 
-  set backup backupext=.bak
-  let &backupdir = g:stdpath['state'] . '/backup//'
-  let &backupskip .= ',' . expand('$HOME/.cache/*')
-  let &backupskip .= ',' . expand('$HOME/.local/*')
-  set undofile
-
-  " try running `:options`
-  set smoothscroll
-  set jumpoptions+=view
-  set mousescroll=hor:0
-  set nocdhome
-
+  hi link vimMap @keyword
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
 endif
