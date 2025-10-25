@@ -1,41 +1,28 @@
 --- Integration test for benchmarking utilities
 --- Tests both words and benchmark modules together
 
--- Add the test directory to the package path
-package.path = package.path .. ';/home/runner/work/.vim/.vim/lua/?.lua'
-
--- Mock vim.loop for standalone lua
-if not vim then
-  vim = {}
-  local socket = require('socket')
-  vim.loop = {
-    hrtime = function()
-      return socket.gettime() * 1e9
-    end,
-  }
-  vim.tbl_extend = function(behavior, ...)
-    local result = {}
-    for _, tbl in ipairs({ ... }) do
-      for k, v in pairs(tbl) do
-        result[k] = v
-      end
-    end
-    return result
+-- Setup for standalone execution
+local function init_standalone()
+  -- Get current working directory
+  local cwd = io.popen('pwd'):read('*l')
+  
+  -- Find lua directory
+  local lua_dir
+  if cwd:find('/lua') then
+    lua_dir = cwd:match('(.*)/lua') .. '/lua/'
+  else
+    lua_dir = cwd .. '/lua/'
   end
-  vim.deepcopy = function(tbl)
-    if type(tbl) ~= 'table' then
-      return tbl
-    end
-    local result = {}
-    for k, v in pairs(tbl) do
-      result[k] = vim.deepcopy(v)
-    end
-    return result
+  
+  -- Add to package path
+  package.path = package.path .. ';' .. lua_dir .. '?.lua'
+  
+  -- Mock vim if needed
+  if not vim then
+    require('test.util.standalone').init()
   end
-  vim.json = { encode = function(tbl)
-    return '{}'
-  end }
 end
+init_standalone()
 
 local words = require('test.util.words')
 local benchmark = require('test.util.benchmark')

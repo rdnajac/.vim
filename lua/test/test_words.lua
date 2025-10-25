@@ -1,8 +1,18 @@
---- Test script for the benchmark utilities
---- This script demonstrates the functionality of the words and benchmark modules
+--- Test script for the words module
+--- This script demonstrates the functionality of the words module
 
--- Add the test directory to the package path
-package.path = package.path .. ';/home/runner/work/.vim/.vim/lua/?.lua'
+-- Setup for standalone execution
+local function init_standalone()
+  local cwd = io.popen('pwd'):read('*l')
+  local lua_dir
+  if cwd:find('/lua') then
+    lua_dir = cwd:match('(.*)/lua') .. '/lua/'
+  else
+    lua_dir = cwd .. '/lua/'
+  end
+  package.path = package.path .. ';' .. lua_dir .. '?.lua'
+end
+init_standalone()
 
 local words = require('test.util.words')
 

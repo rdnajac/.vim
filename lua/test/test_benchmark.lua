@@ -1,59 +1,21 @@
 --- Test script for the benchmark framework
 --- This script demonstrates the functionality of the benchmark module
 
--- Add the test directory to the package path
-package.path = package.path .. ';/home/runner/work/.vim/.vim/lua/?.lua'
-
--- Mock vim.loop for standalone lua
-if not vim then
-  vim = {}
-  local socket = require('socket')
-  vim.loop = {
-    hrtime = function()
-      return socket.gettime() * 1e9 -- Convert to nanoseconds
-    end,
-  }
-  vim.tbl_extend = function(behavior, ...)
-    local result = {}
-    for _, tbl in ipairs({ ... }) do
-      for k, v in pairs(tbl) do
-        result[k] = v
-      end
-    end
-    return result
+-- Setup for standalone execution
+local function init_standalone()
+  local cwd = io.popen('pwd'):read('*l')
+  local lua_dir
+  if cwd:find('/lua') then
+    lua_dir = cwd:match('(.*)/lua') .. '/lua/'
+  else
+    lua_dir = cwd .. '/lua/'
   end
-  vim.deepcopy = function(tbl)
-    if type(tbl) ~= 'table' then
-      return tbl
-    end
-    local result = {}
-    for k, v in pairs(tbl) do
-      result[k] = vim.deepcopy(v)
-    end
-    return result
+  package.path = package.path .. ';' .. lua_dir .. '?.lua'
+  if not vim then
+    require('test.util.standalone').init()
   end
-  vim.json = {
-    encode = function(tbl)
-      -- Simple JSON encoding for testing
-      local function encode_value(val)
-        if type(val) == 'string' then
-          return '"' .. val .. '"'
-        elseif type(val) == 'number' then
-          return tostring(val)
-        elseif type(val) == 'table' then
-          local items = {}
-          for k, v in pairs(val) do
-            table.insert(items, encode_value(k) .. ':' .. encode_value(v))
-          end
-          return '{' .. table.concat(items, ',') .. '}'
-        else
-          return tostring(val)
-        end
-      end
-      return encode_value(tbl)
-    end,
-  }
 end
+init_standalone()
 
 local benchmark = require('test.util.benchmark')
 
