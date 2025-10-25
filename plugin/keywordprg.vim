@@ -1,3 +1,18 @@
+" keywordprg.vim - Configure keywordprg for various filetypes
+" This plugin sets up the 'keywordprg' option to enable looking up
+" documentation with the K key for different file types.
+"
+" Supported filetypes:
+"   - lua: Uses Vim's :help command
+"   - sh: Uses :Man command directly
+"   - kitty, tmux, ssh, ghostty, alacritty: Terminal/SSH configs
+"   - dockerfile: Docker configuration files
+"   - gitconfig: Git configuration files
+"   - make: Makefiles
+"   - nginx: Nginx configuration files
+"   - apache: Apache configuration files
+"   - crontab: Crontab files
+
 if exists('g:loaded_mykeywordprg')
   finish
 endif
@@ -28,11 +43,17 @@ endfunction
 
 augroup ManLookupSetup
   autocmd!
-  autocmd FileType lua       setlocal keywordprg=:help iskeyword+=-
-  autocmd FileType sh        setlocal keywordprg=:Man  iskeyword-=_
-  autocmd FileType kitty     call s:KeywordSetup('kitty')
-  autocmd FileType tmux      call s:KeywordSetup('tmux')
-  autocmd FileType sshconfig call s:KeywordSetup('ssh')
-  autocmd FileType ghostty   call s:KeywordSetup('ghostty')
+  autocmd FileType lua        setlocal keywordprg=:help iskeyword+=-
+  autocmd FileType sh         setlocal keywordprg=:Man  iskeyword-=_
+  autocmd FileType kitty      call s:KeywordSetup('kitty')
+  autocmd FileType tmux       call s:KeywordSetup('tmux')
+  autocmd FileType sshconfig  call s:KeywordSetup('ssh')
+  autocmd FileType ghostty    call s:KeywordSetup('ghostty')
+  autocmd FileType dockerfile call s:KeywordSetup('5 Dockerfile')
+  autocmd FileType gitconfig  call s:KeywordSetup('git-config')
+  autocmd FileType make       call s:KeywordSetup('make')
+  autocmd FileType nginx      call s:KeywordSetup('nginx')
+  autocmd FileType apache     call s:KeywordSetup('apache2')
+  autocmd FileType crontab    call s:KeywordSetup('5 crontab')
   autocmd BufRead,BufNewFile *alacritty.*ml call s:KeywordSetup('5 alacritty')
 augroup END
