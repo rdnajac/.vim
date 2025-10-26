@@ -61,10 +61,6 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
-    "oil.nvim": {
-      "rev": "7e1cd77",
-      "src": "https://github.com/stevearc/oil.nvim.git"
-    },
     "render-markdown.nvim": {
       "rev": "bfd67f1",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
