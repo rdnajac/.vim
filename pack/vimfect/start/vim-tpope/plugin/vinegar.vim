@@ -8,13 +8,13 @@ if exists("g:loaded_vinegar") || v:version < 700 || &cp
 endif
 let g:loaded_vinegar = 1
 
-function! s:fnameescape(file) abort
-  if exists('*fnameescape')
-    return fnameescape(a:file)
-  else
-    return escape(a:file," \t\n*?[{`$\\%#'\"|!<")
-  endif
-endfunction
+" function! s:fnameescape(file) abort
+"   if exists('*fnameescape')
+"     return fnameescape(a:file)
+"   else
+"     return escape(a:file," \t\n*?[{`$\\%#'\"|!<")
+"   endif
+" endfunction
 
 let s:dotfiles = '\(^\|\s\s\)\zs\.\S\+'
 
@@ -22,9 +22,9 @@ let s:escape = 'substitute(escape(v:val, ".$~"), "*", ".*", "g")'
 let g:netrw_list_hide =
       \ join(map(split(&wildignore, ','), '"^".' . s:escape . '. "/\\=$"'), ',') . ',^\.\.\=/\=$' .
       \ (get(g:, 'netrw_list_hide', '')[-strlen(s:dotfiles)-1:-1] ==# s:dotfiles ? ','.s:dotfiles : '')
-if !exists("g:netrw_banner")
+" if !exists("g:netrw_banner")
   let g:netrw_banner = 0
-endif
+" endif
 unlet! s:netrw_up
 
 nnoremap <silent> <Plug>VinegarUp :call <SID>opendir('edit')<CR>
@@ -106,7 +106,7 @@ endfunction
 
 function! s:escaped(first, last) abort
   let files = s:relatives(a:first, a:last)
-  return join(map(files, 's:fnameescape(v:val)'), ' ')
+  return join(map(files, 'fnameescape(v:val)'), ' ')
 endfunction
 " 97f3fbc9596f3997ebf8e30bfdd00ebb34597722
 
