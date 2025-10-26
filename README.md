@@ -8,6 +8,7 @@ My (n)vim configuration.
 - [ ] snacks profiler and todo comments
 - [ ] vim.pack to install/update neovim
 - [ ] <M-.> does what?
+- [ ] filter g0 like aerial for functions or M. in lua
 
 remote ui stuff
 

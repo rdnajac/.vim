@@ -16,7 +16,8 @@ local M = {
       if bt == 'acwrite' then
         local ft = opts.ft or vim.bo[bufnr].filetype
         if ft == 'nvim-pack' then dirty_path = vim.g.plug_home
-        elseif ft == 'oil' then dirty_path = require('oil').get_current_dir() end
+        -- elseif ft == 'oil' then dirty_path = require('oil').get_current_dir()
+      end
       elseif bt == 'terminal' then
         dirty_path = vim.b[vim.api.nvim_get_current_buf()].osc7_dir
       end
@@ -24,11 +25,14 @@ local M = {
     end
 
     return table.concat({
-      ' %h%w%q ', -- help/preview/quickfix
+      '%h%w%q ', -- help/preview/quickfix
       path,
       "%{% &readonly ? ' ' : '%M' %}",
       "%{% &busy     ? '◐ ' : ''   %}",
-      -- TODO: add ff, fenc, etc
+      "%{% &busy     ? '◐ ' : ''   %}",
+      -- FIXME: 
+      -- [[%{% &ff ~=# 'unix'  ? 'ff=%&ff' : ''  %}]],
+      -- [[%{% &fenc ~=# 'utf-8'  ? 'fenc=%&fenc' : ''  %}]],
     })
   end,
 
@@ -85,27 +89,13 @@ function M.render(a, b, c)
   local function sec(s, str) return hl(s) .. str end
   --stylua: ignore end
   local sep = nv.icons.sep.component.rounded.left
-  local sec_a = a and sec('a', a) or ''
+  local sec_a = a and sec('a', a) or nil
   local sec_b = b and sec('ab', sep .. ' ') .. sec('b', b) .. sec('bc', sep) or sec('c', sep)
-  -- return sec_a .. sec_b .. sec('c', c)
-  return string.format('%s%s%s', sec_a, sec_b, sec('c', c))
+  local sec_c = c and sec('c', c) or ''
+  -- return string.format('%s%s%s', sec_a, sec_b, sec_c)
+  local ret = {sec_a, sec_b, sec_c}
+  return table.concat(ret)
 end
-
-local winbar_by_bt = {
-  [''] = function(ft) end,
-  acwrite = {
-    oil = require('oil').get_current_dir,
-    ['nvim-pack'] = function()
-      return vim.g.plug_home
-    end,
-  },
-  help = function(ft) end,
-  nofile = function(ft) end,
-  nowrite = function(ft) end,
-  quickfix = function(ft) end,
-  terminal = function(ft) end,
-  prompt = function(ft) end,
-}
 
 M.winbar = function(opts)
   opts = opts or {}
@@ -117,7 +107,11 @@ M.winbar = function(opts)
 
   local winbar = M.a(opts)
 
-  return opts.active and M.render(winbar, M.b(), M.c()) or winbar
+  if opts.active then
+    return M.render(winbar, M.b(), M.c())
+  else
+    return M.render(nv.icons.filetype(opts.ft), winbar, '')
+  end
 end
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end

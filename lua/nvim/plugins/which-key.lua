@@ -1,3 +1,5 @@
+-- TODO: function for feteching icon based on where the okugin was defined and whether it wqas vim or lua
+-- TODO: do the same for descriotions of cmd mappings
 local spec = {
   {
     mode = { 'n', 'v' },

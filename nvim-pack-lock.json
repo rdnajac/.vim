@@ -16,6 +16,10 @@
       "rev": "1454f14",
       "src": "https://github.com/Saghen/blink.compat.git"
     },
+    "bullets.vim": {
+      "rev": "1c13e51",
+      "src": "https://git::@github.com/bullets-vim/bullets.vim.git"
+    },
     "chezmoi.vim": {
       "rev": "ca5f2ed",
       "src": "http://github.com/alker0/chezmoi.vim.git"
@@ -100,6 +104,10 @@
     "vim-git": {
       "rev": "485e38f",
       "src": "http://github.com/tpope/vim-git.git"
+    },
+    "vim-unimpaired": {
+      "rev": "db65482",
+      "src": "https://git::@github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
       "rev": "be9deac3",
