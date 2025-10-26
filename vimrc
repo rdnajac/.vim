@@ -262,7 +262,7 @@ nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
 
 " more intuitive `gf` that habdles line numbers
-nnoremap <expr> gf keymap#g#f()
+nnoremap <expr> gf keymap#gf#()
 
 " select last changed text (ie pasted text)
 nnoremap gV `[V`]
@@ -336,14 +336,6 @@ nnoremap <Bslash>, mzA,<Esc>;`z
 nnoremap <Bslash>; mzA;<Esc>;`z
 nnoremap <Bslash>. mzA.<Esc>;`z
 
-" unimpaired  {{{2
-" exchange lines
-nnoremap ]e :execute 'move .+' . v:count1<CR>==
-" inoremap ]e <Esc>:m .+1<CR>==gi
-vnoremap ]e :<C-u>execute "'<,'>move '>+" . v:count1<CR>gv=gv
-nnoremap [e :execute 'move .-' . (v:count1 + 1)<CR>==
-" inoremap [e <Esc>:m .-2<CR>==gi
-vnoremap [e :<C-u>execute "'<,'>move '<-" . (v:count1 + 1)<CR>gv=gv
 
 " insert special chars {{{2
 inoremap \sec Section:
