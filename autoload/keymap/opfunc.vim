@@ -33,3 +33,5 @@ function! keymap#opfunc#format(type, ...)
   call winrestview(w:gqview)
   unlet w:gqview
 endfunction
+
+" nnoremap <silent> gq :<C-U>let w:gqview=winsaveview()<CR>:set opfunc=keymap#opfunc#format<CR>g@
