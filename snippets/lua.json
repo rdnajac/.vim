@@ -28,13 +28,13 @@
   "autocmd": {
     "body": [
       "vim.api.nvim_create_autocmd({'${1:event}'}, {",
-      "  pattern = { '${2:*}' },",
-      "  group = aug,",
-      "  callback = function()",
-      "    ${0}",
-      "  end,",
-      "  desc = '${4}',",
-      "})"
+        "  pattern = { '${2:*}' },",
+        "  group = aug,",
+        "  callback = function()",
+        "    ${0}",
+        "  end,",
+        "  desc = '${4}',",
+        "})"
     ],
     "description": "autocmd",
     "prefix": "autocmd"
@@ -67,15 +67,15 @@
   "mfunc": {
     "body": [
       "local M = setmetatable({}, {",
-      "  __call = function(M, ...)",
-      "    return M.${TM_FILENAME_BASE}(...)",
-      "  end,",
-      "})",
-      "",
-      "function M.${TM_FILENAME_BASE}($1)",
-      "  $0",
-      "end\n",
-      "return M"
+        "  __call = function(M, ...)",
+        "    return M.${TM_FILENAME_BASE}(...)",
+        "  end,",
+        "})",
+        "",
+        "function M.${TM_FILENAME_BASE}($1)",
+        "  $0",
+        "end\n",
+        "return M"
     ],
     "description": "Module function skeleton with callable module and function",
     "prefix": "mfunc"
@@ -102,5 +102,21 @@
     ],
     "description": "return value",
     "prefix": "return"
+  },
+  "Current Win": {
+    "prefix": "win",
+    "body": "local win = vim.api.nvim_get_current_win()\n$0"
+  },
+  "Current Buf": {
+    "prefix": "buf",
+    "body": "local buf = vim.api.nvim_get_current_buf()\n$0"
+  },
+  "Buf Valid": {
+    "prefix": "bufvalid",
+    "body": "vim.api.nvim_buf_is_valid(${1:buf})"
+  },
+  "Win Valid": {
+    "prefix": "winvalid",
+    "body": "vim.api.nvim_win_is_valid(${1:win})"
   }
 }

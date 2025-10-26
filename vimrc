@@ -336,7 +336,6 @@ nnoremap <Bslash>, mzA,<Esc>;`z
 nnoremap <Bslash>; mzA;<Esc>;`z
 nnoremap <Bslash>. mzA.<Esc>;`z
 
-
 " insert special chars {{{2
 inoremap \sec Section:
 iabbrev n- –

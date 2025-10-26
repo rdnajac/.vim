@@ -4,6 +4,7 @@ nnoremap ; :
 cnoreabbrev <expr> %% expand('%:p:h')
 cnoreabbrev !! !./%
 cnoreabbrev scp !./%
+" TODO: make work with ?? (no `:`) from normal mode
 cnoreabbrev ?? verbose set?<Left>
 cnoreabbrev <expr> vv getcmdtype() == ':' && getcmdline() =~ '^vv' ? 'verbose' : 'vv'
 cnoreabbrev <expr> scp getcmdtype() == ':' && getcmdline() =~ '^scp' ? '!scp %' : 'scp'

@@ -7,6 +7,7 @@ My (n)vim configuration.
 - [ ] Who is VIMDIR? VIMHOME?
 - [ ] snacks profiler and todo comments
 - [ ] vim.pack to install/update neovim
+- [ ] <M-.> does what?
 
 remote ui stuff
 

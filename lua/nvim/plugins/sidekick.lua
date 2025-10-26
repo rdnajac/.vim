@@ -1,12 +1,3 @@
--- -- hotfix for ~/.local/share/nvim/site/pack/core/opt/sidekick.nvim/lua/sidekick/cli/scrollback.lua:38
-nv = _G.nv or require('nvim.utils')
-nv.hotfix('sidekick.cli.scrollback', function(m)
-  local orig_is_enabled = m.is_enabled
-  function m.is_enabled(terminal)
-    return terminal.parent and orig_is_enabled(terminal)
-  end
-end)
-
 return {
   'folke/sidekick.nvim',
   lazy = true,
@@ -58,9 +49,9 @@ return {
       { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI' },
       { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session' },
       { '<leader>ap', function() require('sidekick.cli').prompt() end, mode = { 'n', 'x' }, desc = 'Sidekick Select Prompt'  },
-      { '<leader>at', function() require('sidekick.cli').send({msg='{this}'}) end, mode = { 'n', 'x' }, desc = 'Send This' },
-      { '<leader>af', function() require('sidekick.cli').send({msg='{file}'}) end,                      desc = 'Send File' },
-      { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
-      { '<C-.>',      function() require('sidekick.cli').toggle('copilot') end,    mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Toggle' },
+      { '<leader>at', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'n', 'x' }, desc = 'Send This' },
+      { '<leader>af', function() require('sidekick.cli').send({name='copilot',msg='{file}'}) end,                      desc = 'Send File' },
+      -- { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
+      { '<C-.>',      function() require('sidekick.cli').toggle('copilot') end,   mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Toggle' },
     },
 }

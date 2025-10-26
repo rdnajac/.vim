@@ -28,14 +28,6 @@
       "rev": "f0404ec",
       "src": "https://github.com/monaqa/dial.nvim.git"
     },
-    "dsf.vim": {
-      "rev": "b88e64d",
-      "src": "http://github.com/AndrewRadev/dsf.vim.git"
-    },
-    "golf": {
-      "rev": "abf1bc0",
-      "src": "http://github.com/vuciv/golf.git"
-    },
     "lazydev.nvim": {
       "rev": "01bc2aa",
       "src": "https://github.com/folke/lazydev.nvim.git"
@@ -45,7 +37,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "5121416",
+      "rev": "d1a9158",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -53,7 +45,7 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "ececa53",
+      "rev": "a9b2fb5",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-navic": {
@@ -61,7 +53,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "4a9f5797",
+      "rev": "c53bb10a",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -70,7 +62,7 @@
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
     "render-markdown.nvim": {
-      "rev": "475d3ad",
+      "rev": "bfd67f1",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
@@ -78,12 +70,8 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "4d9666e",
+      "rev": "b1a9010",
       "src": "https://github.com/folke/snacks.nvim.git"
-    },
-    "splitjoin.vim": {
-      "rev": "b55d5ba",
-      "src": "http://github.com/AndrewRadev/splitjoin.vim.git"
     },
     "todo-comments.nvim": {
       "rev": "19d461d",
@@ -112,14 +100,6 @@
     "vim-git": {
       "rev": "485e38f",
       "src": "http://github.com/tpope/vim-git.git"
-    },
-    "vim-repeat": {
-      "rev": "6584602",
-      "src": "http://github.com/tpope/vim-repeat.git"
-    },
-    "vim-surround": {
-      "rev": "3d188ed",
-      "src": "http://github.com/tpope/vim-surround.git"
     },
     "vimtex": {
       "rev": "be9deac3",
