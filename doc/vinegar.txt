@@ -1,0 +1,105 @@
+*vinegar.txt*  Combine with netrw to create a delicious salad dressing
+
+Author:  Tim Pope <http://tpo.pe/>
+Repo:    https://github.com/tpope/vim-vinegar
+License: Same terms as Vim itself (see |license|)
+Lua Rewrite: For Neovim
+
+                                                *vinegar* *vinegar.lua*
+Vinegar extends netrw. This is a Lua rewrite of the original vim-vinegar
+plugin for Neovim, split into a plugin file and ftplugin file following
+modern Neovim conventions.
+
+STRUCTURE                                        *vinegar-structure*
+
+The plugin is organized as:
+  - plugin/vinegar.lua: Core functionality, global configuration, and
+    mappings available everywhere
+  - after/ftplugin/netrw.lua: Buffer-local mappings and configuration
+    specific to netrw buffers
+
+MAPPINGS                                        *vinegar-mappings*
+
+Global mappings (available everywhere):
+                                                *vinegar--*
+-                       Open the parent directory of the current file.
+
+                                                *<Plug>VinegarUp*
+<Plug>VinegarUp         Explicit mapping to open parent directory.
+
+                                                *<Plug>VinegarTabUp*
+<Plug>VinegarTabUp      Open parent directory in new tab.
+
+                                                *<Plug>VinegarSplitUp*
+<Plug>VinegarSplitUp    Open parent directory in split.
+
+                                                *<Plug>VinegarVerticalSplitUp*
+<Plug>VinegarVerticalSplitUp
+                        Open parent directory in vertical split.
+
+Buffer-local mappings (in netrw buffers):
+                                                *vinegar-~*
+~                       Open $HOME.
+
+                                                *vinegar-c_CTRL-R_CTRL-F*
+                                                *vinegar-c_<C-R>_<C-F>*
+CTRL-R CTRL-F           In command line mode, insert the path to the file
+                        under the cursor. Similar to the native
+                        |c_CTRL-R_CTRL-F|, but resolves the path with respect
+                        to the parent directory.
+
+                                                *vinegar-.*
+.                       Start a command line with the path to the file
+                        under the cursor. Provide a [count] to include
+                        multiple files.
+
+                                                *vinegar-!*
+!                       As above, but use a |:!| command line.
+
+                                                *vinegar-y.*
+y.                      Yank the current line or [count] lines as absolute
+                        paths.
+
+CONFIGURATION                                   *vinegar-configuration*
+
+The plugin automatically configures several netrw settings:
+
+- Sets |g:netrw_banner| to 0 (hides the banner) if not already set
+- Builds |g:netrw_list_hide| from |'wildignore'| patterns
+- Sets |g:netrw_sort_sequence| based on |'suffixes'|
+
+To prevent the plugin from loading: >
+    vim.g.loaded_vinegar = 1
+<
+API                                             *vinegar-api*
+
+The vinegar module is exposed globally as `_G.vinegar` for use by the
+ftplugin and advanced users. Key functions:
+
+vinegar.opendir({cmd})                          *vinegar.opendir()*
+    Open parent directory using the specified command ('edit', 'split', etc.)
+
+vinegar.seek({file})                            *vinegar.seek()*
+    Search for and position cursor on the specified file in netrw buffer.
+
+vinegar.absolutes({first}, {last})              *vinegar.absolutes()*
+    Get absolute paths from netrw buffer lines {first} to {last}.
+
+vinegar.relatives({first}, {last})              *vinegar.relatives()*
+    Get relative paths from netrw buffer lines {first} to {last}.
+
+vinegar.escaped({first}, {last})                *vinegar.escaped()*
+    Get shell-escaped relative paths for command line use.
+
+DIFFERENCES FROM ORIGINAL                       *vinegar-differences*
+
+This Lua rewrite maintains feature parity with the original vim-vinegar
+but with the following changes:
+
+1. Uses modern Neovim Lua APIs (vim.keymap.set, vim.api, etc.)
+2. Split into plugin and ftplugin files following Neovim conventions
+3. No global guards in ftplugin (per Neovim best practices)
+4. Uses Lua patterns and string manipulation instead of VimScript regex
+5. Module-based architecture with functions exposed via _G.vinegar
+
+ vim:tw=78:et:ft=help:norl:

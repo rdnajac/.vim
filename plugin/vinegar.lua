@@ -195,7 +195,7 @@ function M.opendir(cmd)
     vim.g.netrw_list_hide = vim.g.netrw_list_hide:sub(1, -#df - 1)
   end
 
-  if vim.bo.filetype == 'netrw' and M.netrw_up then
+  if vim.bo.filetype == 'netrw' and M.netrw_up and M.netrw_up ~= '' then
     -- Already in netrw, go up one level
     local basename = vim.fn.fnamemodify(vim.b.netrw_curdir, ':t')
     vim.cmd(M.netrw_up)

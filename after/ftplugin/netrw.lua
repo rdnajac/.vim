@@ -12,10 +12,15 @@ end
 if not vinegar.netrw_up then
   local orig = vim.fn.maparg('-', 'n')
   if orig:match('^<[Pp]lug>') and orig ~= '<Plug>VinegarUp' then
-    vinegar.netrw_up = 'execute "normal \\' .. orig:gsub(' *$', '') .. '"'
+    -- Remove trailing spaces and wrap in execute "normal \..."
+    local cleaned = orig:gsub(' *$', '')
+    vinegar.netrw_up = 'execute "normal \\' .. cleaned .. '"'
   elseif orig:match('^:') then
-    -- Remove :, <C-U>, and <CR> from the mapping
-    vinegar.netrw_up = orig:gsub('^:[<Cc]%-[Uu]>', ''):gsub('<[Cc][Rr]>$', '')
+    -- Remove :, optional <C-U>, and <CR> from the mapping (case insensitive)
+    local cleaned = orig:gsub('^:', '')
+    cleaned = cleaned:gsub('^[<Cc]%-[Uu]>', '')
+    cleaned = cleaned:gsub('[<Cc][Rr]>$', '')
+    vinegar.netrw_up = cleaned
   else
     vinegar.netrw_up = ''
   end
