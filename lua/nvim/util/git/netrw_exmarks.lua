@@ -96,14 +96,14 @@ local function parse_netrw_line(line)
     return nil
   end
   
-  -- Remove tree prefixes like "| | " (removes leading whitespace and pipe characters)
+  -- Remove tree prefixes (pipes and leading whitespace like "| | ")
   local cleaned = line:gsub('^[|%s]*', '')
   
-  -- Extract filename before any markers (/, *, |, @, =) or whitespace
+  -- Extract filename before any markers (/, *, |, @, =)
+  -- Note: whitespace is excluded to handle both pre-marker spaces and line endings
   local name = cleaned:match('^([^/*|@=%s]+)')
   
   if name then
-    name = vim.trim(name)
     -- Skip parent directory and current directory
     if name == '..' or name == '../' or name == '.' or name == './' then
       return nil
