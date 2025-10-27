@@ -16,6 +16,18 @@ local icons = {
     cmp_r = ' ',
   },
   diff = { add = '▎', change = '▎', delete = '' },
+  git = {
+    added = '+',
+    copied = 'C',
+    deleted = '-',
+    ignored = '◌',
+    modified = '~',
+    renamed = '➜',
+    typechanged = 'T',
+    unmerged = '‡',
+    unmodified = ' ',
+    untracked = '?',
+  },
   mason = {
     package_installed = '✓',
     package_pending = '➜',
