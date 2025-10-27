@@ -69,6 +69,8 @@ table.insert(hide_patterns, '^\\.\\.\\/\\=$')
 
 -- Check if existing netrw_list_hide ends with dotfiles pattern
 -- If it does, preserve it in the new list
+-- Note: This preserves user's choice - if they had dotfiles hidden, keep them hidden
+-- If they didn't, don't force it. Vinegar doesn't hide dotfiles by default.
 local existing_hide = vim.g.netrw_list_hide or ''
 local dotfiles_with_comma = ',' .. dotfiles
 local check_len = #dotfiles_with_comma
