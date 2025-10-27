@@ -67,15 +67,13 @@ for pattern in vim.gsplit(vim.o.wildignore, ',', { plain = true }) do
 end
 table.insert(hide_patterns, '^\\.\\.\\/\\=$')
 
--- Add dotfiles pattern if not already present in existing netrw_list_hide
+-- Check if existing netrw_list_hide ends with dotfiles pattern
+-- If it does, preserve it in the new list
 local existing_hide = vim.g.netrw_list_hide or ''
-local dotfiles_len = #dotfiles
-if existing_hide ~= '' then
-  local suffix = existing_hide:sub(-dotfiles_len)
-  if suffix ~= dotfiles then
-    table.insert(hide_patterns, dotfiles)
-  end
-else
+local dotfiles_with_comma = ',' .. dotfiles
+local check_len = #dotfiles_with_comma
+
+if #existing_hide >= check_len and existing_hide:sub(-check_len) == dotfiles_with_comma then
   table.insert(hide_patterns, dotfiles)
 end
 
