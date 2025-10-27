@@ -71,7 +71,7 @@ return {
     end
 
     if not opts.cwd then
-        opts.cwd = Snacks.git.get_root() or vim.fn.getcwd()
+      opts.cwd = Snacks.git.get_root() or vim.fn.getcwd()
     end
 
     -- hide the preview window if the screen is too narrow
