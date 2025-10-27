@@ -92,20 +92,20 @@ end
 --- @return string|nil
 local function parse_netrw_line(line)
   -- Skip empty lines, comment lines, and header lines
-  if line == '' or line:match('^"') or line:match('^$') then
+  if line == '' or line:match('^"') or line:match('^%s*$') then
     return nil
   end
   
-  -- Remove tree prefixes like "| "
-  local cleaned = line:gsub('^%s*|?%s*', '')
+  -- Remove tree prefixes like "| | " and leading whitespace
+  local cleaned = line:gsub('^%s*', ''):gsub('^[|%s]*', '')
   
   -- Extract filename before any markers (/, *, |, @, =) and optional tab/whitespace
-  local name = cleaned:match('^([^/*|@=\t]+)')
+  local name = cleaned:match('^([^/*|@=\t%s]+)')
   
   if name then
     name = vim.trim(name)
-    -- Skip parent directory
-    if name == '..' or name == '../' then
+    -- Skip parent directory and current directory
+    if name == '..' or name == '../' or name == '.' or name == './' then
       return nil
     end
     return name
