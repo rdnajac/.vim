@@ -37,7 +37,23 @@ No special installation steps are needed - it's part of this vim configuration.
 
 ### Relationship to Original Plugin
 
-The original VimScript version is located at `pack/vimfect/start/vim-tpope/plugin/vinegar.vim`. The Lua version in `after/ftplugin/netrw.lua` will take precedence in Neovim due to the load guard (`g:loaded_vinegar`), effectively replacing the VimScript version while maintaining identical functionality.
+The original VimScript version is located at `pack/vimfect/start/vim-tpope/plugin/vinegar.vim`. 
+
+The Lua version uses a load guard (`g:loaded_vinegar`) to coordinate with the VimScript version. When placed in `after/ftplugin/netrw.lua`, it will execute after the VimScript plugin during Vim's initialization, but the guard prevents double-loading:
+
+1. If the VimScript version loads first (default), it sets `g:loaded_vinegar = 1`
+2. When the Lua ftplugin runs, it checks the guard and skips global setup
+3. Only buffer-local mappings are applied to netrw buffers
+
+To use the Lua version exclusively, remove or disable the VimScript plugin at `pack/vimfect/start/vim-tpope/plugin/vinegar.vim`.
+
+### Implementation as ftplugin
+
+This plugin is implemented as an ftplugin, which means it executes each time a netrw buffer is opened. To handle this efficiently:
+
+- Global setup (settings, <Plug> mappings, autocommands) is guarded and runs only once
+- Buffer-local mappings are set up each time a netrw buffer opens
+- Shared functions are stored in `_G.vinegar` for access across buffer loads
 
 ## Implementation Notes
 
@@ -66,4 +82,5 @@ The plugin sets up:
 ## Credits
 
 Original plugin by Tim Pope: https://github.com/tpope/vim-vinegar
-Lua port for this configuration by GitHub Copilot
+
+Lua port by rdnajac
