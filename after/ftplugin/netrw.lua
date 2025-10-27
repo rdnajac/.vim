@@ -85,10 +85,11 @@ if not vim.g.loaded_vinegar then
 
   -- Get the platform-appropriate path separator
   _G.vinegar.get_slash = function()
-    if vim.o.shellslash then
-      return '\\'
-    else
+    -- If shellslash option doesn't exist (Unix) or is enabled, use forward slash
+    if vim.fn.exists('+shellslash') == 0 or vim.o.shellslash then
       return '/'
+    else
+      return '\\'
     end
   end
 
@@ -249,11 +250,14 @@ end
 local bufnr = vim.api.nvim_get_current_buf()
 
 -- Detect and store existing '-' mapping for netrw navigation
+-- This runs only on the first netrw buffer open to detect netrw's own '-' mapping
+-- Note: While ftplugin execution is generally serialized by Neovim's event handling,
+-- we use a simple nil check guard. This matches the original VimScript behavior.
 if _G.vinegar.netrw_up == nil then
   local orig = vim.fn.maparg('-', 'n')
-  if orig ~= '' then
+  if orig ~= '' and orig ~= '<Plug>VinegarUp' then
     -- Check if it's a <Plug> mapping
-    if orig:match('^<[Pp]lug>') and orig ~= '<Plug>VinegarUp' then
+    if orig:match('^<[Pp]lug>') then
       _G.vinegar.netrw_up = 'execute "normal \\' .. orig:gsub(' *$', '') .. '"'
     -- Check if it's a command mapping
     elseif orig:match('^:') then
