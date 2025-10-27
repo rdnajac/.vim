@@ -105,7 +105,7 @@ local function parse_netrw_line(line)
   
   if name then
     -- Skip parent directory and current directory
-    if name == '..' or name == '../' or name == '.' or name == './' then
+    if name == '..' or name == '.' then
       return nil
     end
     return name
