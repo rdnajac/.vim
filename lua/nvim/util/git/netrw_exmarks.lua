@@ -145,14 +145,14 @@ local function add_status_extmarks(buffer, status)
 
         if status_codes then
           -- Set index status sign (left column)
-          local ok_index = pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
+          pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
             sign_text = get_symbol(status_codes.index),
             sign_hl_group = highlight_group(status_codes.index, true),
             priority = 2,
           })
           
           -- Set working tree status sign (right column)
-          local ok_working = pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
+          pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
             sign_text = get_symbol(status_codes.working_tree),
             sign_hl_group = highlight_group(status_codes.working_tree, false),
             priority = 1,
