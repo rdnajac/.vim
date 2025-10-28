@@ -33,8 +33,8 @@ local backticks_in_comments = {
   extmark_opts = {
     hl_mode = 'combine',
     spell = false,
-    priority = 10000,
   },
+  priority = 10000,
 }
 
 -- Update hipatterns configuration to include backtick highlighting
