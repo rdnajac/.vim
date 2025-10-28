@@ -84,7 +84,10 @@ end
 
 local function get_symbol(code)
   local k = highlight_group_suffix_for_status_code[code]
-  return nv.icons.git[vim.fn.tolower(k)] or code
+  if k and _G.nv and _G.nv.icons and _G.nv.icons.git then
+    return _G.nv.icons.git[vim.fn.tolower(k)] or code
+  end
+  return code
 end
 
 --- Parse a netrw buffer line to extract the filename
@@ -162,6 +165,13 @@ local function load_git_status(buffer, callback)
   -- Get the current directory from netrw's buffer variable
   local path = vim.b[buffer].netrw_curdir
   if not path then
+    -- Fallback: try to get directory from buffer name
+    local bufname = vim.api.nvim_buf_get_name(buffer)
+    if bufname and bufname ~= '' then
+      path = vim.fn.fnamemodify(bufname, ':p:h')
+    end
+  end
+  if not path then
     return callback()
   end
   concurrent({
@@ -229,6 +239,13 @@ M.setup = function()
 
       if not vim.b[buffer].netrw_git_status_started then
         vim.b[buffer].netrw_git_status_started = true
+        
+        -- Load git status immediately when netrw buffer opens
+        load_git_status(buffer, function(status)
+          current_status = status
+          add_status_extmarks(buffer, current_status)
+        end)
+        
         vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost' }, {
           buffer = buffer,
           callback = function()
