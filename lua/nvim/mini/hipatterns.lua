@@ -22,7 +22,7 @@ hipatterns.setup({
       pattern = '`[^`\n]+`',
       group = 'Chromatophore',
       extmark_opts = function(_, match, data)
-        -- Skip bigfiles (matching original behavior)
+        -- Skip bigfiles early to avoid expensive comment detection
         if vim.bo[data.buf_id].filetype == 'bigfile' then
           return nil
         end
