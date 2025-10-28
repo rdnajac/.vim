@@ -18,6 +18,11 @@ end
 local backticks_in_comments = {
   pattern = '`[^`\n]+`',
   group = function(buf_id, match, data)
+    -- Skip highlighting for bigfile filetype (performance optimization)
+    if vim.bo[buf_id].filetype == 'bigfile' then
+      return nil
+    end
+    
     -- Extract line and column information from data
     -- data.from_pos is {line, col} in 1-indexed format
     local line = data.from_pos[1] - 1  -- Convert to 0-indexed for in_comment
