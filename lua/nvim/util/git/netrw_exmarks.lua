@@ -240,6 +240,9 @@ M.setup = function()
       if not vim.b[buffer].netrw_git_status_started then
         vim.b[buffer].netrw_git_status_started = true
         
+        -- Enable signcolumn for netrw buffers to show git status
+        vim.wo.signcolumn = 'yes:2'
+        
         -- Load git status immediately when netrw buffer opens
         load_git_status(buffer, function(status)
           current_status = status
