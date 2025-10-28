@@ -127,29 +127,39 @@ local function add_status_extmarks(buffer, status)
 
   if status then
     local line_count = vim.api.nvim_buf_line_count(buffer)
+    local ok, lines = pcall(vim.api.nvim_buf_get_lines, buffer, 0, -1, false)
+    if not ok or not lines then
+      return
+    end
+    
     for n = 1, line_count do
-      local ok, lines = pcall(vim.api.nvim_buf_get_lines, buffer, n - 1, n, false)
-      if not ok or not lines or #lines == 0 then
+      local line = lines[n]
+      if not line then
         goto continue
       end
       
-      local line = lines[1]
       local name = parse_netrw_line(line)
       
       if name then
         local status_codes = status[name] or (show_ignored and { index = '!', working_tree = '!' })
 
         if status_codes then
-          pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
+          -- Set index status sign (left column)
+          local ok_index = pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
             sign_text = get_symbol(status_codes.index),
             sign_hl_group = highlight_group(status_codes.index, true),
             priority = 2,
           })
-          pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
+          
+          -- Set working tree status sign (right column)
+          local ok_working = pcall(vim.api.nvim_buf_set_extmark, buffer, ns, n - 1, 0, {
             sign_text = get_symbol(status_codes.working_tree),
             sign_hl_group = highlight_group(status_codes.working_tree, false),
             priority = 1,
           })
+          
+          -- Note: Silent failure is intentional - extmark operations may fail
+          -- for lines being modified, but this is not critical
         end
       end
       
@@ -224,8 +234,10 @@ local function load_git_status(buffer, callback)
       end
       
       -- ls-tree failure is okay (might be an empty repo with no HEAD)
-      local ls_tree_stdout = (git_ls_tree_results and git_ls_tree_results.code == 0) 
-        and git_ls_tree_results.stdout or ''
+      local ls_tree_stdout = ''
+      if git_ls_tree_results and git_ls_tree_results.code == 0 then
+        ls_tree_stdout = git_ls_tree_results.stdout
+      end
 
       callback(parse_git_status(git_status_results.stdout, ls_tree_stdout))
     end)
