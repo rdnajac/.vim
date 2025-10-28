@@ -1,66 +1,45 @@
--- highlights `src` in backticks ( ` )
-local ns = vim.api.nvim_create_namespace('src')
+-- highlights `src` in backticks ( ` ) using Mini.hipatterns
+local hipatterns = require('mini.hipatterns')
 
-local function in_comment(lnum, s_col)
-  if vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] then
-    return nv.treesitter.is_comment({ lnum, s_col })
+-- Helper function to check if position is inside a comment
+local function in_comment(buf_id, line, col)
+  -- Use treesitter if available
+  if vim.treesitter.highlighter.active[buf_id] then
+    return nv.treesitter.is_comment({ line, col })
   end
-  local synid = vim.fn.synID(lnum + 1, s_col + 1, 1)
+  -- Fallback to syntax highlighting
+  local synid = vim.fn.synID(line + 1, col + 1, 1)
   local name = vim.fn.synIDattr(synid, 'name')
   return name and name:find('Comment') ~= nil
 end
 
-local function highlight_line(bufnr, lnum, line)
-  vim.api.nvim_buf_clear_namespace(bufnr, ns, lnum, lnum + 1)
-
-  local s_col = 0
-  while true do
-    local s, e = line:find('`[^`\n]+`', s_col + 1)
-    if not s then
-      break
+-- Computed highlighter for backticks in comments
+-- This function is called during highlighting to determine what to highlight
+local backticks_in_comments = {
+  pattern = '`[^`\n]+`',
+  group = function(buf_id, match, data)
+    -- Extract line and column information from data
+    -- data.from_pos is {line, col} in 1-indexed format
+    local line = data.from_pos[1] - 1  -- Convert to 0-indexed for in_comment
+    local col = data.from_pos[2] - 1   -- Convert to 0-indexed for in_comment
+    
+    -- Only return highlight group if inside a comment
+    if in_comment(buf_id, line, col) then
+      return 'Chromatophore'
     end
-
-    -- highlight inside comment only
-    if in_comment(lnum, s - 1) then
-      vim.api.nvim_buf_set_extmark(bufnr, ns, lnum, s - 1, {
-        end_col = e,
-        hl_group = 'Chromatophore',
-        hl_mode = 'combine',
-        spell = false,
-        priority = 10000,
-      })
-    end
-    s_col = e
-  end
-end
-
-local function highlight_backticks(bufnr)
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  for lnum, line in ipairs(lines) do
-    highlight_line(bufnr, lnum - 1, line)
-  end
-end
-
-local aug = vim.api.nvim_create_augroup('sourcecode', {})
-
-vim.api.nvim_create_autocmd('BufEnter', {
-  group = aug,
-  nested = true,
-  callback = function(args)
-    if vim.bo[args.buf].filetype ~= 'bigfile' then
-      highlight_backticks(args.buf)
-
-      vim.api.nvim_create_autocmd({ 'TextChanged', 'TextChangedI' }, {
-        group = aug,
-        buffer = args.buf,
-        callback = function(a)
-          local lnum = vim.api.nvim_win_get_cursor(0)[1] - 1
-          local line = vim.api.nvim_buf_get_lines(a.buf, lnum, lnum + 1, false)[1]
-          if line then
-            highlight_line(a.buf, lnum, line)
-          end
-        end,
-      })
-    end
+    
+    return nil  -- Don't highlight if not in a comment
   end,
+  extmark_opts = {
+    hl_mode = 'combine',
+    spell = false,
+    priority = 10000,
+  },
+}
+
+-- Update hipatterns configuration to include backtick highlighting
+hipatterns.update_config({
+  highlighters = {
+    backticks_in_comments = backticks_in_comments,
+  },
 })
