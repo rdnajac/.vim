@@ -22,6 +22,10 @@ hipatterns.setup({
       pattern = '`[^`\n]+`',
       group = 'Chromatophore',
       extmark_opts = function(_, match, data)
+        -- Skip bigfiles (matching original behavior)
+        if vim.bo[data.buf_id].filetype == 'bigfile' then
+          return nil
+        end
         -- Check if the match is inside a comment
         -- Mini.hipatterns uses 1-indexed line_num, convert to 0-indexed for in_comment
         if in_comment(data.buf_id, data.line_num - 1, data.from_col - 1) then
