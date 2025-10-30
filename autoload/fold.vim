@@ -10,25 +10,13 @@ endfunction
 function! fold#text() abort
   let s:foldchar = '.'
   let l:line1 = getline(v:foldstart)
-
-  function! s:CleanLine(line) abort
-    return substitute(a:line, '\s*"\?\s*{{{\d*\s*$', '', '')
-  endfunction
-
-  function! s:FoldHeader(line1) abort
-    if a:line1 =~# '^\s*{'
-      let l:next = getline(v:foldstart + 1)
-      let l:indent = matchstr(a:line1, '^\s*')
-      return l:indent . substitute(l:next, '^\s*', '{ ', '')
-    endif
-    return s:CleanLine(a:line1)
-  endfunction
+  let l:line = substitute(l:line1, '\s*"\?\s*{{{\d*\s*$', '', '')
 
   let l:line = s:FoldHeader(l:line1)
   let l:lines_count = v:foldend - v:foldstart + 1
-  let l:post = '|' . printf('%10s', l:lines_count . ' lines') . ' |'
+  let l:post = printf('|%4s lines|', l:lines_count)
   let l:pre = l:line . ' '
-  let l:fill = repeat(s:foldchar, max([0, 78 - strdisplaywidth(l:pre . l:post)]))
+  let l:fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(l:pre . l:post)]))
 
   return l:pre . l:fill . l:post
 endfunction

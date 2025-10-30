@@ -113,8 +113,9 @@ return {
         -- { path = "LazyVim", words = { "LazyVim" } },
         { path = 'snacks.nvim', words = { 'Snacks' } },
         -- { path = "lazy.nvim", words = { "LazyVim" } },
+        { path = 'mini.diff', words = { 'MiniDiff' } },
       },
     },
   },
 }
--- vim:foldlevel=1:foldmethod=expr
+--vim: fdl=1

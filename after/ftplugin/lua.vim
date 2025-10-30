@@ -21,3 +21,11 @@ let b:surround_85 = "function() \r end"
 let b:surround_117 = "function()\n \r \nend"
 let b:surround_105 = "-- stylua: ignore start\n \r \n--stylua: ignore end"
 let b:surround_115 = "vim.schedule(function()\n \r \nend)"
+
+" function! s:FoldHeader(line1) abort
+"   if a:line1 =~# '^\s*{'
+"     let l:next = getline(v:foldstart + 1)
+"     let l:indent = matchstr(a:line1, '^\s*')
+"     return l:indent . substitute(l:next, '^\s*', '{ ', '')
+"   endif
+" endfunction

@@ -14,7 +14,7 @@ Snacks.toggle.treesitter():map('<leader>ut')
 Snacks.toggle.words():map('<leader>uW')
 Snacks.toggle.zoom():map('<leader>uZ')
 
--- additional option toggles"
+-- additional option toggles
 local options = {
   autochdir = '<leader>ac',
 }
@@ -111,7 +111,6 @@ toggles['<leader>uG'] = {
   end,
   set = function(state)
     vim.g.minidiff_disable = not state
-    -- MiniDiff[state and 'enable' or 'disable'](0)
     MiniDiff.toggle(0)
     defer_redraw()
   end,
@@ -154,4 +153,4 @@ end
 for key, opts in pairs(toggles) do
   Snacks.toggle.new(opts):map(key)
 end
--- vim: fdl=1
+--vim: fdl=1
