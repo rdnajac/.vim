@@ -106,9 +106,10 @@ local function apply_icons(bufnr)
     if fname then
       local entry = icon_cache[fname]
       if not entry then
-        local is_dir = vim.fn.isdirectory(fname) == 1
-        local icon, hl = nv.icons[is_dir and 'directory' or 'file'](fname)
-        entry = { icon = icon, hl = hl }
+        -- get icon and hl from MiniIcons, handling dirs and trailing * for executables
+        local icon, hl =
+          nv.icons[vim.endswith(fname, '/') and 'directory' or 'file'](fname:gsub('*$', ''))
+        entry = { icon = icon, hl = vim.endswith(fname, '*') and 'MiniIconsRed' or hl }
         icon_cache[fname] = entry
       end
       vim.api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
