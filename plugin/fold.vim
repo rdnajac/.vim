@@ -25,9 +25,16 @@ nnoremap <expr> h      fold#open_or_h()
 " set foldopen-=search
 " nnoremap <silent> / zn/
 
+" HACK: assumes foldmethods are set to 'expr' elsewhere
+set foldexpr=v:lua.vim.treesitter.foldexpr()
+setlocal foldmethod=expr
+
 augroup vimrc_fold
   au!
-  au FileType lua setl fdm=expr fdl=99 fml=5
+  au FileType lua setl fdm=expr fdl=99 fml=5 " flds=2
   au FileType sh  setl fdm=expr
-  " au FileType vim setl fdm=marker
+  " use treesitter folding for certain filetypes
+  if has('nvim')
+    au FileType markdown,r setl fdm=expr foldexpr=v:lua.vim.treesitter.foldexpr()
+  endif
 augroup END

@@ -13,6 +13,7 @@ local spec = {
   },
   {
     mode = { 'n' },
+    -- add groups
     { 'co', group = 'comment below' },
     { 'cO', group = 'comment above' },
     { '<leader>b', group = 'buffers', icon = { icon = '' } },
@@ -25,10 +26,8 @@ local spec = {
     { '<leader>s', group = 'search' },
     { '<leader>u', group = 'ui' },
 
-    -- descriptions
+    --  add descriptions
     { 'gx', desc = 'Open with system app' },
-    { 'ga', mode = 'x', desc = 'Align' },
-    { 'gA', mode = 'x', desc = 'Align (preview)' },
   },
   { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
 }

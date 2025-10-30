@@ -1,6 +1,6 @@
-" See https://stackoverflow.com/questions/75587279/quick-way-to-select-inside-a-fenced-code-block-in-markdown-using-vim
-" To be put in after/ftplugin/markdown.vim
-function! s:SelectInnerCodeBlock()
+" https://stackoverflow.com/questions/75587279/quick-way-to-select-inside-a-fenced-code-block-in-markdown-using-vim|
+function! markdown#select_code_block()
+
   function! IsFence()
     return getline('.') =~ '^```'
   endfunction
@@ -9,14 +9,15 @@ function! s:SelectInnerCodeBlock()
     return IsFence() && getline(line('.'),'$')->filter({ _, val -> val =~ '^```'})->len() % 2 == 0
   endfunction
 
+  function! IsClosingFence()
+    return IsFence() && !IsOpeningFence()
+  endfunction
+
   function! IsBetweenFences()
     return synID(line("."), col("."), 0)->synIDattr('name') =~? 'markdownCodeBlock'
   endfunction
 
-  function! IsClosingFence()
-    return IsFence() && !IsOpeningFence()
-  endfunction
-  Info 'Selecting code block'
+  " Info 'Selecting code block'
   if IsOpeningFence() || IsBetweenFences()
     call search('^```', 'W')
     normal -
@@ -27,10 +28,11 @@ function! s:SelectInnerCodeBlock()
     call search('^```', 'Wbs')
     normal +
     normal V''k
-  else
-    return
+  " else
+    " return
   endif
 endfunction
-" FIXME: 
-xnoremap <buffer> <silent> ij :<C-u>call <SID>SelectInnerCodeBlock()<CR>
-onoremap <buffer> <silent> ij :<C-u>call <SID>SelectInnerCodeBlock()<CR>
+
+" FIXME: or use MiniAi
+" xnoremap <buffer> <silent> ij :<C-u>call markdown#select_code_block()<CR>
+" onoremap <buffer> <silent> ij :<C-u>call markdown#select_code_block()<CR>

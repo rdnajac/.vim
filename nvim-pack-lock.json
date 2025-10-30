@@ -53,7 +53,7 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "64e0a1c",
+      "rev": "87d3018",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-navic": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "645f42e8",
+      "rev": "64f4755b",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -78,7 +78,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "4bb1ce1",
+      "rev": "0bc7c26",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
@@ -100,6 +100,10 @@
     "vim-characterize": {
       "rev": "a8bffac",
       "src": "https://git::@github.com/tpope/vim-characterize.git"
+    },
+    "vim-dirvish": {
+      "rev": "5d1d1ef",
+      "src": "https://git::@github.com/justinmk/vim-dirvish.git"
     },
     "vim-dispatch": {
       "rev": "a2ff28a",

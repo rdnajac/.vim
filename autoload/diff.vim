@@ -16,7 +16,8 @@ function! diff#wrap(...) abort
       if exists(':DiffTool') == 2
 	let b1 = fnamemodify(bufname(winbufnr(1)), ':p')
 	let b2 = fnamemodify(bufname(winbufnr(2)), ':p')
-	DiffTool b1 b2
+	echom 'Using DiffTool to compare: ' . b1 . ' and ' . b2
+	execute 'DiffTool' b1 b2
       else
 	call s:diffthese()
       endif

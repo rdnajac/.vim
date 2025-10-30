@@ -64,10 +64,11 @@ return {
       new({ 'sgID2', 'agx51' }, false),
       new({ 'SGID2', 'AGX51' }, false),
     }
-    -- groups.vim = {
+    groups.vim = {
+    new({ 'echom', 'execute' }, false),
     -- new({ 'opt', 'start' }, false),
     -- new({ 'autoload', 'plugin' }, false),
-    -- }
+    }
 
     -- create rmd group as a combination of markdown and r
     groups.rmd = vim.tbl_extend('force', {}, groups.r, groups.markdown)

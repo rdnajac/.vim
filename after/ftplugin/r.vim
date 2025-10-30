@@ -1,7 +1,5 @@
 " TODO: move to r.lua opts
 setlocal iskeyword-=.
-setlocal foldexpr=v:lua.vim.treesitter.foldexpr()
-setlocal foldmethod=expr
 
 " Note that not all terminals handle these key presses the same way
 inoremap <buffer> <M--> <-<Space>

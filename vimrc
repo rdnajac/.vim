@@ -96,10 +96,6 @@ else
   " default on in vim
   set startofline
   " try running `:options` for more...
-
-  packadd! nvim.difftool
-  packadd! nvim.undotree
-
   hi link vimMap @keyword
   " disable the default popup menu
   aunmenu PopUp | autocmd! nvim.popupmenu
@@ -149,22 +145,16 @@ command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 " }}}1
 " Section: keymaps {{{1
-let g:mapleader = ' '
-let g:maplocalleader = '\'
-
-nnoremap <BS> :bprevious<CR>
-nnoremap <C-BS> g;
-
 nnoremap ` ~
 nnoremap ~ `
-
-nnoremap <expr> ' '"'
-" nnoremap " '
 
 " TODO: sort opfunc
 vmap  :sort<CR>
 
-" <leader> {{{2
+" `<leader>` {{{2
+let g:mapleader = ' '
+let g:maplocalleader = '\'
+
 " vim.lsp.hover overrides the default K mapping
 nnoremap <leader>q :q!<CR>
 nnoremap <leader>Q :wqa!<CR>
@@ -174,7 +164,6 @@ nnoremap <leader>r <Cmd>call sesh#restart()<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
 nnoremap <leader>m <Cmd>messages<CR>
-nnoremap <leader>N <Cmd>lua Snacks.picker.notifications()<CR>
 nnoremap <leader>h <Cmd>Help<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
@@ -195,7 +184,7 @@ nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 
-" more intutive navigation and centering
+" searching and centering {{{2
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
 nmap n nzz
 " nnoremap <expr> n  'Nn'[v:searchforward]
@@ -213,60 +202,60 @@ nnoremap #  #zzzv
 nnoremap g* g*zzzv
 nnoremap g# g#zzzv
 
-nnoremap J      mzJ`z
-
-" TODO:
-nnoremap dp     dp]c
-nnoremap do     do]c
+" TODO: I forgot what these do...
+" nnoremap dp     dp]c
+" nnoremap do     do]c
 
 " bookmarks {{{2
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 
-" windows {{{2
+" navigate buffers and windows {{{2
+nnoremap <BS> :bprevious<CR>
+nnoremap <C-BS> g;
+
+" `<C-e>` scrolls the window downwards by [count] lines
+" `<C-^>` (`<C-6>`) which edits the alternate  buffer`:e #`
+nnoremap      <C-e>      <C-^>
+nnoremap <C-w><C-e> <C-w><C-^>
+" see `:h sbp`
+
+for [lhs, rhs] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
+  execute printf('nnoremap <S-%s> <Cmd>wincmd %s<CR>', lhs, rhs)
+  execute printf('tnoremap <S-%s> <Cmd>wincmd %s<CR>', lhs, rhs)
+endfor
+
+" TODO: S-Tab not detected?
 " nnoremap <S-Tab>   <Cmd>wincmd w<CR>
+nnoremap <C-q>      <Cmd>wincmd c<CR>
+nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
+nnoremap <C-w><C-v> <Cmd>vertical +sbprevious<CR>
 
-nnoremap <S-Down>  <Cmd>wincmd j<CR>
-nnoremap <S-Up>    <Cmd>wincmd k<CR>
-nnoremap <S-Left>  <Cmd>wincmd h<CR>
-nnoremap <S-Right> <Cmd>wincmd l<CR>
-
-nnoremap <C-q>     <Cmd>wincmd c<CR>
-nnoremap <C-w><C-v> <Cmd>vsp
-
-" term
-tnoremap <S-Down>  <Cmd>wincmd j<CR>
-tnoremap <S-Up>    <Cmd>wincmd k<CR>
-tnoremap <S-Left>  <Cmd>wincmd h<CR>
-tnoremap <S-Right> <Cmd>wincmd l<CR>
-
-:tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " just like tmux!
 " nnoremap <C-w>-     <C-w>s
 " nnoremap <C-w><Bar> <C-w>v
 
 " resize splits
-nnoremap <C-W><Up>    :         resize +10<CR>
-nnoremap <C-W><Down>  :         resize -10<CR>
-nnoremap <C-W><Left>  :vertical resize +10<CR>
-nnoremap <C-W><Right> :vertical resize -10<CR>
+nnoremap <C-W><Up>    :     resize +10<CR>
+nnoremap <C-W><Down>  :     resize -10<CR>
+nnoremap <C-W><Left>  :vert resize +10<CR>
+nnoremap <C-W><Right> :vert resize -10<CR>
 
 " key pairs in normal mode {{{2
 " `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
-
 " `cd` cm co cp `cq` `cr` `cs` cu cx cy cz
-" `dc` dm dq dr `ds`  du dx `dy` dz
+" `dc` dm dq dr `ds` du dx `dy` dz
 " `gb` `gc` `gl` `gs` `gy`
 " vm vo vq `vv` vz
-" yc `yd` ym `yo` `yp` yq yr `ys` yu yx yz
+" yc `yd` ym `yo` `yp` yq `yr` `ys` `yu` yx yz
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
 
-" comments
+" delete/yank comment
 nmap dc dgc
 nmap yc ygc
-
 
 nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
@@ -279,8 +268,8 @@ nmap <expr> cq change#quote()
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
 
-" more intuitive `gf` that habdles line numbers
-nnoremap <expr> gf keymap#gf#()
+" more intuitive `gf` to open file in a new window or jump to the line number
+nnoremap <expr> gf &ft !=# '\vmsg<BAR>pager' ? '' : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
 
 " select last changed text (ie pasted text)
 nnoremap gV `[V`]
@@ -306,16 +295,6 @@ vmap F Sf
 
 " xmap ga <Plug>(EasyAlign)
 " nmap ga <Plug>(EasyAlign)
-
-" buffer navigation {{{2
-" nnoremap <silent> gb    <Cmd>bnext<CR>
-" nnoremap <silent> gB    <Cmd>bprevious<CR>
-
-" `<C-e>` scrolls the window downwards by [count] lines;
-" `<C-^>` (`<C-6>`) which edits the alternate  buffer`:e #`
-nnoremap <C-e>            <C-^>
-nnoremap <C-w><C-e>  <C-w><C-^>
-" see `:h sbp`
 
 " TODO: test me!
 " change/delete current word {{{2
@@ -349,7 +328,7 @@ inoremap <silent> ,o <C-x><C-o>
 " inoremap <silent> ,u <C-x><C-u>
 inoremap <silent> ,i <Cmd>Icons<CR>
 
-" add chars to EOL easily {{{2
+" add chars to EOL {{{2
 nnoremap <Bslash>, mzA,<Esc>;`z
 nnoremap <Bslash>; mzA;<Esc>;`z
 nnoremap <Bslash>. mzA.<Esc>;`z
@@ -360,12 +339,11 @@ iabbrev n- –
 iabbrev m- —
 
 " you know what I mean... {{{2
-
-for act in ['c', 'd', 'y'] "change, delete, yank
-  for obj in ['p', 'w'] " paragraph, word
-    execute $'nnoremap {act}{obj} {act}i{obj}'
-    execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
-  endfor
+for act in ['c', 'd', 'y'] " change, delete, yank
+for obj in ['p', 'w'] " paragraph, word
+  execute $'nnoremap {act}{obj} {act}i{obj}'
+  execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
+endfor
 endfor
 
 " don't capture whitespace in `gc`
@@ -377,6 +355,7 @@ call plug#begin()
 Plug 'alker0/chezmoi.vim'
 " Plug 'andymass/vim-matchup'
 Plug 'bullets-vim/bullets.vim'
+Plug 'justinmk/vim-dirvish'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
 Plug 'tpope/vim-abolish'
@@ -394,23 +373,32 @@ Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 if !has('nvim')
-  Plug 'dense-analysis/ale'
-  Plug 'dstein64/vim-startuptime'
-  Plug 'github/copilot.vim'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'tpope/vim-repeat'
-  Plug 'tpope/vim-surround'
-  " Plug 'tpope/vim-commentary'
-  Plug 'wellle/targets.vim'
-  Plug 'wellle/tmux-complete.vim'
-  Plug 'AndrewRadev/dsf.vim'
-  Plug 'AndrewRadev/splitjoin.vim'
-  Plug 'Konfekt/FastFold'
-  Plug 'vuciv/golf'
+Plug 'dense-analysis/ale'
+Plug 'dstein64/vim-startuptime'
+Plug 'github/copilot.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-commentary'
+Plug 'wellle/targets.vim'
+Plug 'wellle/tmux-complete.vim'
+Plug 'AndrewRadev/dsf.vim'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'Konfekt/FastFold'
+Plug 'vuciv/golf'
 else
-  Plug 'folke/tokyonight.nvim'
-  Plug 'saxon1964/neovim-tips'
-  Plug 'nvim-treesitter/nvim-treesitter-context'
+Plug 'folke/tokyonight.nvim'
+Plug 'saxon1964/neovim-tips'
+Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
 call plug#end() " don't plug#end() if neovim...
+
+if has('nvim')
+packadd! nvim.difftool
+packadd! nvim.undotree
+else
+packadd! editorconfig
+endif
+packadd! nohlsearch
+
 " vim: foldlevelstart=1 foldmethod=marker

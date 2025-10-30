@@ -1,4 +1,6 @@
-function! s:Sanitize(str) abort
+" TODO: get MiniSurround to do the same thing
+
+function! s:sanitize(str) abort
   let s = a:str
   if s ==# '' || type(s) != v:t_string
     let s = ''
@@ -11,7 +13,7 @@ function! s:Sanitize(str) abort
   return s
 endfunction
 
-function! Linkify() range abort
+function! hyperlink#() range abort
   " Exit select/visual mode
   "call feedkeys("\<Esc>", 'x')
 
@@ -41,7 +43,7 @@ function! Linkify() range abort
     let default_val = ''
   else
     let prompt = 'URL (default from clipboard): '
-    let default_val = s:Sanitize(getreg('+'))
+    let default_val = s:sanitize(getreg('+'))
   endif
 
   " Blocking input() since Vimscript has no async ui.input
@@ -59,7 +61,7 @@ function! Linkify() range abort
     let url = input_val
   endif
 
-  let hyperlink = printf('[%s](%s)', s:Sanitize(text), url)
+  let hyperlink = printf('[%s](%s)', s:sanitize(text), url)
 
   " Replace selection with hyperlink
   if lnum1 == lnum2
@@ -74,8 +76,6 @@ function! Linkify() range abort
   endif
 endfunction
 
-vmap <leader>k :call Linkify()<CR>
-
-" test
+" test here!
 " http://example.com
 " some text

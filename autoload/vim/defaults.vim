@@ -112,6 +112,6 @@ function! vim#defaults#() abort
   setglobal include=
   setglobal includeexpr=
 
-  let &viminfofile = g:vimrc#home . '.viminfo'
-  let &verbosefile = g:vimrc#home . '.vimlog.txt'
+  let &viminfofile = g:my#vimdir . '.viminfo'
+  let &verbosefile = g:my#vimdir . '.vimlog.txt'
 endfunction
