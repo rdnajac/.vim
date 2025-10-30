@@ -61,17 +61,6 @@ set signcolumn=auto
 
 set lazyredraw
 set termguicolors
-set fillchars= " reset
-set fillchars+=diff:╱
-set fillchars+=eob:,
-set fillchars+=stl:\ ,
-set list
-set listchars= " reset
-set listchars+=trail:¿,
-set listchars+=tab:→\ ",
-set listchars+=extends:…,
-set listchars+=precedes:…,
-set listchars+=nbsp:+
 
 
 augroup vimrc_ui
@@ -93,12 +82,6 @@ augroup END
 " Section: neovim {{{1
 if !has('nvim')
   call vimrc#init_vim()
-  packadd! nvim.difftool
-  packadd! nvim.undotree
-
-  hi link vimMap @keyword
-  " disable the default popup menu
-  aunmenu PopUp | autocmd! nvim.popupmenu
 else
   set backup backupext=.bak
   let &backupdir = g:stdpath['state'] . '/backup//'
@@ -113,8 +96,14 @@ else
 
   " default on in vim
   set startofline
-
   " try running `:options` for more...
+
+  packadd! nvim.difftool
+  packadd! nvim.undotree
+
+  hi link vimMap @keyword
+  " disable the default popup menu
+  aunmenu PopUp | autocmd! nvim.popupmenu
 endif
 " }}}1
 " Section: autocmds {{{1
@@ -214,13 +203,13 @@ nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
 nmap n nzz
 " nnoremap <expr> n  'Nn'[v:searchforward]
-xnoremap <expr> n  'Nn'[v:searchforward]
-onoremap <expr> n  'Nn'[v:searchforward]
+xnoremap <expr> n 'Nn'[v:searchforward]
+onoremap <expr> n 'Nn'[v:searchforward]
 
 nmap N Nzz
 " nnoremap <expr> N  'nN'[v:searchforward]
-xnoremap <expr> N  'nN'[v:searchforward]
-onoremap <expr> N  'nN'[v:searchforward]
+xnoremap <expr> N 'nN'[v:searchforward]
+onoremap <expr> N 'nN'[v:searchforward]
 
 " center searches
 nnoremap *  *zzzv
@@ -233,7 +222,6 @@ nnoremap J      mzJ`z
 " TODO:
 nnoremap dp     dp]c
 nnoremap do     do]c
-
 
 " bookmarks {{{2
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
@@ -257,7 +245,7 @@ tnoremap <S-Up>    <Cmd>wincmd k<CR>
 tnoremap <S-Left>  <Cmd>wincmd h<CR>
 tnoremap <S-Right> <Cmd>wincmd l<CR>
 
- :tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+:tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " just like tmux!
 " nnoremap <C-w>-     <C-w>s
@@ -273,13 +261,16 @@ nnoremap <C-W><Right> :vertical resize -10<CR>
 " `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
 
 " `cd` cm co cp `cq` `cr` `cs` cu cx cy cz
-" dc dm dq dr `ds`  du dx `dy` dz
+" `dc` dm dq dr `ds`  du dx `dy` dz
 " `gb` `gc` `gl` `gs` `gy`
 " vm vo vq `vv` vz
 " yc `yd` ym `yo` `yp` yq yr `ys` yu yx yz
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
 
-nnoremap ZX <Cmd>Zoxide<CR>
+" comments
+nmap dc dgc
+nmap yc ygc
+
 
 nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
@@ -302,6 +293,7 @@ nnoremap gV `[V`]
 nnoremap gcd :Gcd<Bar>pwd<CR>
 
 nnoremap zq <Cmd>Format<CR>
+nnoremap ZX <Cmd>Zoxide<CR>
 
 " resursive keymaps
 nmap gy "xyygcc"xp<Up>
@@ -372,9 +364,16 @@ iabbrev n- –
 iabbrev m- —
 
 " you know what I mean... {{{2
-nnoremap cw ciw
-nnoremap cW ciW
-nnoremap gcap gcip
+
+for act in ['c', 'd', 'y'] "change, delete, yank
+  for obj in ['p', 'w'] " paragraph, word
+    execute $'nnoremap {act}{obj} {act}i{obj}'
+    execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
+  endfor
+endfor
+
+" don't capture whitespace in `gc`
+nmap gcap gcip
 
 " }}}1
 
@@ -417,5 +416,5 @@ else
   Plug 'saxon1964/neovim-tips'
   Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
-  call plug#end() " don't plug#end() if neovim...
+call plug#end() " don't plug#end() if neovim...
 " vim: foldlevelstart=1 foldmethod=marker
