@@ -2,6 +2,10 @@
 " Description:  vim colorscheme inspired by tokyonight
 " Author:       rdnajac
 
+" if !has('nvim')
+"   require('tokyonight').load()
+" endif
+
 hi clear
 if exists('syntax_on')
   syntax reset

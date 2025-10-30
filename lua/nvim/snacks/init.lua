@@ -22,16 +22,40 @@ return {
       end,
     },
     dashboard = require('nvim.snacks.dashboard'),
-    explorer = { replace_netrw = false }, -- using `oil` instead
+    explorer = { replace_netrw = false },
     image = { enabled = true },
     indent = { indent = { only_current = true, only_scope = true } },
     input = { enabled = true },
-    -- notifier = { enabled = false },
-    notifier = require('nvim.snacks.notifier'),
+    notifier = { enabled = false },
+    -- notifier = require('nvim.snacks.notifier'),
     quickfile = { enabled = true },
     scratch = { template = 'local x = \n\nprint(x)' },
     terminal = { enabled = true },
-    scope = { enabled = true },
+    scope = {
+      keys = {
+        textobject = {
+          ii = { min_size = 2, edge = false, cursor = false, desc = 'inner scope' },
+          ai = { min_size = 2, cursor = false, desc = 'full scope' },
+          -- ag = { min_size = 1, edge = false, cursor = false, treesitter = { enabled = false }, desc = "buffer" },
+        },
+        jump = {
+          ['[i'] = {
+            min_size = 1,
+            bottom = false,
+            cursor = false,
+            edge = true,
+            desc = 'jump to top edge of scope',
+          },
+          [']i'] = {
+            min_size = 1,
+            bottom = true,
+            cursor = false,
+            edge = true,
+            desc = 'jump to bottom edge of scope',
+          },
+        },
+      },
+    },
     scroll = { enabled = true },
     -- statuscolumn = { enabled = false },
     statuscolumn = {
@@ -69,6 +93,11 @@ return {
         files = require('nvim.snacks.picker.defaults'),
         grep = require('nvim.snacks.picker.defaults'),
         icons = { layout = { preset = 'insert' } },
+        recent = {
+          config = function(p)
+            p.filter = {}
+          end,
+        },
         zoxide = { confirm = 'edit' },
       },
     },

@@ -1,7 +1,7 @@
 return {
   'folke/sidekick.nvim',
   lazy = true,
-  --- @type sidekick.Config
+  ---@type sidekick.Config
   opts = {},
   after = function()
     vim.lsp.enable('copilot')
@@ -44,7 +44,7 @@ return {
          return require('sidekick').nes_jump_or_apply() or '<Tab>'
         end,
       },
-      { '<leader>a', '', desc = '+ai', mode = { 'n', 'v' } },
+      { '<leader>a', desc = '+ai', mode = { 'n', 'v' } },
       { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI' },
       { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI' },
       { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session' },

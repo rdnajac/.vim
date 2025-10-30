@@ -36,6 +36,7 @@ M.write = function(file, contents)
   safe_io(fd.close, fd)
 end
 
+-- TODO:  vim.fn.writefile?
 ---@param path string
 ---@param lines string[]
 M.write_lines = function(path, lines)

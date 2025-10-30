@@ -27,19 +27,23 @@ function! s:setmanpage(page) abort
 endfunction
 
 let s:filetypes = ['kitty', 'tmux', 'ghostty', 'sshconfig', 'gitconfig', 'gitconfig.chezmoitmpl']
-let s:manpage_map = {
+let s:manmap = {
       \ 'sshconfig': 'ssh',
       \ 'gitconfig': 'git-config(1)',
       \ 'gitconfig.chezmoitmpl': 'git-config(1)',
       \ }
 
-augroup ManLookupSetup
+augroup vimrc_keywordprg
   autocmd!
-  autocmd FileType lua       setlocal keywordprg=:help iskeyword+=-
-  autocmd FileType sh        setlocal keywordprg=:Man  iskeyword-=_
+  " makes autoloaded functions easier to `ciw`
+  autocmd FileType vim setl isk-=# | nnoremap <silent><buffer> <leader>K <Plug>ScripteaseHelp
+  " TODO: override keywordprg?
+  autocmd FileType tex nnoremap <silent><buffer> <leader>K <Plug>(vimtex-doc-package)
+  autocmd FileType lua setlocal keywordprg=:help iskeyword+=-
+  autocmd FileType sh  setlocal keywordprg=:Man  iskeyword-=_
   " for l:ft in items(s:filetypes)
   for ft in s:filetypes
-    let manpage = has_key(s:manpage_map, ft) ? s:manpage_map[ft] : ft
+    let manpage = has_key(s:manmap, ft) ? s:manmap[ft] : ft
     " TODO: execute filetype string concat with , for filetypes instead of loop
     execute printf('autocmd FileType %s call s:setmanpage(%s)', ft, string(ft))
   endfor

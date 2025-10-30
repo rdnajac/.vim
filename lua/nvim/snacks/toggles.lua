@@ -14,6 +14,15 @@ Snacks.toggle.treesitter():map('<leader>ut')
 Snacks.toggle.words():map('<leader>uW')
 Snacks.toggle.zoom():map('<leader>uZ')
 
+-- additional option toggles"
+local options = {
+  autochdir = '<leader>ac',
+}
+
+for opt, key in pairs(options) do
+  Snacks.toggle.option(opt):map(key)
+end
+
 ---@type table<string, snacks.toggle.Opts>
 local toggles = {
   ['<leader>ai'] = {
@@ -23,21 +32,6 @@ local toggles = {
     end,
     set = function(state)
       vim.lsp.inline_completion.enable(state)
-    end,
-  },
-  ['<leader>u\\'] = {
-    name = 'ColorColumn',
-    get = function()
-      ---@diagnostic disable-next-line: undefined-field
-      local cc = vim.opt_local.colorcolumn:get()
-      local tw = vim.bo.textwidth
-      local col = tostring(tw ~= 0 and tw or 81)
-      return vim.tbl_contains(cc, col)
-    end,
-    set = function(state)
-      local tw = vim.bo.textwidth
-      local col = tostring(tw ~= 0 and tw or 81)
-      vim.opt_local.colorcolumn = state and col or ''
     end,
   },
   ['<leader>uv'] = {
@@ -72,16 +66,92 @@ local toggles = {
       end
     end,
   },
+  ['<leader>u\\'] = {
+    name = 'ColorColumn',
+    get = function()
+      ---@diagnostic disable-next-line: undefined-field
+      local cc = vim.opt_local.colorcolumn:get()
+      local tw = vim.bo.textwidth
+      local col = tostring(tw ~= 0 and tw or 81)
+      return vim.tbl_contains(cc, col)
+    end,
+    set = function(state)
+      local tw = vim.bo.textwidth
+      local col = tostring(tw ~= 0 and tw or 81)
+      vim.opt_local.colorcolumn = state and col or ''
+    end,
+  },
 }
+
+if package.loaded['render-markdown'] then
+  toggles['<leader>um'] = {
+    name = 'Render Markdown',
+    get = function()
+      return require('render-markdown.state').enabled
+    end,
+    set = function(state)
+      require('render-markdown').set(state)
+    end,
+  }
+end
+
+-- if MiniDiff ~= nil then
+local defer_redraw = function(t)
+  vim.defer_fn(function()
+    -- vim.cmd([[redraw!]])
+    -- vim.cmd.redraw({ bang = true })
+    Snacks.util.redraw(vim.api.nvim_get_current_win())
+  end, t or 200)
+end
+
+toggles['<leader>uG'] = {
+  name = 'MiniDiff Signs',
+  get = function()
+    return vim.g.minidiff_disable ~= true
+  end,
+  set = function(state)
+    vim.g.minidiff_disable = not state
+    -- MiniDiff[state and 'enable' or 'disable'](0)
+    MiniDiff.toggle(0)
+    defer_redraw()
+  end,
+}
+
+toggles['<leader>go'] = {
+  name = 'MiniDiff Overlay',
+  get = function()
+    local data = MiniDiff.get_buf_data(0)
+    return data and data.overlay == true or false
+  end,
+  set = function(_)
+    MiniDiff.toggle_overlay(0)
+    defer_redraw()
+  end,
+}
+-- end
+
+if package.loaded['treesitter-context'] then
+  local tsc = require('treesitter-context')
+  toggles['<leader>ux'] = {
+    name = 'Treesitter Context',
+    get = tsc.enabled,
+    set = tsc.toggle,
+  }
+end
+
+if package.loaded['sidekick'] then
+  toggles['<leader>uN'] = {
+    name = 'Sidekick NES',
+    get = function()
+      return require('sidekick.nes').enabled
+    end,
+    set = function(state)
+      require('sidekick.nes').enable(state)
+    end,
+  }
+end
 
 for key, opts in pairs(toggles) do
   Snacks.toggle.new(opts):map(key)
 end
-
-local options = {
-  autochdir = '<leader>ac',
-}
-
-for opt, key in pairs(options) do
-  Snacks.toggle.option(opt):map(key)
-end
+-- vim: fdl=1

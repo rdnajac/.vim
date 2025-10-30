@@ -3,6 +3,10 @@ scriptencoding utf-8
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
+set wildignore+=.DS_Store
+set wildignore+=*.o,*.out,*.a,*.so,
+
+set switchbuf+=vsplit
 
 " general {{{2
 set jumpoptions+=stack
@@ -23,7 +27,7 @@ set ignorecase
 set showmatch
 set smartcase
 
-" editor {{{2
+" indent {{{2
 set breakindent
 set linebreak
 set nowrap
@@ -89,6 +93,12 @@ augroup END
 " Section: neovim {{{1
 if !has('nvim')
   call vimrc#init_vim()
+  packadd! nvim.difftool
+  packadd! nvim.undotree
+
+  hi link vimMap @keyword
+  " disable the default popup menu
+  aunmenu PopUp | autocmd! nvim.popupmenu
 else
   set backup backupext=.bak
   let &backupdir = g:stdpath['state'] . '/backup//'
@@ -145,26 +155,35 @@ command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
 command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 
+command! -nargs=* Diff call diff#wrap(<f-args>)
+
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 " }}}1
 " Section: keymaps {{{1
 let g:mapleader = ' '
 let g:maplocalleader = '\'
-" make it easier to toggle letter case
+
+nnoremap <BS> :bprevious<CR>
+nnoremap <C-BS> g;
+
+" make it easier to toggle letter case and go to registers
 nnoremap ` ~
-" use `'` to go to mark instead
+" nnoremap ' "
+
+" the other half of the swap
 nnoremap ~ `
+" nnoremap " '
+
 vmap  :sort<CR>
 
-" <C-c> is a dangerous key to use frequently
-" nmap  ciw
-" stop using <BS> for buffer navigation...
-nmap <BS> ciw
+nnoremap <Space><Space> viW
 
 " <leader> {{{2
 " vim.lsp.hover overrides the default K mapping
 nnoremap <leader>q :q!<CR>
+nnoremap <leader>Q :wqa!<CR>
+nnoremap <leader>E <Cmd>sbp<CR>
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>r <Cmd>call sesh#restart()<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
@@ -188,6 +207,8 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 nnoremap <leader>ga <Cmd>!git add %<CR>
 nnoremap <leader>gN <Cmd>execute '!open' git#url('neovim/neovim')<CR>
 nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
+
+nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 
 " more intutive navigation and centering
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
@@ -218,15 +239,25 @@ nnoremap do     do]c
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
-nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 
 " windows {{{2
+" nnoremap <S-Tab>   <Cmd>wincmd w<CR>
+
 nnoremap <S-Down>  <Cmd>wincmd j<CR>
 nnoremap <S-Up>    <Cmd>wincmd k<CR>
 nnoremap <S-Left>  <Cmd>wincmd h<CR>
 nnoremap <S-Right> <Cmd>wincmd l<CR>
-nnoremap <S-Tab>   <Cmd>wincmd w<CR>
+
 nnoremap <C-q>     <Cmd>wincmd c<CR>
+nnoremap <C-w><C-v> <Cmd>vsp
+
+" term
+tnoremap <S-Down>  <Cmd>wincmd j<CR>
+tnoremap <S-Up>    <Cmd>wincmd k<CR>
+tnoremap <S-Left>  <Cmd>wincmd h<CR>
+tnoremap <S-Right> <Cmd>wincmd l<CR>
+
+ :tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " just like tmux!
 " nnoremap <C-w>-     <C-w>s
@@ -297,7 +328,6 @@ vmap F Sf
 nnoremap <C-e>            <C-^>
 nnoremap <C-w><C-e>  <C-w><C-^>
 " see `:h sbp`
-nnoremap <leader>E <Cmd>sbp<CR>
 
 " TODO: test me!
 " change/delete current word {{{2
@@ -342,7 +372,9 @@ iabbrev n- –
 iabbrev m- —
 
 " you know what I mean... {{{2
-nmap gcap gcip
+nnoremap cw ciw
+nnoremap cW ciW
+nnoremap gcap gcip
 
 " }}}1
 
@@ -352,42 +384,38 @@ Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
-" Plug 'tpope/vim-abolish'
-" Plug 'tpope/vim-capslock'
-" Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-capslock'
+Plug 'tpope/vim-characterize'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-git'
-" Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-sensible'
-" Plug 'tpope/vim-scriptease'
-" Plug 'tpope/vim-tbone'
-  Plug 'tpope/vim-unimpaired'
-" Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-vinegar'
 if !has('nvim')
   Plug 'dense-analysis/ale'
   Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
-  Plug 'wellle/targets.vim'
-  Plug 'wellle/tmux-complete.vim'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
   " Plug 'tpope/vim-commentary'
+  Plug 'wellle/targets.vim'
+  Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
-  call plug#end() " don't plug#end() if neovim...
 else
+  Plug 'folke/tokyonight.nvim'
   Plug 'saxon1964/neovim-tips'
-  packadd! nvim.difftool
-  packadd! nvim.undotree
-
-  hi link vimMap @keyword
-  " disable the default popup menu
-  aunmenu PopUp | autocmd! nvim.popupmenu
+  Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
+  call plug#end() " don't plug#end() if neovim...
 " vim: foldlevelstart=1 foldmethod=marker

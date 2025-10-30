@@ -22,9 +22,9 @@ opts.on_attach = function(client, bufnr)
     })
   end
 
-  if client:supports_method('textDocument/documentSymbol') then
-    nv.lsp.docsymbols.attach(client, bufnr)
-  end
+  -- if client:supports_method('textDocument/documentSymbol') then
+  --   nv.lsp.docsymbols.attach(client, bufnr)
+  -- end
 
   if client:supports_method('textDocument/inlayHint') then
     vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })

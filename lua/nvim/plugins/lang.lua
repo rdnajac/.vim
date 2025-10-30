@@ -15,24 +15,8 @@ return {
       ensure_installed = {},
     },
   },
-  { 'SmiteshP/nvim-navic' },
+  -- { 'SmiteshP/nvim-navic' },
   -- { 'b0o/SchemaStore.nvim' },
-  {
-    'R-nvim/R.nvim',
-    ft = { 'r', 'rmd', 'quarto' },
-    config = function()
-      vim.g.rout_follow_colorscheme = true
-      ---@module "r"
-      ---@type RConfigUserOpts
-      local opts = {
-        R_args = { '--quiet', '--no-save' },
-        -- pdfviewer = 'skim',
-        user_maps_only = true,
-        quarto_chunk_hl = { highlight = false },
-      }
-      require('r').setup(opts)
-    end,
-  },
   {
     'MeanderingProgramMer/render-markdown.nvim',
     --- @module "render-markdown"
@@ -65,6 +49,8 @@ return {
         sign = false,
         width = 'full',
         position = 'inline',
+
+        left_pad = { 0, 1, 2, 3, 4, 5 },
         -- icons = '',
       },
       html = {
@@ -72,18 +58,5 @@ return {
         enabled = false,
       },
     },
-    after = function()
-      Snacks.toggle
-        .new({
-          name = 'Render Markdown',
-          get = function()
-            return require('render-markdown.state').enabled
-          end,
-          set = function(state)
-            require('render-markdown').set(state)
-          end,
-        })
-        :map('<leader>um')
-    end,
   },
 }

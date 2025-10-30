@@ -19,7 +19,7 @@ nnoremap <leader>df <Cmd>call fold#status()<CR>
 
 " open closed folds with in normal mode
 nnoremap <expr> h      fold#open_or_h()
-nnoremap <expr> <Left> fold#open_or_h()
+" nnoremap <expr> <Left> fold#open_or_h()
 
 " better search if auto pausing folds
 " set foldopen-=search

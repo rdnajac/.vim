@@ -35,9 +35,6 @@ local M = {
   {
     'nvim-treesitter/nvim-treesitter',
     build = vim.cmd.TSUpdate,
-    -- build = function()
-    --   require('nvim-treesitter').update(nil, { summary = true })
-    -- end,
     keys = {
       { '<C-Space>', nv.treesitter.selection.start },
       { mode = 'x', '<C-Space>', nv.treesitter.selection.increment },
@@ -106,6 +103,8 @@ local M = {
     --   })
     -- end,
   },
+  -- FIXME: main branch is `master`...
+  -- { 'nvim-treesitter/nvim-treesitter-context' },
 }
 
 return M

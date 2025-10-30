@@ -1,6 +1,5 @@
-" TODO: do i want this
 function! s:nvim_close_float() abort
-  if luaeval("require('snacks.util').is_float()")
+  if luaeval('Snacks and Snacks.util.is_float()')
     quit
   endif
 endfunction

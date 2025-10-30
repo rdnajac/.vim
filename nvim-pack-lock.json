@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "LazyVim": {
+      "rev": "064e6105",
+      "src": "http://github.com/LazyVim/LazyVim.git"
+    },
     "R.nvim": {
       "rev": "fef9903",
       "src": "https://github.com/R-nvim/R.nvim.git"
@@ -9,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "8743384",
+      "rev": "afc4f4d",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -21,7 +25,7 @@
       "src": "https://git::@github.com/bullets-vim/bullets.vim.git"
     },
     "chezmoi.vim": {
-      "rev": "ca5f2ed",
+      "rev": "03b8d12",
       "src": "http://github.com/alker0/chezmoi.vim.git"
     },
     "cmp-r": {
@@ -33,7 +37,7 @@
       "src": "https://github.com/monaqa/dial.nvim.git"
     },
     "lazydev.nvim": {
-      "rev": "01bc2aa",
+      "rev": "c2dfe35",
       "src": "https://github.com/folke/lazydev.nvim.git"
     },
     "mason.nvim": {
@@ -41,7 +45,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "d1a9158",
+      "rev": "ee4a4a4",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -49,7 +53,7 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "a9b2fb5",
+      "rev": "64e0a1c",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-navic": {
@@ -57,33 +61,45 @@
       "src": "https://github.com/SmiteshP/nvim-navic.git"
     },
     "nvim-treesitter": {
-      "rev": "c53bb10a",
+      "rev": "645f42e8",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
-    "oil.nvim": {
-      "rev": "7e1cd77",
-      "src": "https://github.com/stevearc/oil.nvim.git"
+    "nvim-treesitter-context": {
+      "rev": "ec308c7",
+      "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "bfd67f1",
+      "rev": "10126ef",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "bd1f79a",
+      "rev": "6c53e5f",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "b1a9010",
+      "rev": "4bb1ce1",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
-      "rev": "19d461d",
+      "rev": "411503d",
       "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
-      "rev": "4fe1b0c",
+      "rev": "2642dbb",
       "src": "https://github.com/folke/tokyonight.nvim.git"
+    },
+    "vim-abolish": {
+      "rev": "dcbfe06",
+      "src": "https://git::@github.com/tpope/vim-abolish.git"
+    },
+    "vim-capslock": {
+      "rev": "2bd1d47",
+      "src": "https://git::@github.com/tpope/vim-capslock.git"
+    },
+    "vim-characterize": {
+      "rev": "a8bffac",
+      "src": "https://git::@github.com/tpope/vim-characterize.git"
     },
     "vim-dispatch": {
       "rev": "a2ff28a",
@@ -105,16 +121,32 @@
       "rev": "485e38f",
       "src": "http://github.com/tpope/vim-git.git"
     },
+    "vim-rsi": {
+      "rev": "4554063",
+      "src": "https://git::@github.com/tpope/vim-rsi.git"
+    },
+    "vim-scriptease": {
+      "rev": "cdb5981",
+      "src": "https://git::@github.com/tpope/vim-scriptease.git"
+    },
+    "vim-tbone": {
+      "rev": "79d2819",
+      "src": "https://git::@github.com/tpope/vim-tbone.git"
+    },
     "vim-unimpaired": {
       "rev": "db65482",
       "src": "https://git::@github.com/tpope/vim-unimpaired.git"
+    },
+    "vim-vinegar": {
+      "rev": "bb1bcdd",
+      "src": "https://git::@github.com/tpope/vim-vinegar.git"
     },
     "vimtex": {
       "rev": "be9deac3",
       "src": "http://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {
-      "rev": "b4177e3",
+      "rev": "3aab214",
       "src": "https://github.com/folke/which-key.nvim.git"
     }
   }

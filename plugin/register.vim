@@ -4,9 +4,9 @@ nnoremap dD <Cmd>%d<CR>
 
 " delete/paste without yanking
 nnoremap dy "_dd
-vnoremap <leader>d "_d
-" vnoremap <leader>p "_dP
 vnoremap p "_dP
+vnoremap <leader>c "_c
+vnoremap <leader>d "_d
 
 " yank path current file path, with and without line number
 nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>

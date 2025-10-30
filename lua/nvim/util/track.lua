@@ -1,30 +1,34 @@
-_G.t = { vim.uv.hrtime() }
 local M = {}
 
 -- TODO:  split up logging and printing
 --- log a message with timing info
 ---@param msg string
 ---@param store? table optional store (defaults to _G.t)
-function M.log(store, msg)
+function M.log(msg, store)
   store = store or _G.t
   local now = vim.uv.hrtime()
-  local i = #store
-  local prev = store[i]
-  table.insert(store, now)
+  local time_since_t0 = (now - store[1]) / 1e6
 
-  local abs = (now - store[1]) / 1e6
+  store[msg and msg or #store + 1] = time_since_t0
+
+  local i = #store
+  local prev = store[i - 1] and (store[i - 1] < store[1] and store[1] or store[i - 1]) or store[1]
   local diff = (now - prev) / 1e6
 
   -- Snacks.notify.warn(('%2d: %-16s (%7.3f) %+8.3f ms'):format(i, msg, abs, diff))
-  Snacks.notify.warn(('%2d: %-16s %+8.3f ms'):format(i, msg, diff))
+  -- Snacks.notify.warn(('%2d: %-16s %+8.3f ms'):format(i, msg or 'lap', diff))
 end
 
-setmetatable(_G.t, { __call = M.log })
+setmetatable(_G.t, {
+  __call = function(_, ...)
+    return M.log(...)
+  end,
+})
 
 --- @param ev table event data
 require('nvim.util').lazyload(function(ev)
   t(ev.event)
-end, { 'VimEnter' })
+end, { 'VimEnter', 'UIEnter', 'BufReadPost' })
 
 --- Wrap a function so it logs when called
 ---@param label string

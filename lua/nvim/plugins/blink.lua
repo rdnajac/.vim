@@ -1,3 +1,4 @@
+-- `https://cmp.saghen.dev/`
 -- use the winborder or default to 'single'
 -- local border = vim.o.winborder == '' and 'single' or nil
 -- TODO: make a toggle v vim.b.completion with nv.munchies.flag

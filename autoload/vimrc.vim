@@ -1,7 +1,7 @@
 function! vimrc#init_vim() abort
   call vim#defaults#()
   call vim#sensible#()
-  call vim#toggle#()
+  call vimrc#toggles()
   color scheme " set the default colorscheme once
 
   " BUG: still does not work with the version of vim on homebrew
@@ -24,4 +24,12 @@ function! vimrc#setmarks() abort
       call setpos("'" . toupper(l:char), [0, l:num, 1, 0])
     endif
   endfor
+endfunction
+
+function! vimrc#toggles() abort
+  nnoremap yol :set list!<BAR>set list?<CR>
+  nnoremap yon :set number!<BAR>redraw!<BAR>set number?<CR>
+  nnoremap yos :set spell!<BAR>set spell?<CR>
+  nnoremap yow :set wrap!<BAR>set wrap?<CR>
+  nnoremap yo~ :set autochdir!<BAR>set autochdir?<CR>
 endfunction

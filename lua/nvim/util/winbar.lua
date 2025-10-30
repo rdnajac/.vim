@@ -16,7 +16,6 @@ local M = {
       if bt == 'acwrite' then
         local ft = opts.ft or vim.bo[bufnr].filetype
         if ft == 'nvim-pack' then dirty_path = vim.g.plug_home
-        -- elseif ft == 'oil' then dirty_path = require('oil').get_current_dir()
       end
       elseif bt == 'terminal' then
         dirty_path = vim.b[vim.api.nvim_get_current_buf()].osc7_dir
@@ -30,7 +29,7 @@ local M = {
       "%{% &readonly ? ' ' : '%M' %}",
       "%{% &busy     ? '◐ ' : ''   %}",
       "%{% &busy     ? '◐ ' : ''   %}",
-      -- FIXME: 
+      -- FIXME:
       -- [[%{% &ff ~=# 'unix'  ? 'ff=%&ff' : ''  %}]],
       -- [[%{% &fenc ~=# 'utf-8'  ? 'fenc=%&fenc' : ''  %}]],
     })
@@ -39,7 +38,12 @@ local M = {
   b = function()
     ---@type fun():string[]|nv.status.Component
     local parts = {
-      nv.status.buffer,
+      function()
+        if vim.bo.buftype == 'terminal' then
+          return "%{% &buftype == 'terminal' ? ' %{&channel}' : '' %}"
+        end
+        return "%{% &buflisted ? '%n' : '󱪟 ' %}" .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
+      end,
       nv.status.treesitter,
       nv.status.lsp,
       nv.status.blink,
@@ -48,7 +52,9 @@ local M = {
       .iter(parts)
       :map(function(p)
         local value
-        if type(p) == 'function' then
+        if type(p) == 'string' then
+          value = p
+        elseif type(p) == 'function' then
           value = p()
         elseif type(p) == 'table' then
           if p.cond == nil or p.cond() then
@@ -79,7 +85,7 @@ local M = {
     if nv.status.diagnostic.cond(vim.api.nvim_get_current_buf()) then
       return nv.status.diagnostic[1]()
     end
-    return '%<' .. table.concat(require('nvim.util.lsp.docsymbols')(), nv.icons.sep.item.right)
+    -- return '%<' .. table.concat(require('nvim.util.lsp.docsymbols')(), nv.icons.sep.item.right)
   end,
 }
 
@@ -93,7 +99,7 @@ function M.render(a, b, c)
   local sec_b = b and sec('ab', sep .. ' ') .. sec('b', b) .. sec('bc', sep) or sec('c', sep)
   local sec_c = c and sec('c', c) or ''
   -- return string.format('%s%s%s', sec_a, sec_b, sec_c)
-  local ret = {sec_a, sec_b, sec_c}
+  local ret = { sec_a, sec_b, sec_c }
   return table.concat(ret)
 end
 
@@ -104,6 +110,10 @@ M.winbar = function(opts)
   opts.active = opts.active or (opts.win == tonumber(vim.g.actual_curwin))
   opts.bt = vim.bo[opts.bufnr].buftype
   opts.ft = vim.bo[opts.bufnr].filetype
+
+  if opts.ft == 'netrw' then
+    return nv.netrw.winbar()
+  end
 
   local winbar = M.a(opts)
 
@@ -119,7 +129,7 @@ end
 M.debug = function(opts)
   opts = opts or {}
   opts.use_winbar = true
-  return vim.api.nvim_eval_statusline(nv.winbar(0, 0, true), opts)
+  return vim.api.nvim_eval_statusline(nv.winbar(opts))
 end
 
 return setmetatable(M, {

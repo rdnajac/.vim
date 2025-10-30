@@ -67,11 +67,15 @@ local mini_icon_keys = {
   'os',
 }
 
+---@param key "directory"|"extension"|"file"|"filetype"|"os"
+---@param lookup string
+---@return string|"" icon, string? hl always return a string, hl group on success
 local function get_mini_icon(_, key, lookup)
   if not _G.MiniIcons then
-    return ' '
+    return ' ', nil
   end
-  return _G.MiniIcons.get(key, lookup) .. ' ' or ' '
+  local icon, hl = _G.MiniIcons.get(key, lookup)
+  return icon .. ' ', hl
 end
 
 for _, category in ipairs(mini_icon_keys) do

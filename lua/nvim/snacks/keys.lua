@@ -5,15 +5,15 @@ local notifier = true -- TODO: dynamic keymaps for message history
 -- TODO: add groups and icons
 -- stylua: ignore
 local keys = {
-{ '<leader><space>', function() Snacks.picker.smart() end,   desc = 'Smart Find Files'              },
+{ '<leader>F', function() Snacks.picker.smart() end,         desc = 'Smart Find Files'              },
 { '<leader>,', function() Snacks.picker.buffers() end,       desc = 'Buffers'                       },
 { '<leader>/', function() Snacks.picker.grep() end,          desc = 'Grep'                          },
 { '<leader>e', function() Snacks.explorer() end,             desc = 'File Explorer'                 },
 { '<leader>p', function() Snacks.picker.resume() end,        desc = 'Resume Picking'                },
 { '<leader>P', function() Snacks.picker() end,               desc = 'Snacks Pickers'                },
+{ ',,',        function() Snacks.picker.buffers() end,       desc = 'Buffers'                       },
 
--- buffers
-{ ',,',         function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
+{ '<leader>b', group = 'buffers', icon = { icon = '' } },
 { '<leader>bb', function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
 { '<leader>bB', function() Snacks.picker.buffers(all) end,   desc = 'Buffers (all)'                 },
 { '<leader>bl', function() Snacks.picker.lines() end,        desc = 'Buffer Lines'                  },
@@ -21,22 +21,21 @@ local keys = {
 { '<leader>bd', function() Snacks.bufdelete() end,           desc = 'Delete Buffer'                 },
 { '<leader>bD', function() Snacks.bufdelete.other() end,     desc = 'Delete Other Buffers'          },
 
--- code
+{ '<leader>c', group = 'code',},-- icon = { icon = '' } },
 { '<leader>cd', function() Snacks.picker.diagnostics() end,          desc = 'Diagnostics'           },
 { '<leader>cD', function() Snacks.picker.diagnostics_buffer() end,   desc = 'Buffer Diagnostics'    },
 
--- profiler
 { '<leader>dp', group = 'profiler', icon = {icon = '⚡' }},
 { '<leader>dps>', function() Snacks.profiler.scratch() end, desc = '' },
 
--- find
+{ '<leader>f', group = 'find' },
 { '<leader>fb', function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
 { '<leader>ff', function() Snacks.picker.files() end,        desc = 'Find Files'                    },
 { '<leader>fg', function() Snacks.picker.git_files() end,    desc = 'Find Git Files'                },
 { '<leader>fp', function() Snacks.picker.projects() end,     desc = 'Projects'                      },
 { '<leader>fr', function() Snacks.picker.recent() end,       desc = 'Recent'                        },
 
--- git
+{ '<leader>g', group = 'git' },
 { '<leader>gB', function() Snacks.gitbrowse() end,           desc = 'Git Browse'                    },
 { '<leader>gb', function() Snacks.picker.git_branches() end, desc = 'Git Branches'                  },
 { '<leader>gd', function() Snacks.picker.git_diff() end,     desc = 'Git Diff'                      },
@@ -47,7 +46,10 @@ local keys = {
 { '<leader>gS', function() Snacks.picker.git_stash() end,    desc = 'Git Stash'                     },
 { '<leader>gg', function() Snacks.lazygit() end,             desc = 'Lazygit' ,                     },
 
--- search/grep
+{ '<leader>s', group = 'search' },
+{ '<leader>sa', function() Snacks.picker.files() end,               desc = 'Find Files'            },
+{ '<leader>sg', function() Snacks.picker.grep() end,                desc = 'Grep'                  },
+{ '<leader>sG', function() Snacks.picker.git_grep() end,           desc = 'Git Grep'              },
 { '<leader>s"', function() Snacks.picker.registers() end,            desc = 'Registers'             },
 { '<leader>s/', function() Snacks.picker.search_history() end,       desc = 'Search History'        },
 { '<leader>s:', function() Snacks.picker.command_history() end,      desc = 'Command History'       },
@@ -68,7 +70,9 @@ local keys = {
 { '<leader>sR', function() Snacks.picker.resume() end,               desc = 'Resume'                },
 { '<leader>sw', function() Snacks.picker.grep_word() end,            desc = 'Grep <cword>'          },
 { '<leader>su', function() Snacks.picker.undo() end,                 desc = 'Undo History'          },
--- ui
+
+{ '<leader>u', group = 'ui' },
+{ '<leader>uT', function() Snacks.picker.themes() end,              desc = 'Themes'                 },
 { '<leader>uC', function() Snacks.picker.colorschemes() end,         desc = 'Colorschemes'          },
 { '<leader>uz', function() Snacks.zen() end,                         desc = 'Zen Mode'              },
 { '<leader>z',  function() Snacks.zen() end,                         desc = 'Toggle Zen Mode'       },

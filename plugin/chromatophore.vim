@@ -10,11 +10,17 @@ let g:chromatophore_groups = [
       \ 'WinBar',
       \ 'helpSectionDelim',
       \ 'SnacksScratchTitle',
+      \ 'SnacksDashboardHeader',
+      \ 'SnacksDashboardFooter',
+      \ 'SnacksDashboardTerminal',
       \  '@markup.raw.markdown_inline',
       \ 'StatusLineNC',
       \ 'StatusLineTermNC',
       \ ]
 
+      " \ 'SnacksDashboardDesc',
+      " \ 'SnacksDashboardIcon',
+      " \ 'SnacksDashboardKey',
 augroup chromatophore
   autocmd!
   if has('nvim')

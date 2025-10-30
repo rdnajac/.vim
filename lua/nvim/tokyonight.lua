@@ -2,12 +2,6 @@ vim.g.transparent = true
 
 local M = {
   'folke/tokyonight.nvim',
-  --- @type ColorScheme
-  colors = nil,
-  --- @type tokyonight.Highlights
-  groups = nil,
-  --- @type tokyonight.Config
-  opts = nil,
 }
 
 local bg = {
@@ -18,26 +12,45 @@ local bg = {
   lualine = '#3b4261',
 }
 
-local normal_bg = bg.black
+---@type ColorScheme
+local mycolors = {
+  blue = '#14afff',
+  green = '#39ff14',
+}
 
-local opts = {
+-- stylua: ignore
+---@param colors ColorScheme
+---@return tokyonight.Highlights
+local myhighlights = function(colors)
+  return {
+    Normal        = { bg = bg.black },
+    Cmdline       = { bg = bg.black },
+    Statement     = { fg = colors.red },
+    Special       = { fg = colors.red, bold = true },
+    SpellBad      = { bg = colors.red },
+    WinBar        = { bg = bg.lualine },
+    WinBorder     = { bg = bg.lualine },
+    SpecialWindow = { bg = bg.eigengrau },
+  }
+end
+
+--- @type tokyonight.Config
+require('tokyonight').setup({
   style = 'night',
   transparent = vim.g.transparent == true,
-
   styles = {
     comments = { italic = true },
     keywords = { italic = false, bold = true },
-    -- variables = { italic = true },
+    variables = { italic = false },
     floats = vim.g.transparent == true and 'transparent' or nil,
     sidebars = vim.g.transparent == true and 'transparent' or nil,
   },
   dim_inactive = true,
   on_colors = function(colors)
-    colors.blue = '#14afff'
-    colors.green = '#39ff14'
+    vim.tbl_extend('force', colors, mycolors)
   end,
   on_highlights = function(hl, colors)
-    -- TODO:
+    vim.tbl_extend('force', hl, myhighlights(colors))
     hl['Normal'] = (normal_bg and { bg = normal_bg }) or nil
     -- hl['LineNr'] = { fg = '#3B4261', bg = '#111111' }
     hl['Cmdline'] = { bg = bg.black }
@@ -47,10 +60,11 @@ local opts = {
     hl['WinBar'] = { bg = bg.lualine }
     hl['WinBorder'] = { bg = bg.lualine }
     hl['SpecialWindow'] = { bg = bg.eigengrau }
-    hl['Green'] = { fg = colors.green }
+    -- hl['Green'] = { fg = colors.green }
     -- FIXME: check if this was interfering with something
     -- hl['RenderMarkdownCode'] = { bg = bg.tokyonight }
   end,
+  -- TODO: check against vim.pack.get plugins
   plugins = {
     all = false,
     -- aerial = true,
@@ -63,24 +77,29 @@ local opts = {
     ['render-markdown'] = true,
     sidekick = true,
     snacks = true,
-    -- [ 'treesittr-contetxt' ] = true,
-    trouble = true,
+    ['treesitter-context'] = true,
+    -- trouble = true,
     ['which-key'] = true,
   },
-}
+})
 
-M.config = function()
-  -- optionally, run setup to cache colors and groups inside tokyonight module
-  require('tokyonight').setup(opts)
-  M.colors, M.groups = require('tokyonight').load(M.opts)
-  -- `load()` does no trigger ColorScheme autocommands, so do it here
-  vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+--- @type ColorScheme, tokyonight.Highlights, tokyonight.Config
+M.colors, M.groups, M.opts = require('tokyonight').load()
+-- `load()` won't trigger ColorScheme autocommand, so do it here
+vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+
+-- write colors opts and grouos to a file: ~/.vim/tokyonight/debug/{colors,opts,groups}.lua
+-- use nv.file.write
+M.debug = function()
+  local debug_dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'tokyonight', 'debug')
+  for _, fname in ipairs({ 'colors', 'groups', 'opts' }) do
+    nv.file.write(vim.fs.joinpath(debug_dir, fname .. '.lua'), 'return ' .. vim.inspect(M[fname]))
+  end
 end
 
----@param opts? tokyonight.Config
 ---@return string
-function M.generate_vim_scheme(opts)
-  local colors, groups = require('tokyonight').load(opts)
+function M.generate_vim_scheme()
+  local groups = M.groups
 
   local lines = {
     'hi clear',
@@ -110,6 +129,7 @@ function M.generate_vim_scheme(opts)
     end)
     :totable()
 
+  -- TODO: combine these?
   table.sort(names)
 
   -- build highlight definitions
@@ -191,15 +211,13 @@ local want = {
   -- TODO: use the gen function in this module
 }
 
-local build = function()
-  -- TODO: make sure config is loaded
+M.build = function()
   local extras = require('tokyonight.extra').extras
   local style = 'midnight'
   local style_name = ''
-  -- local colors = M.colors
-  -- local groups = M.groups
-  -- local opts = M.opts
-  local colors, groups = require('tokyonight').load(opts)
+  local colors = M.colors
+  local groups = M.groups
+  local opts = M.opts
   local dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'tokyonight')
 
   for name, location in pairs(want) do
@@ -229,7 +247,5 @@ local build = function()
     end
   end
 end
-
--- M.build = build
 
 return M

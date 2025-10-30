@@ -1,26 +1,13 @@
 scriptencoding utf-8
+" TODO: util functions to do stuff like count lines (using v:vars)
 
 function! fold#status()
   verbose set foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?
 endfunction
 
-function! fold#text_lua()
-  let l:start = v:foldstart
-  let l:lines = v:foldend - l:start + 1
-  let l:open = getline(l:start)
-  let l:next = getline(l:start + 1)
-
-  if indent(l:start + 1) > indent(l:start)
-    return substitute(l:open, '{\s*$', '', '')
-  endif
-  return l:open
-endfunction
-
 " TODO: trim trailing dots after closing bar
+" TODO: indent folds
 function! fold#text() abort
-  if &ft ==# 'lua'
-    return fold#text_lua()
-  endif
   let s:foldchar = '.'
   let l:line1 = getline(v:foldstart)
 

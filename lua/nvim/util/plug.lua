@@ -1,21 +1,24 @@
-local nv = _G.nv or require('nvim.util')
+--- what junegunn/vim-plug returns as `g:plugs`
+---@class vimPlugSpec
+---@field uri string Git URL of the plugin repository.
+---@field dir string Local directory where the plugin is installed.
+---@field frozen integer Whether the plugin is frozen (0 or 1).
+---@field branch string Branch name if specified.
 
---- Describes the raw table values passed to to construct a `Plugin`.
---- Most fields are optional and most are normalized.
---- @class PluginModule
---- @field [1] string The plugin name in `user/repo` format.
---- @field enabled? boolean|fun():boolean
+---@alias PluginTable table<string, vimPlugSpec>
+vim.g.plugs = vim.g.plugs or {}
+
+local nv = _G.nv or require('nvim.util')
 
 --- @class Plugin
 --- @field [1] string The plugin name in `user/repo` format.
 --- @field enabled boolean Defaults to `true`.
 --- @field name string The plugin name as evauluated by `vim.pack`.
---- @field did_setup boolean Tracks if `setup()` has been called.
+--- @field did_setup? boolean Tracks if `setup()` has been called.
 --- @field after? fun():nil Commands to run after the plugin is loaded.
 --- @field build? string|fun():nil Callback after plugin is installed/updated.
 --- @field config? boolean|fun():nil Setup fun or, if true, mod.setup({})
 --- @field event? string |string[] Autocommand event(s) to lazy-load on.
---- @field ft? string|string[] Filetypes to lazy-load on.
 --- @field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
 --- @field keys? table|fun():table Keymaps to bind for the plugin.
 --- @field opts? table|fun():table Options to pass to the plugin's `setup()`.
@@ -41,12 +44,18 @@ function Plugin.new(t)
   self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
   -- store things to be passed to `vim.pack.Spec.data`
   self.data = {
-    build = self.build,
+    -- build = self.build, -- TODO:
     setup = function()
       return self:setup()
     end,
   }
+  -- TODO:
+  -- if config is false, skip setup entirely
+  -- a missing did_setup should skip setup entirely
+  -- self.did_setup = self.config ~= false and false or nil
   self.did_setup = false
+
+  -- if config is truem set missing opts to {}
   if not self.opts and self.config == true then
     self.opts = {} -- HACK: handles `config = true`
   end
@@ -91,21 +100,19 @@ end
 --- Call the `Plugin`'s `config` function if it exists, otherwise
 --- call the named module's `setup` function with `opts` they exist.
 function Plugin:setup()
-  if self.did_setup then
-    return
-  end
-  -- if no lazy-loading, call setup now
-  if not (self.event or self.ft or self.lazy == true) then
-    self:_setup()
-  else
-    local event = self.event and self.event or self.ft and 'FileType' or 'VimEnter'
-    nv.lazyload(function()
+  if self.did_setup == false then
+    if self.event or self.lazy == true then
+      nv.lazyload(function()
+        self:_setup()
+      end, self.event)
+    else
       self:_setup()
-    end, event, self.ft)
+    end
+    self:register_keys()
   end
-  self:register_keys()
 end
 
+-- TODO: this has been fixed in a recent update. revise:
 -- breaks on initial install
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
   callback = function(event)
@@ -132,100 +139,62 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
   end,
 })
 
-local M = {
-  unloaded = function()
-    local names = {}
-    for _, p in ipairs(vim.pack.get()) do
-      if not p.active then
-        names[#names + 1] = p.spec.name
-      end
-    end
-    return names
+local command = vim.api.nvim_create_user_command
+
+-- plug commands
+command('PlugUpdate', function(opts)
+  local plugs = #opts.fargs > 0 and opts.fargs or nil
+  vim.pack.update(plugs, { force = opts.bang })
+end, {
+  nargs = '*',
+  bang = true,
+  complete = function()
+    return vim.tbl_map(function(p)
+      return p.spec.name
+    end, vim.pack.get())
   end,
+})
+
+command('PlugStatus', function(opts)
+  local plugin = nv.is_nonempty_string(opts.fargs) and opts.fargs or nil
+  vim._print(true, vim.pack.get(plugin, { info = opts.bang }))
+end, {
+  bang = true,
+  nargs = '*',
+  complete = function()
+    return vim.tbl_map(function(p)
+      return p.spec.name
+    end, vim.pack.get())
+  end,
+})
+
+command('PlugClean', function(opts)
+  local plugs = #opts.fargs > 0 and opts.fargs or nv.plug.unloaded()
+  vim.pack.del(plugs)
+end, {
+  nargs = '*',
+  complete = function(_, _, _)
+    return nv.plug.unloaded()
+  end,
+})
+
+return setmetatable({
   get_keys = function()
-    return vim.tbl_map(function(k)
-      return nv.get(k)
+    return vim.tbl_map(function(p)
+      return nv.get(p)
     end, vim.tbl_values(keys))
   end,
-}
-
-local register_commands = function()
-  local command = vim.api.nvim_create_user_command
-
-  -- plug commands
-  command('PlugUpdate', function(opts)
-    local plugs = #opts.fargs > 0 and opts.fargs or nil
-    vim.pack.update(plugs, { force = opts.bang })
-  end, {
-    nargs = '*',
-    bang = true,
-    complete = function()
-      return vim.tbl_map(function(p)
+  unloaded = function()
+    return vim.tbl_map(
+      function(p)
         return p.spec.name
+      end,
+      vim.tbl_filter(function(p)
+        return not p.active
       end, vim.pack.get())
-    end,
-  })
-  command('PlugStatus', function(opts)
-    local plugin = nv.is_nonempty_string(opts.fargs) and opts.fargs or nil
-    vim._print(true, vim.pack.get(plugin, { info = opts.bang }))
-  end, {
-    bang = true,
-    nargs = '*',
-    complete = function()
-      return vim.tbl_map(function(p)
-        return p.spec.name
-      end, vim.pack.get())
-    end,
-  })
-  command('Plugins', function()
-    local active, inactive = {}, {}
-    for _, p in ipairs(vim.pack.get()) do
-      if p.active then
-        table.insert(active, p.spec.name)
-      else
-        table.insert(inactive, p.spec.name)
-      end
-    end
-    print(
-      string.format(
-        'Plugins: %d total (%d active, %d inactive)',
-        #active + #inactive,
-        #active,
-        #inactive
-      )
     )
-    print('\nActive:\n' .. table.concat(active, '\n'))
-    print('\nInactive:\n' .. table.concat(inactive, '\n'))
-  end, {})
-
-  local unloaded = nv.plug.unloaded()
-
-  command('PlugClean', function(opts)
-    local plugs = #opts.fargs > 0 and opts.fargs or unloaded
-    vim.pack.del(plugs)
-  end, {
-    nargs = '*',
-    complete = function(_, _, _)
-      return unloaded
-    end,
-  })
-end
-
-nv.lazyload(function()
-  register_commands()
-end, 'CmdLineEnter')
-
---- what junegunn/vim-plug returns as `g:plugs`
----@class vimPlugSpec
----@field uri string Git URL of the plugin repository.
----@field dir string Local directory where the plugin is installed.
----@field frozen integer Whether the plugin is frozen (0 or 1).
----@field branch string Branch name if specified.
-
----@alias PluginTable table<string, vimPlugSpec>
-vim.g.plugs = vim.g.plugs or {}
-
-return setmetatable(M, {
+  end,
+}, {
   __call = function(_, k)
     return Plugin.new(k)
   end,

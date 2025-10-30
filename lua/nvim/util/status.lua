@@ -1,19 +1,12 @@
 ---@class nv.status.Component
----@field [1] fun():string[]|string[]
----@field cond? fun():boolean
+---@field [1] fun(bufnr):string[]|string[]
+---@field cond? fun(bufnr):boolean
 ---@field color? any
 
 local nv = _G.nv or require('nvim.util')
 local icons = nv.icons
 
 local M = {}
-
-M.buffer = function()
-  if vim.bo.buftype == 'terminal' then
-    return [[ %{&channel}]]
-  end
-  return "%{% &buflisted ? '%n' : '󱪟 ' %}" .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
-end
 
 ---@type nv.status.Component
 M.blink = {
@@ -25,6 +18,7 @@ M.blink = {
   end,
 }
 
+---@type nv.status.Component
 M.diagnostic = {
   ---@param bufnr? number
   ---@return string
@@ -82,10 +76,27 @@ M.treesitter = function(bufnr)
   ---@diagnostic disable-next-line: invisible
   local queries = hl and hl._queries
   if type(queries) == 'table' then
-    return vim.tbl_map(icons.filetype, vim.tbl_keys(queries))
+    return vim.tbl_map(function(query)
+      if query == vim.bo.filetype then
+        return ' '
+      end
+      return icons.filetype[query]
+    end, vim.tbl_keys(queries))
   end
   return {}
 end
+
+-- TODO: add me
+M.profiler = Snacks.profiler.status
+-- {
+--   function()
+--     return ("%s %d events"):format(M.config.icons.status, #M.core.events)
+--   end,
+--   color = "DiagnosticError",
+--   cond = function()
+--     return M.core.running
+--   end,
+-- }
 
 return setmetatable(M, {
   __call = function()

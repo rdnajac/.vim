@@ -1,10 +1,4 @@
---- This is the main entry point for plugin configurations using the new,
---- native `vim.pack` plugin manager in neovim. This module return a list of
---- of plugin specifications to be used by `vim.pack` in a format similar to
---- `lazy.nvim`'s LazySpec
-
 local M = {
-  require('nvim.tokyonight'),
   require('nvim.snacks'),
 }
 
