@@ -51,17 +51,16 @@ set sessionoptions-=terminal  " don't save terminals
 set viewoptions-=options      " keep mkview minimal
 
 " ui {{{2
+set lazyredraw
+set termguicolors
 let &laststatus = has('nvim') ? 3 : 2
 set statusline=%!vimline#statusline#()
 
+" statuscolumn
 " set foldcolumn=1
+" set numberwidth=3
 " set signcolumn=number
 set signcolumn=auto
-" set numberwidth=3
-
-set lazyredraw
-set termguicolors
-
 
 augroup vimrc_ui
   " no cursorline in insert mode
@@ -156,17 +155,14 @@ let g:maplocalleader = '\'
 nnoremap <BS> :bprevious<CR>
 nnoremap <C-BS> g;
 
-" make it easier to toggle letter case and go to registers
 nnoremap ` ~
-" nnoremap ' "
-
-" the other half of the swap
 nnoremap ~ `
+
+nnoremap <expr> ' '"'
 " nnoremap " '
 
+" TODO: sort opfunc
 vmap  :sort<CR>
-
-nnoremap <Space><Space> viW
 
 " <leader> {{{2
 " vim.lsp.hover overrides the default K mapping

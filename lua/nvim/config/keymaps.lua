@@ -23,12 +23,6 @@ end, { desc = 'Quickfix List' })
 
 vim.keymap.set('n', 'yu', nv.debug.print, { desc = 'Debug print <cword>' })
 
--- stylua: ignore start
-vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
-vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
-vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
--- stylua: ignore end
-
 local shortcuts = {
   n = 'nvim/init',
   s = 'nvim/snacks',

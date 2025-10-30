@@ -1,19 +1,35 @@
-local all = { hidden = true, nofile = true } -- opts for buffers (all)
-local notifier = true -- TODO: dynamic keymaps for message history
+-- scope (indent)
+vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent' })
 
--- TODO: find missing descriptions
--- TODO: add groups and icons
+-- stylua: ignore start
+vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
+vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
+vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
+-- stylua: ignore end
+
+local all = { hidden = true, nofile = true } -- opts for buffers (all)
+local notifier = false -- whether to use the notifier window
+
+-- TODO: 
+local leader = {
+  F = { Snacks.picker.smart },
+  P = { Snacks.picker },
+  [',,'] = { Snacks.picker.buffers },
+  ['/'] = { Snacks.picker.grep },
+  e = { Snacks.explorer },
+  p = { Snacks.picker.resume },
+}
+
 -- stylua: ignore
 local keys = {
-{ '<leader>F', function() Snacks.picker.smart() end,         desc = 'Smart Find Files'              },
+{ '<leader>F', function() Snacks.picker.smart()   end,       desc = 'Smart Find Files'              },
 { '<leader>,', function() Snacks.picker.buffers() end,       desc = 'Buffers'                       },
-{ '<leader>/', function() Snacks.picker.grep() end,          desc = 'Grep'                          },
-{ '<leader>e', function() Snacks.explorer() end,             desc = 'File Explorer'                 },
-{ '<leader>p', function() Snacks.picker.resume() end,        desc = 'Resume Picking'                },
-{ '<leader>P', function() Snacks.picker() end,               desc = 'Snacks Pickers'                },
+{ '<leader>/', function() Snacks.picker.grep()    end,       desc = 'Grep'                          },
+{ '<leader>e', function() Snacks.explorer()       end,       desc = 'File Explorer'                 },
+{ '<leader>p', function() Snacks.picker.resume()  end,       desc = 'Resume Picking'                },
+{ '<leader>P', function() Snacks.picker()         end,       desc = 'Snacks Pickers'                },
 { ',,',        function() Snacks.picker.buffers() end,       desc = 'Buffers'                       },
 
-{ '<leader>b', group = 'buffers', icon = { icon = '' } },
 { '<leader>bb', function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
 { '<leader>bB', function() Snacks.picker.buffers(all) end,   desc = 'Buffers (all)'                 },
 { '<leader>bl', function() Snacks.picker.lines() end,        desc = 'Buffer Lines'                  },
@@ -21,21 +37,17 @@ local keys = {
 { '<leader>bd', function() Snacks.bufdelete() end,           desc = 'Delete Buffer'                 },
 { '<leader>bD', function() Snacks.bufdelete.other() end,     desc = 'Delete Other Buffers'          },
 
-{ '<leader>c', group = 'code',},-- icon = { icon = '' } },
 { '<leader>cd', function() Snacks.picker.diagnostics() end,          desc = 'Diagnostics'           },
 { '<leader>cD', function() Snacks.picker.diagnostics_buffer() end,   desc = 'Buffer Diagnostics'    },
 
-{ '<leader>dp', group = 'profiler', icon = {icon = '⚡' }},
 { '<leader>dps>', function() Snacks.profiler.scratch() end, desc = '' },
 
-{ '<leader>f', group = 'find' },
 { '<leader>fb', function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
 { '<leader>ff', function() Snacks.picker.files() end,        desc = 'Find Files'                    },
 { '<leader>fg', function() Snacks.picker.git_files() end,    desc = 'Find Git Files'                },
 { '<leader>fp', function() Snacks.picker.projects() end,     desc = 'Projects'                      },
 { '<leader>fr', function() Snacks.picker.recent() end,       desc = 'Recent'                        },
 
-{ '<leader>g', group = 'git' },
 { '<leader>gB', function() Snacks.gitbrowse() end,           desc = 'Git Browse'                    },
 { '<leader>gb', function() Snacks.picker.git_branches() end, desc = 'Git Branches'                  },
 { '<leader>gd', function() Snacks.picker.git_diff() end,     desc = 'Git Diff'                      },
@@ -46,7 +58,6 @@ local keys = {
 { '<leader>gS', function() Snacks.picker.git_stash() end,    desc = 'Git Stash'                     },
 { '<leader>gg', function() Snacks.lazygit() end,             desc = 'Lazygit' ,                     },
 
-{ '<leader>s', group = 'search' },
 { '<leader>sa', function() Snacks.picker.files() end,               desc = 'Find Files'            },
 { '<leader>sg', function() Snacks.picker.grep() end,                desc = 'Grep'                  },
 { '<leader>sG', function() Snacks.picker.git_grep() end,           desc = 'Git Grep'              },
@@ -71,19 +82,17 @@ local keys = {
 { '<leader>sw', function() Snacks.picker.grep_word() end,            desc = 'Grep <cword>'          },
 { '<leader>su', function() Snacks.picker.undo() end,                 desc = 'Undo History'          },
 
-{ '<leader>u', group = 'ui' },
-{ '<leader>uT', function() Snacks.picker.themes() end,              desc = 'Themes'                 },
 { '<leader>uC', function() Snacks.picker.colorschemes() end,         desc = 'Colorschemes'          },
 { '<leader>uz', function() Snacks.zen() end,                         desc = 'Zen Mode'              },
 { '<leader>z',  function() Snacks.zen() end,                         desc = 'Toggle Zen Mode'       },
 { '<leader>Z',  function() Snacks.zen.zoom() end,                    desc = 'Toggle Zoom'           },
--- other
+
 { '<leader>.',  function() Snacks.scratch() end,                     desc = 'Toggle Scratch Buffer' },
 { '<leader>S',  function() Snacks.scratch.select() end,              desc = 'Select Scratch Buffer' },
 { '<leader>un', function() Snacks.notifier.hide() end,               desc = 'Dismiss Notifications' },
 { '<leader>cR', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
 { '<leader>fC', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
--- LSP
+
 { 'grd', function() Snacks.picker.lsp_definitions() end,             desc = 'LSP Definition'        },
 { 'grD', function() Snacks.picker.lsp_declarations() end,            desc = 'LSP Declaration'       },
 { 'grR', function() Snacks.picker.lsp_references() end,              desc = 'LSP References'        },
@@ -111,14 +120,12 @@ local keys = {
 --- @param picker_opts? snacks.picker.files.Config
 local function picker_pair(desc, key, dir_or_opts, picker_opts)
   local opts = {}
-
   if type(dir_or_opts) == 'string' then
     opts = picker_opts or {}
     opts.cwd = vim.fn.expand(dir_or_opts)
   elseif type(dir_or_opts) == 'table' then
     opts = dir_or_opts
   end
-
   -- stylua: ignore
   return {
     { '<leader>f' .. key, function() Snacks.picker.files(opts) end, desc = desc },

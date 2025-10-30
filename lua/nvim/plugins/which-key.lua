@@ -1,5 +1,7 @@
--- TODO: function for feteching icon based on where the okugin was defined and whether it wqas vim or lua
--- TODO: do the same for descriotions of cmd mappings
+-- TODO: function for fetching icon based on where the plugin was defined and whether it was vim or lua
+-- TODO: do the same for descriptions of cmd mappings
+-- TODO: find missing descriptions
+-- TODO: add groups and icons
 local spec = {
   {
     mode = { 'n', 'v' },
@@ -13,8 +15,15 @@ local spec = {
     mode = { 'n' },
     { 'co', group = 'comment below' },
     { 'cO', group = 'comment above' },
+    { '<leader>b', group = 'buffers', icon = { icon = '' } },
+    { '<leader>c', group = 'code' },
     { '<localleader>l', group = 'vimtex' },
     { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
+    { '<leader>dp', group = 'profiler', icon = {icon = '⚡' }},
+    { '<leader>f', group = 'find' },
+    { '<leader>g', group = 'git' },
+    { '<leader>s', group = 'search' },
+    { '<leader>u', group = 'ui' },
 
     -- descriptions
     { 'gx', desc = 'Open with system app' },
