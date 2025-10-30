@@ -15,7 +15,7 @@ function! vim#mkdir#(file) abort
     let l:dir = fnamemodify(expand(a:file), ':p:h')
     if !isdirectory(l:dir)
       if exists(':Mkdir') == 2
-	Mkdir l:dir
+	execute 'Mkdir' l:dir
       else
 	call mkdir(l:dir, 'p')
       endif
