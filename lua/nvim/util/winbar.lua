@@ -5,22 +5,23 @@ local M = {
     local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
     local win = opts.win or vim.api.nvim_get_current_win()
     local bt = opts.bt or vim.bo[bufnr].buftype
+    local ft = opts.ft or vim.bo[bufnr].filetype
 
     local path
     if bt == '' then
       local active = opts.active or (win == tonumber(vim.g.actual_curwin))
       path = active and '%t' or '%f'
+    elseif bt == 'help' then
+      path = '%t'
     else
-      local dirty_path
-      -- stylua: ignore
-      if bt == 'acwrite' then
-        local ft = opts.ft or vim.bo[bufnr].filetype
-        if ft == 'nvim-pack' then dirty_path = vim.g.plug_home
-      end
+      local maybe_path = ''
+      if bt == 'acwrite' and ft == 'nvim-pack' then
+         maybe_path = vim.g.plug_home
       elseif bt == 'terminal' then
-        dirty_path = vim.b[vim.api.nvim_get_current_buf()].osc7_dir
+        maybe_path = vim.b[bufnr].osc7_dir
+	-- or vim.env.PWD -- not updated on dir change?
       end
-      path = vim.fn.fnamemodify(dirty_path or vim.fn.getcwd(), ':~')
+      path = vim.fn.fnamemodify(maybe_path or vim.fn.getcwd(), ':~')
     end
 
     return table.concat({
@@ -111,13 +112,11 @@ M.winbar = function(opts)
   opts.bt = vim.bo[opts.bufnr].buftype
   opts.ft = vim.bo[opts.bufnr].filetype
 
-  if opts.ft == 'netrw' then
-    return nv.netrw.winbar()
-  end
-
+  -- TODO: since only a needs opts, move things around
   local winbar = M.a(opts)
 
-  if opts.active then
+  -- TODO: return early if inactive or help
+  if opts.active and opts.bt ~= 'help' then
     return M.render(winbar, M.b(), M.c())
   else
     return M.render(nv.icons.filetype(opts.ft), winbar, '')
