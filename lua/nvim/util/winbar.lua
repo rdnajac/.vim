@@ -6,8 +6,13 @@ local M = {
     local win = opts.win or vim.api.nvim_get_current_win()
     local bt = opts.bt or vim.bo[bufnr].buftype
     local ft = opts.ft or vim.bo[bufnr].filetype
-
     local path
+
+    if ft == 'dirvish' then
+      local path = vim.b[bufnr].dirvish._dir
+      return nv.icons.directory[path] .. ' ' .. vim.fn.fnamemodify(path, ':~')
+    end
+
     if bt == '' then
       local active = opts.active or (win == tonumber(vim.g.actual_curwin))
       path = active and '%t' or '%f'
@@ -16,10 +21,10 @@ local M = {
     else
       local maybe_path = ''
       if bt == 'acwrite' and ft == 'nvim-pack' then
-         maybe_path = vim.g.plug_home
+        maybe_path = vim.g.plug_home
       elseif bt == 'terminal' then
         maybe_path = vim.b[bufnr].osc7_dir
-	-- or vim.env.PWD -- not updated on dir change?
+        -- or vim.env.PWD -- not updated on dir change?
       end
       path = vim.fn.fnamemodify(maybe_path or vim.fn.getcwd(), ':~')
     end

@@ -4,7 +4,7 @@ scriptencoding utf-8
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
 set wildignore+=.DS_Store
-set wildignore+=*.o,*.out,*.a,*.so,
+set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
 
 set switchbuf+=vsplit
 
@@ -101,7 +101,7 @@ nnoremap <silent> zk zckzOzz
 
 nnoremap <leader>df <Cmd>call fold#status()<CR>
 
-" FIXME: 
+" FIXME:
 " open closed folds with in normal mode
 nnoremap <expr> h virtcol('.') <= indent('.') + 1 && &l:foldopen =~# 'hor' ? 'zc' : 'h'
 
@@ -412,15 +412,16 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-vinegar'
 if !has('nvim')
   Plug 'dense-analysis/ale'
   Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
+  Plug 'romainl/vim-redir'
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
-  " Plug 'tpope/vim-commentary'
+  " Plug 'tpope/vim-vinegar'    " use dirvish
+  " Plug 'tpope/vim-commentary' " use vim9 commentary
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
@@ -440,6 +441,4 @@ if has('nvim')
 else
   packadd! editorconfig
 endif
-packadd! nohlsearch
-
 " vim: foldlevel=1 foldmethod=marker

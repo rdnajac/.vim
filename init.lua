@@ -14,6 +14,7 @@ end, { 'cache', 'config', 'data', 'state' })
 vim.g.stdpath = stdpath_dict
 vim.g.luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
 vim.g.plug_home = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
+vim.g.loaded_netrw = false
 
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_home, 'snacks.nvim'))
