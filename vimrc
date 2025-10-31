@@ -43,11 +43,12 @@ augroup vimrc_indent
 augroup END
 
 " sesh {{{2
-set sessionoptions+=folds
+" set sessionoptions+=folds
 " set sessionoptions-=options   " already default in nvim
 set sessionoptions-=blank     " like vim-obsession
 set sessionoptions-=tabpages  " per project, not global
 set sessionoptions-=terminal  " don't save terminals
+set sessionoptions-=folds
 set viewoptions-=options      " keep mkview minimal
 
 " ui {{{2
@@ -75,6 +76,43 @@ augroup vimrc_ui
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+augroup END
+
+" fold " {{{2
+set fillchars+=fold:\ ,
+set fillchars+=foldclose:▸,
+set fillchars+=foldopen:▾,
+set fillchars+=foldsep:\ ,
+set fillchars+=foldsep:│
+
+set foldlevelstart=99
+" set foldlevelstart=2
+" set foldminlines=5
+set foldopen+=insert,jump
+" better search if auto pausing folds
+" set foldopen-=search
+" nnoremap <silent> / zn/
+set foldtext=fold#text()
+set foldmethod=marker
+
+nnoremap          zv zMzvzz
+nnoremap <silent> zj zcjzOzz
+nnoremap <silent> zk zckzOzz
+
+nnoremap <leader>df <Cmd>call fold#status()<CR>
+
+" FIXME: 
+" open closed folds with in normal mode
+nnoremap <expr> h virtcol('.') <= indent('.') + 1 && &l:foldopen =~# 'hor' ? 'zc' : 'h'
+
+augroup vimrc_fold
+  au!
+  au FileType lua setl fdm=expr fml=5 "fdl=99 flds=2
+  au FileType sh  setl fdm=expr
+  " use treesitter folding for certain filetypes
+  if has('nvim')
+    au FileType markdown,r setl fdm=expr foldexpr=v:lua.vim.treesitter.foldexpr()
+  endif
 augroup END
 
 " }}}1
@@ -343,10 +381,10 @@ iabbrev m- —
 
 " you know what I mean... {{{2
 for act in ['c', 'd', 'y'] " change, delete, yank
-for obj in ['p', 'w'] " paragraph, word
-  execute $'nnoremap {act}{obj} {act}i{obj}'
-  execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
-endfor
+  for obj in ['p', 'w'] " paragraph, word
+    execute $'nnoremap {act}{obj} {act}i{obj}'
+    execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
+  endfor
 endfor
 
 " don't capture whitespace in `gc`
@@ -376,32 +414,32 @@ Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
 if !has('nvim')
-Plug 'dense-analysis/ale'
-Plug 'dstein64/vim-startuptime'
-Plug 'github/copilot.vim'
-Plug 'junegunn/vim-easy-align'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-commentary'
-Plug 'wellle/targets.vim'
-Plug 'wellle/tmux-complete.vim'
-Plug 'AndrewRadev/dsf.vim'
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'Konfekt/FastFold'
-Plug 'vuciv/golf'
+  Plug 'dense-analysis/ale'
+  Plug 'dstein64/vim-startuptime'
+  Plug 'github/copilot.vim'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-surround'
+  " Plug 'tpope/vim-commentary'
+  Plug 'wellle/targets.vim'
+  Plug 'wellle/tmux-complete.vim'
+  Plug 'AndrewRadev/dsf.vim'
+  Plug 'AndrewRadev/splitjoin.vim'
+  Plug 'Konfekt/FastFold'
+  Plug 'vuciv/golf'
 else
-Plug 'folke/tokyonight.nvim'
-Plug 'saxon1964/neovim-tips'
-Plug 'nvim-treesitter/nvim-treesitter-context'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'saxon1964/neovim-tips'
+  Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
 call plug#end() " don't plug#end() if neovim...
 
 if has('nvim')
-packadd! nvim.difftool
-packadd! nvim.undotree
+  packadd! nvim.difftool
+  packadd! nvim.undotree
 else
-packadd! editorconfig
+  packadd! editorconfig
 endif
 packadd! nohlsearch
 
-" vim: foldlevelstart=1 foldmethod=marker
+" vim: foldlevel=1 foldmethod=marker

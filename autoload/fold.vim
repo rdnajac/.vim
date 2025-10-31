@@ -21,16 +21,7 @@ function! fold#text() abort
   return l:pre . l:fill . l:post
 endfunction
 
-function! fold#open_or_h() abort
-  let col = virtcol('.')
-  let indent = indent('.')
-  if col <= indent + 1 && &l:foldopen =~# 'hor'
-    return 'zc'
-  else
-    return 'h'
-  endif
-endfunction
-
+finish " TODO: needs testing
 function! fold#pause() abort
   if &foldenable
     let b:fold_was_enabled = 1
@@ -46,7 +37,6 @@ function! fold#unpause() abort
   endif
 endfunction
 
-finish " TODO: needs testing
 " https://www.reddit.com/r/neovim/comments/1534jt3/showcase_your_folds/
 function! fold#setup_search_pause() abort
   nnoremap <silent> / zn/
