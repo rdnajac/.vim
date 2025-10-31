@@ -37,7 +37,9 @@ return {
     -- run all `setup` functions in `nvim/config/*.lua` after startup
     vim.schedule(function()
       vim.o.winbar = '%{%v:lua.nv.winbar()%}'
-      vim.tbl_map(require, nv.submodules('config'))
+      vim.tbl_map(function(f)
+        require(f:sub(#vim.g.luaroot + 2, -5))
+      end, vim.fn.globpath(vim.fs.joinpath(vim.g.luaroot, 'nvim', 'config'), '*', false, true))
     end)
     -- stylua: ignore start
     _G.dd = function(...) Snacks.debug.inspect(...) end

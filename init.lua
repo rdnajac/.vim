@@ -35,4 +35,4 @@ vim.cmd([[
 require('nvim').init()
 vim.pack.add({ vim.fn['git#url']('LazyVim/LazyVim') }, { load = false })
 -- require('nvim.util.git.extmarks')
-require('nvim.util.netrw').setup()
+-- require('nvim.util.netrw').setup()

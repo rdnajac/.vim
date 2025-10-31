@@ -22,7 +22,7 @@ return {
       end,
     },
     dashboard = require('nvim.snacks.dashboard'),
-    explorer = { replace_netrw = true },
+    explorer = { replace_netrw = false },
     image = { enabled = true },
     indent = { indent = { only_current = true, only_scope = true } },
     input = { enabled = true },

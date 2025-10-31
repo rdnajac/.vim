@@ -29,11 +29,11 @@ Plugin.__index = Plugin
 
 -- shared table of keys for all plugins
 local keys = {}
-local toggles = {}
+-- local toggles = {}
 
 function Plugin:register_keys()
   keys[self.name] = self.keys
-  -- TODO: 
+  -- TODO:
   -- toggles[self.toggle] = self.keys
 end
 
@@ -82,6 +82,13 @@ function Plugin:tospec()
   return spec
 end
 
+--- @generic T
+--- @param x T|fun():T
+--- @return T
+_get = function(x)
+  return type(x) == 'function' and x() or x
+end
+
 --- Call the `Plugin`'s `config` function if it exists, otherwise
 --- call the named module's `setup` function with `opts` if they exist.
 --- Also schedules the `after` function if it exists.
@@ -90,7 +97,7 @@ function Plugin:_setup()
     return
   end
   -- PERF: only evaluate opts once
-  local opts = nv.get(self.opts)
+  local opts = _get(self.opts)
   if type(opts) == 'table' then
     local modname = self.name:gsub('%.nvim$', '')
     require(modname).setup(opts)
@@ -101,14 +108,20 @@ function Plugin:_setup()
   self.did_setup = true
 end
 
+local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- Call the `Plugin`'s `config` function if it exists, otherwise
 --- call the named module's `setup` function with `opts` they exist.
 function Plugin:setup()
   if self.did_setup == false then
     if self.event or self.lazy == true then
-      nv.lazyload(function()
-        self:_setup()
-      end, self.event)
+      vim.api.nvim_create_autocmd(self.event or 'VimEnter', {
+        callback = function()
+          self:_setup()
+        end,
+        group = aug,
+        -- nested = true,
+        once = true,
+      })
     else
       self:_setup()
     end
@@ -185,7 +198,7 @@ end, {
 return setmetatable({
   get_keys = function()
     return vim.tbl_map(function(p)
-      return nv.get(p)
+      return _get(p)
     end, vim.tbl_values(keys))
   end,
   unloaded = function()

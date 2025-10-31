@@ -25,10 +25,12 @@ setmetatable(_G.t, {
   end,
 })
 
---- @param ev table event data
-require('nvim.util').lazyload(function(ev)
-  t(ev.event)
-end, { 'VimEnter', 'UIEnter', 'BufReadPost' })
+vim.api.nvim_create_autocmd({ 'VimEnter', 'UIEnter', 'BufReadPost' }, {
+  callback = function(ev)
+    t(ev.event)
+  end,
+  once = true,
+})
 
 --- Wrap a function so it logs when called
 ---@param label string
