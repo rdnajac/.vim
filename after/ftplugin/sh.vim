@@ -1,4 +1,4 @@
-call apathy#Prepend('path', apathy#EnvSplit($PATH))
+call list#Prepend('path', split($PATH, has('win32') ? ';' : ':'))
 setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
 setlocal define=\\<\\%(\\i\\+\\s*()\\)\\@=
 

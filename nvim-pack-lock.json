@@ -25,7 +25,7 @@
       "src": "https://git::@github.com/bullets-vim/bullets.vim.git"
     },
     "chezmoi.vim": {
-      "rev": "03b8d12",
+      "rev": "73b30df",
       "src": "http://github.com/alker0/chezmoi.vim.git"
     },
     "cmp-r": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/monaqa/dial.nvim.git"
     },
     "lazydev.nvim": {
-      "rev": "c2dfe35",
+      "rev": "faf4623",
       "src": "https://github.com/folke/lazydev.nvim.git"
     },
     "mason.nvim": {
@@ -53,7 +53,7 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "87d3018",
+      "rev": "e25994a",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-navic": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "6c53e5f",
+      "rev": "317ada1",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {

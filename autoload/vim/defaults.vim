@@ -44,73 +44,71 @@ xnoremap <silent><expr> @ mode() ==# 'V' ? ':normal! @'.getcharstr().'<CR>'     
 
 " - |[<Space>| |]<Space>|
 
-" - 'autoindent' is enabled
-" - 'autoread' is enabled (works in all UIs, including terminal)
-" - 'background' defaults to "dark" (unless set automatically by the terminal/UI)
-" - 'backupdir' defaults to .,~/.local/state/nvim/backup// (|xdg|), auto-created
-" - 'belloff' defaults to "all"
-" - 'comments' includes "fb:•"
-" - 'commentstring' defaults to ""
+" - `autoindent` is enabled
+" - `autoread` is enabled (works in all UIs, including terminal)
+" - `background` defaults to "dark" (unless set automatically by the terminal/UI)
+" - `backupdir` defaults to .,~/.local/state/nvim/backup// (|xdg|), auto-created
+" - `belloff` defaults to "all"
+" - `comments` includes "fb:•"
+" - `commentstring` defaults to ""
 " - 'compatible' is always disabled
-" - 'complete' excludes "i"
-" - 'completeopt' defaults to "menu,popup"
-" - 'define' defaults to "". The C ftplugin sets it to "^\\s*#\\s*define"
-setglobal path=.,,
-" - 'diffopt' includes "linematch:40"
-" - 'directory' defaults to ~/.local/state/nvim/swap// (|xdg|), auto-created
-" - 'display' defaults to "lastline"
+" - `complete` excludes "i"
+" - `completeopt` defaults to "menu,popup"
+" - `define` defaults to "". The C ftplugin sets it to "^\\s*#\\s*define"
+" - `diffopt` includes "linematch:40"
+" - `directory` defaults to ~/.local/state/nvim/swap// (|xdg|), auto-created
+" - `display` defaults to "lastline"
 " - 'encoding' is UTF-8 (cf. 'fileencoding' for file-content encoding)
-" - 'fillchars' defaults (in effect) to "vert:│,fold:·,foldsep:│"
-" - 'formatoptions' defaults to "tcqj"
-" - 'grepprg' uses the -H and -I flags for regular grep,
-"   and defaults to using ripgrep if available
+" - `fillchars` defaults (in effect) to "vert:│,fold:·,foldsep:│"
+" - `formatoptions` defaults to "tcqj"
+" - `grepprg` uses the -H and -I flags for regular grep, and defaults to using ripgrep if available
 if executable('rg')
   set grepprg=rg\ --vimgrep\ --uu
   set grepformat=%f:%l:%c:%m
 else
   set grepprg=grep\ -HIn\ $*\ /dev/null
 endif
-" - 'hidden' is enabled
-" - 'history' defaults to 10000 (the maximum)
-" - 'hlsearch' is enabled
-" - 'include' defaults to "". The C ftplugin sets it to "^\\s*#\\s*include"
-" - 'incsearch' is enabled
+" - `hidden` is enabled
+" - `history` defaults to 10000 (the maximum)
+" - `hlsearch` is enabled
+" - `include` defaults to "". The C ftplugin sets it to "^\\s*#\\s*include"
+" - `incsearch` is enabled
 " - 'isfname' does not include ":" (on Windows).
-" - 'joinspaces' is disabled
-" - 'jumpoptions' defaults to "clean"
+" - `joinspaces` is disabled
+" - `jumpoptions` defaults to "clean"
 " - 'langnoremap' is enabled
 " - 'langremap' is disabled
 " - 'laststatus' defaults to 2 (statusline is always shown)
-" - 'listchars' defaults to "tab:> ,trail:-,nbsp:+"
+" - `listchars` defaults to "tab:> ,trail:-,nbsp:+"
 " - 'maxsearchcount' defaults to 999
 " - 'mouse' defaults to "nvi"
 " - 'mousemodel' defaults to "popup_setpos"
-" - 'nrformats' defaults to "bin,hex"
-" - 'path' defaults to ".,,". The C ftplugin adds "/usr/include" if it exists.
-setglobal path=.,,
-" - 'sessionoptions' includes "unix,slash", excludes "options"
-" - 'shortmess' includes "CF", excludes "S"
-" - 'sidescroll' defaults to 1
-" - 'smarttab' is enabled
-" - 'startofline' is disabled
-" - 'switchbuf' defaults to "uselast"
+" - `nrformats` defaults to "bin,hex"
+" - `path` defaults to ".,,". The C ftplugin adds "/usr/include" if it exists.
+" - `sessionoptions` includes "unix,slash", excludes "options"
+" - `shortmess` includes "CF", excludes "S" TODO: test these!
+" - `sidescroll` defaults to 1
+" - `smarttab` is enabled
+" - `startofline` is disabled XXX: verify
+" - `switchbuf` defaults to "uselast XXX: verify
 " - 'tabpagemax' defaults to 50
-" - 'tags' defaults to "./tags;,tags"
-" - 'termguicolors' is enabled by default if Nvim can detect support from the host terminal
-" - 'ttimeout' is enabled
-" - 'ttimeoutlen' defaults to 50
-" - 'ttyfast' is always set
-" - 'undodir' defaults to ~/.local/state/nvim/undo// (|xdg|), auto-created
-" - 'viewoptions' includes "unix,slash", excludes "options"
+" - `tags` defaults to "./tags;,tags"
+" - `termguicolors` is enabled by default if Nvim can detect support from the host terminal
+" - `ttimeout` is enabled
+" - `ttimeoutlen` defaults to 50
+" - `ttyfast` is always set
+" - `undodir` defaults to ~/.local/state/nvim/undo// (|xdg|), auto-created
+" - `viewoptions` includes "unix,slash", excludes "options"
 " - 'viminfo' includes "!"
-" - 'wildoptions' defaults to "pum,tagfile"
+" - `wildoptions` defaults to "pum,tagfile"
 set wildoptions=pum,tagfile
 
 function! vim#defaults#() abort
   " vim sets defaults that are only useful for C/C++
-  " taken from `vim-apathy`, along with setglobal define and path
+  setglobal define=
   setglobal include=
   setglobal includeexpr=
+  setglobal path=.,,
 
   let &viminfofile = g:my#vimdir . '.viminfo'
   let &verbosefile = g:my#vimdir . '.vimlog.txt'

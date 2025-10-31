@@ -130,7 +130,7 @@ augroup vimrc_filetype
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
   au FileType lua,json call vim#auto#braces()
 
-  au FileType man setlocal nobuflisted
+  au FileType man,netrw,snacks_explorer setlocal nobuflisted
 augroup END
 
 " }}}1

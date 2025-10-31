@@ -1,3 +1,4 @@
+-- TODO: move to util and put leymaps in ftplugin
 local modname = function(path)
   local name = vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
 

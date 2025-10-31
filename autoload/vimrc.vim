@@ -33,3 +33,12 @@ function! vimrc#toggles() abort
   nnoremap yow :set wrap!<BAR>set wrap?<CR>
   nnoremap yo~ :set autochdir!<BAR>set autochdir?<CR>
 endfunction
+
+" `apathy#Prepend()` but only for path
+function! vimrc#apathy(...) abort
+  let orig = getbufvar('', '&path')
+  let val = list#join(list#uniq(call('list#split', a:000 + [orig])))
+  call setbufvar('', '&path', val)
+  return val
+endfunction
+
