@@ -1,6 +1,4 @@
-setlocal commentstring=\"\ %s " add space after the comment character
-setlocal formatoptions-=ro    " don't continue comments with 'o' or 'O'
-
 nnoremap <buffer> <leader>ch <Cmd>call edit#ch()<CR>
+nnoremap <buffer> gch        <Cmd>call edit#ch()<CR>
 
-inoremap <buffer> enc scriptencoding utf-8
+ia <buffer> enc scriptencoding utf-8

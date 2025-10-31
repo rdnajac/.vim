@@ -29,7 +29,7 @@ local spec = {
     --  add descriptions
     { 'gx', desc = 'Open with system app' },
   },
-  { hidden = true, { 'g~' }, { 'g#' }, { 'g*' } },
+  { hidden = true, { 'g~' }, { 'g#' }, { 'g*' }, { 'gc' } },
 }
 
 -- from lazyvim

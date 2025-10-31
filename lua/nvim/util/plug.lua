@@ -22,15 +22,19 @@ local nv = _G.nv or require('nvim.util')
 --- @field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
 --- @field keys? table|fun():table Keymaps to bind for the plugin.
 --- @field opts? table|fun():table Options to pass to the plugin's `setup()`.
+--- @field toggles? table
 --- @field data? any additional data to pass to `vim.pack.add()`
 local Plugin = {}
 Plugin.__index = Plugin
 
 -- shared table of keys for all plugins
 local keys = {}
+local toggles = {}
 
 function Plugin:register_keys()
   keys[self.name] = self.keys
+  -- TODO: 
+  -- toggles[self.toggle] = self.keys
 end
 
 function Plugin:schedule_after()
