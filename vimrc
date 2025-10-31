@@ -140,11 +140,14 @@ command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
 command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
+command! -nargs=0 Format call execute#inPlace('call format#buffer()')
+
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 " }}}1
 " Section: keymaps {{{1
+nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
 

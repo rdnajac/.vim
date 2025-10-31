@@ -6,11 +6,8 @@ if executable('prettier')
   let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
 endif
 
-setlocal formatoptions+=o
 setlocal noautoindent
 setlocal textwidth=80
-" treat quoted text as comments for easy toggling
-" setlocal commentstring=>\ %s
 
 " Insert an octothorpe at the beginning of the line that already has text
 nnoremap <buffer> <localleader>h ^i#<Space><Esc>

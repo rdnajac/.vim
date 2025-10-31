@@ -1,16 +1,23 @@
 " plugin/comment.vim
+let s:comment_map = {
+      \ 'o': '',
+      \ 'b': 'BUG: ',
+      \ 'f': 'FIXME: ',
+      \ 'h': 'HACK: ',
+      \ 'n': 'NOTE: ',
+      \ 'p': 'PERF: ',
+      \ 't': 'TODO: ',
+      \ 'x': 'XXX: ',
+      \ 'i': 'stylua: ignore',
+      \ }
+
+" maps `co` and `cO` to insert comments with specific tags
 function! s:map_insert_comment(lhs, tag) abort
-  execute 'nmap cO'.a:lhs.' :call comment#above("'.a:tag.'")<CR>'
-  execute 'nmap co'.toupper(a:lhs).' :call comment#above("'.a:tag.'")<CR>'
-  execute 'nmap co'.a:lhs.' :call comment#below("'.a:tag.'")<CR>'
+  execute printf('nmap co%s :call comment#below("%s")<CR>', a:lhs, a:tag)
+  execute printf('nmap cO%s :call comment#above("%s")<CR>', a:lhs, a:tag)
+  execute printf('nmap co%s :call comment#above("%s")<CR>', toupper(a:lhs), a:tag)
 endfunction
 
-call <SID>map_insert_comment('o', '')
-call <SID>map_insert_comment('t', 'TODO: ')
-call <SID>map_insert_comment('f', 'FIXME: ')
-call <SID>map_insert_comment('h', 'HACK: ')
-call <SID>map_insert_comment('b', 'BUG: ')
-call <SID>map_insert_comment('p', 'PERF: ')
-call <SID>map_insert_comment('x', 'XXX: ')
-call <SID>map_insert_comment('n', 'NOTE: ')
-call <SID>map_insert_comment('i', 'stylua: ignore')
+for [key, val] in items(s:comment_map)
+  call <SID>map_insert_comment(key, val)
+endfor

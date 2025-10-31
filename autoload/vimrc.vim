@@ -41,4 +41,3 @@ function! vimrc#apathy(...) abort
   call setbufvar('', '&path', val)
   return val
 endfunction
-

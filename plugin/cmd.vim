@@ -1,6 +1,4 @@
 " plugin/cmd.vim
-nnoremap ; :
-
 cnoreabbrev <expr> %% expand('%:p:h')
 cnoreabbrev !! !./%
 cnoreabbrev scp !./%

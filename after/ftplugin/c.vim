@@ -18,7 +18,7 @@ function! s:apathy(varname, lang) abort
     let g:c_path_compiler = get(g:, 'c_path_compiler', executable('clang') ? 'clang' : 'gcc')
     let g:[a:varname] = ['.'] + s:CPreProcIncludes(g:c_path_compiler, '-E -v -x ' . a:lang . ' /dev/null')
   endif
-  call list#Prepend('path', g:[a:varname])
+  call vimrc#apathy(g:[a:varname])
 endfunction
 
 if &filetype ==# 'cpp'
