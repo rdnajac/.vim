@@ -17,6 +17,7 @@ inoremap <buffer> req<Tab> require(')<Left><Left>'
 " custom surround using `tpope/vim-surround`
 " use ascii value (i = 105)
 " NOTE: must use double quotes
+" 
 let b:surround_85 = "function() \r end"
 let b:surround_117 = "function()\n \r \nend"
 let b:surround_105 = "-- stylua: ignore start\n \r \n--stylua: ignore end"
@@ -29,3 +30,9 @@ let b:surround_115 = "vim.schedule(function()\n \r \nend)"
 "     return l:indent . substitute(l:next, '^\s*', '{ ', '')
 "   endif
 " endfunction
+
+" coerce
+" vim global to `vim.g.%s =`
+nnoremap crv ^d3wivim.g.<Esc>
+" vim.g to `let g:%s =`
+nnoremap crV ^d4wilet<Space>g:<Esc>

@@ -1,4 +1,6 @@
--- TODO: move to util and put leymaps in ftplugin
+local M = {}
+
+-- currently only for lua
 local local_patterns = {
   -- match:  local var = ...
   -- turn into: M.var = ...
@@ -71,16 +73,17 @@ local function make(rules)
   end
 end
 
-local form = make(form_rules)
-local scope = make(scope_rules)
+M.form = make(form_rules)
+M.scope = make(scope_rules)
 
-local function nmap(lhs, rhs, desc)
-  vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
+M.formscope = function()
+  M.form()
+  M.scope()
 end
 
-nmap('crf', form, 'local function fn() ↔ local fn = function()')
-nmap('crm', scope, 'local x ↔ M.x')
--- stylua: ignore start
-nmap('crM', function() form(); scope() end, 'local function foo() → M.foo = function()')
-nmap('crF', function() scope(); form() end, 'M.foo = function() → local function foo()')
---stylua: ignore end
+M.scopeform = function()
+  M.scope()
+  M.form()
+end
+
+return M
