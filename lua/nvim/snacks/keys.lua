@@ -10,7 +10,7 @@ vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', {
 local all = { hidden = true, nofile = true } -- opts for buffers (all)
 local notifier = false -- whether to use the notifier window
 
--- TODO: 
+-- TODO:
 local leader = {
   F = { Snacks.picker.smart },
   P = { Snacks.picker },

@@ -20,7 +20,7 @@ local spec = {
     { '<leader>c', group = 'code' },
     { '<localleader>l', group = 'vimtex' },
     { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
-    { '<leader>dp', group = 'profiler', icon = {icon = '⚡' }},
+    { '<leader>dp', group = 'profiler', icon = { icon = '⚡' } },
     { '<leader>f', group = 'find' },
     { '<leader>g', group = 'git' },
     { '<leader>s', group = 'search' },

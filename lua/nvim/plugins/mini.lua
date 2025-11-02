@@ -154,7 +154,7 @@ return {
     return {
       { 'ga', mode = 'x', desc = 'Align' },
       { 'gA', mode = 'x', desc = 'Align (preview)' },
-      {'<leader>M', MiniFiles.open }
+      { '<leader>M', MiniFiles.open },
     }
   end,
 }
