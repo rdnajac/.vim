@@ -65,9 +65,9 @@ return {
       new({ 'SGID2', 'AGX51' }, false),
     }
     groups.vim = {
-    new({ 'echom', 'execute' }, false),
-    -- new({ 'opt', 'start' }, false),
-    -- new({ 'autoload', 'plugin' }, false),
+      new({ 'echom', 'execute' }, false),
+      -- new({ 'opt', 'start' }, false),
+      -- new({ 'autoload', 'plugin' }, false),
     }
 
     -- create rmd group as a combination of markdown and r
