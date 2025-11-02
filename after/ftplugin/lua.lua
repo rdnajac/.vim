@@ -60,4 +60,3 @@ vim.b.minisurround_config = {
     },
   },
 }
-
