@@ -9,23 +9,27 @@ set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
 set switchbuf+=vsplit
 
 " general {{{2
+set foldlevel=99
+" set foldlevelstart=99
+set foldminlines=3
+set foldopen+=insert,jump
+set foldtext=fold#text()
+set foldmethod=marker
+set ignorecase
 set jumpoptions+=stack
 set mouse=a
 set report=0
 set scrolloff=8
 set shortmess+=aAcCI
 set shortmess-=o
+set showmatch
+set smartcase
 set splitbelow splitright
 set splitkeep=screen
 set timeoutlen=420
 set updatetime=69
 set virtualedit=block
 set whichwrap+=<,>,[,],h,l
-
-" searching {{{2
-set ignorecase
-set showmatch
-set smartcase
 
 " indent {{{2
 set breakindent
@@ -52,6 +56,7 @@ set sessionoptions-=folds
 set viewoptions-=options      " keep mkview minimal
 
 " ui {{{2
+set cursorline
 set lazyredraw
 set termguicolors
 let &laststatus = has('nvim') ? 3 : 2
@@ -65,54 +70,17 @@ set signcolumn=auto
 
 augroup vimrc_ui
   " no cursorline in insert mode
-  au InsertLeave,WinEnter * setlocal cursorline
-  au InsertEnter,WinLeave * setlocal nocursorline
+  au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
+  au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
 
   " Hide the statusline while in command mode
-  au CmdlineEnter * if &ls != 0            | let g:last_ls = &ls | set ls=0        | endif
+  au CmdlineEnter * if &ls != 0 | set ls=0 | let g:last_ls = &ls | endif
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-augroup END
-
-" fold " {{{2
-set fillchars+=fold:\ ,
-set fillchars+=foldclose:▸,
-set fillchars+=foldopen:▾,
-set fillchars+=foldsep:\ ,
-set fillchars+=foldsep:│
-
-set foldlevelstart=99
-" set foldlevelstart=2
-" set foldminlines=5
-set foldopen+=insert,jump
-" better search if auto pausing folds
-" set foldopen-=search
-" nnoremap <silent> / zn/
-set foldtext=fold#text()
-set foldmethod=marker
-
-nnoremap          zv zMzvzz
-nnoremap <silent> zj zcjzOzz
-nnoremap <silent> zk zckzOzz
-
-nnoremap <leader>df <Cmd>call fold#status()<CR>
-
-" FIXME:
-" open closed folds with in normal mode
-nnoremap <expr> h virtcol('.') <= indent('.') + 1 && &l:foldopen =~# 'hor' ? 'zc' : 'h'
-
-augroup vimrc_fold
-  au!
-  au FileType lua setl fdm=expr fml=5 "fdl=99 flds=2
-  au FileType sh  setl fdm=expr
-  " use treesitter folding for certain filetypes
-  if has('nvim')
-    au FileType markdown,r setl fdm=expr foldexpr=v:lua.vim.treesitter.foldexpr()
-  endif
 augroup END
 
 " }}}1
@@ -142,10 +110,10 @@ endif
 " Section: autocmds {{{1
 augroup vimrc
   autocmd!
-  au BufWritePre * call vim#mkdir#(expand('<afile>'))
-  au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
-  au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
   au BufReadPost vimrc call vimrc#setmarks()
+  au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
+  au BufWritePre * call vim#mkdir#(expand('<afile>'))
+  au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
   " restore cursor position
   au BufWinEnter * exec "silent! normal! g`\"zv"
@@ -180,7 +148,6 @@ command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
 
-
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 " }}}1
@@ -199,7 +166,8 @@ let g:maplocalleader = '\'
 " vim.lsp.hover overrides the default K mapping
 nnoremap <leader>q :q!<CR>
 nnoremap <leader>Q :wqa!<CR>
-nnoremap <leader>E <Cmd>sbp<CR>
+nnoremap <leader>- <Cmd>sbp<CR>
+nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 nnoremap <leader>K <Cmd>norm! K<CR>
 nnoremap <leader>r <Cmd>call sesh#restart()<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
@@ -226,23 +194,13 @@ nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
 
 " searching and centering {{{2
+" make `n` and `N` behave the same way for `?` and `/` searches
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
-nmap n nzz
-" nnoremap <expr> n  'Nn'[v:searchforward]
-xnoremap <expr> n 'Nn'[v:searchforward]
-onoremap <expr> n 'Nn'[v:searchforward]
-
-nmap N Nzz
-" nnoremap <expr> N  'nN'[v:searchforward]
-xnoremap <expr> N 'nN'[v:searchforward]
-onoremap <expr> N 'nN'[v:searchforward]
-
-" center searches
-nnoremap *  *zzzv
-nnoremap #  #zzzv
-nnoremap g* g*zzzv
-nnoremap g# g#zzzv
-
+" 'Nn'[v:searchforward] is the same as (v:searchforward ? 'n' : 'N')
+" `zz` to center and since foldopen doesn work in mappings, add `zv`
+nnoremap <expr> n (v:searchforward ? "n" : "N")."zvzz"
+nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
+f
 " TODO: I forgot what these do...
 " nnoremap dp     dp]c
 " nnoremap do     do]c
@@ -334,10 +292,6 @@ nmap S viWS
 vmap ` S`
 vmap F Sf
 
-" xmap ga <Plug>(EasyAlign)
-" nmap ga <Plug>(EasyAlign)
-
-" TODO: test me!
 " change/delete current word {{{2
 nnoremap c*   *``cgn
 nnoremap c#   *``cgN
@@ -378,6 +332,23 @@ nnoremap <Bslash>. mzA.<Esc>;`z
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
+
+" folding {{{2
+" better search if auto pausing folds
+" set foldopen-=search
+" nnoremap <silent> / zn/
+
+nnoremap          zv zMzvzz
+nnoremap <silent> zj zcjzOzz
+nnoremap <silent> zk zckzOzz
+
+nnoremap <leader>df <Cmd>call fold#status()<CR>
+" close folds when moving left at beginning of line
+" TODO: make it wrap like whichwrap+=h or (col('.') == 1 ? 'gk$' : 'h')
+nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
+
+" save, override, and restore commentstring to get nice folds
+xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '.s \| '<,'>fold \| let &l:cms=s<CR>
 
 " you know what I mean... {{{2
 for act in ['c', 'd', 'y'] " change, delete, yank
@@ -431,6 +402,7 @@ if !has('nvim')
 else
   Plug 'folke/tokyonight.nvim'
   Plug 'saxon1964/neovim-tips'
+  Plug 'nvim-treesitter/nvim-treesitter-context'
   Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
 call plug#end() " don't plug#end() if neovim...

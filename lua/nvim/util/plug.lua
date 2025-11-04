@@ -75,8 +75,9 @@ function Plugin:tospec()
   end
   -- local spec = { src = 'https://github.com/' .. self[1] .. '.git' }
   local spec = { src = 'https://git::@github.com/' .. self[1] .. '.git' }
+  spec.version = self.version or self.branch or nil
   -- HACK: remove this once default branches become `main`
-  spec.version = vim.startswith(self[1], 'nvim-treesitter') and 'main' or nil
+  -- spec.version = vim.startswith(self[1], 'nvim-treesitter') and 'main' or nil
   spec.name = self.name
   spec.data = self.data
   return spec

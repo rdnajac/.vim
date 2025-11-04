@@ -8,6 +8,8 @@ endif
 
 setlocal noautoindent
 setlocal textwidth=80
+setlocal formatoptions+=o 
+setlocal commentstring=>\ %s
 
 " Insert an octothorpe at the beginning of the line that already has text
 nnoremap <buffer> <localleader>h ^i#<Space><Esc>

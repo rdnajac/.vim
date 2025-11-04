@@ -153,4 +153,4 @@ end
 for key, opts in pairs(toggles) do
   Snacks.toggle.new(opts):map(key)
 end
---vim: fdl=1
+-- vim: fdl=1

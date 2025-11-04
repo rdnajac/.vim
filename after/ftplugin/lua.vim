@@ -1,6 +1,9 @@
 " let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
 let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 
+" setlocal nonumber signcolumn=yes:1
+setlocal foldtext=v:lua.nv.foldtext()
+
 iabbrev <buffer> fu function()
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> \ig --<SPACE>stylua:<SPACE>ignore
@@ -17,22 +20,54 @@ inoremap <buffer> req<Tab> require(')<Left><Left>'
 " custom surround using `tpope/vim-surround`
 " use ascii value (i = 105)
 " NOTE: must use double quotes
-" 
 let b:surround_85 = "function() \r end"
 let b:surround_117 = "function()\n \r \nend"
 let b:surround_105 = "-- stylua: ignore start\n \r \n--stylua: ignore end"
 let b:surround_115 = "vim.schedule(function()\n \r \nend)"
 
-" function! s:FoldHeader(line1) abort
-"   if a:line1 =~# '^\s*{'
-"     let l:next = getline(v:foldstart + 1)
-"     let l:indent = matchstr(a:line1, '^\s*')
-"     return l:indent . substitute(l:next, '^\s*', '{ ', '')
-"   endif
-" endfunction
-
 " coerce
 " vim global to `vim.g.%s =`
 nnoremap crv ^d3wivim.g.<Esc>
 " vim.g to `let g:%s =`
-nnoremap crV ^d4wilet<Space>g:<Esc>
+nnoremap crV ^df4wilet<Space>g:<Esc>
+
+if !has('nvim')
+  finish
+endif
+
+setlocal foldmethod=expr
+
+lua << EOF
+-- TODO: only disable highlighting inside of `vim.cmd([[...]])`
+-- Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
+
+vim.bo.syntax = 'ON' -- Keep using legacy syntax for `vim-endwise`
+-- vim.wo.foldmethod = 'expr' -- foldexpression already set by ftplugin
+
+local function nmap(lhs, rhs, desc)
+vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
+end
+
+nmap('crf',   nv.coerce.form,      'local function foo() ↔ local foo = function()')
+nmap('crf',   nv.coerce.scope,     'local x ↔ M.x')
+nmap('crM',   nv.coerce.formscope, 'local function foo() → M.foo = function()')
+nmap('crF',   nv.coerce.scopeform, 'M.foo = function() → local function foo()')
+
+nmap('ym',    nv.yankmod.name,     'yank lua module name')
+nmap('yM',    nv.yankmod.require,  'yank require(...) form')
+nmap('yr',    nv.yankmod.func,     'yank require + function')
+nmap('yR',    nv.yankmod.print,    'print require + function')
+nmap('y<CR>', nv.yankmod.print,    'print require + function')
+
+vim.b.minisurround_config = {
+  custom_surroundings = {
+    L = {
+      input = { '%[().-()%]%(.-%)' },
+      output = function()
+      local link = require('mini.surround').user_input('Link: ')
+      return { left = '[', right = '](' .. link .. ')' }
+      end,
+    },
+    },
+  }
+EOF

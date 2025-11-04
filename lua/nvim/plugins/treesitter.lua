@@ -30,10 +30,19 @@ local autostart_filetypes = {
 
 autostart(autostart_filetypes)
 autostart({ 'sh', 'zsh' }, 'bash')
+-- TODO: use register
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'markdown', 'r', 'rmd', 'quarto' },
+  group = aug,
+  command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
+  desc = 'Use treesitter folding for select filetypes',
+})
 
 local M = {
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main',
     build = vim.cmd.TSUpdate,
     keys = {
       { '<C-Space>', nv.treesitter.selection.start },
@@ -43,6 +52,7 @@ local M = {
   },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
+    branch = 'main',
     enabled = false,
     opts = {
       move = { set_jumps = true },
@@ -79,32 +89,8 @@ local M = {
     --       ['[A'] = '@parameter.inner',
     --     },
     --   }
-    --   vim.api.nvim_create_autocmd('FileType', {
-    --     group = vim.api.nvim_create_augroup('treesitter_textobjects', {}),
-    --     callback = function(ev)
-    --       for method, keymaps in pairs(moves) do
-    --         for key, query in pairs(keymaps) do
-    --           local desc = query:gsub('@', ''):gsub('%..*', '')
-    --           desc = desc:sub(1, 1):upper() .. desc:sub(2)
-    --           desc = (key:sub(1, 1) == '[' and 'Prev ' or 'Next ') .. desc
-    --           desc = desc .. (key:sub(2, 2) == key:sub(2, 2):upper() and ' End' or ' Start')
-    --           if not (vim.wo.diff and key:find('[cC]')) then
-    --             vim.keymap.set({ 'n', 'x', 'o' }, key, function()
-    --               require('nvim-treesitter-textobjects.move')[method](query, 'textobjects')
-    --             end, {
-    --               buffer = ev.buf,
-    --               desc = desc,
-    --               silent = true,
-    --             })
-    --           end
-    --         end
-    --       end
-    --     end,
-    --   })
-    -- end,
   },
-  -- FIXME: main branch is `master`...
-  -- { 'nvim-treesitter/nvim-treesitter-context' },
+  { 'nvim-treesitter/nvim-treesitter-context' },
 }
 
 return M

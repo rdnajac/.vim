@@ -2,6 +2,7 @@ _G.t = { vim.uv.hrtime() }
 
 vim.loader.enable()
 require('nvim.util.track')
+
 ---@diagnostic disable-next-line: duplicate-set-field
 function vim.print(...)
   return vim._print(true, ...)
@@ -34,6 +35,5 @@ vim.cmd([[
 
 -- the rest if the owl
 require('nvim').init()
+
 vim.pack.add({ vim.fn['git#url']('LazyVim/LazyVim') }, { load = false })
--- require('nvim.util.git.extmarks')
--- require('nvim.util.netrw').setup()

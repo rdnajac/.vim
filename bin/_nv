@@ -37,4 +37,3 @@ else
 end
 
 return os.exit(os.execute(cmd))
--- vim:ft=lua

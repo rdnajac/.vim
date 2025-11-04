@@ -101,4 +101,4 @@ return {
   },
   { 'folke/ts-comments.nvim', enabled = false, opts = {} },
 }
---vim: fdl=1
+-- vim: set fdl=2

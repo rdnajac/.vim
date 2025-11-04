@@ -118,3 +118,4 @@ return {
     require('nvim.snacks.toggles')
   end,
 }
+-- vim: fdl=2
