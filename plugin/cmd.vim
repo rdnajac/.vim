@@ -22,10 +22,3 @@ function! s:cab(from, to, exact) abort
 endfunction
 
 call s:cab('f', 'find', v:false)
-
-" command definitions are more robust than abbreviations
-command! E e!
-command! W w!
-command! Wq wq!
-command! Wqa wqa!
-command! -bang Quit call quit#buffer(<q-bang>)

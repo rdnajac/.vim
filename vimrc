@@ -147,6 +147,7 @@ command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
+command! -bang Quit call quit#buffer(<q-bang>)
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
@@ -333,6 +334,26 @@ inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
+" insert comments {{{2
+let s:comment_map = {
+      \ 'o': '',
+      \ 'b': 'BUG: ',
+      \ 'f': 'FIXME: ',
+      \ 'h': 'HACK: ',
+      \ 'n': 'NOTE: ',
+      \ 'p': 'PERF: ',
+      \ 't': 'TODO: ',
+      \ 'x': 'XXX: ',
+      \ 'i': 'stylua: ignore',
+      \ }
+
+" map `co` and `cO` to insert comments with specific tags
+for [key, val] in items(s:comment_map)
+  execute printf('nmap co%s :call comment#below("%s")<CR>', key, val)
+  execute printf('nmap cO%s :call comment#above("%s")<CR>', key, val)
+  execute printf('nmap co%s :call comment#above("%s")<CR>', toupper(key), val)
+endfor
+
 " folding {{{2
 " better search if auto pausing folds
 " set foldopen-=search
@@ -350,6 +371,29 @@ nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
 " save, override, and restore commentstring to get nice folds
 xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '.s \| '<,'>fold \| let &l:cms=s<CR>
 
+" substitutions {{{2
+" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
+xnoremap s :s/\%V<C-R><C-W>/
+
+" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
+nnoremap g. :%s//<C-r>./g<ESC>
+
+" completion {{{2
+" see `:h |cmdline-completion|.`
+set completeopt=menu,preview,longest
+" set completeopt+=preinsert
+
+" More info here: |cmdline-completion|; default: `wildmode=full`
+" set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
+set wildmode=longest:full,full " Same as above, but cycle through the first patch ('preinsert'?)
+" set wildmode=longest,list    " First press: longest common substring, Second press: list all matches
+" set wildmode=noselect:full   " Show 'wildmenu' without selecting, then cycle full matches
+" set wildmode=noselect:lastused,full " Same as above, but buffer matches are sorted by time last used
+
+" Up and Down arrow keys to navigate completion menu
+cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
+cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
+
 " you know what I mean... {{{2
 for act in ['c', 'd', 'y'] " change, delete, yank
   for obj in ['p', 'w'] " paragraph, word
@@ -361,6 +405,11 @@ endfor
 " don't capture whitespace in `gc`
 nmap gcap gcip
 
+" command definitions are more robust than abbreviations
+command! E e!
+command! W w!
+command! Wq wq!
+command! Wqa wqa!
 " }}}1
 
 call plug#begin()
