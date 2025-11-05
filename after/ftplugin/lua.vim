@@ -71,4 +71,26 @@ vim.b.minisurround_config = {
     },
     },
   }
+
+local aug = vim.api.nvim_create_augroup('lua', {})
+
+vim.api.nvim_create_autocmd('InsertEnter', {
+  group = aug,
+  buffer = vim.api.nvim_get_current_buf(),
+  callback = function()
+    vim.b.old_hl = Snacks.util.color('LspReferenceText', 'bg')
+    Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
+  end,
+})
+
+vim.api.nvim_create_autocmd('InsertLeave', {
+  group = aug,
+  buffer = vim.api.nvim_get_current_buf(),
+  callback = function()
+    if vim.b.old_hl then
+      Snacks.util.set_hl({ LspReferenceText = { bg = vim.b.old_hl } })
+      vim.b.old_hl = nil
+    end
+  end,
+})
 EOF

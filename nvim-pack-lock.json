@@ -49,7 +49,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "1408d66",
+      "rev": "86bb076",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "d6137be",
+      "rev": "3b8c6a6",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
@@ -82,7 +82,7 @@
       "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
-      "rev": "b13cfc1",
+      "rev": "047ace2",
       "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-abolish": {
