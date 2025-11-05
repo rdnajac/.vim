@@ -9,7 +9,6 @@ local opts = {
     ---@param k number
     ---@param v string
     for k, v in ipairs(vim.diagnostic.severity) do
-      ---@type string
       local diagnostic = v:sub(1, 1) .. v:sub(2):lower()
       icon[k] = nv.icons.diagnostics[diagnostic]
       hl[k] = 'Diagnostic' .. diagnostic

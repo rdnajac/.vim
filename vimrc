@@ -111,7 +111,7 @@ endif
 augroup vimrc
   autocmd!
   au BufReadPost vimrc call vimrc#setmarks()
-  au BufWinLeave vimrc normal! mV
+  au BufLeave vimrc normal! mV
   au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   au BufWritePre * call vim#mkdir#(expand('<afile>'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
@@ -161,6 +161,9 @@ nnoremap ~ `
 " TODO: sort opfunc
 vmap  :sort<CR>
 
+" diff?
+" nnoremap dp     dp]c
+" nnoremap do     do]c
 " `<leader>` {{{2
 let g:mapleader = ' '
 let g:maplocalleader = '\'
@@ -183,9 +186,8 @@ nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
-nnoremap <leader>fs <Cmd>call edit#filetype('snippets/', '.json')<CR>
+nnoremap <leader>fs <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
-nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " git
@@ -193,29 +195,11 @@ nnoremap <leader>ga <Cmd>!git add %<CR>
 nnoremap <leader>gN <Cmd>execute '!open' git#url('neovim/neovim')<CR>
 nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 
-nnoremap <leader>vv <Cmd>call edit#vimrc()<CR>
-
-" searching and centering {{{2
-" make `n` and `N` behave the same way for `?` and `/` searches
-" https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
-" 'Nn'[v:searchforward] is the same as (v:searchforward ? 'n' : 'N')
-" `zz` to center and since foldopen doesn work in mappings, add `zv`
-nnoremap <expr> n (v:searchforward ? "n" : "N")."zvzz"
-nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
-f
-" TODO: I forgot what these do...
-" nnoremap dp     dp]c
-" nnoremap do     do]c
-
-" bookmarks {{{2
-nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
-nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
-nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
-
-" navigate buffers and windows {{{2
+" navigate buffers, windows, and tabs {{{2
 nnoremap <BS> :bprevious<CR>
 nnoremap <C-BS> g;
 
+" wincmds {{{3
 " `<C-e>` scrolls the window downwards by [count] lines
 " `<C-^>` (`<C-6>`) which edits the alternate  buffer`:e #`
 nnoremap      <C-e>      <C-^>
@@ -239,11 +223,33 @@ tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 " nnoremap <C-w>-     <C-w>s
 " nnoremap <C-w><Bar> <C-w>v
 
-" resize splits
+" searching and centering {{{3
+" make `n` and `N` behave the same way for `?` and `/` searches
+" https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
+" 'Nn'[v:searchforward] is the same as (v:searchforward ? 'n' : 'N')
+" `zz` to center and since foldopen doesn work in mappings, add `zv`
+nnoremap <expr> n (v:searchforward ? "n" : "N")."zvzz"
+nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
+
+" bookmarks {{{3
+nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
+nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
+nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
+
+" resize splits {{{3
 nnoremap <C-W><Up>    :     resize +10<CR>
 nnoremap <C-W><Down>  :     resize -10<CR>
 nnoremap <C-W><Left>  :vert resize +10<CR>
 nnoremap <C-W><Right> :vert resize -10<CR>
+
+" tabpages {{{3
+nnoremap <leader><Tab>l <Cmd>tablast<CR>
+nnoremap <leader><Tab>o <Cmd>tabonly<CR>
+nnoremap <leader><Tab>f <Cmd>tabfirst<CR>
+nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
+nnoremap <leader><Tab>d <Cmd>tabclose<CR>
+nnoremap <leader><Tab>] <Cmd>tabnext<CR>
+nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
 
 " key pairs in normal mode {{{2
 " `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
@@ -296,7 +302,8 @@ nmap S viWS
 vmap ` S`
 vmap F Sf
 
-" change/delete current word {{{2
+" qol {{{2
+" change/delete current word {{{3
 nnoremap c*   *``cgn
 nnoremap c#   *``cgN
 nnoremap cg* g*``cgn
@@ -306,38 +313,68 @@ nnoremap d#   *``dgN
 nnoremap dg* g*``dgn
 nnoremap dg# g*``dgN
 
-" better indenting {{{2
+" better indenting {{{3
 vnoremap < <gv
 vnoremap > >gv
 nnoremap > V`]>
 nnoremap < V`]<
 
-" insert mode undo breakpoints {{{2
-inoremap , ,<C-g>u
-inoremap . .<C-g>u
-inoremap ; ;<C-g>u
+" substitutions {{{3
+" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
+xnoremap s :s/\%V<C-R><C-W>/
 
-" easier completion  {{{2
-inoremap <silent> ,o <C-x><C-o>
-" inoremap <silent> ,f <C-x><C-f>
-" inoremap <silent> ,i <C-x><C-i>
-" inoremap <silent> ,l <C-x><C-l>
-" inoremap <silent> ,n <C-x><C-n>
-" inoremap <silent> ,t <C-x><C-]>
-" inoremap <silent> ,u <C-x><C-u>
-inoremap <silent> ,i <Cmd>Icons<CR>
+" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
+nnoremap g. :%s//<C-r>./g<ESC>
 
-" add chars to EOL {{{2
+" folding {{{3
+" better search if auto pausing folds
+" set foldopen-=search
+" nnoremap <silent> / zn/
+
+nnoremap          zv zMzvzz
+nnoremap <silent> zj zcjzOzz
+nnoremap <silent> zk zckzOzz
+
+nnoremap <leader>df <Cmd>call fold#status()<CR>
+" close folds when moving left at beginning of line
+" TODO: make it wrap like whichwrap+=h or (col('.') == 1 ? 'gk$' : 'h')
+nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
+
+" save, override, and restore commentstring to get nice folds
+xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '.s \| '<,'>fold \| let &l:cms=s<CR>
+
+" you know what I mean... {{{3
+" for act in ['c', 'd', 'y'] " change, delete, yank
+"   for obj in ['p', 'w'] " paragraph, word
+"     execute $'nnoremap {act}{obj} {act}i{obj}'
+"     execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
+"   endfor
+" endfor
+
+" don't capture whitespace in `gc`
+nmap gcap gcip
+
+" command definitions are more robust than abbreviations
+command! W w!
+command! Wq wq!
+command! Wqa wqa!
+" insert {{{2
+" insert chars at EOL {{{3
 nnoremap <Bslash>, mzA,<Esc>;`z
 nnoremap <Bslash>; mzA;<Esc>;`z
 nnoremap <Bslash>. mzA.<Esc>;`z
 
-" insert special chars {{{2
+" insert special chars {{{3
 inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
-" insert comments {{{2
+" insert mode undo breakpoints {{{3
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap ; ;<C-g>u
+
+" insert comments {{{3
 let s:comment_map = {
       \ 'o': '',
       \ 'b': 'BUG: ',
@@ -357,31 +394,17 @@ for [key, val] in items(s:comment_map)
   execute printf('nmap co%s :call comment#above("%s")<CR>', toupper(key), val)
 endfor
 
-" folding {{{2
-" better search if auto pausing folds
-" set foldopen-=search
-" nnoremap <silent> / zn/
-
-nnoremap          zv zMzvzz
-nnoremap <silent> zj zcjzOzz
-nnoremap <silent> zk zckzOzz
-
-nnoremap <leader>df <Cmd>call fold#status()<CR>
-" close folds when moving left at beginning of line
-" TODO: make it wrap like whichwrap+=h or (col('.') == 1 ? 'gk$' : 'h')
-nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
-
-" save, override, and restore commentstring to get nice folds
-xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '.s \| '<,'>fold \| let &l:cms=s<CR>
-
-" substitutions {{{2
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
-xnoremap s :s/\%V<C-R><C-W>/
-
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
-nnoremap g. :%s//<C-r>./g<ESC>
-
-" completion {{{2
+" easier completion  {{{3
+inoremap <silent> ,o <C-x><C-o>
+" inoremap <silent> ,f <C-x><C-f>
+" inoremap <silent> ,i <C-x><C-i>
+" inoremap <silent> ,l <C-x><C-l>
+" inoremap <silent> ,n <C-x><C-n>
+" inoremap <silent> ,t <C-x><C-]>
+" inoremap <silent> ,u <C-x><C-u>
+inoremap <silent> ,i <Cmd>Icons<CR>
+" cmdline {{{2
+" completion {{{3
 " see `:h |cmdline-completion|.`
 set completeopt=menu,preview,longest
 " set completeopt+=preinsert
@@ -397,22 +420,29 @@ set wildmode=longest:full,full " Same as above, but cycle through the first patc
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
 
-" you know what I mean... {{{2
-for act in ['c', 'd', 'y'] " change, delete, yank
-  for obj in ['p', 'w'] " paragraph, word
-    execute $'nnoremap {act}{obj} {act}i{obj}'
-    execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
-  endfor
-endfor
+" abbreviations {{{3
+nnoremap ?? :verbose set ?<Left>
+cnoreabbrev ?? verbose set ?<Left>
+cnoreabbrev !! !./%
+cnoreabbrev <expr> %% expand('%:p:h')
 
-" don't capture whitespace in `gc`
-nmap gcap gcip
+function! s:singlequote(str)
+  return "'" . substitute(copy(a:str), "'", "''", 'g') . "'"
+endfunction
 
-" command definitions are more robust than abbreviations
-command! E e!
-command! W w!
-command! Wq wq!
-command! Wqa wqa!
+function! s:cabbrev(lhs, rhs)
+  " execute printf( 'cnoreabbrev <expr> %s (getcmdtype() ==# ":" && getcmdline() =~# "%s") ? "%s" : "%s"',
+  execute printf('cabbrev <expr> %s (getcmdtype() == ":" && getcmdpos() <= %d) ? %s : %s',
+	\ a:lhs, 1+len(a:lhs), s:singlequote(a:rhs), s:singlequote(a:lhs))
+endfunction
+
+call s:cabbrev('vv', 'verbose')
+call s:cabbrev('scp', '!scp %')
+call s:cabbrev('require', 'lua require')
+call s:cabbrev('man', 'Man')
+call s:cabbrev('Snacks', 'lua Snacks')
+call s:cabbrev('snacks', 'lua Snacks')
+call s:cabbrev('f', 'find')
 " }}}1
 
 call plug#begin()
@@ -433,7 +463,6 @@ Plug 'tpope/vim-git'
 Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 if !has('nvim')
   Plug 'dense-analysis/ale'
@@ -441,10 +470,11 @@ if !has('nvim')
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'romainl/vim-redir'
+  " Plug 'tpope/vim-commentary' " use vim9 commentary
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-tbone'
   " Plug 'tpope/vim-vinegar'    " use dirvish
-  " Plug 'tpope/vim-commentary' " use vim9 commentary
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'

@@ -93,6 +93,9 @@ local keys = {
 { '<leader>cR', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
 { '<leader>fC', function() Snacks.rename.rename_file() end,          desc = 'Rename File'           },
 
+-- nvim unconditionally creates global lsp keymaps, so do it for snacks lsp keymaps too
+{ 'gai', function() Snacks.picker.lsp_incoming_calls() end, desc = 'C[a]lls Incoming' --[[has = "callHierarchy/incomingCalls"]] },
+{ 'gao', function() Snacks.picker.lsp_outgoing_calls() end, desc = 'C[a]lls Outgoing' --[[has = "callHierarchy/outgoingCalls"]] },
 { 'grd', function() Snacks.picker.lsp_definitions() end,             desc = 'LSP Definition'        },
 { 'grD', function() Snacks.picker.lsp_declarations() end,            desc = 'LSP Declaration'       },
 { 'grR', function() Snacks.picker.lsp_references() end,              desc = 'LSP References'        },

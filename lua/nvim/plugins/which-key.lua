@@ -16,15 +16,19 @@ local spec = {
     -- add groups
     { 'co', group = 'comment below' },
     { 'cO', group = 'comment above' },
+    -- { 'gr', group = 'LSP', icon = { icon = '' } },
+    { 'gr', group = 'LSP' },
     { '<leader>b', group = 'buffers', icon = { icon = '' } },
     { '<leader>c', group = 'code' },
-    { '<localleader>l', group = 'vimtex' },
-    { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
-    { '<leader>dp', group = 'profiler', icon = { icon = '⚡' } },
-    { '<leader>f', group = 'find' },
+    { '<leader>d', group = 'debug' },
+    { '<leader>dp', group = 'profiler' },
+    { '<leader>f', group = 'file/find' },
     { '<leader>g', group = 'git' },
     { '<leader>s', group = 'search' },
     { '<leader>u', group = 'ui' },
+    { '<leader>x', group = 'quickfix' },
+    { '<localleader>l', group = 'vimtex' },
+    { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
 
     --  add descriptions
     { 'gx', desc = 'Open with system app' },
@@ -103,8 +107,8 @@ return {
       desc = {
         -- { '<Plug>%(?(.*)%)?', '%1' },
         { '^%+', '' },
-        { '<[cC]md>', '' },
-        { '<[cC][rR]>', '' },
+        { '<[cC]md>', ':' },
+        { '<[cC][rR]>', '󰌑 ' },
         { '<[sS]ilent>', '' },
         { '^lua%s+', '' },
         { '^call%s+', '' },
@@ -124,7 +128,6 @@ return {
     -- see rules at  ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
   end,
   keys = {
-    { '<leader>d', group = 'debug' },
     { '<leader>db', '<Cmd>Blink status<CR>', desc = 'Blink Status' },
     {
       '<leader>dc',

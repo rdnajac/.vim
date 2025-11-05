@@ -99,12 +99,16 @@ function! edit#filetype(...) abort
   endif
 
   if a:0 >= 2 && a:2 =~# '^\.'      " second arg is extension
-    let l:ext = a:2
+    " let l:ext = a:2
   elseif a:0 >= 2
     let l:dir = a:2
   endif
 
   call s:edit(join([g:my#vimdir, l:dir, &filetype . l:ext], '/'))
+endfunction
+
+function! edit#snippet() abort
+  call edit#filetype('snippets/', '.json')
 endfunction
 
 " TODO: move this to vim ftplugin

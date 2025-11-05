@@ -57,7 +57,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "65a266bf",
+      "rev": "896e92a7",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -74,7 +74,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "41712e3",
+      "rev": "d6137be",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
@@ -106,7 +106,7 @@
       "src": "http://github.com/tpope/vim-dispatch.git"
     },
     "vim-endwise": {
-      "rev": "eab5301",
+      "rev": "4994afb",
       "src": "http://github.com/tpope/vim-endwise.git"
     },
     "vim-eunuch": {
@@ -128,10 +128,6 @@
     "vim-scriptease": {
       "rev": "cdb5981",
       "src": "https://git::@github.com/tpope/vim-scriptease.git"
-    },
-    "vim-tbone": {
-      "rev": "79d2819",
-      "src": "https://git::@github.com/tpope/vim-tbone.git"
     },
     "vim-unimpaired": {
       "rev": "db65482",
