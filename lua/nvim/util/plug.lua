@@ -150,7 +150,10 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
       build()
       print('Build function executed for ' .. spec.name)
     elseif type(build) == 'string' then
-      print('Build strings are not supported: ' .. build)
+      -- trim leading ':' or '<Cmd>' and trailing '<CR>'
+      build = build:gsub('^:*', ''):gsub('^<[Cc][Mm][Dd]>', ''):gsub('<[Cc][Rr]>$', '')
+      vim.cmd(build)
+      print('Build string executed for ' .. spec.name)
     end
   end,
 })

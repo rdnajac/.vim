@@ -1,4 +1,3 @@
-local groups = {}
 local dials_by_ft = {
   -- sass = 'css',
   -- scss = 'css',
@@ -10,16 +9,16 @@ return {
   'monaqa/dial.nvim',
   event = 'BufWinEnter',
   debug = function()
-    dd(dials_by_ft)
-    dd(groups)
+    return dials_by_ft
   end,
   config = function()
     local augend = require('dial.augend')
 
     ---@param elements string[] The elements to cycle through
-    ---@param word boolean Whether the elements are words (true) or symbols (false)
-    local new = function(elements, word)
-      return augend.constant.new({ elements = elements, word = word, cyclic = true })
+    ---@param word? boolean Whether the elements are words (true) or symbols (false). Default: false
+    ---@param cyclic? boolean Whether the cycle is cyclic (true) or not (false). Default: true
+    local new = function(elements, word, cyclic)
+      return augend.constant.new({ elements = elements, word = word ~= true, cyclic = cyclic ~= false })
     end
 
     local default_switches = {
@@ -31,43 +30,46 @@ return {
       augend.constant.alias.bool,
       new({ 'True', 'False' }, true),
       new({ 'and', 'or' }, true),
-      new({ '&&', '||' }, false),
+      new({ '&&', '||' }),
       new({ 'top', 'middle', 'bottom' }, true),
       new({ 'left', 'center', 'right' }, true),
       new({ 'start', 'end' }, true),
-      new({ 'row', 'col' }, false),
-      new({ 'human', 'mouse' }, false),
+      new({ 'row', 'col' }),
+      new({ 'human', 'mouse' }),
     -- stylua: ignore start
     new({ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' }, true),
-    new({ 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth' }, false),
+    new({ 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth' }),
     }
 
-    groups.css = {
-      augend.hexcolor.new({ case = 'lower' }),
-      augend.hexcolor.new({ case = 'upper' }),
-    }
-    groups.json = {
-      augend.semver.alias.semver,
-    }
-    groups.markdown = {
-      augend.misc.alias.markdown_header,
-      new({ '[ ]', '[x]' }, false),
-    }
-    groups.r = {
-      new({ 'TRUE', 'FALSE' }, false),
-      new({ 'fin', 'oza', 'pon' }, false),
-      new({ 'Fingolimod', 'Ozanimod', 'Ponesimod' }, false),
-      new({ 'phip', 'phf6' }, false),
-      new({ 'PHIP', 'PHF6' }, false),
-      new({ 'jurkat', 'pf382' }, false),
-      new({ 'Jurkat', 'PF382' }, false),
-      new({ 'sgID2', 'agx51' }, false),
-      new({ 'SGID2', 'AGX51' }, false),
-    }
-    groups.vim = {
-      new({ 'echom', 'execute' }, false),
-      -- new({ 'opt', 'start' }, false),
-      -- new({ 'autoload', 'plugin' }, false),
+    local groups = {
+      default = {},
+      css = {
+        augend.hexcolor.new({ case = 'lower' }),
+        augend.hexcolor.new({ case = 'upper' }),
+      },
+      json = {
+        augend.semver.alias.semver,
+      },
+      markdown = {
+        augend.misc.alias.markdown_header,
+        new({ '[ ]', '[x]' }),
+      },
+      r = {
+        new({ 'TRUE', 'FALSE' }),
+        new({ 'fin', 'oza', 'pon' }),
+        new({ 'Fingolimod', 'Ozanimod', 'Ponesimod' }),
+        new({ 'phip', 'phf6' }),
+        new({ 'PHIP', 'PHF6' }),
+        new({ 'jurkat', 'pf382' }),
+        new({ 'Jurkat', 'PF382' }),
+        new({ 'sgID2', 'agx51' }),
+        new({ 'SGID2', 'AGX51' }),
+      },
+      vim = {
+        new({ 'echom', 'execute' }),
+        -- new({ 'opt', 'start' }),
+        -- new({ 'autoload', 'plugin' }),
+      },
     }
 
     -- create rmd group as a combination of markdown and r
@@ -79,7 +81,6 @@ return {
     end
 
     -- extend each group with default switches
-    groups.default = {}
     for _, group in pairs(groups) do
       vim.list_extend(group, default_switches)
     end
@@ -93,20 +94,14 @@ return {
       local is_visual = vim.tbl_contains({ 'v', 'V', '\22' }, vim.fn.mode(true))
 
       ---@type "inc_normal"|"dec_normal"|"inc_gvisual"|"dec_visual"
-      -- local func = string.format(
-      --   '%s%s%s',
-      --   increment and 'inc' or 'dec',
-      --   g and '_g' or '_',
-      --   is_visual and 'visual' or 'normal'
-      -- )
-      local func = string.format(
-        '%sc_%s%sal',
-        increment and 'in' or 'de',
-        g and 'g' or '',
-        is_visual and 'visu' or 'norm'
+      local fn = string.format(
+        '%s%s%s',
+        increment and 'inc' or 'dec',
+        g and '_g' or '_',
+        is_visual and 'visual' or 'normal'
       )
       local group = dials_by_ft[vim.bo.filetype] or 'default'
-      return require('dial.map')[func](group)
+      return require('dial.map')[fn](group)
     end
 
     return {

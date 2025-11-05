@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "2408f14",
+      "rev": "40380e7",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -66,7 +66,7 @@
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "a1b2bf0",
+      "rev": "060c911",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "b49d11c",
+      "rev": "741f4b1",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {

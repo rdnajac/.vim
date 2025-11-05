@@ -12,6 +12,7 @@ end
 local M = {
   'Saghen/blink.cmp',
   event = 'InsertEnter',
+  build = 'BlinkCmp build',
   ---@type blink.cmp.Config
   opts = {
     cmdline = { enabled = false },

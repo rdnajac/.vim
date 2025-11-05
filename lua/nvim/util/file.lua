@@ -43,14 +43,4 @@ M.write_lines = function(path, lines)
   M.write(path, table.concat(lines, '\n'))
 end
 
----@param path string
----@return table
-M.read_json = function(path)
-  return vim.json.decode(M.read(path))
-end
-
-M.write_json = function(path, tbl)
-  M.write(path, vim.json.encode(tbl))
-end
-
 return M
