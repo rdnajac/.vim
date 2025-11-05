@@ -133,6 +133,5 @@ _G.Formatexpr = function(opts)
   end
 end
 
-vim.o.formatexpr = 'v:lua.Formatexpr()'
--- stylua: ignore
-vim.keymap.set("n", "gqag", function() format() end)
+-- vim.o.formatexpr = 'v:lua.Formatexpr()'
+-- vim.keymap.set("n", "gqag", function() format() end)

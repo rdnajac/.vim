@@ -25,8 +25,8 @@ if exists('g:chezmoi#source_dir_path')
   augroup chezmoi
     autocmd!
     " Automatically `chezmoi add` aliases and binfiles
-    au BufWritePost ~/.bash_aliases,~/bin/* sil! exe
-	  \ '!chezmoi add "%" --no-tty >/dev/null 2>&1' | redr!
+    au BufWritePost ~/.bash_aliases,~/bin/* sil! exec
+	  \ '!chezmoi add "%" --no-tty >/dev/null 2>&1' | redraw!
 
     " Immediately `chezmoi apply` changes when writing to a chezmoi file
     exec 'au BufWritePost '.g:chezmoi#source_dir_path.'/* ' .

@@ -111,6 +111,7 @@ endif
 augroup vimrc
   autocmd!
   au BufReadPost vimrc call vimrc#setmarks()
+  au BufWinLeave vimrc normal! mV
   au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   au BufWritePre * call vim#mkdir#(expand('<afile>'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
@@ -268,10 +269,12 @@ nmap <expr> cq change#quote()
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
 
-" more intuitive `gf` to open file in a new window or jump to the line number
-nnoremap <expr> gf &ft !=# '\vmsg<BAR>pager' ? '' : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
+" open file in a new window when or jump to line number when appropriate
+nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
+      \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
 
 " select last changed text (ie pasted text)
+" TODO: does gv already do this?
 nnoremap gV `[V`]
 
 " `fugitive`
@@ -452,7 +455,6 @@ else
   Plug 'folke/tokyonight.nvim'
   Plug 'saxon1964/neovim-tips'
   Plug 'nvim-treesitter/nvim-treesitter-context'
-  Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
 call plug#end() " don't plug#end() if neovim...
 
@@ -462,4 +464,4 @@ if has('nvim')
 else
   packadd! editorconfig
 endif
-" vim: foldlevel=1 foldmethod=marker
+" vim: foldlevel=0 foldmethod=marker

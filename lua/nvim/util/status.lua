@@ -11,7 +11,9 @@ local M = {}
 ---@type nv.status.Component
 M.blink = {
   function()
-    return vim.tbl_map(icons.blink, nv.blink.get_providers())
+    return vim.tbl_map(function(src)
+      return nv.icons.src[src] or ' '
+    end, nv.blink.get_providers())
   end,
   cond = function()
     return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'

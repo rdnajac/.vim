@@ -1,65 +1,75 @@
---- NOTE: oil.nvim and render-markdown.nvim both use mini icons
-local icons = {
-  default = {},
-  directory = {},
-  extension = {},
-  file = {},
-  filetype = {},
-  lsp = {},
-  os = {},
+local directory = {
+  ghostty = { '󰊠', 'Green' },
 }
 
---- @param k "file"|"extension"|"filetype"
---- @param v string
---- @param glyph string the actual icon
---- @param color? string optional MiniIconColor
-local add = function(k, v, glyph, color)
-  icons[k][v] = { glyph = glyph, hl = 'MiniIcons' .. color }
-end
-
-add('file', '.keep', '󰊢 ', 'Grey')
-add('file', 'devcontainer.json', '', 'Azure')
-
-local ft_map = {
-  json = ' ',
-  sh = ' ',
-  toml = ' ',
-  zsh = ' ',
+local extension = {
+  fastq = { '󰚄', 'Purple' },
+  ['fastq.gz'] = { '󰚄', 'Red' },
+  ['json.tmpl'] = { ' ', 'Grey' },
+  ['sh.tmpl'] = { ' ', 'Grey' },
+  ['toml.tmpl'] = { ' ', 'Grey' },
+  ['zsh.tmpl'] = { ' ', 'Grey' },
 }
 
--- add chezmoi template extensions
-for ext in string.gmatch('json sh toml zsh', '%S+') do
-  add('extension', ext .. '.tmpl', ft_map[ext], 'Grey')
-end
-
--- add chezmoi special files
-for file in string.gmatch('ignore remove root version', '%S+') do
-  add('file', '.chezmoi' .. file, '', 'Grey')
-end
-
--- add chezmoi hidden files
-for file in string.gmatch('zshrc zshenv zprofile zshprofile', '%S+') do
-  add('file', 'dot_' .. file, ' ', 'Green')
-end
-
-add('file', 'dot_Rprofile', '󰟔 ', 'Blue')
-add('file', 'dot_bash_aliases', ' ', 'Blue')
-
-local todo = {
-  { 'extension', 'fastq', '󰚄', 'Purple' },
-  { 'extension', 'fastq.gz', '󰚄', 'Red' },
-  { 'filetype', 'dotenv', ' ', 'Yellow' },
-  { 'filetype', 'nvim-pack', '', 'Green' },
-  { 'filetype', 'snacks_dashboard', '󰨇 ', '' },
-  { 'filetype', 'snacks_terminal', '🍬', '' },
-  { 'filetype', 'sidekick_terminal', ' ', '' },
-  -- HACK: treesitter status icons
-  { 'filetype', 'printf', '', 'Orange' },
-  { 'filetype', 'regex', '', 'Orange' },
+local file = {
+  ['.chezmoiignore'] = { '', 'Grey' },
+  ['.chezmoiremove'] = { '', 'Grey' },
+  ['.chezmoiroot'] = { '', 'Grey' },
+  ['.chezmoiversion'] = { '', 'Grey' },
+  ['.keep'] = { '󰊢 ', 'Grey' },
+  ['devcontainer.json'] = { '', 'Azure' },
+  dot_Rprofile = { '󰟔 ', 'Blue' },
+  dot_bash_aliases = { ' ', 'Blue' },
+  dot_zprofile = { ' ', 'Green' },
+  dot_zshenv = { ' ', 'Green' },
+  dot_zshprofile = { ' ', 'Green' },
+  dot_zshrc = { ' ', 'Green' },
+  ['ghostty/config'] = { '👻', 'Green' },
 }
 
-for _, v in ipairs(todo) do
-  add(v[1], v[2], v[3], v[4])
+local filetype = {
+  dotenv = { ' ', 'Yellow' },
+  ['nvim-pack'] = { '', 'Green' },
+  printf = { '', 'Orange' },
+  regex = { '', 'Orange' },
+  sidekick_terminal = { ' ', '' },
+  snacks_dashboard = { '󰨇 ', '' },
+  snacks_terminal = { '🍬', '' },
+}
+
+local function make_opts(v)
+  return { glyph = v[1], hl = 'MiniIcons' .. v[2] }
 end
 
-return icons
+local M = {
+  directory = vim.tbl_map(make_opts, directory),
+  extension = vim.tbl_map(make_opts, extension),
+  file = vim.tbl_map(make_opts, file),
+  filetype = vim.tbl_map(make_opts, filetype),
+}
+
+M.use_file_extension = function(ext, _)
+  return ext:sub(-3) ~= 'scm'
+end
+
+M.test = function()
+  local tests = {
+    directory = { 'ghostty', 'src', 'mini.nvim' },
+    file = {
+      '.chezmoiignore',
+      'devcontainer.json',
+      'somefile.fastq.gz',
+      'dot_Rprofile',
+      'test.lua',
+      'README.md',
+    },
+  }
+  for kind, names in pairs(tests) do
+    for _, name in ipairs(names) do
+      local icon, hl = MiniIcons.get(kind, name)
+      print(string.format('[%s] %s -> %s (%s)', kind, name, icon, hl))
+    end
+  end
+end
+
+return M

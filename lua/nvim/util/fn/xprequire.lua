@@ -3,7 +3,6 @@ local M = setmetatable({}, {
     return M.xprequire(...)
   end,
 })
--- TODO: text to json body for snippet creation
 
 --- Same as require but handles errors gracefully
 ---

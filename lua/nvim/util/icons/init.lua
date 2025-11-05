@@ -1,7 +1,3 @@
---   package.preload['nvim-web-devicons'] = function()
---     require('mini.icons').mock_nvim_web_devicons()
---     return package.loaded['nvim-web-devicons']
---   end
 local icons = {
   src = { -- blink sources
     buffer = ' ',
@@ -45,12 +41,6 @@ local icons = {
   },
 }
 
--- setmetatable(icons.src({
---   __call = function(_, key)
---     return icons.src[key]
---   end,
--- }))
-
 local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
 local M = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
 
@@ -89,8 +79,6 @@ for _, category in ipairs(mini_icon_keys) do
   })
 end
 
-M.blink = function(src)
-  return M.src[src] or ' '
-end
+-- M.mini = require('nvim.util.icons.mini')
 
 return M
