@@ -1,4 +1,31 @@
-_G.nv = _G.nv or require('nvim.util')
+local M = {}
+
+local prefixes = {
+  'nvim.util',
+  'nvim',
+  'nvim.config',
+  'nvim.plugins',
+}
+
+local stats = { hits = 0, misses = 0 }
+function M.stats()
+  return stats
+end
+
+_G.nv = setmetatable(M, {
+  __index = function(t, k)
+    for _, prefix in ipairs(prefixes) do
+      local ok, mod = pcall(require, prefix .. '.' .. k)
+      if ok then
+        stats.hits = stats.hits + 1
+        t[k] = mod
+        return mod
+      end
+      stats.misses = stats.misses + 1
+    end
+    return nil
+  end,
+})
 
 nv.specs = vim.tbl_values(vim.tbl_map(function(plugin)
   return nv.plug(plugin):tospec()

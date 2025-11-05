@@ -39,7 +39,7 @@ function M.check()
     end
   else
     ok(
-      'Using a prerelease version of Neovim: '
+      'Using Neovim nightly: '
         .. ver.major
         .. '.'
         .. ver.minor

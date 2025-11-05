@@ -23,6 +23,8 @@ local nv = _G.nv or require('nvim.util')
 --- @field keys? table|fun():table Keymaps to bind for the plugin.
 --- @field opts? table|fun():table Options to pass to the plugin's `setup()`.
 --- @field toggles? table
+--- @field version? string Git tag or version to checkout.
+--- @field branch? string Git branch to checkout.
 --- @field data? any additional data to pass to `vim.pack.add()`
 local Plugin = {}
 Plugin.__index = Plugin
@@ -44,11 +46,12 @@ function Plugin:schedule_after()
 end
 
 function Plugin.new(t)
+  -- print(vim.inspect(t))
   local self = setmetatable(t, Plugin)
   self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
   -- store things to be passed to `vim.pack.Spec.data`
   self.data = {
-    -- build = self.build, -- TODO:
+    build = self.build,
     setup = function()
       return self:setup()
     end,
@@ -63,12 +66,17 @@ function Plugin.new(t)
   if not self.opts and self.config == true then
     self.opts = {} -- HACK: handles `config = true`
   end
+
+  if self.lazy == true or self.event == 'LazyFile' then
+    self.event = 'VimEnter'
+  end
+
   return self
 end
 
 --- Convert the `Plugin` to a `vim.pack.Spec` for use with `vim.pack`.
 --- The `spec`'s `data` field will contain the `build` and `setup` functions.
---- @return vim.pack.Spec
+--- @return vim.pack.Spec|nil
 function Plugin:tospec()
   if self.enabled == false then
     return nil
@@ -83,13 +91,6 @@ function Plugin:tospec()
   return spec
 end
 
---- @generic T
---- @param x T|fun():T
---- @return T
-_get = function(x)
-  return type(x) == 'function' and x() or x
-end
-
 --- Call the `Plugin`'s `config` function if it exists, otherwise
 --- call the named module's `setup` function with `opts` if they exist.
 --- Also schedules the `after` function if it exists.
@@ -98,7 +99,7 @@ function Plugin:_setup()
     return
   end
   -- PERF: only evaluate opts once
-  local opts = _get(self.opts)
+  local opts = vim.is_callable(self.opts) and self.opts() or self.opts
   if type(opts) == 'table' then
     local modname = self.name:gsub('%.nvim$', '')
     require(modname).setup(opts)
@@ -114,12 +115,8 @@ local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 --- call the named module's `setup` function with `opts` they exist.
 function Plugin:setup()
   if self.did_setup == false then
-    if self.event or self.lazy == true then
-      -- if event is 'LazyFile, treat as 'VimEnter'
-      if self.event == 'LazyFile' then
-        self.event = 'VimEnter'
-      end
-      vim.api.nvim_create_autocmd(self.event or 'VimEnter', {
+    if self.event then
+      vim.api.nvim_create_autocmd(self.event, {
         callback = function()
           self:_setup()
         end,
@@ -147,11 +144,8 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
     local spec = event.data.spec
     local build = spec.data and spec.data.build
     if type(build) == 'function' then
-      if vim.v.vim_did_enter == 0 then
-        -- TODO:
-        -- defer build until after startup
-        -- vim.schedule(function() build() end)
-        print('Build function deferred for ' .. spec.name)
+      if not event.data.active then
+        vim.cmd.packadd(spec.name)
       end
       build()
       print('Build function executed for ' .. spec.name)
@@ -203,7 +197,7 @@ end, {
 return setmetatable({
   get_keys = function()
     return vim.tbl_map(function(p)
-      return _get(p)
+      return vim.is_callable(p) and p() or p
     end, vim.tbl_values(keys))
   end,
   unloaded = function()

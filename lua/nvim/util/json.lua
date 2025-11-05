@@ -24,30 +24,16 @@ function M.format(opts)
   return 0
 end
 
-local function _open_file(path, mode)
-  local f = io.open(path, mode)
-  if not f then
-    error('Could not open file: ' .. path)
-  end
-  return f
-end
-
----@param path string
+---@param filename string
 ---@return table
-M.read = function(path)
-  local f = _open_file(path, 'r')
-  local data = f:read('*a')
-  f:close()
-  return vim.json.decode(data)
+M.read = function(filename)
+  return vim.json.decode(nv.file.read(filename))
 end
 
----@param file string
+---@param filename string
 ---@param contents string
-M.write = function(file, contents)
-  vim.fn.mkdir(vim.fn.fnamemodify(file, ':h'), 'p')
-  local fd = _open_file(file, 'w+')
-  fd:write(contents)
-  fd:close()
+M.write = function(filename, contents)
+  return nv.file.write(filename, vim.json.encode(contents))
 end
 
 return M

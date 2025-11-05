@@ -123,5 +123,3 @@ nv.patch('snacks.statuscolumn', function(M)
     return ret
   end
 end)
-
-return {}

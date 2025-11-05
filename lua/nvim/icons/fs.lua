@@ -28,7 +28,17 @@ end
 
 local M = {}
 
-M.apply_icons = function(bufnr)
+M.get = function(fname)
+  local entry = icon_cache[fname]
+  if not entry then
+    local icon, hl = nv.icons[Snacks.util.path_type(fname)](fname)
+    entry = { icon = icon, hl = hl }
+    icon_cache[fname] = entry
+  end
+  return entry
+end
+
+M.render = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
     return
@@ -39,12 +49,7 @@ M.apply_icons = function(bufnr)
   for i, line in ipairs(lines) do
     local fname = to_file(line)
     if fname then
-      local entry = icon_cache[fname]
-      if not entry then
-        local icon, hl = nv.icons[Snacks.util.path_type(fname)](fname)
-        entry = { icon = icon, hl = hl }
-        icon_cache[fname] = entry
-      end
+      local entry = M.get(fname)
       vim.api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
         sign_text = entry.icon,
         sign_hl_group = entry.hl,

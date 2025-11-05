@@ -12,7 +12,6 @@ M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end
 
-
 M.is_nonempty_list = function(x)
   return vim.islist(x) and #x > 0
 end

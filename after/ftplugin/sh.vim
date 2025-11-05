@@ -1,6 +1,6 @@
-call vimrc#apathy('path', split($PATH, has('win32') ? ';' : ':'))
-setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
 setlocal define=\\<\\%(\\i\\+\\s*()\\)\\@=
+setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
+call vimrc#apathy('path', split($PATH, has('win32') ? ';' : ':'))
 
 if executable('shfmt')
   if !exists('g:shellharden')
@@ -15,6 +15,7 @@ if executable('shfmt')
   if get(b:, 'sh_simple', get(g:, 'sh_simple', 0))
     let s:cmd .= ' --simplify'
   endif
+
   if executable('shellharden') && get(b:, 'shellharden', get(g:, 'shellharden', 0))
     let s:cmd = 'shellharden --transform "" | ' . s:cmd
   endif

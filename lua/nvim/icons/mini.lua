@@ -29,6 +29,7 @@ local file = {
 
 local filetype = {
   dotenv = { ' ', 'Yellow' },
+  ghostty = { '👻', 'Green' },
   ['nvim-pack'] = { '', 'Green' },
   printf = { '', 'Orange' },
   regex = { '', 'Orange' },

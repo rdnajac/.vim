@@ -1,4 +1,4 @@
-lua require('nvim/util/fs').apply_icons()
+lua require('nvim.icons.fs').render()
 
 nnoremap <buffer> h <Plug>(dirvish_up)
 nnoremap <buffer> <Left> <Plug>(dirvish_up)

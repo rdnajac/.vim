@@ -59,7 +59,7 @@ end
 
 return setmetatable(M, {
   __index = function(t, k)
-    t[k] = require('nvim.util.treesitter.' .. k)
+    t[k] = require('nvim.treesitter.' .. k)
     return t[k]
   end,
 })

@@ -74,7 +74,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "3b8c6a6",
+      "rev": "b49d11c",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
@@ -82,7 +82,7 @@
       "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
-      "rev": "047ace2",
+      "rev": "5da1b76",
       "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-abolish": {
@@ -96,6 +96,10 @@
     "vim-characterize": {
       "rev": "a8bffac",
       "src": "https://git::@github.com/tpope/vim-characterize.git"
+    },
+    "vim-dadbod": {
+      "rev": "e95afed",
+      "src": "https://git::@github.com/tpope/vim-dadbod.git"
     },
     "vim-dirvish": {
       "rev": "5d1d1ef",
@@ -128,6 +132,10 @@
     "vim-scriptease": {
       "rev": "cdb5981",
       "src": "https://git::@github.com/tpope/vim-scriptease.git"
+    },
+    "vim-ug": {
+      "rev": "dd58f58",
+      "src": "https://git::@github.com/justinmk/vim-ug.git"
     },
     "vim-unimpaired": {
       "rev": "db65482",

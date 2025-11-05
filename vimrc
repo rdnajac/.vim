@@ -74,7 +74,7 @@ augroup vimrc_ui
   au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
 
   " Hide the statusline while in command mode
-  au CmdlineEnter * if &ls != 0 | set ls=0 | let g:last_ls = &ls | endif
+  au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
@@ -450,18 +450,18 @@ Plug 'alker0/chezmoi.vim'
 " Plug 'andymass/vim-matchup'
 Plug 'bullets-vim/bullets.vim'
 Plug 'justinmk/vim-dirvish'
+Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 " Plug 'lervag/wiki.vim.git'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
+Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-git'
 Plug 'tpope/vim-rsi'
-" Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-unimpaired'
 if !has('nvim')
@@ -472,6 +472,7 @@ if !has('nvim')
   Plug 'romainl/vim-redir'
   " Plug 'tpope/vim-commentary' " use vim9 commentary
   Plug 'tpope/vim-repeat'
+  " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-tbone'
   " Plug 'tpope/vim-vinegar'    " use dirvish
@@ -484,7 +485,7 @@ if !has('nvim')
 else
   Plug 'folke/tokyonight.nvim'
   Plug 'saxon1964/neovim-tips'
-  Plug 'nvim-treesitter/nvim-treesitter-context'
+  " Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
 call plug#end() " don't plug#end() if neovim...
 
@@ -493,5 +494,7 @@ if has('nvim')
   packadd! nvim.undotree
 else
   packadd! editorconfig
+  packadd! hlyank
 endif
+packadd! cfilter
 " vim: foldlevel=0 foldmethod=marker

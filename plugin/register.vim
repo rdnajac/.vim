@@ -21,10 +21,8 @@ function s:set_clipboard() abort
   if !has('nvim')
     set clipboard=unnamed
   else
-    " don't use the clipboard over ssh
-    if !exists('$SSH_TTY')
+    if !exists('$SSH_TTY') " don't set clipboard over ssh
       set clipboard=unnamedplus
-      " Info 'Using system clipboard for yank and paste'
     endif
   endif
 endfunction
@@ -57,7 +55,5 @@ augroup vimrc_yank
   if has('nvim')
     autocmd TextYankPost * silent! lua vim.hl.on_yank()
     autocmd UIEnter * call s:set_clipboard()
-  else
-    packadd hlyank
   endif
 augroup END

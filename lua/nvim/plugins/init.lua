@@ -2,6 +2,10 @@ local M = {
   require('nvim.snacks'),
 }
 
+vim.list_extend(M, require('nvim.lazy.spec'))
+vim.list_extend(M, require('nvim.lsp.spec'))
+vim.list_extend(M, require('nvim.treesitter.spec'))
+
 local path = vim.fs.dirname(debug.getinfo(1).source:sub(2))
 local files = vim.fn.globpath(path, '*.lua', false, true)
 local iter = vim.iter(files)

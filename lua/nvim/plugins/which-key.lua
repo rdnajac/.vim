@@ -16,7 +16,7 @@ local spec = {
     -- add groups
     { 'co', group = 'comment below' },
     { 'cO', group = 'comment above' },
-    { 'cr', group = 'CoeRce', icon = {'󰬴' } },
+    { 'cr', group = 'CoeRce', icon = { '󰬴' } },
     { 'gr', group = 'LSP', icon = { icon = '' } },
     { '<leader>b', group = 'buffers', icon = { icon = '' } },
     { '<leader>c', group = 'code' },

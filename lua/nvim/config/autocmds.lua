@@ -19,7 +19,3 @@ local function audebug(event, pattern, cb)
 end
 
 audebug('DirChanged')
-
-audebug('DirChanged', function(ev)
-  print('Dir changed to: ' .. ev.file)
-end)

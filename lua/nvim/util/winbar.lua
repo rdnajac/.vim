@@ -83,7 +83,7 @@ local M = {
           ret = value
         end
         if ret ~= nil then
-	  -- FIXME:
+          -- FIXME:
           -- if type(p) == 'table' and p.color ~= nil then
           --   local color = vim.is_callable(p.color) and p.color() or p.color
           --   ret = string.format('%%#%s#%s%%#Chromatophore_b#', color, ret)

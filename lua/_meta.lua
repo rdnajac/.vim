@@ -20,7 +20,7 @@ error('this file should not be required directly')
 -- function vim.api.nvim_create_autocmd(event, opts) end
 
 -- these should be generated automatically...
-nv.lsp = require('nvim.util.lsp')
+nv.lsp = require('nvim.lsp')
 nv.status = require('nvim.util.status')
 
 ---@class GitResult
