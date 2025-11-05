@@ -45,9 +45,10 @@ M.diagnostic = {
   end,
 }
 
+---@param bufnr? number
 ---@return string[] List of status icons for the statusline
-M.lsp = function()
-  local clients = vim.lsp.get_clients()
+M.lsp = function(bufnr)
+  local clients = vim.lsp.get_clients({ bufnr = bufnr or 0 })
   if #clients == 0 then
     return { icons.lsp.unavailable .. ' ' }
   end
@@ -56,15 +57,20 @@ M.lsp = function()
     .iter(clients)
     :map(function(c)
       if c.name == 'copilot' and package.loaded['sidekick'] then
-        local ok, statusmod = pcall(require, 'sidekick.status')
-        if ok and statusmod then
+        local ok_sk, statusmod = pcall(require, 'sidekick.status')
+        if ok_sk and statusmod then
           local status = statusmod.get()
           local kind = status and status.kind or 'Inactive'
           return (icons.copilot[kind] or icons.copilot.Inactive)[1]
         end
         return icons.copilot.Inactive[1]
       else
-        return icons.lsp.attached
+        local icon = icons.lsp.attached
+        local msgs = nv.lsp.progress(c.id)
+        if #msgs > 0 then
+          icon = icon .. ' ' .. table.concat(msgs, ' ')
+        end
+        return icon
       end
     end)
     :totable()

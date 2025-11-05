@@ -1,4 +1,5 @@
 ---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
+-- TODO: migrate to lualine?
 
 local M = {
   a = function(opts)
@@ -9,7 +10,7 @@ local M = {
     local path
 
     if ft == 'dirvish' then
-      local path = vim.b[bufnr].dirvish._dir
+      path = vim.b[bufnr].dirvish._dir
       return nv.icons.directory[path] .. ' ' .. vim.fn.fnamemodify(path, ':~')
     end
 
@@ -53,6 +54,7 @@ local M = {
       nv.status.treesitter,
       nv.status.lsp,
       nv.status.blink,
+      require('nvim.plugins.r').status,
     }
     return vim
       .iter(parts)
@@ -74,10 +76,19 @@ local M = {
             end
           end
         end
+        local ret
         if type(value) == 'table' then
-          return table.concat(value, ' ')
+          ret = table.concat(value, ' ')
         elseif type(value) == 'string' then
-          return value
+          ret = value
+        end
+        if ret ~= nil then
+	  -- FIXME:
+          -- if type(p) == 'table' and p.color ~= nil then
+          --   local color = vim.is_callable(p.color) and p.color() or p.color
+          --   ret = string.format('%%#%s#%s%%#Chromatophore_b#', color, ret)
+          -- end
+          return ret
         end
         return nil
       end)
