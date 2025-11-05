@@ -1,3 +1,4 @@
+-- TODO: use native reopen from new release
 ---@diagnostic disable-next-line
 local function reopen(picker, overrides)
   local last = {
@@ -52,13 +53,14 @@ end
 return {
   ---@param opts snacks.picker.Config
   config = function(opts)
+    opts.layout = { preset = 'mydefault' }
     local icon_map = { grep = '󰱽', files = '' }
     local icon = icon_map[opts.finder] or ' '
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
     local searchpath = opts.dirs and 'Multiple Paths' or vim.fn.fnamemodify(opts.cwd, ':~')
 
     opts.title = string.format('%s %s [ %s ]', icon, name, searchpath)
-    if nv.is_nonempty_list(opts.ft) then
+    if vim.islist(opts.ft) and #opts.ft > 0 then
       opts.title = table.concat(
         vim.list_extend(
           { opts.title },

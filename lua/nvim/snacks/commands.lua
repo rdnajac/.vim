@@ -30,7 +30,7 @@ vim
     if vim.fn.exists(':' .. cmd) ~= 2 then
       vim.api.nvim_create_user_command(cmd, function(args)
         local opts = {}
-        if nv.is_nonempty_string(args.args) then
+        if nv.fn.is_nonempty_string(args.args) then
           --- @diagnostic disable-next-line: param-type-mismatch
           local ok, result = pcall(loadstring('return {' .. args.args .. '}'))
           if ok and type(result) == 'table' then

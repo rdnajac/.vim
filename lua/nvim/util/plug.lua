@@ -115,6 +115,10 @@ local aug = vim.api.nvim_create_augroup('LazyLoad', {})
 function Plugin:setup()
   if self.did_setup == false then
     if self.event or self.lazy == true then
+      -- if event is 'LazyFile, treat as 'VimEnter'
+      if self.event == 'LazyFile' then
+        self.event = 'VimEnter'
+      end
       vim.api.nvim_create_autocmd(self.event or 'VimEnter', {
         callback = function()
           self:_setup()
@@ -174,7 +178,7 @@ end, {
 })
 
 command('PlugStatus', function(opts)
-  local plugin = nv.is_nonempty_string(opts.fargs) and opts.fargs or nil
+  local plugin = nv.fn.is_nonempty_string(opts.fargs) and opts.fargs or nil
   vim._print(true, vim.pack.get(plugin, { info = opts.bang }))
 end, {
   bang = true,

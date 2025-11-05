@@ -76,7 +76,7 @@ return {
         -- proc = true, -- show proc debug info
         -- extmarks = true, -- show extmarks errors
       },
-      layout = { preset = 'mydefault' },
+      -- layout = { preset = 'mydefault' },
       layouts = require('nvim.snacks.picker.layouts'),
       sources = {
         buffers = {

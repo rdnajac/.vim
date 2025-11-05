@@ -50,7 +50,8 @@ vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
 end
 
 nmap('crf',   nv.coerce.form,      'local function foo() ↔ local foo = function()')
-nmap('crf',   nv.coerce.scope,     'local x ↔ M.x')
+-- FIXME: crm conflicts with abolish
+-- nmap('crf',   nv.coerce.scope,     'local x ↔ M.x')
 nmap('crM',   nv.coerce.formscope, 'local function foo() → M.foo = function()')
 nmap('crF',   nv.coerce.scopeform, 'M.foo = function() → local function foo()')
 

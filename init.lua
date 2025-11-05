@@ -35,5 +35,3 @@ vim.cmd([[
 
 -- the rest if the owl
 require('nvim').init()
-
-vim.pack.add({ vim.fn['git#url']('LazyVim/LazyVim') }, { load = false })

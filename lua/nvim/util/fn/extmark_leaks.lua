@@ -1,3 +1,9 @@
+local M = setmetatable({}, {
+  __call = function(M, ...)
+    return M.extmark_leaks(...)
+  end,
+})
+
 function M.extmark_leaks()
   local nsn = vim.api.nvim_get_namespaces()
 
@@ -19,5 +25,6 @@ function M.extmark_leaks()
   table.sort(counts, function(a, b)
     return a.count > b.count
   end)
-  dd(counts)
 end
+
+return M

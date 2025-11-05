@@ -9,7 +9,7 @@ local M = setmetatable({}, {
 -- FIXME:
 function M.new(fname)
   vim.cmd.enew()
-  if not nv.is_nonempty_string(fname) then
+  if not nv.fn.is_nonempty_string(fname) then
     vim.ui.input({ prompt = 'edit file: ' }, function(input)
       vim.cmd.file(input)
     end)
