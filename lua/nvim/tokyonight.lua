@@ -193,7 +193,7 @@ local want = {
   'vim',
 }
 
-M.build = function()
+local function build()
   local extras = require('tokyonight.extra').extras
   local style = 'midnight'
   local style_name

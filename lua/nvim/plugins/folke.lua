@@ -1,6 +1,7 @@
 return {
   {
     'folke/todo-comments.nvim',
+    enabled = false,
     lazy = true,
     opts = {
       keywords = { Section = { icon = '󰚟', color = 'title' } },

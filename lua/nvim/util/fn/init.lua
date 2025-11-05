@@ -26,6 +26,40 @@ M.submodules = function(subdir)
   end, files)
 end
 
+--- Deferred redraw after `t` milliseconds (default 200ms)
+--- @param t number? time in ms to defer
+M.defer_redraw = function(t)
+  vim.defer_fn(function()
+    -- vim.cmd([[redraw!]])
+    -- vim.cmd.redraw({ bang = true })
+    Snacks.util.redraw(vim.api.nvim_get_current_win())
+  end, t or 200)
+end
+
+function M.extmark_leaks()
+  local nsn = vim.api.nvim_get_namespaces()
+
+  local counts = {}
+
+  for name, ns in pairs(nsn) do
+    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+      local count = #vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
+      if count > 0 then
+        counts[#counts + 1] = {
+          name = name,
+          buf = buf,
+          count = count,
+          ft = vim.bo[buf].ft,
+        }
+      end
+    end
+  end
+  table.sort(counts, function(a, b)
+    return a.count > b.count
+  end)
+  dd(counts)
+end
+
 return setmetatable(M, {
   __index = function(_, key)
     local ok, mod = pcall(require, 'nv.util.fn.' .. key)

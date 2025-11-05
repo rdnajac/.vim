@@ -35,8 +35,6 @@ local on_filetype = function()
   " TODO: are these overridden by R.nvim in after/ftplugin?
   hi clear RCodeBlock
   hi clear RCodeComment
-
-  autocmd BufEnter term://*:R\ * startinsert
   ]])
 end
 

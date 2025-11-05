@@ -49,8 +49,12 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "86bb076",
+      "rev": "d122136",
       "src": "http://github.com/saxon1964/neovim-tips.git"
+    },
+    "noice.nvim": {
+      "rev": "7bfd942",
+      "src": "https://git::@github.com/folke/noice.nvim.git"
     },
     "nvim-lspconfig": {
       "rev": "2010fc6",
@@ -79,7 +83,7 @@
     },
     "todo-comments.nvim": {
       "rev": "411503d",
-      "src": "https://github.com/folke/todo-comments.nvim.git"
+      "src": "https://git::@github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
       "rev": "5da1b76",
@@ -120,10 +124,6 @@
     "vim-fugitive": {
       "rev": "61b51c0",
       "src": "http://github.com/tpope/vim-fugitive.git"
-    },
-    "vim-git": {
-      "rev": "485e38f",
-      "src": "http://github.com/tpope/vim-git.git"
     },
     "vim-rsi": {
       "rev": "4554063",

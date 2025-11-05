@@ -1,7 +1,7 @@
 return {
   ---@module "snacks"
-  ---@type snacks.Config
   'folke/snacks.nvim',
+  ---@type snacks.Config
   opts = {
     -- bigfile = { enabled = true },
     bigfile = {
@@ -29,7 +29,7 @@ return {
     notifier = { enabled = false },
     -- notifier = require('nvim.snacks.notifier'),
     quickfile = { enabled = true },
-    scratch = { template = 'local x = \n\nprint(x)' },
+    -- scratch = { template = 'local x = \n\nprint(x)' },
     terminal = { enabled = true },
     scope = {
       keys = {

@@ -8,6 +8,7 @@ local autostart_filetypes = {
   'html',
   'javascript',
   'json',
+  'lua',
   'markdown',
   'python',
   'sh',
@@ -34,11 +35,16 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Use treesitter folding for select filetypes',
 })
 
+local function install_defaults()
+  local parsers = require('nvim.treesitter.parsers')
+  vim.cmd('TSUpdate | TSInstall! ' .. table.concat(parsers, ' '))
+end
+
 local M = {
   {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
-    build = vim.cmd.TSUpdate,
+    build = install_defaults,
     keys = {
       { '<C-Space>', nv.treesitter.selection.start },
       { mode = 'x', '<C-Space>', nv.treesitter.selection.increment },

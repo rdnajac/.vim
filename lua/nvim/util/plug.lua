@@ -13,7 +13,7 @@ local nv = _G.nv or require('nvim.util')
 --- @class Plugin
 --- @field [1] string The plugin name in `user/repo` format.
 --- @field enabled boolean Defaults to `true`.
---- @field name string The plugin name as evauluated by `vim.pack`.
+--- @field name string The plugin name as evaluated by `vim.pack`.
 --- @field did_setup? boolean Tracks if `setup()` has been called.
 --- @field after? fun():nil Commands to run after the plugin is loaded.
 --- @field build? string|fun():nil Callback after plugin is installed/updated.

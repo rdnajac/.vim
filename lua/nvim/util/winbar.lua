@@ -35,10 +35,8 @@ local M = {
       path,
       "%{% &readonly ? ' ' : '%M' %}",
       "%{% &busy     ? '◐ ' : ''   %}",
-      "%{% &busy     ? '◐ ' : ''   %}",
-      -- FIXME:
-      -- [[%{% &ff ~=# 'unix'  ? 'ff=%&ff' : ''  %}]],
-      -- [[%{% &fenc ~=# 'utf-8'  ? 'fenc=%&fenc' : ''  %}]],
+      [[%{% &ff !=# 'unix'  ? ' ff=' . &ff : ''  %}]],
+      [[%{% &fenc !=# 'utf-8'  ? ' fenc=' . &fenc : ''  %}]],
     })
   end,
 
@@ -132,11 +130,14 @@ M.winbar = function(opts)
   local winbar = M.a(opts)
 
   -- TODO: return early if inactive or help
+  if opts.ft == 'dirvish' then
+    local b = [[%{join(map(argv(), "fnamemodify(v:val, ':t')"), ' ')}]]
+    return M.render(winbar, b, '')
+  end
   if opts.active and opts.bt ~= 'help' then
     return M.render(winbar, M.b(), M.c())
-  else
-    return M.render(nv.icons.filetype(opts.ft), winbar, '')
   end
+  return M.render(nv.icons.filetype(opts.ft), winbar, '')
 end
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end

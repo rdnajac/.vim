@@ -128,6 +128,10 @@ augroup vimrc
   " automatically resize splits when the window is resized
   au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet t
 
+  " terminal stuff
+   autocmd BufEnter term://*:R\ * startinsert
+   autocmd BufEnter term://*/copilot startinsert
+
   au VimLeave * if v:dying | echom "help im dying: " . v:dying | endif
 augroup END
 
@@ -485,7 +489,6 @@ if !has('nvim')
 else
   Plug 'folke/tokyonight.nvim'
   Plug 'saxon1964/neovim-tips'
-  " Plug 'nvim-treesitter/nvim-treesitter-context'
 endif
 call plug#end() " don't plug#end() if neovim...
 

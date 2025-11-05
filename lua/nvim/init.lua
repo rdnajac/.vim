@@ -73,5 +73,6 @@ return {
     _G.bt = function(...) Snacks.debug.backtrace(...) end
     _G.p  = function(...) Snacks.debug.profile(...) end
     require('nvim.tokyonight')
+    require('nvim.lsp')
   end,
 }

@@ -152,5 +152,4 @@ return {
     }
   end,
 }
-
 -- vim: fdl=2

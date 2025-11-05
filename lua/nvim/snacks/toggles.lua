@@ -96,14 +96,6 @@ if package.loaded['render-markdown'] then
 end
 
 -- if MiniDiff ~= nil then
-local defer_redraw = function(t)
-  vim.defer_fn(function()
-    -- vim.cmd([[redraw!]])
-    -- vim.cmd.redraw({ bang = true })
-    Snacks.util.redraw(vim.api.nvim_get_current_win())
-  end, t or 200)
-end
-
 toggles['<leader>uG'] = {
   name = 'MiniDiff Signs',
   get = function()
@@ -112,7 +104,7 @@ toggles['<leader>uG'] = {
   set = function(state)
     vim.g.minidiff_disable = not state
     MiniDiff.toggle(0)
-    defer_redraw()
+    nv.fn.defer_redraw()
   end,
 }
 
@@ -124,7 +116,7 @@ toggles['<leader>go'] = {
   end,
   set = function(_)
     MiniDiff.toggle_overlay(0)
-    defer_redraw()
+    nv.fn.defer_redraw()
   end,
 }
 -- end

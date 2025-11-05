@@ -3,7 +3,7 @@ _G.t = { vim.uv.hrtime() }
 vim.loader.enable()
 require('nvim.util.track')
 
----@diagnostic disable-next-line: duplicate-set-field
+--- @diagnostic disable-next-line: duplicate-set-field
 function vim.print(...)
   return vim._print(true, ...)
 end
