@@ -1,9 +1,10 @@
-" TODO: move to r.lua opts
 setlocal iskeyword-=.
 
-" Note that not all terminals handle these key presses the same way
+inoremap <buffer> <C-=> <-<Space>
 inoremap <buffer> <M--> <-<Space>
 inoremap <buffer> <M-Bslash> <Bar>><Space>
+inoremap <buffer> `` <Plug>RmdInsertChunk
+
 inoremap <buffer> <space><space> viw
 
 " TODO: move to snippets
@@ -24,6 +25,7 @@ vnoremap <buffer> <CR> <Plug>RSendSelection
 " nnoremap <buffer> <CR> <Plug>RDSendLine
 nnoremap <buffer> <M-CR> <Plug>RInsertLineOutput
 
+
 nnoremap <buffer> <localleader>r<CR> <Plug>RSendFile
 nnoremap <buffer> <localleader>rq <Plug>RClose
 
@@ -39,4 +41,6 @@ nnoremap <buffer> <localleader>rq :<C-U>RSend quarto::quarto_preview(file="<C-R>
 " TODO: are these overridden by R.nvim in after/ftplugin?
 hi clear RCodeBlock
 hi clear RCodeComment
+
+" inoremap <buffer> `` ```{r}<CR><CR>```<Up>
 " endif

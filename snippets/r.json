@@ -8,18 +8,23 @@
     ]
   },
   "bioconductor": {
-    "prefix": "bc",
+    "prefix": "bcinstall",
     "body": ["BiocManager::install(\"${1:package}\")"]
   },
 
   "library": {
-    "prefix": "lib",
+    "prefix": "library",
     "body": ["library(${1:package})"]
   },
 
   "install": {
     "prefix": "install",
     "body": ["install.packages(${1:package})"]
+  },
+
+  "renvinstall": {
+    "prefix": "renv::install",
+    "body": ["renv::install(${1:package})"]
   },
 
   "require": {
@@ -29,34 +34,6 @@
   "source": {
     "prefix": "src",
     "body": ["source(\"${1:file.R}\")"]
-  },
-  "return": {
-    "prefix": "ret",
-    "body": "return(${1:code})"
-  },
-  "matrix": {
-    "prefix": "mat",
-    "body": "matrix(${1:data}, nrow = ${2:rows}, ncol = ${3:cols})"
-  },
-  "setGeneric": {
-    "prefix": "sg",
-    "body": [
-      "setGeneric(\"${1:generic}\", function(${2:x, ...}) {",
-      "    standardGeneric(\"${1:generic}\")",
-      "})\n"
-    ]
-  },
-  "setMethod": {
-    "prefix": "sm",
-    "body": [
-      "setMethod(\"${1:generic}\", ${2:class}, function(${2:x, ...}) {",
-      "    ${0}",
-      "})\n"
-    ]
-  },
-  "setClass": {
-    "prefix": "sc",
-    "body": ["setClass(\"${1:Class}\", slots = c(${2:name = \"type\"}))\n"]
   },
   "if": {
     "prefix": "if",
