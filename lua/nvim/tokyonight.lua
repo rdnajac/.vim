@@ -73,6 +73,7 @@ local opts = {
 
 --- @type ColorScheme, tokyonight.Highlights, tokyonight.Config
 M.colors, M.groups, M.opts = require('tokyonight').load(opts)
+
 -- `load()` won't trigger ColorScheme autocommand, so do it here
 vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 

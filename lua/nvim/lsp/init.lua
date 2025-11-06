@@ -1,3 +1,25 @@
+local M = {}
+
+M.spec = {
+  { 'neovim/nvim-lspconfig' },
+  {
+    'mason-org/mason.nvim',
+    opts = function()
+      return { ui = { icons = nv.icons.mason } }
+    end,
+    build = vim.cmd.MasonUpdate,
+    keys = { { '<leader>cm', '<Cmd>Mason<CR>', desc = 'Mason' } },
+  },
+  {
+    'mason-lspconfig.nvim',
+    enabled = false,
+    opts = {
+      ensure_installed = {},
+    },
+  },
+  -- { 'SmiteshP/nvim-navic' },
+  -- { 'b0o/SchemaStore.nvim' },
+}
 --- @type vim.lsp.Config
 local opts = {}
 
@@ -31,16 +53,9 @@ opts.on_attach = function(client, bufnr)
   end
 end
 
+-- apply to all LSP clients
 vim.lsp.config('*', opts)
 
-local M = {}
-
----@type string[] The list of LSP servers to configure and enable from `lsp/`
-M.servers = vim.tbl_map(function(path)
-  return path:match('^.+/(.+)$'):sub(1, -5)
-end, vim.fn.globpath(vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp'), '*.lua', false, true))
-
-vim.lsp.enable(M.servers)
 
 M.attached = function(buf)
   buf = buf or vim.api.nvim_get_current_buf()
@@ -52,6 +67,15 @@ M.attached = function(buf)
   end, clients)
   return table.concat(clients, ';')
 end
+
+---@type string[] The list of LSP servers to configure and enable from `lsp/`
+M.servers = vim.tbl_map(function(path)
+  return path:match('^.+/(.+)$'):sub(1, -5)
+end, vim.fn.globpath(vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp'), '*.lua', false, true))
+
+-- enable all LSP servers defined in `lsp/`
+vim.lsp.enable(M.servers)
+
 
 return setmetatable(M, {
   __index = function(t, k)

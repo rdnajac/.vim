@@ -16,7 +16,6 @@ local spec = {
     -- add groups
     { 'co', group = 'comment below' },
     { 'cO', group = 'comment above' },
-    { 'cr', group = 'CoeRce', icon = { '󰬴' } },
     { 'gr', group = 'LSP', icon = { icon = '' } },
     { '<leader>b', group = 'buffers', icon = { icon = '' } },
     { '<leader>c', group = 'code' },
@@ -118,6 +117,9 @@ return {
     show_help = false,
     sort = { 'order', 'alphanum', 'case', 'mod' },
     spec = spec,
+    -- triggers = {
+    --   { '<auto>', mode = 'nixsotc' },
+    -- },
   },
   after = function()
     -- HACK: global key registration

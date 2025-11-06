@@ -4,7 +4,7 @@
 -- setting a metatable on the module table and the filename is the function
 local M = {}
 
-local function get_syn_name(line, col)
+M.get_syn_name = function(line, col)
   return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name')
 end
 
@@ -36,7 +36,13 @@ M.defer_redraw = function(t)
   end, t or 200)
 end
 
-function M.extmark_leaks()
+M.new = function()
+  vim.ui.input({ prompt = 'new file: ' }, function(input)
+    vim.cmd.edit(vim.fs.joinpath(vim.b.dirvish._dir, input))
+  end)
+end
+
+M.extmark_leaks = function()
   local nsn = vim.api.nvim_get_namespaces()
 
   local counts = {}
@@ -71,3 +77,4 @@ return setmetatable(M, {
     end
   end,
 })
+-- vim: fdm=expr fdl=0 fml=1

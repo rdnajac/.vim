@@ -38,20 +38,29 @@ return {
     })
   end,
   -- stylua: ignore
-      keys = {
-      { mode = 'n', expr = true, '<Tab>',
-        function()
-         return require('sidekick').nes_jump_or_apply() or '<Tab>'
-        end,
-      },
-      { '<leader>a', desc = '+ai', mode = { 'n', 'v' } },
-      { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI' },
-      { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI' },
-      { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session' },
-      { '<leader>ap', function() require('sidekick.cli').prompt() end, mode = { 'n', 'x' }, desc = 'Sidekick Select Prompt'  },
-      { '<leader>at', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'n', 'x' }, desc = 'Send This' },
-      { '<leader>af', function() require('sidekick.cli').send({name='copilot',msg='{file}'}) end,                      desc = 'Send File' },
-      -- { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
-      { '<C-.>',      function() require('sidekick.cli').toggle('copilot') end,   mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Toggle' },
-    },
+  keys = {
+  { mode = 'n', expr = true, '<Tab>',
+    function()
+      return require('sidekick').nes_jump_or_apply() or '<Tab>'
+    end,
+  },
+  { '<leader>a', desc = '+ai', mode = { 'n', 'v' } },
+  { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI' },
+  { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI' },
+  { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session' },
+  { '<leader>ap', function() require('sidekick.cli').prompt() end, mode = { 'n', 'x' }, desc = 'Sidekick Select Prompt'  },
+
+  -- always send file in normal mode
+  { '<leader>at', function() require('sidekick.cli').send({name='copilot',msg='{file}'}) end, mode = { 'n' }, desc = 'Send File' },
+  { '<leader>af', function() require('sidekick.cli').send({name='copilot',msg='{file}'}) end, mode = { 'n' }, desc = 'Send File' },
+
+  -- always send 'this' (the selection) in visual mode
+  { '<leader>at', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
+  { '<leader>af', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
+  { '<leader>at', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
+  { '<leader>af', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
+  -- { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
+
+  { '<C-.>',      function() require('sidekick.cli').toggle('copilot') end,   mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Toggle' },
+},
 }

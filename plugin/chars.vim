@@ -3,8 +3,8 @@
 " set fillchars+=eob:,
 " set fillchars+=stl:\ ,
 set fillchars+=fold:\ ,
-set fillchars+=foldclose:▸,
-set fillchars+=foldopen:▾,
+" set fillchars+=foldclose:▸,
+" set fillchars+=foldopen:▾,
 set fillchars+=foldsep:\ ,
 
 set list

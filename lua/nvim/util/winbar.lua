@@ -36,7 +36,7 @@ local M = {
       "%{% &readonly ? ' ' : '%M' %}",
       "%{% &busy     ? '◐ ' : ''   %}",
       [[%{% &ff !=# 'unix'  ? ' ff=' . &ff : ''  %}]],
-      [[%{% &fenc !=# 'utf-8'  ? ' fenc=' . &fenc : ''  %}]],
+      [[%{% &fenc !=# 'utf-8' && &fenc !=# ''  ? ' fenc=' . &fenc : ''  %}]],
     })
   end,
 

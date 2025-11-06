@@ -2,9 +2,13 @@ local M = {
   require('nvim.snacks'),
 }
 
-vim.list_extend(M, require('nvim.lazy.spec'))
-vim.list_extend(M, require('nvim.lsp.spec'))
-vim.list_extend(M, require('nvim.treesitter.spec'))
+vim.tbl_map(function(mod)
+  vim.list_extend(M, require('nvim.' .. mod).spec)
+end, {
+  'lazy',
+  'lsp',
+  'treesitter',
+})
 
 local path = vim.fs.dirname(debug.getinfo(1).source:sub(2))
 local files = vim.fn.globpath(path, '*.lua', false, true)
