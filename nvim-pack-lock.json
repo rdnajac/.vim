@@ -49,7 +49,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "d122136",
+      "rev": "3a99f17",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "noice.nvim": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "896e92a7",
+      "rev": "1ddb2664",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },

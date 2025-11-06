@@ -41,6 +41,7 @@ local parsers = {
   'toml',
   -- 'xml',
   'yaml',
+  'zsh',
 }
 
 -- local snacks_image_supported_filetypes = Snacks.image.langs()

@@ -1,5 +1,3 @@
-vim.treesitter.language.register('bash', 'zsh')
-
 local aug = vim.api.nvim_create_augroup('treesitter', {})
 
 -- TODO: ensure installed
