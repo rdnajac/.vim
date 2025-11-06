@@ -57,7 +57,6 @@ set viewoptions-=options      " keep mkview minimal
 
 " ui {{{2
 set cursorline
-set lazyredraw
 set termguicolors
 let &laststatus = has('nvim') ? 3 : 2
 set statusline=%!vimline#statusline#()
@@ -129,8 +128,8 @@ augroup vimrc
   au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet t
 
   " terminal stuff
-   autocmd BufEnter term://*:R\ * startinsert
-   autocmd BufEnter term://*/copilot startinsert
+  autocmd BufEnter term://*:R\ * startinsert
+  autocmd BufEnter term://*/copilot startinsert
 
   au VimLeave * if v:dying | echom "help im dying: " . v:dying | endif
 augroup END
@@ -155,6 +154,10 @@ command! -nargs=0 Format call execute#inPlace('call format#buffer()')
 command! -bang Quit call quit#buffer(<q-bang>)
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
+
+command! -nargs=? -complete=dir Explore Dirvish <args>
+command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
+command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
 
 " }}}1
 " Section: keymaps {{{1

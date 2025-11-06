@@ -52,10 +52,6 @@
       "rev": "3a99f17",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
-    "noice.nvim": {
-      "rev": "7bfd942",
-      "src": "https://git::@github.com/folke/noice.nvim.git"
-    },
     "nvim-lspconfig": {
       "rev": "2010fc6",
       "src": "https://github.com/neovim/nvim-lspconfig.git"

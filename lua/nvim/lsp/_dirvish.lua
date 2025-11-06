@@ -1,18 +1,10 @@
--- |vim.lsp.buf.code_action()| -- define mappings to a specific action by
--- invoking `vim.lsp.buf.code_action()` with  `filter` + `apply`
--- vim.lsp.buf.code_action({
---     apply = true,
---     filter = function(a)
---         return a.title == 'Do something'
---     end,
--- })
-
+-- ~/.local/share/nvim/share/nvim/runtime/lua/vim/pack/_lsp.lua
 local M = {}
 
 local capabilities = {
   codeActionProvider = true,
   documentSymbolProvider = true,
-  executeCommandProvider = { commands = { 'delete_plugin', 'update_plugin', 'skip_update_plugin' } },
+  executeCommandProvider = { commands = { 'delete', 'rename' } },
   hoverProvider = true,
 }
 --- @type table<string,function>
@@ -28,213 +20,157 @@ function methods.shutdown(_, callback)
   return callback(nil, nil)
 end
 
-local get_confirm_bufnr = function(uri)
-  return tonumber(uri:match('^nvim%-pack://(%d+)/confirm%-update$'))
+local get_dirvish_bufnr = function(uri)
+  local bufnr = vim.uri_to_bufnr(uri)
+  if vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].filetype == 'dirvish' then
+    return bufnr
+  end
+  return nil
 end
 
-local group_header_pattern = '^# (%S+)'
-local plugin_header_pattern = '^## (.+)$'
-
---- @return { group: string?, name: string?, from: integer?, to: integer? }
-local get_plug_data_at_lnum = function(bufnr, lnum)
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  --- @type string, string, integer, integer
-  local group, name, from, to
-  for i = lnum, 1, -1 do
-    group = group or lines[i]:match(group_header_pattern) --[[@as string]]
-    -- If group is found earlier than name - `lnum` is for group header line
-    -- If later - proper group header line.
-    if group then
-      break
-    end
-    name = name or lines[i]:match(plugin_header_pattern) --[[@as string]]
-    from = (not from and name) and i or from --[[@as integer]]
+--- @return { path: string?, lnum: integer }
+local get_file_at_lnum = function(bufnr, lnum)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, lnum - 1, lnum, false)
+  local path = nil
+  if #lines > 0 and vim.trim(lines[1]) ~= '' then
+    path = lines[1]
   end
-  if not (group and name and from) then
-    return {}
-  end
-  --- @cast group string
-  --- @cast from integer
-
-  for i = lnum + 1, #lines do
-    if lines[i]:match(group_header_pattern) or lines[i]:match(plugin_header_pattern) then
-      -- Do not include blank line before next section
-      to = i - 2
-      break
-    end
-  end
-  to = to or #lines
-
-  if not (from <= lnum and lnum <= to) then
-    return {}
-  end
-  return { group = group, name = name, from = from, to = to }
+  return { path = path, lnum = lnum }
 end
 
---- @alias vim.pack.lsp.Position { line: integer, character: integer }
---- @alias vim.pack.lsp.Range { start: vim.pack.lsp.Position, end: vim.pack.lsp.Position }
+--- @alias dirvish.lsp.Position { line: integer, character: integer }
+--- @alias dirvish.lsp.Range { start: dirvish.lsp.Position, end: dirvish.lsp.Position }
+--- @alias dirvish.lsp.CodeActionContext { diagnostics: table, only: table?, triggerKind: integer? }
+--- @alias dirvish.lsp.Symbol { name: string, kind: number, range: dirvish.lsp.Range, selectionRange: dirvish.lsp.Range }
 
 --- @param params { textDocument: { uri: string } }
 --- @param callback function
 methods['textDocument/documentSymbol'] = function(params, callback)
-  local bufnr = get_confirm_bufnr(params.textDocument.uri)
-  if bufnr == nil then
+  local bufnr = get_dirvish_bufnr(params.textDocument.uri)
+  if not bufnr then
     return callback(nil, {})
-  end
-
-  --- @alias vim.pack.lsp.Symbol {
-  ---   name: string,
-  ---   kind: number,
-  ---   range: vim.pack.lsp.Range,
-  ---   selectionRange: vim.pack.lsp.Range,
-  ---   children: vim.pack.lsp.Symbol[]?,
-  --- }
-
-  --- @return vim.pack.lsp.Symbol?
-  local new_symbol = function(name, start_line, end_line, kind)
-    if name == nil then
-      return nil
-    end
-    local range = {
-      start = { line = start_line, character = 0 },
-      ['end'] = { line = end_line, character = 0 },
-    }
-    return { name = name, kind = kind, range = range, selectionRange = range }
   end
 
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+  local symbols = {}
 
-  --- @return vim.pack.lsp.Symbol[]
-  local parse_headers = function(pattern, start_line, end_line, kind)
-    local res, cur_match, cur_start = {}, nil, nil
-    for i = start_line, end_line do
-      local m = lines[i + 1]:match(pattern)
-      if m ~= nil and m ~= cur_match then
-        table.insert(res, new_symbol(cur_match, cur_start, i, kind))
-        cur_match, cur_start = m, i
-      end
+  for i, line in ipairs(lines) do
+    local trimmed = vim.trim(line)
+    if trimmed ~= '' then
+      local name = vim.fn.fnamemodify(trimmed, ':t')
+      local kind = trimmed:match('/$') and vim.lsp.protocol.SymbolKind.Namespace
+        or vim.lsp.protocol.SymbolKind.File
+      local range = {
+        start = { line = i - 1, character = 0 },
+        ['end'] = { line = i - 1, character = 0 },
+      }
+      table.insert(symbols, { name = name, kind = kind, range = range, selectionRange = range })
     end
-    table.insert(res, new_symbol(cur_match, cur_start, end_line, kind))
-    return res
   end
 
-  local group_kind = vim.lsp.protocol.SymbolKind.Namespace
-  local symbols = parse_headers(group_header_pattern, 0, #lines - 1, group_kind)
-
-  local plug_kind = vim.lsp.protocol.SymbolKind.Module
-  for _, group in ipairs(symbols) do
-    local start_line, end_line = group.range.start.line, group.range['end'].line
-    group.children = parse_headers(plugin_header_pattern, start_line, end_line, plug_kind)
-  end
-
-  return callback(nil, symbols)
+  callback(nil, symbols)
 end
 
---- @alias vim.pack.lsp.CodeActionContext { diagnostics: table, only: table?, triggerKind: integer? }
-
---- @param params { textDocument: { uri: string }, range: vim.pack.lsp.Range, context: vim.pack.lsp.CodeActionContext }
+--- @param params { textDocument: { uri: string }, range: dirvish.lsp.Range, context: dirvish.lsp.CodeActionContext }
 --- @param callback function
 methods['textDocument/codeAction'] = function(params, callback)
-  local bufnr = get_confirm_bufnr(params.textDocument.uri)
-  local empty_kind = vim.lsp.protocol.CodeActionKind.Empty
-  local only = params.context.only or { empty_kind }
-  if not (bufnr and vim.tbl_contains(only, empty_kind)) then
+  local bufnr = get_dirvish_bufnr(params.textDocument.uri)
+  if not bufnr or vim.bo[bufnr].filetype ~= 'dirvish' then
     return callback(nil, {})
   end
-  local plug_data = get_plug_data_at_lnum(bufnr, params.range.start.line + 1)
-  if not plug_data.name then
+
+  local empty_kind = vim.lsp.protocol.CodeActionKind.Empty
+  local only = params.context.only or { empty_kind }
+  if not vim.tbl_contains(only, empty_kind) then
+    return callback(nil, {})
+  end
+
+  local file_data = get_file_at_lnum(bufnr, params.range.start.line + 1)
+  if not file_data.path then
     return callback(nil, {})
   end
 
   local function new_action(title, command)
+    local filename = vim.fn.fnamemodify(file_data.path, ':t')
     return {
-      title = ('%s `%s`'):format(title, plug_data.name),
-      command = { title = title, command = command, arguments = { bufnr, plug_data } },
+      title = ('%s `%s`'):format(title, filename),
+      command = { title = title, command = command, arguments = { bufnr, file_data } },
     }
   end
 
-  local res = {}
-  if plug_data.group == 'Update' then
-    vim.list_extend(res, {
-      new_action('Update', 'update_plugin'),
-      new_action('Skip updating', 'skip_update_plugin'),
-    }, 0)
-  end
-  vim.list_extend(res, { new_action('Delete', 'delete_plugin') })
+  local res = {
+    new_action('Delete', 'delete'),
+    new_action('Rename', 'rename'),
+  }
   callback(nil, res)
 end
 
 local commands = {
-  update_plugin = function(plug_data)
-    vim.pack.update({ plug_data.name }, { force = true, _offline = true })
+  delete = function(file_data)
+    vim.uv.fs_unlink(file_data.path, function(err)
+      if err then
+        Snacks.notify.error('Failed to delete: ' .. err)
+      else
+        vim.schedule(function()
+          Snacks.bufdelete({ file = file_data.path, wipe = true })
+          vim.cmd.Dirvish()
+        end)
+      end
+    end)
   end,
-  skip_update_plugin = function(_) end,
-  delete_plugin = function(plug_data)
-    vim.pack.del({ plug_data.name })
+
+  rename = function(file_data)
+    Snacks.rename.rename_file({
+      from = file_data.path,
+      on_rename = function()
+        vim.cmd.Dirvish()
+      end,
+    })
   end,
 }
 
--- NOTE: Use `vim.schedule_wrap` to avoid press-enter after choosing code
--- action via built-in `vim.fn.inputlist()`
 --- @param params { command: string, arguments: table }
 --- @param callback function
 methods['workspace/executeCommand'] = vim.schedule_wrap(function(params, callback)
-  --- @type integer, table
-  local bufnr, plug_data = unpack(params.arguments)
-  local ok, err = pcall(commands[params.command], plug_data)
+  local _, file_data = unpack(params.arguments)
+  local ok, err = pcall(commands[params.command], file_data)
   if not ok then
     return callback({ code = 1, message = err }, {})
   end
-
-  -- Remove plugin lines (including blank line) to not later act on plugin
-  vim.bo[bufnr].modifiable = true
-  vim.api.nvim_buf_set_lines(bufnr, plug_data.from - 2, plug_data.to, false, {})
-  vim.bo[bufnr].modifiable, vim.bo[bufnr].modified = false, false
   callback(nil, {})
 end)
 
---- @param params { textDocument: { uri: string }, position: vim.pack.lsp.Position }
+--- @param params { textDocument: { uri: string }, position: dirvish.lsp.Position }
 --- @param callback function
 methods['textDocument/hover'] = function(params, callback)
-  local bufnr = get_confirm_bufnr(params.textDocument.uri)
-  if bufnr == nil then
+  local bufnr = get_dirvish_bufnr(params.textDocument.uri)
+  if not bufnr then
     return
   end
 
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  local lnum = params.position.line + 1
-  local commit = lines[lnum]:match('^[<>] (%x+) │') or lines[lnum]:match('^State.*:%s+(%x+)')
-  local tag = lines[lnum]:match('^• (.+)$')
-  if commit == nil and tag == nil then
+  local file_data = get_file_at_lnum(bufnr, params.position.line + 1)
+  if not file_data.path then
     return
   end
 
-  local path, path_lnum = nil, lnum - 1
-  while path == nil and path_lnum >= 1 do
-    path = lines[path_lnum]:match('^Path:%s+(.+)$')
-    path_lnum = path_lnum - 1
-  end
-  if path == nil then
-    return
-  end
+  local path = file_data.path
+  local cmd = { 'ls', '-ldhG', path }
 
-  local cmd = { 'git', 'show', '--no-color', commit or tag }
   --- @param sys_out vim.SystemCompleted
   local on_exit = function(sys_out)
-    local markdown = '```diff\n' .. sys_out.stdout .. '\n```'
+    if sys_out.code ~= 0 then
+      return
+    end
+    local output = vim.trim(sys_out.stdout)
+    local markdown = '```\n' .. output .. '\n```'
     local res = { contents = { kind = vim.lsp.protocol.MarkupKind.Markdown, value = markdown } }
     callback(nil, res)
   end
-  vim.system(cmd, { cwd = path }, vim.schedule_wrap(on_exit))
+
+  vim.system(cmd, {}, vim.schedule_wrap(on_exit))
 end
 
-local dispatchers = {}
-
--- TODO: Simplify after `vim.lsp.server` is a thing
--- https://github.com/neovim/neovim/pull/24338
 local cmd = function(disp)
-  -- Store dispatchers to use for showing progress notifications
-  dispatchers = disp
   local res, closing, request_id = {}, false, 0
 
   function res.request(method, params, callback)
@@ -248,7 +184,7 @@ local cmd = function(disp)
 
   function res.notify(method, _)
     if method == 'exit' then
-      dispatchers.on_exit(0, 15)
+      disp.on_exit(0, 15)
     end
     return false
   end
@@ -265,7 +201,14 @@ local cmd = function(disp)
 end
 
 M.client_id = assert(
-  vim.lsp.start({ cmd = cmd, name = 'vim.pack', root_dir = vim.uv.cwd() }, { attach = false })
+  vim.lsp.start({ cmd = cmd, name = 'dirvish', root_dir = vim.uv.cwd() }, { attach = false })
 )
+
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'dirvish',
+  callback = function(ev)
+    vim.lsp.buf_attach_client(ev.buf, M.client_id)
+  end,
+})
 
 return M

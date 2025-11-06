@@ -1,30 +1,33 @@
 return {
   {
-    'folke/todo-comments.nvim',
+    'folke/edgy.nvim',
     enabled = false,
     lazy = true,
     opts = {
-      keywords = { Section = { icon = '󰚟', color = 'title' } },
-      -- highlight = { keyword = 'bg', },
-      colors = {
-        title = { '#7DCFFF' },
-        error = { '#DC2626' },
-        warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
-        info = { 'DiagnosticInfo', '#2563EB' },
-        hint = { 'DiagnosticHint', '#10B981' },
-        default = { 'Identifier', '#7C3AED' },
-        test = { 'Identifier', '#FF00FF' },
+      right = {
+        {
+          title = 'Dirvish',
+          ft = 'dirvish',
+          -- size = { height = 0.5 },
+        },
+      },
+      wo = {
+        -- Setting to `true`, will add an edgy winbar.
+        -- Setting to `false`, won't set any winbar.
+        -- Setting to a string, will set the winbar to that string.
+        winbar = true,
+        winfixwidth = true,
+        winfixheight = false,
+        winhighlight = 'WinBar:EdgyWinBar,Normal:EdgyNormal',
+        spell = false,
+        signcolumn = 'yes',
       },
     },
-    keys = {
       -- stylua: ignore
-      { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
+    keys = {
+      {'<leader>ue', function() require('edgy').toggle() end, desc = 'Edgy Toggle',},
+      {'<leader>uE', function() require('edgy').select() end, desc = 'Edgy Select Window',},
     },
-    after = function()
-      for _, cmd in ipairs({ 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }) do
-        vim.cmd.delcommand(cmd)
-      end
-    end,
   },
   {
     'folke/flash.nvim',
@@ -53,32 +56,59 @@ return {
     'folke/noice.nvim',
     enabled = false,
     opts = {
-      lsp = {
-        override = {
-          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
-          ['vim.lsp.util.stylize_markdown'] = true,
-          ['cmp.entry.get_documentation'] = true,
-        },
-      },
-      routes = {
-        {
-          filter = {
-            event = 'msg_show',
-            any = {
-              { find = '%d+L, %d+B' },
-              { find = '; after #%d+' },
-              { find = '; before #%d+' },
-            },
-          },
-          view = 'mini',
-        },
-      },
+      -- lsp = {
+      --   override = {
+      --     ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+      --     ['vim.lsp.util.stylize_markdown'] = true,
+      --     ['cmp.entry.get_documentation'] = true,
+      --   },
+      -- },
+      -- routes = {
+      --   {
+      --     filter = {
+      --       event = 'msg_show',
+      --       any = {
+      --         { find = '%d+L, %d+B' },
+      --         { find = '; after #%d+' },
+      --         { find = '; before #%d+' },
+      --       },
+      --     },
+      --     view = 'mini',
+      --   },
+      -- },
       presets = {
         bottom_search = true,
         command_palette = true,
-        long_message_to_split = true,
+        -- long_message_to_split = true,
       },
     },
+  },
+  {
+    'folke/todo-comments.nvim',
+    -- enabled = false,
+    lazy = true,
+    opts = {
+      keywords = { Section = { icon = '󰚟', color = 'title' } },
+      -- highlight = { keyword = 'bg', },
+      colors = {
+        title = { '#7DCFFF' },
+        error = { '#DC2626' },
+        warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
+        info = { 'DiagnosticInfo', '#2563EB' },
+        hint = { 'DiagnosticHint', '#10B981' },
+        default = { 'Identifier', '#7C3AED' },
+        test = { 'Identifier', '#FF00FF' },
+      },
+    },
+    keys = {
+      -- stylua: ignore
+      { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
+    },
+    after = function()
+      for _, cmd in ipairs({ 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }) do
+        vim.cmd.delcommand(cmd)
+      end
+    end,
   },
   {
     'folke/trouble.nvim',

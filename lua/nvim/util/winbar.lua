@@ -131,8 +131,10 @@ M.winbar = function(opts)
 
   -- TODO: return early if inactive or help
   if opts.ft == 'dirvish' then
-    local b = [[%{join(map(argv(), "fnamemodify(v:val, ':t')"), ' ')}]]
-    return M.render(winbar, b, '')
+    local clients = vim.lsp.get_clients({ bufnr = opts.bufnr, name = 'dirvish' })
+    local b = #clients > 0 and '%{%v:lua.nv.status.lsp()%}' or ''
+    local c = [[%{join(map(argv(), "fnamemodify(v:val, ':t')"), ' ')}]]
+    return M.render(winbar, b, c)
   end
   if opts.active and opts.bt ~= 'help' then
     return M.render(winbar, M.b(), M.c())
