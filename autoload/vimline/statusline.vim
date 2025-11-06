@@ -25,7 +25,9 @@ function! vimline#statusline#() abort
   let l:ret .= s:left_sep
 
   let l:ret .= '%#Chromatophore_b#'
-  let l:ret .= '󱉭 ' . l:cwd . '/'
+  let l:ret .= FugitiveStatusline()
+  let l:ret .= ' 󱉭  '
+  let l:ret .= l:cwd . '/'
 
   let l:ret .= '%#Chromatophore_bc#'
   let l:ret .= s:left_sep
@@ -36,7 +38,6 @@ function! vimline#statusline#() abort
 
   " right-aligned
   let l:ret .= '%='
-
   let l:ret .= '%#Chromatophore_z#'
   let l:ret .= vimline#recording#()
 
