@@ -74,6 +74,5 @@ return {
     _G.p  = function(...) Snacks.debug.profile(...) end
     require('nvim.tokyonight')
     require('nvim.lsp')
-    require('nvim.lsp._dirvish')
   end,
 }

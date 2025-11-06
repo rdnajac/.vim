@@ -204,11 +204,8 @@ M.client_id = assert(
   vim.lsp.start({ cmd = cmd, name = 'dirvish', root_dir = vim.uv.cwd() }, { attach = false })
 )
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'dirvish',
-  callback = function(ev)
-    vim.lsp.buf_attach_client(ev.buf, M.client_id)
-  end,
-})
+M.status = function()
+  return vim.lsp.client_is_active(M.client_id) and nv.icons.lsp.print
+end
 
 return M

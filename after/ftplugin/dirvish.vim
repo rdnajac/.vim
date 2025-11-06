@@ -5,11 +5,12 @@ let g:dirvish_mode = ':sort ,^.*[\/],'
 lua vim.opt_local.listchars = vim.opt.listchars:get()
 lua vim.opt_local.listchars:remove('precedes')
 
-nnoremap <buffer> h <Plug>(dirvish_up)
 nnoremap <buffer> <Left> <Plug>(dirvish_up)
+nnoremap <buffer> h      <Plug>(dirvish_up)
 
-nmap <buffer> l <CR>
-nmap <buffer> <Right> <CR>
+nnoremap <buffer> <Right> <Cmd>call dirvish#open("edit", 0)<CR>
+nnoremap <buffer> l       <Cmd>call dirvish#open("edit", 0)<CR>
+nnoremap <buffer> o       <Cmd>lua nv.fn.new()<CR>
 
 nnoremap <buffer> t o<Esc>:r !find '<C-R>=substitute(getline(line(".")-1),"\\n","","g")<CR>' -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d _<CR>"_dd\| :lua require('nvim.icons.fs').render()<CR>|redraw!
 
@@ -25,3 +26,4 @@ lua nv.fn.defer_redraw(50)
 "
 " " Register the function with dirvish
 " let g:dirvish_icon_id = dirvish#add_icon_fn(funcref('DirvishIcons'))
+lua vim.lsp.buf_attach_client(0, nv.lsp._dirvish.client_id)
