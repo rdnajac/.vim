@@ -372,7 +372,7 @@ nnoremap <Bslash>; mzA;<Esc>;`z
 nnoremap <Bslash>. mzA.<Esc>;`z
 
 " insert special chars {{{3
-inoremap \sec Section:
+" inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 

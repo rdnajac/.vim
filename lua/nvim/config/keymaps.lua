@@ -1,4 +1,4 @@
-nnoremap = function(lhs, rhs, opts)
+local function nnoremap(lhs, rhs, opts)
   vim.keymap.set('n', lhs, rhs, opts or {})
 end
 
@@ -60,7 +60,7 @@ end, { desc = 'Quickfix List' })
 -- }}}
 -- Snacks.util.on_key {{{
 Snacks.util.on_key('<Esc>', function()
-  vim.Cmd.nohlsearch()
+  vim.cmd.nohlsearch()
   if package.loaded['sidekick'] then
     require('sidekick').clear()
   end

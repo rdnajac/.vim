@@ -122,30 +122,52 @@ return {
     -- },
   },
   after = function()
+    -- only show certain registers
+    ---@diagnostic disable: inject-field
+    require('which-key.plugins.registers').registers = [[*+"-:.%/#=_01234567890qZ]]
+
+    local wk = require('which-key')
+
     -- HACK: global key registration
-    -- require(
-    require('which-key').add(nv.plug.get_keys())
-    local registers = '*+"-:.%/#=_0123456789qZ'
-    require('which-key.plugins.registers').registers = registers
-    -- see rules at  ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
+    wk.add(nv.plug.get_keys())
+
+    local function coerce(char)
+      return function()
+        vim.api.nvim_feedkeys(vim.keycode('<Plug>(abolish-coerce-word)') .. char, 'nt', false)
+      end
+    end
+
+    wk.add({
+      { 'cR', group = 'CoeRce', icon = { icon = '󰬴' } },
+      { 'cRc', coerce('c'), desc = 'camelcase' },
+      { 'cRm', coerce('m'), desc = 'mixedcase' },
+      { 'cRp', coerce('p'), desc = 'mixedcase' },
+      { 'cRs', coerce('s'), desc = 'snakecase' },
+      { 'cR_', coerce('_'), desc = 'snakecase' },
+      { 'cRu', coerce('u'), desc = 'UPPERCASE' },
+      { 'cRU', coerce('U'), desc = 'uppercase' },
+      { 'cR-', coerce('-'), desc = 'dashcase' },
+      { 'cRk', coerce('k'), desc = 'dashcase' },
+      { 'cR.', coerce('.'), desc = 'dotcase' },
+      { 'cR<Space>', coerce(' '), desc = 'spacecase' },
+    })
+
+    -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
   end,
+  -- stylua: ignore
   keys = {
-    { '<leader>db', '<Cmd>Blink status<CR>', desc = 'Blink Status' },
-    {
-      '<leader>dc',
-      '<Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>',
-      desc = 'LSP Capabilities',
-    },
-    { '<leader>dd', '<Cmd>LazyDev debug<CR>', desc = 'LazyDev Debug' },
-    { '<leader>dh', '<Cmd>packloadall<Bar>checkhealth<CR>', desc = 'Check Health' },
-    { '<leader>dl', '<Cmd>LazyDev lsp<CR>', desc = 'LazyDev LSP' },
-    { '<leader>dP', '<Cmd>=vim.tbl_keys(package.loaded)<CR>', desc = 'Loaded Packages' },
-    { '<leader>dR', '<Cmd>=require("r.config").get_config()<CR>', desc = 'R Config' },
-    { '<leader>dS', '<Cmd>=require("snacks").meta.get()<CR>', desc = 'Snacks Meta' },
-    {
-      '<leader>dw',
-      '<Cmd>=vim.lsp.buf.list_workspace_folders()<CR>',
-      desc = 'LSP Workspace Folders',
-    },
+    -- meta
+    { '<leader>?', function() require('which-key').show({ global = false }) end, desc = 'Buffer Keymaps (which-key)',},
+    { '<C-w><Space>', function() require('which-key').show({ keys = '<c-w>', loop = true }) end, desc = 'Window Hydra Mode (which-key)',},
+    -- debug
+    { '<leader>db', '<Cmd>Blink status<CR>',                                  desc = 'Blink Status'          },
+    { '<leader>dc', '<Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities',     },
+    { '<leader>dd', '<Cmd>LazyDev debug<CR>',                                 desc = 'LazyDev Debug'         },
+    { '<leader>dh', '<Cmd>packloadall<Bar>checkhealth<CR>',                   desc = 'Check Health'          },
+    { '<leader>dl', '<Cmd>LazyDev lsp<CR>',                                   desc = 'LazyDev LSP'           },
+    { '<leader>dP', '<Cmd>=vim.tbl_keys(package.loaded)<CR>',                 desc = 'Loaded Packages'       },
+    { '<leader>dR', '<Cmd>=require("r.config").get_config()<CR>',             desc = 'R Config'              },
+    { '<leader>dS', '<Cmd>=require("snacks").meta.get()<CR>',                 desc = 'Snacks Meta'           },
+    { '<leader>dw', '<Cmd>=vim.lsp.buf.list_workspace_folders()<CR>',         desc = 'LSP Workspace Folders' },
   },
 }

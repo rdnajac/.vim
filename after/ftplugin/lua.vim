@@ -35,12 +35,9 @@ nnoremap crV ^df4wilet<Space>g:<Esc>
 if !has('nvim')
   finish
 endif
-
 setlocal foldmethod=expr
 
 lua << EOF
--- TODO: only disable highlighting inside of `vim.cmd([[...]])`
--- Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
 
 vim.bo.syntax = 'ON' -- Keep using legacy syntax for `vim-endwise`
 -- vim.wo.foldmethod = 'expr' -- foldexpression already set by ftplugin
@@ -50,10 +47,10 @@ vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
 end
 
 nmap('crf',   nv.coerce.form,      'local function foo() ↔ local foo = function()')
--- FIXME: crm conflicts with abolish
--- nmap('crf',   nv.coerce.scope,     'local x ↔ M.x')
 nmap('crM',   nv.coerce.formscope, 'local function foo() → M.foo = function()')
 nmap('crF',   nv.coerce.scopeform, 'M.foo = function() → local function foo()')
+-- FIXME: conflicts with abolish
+-- nmap('crm',   nv.coerce.scope,     'local x ↔ M.x')
 
 nmap('ym',    nv.yankmod.name,     'yank lua module name')
 nmap('yM',    nv.yankmod.require,  'yank require(...) form')
@@ -79,8 +76,8 @@ vim.api.nvim_create_autocmd('InsertEnter', {
   group = aug,
   buffer = vim.api.nvim_get_current_buf(),
   callback = function()
-    vim.b.old_hl = Snacks.util.color('LspReferenceText', 'bg')
-    Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
+  vim.b.old_hl = Snacks.util.color('LspReferenceText', 'bg')
+  Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
   end,
 })
 
@@ -88,10 +85,11 @@ vim.api.nvim_create_autocmd('InsertLeave', {
   group = aug,
   buffer = vim.api.nvim_get_current_buf(),
   callback = function()
-    if vim.b.old_hl then
-      Snacks.util.set_hl({ LspReferenceText = { bg = vim.b.old_hl } })
-      vim.b.old_hl = nil
+  if vim.b.old_hl then
+    Snacks.util.set_hl({ LspReferenceText = { bg = vim.b.old_hl } })
+    vim.b.old_hl = nil
     end
-  end,
+    end,
 })
+-- TODO: only disable highlighting inside of `vim.cmd([[...]])`
 EOF
