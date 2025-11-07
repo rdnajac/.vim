@@ -40,6 +40,10 @@
       "rev": "371cd74",
       "src": "https://github.com/folke/lazydev.nvim.git"
     },
+    "mason-lspconfig.nvim": {
+      "rev": "d7b5feb",
+      "src": "https://git::@github.com/mason-org/mason-lspconfig.nvim.git"
+    },
     "mason.nvim": {
       "rev": "ad7146a",
       "src": "https://github.com/mason-org/mason.nvim.git"

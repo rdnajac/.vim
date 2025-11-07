@@ -57,8 +57,8 @@ M.lsp = function(bufnr)
     .iter(clients)
     :map(function(c)
       if c.name == 'copilot' and package.loaded['sidekick'] then
-        local ok_sk, statusmod = pcall(require, 'sidekick.status')
-        if ok_sk and statusmod then
+        local ok, statusmod = pcall(require, 'sidekick.status')
+        if ok and statusmod then
           local status = statusmod.get()
           local kind = status and status.kind or 'Inactive'
           return (icons.copilot[kind] or icons.copilot.Inactive)[1]
