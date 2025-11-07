@@ -83,7 +83,7 @@ local miniopts = function()
       highlighters = {
         source_code = nv.source_code_hi,
         hex_color = hi.gen_highlighter.hex_color(),
-        -- if not using todo-comments
+        --  TODO: don't schedule this setup...
         -- fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
         -- warning = { pattern = 'WARNING', group = 'MiniHipatternsFixme' },
         -- hack = { pattern = 'HACK', group = 'MiniHipatternsHack' },

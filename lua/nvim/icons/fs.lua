@@ -1,12 +1,11 @@
 -- apply icons to special filesystem buffers like netrw and dirvish
 local aug = vim.api.nvim_create_augroup('fs-icons', {})
 local ns = vim.api.nvim_create_namespace('fs-icons')
--- /Users/rdn/.local/share/nvim/cache/fs-icons.json
+-- `~/.local/share/nvim/cache/fs-icons.json`
 local cache_path = vim.fn.stdpath('cache') .. '/fs-icons.json'
 local ok, cache = pcall(nv.file.read_json, cache_path)
 _G.icon_cache = ok and cache or {}
 
--- Save cache on exit
 vim.api.nvim_create_autocmd('VimLeavePre', {
   group = aug,
   callback = function()
@@ -18,7 +17,7 @@ vim.api.nvim_create_autocmd('VimLeavePre', {
 ---@param line string
 ---@return string|nil file
 local function to_file(line)
-  if type(line) == 'string' and not (line == '' or line == './' or line == '../') then
+  if not vim.tbl_contains({ '', './', '../' }, line) then
     if vim.b.netrw_curdir ~= nil then
       return vim.fs.joinpath(vim.b.netrw_curdir, line)
     end
@@ -57,6 +56,7 @@ M.render = function(bufnr)
       })
     end
   end
+  nv.fn.defer_redraw(50) -- PERF: force redraw to avoid flicker
 end
 
 return M

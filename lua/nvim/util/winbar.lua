@@ -9,11 +9,6 @@ local M = {
     local ft = opts.ft or vim.bo[bufnr].filetype
     local path
 
-    if ft == 'dirvish' then
-      path = vim.b[bufnr].dirvish._dir
-      return nv.icons.directory[path] .. ' ' .. vim.fn.fnamemodify(path, ':~')
-    end
-
     if bt == '' then
       local active = opts.active or (win == tonumber(vim.g.actual_curwin))
       path = active and '%t' or '%f'
@@ -131,11 +126,16 @@ M.winbar = function(opts)
 
   -- TODO: return early if inactive or help
   if opts.ft == 'dirvish' then
-    local clients = vim.lsp.get_clients({ bufnr = opts.bufnr, name = 'dirvish' })
-    local b = #clients > 0 and '%{%v:lua.nv.status.lsp()%}' or ''
-    local c = [[%{join(map(argv(), "fnamemodify(v:val, ':t')"), ' ')}]]
-    return M.render(winbar, b, c)
+    local a = function()
+      local path = vim.b.dirvish._dir
+      return nv.icons.directory[path] .. ' ' .. vim.fn.fnamemodify(path, ':~')
+    end
+    local a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]]
+    local b = [[%{%v:lua.nv.lsp.dirvish.status()%}]]
+    local c = [[ %{join(map(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]]
+    return M.render(a, b, c)
   end
+
   if opts.active and opts.bt ~= 'help' then
     return M.render(winbar, M.b(), M.c())
   end
