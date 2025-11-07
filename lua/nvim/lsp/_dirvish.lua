@@ -107,12 +107,15 @@ end
 
 local commands = {
   delete = function(file_data)
-    vim.uv.fs_unlink(file_data.path, function(err)
+    local path = file_data.path
+    local is_dir = vim.endswith(path, '/')
+    vim.uv['fs_' .. (is_dir and 'rmdir' or 'unlink')](path, function(err)
       if err then
         Snacks.notify.error('Failed to delete: ' .. err)
       else
+        Snacks.notify.warn('Deleted: ' .. path)
         vim.schedule(function()
-          Snacks.bufdelete({ file = file_data.path, wipe = true })
+          Snacks.bufdelete({ file = path, wipe = true })
           vim.cmd.Dirvish()
         end)
       end
@@ -205,7 +208,9 @@ M.client_id = assert(
 )
 
 M.status = function()
-  return vim.lsp.client_is_active(M.client_id) and nv.icons.lsp.print
+  local client = vim.lsp.get_client_by_id(M.client_id)
+  local status = (client and not client:is_stopped()) and 'attached' or 'unavailable'
+  return nv.icons.lsp[status]
 end
 
 return M

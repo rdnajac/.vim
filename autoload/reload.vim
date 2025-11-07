@@ -16,7 +16,7 @@ endfunction
 
 function! reload#ftplugin(path) abort
   let l:filetype = s:resolve(a:path)
-  call vim#notify#info('Reloading ftplugin for ' . l:filetype)
+  " call vim#notify#info('Reloading ftplugin for ' . l:filetype)
   call execute#withSavedState('call reload#loop("' . l:filetype . '")')
 endfunction
 

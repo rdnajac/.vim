@@ -1,5 +1,6 @@
 setlocal formatoptions-=ro
-setlocal iskeyword " makes autoloaded functions easier to `ciw`
+" makes autoloaded functions easier to `ciw`
+setlocal iskeyword-=#
 setlocal commentstring=\"\ %s
 
 nnoremap <buffer> <leader>ch <Cmd>call edit#ch()<CR>

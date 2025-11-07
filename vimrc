@@ -72,7 +72,7 @@ augroup vimrc_ui
   au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
   au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
 
-  " Hide the statusline while in command mode
+  " hide the statusline while in command mode
   au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
@@ -80,6 +80,10 @@ augroup vimrc_ui
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+
+  " au InsertEnter * let w:hlKeep = v:lua.Snacks.util.color('LspReferenceText', 'bg') | execute "lua Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })"
+  " au InsertLeave * lua vim.w.hlKeep and Snacks.util.set_hl({ LspReferenceText = { bg = vim.w.hlKeep } })
+
 augroup END
 
 " }}}1
@@ -112,7 +116,7 @@ augroup vimrc
   au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
   au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
-  au BufWritePre * call vim#mkdir#(expand('<afile>'))
+  au BufWritePre * silent! call vim#mkdir#(expand('<afile>'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
   " restore cursor position
@@ -153,6 +157,10 @@ command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
 command! -bang Quit call quit#buffer(<q-bang>)
 
+command! Restart
+      \ let sesh = fnameescape(stdpath('state') .. '/Session.vim') |
+      \ execute printf('mksession! %s | confirm silent! noautocmd restart silent source %s', sesh, sesh)
+
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 command! -nargs=? -complete=dir Explore Dirvish <args>
@@ -181,7 +189,7 @@ nnoremap <leader>Q :wqa!<CR>
 nnoremap <leader>- <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 nnoremap <leader>K <Cmd>norm! K<CR>
-nnoremap <leader>r <Cmd>call sesh#restart()<CR>
+nnoremap <leader>r <Cmd>Restart<CR>
 nnoremap <leader>R <Cmd>restart!<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
 nnoremap <leader>m <Cmd>messages<CR>
