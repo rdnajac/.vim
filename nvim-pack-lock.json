@@ -1,7 +1,7 @@
 {
   "plugins": {
     "LazyVim": {
-      "rev": "42c9f715",
+      "rev": "a507822c",
       "src": "http://github.com/LazyVim/LazyVim.git"
     },
     "R.nvim": {
@@ -37,11 +37,11 @@
       "src": "https://github.com/monaqa/dial.nvim.git"
     },
     "lazydev.nvim": {
-      "rev": "371cd74",
+      "rev": "5231c62",
       "src": "https://github.com/folke/lazydev.nvim.git"
     },
     "mason-lspconfig.nvim": {
-      "rev": "d7b5feb",
+      "rev": "d627416",
       "src": "https://git::@github.com/mason-org/mason-lspconfig.nvim.git"
     },
     "mason.nvim": {
@@ -49,11 +49,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "7d6fcfd",
+      "rev": "68d4478",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "3a99f17",
+      "rev": "70157bb",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "1ddb2664",
+      "rev": "d97d226c",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -70,7 +70,7 @@
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "060c911",
+      "rev": "6a744f0",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
@@ -78,7 +78,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "741f4b1",
+      "rev": "8ca098c",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
@@ -134,7 +134,7 @@
       "src": "https://git::@github.com/tpope/vim-scriptease.git"
     },
     "vim-ug": {
-      "rev": "dd58f58",
+      "rev": "3ac372d",
       "src": "https://git::@github.com/justinmk/vim-ug.git"
     },
     "vim-unimpaired": {

@@ -16,6 +16,7 @@ return {
     },
     -- { icon = ' ', key = 'f', desc = 'Find File', action = ':Files' },
     { icon = ' ', key = 'n', desc = 'New File', action = ':enew | startinsert', hidden = true },
+    -- TODO: 2 cols, no recent files, only useful COMMMANDS
     {
       icon = '',
       title = 'Plugins',
@@ -45,7 +46,7 @@ return {
     },
   },
   formats = {
-    header = { '%s', align = 'center' },
+    header = { '%s' .. '\nNVIM ' .. tostring(vim.version()), align = 'center' },
   },
   -- wo = { winbar = '', winhighlight = { 'WinBar:NONE' } },
 }

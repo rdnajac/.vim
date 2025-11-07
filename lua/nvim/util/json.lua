@@ -1,5 +1,7 @@
 local M = {}
 
+-- local function format_lines(content)
+
 --- @param opts? table table of options including `sort` key
 function M.format(opts)
   -- if vim.list_contains({ 'i', 'R', 'ic', 'ix' }, vim.fn.mode()) then
@@ -14,13 +16,13 @@ function M.format(opts)
     sort_keys = true
   end
   -- local sort_keys = vim.bo.json_sort_keys or false
-  local indent = vim.bo.expandtab and string.rep(' ', vim.o.softtabstop) or '\t'
+  local indent = vim.bo.expandtab and (' '):rep(vim.o.shiftwidth) or '\t'
   local lines = vim.api.nvim_buf_get_lines(0, vim.v.lnum - 1, vim.v.count, true)
-  local deco = vim.json.decode(table.concat(lines, '\n'))
-  local enco = vim.json.encode(deco, { indent = indent, sort_keys = sort_keys })
-  local split = vim.split(enco, '\n') -- no split for single line?
-
-  vim.api.nvim_buf_set_lines(0, vim.v.lnum - 1, vim.v.count, true, split)
+  local lines = vim.api.nvim_buf_get_lines(0, vim.v.lnum - 1, vim.v.lnum + vim.v.count - 1, true)
+  local o = vim.json.decode(table.concat(lines, '\n'))
+  local stringified = vim.json.encode(o, { indent = indent, sort_keys = false })
+  lines = vim.split(stringified, '\n')
+  vim.api.nvim_buf_set_lines(0, vim.v.lnum - 1, vim.v.count, true, lines)
   return 0
 end
 
@@ -31,9 +33,12 @@ M.read = function(filename)
 end
 
 ---@param filename string
----@param contents string
+---@param contents string|string[]
 M.write = function(filename, contents)
-  return nv.file.write(filename, vim.json.encode(contents))
+  return require('nvim.util.file').write_lines(
+    filename,
+    vim.split(vim.json.encode(contents, { indent = '\t', sort_keys = false }), '\n')
+  )
 end
 
 return M

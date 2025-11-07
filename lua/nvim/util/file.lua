@@ -3,8 +3,7 @@ local M = {}
 ---@param path string
 ---@return string[]
 M.lines = function(path)
-  local iter = io.lines(path)
-  return iter and vim.iter(iter):totable() or {}
+  return vim.iter(io.lines(path)):totable() or {}
 end
 
 ---@param op function

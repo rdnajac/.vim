@@ -39,17 +39,20 @@ local function install_defaults()
 end
 
 local M = {}
-M.selection = require('nvim.treesitter.selection')
+
 M.spec = {
   {
     'nvim-treesitter/nvim-treesitter',
     branch = 'main',
     build = install_defaults,
-    -- keys = {
-    --   { '<C-Space>', nv.treesitter.selection.start },
-    --   { mode = 'x', '<C-Space>', nv.treesitter.selection.increment },
-    --   { mode = 'x', '<BS>', nv.treesitter.selection.decrement },
-    -- },
+    keys = function()
+      local selection = require('nvim.treesitter.selection')
+      return {
+        { '<C-Space>', selection.start },
+        { '<C-Space>', selection.increment, mode = 'x' },
+        { '<BS>', selection.decrement, mode = 'x' },
+      }
+    end,
   },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',

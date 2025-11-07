@@ -1,44 +1,77 @@
 ---@module "snacks"
----@class snacks.picker.todo.Config: snacks.picker.grep.Config
----@field keywords? string[]
 
 local keywords = {
-  FIX = { icon = ' ', color = 'error', alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' } },
-  TODO = { icon = ' ', color = 'info' },
-  HACK = { icon = ' ', color = 'warning' },
-  WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
-  PERF = { icon = ' ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
-  NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
+  FIX = { icon = ' ', color = 'error', alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' } },
+  TODO = { icon = ' ', color = 'info' },
+  HACK = { icon = ' ', color = 'warning' },
+  WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
+  PERF = { icon = ' ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
+  NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
   TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
 }
+keywords.Section = { icon = '󰚟', color = 'title' }
 
-local keyword_keys = vim.tbl_keys(keywords)
-table.sort(keyword_keys, function(a, b)
-  return #b < #a
-end)
-local search_pattern = ([[\b(%s):]]):format(table.concat(keyword_keys, '|'))
+local colors = {
+  title = { '#7DCFFF' },
+  error = { '#DC2626' },
+  warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
+  info = { 'DiagnosticInfo', '#2563EB' },
+  hint = { 'DiagnosticHint', '#10B981' },
+  default = { 'Identifier', '#7C3AED' },
+  test = { 'Identifier', '#FF00FF' },
+}
 
-local Highlight = require('todo-comments.highlight')
-local align = Snacks.picker.util.align
+local Config = {
+  -- TODO: generate dynamically
+  hl_regex = {
+    '.*<(PERFORMANCE|OPTIMIZE|TESTING|Section|WARNING|FAILED|PASSED|OPTIM|ISSUE|FIXIT|FIXME|TODO|TEST|WARN|PERF|NOTE|INFO|HACK|BUG|XXX|FIX)\\s*:',
+  },
+}
+
+local Highlight = {
+  match = function(str, patterns)
+    -- local max_line_len = Config.options.highlight.max_line_len
+    -- if max_line_len and #str > max_line_len then return end
+
+    patterns = patterns or Config.hl_regex
+    if not type(patterns) == 'table' then
+      patterns = { patterns }
+    end
+
+    for _, pattern in pairs(patterns) do
+      -- same as `vim.fn.match`, but returns a list
+      local m = vim.fn.matchlist(str, [[\v\C]] .. pattern)
+      -- if nv.fn.is_nonempty_list(m) then
+      if #m > 1 and m[2] then
+        local match = m[2]
+        local kw = m[3] ~= '' and m[3] or m[2]
+        local start = str:find(match, 1, true)
+        return start, start + #match, kw
+      end
+    end
+  end,
+}
 
 Snacks.picker.sources.todo = {
   finder = 'grep',
   live = false,
   supports_live = true,
+  ---@param picker { opts: { keywords: string[] } }
   search = function(picker)
-    local opts = picker.opts --[[@as snacks.picker.todo.Config]]
-    if not opts.keywords then
-      return search_pattern
-    end
-    local kws = vim.tbl_filter(function(kw)
-      return keywords[kw]
-    end, opts.keywords)
-    table.sort(kws, function(a, b)
+    local opts = picker.opts
+    local kws = vim
+      .iter(vim.tbl_keys(keywords))
+      :filter(function(kw)
+        return opts.keywords and vim.tbl_contains(opts.keywords, kw) or true
+      end)
+      :totable()
+    table.sort(keywords, function(a, b)
       return #b < #a
     end)
-    return [[\b(]] .. table.concat(kws, '|') .. [[):]]
+    return ([[\b(%s):]]):format(table.concat(kws, '|'))
   end,
   format = function(item, picker)
+    local align = Snacks.picker.util.align
     local ret = {}
     local _, _, kw = Highlight.match(item.text)
     if kw then
@@ -49,13 +82,8 @@ Snacks.picker.sources.todo = {
         { align(kw, 6, { align = 'center' }), 'TodoBg' .. kw },
         { ' ' },
       }
-      return vim.list_extend(ret, Snacks.picker.format.file(item, picker))
     end
-  end,
-  previewer = function(ctx)
-    Snacks.picker.preview.file(ctx)
-    -- Highlight.highlight_win(ctx.preview.win.win, true)
-    -- Highlight.update()
+    return vim.list_extend(ret, Snacks.picker.format.file(item, picker))
   end,
 }
 

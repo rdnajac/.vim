@@ -38,6 +38,7 @@ M.spec = {
     enabled = true,
     opts = {
       ensure_installed = {},
+      automatic_enable = false,
     },
   },
   -- { 'SmiteshP/nvim-navic' },

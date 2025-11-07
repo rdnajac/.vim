@@ -91,6 +91,7 @@ return {
         autocmds = require('nvim.snacks.picker.nvimcfg'),
         keymaps = require('nvim.snacks.picker.nvimcfg'),
         files = require('nvim.snacks.picker.defaults'),
+        git_status = { layout = 'left' },
         grep = require('nvim.snacks.picker.defaults'),
         icons = { layout = { preset = 'insert' } },
         recent = {

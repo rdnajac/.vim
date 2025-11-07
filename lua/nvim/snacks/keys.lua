@@ -40,7 +40,7 @@ local keys = {
 { '<leader>cd', function() Snacks.picker.diagnostics() end,          desc = 'Diagnostics'           },
 { '<leader>cD', function() Snacks.picker.diagnostics_buffer() end,   desc = 'Buffer Diagnostics'    },
 
-{ '<leader>dps>', function() Snacks.profiler.scratch() end, desc = '' },
+{ '<leader>dps', function() Snacks.profiler.scratch() end, desc = '' },
 
 { '<leader>fb', function() Snacks.picker.buffers() end,      desc = 'Buffers'                       },
 { '<leader>ff', function() Snacks.picker.files() end,        desc = 'Find Files'                    },
