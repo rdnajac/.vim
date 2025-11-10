@@ -1,3 +1,5 @@
+_G.t = _G.t or { vim.uv.hrtime() }
+
 local M = {}
 
 -- TODO:  split up logging and printing
@@ -14,7 +16,6 @@ function M.log(msg, store)
   local i = #store
   local prev = store[i - 1] and (store[i - 1] < store[1] and store[1] or store[i - 1]) or store[1]
   local diff = (now - prev) / 1e6
-
   -- Snacks.notify.warn(('%2d: %-16s (%7.3f) %+8.3f ms'):format(i, msg, abs, diff))
   -- Snacks.notify.warn(('%2d: %-16s %+8.3f ms'):format(i, msg or 'lap', diff))
 end
@@ -87,5 +88,65 @@ end
 --     return entry
 --   end
 -- end
+
+M.write_log = function()
+  vim.api.nvim_create_autocmd('VimEnter', {
+    callback = function()
+      local startuptime = _G.t[1]
+      local state = vim.loader.enabled and 'enabled' or 'disabled'
+      local logpath = vim.fs.joinpath(vim.fn.stdpath('data'), 'startuptime.log')
+      local stats = setmetatable({ total = 0, cnt = 0, high = 0, low = math.huge }, {
+        __index = function(t, k)
+          if k == 'avg' then
+            return t.cnt > 0 and t.total / t.cnt or 0
+          else
+            return rawget(t, k)
+          end
+        end,
+        __call = function(t, time)
+          t.cnt = t.cnt + 1
+          t.total = t.total + time
+          t.high = math.max(t.high, time)
+          t.low = math.min(t.low, time)
+        end,
+      })
+
+      -- Read previous log and accumulate only current state
+      if vim.uv.fs_stat(logpath) then
+        for line in io.lines(logpath) do
+          local ts, s, t, a = line:match('^(%d+),(%w+),([%d%.]+),([%d%.]+)$')
+          if ts and s == state and t then
+            stats(tonumber(t))
+          end
+        end
+      end
+
+      stats(startuptime)
+
+      local f = io.open(logpath, 'a+')
+      if f then
+        f:write(('%d,%s,%.6f,%.6f\n'):format(os.time(), state, startuptime, stats.avg))
+        f:close()
+      end
+    end,
+  })
+end
+
+M.notify = function()
+  local stats = {} -- placeholder
+  local msg = table.concat({
+    ('**vim.loader [%s]**'):format(stats.info),
+    '',
+    '| Metric | Value    |',
+    '|--------|----------|',
+    ('| Start  | %.2fms |'):format(stats.start),
+    ('| Avg    | %.2fms |'):format(stats.avg),
+    ('| High   | %.2fms |'):format(stats.high),
+    ('| Low    | %.2fms |'):format(stats.low),
+    ('| Runs   | %d       |'):format(stats.cnt),
+  }, '\n')
+
+  Snacks.notify.info(msg, { title = 'Startup Time', ft = 'markdown' })
+end
 
 return M
