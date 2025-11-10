@@ -100,9 +100,8 @@ end
 
 local commands = {
   delete = function(path)
-    local filename = vim.fn.fnamemodify(path, ':t')
-    local prompt = string.format('Delete "%s"? [y/N] ', filename)
-    local res = vim.fn.input(prompt)
+    local name = vim.fn.fnamemodify(path, ':~')
+    local res = vim.fn.input(('Delete "%s"? [y/N] '):format(name))
     vim.cmd('echon ""')
     if res:lower() ~= 'y' then
       return
@@ -111,10 +110,10 @@ local commands = {
       if err then
         Snacks.notify.error('Failed to delete: ' .. err)
       else
-        Snacks.notify.warn('Deleted: ' .. vim.fn.fnamemodify(path, ':~'))
+        Snacks.notify.warn('Deleted: ' .. name)
         vim.schedule(function()
           Snacks.bufdelete({ file = path, wipe = true })
-          vim.cmd.Dirvish()
+          vim.cmd.Dirvish() -- refresh
         end)
       end
     end)
@@ -123,9 +122,9 @@ local commands = {
   rename = function(path)
     Snacks.rename.rename_file({
       from = path,
-      -- on_rename = function()
-      --   vim.cmd.Dirvish()
-      -- end,
+      on_rename = function()
+        vim.cmd.Dirvish() -- refresh
+      end,
     })
   end,
 }
@@ -144,17 +143,17 @@ end)
 --- @param params { textDocument: { uri: string }, position: dirvish.lsp.Position }
 --- @param callback function
 methods['textDocument/hover'] = function(params, callback)
-  local bufnr = get_dirvish_bufnr(params.textDocument.uri)
+  local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
   if not bufnr then
     return
   end
 
   local file_data = get_file_at_lnum(bufnr, params.position.line + 1)
-  if not file_data.path then
+  local path = file_data.path
+  if not path then
     return
   end
 
-  local path = file_data.path
   local cmd = { 'ls', '-ldhG', path }
 
   --- @param sys_out vim.SystemCompleted
