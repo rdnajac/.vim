@@ -7,13 +7,23 @@ local ns = vim.api.nvim_create_namespace('git-status')
 
 local function get_path(buffer)
   local ft = vim.bo[buffer].filetype
-  return ft == 'oil' and require('oil').get_current_dir(buffer)
-    or ft == 'netrw' and vim.b[buffer].netrw_curdir
+  if ft == 'dirvish' then
+    return vim.b[buffer].dirvish._dir
+  elseif ft == 'oil' then
+    return require('oil').get_current_dir(buffer)
+  elseif ft == 'netrw' then
+    return vim.b[buffer].netrw_curdir
+  end
 end
 
 local function get_line_name(buffer, n)
   local ft = vim.bo[buffer].filetype
-  if ft == 'oil' then
+  if ft == 'dirvish' then
+    local dir = vim.b[buffer].dirvish._dir
+    local fname = vim.fn.getline(n):gsub('/$', '')
+    local rel = fname:gsub('^' .. vim.pesc(dir), ''):gsub('^/', '')
+    return rel
+  elseif ft == 'oil' then
     local entry = require('oil').get_entry_on_line(buffer, n)
     return entry and entry.name ~= '..' and entry.name
   elseif ft == 'netrw' then
@@ -32,8 +42,9 @@ end
 ---@return table<string, GitStatusCodes> Map of filename to status codes
 local function parse_git_status(git_status_stdout, git_ls_tree_stdout, cwd)
   local status = {}
-  local git_root = vim.fn.FugitiveGitDir():gsub('/.git$', '')
-  local rel_path = cwd:gsub('^' .. vim.pesc(git_root) .. '/?', '')
+  local git_root = vim.fs.dirname(vim.fn.FugitiveGitDir())
+  local rel_path =
+    vim.fs.normalize(cwd):gsub('^' .. vim.pesc(vim.fs.normalize(git_root)) .. '/?', '')
   local in_subdir = rel_path ~= '' and rel_path ~= cwd
 
   for _, line in ipairs(git_status_stdout) do
@@ -98,25 +109,36 @@ local function add_status_extmarks(buffer, status)
     return
   end
 
-  local function get_extmark(code, priority)
+  local function get_icon(code)
     local k = nv.git.short_codes[code]
-    return {
-      sign_text = nv.icons.git[vim.fn.tolower(k or '')] or code,
-      sign_hl_group = 'SnacksPickerGitStatus' .. (k or ''),
-      priority = priority,
-    }
+    return nv.icons.git[vim.fn.tolower(k or '')] or code, 'SnacksPickerGitStatus' .. (k or '')
   end
 
   for n = 1, vim.api.nvim_buf_line_count(buffer) do
     local name = get_line_name(buffer, n)
-    if name then
+    if not name then
+      -- skip this line
+    else
       local codes = status[name]
       if codes then
+        local virt = {}
+
         if codes.index ~= ' ' then
-          vim.api.nvim_buf_set_extmark(buffer, ns, n - 1, 0, get_extmark(codes.index, 2))
+          local icon, hl = get_icon(codes.index)
+          table.insert(virt, { icon, hl })
         end
+
         if codes.working_tree ~= ' ' then
-          vim.api.nvim_buf_set_extmark(buffer, ns, n - 1, 0, get_extmark(codes.working_tree, 1))
+          local icon, hl = get_icon(codes.working_tree)
+          table.insert(virt, { icon, hl })
+        end
+
+        if #virt > 0 then
+          vim.api.nvim_buf_set_extmark(buffer, ns, n - 1, 0, {
+            virt_text = virt,
+            virt_text_pos = 'eol',
+            priority = 1000,
+          })
         end
       end
     end
@@ -124,8 +146,9 @@ local function add_status_extmarks(buffer, status)
 end
 
 local aug = vim.api.nvim_create_augroup('git-extmarks', {})
+
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'oil', 'netrw' },
+  pattern = { 'dirvish', 'oil', 'netrw' },
   group = aug,
   callback = function(ev)
     local buffer = ev.buf or vim.api.nvim_get_current_buf()
@@ -136,7 +159,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
     local current_status, last_dir
 
-    local function refresh()
+    local refresh = Snacks.util.debounce(function()
       local current_dir = get_path(buffer)
       if current_dir and current_dir ~= last_dir then
         last_dir = current_dir
@@ -147,18 +170,17 @@ vim.api.nvim_create_autocmd('FileType', {
       elseif current_status then
         add_status_extmarks(buffer, current_status)
       end
-    end
+    end, { ms = 50 })
 
     refresh()
-    vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'BufEnter', 'DirChanged' }, {
-      buffer = buffer,
-      group = aug,
-      callback = refresh,
-    })
-    vim.api.nvim_create_autocmd({ 'InsertLeave', 'TextChanged', 'CursorMoved' }, {
-      buffer = buffer,
-      group = aug,
-      callback = refresh,
-    })
+
+    vim.api.nvim_create_autocmd(
+      { 'BufReadPost', 'BufWritePost', 'WinEnter', 'DirChanged', 'CursorMoved' },
+      {
+        buffer = buffer,
+        group = aug,
+        callback = refresh,
+      }
+    )
   end,
 })

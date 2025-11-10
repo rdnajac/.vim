@@ -38,13 +38,11 @@ function s:fallback() abort
 endfunction
 
 function! s:yankring() abort
-  if v:event.operator !=# 'y'
-    return
+  if v:event.operator ==# 'y'
+    for i in range(9, 1, -1)
+      call setreg(string(i), getreg(string(i - 1)))
+    endfor
   endif
-  for i in range(9, 1, -1)
-    " TODO: this copies 0 into 1 intead of rotating
-    call setreg(string(i), getreg(string(i - 1)))
-  endfor
 endfunction
 
 augroup vimrc_yank

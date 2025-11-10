@@ -3,10 +3,11 @@ return {
   'folke/snacks.nvim',
   ---@type snacks.Config
   opts = {
-    -- bigfile = { enabled = true },
     bigfile = {
       ---@param ctx {buf: number, ft:string}
       setup = function(ctx)
+        vim.b.completion = false
+        vim.b.minihipatterns_disable = true
         if vim.fn.exists(':NoMatchParen') == 2 then
           vim.cmd.NoMatchParen()
         end

@@ -5,7 +5,7 @@
 set fillchars+=fold:\ ,
 " set fillchars+=foldclose:▸,
 " set fillchars+=foldopen:▾,
-set fillchars+=foldsep:\ ,
+" set fillchars+=foldsep:\ ,
 
 set list
 set listchars= " reset
