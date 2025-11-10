@@ -173,7 +173,6 @@ nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
 
-" TODO: sort opfunc
 vmap  :sort<CR>
 
 " diff?

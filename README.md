@@ -5,7 +5,7 @@ My (n)vim configuration.
 ## TODO
 
 - [ ] Who is VIMDIR? VIMHOME?
-- [ ] snacks profiler and todo comments
+- [ ] snacks profiler or todo comments
 - [ ] vim.pack to install/update neovim
 - [ ] <M-.> does what?
 - [ ] filter g0 like aerial for functions or M. in lua
@@ -16,15 +16,7 @@ remote ui stuff
 - [ ] on startup, attach to ui, then try out remote plugins and eval expr
 - [ ] neovim as an http server attach to instance view the buffers (logfiles)
 
-## Snacks
 
-### Image
-
-null hypothesis testing
-
-$$
-Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
-$$
 
 ## netrw
 
@@ -103,15 +95,6 @@ To clean up:
 rm -rf ~/.local/state/nvim/{*.log,sessions,swap,undo}
 ```
 
-## Cheatsheet
-
-<!-- TODO: add image sources -->
-
-![Vim Cheatsheet](./assets/vim-cheatsheet.png)
-
-## Pipes
-
-![Vim Pipes](./assets/vim-pipes.png)
 
 ## Resources and references
 
@@ -128,6 +111,19 @@ rm -rf ~/.local/state/nvim/{*.log,sessions,swap,undo}
 - [`lazy.nvim` plugin manager](https://lazy.folke.io/)
 - [LazyVim](https://www.lazyvim.org)
 - [`lsp-zero`](https://lsp-zero.netlify.app/docs/)
+
+### Pipes
+
+This image should be displayed if Snacks.image is working correctly.
+
+![Vim Pipes](./assets/vim-pipes.png)
+
+Snacks.image can also render math, like the formula for null hypothesis testing:
+
+$$
+Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
+$$
+
 
 ---
 

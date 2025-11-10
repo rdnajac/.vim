@@ -1,6 +1,6 @@
 scriptencoding utf-8
 if has ('nvim')
-    finish
+  finish
 endif
 
 let g:ale_virtualtext_cursor = 0
@@ -14,7 +14,6 @@ let g:ale_fixers = {
       \ 'r'	  : ['styler'],
       \ }
 
-" TODO: parse this dictionary with mason auto-install
 let g:ale_linters = {
       \ 'lua' : ['lua_language_server'],
       \ 'vim' : ['vint'],

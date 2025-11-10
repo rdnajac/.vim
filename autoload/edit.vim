@@ -111,7 +111,6 @@ function! edit#snippet() abort
   call edit#filetype('snippets', '.json')
 endfunction
 
-" TODO: move this to vim ftplugin
 " edit the corresponding autoload or plugin file
 function! edit#ch() abort
   let file = expand('%:p')

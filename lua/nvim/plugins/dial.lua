@@ -18,7 +18,11 @@ return {
     ---@param word? boolean Whether the elements are words (true) or symbols (false). Default: false
     ---@param cyclic? boolean Whether the cycle is cyclic (true) or not (false). Default: true
     local new = function(elements, word, cyclic)
-      return augend.constant.new({ elements = elements, word = word ~= true, cyclic = cyclic ~= false })
+      return augend.constant.new({
+        elements = elements,
+        word = word ~= true,
+        cyclic = cyclic ~= false,
+      })
     end
 
     local default_switches = {
@@ -52,6 +56,7 @@ return {
       },
       markdown = {
         augend.misc.alias.markdown_header,
+        -- FIXME: doesn't work
         new({ '[ ]', '[x]' }),
       },
       r = {

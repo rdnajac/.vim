@@ -1,5 +1,13 @@
 scriptencoding utf-8
-" TODO: util functions to do stuff like count lines (using v:vars)
+
+function! s:numlines() abort
+  return v:foldend - v:foldstart + 1
+endfunction
+
+function! s:markers() abort
+  let fdm = &l:foldmarker
+  return split(fdm, ',')
+endfunction
 
 function! fold#status()
   verbose set foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?
@@ -10,11 +18,10 @@ endfunction
 function! fold#text() abort
   let s:foldchar = '.'
   let l:line1 = getline(v:foldstart)
-  let l:line = substitute(l:line1, '\s*"\?\s*{{{\d*\s*$', '', '')
+  let l:open = s:markers()[0]
+  let l:line = substitute(l:line1, '\s*'..escape(l:open, '{}')..'\d*\s*$', '', '')
 
-  let l:line = s:FoldHeader(l:line1)
-  let l:lines_count = v:foldend - v:foldstart + 1
-  let l:post = printf('|%4s lines|', l:lines_count)
+  let l:post = printf('|%4s lines|', s:numlines())
   let l:pre = l:line . ' '
   let l:fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(l:pre . l:post)]))
 

@@ -130,7 +130,8 @@ M.winbar = function(opts)
       local path = vim.b.dirvish._dir
       return nv.icons.directory[path] .. ' ' .. vim.fn.fnamemodify(path, ':~')
     end
-    local a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]]
+    local a =
+      [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]]
     local b = [[%{%v:lua.nv.lsp.dirvish.status()%}]]
     local c = [[ %{join(map(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]]
     return M.render(a, b, c)

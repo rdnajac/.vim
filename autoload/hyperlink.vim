@@ -1,5 +1,3 @@
-" TODO: get MiniSurround to do the same thing
-
 function! s:sanitize(str) abort
   let s = a:str
   if s ==# '' || type(s) != v:t_string
@@ -14,9 +12,6 @@ function! s:sanitize(str) abort
 endfunction
 
 function! hyperlink#() range abort
-  " Exit select/visual mode
-  "call feedkeys("\<Esc>", 'x')
-
   let start_pos = getpos("'<")
   let end_pos   = getpos("'>")
 

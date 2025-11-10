@@ -146,7 +146,7 @@ end
 
 local enable_server_scheduled = vim.schedule_wrap(enable_server)
 
-M.automatic_enable {
+M.automatic_enable({
   init = function()
     enabled_servers = {}
     _.each(enable_server, registry.get_installed_package_names())
@@ -158,6 +158,6 @@ M.automatic_enable {
   enable_all = function()
     _.each(enable_server, registry.get_installed_package_names())
   end,
-}
+})
 
 return M

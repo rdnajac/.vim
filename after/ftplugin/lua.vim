@@ -72,6 +72,7 @@ vim.b.minisurround_config = {
 
 local aug = vim.api.nvim_create_augroup('lua', {})
 
+-- TODO: only disable highlighting inside of `vim.cmd([[...]])`
 vim.api.nvim_create_autocmd({ 'InsertEnter', }, {
   group = aug,
   callback = function()
@@ -79,7 +80,6 @@ vim.api.nvim_create_autocmd({ 'InsertEnter', }, {
   Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
   end,
 })
-
 vim.api.nvim_create_autocmd({ 'InsertLeave',  }, {
   group = aug,
   callback = function()
@@ -90,5 +90,4 @@ vim.api.nvim_create_autocmd({ 'InsertLeave',  }, {
     end,
 })
 
--- TODO: only disable highlighting inside of `vim.cmd([[...]])`
 EOF
