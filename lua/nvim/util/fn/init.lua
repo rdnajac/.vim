@@ -84,14 +84,9 @@ M.extmark_leaks = function()
 end
 
 return setmetatable(M, {
-  __index = function(_, key)
-    local ok, mod = pcall(require, 'nv.util.fn.' .. key)
-    if ok then
-      rawset(M, key, mod)
-      return mod
-    else
-      return nil
-    end
+  __index = function(_, k)
+    t[k] = require('nvim.util.fn.' .. k)
+    return t[k]
   end,
 })
 -- vim: fdm=expr fdl=0 fml=1
