@@ -4,20 +4,39 @@
 -- setting a metatable on the module table and the filename is the function
 local M = {}
 
+--- Get all lines from a buffer
+--- @param bufnr number? buffer number, defaults to current buffer
+--- @return string[]|{} lines of the buffer, empty list if buffer has no lines
+M.get_buf_lines = function(bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  local nlines = vim.api.nvim_buf_line_count(bufnr)
+  -- NOTE: indexing is zero-based and end-exclusive
+  return vim.api.nvim_buf_get_lines(bufnr, 0, nlines, false)
+end
+
+---@param line number
+---@param col number
+---@return string
 M.get_syn_name = function(line, col)
   return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name')
 end
 
+--- Returns false if x is nil, not a string, or an empty string
+---@param x any
+---@return boolean
 M.is_nonempty_string = function(x)
   return type(x) == 'string' and x ~= ''
 end
 
+--- Returns false if x is nil, not a list, or an empty list
+---@param x any
 M.is_nonempty_list = function(x)
   return vim.islist(x) and #x > 0
 end
 
---- @param subdir string subdirectory of `nvim/` to search
---- @return string[] list of module names ready for `require()`
+--- Get list of submodules in a given subdirectory of `nvim/`
+---@param subdir string subdirectory of `nvim/` to search
+---@return string[] list of module names ready for `require()`
 M.submodules = function(subdir)
   local path = vim.fs.joinpath(vim.g.luaroot, 'nvim', subdir)
   local files = vim.fn.globpath(path, '*.lua', false, true)
@@ -27,7 +46,7 @@ M.submodules = function(subdir)
 end
 
 --- Deferred redraw after `t` milliseconds (default 200ms)
---- @param t number? time in ms to defer
+---@param t number? time in ms to defer
 M.defer_redraw = function(t)
   vim.defer_fn(function()
     -- vim.cmd([[redraw!]])
@@ -43,11 +62,9 @@ M.new = function()
 end
 
 M.extmark_leaks = function()
-  local nsn = vim.api.nvim_get_namespaces()
-
   local counts = {}
 
-  for name, ns in pairs(nsn) do
+  for name, ns in pairs(vim.api.nvim_get_namespaces()) do
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       local count = #vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
       if count > 0 then
