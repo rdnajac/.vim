@@ -22,7 +22,7 @@ local M = {
         auto_show = false,
         -- window = { border = border }
       },
-      ghost_text = { enabled = true },
+      ghost_text = { enabled = false },
       trigger = {
         show_on_keyword = true,
         show_on_accept_on_trigger_character = true,

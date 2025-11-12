@@ -73,6 +73,10 @@
       "rev": "f58c05f",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
+    "screenkey.nvim": {
+      "rev": "95f2fb1",
+      "src": "https://git::@github.com/NStefan002/screenkey.nvim.git"
+    },
     "sidekick.nvim": {
       "rev": "c2bdf8c",
       "src": "https://github.com/folke/sidekick.nvim.git"
