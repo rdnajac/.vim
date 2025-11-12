@@ -1,50 +1,52 @@
--- TODO: use native reopen from new release
----@diagnostic disable-next-line
-local function reopen(picker, overrides)
-  local last = {
-    selected = picker:selected({ fallback = false }),
-    cursor = picker.list.cursor,
-    topline = picker.list.top,
-    input = { filter = vim.deepcopy(picker.input.filter) },
-    live = picker.opts.live,
-    toggles = {},
-    cwd = picker:cwd(),
-    source = picker.opts.source, -- included in opts
-  }
-
-  if picker.opts.toggles then
-    for toggle_name in pairs(picker.opts.toggles) do
-      last.toggles[toggle_name] = picker.opts[toggle_name]
-    end
+---@param self snacks.Picker
+local function restore(self)
+  local resume = require('snacks.picker.resume')
+  local state = resume.state[self.opts.source]
+  if not state then
+    return Snacks.notify.warn('No resume state found for ' .. self.opts.source)
   end
-
-  picker:close()
-  Snacks.picker.pick(vim.tbl_extend('force', last, overrides or {}))
+  self.list:set_selected(state.selected)
+  self.list:update()
+  self.input:update()
+  self.matcher.task:on(
+    'done',
+    vim.schedule_wrap(function()
+      if self.closed then
+        return
+      end
+      self.list:view(state.cursor, state.topline)
+    end)
+  )
+  -- return self
 end
 
 ---@param picker snacks.Picker
 local toggle = function(picker)
-  vim.cmd('norm! dd')
-  local opts = { cwd = picker.opts.cwd }
-  local alt = picker.opts.source == 'grep' and 'files' or 'grep'
+  local resume = require('snacks.picker.resume')
+  resume.add(picker)
   picker:close()
-  Snacks.picker(alt, opts)
-  -- reopen(picker, { source = alt })
-  vim.schedule(function()
-    vim.api.nvim_feedkeys(vim.keycode('<C-R>"'), 'i', false)
-  end)
+  local ret = Snacks.picker.pick({
+    source = picker.opts.source == 'grep' and 'files' or 'grep',
+    cwd = picker:cwd(),
+    -- pattern = state.filter.pattern,
+    -- search = state.filter.search,
+  })
+  restore(ret)
 end
 
 ---@param picker snacks.Picker
 local zoxide = function(picker)
-  local opts = picker.opts -- deepcopy?
+  local resume = require('snacks.picker.resume')
+  resume.add(picker)
   picker:close()
+
   Snacks.picker.zoxide({
     confirm = function(z, item)
+      resume.state[picker.opts.source].opts.cwd = item.file
       z:close()
-      opts.cwd = item.file
-      Snacks.picker(opts)
-      -- reopen(picker, { cwd = item.file })
+    end,
+    on_close = function()
+      Snacks.picker.resume()
     end,
   })
 end
