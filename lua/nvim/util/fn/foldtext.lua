@@ -1,10 +1,4 @@
-local M = setmetatable({}, {
-  __call = function(M, ...)
-    return M.foldtext(...)
-  end,
-})
-
-function M.foldtext()
+return function()
   local start_line = vim.fn.getline(vim.v.foldstart)
   local end_line = vim.fn.getline(vim.v.foldend)
 
@@ -23,5 +17,3 @@ function M.foldtext()
 
   return start_line
 end
-
-return M

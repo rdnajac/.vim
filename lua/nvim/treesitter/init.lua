@@ -40,6 +40,7 @@ end
 
 local M = {}
 
+-- ~/.local/share/nvim/site/pack/core/opt/LazyVim/lua/lazyvim/plugins/treesitter.lua
 M.spec = {
   {
     'nvim-treesitter/nvim-treesitter',
@@ -70,29 +71,28 @@ M.spec = {
         include_surrounding_whitespace = false,
       },
     },
-    -- after = function()
-    --   local moves =
-    --     goto_next_start = {
-    --       [']f'] = '@function.outer',
-    --       [']c'] = '@class.outer',
-    --       [']a'] = '@parameter.inner',
-    --     },
-    --     goto_next_end = {
-    --       [']F'] = '@function.outer',
-    --       [']C'] = '@class.outer',
-    --       [']A'] = '@parameter.inner',
-    --     },
-    --     goto_previous_start = {
-    --       ['[f'] = '@function.outer',
-    --       ['[c'] = '@class.outer',
-    --       ['[a'] = '@parameter.inner',
-    --     },
-    --     goto_previous_end = {
-    --       ['[F'] = '@function.outer',
-    --       ['[C'] = '@class.outer',
-    --       ['[A'] = '@parameter.inner',
-    --     },
-    --   }
+    keys = function()
+      -- You can also use captures from other query groups like `locals.scm`
+      -- vim.keymap.set({ 'x', 'o' }, 'as', function()
+      -- require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals')
+      -- end)
+      local function select_textobject(textobject)
+        return require('nvim-treesitter-textobjects.select').select_textobject(
+          textobject,
+          'textobjects'
+        )
+      end
+      return {
+	-- stylua: ignore
+        {
+          mode = { 'x', 'o' },
+          {'af', function() select_textobject('@function.outer') end,},
+          {'if', function() select_textobject('@function.inner') end,},
+          {'ac', function() select_textobject('@class.outer') end,},
+          {'ic', function() select_textobject('@class.inner') end,},
+        },
+      }
+    end,
   },
   { 'nvim-treesitter/nvim-treesitter-context' },
 }

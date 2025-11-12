@@ -5,29 +5,40 @@ local function nmap(lhs, rhs, desc)
   vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
 end
 
-nmap('crf', nv.fn.coerce.form, 'local function foo() ↔ local foo = function()')
+-- stylua: ignore start
+nmap('crf', nv.fn.coerce.form,      'local function foo() ↔ local foo = function()')
 nmap('crM', nv.fn.coerce.formscope, 'local function foo() → M.foo = function()')
 nmap('crF', nv.fn.coerce.scopeform, 'M.foo = function() → local function foo()')
 -- FIXME: conflicts with abolish
 -- nmap('crm',   nv.fn.coerce.scope,     'local x ↔ M.x')
 
-nmap('ym',    nv.fn.yankmod.name, 'yank lua module name')
+nmap('ym',    nv.fn.yankmod.name,    'yank lua module name')
 nmap('yM',    nv.fn.yankmod.require, 'yank require(...) form')
-nmap('yr',    nv.fn.yankmod.func, 'yank require + function')
-nmap('yR',    nv.fn.yankmod.print, 'print require + function')
-nmap('y<CR>', nv.fn.yankmod.print, 'print require + function')
+nmap('yr',    nv.fn.yankmod.func,    'yank require + function')
+nmap('yR',    nv.fn.yankmod.print,   'print require + function')
+nmap('y<CR>', nv.fn.yankmod.print,   'print require + function')
+-- stylua: ignore end
 
 vim.b.minisurround_config = {
   custom_surroundings = {
-    L = {
-      input = { '%[().-()%]%(.-%)' },
-      output = function()
-        local link = require('mini.surround').user_input('Link: ')
-        return { left = '[', right = '](' .. link .. ')' }
-      end,
-    },
+    U = { output = { left = "function()\n", right = "\nend" } },
+    u = { output = { left = "function()\n  ", right = "\nend" } },
+    i = { output = { left = "-- stylua: ignore start\n", right = "\n-- stylua: ignore end" } },
+    s = { output = { left = "vim.schedule(function()\n  ", right = "\nend)" } },
   },
 }
+
+Snacks.util.on_module('mini.splitjoin', function()
+  local gen_hook = MiniSplitjoin.gen_hook
+  local curly = { brackets = { '%b{}' } }
+  local add_comma_curly = gen_hook.add_trailing_separator(curly)
+  local del_comma_curly = gen_hook.del_trailing_separator(curly)
+  local pad_curly = gen_hook.pad_brackets(curly)
+  vim.b.minisplitjoin_config = {
+    split = { hooks_post = { add_comma_curly } },
+    join = { hooks_post = { del_comma_curly, pad_curly } },
+  }
+end)
 
 local aug = vim.api.nvim_create_augroup('lua', {})
 

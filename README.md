@@ -17,7 +17,6 @@ remote ui stuff
 - [ ] neovim as an http server attach to instance view the buffers (logfiles)
 
 
-
 ## netrw
 
 `h: netrw` provides 'ssh hints':

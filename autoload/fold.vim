@@ -9,23 +9,26 @@ function! s:markers() abort
   return split(fdm, ',')
 endfunction
 
-function! fold#status()
-  verbose set foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?
+function! s:foldtext(line) abort
+  return substitute(a:line, '\s*' . s:markers()[0] . '.*$', '', '')
 endfunction
 
 " TODO: trim trailing dots after closing bar
 " TODO: indent folds
 function! fold#text() abort
+  " TODO: use the fillchar?
   let s:foldchar = '.'
-  let l:line1 = getline(v:foldstart)
-  let l:open = s:markers()[0]
-  let l:line = substitute(l:line1, '\s*'..escape(l:open, '{}')..'\d*\s*$', '', '')
+  let l:line = s:foldtext(getline(v:foldstart))
+  let l:info = printf('|%4s lines|', s:numlines())
+  let l:fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(l:line..' '..l:info)]))
 
-  let l:post = printf('|%4s lines|', s:numlines())
-  let l:pre = l:line . ' '
-  let l:fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(l:pre . l:post)]))
+  return printf('%s %s%s', l:line, l:fill, l:info)
+endfunction
 
-  return l:pre . l:fill . l:post
+
+function! fold#test() abort
+  let line = '" Section: settings {{{1'
+  echom s:foldtext(line)
 endfunction
 
 finish " TODO: needs testing

@@ -7,8 +7,8 @@ local miniopts = function()
     ai = {
       n_lines = 500,
       custom_textobjects = {
-        f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
-        c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
+        -- f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
+        -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
         -- d = { '%f[%d]%d+' }, -- digits
         d = ex.gen_ai_spec.number,
         e = { -- Word with case
@@ -108,6 +108,7 @@ local miniopts = function()
       search_method = 'cover_or_next',
     },
     splitjoin = {
+      -- TODO: remove commas when joining 
       mappings = {
         toggle = 'g~',
         split = 'gS',

@@ -1,7 +1,7 @@
 {
   "plugins": {
     "LazyVim": {
-      "rev": "a507822c",
+      "rev": "c64a6173",
       "src": "http://github.com/LazyVim/LazyVim.git"
     },
     "R.nvim": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "40380e7",
+      "rev": "7d79733",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -41,7 +41,7 @@
       "src": "https://github.com/folke/lazydev.nvim.git"
     },
     "mason-lspconfig.nvim": {
-      "rev": "d627416",
+      "rev": "b1d9a91",
       "src": "https://git::@github.com/mason-org/mason-lspconfig.nvim.git"
     },
     "mason.nvim": {
@@ -49,24 +49,24 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "68d4478",
+      "rev": "f43357b",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "70157bb",
+      "rev": "347c45b",
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "2010fc6",
+      "rev": "c8503e6",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "d97d226c",
+      "rev": "b5077407",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
     "nvim-treesitter-context": {
-      "rev": "ec308c7",
+      "rev": "660861b",
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
@@ -78,11 +78,11 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "8ca098c",
+      "rev": "dec29f5",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
-      "rev": "411503d",
+      "rev": "31e3c38",
       "src": "https://git::@github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
@@ -142,7 +142,7 @@
       "src": "https://git::@github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "be9deac3",
+      "rev": "32bcb392",
       "src": "http://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {
