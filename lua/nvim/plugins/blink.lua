@@ -88,7 +88,7 @@ local M = {
         },
       },
     },
-    fuzzy = { implementation = 'lua' },
+    -- fuzzy = { implementation = 'lua' },
     keymap = {
       ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
       ['<Tab>'] = {

@@ -21,10 +21,10 @@ nmap('y<CR>', nv.fn.yankmod.print,   'print require + function')
 
 vim.b.minisurround_config = {
   custom_surroundings = {
-    U = { output = { left = "function()\n", right = "\nend" } },
-    u = { output = { left = "function()\n  ", right = "\nend" } },
-    i = { output = { left = "-- stylua: ignore start\n", right = "\n-- stylua: ignore end" } },
-    s = { output = { left = "vim.schedule(function()\n  ", right = "\nend)" } },
+    U = { output = { left = 'function()\n', right = '\nend' } },
+    u = { output = { left = 'function()\n  ', right = '\nend' } },
+    i = { output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' } },
+    s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
   },
 }
 

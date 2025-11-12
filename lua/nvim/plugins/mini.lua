@@ -108,7 +108,7 @@ local miniopts = function()
       search_method = 'cover_or_next',
     },
     splitjoin = {
-      -- TODO: remove commas when joining 
+      -- TODO: remove commas when joining
       mappings = {
         toggle = 'g~',
         split = 'gS',
@@ -132,14 +132,13 @@ end
 
 return {
   'nvim-mini/mini.nvim',
+  event = 'VimEnter',
   config = function()
     require('mini.icons').setup(nv.icons.mini)
     -- require('mini.misc').setup_termbg_sync()
-    vim.schedule(function()
-      for minimod, opts in pairs(miniopts()) do
-        require('mini.' .. minimod).setup(opts)
-      end
-    end)
+    for minimod, opts in pairs(miniopts()) do
+      require('mini.' .. minimod).setup(opts)
+    end
   end,
   keys = function()
     -- Remap adding surrounding to Visual mode selection

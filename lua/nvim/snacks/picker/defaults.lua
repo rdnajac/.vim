@@ -1,3 +1,10 @@
+-- FIXME: doesn't work
+---@param self snacks.Picker
+local function clear(self)
+  self.opts.ft = nil
+  self.list:update()
+end
+
 ---@param self snacks.Picker
 local function restore(self)
   local resume = require('snacks.picker.resume')
@@ -17,7 +24,6 @@ local function restore(self)
       self.list:view(state.cursor, state.topline)
     end)
   )
-  -- return self
 end
 
 ---@param picker snacks.Picker
@@ -86,6 +92,7 @@ return {
     return opts
   end,
   actions = {
+    clear = clear,
     toggle = toggle,
     zoxide = zoxide,
   },
@@ -100,8 +107,8 @@ return {
           end,
           mode = { 'n' },
         },
+        ['<M-c>'] = { 'clear', mode = { 'i', 'n' } },
       },
     },
   },
-  -- confirm = 'vsplit'
 }

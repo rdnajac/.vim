@@ -36,6 +36,7 @@ M.spec = {
   {
     'mason-org/mason-lspconfig.nvim',
     enabled = true,
+    lazy = true,
     opts = {
       ensure_installed = {},
       automatic_enable = false,

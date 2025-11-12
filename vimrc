@@ -196,6 +196,22 @@ nnoremap <leader>h <Cmd>Help<CR>
 nnoremap <leader>w <Cmd>write!<CR>
 nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 
+" debug
+nnoremap <leader>db <Cmd>call debug#buffer()<CR>
+nnoremap <leader>df <Cmd>call debug#fold()<CR>
+
+if has('nvim')
+  nnoremap <leader>dB <Cmd>Blink status<CR>
+  nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
+  nnoremap <leader>dd <Cmd>LazyDev debug<CR>
+  nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
+  nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
+  nnoremap <leader>dP <Cmd>=vim.tbl_keys(package.loaded)<CR>
+  nnoremap <leader>dR <Cmd>=require("r.config").get_config()<CR>
+  nnoremap <leader>dS <Cmd>=require("snacks").meta.get()<CR>
+  nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
+endif
+
 " file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
@@ -348,8 +364,6 @@ nnoremap g. :%s//<C-r>./g<ESC>
 nnoremap          zv zMzvzz
 nnoremap <silent> zj zcjzOzz
 nnoremap <silent> zk zckzOzz
-
-nnoremap <leader>df <Cmd>call fold#status()<CR>
 " close folds when moving left at beginning of line
 " TODO: make it wrap like whichwrap+=h or (col('.') == 1 ? 'gk$' : 'h')
 nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'

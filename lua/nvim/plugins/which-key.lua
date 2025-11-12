@@ -154,20 +154,20 @@ return {
 
     -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
   end,
-  -- stylua: ignore
   keys = {
-    -- meta
-    { '<leader>?', function() require('which-key').show({ global = false }) end, desc = 'Buffer Keymaps (which-key)',},
-    { '<C-w><Space>', function() require('which-key').show({ keys = '<c-w>', loop = true }) end, desc = 'Window Hydra Mode (which-key)',},
-    -- debug
-    { '<leader>db', '<Cmd>Blink status<CR>',                                  desc = 'Blink Status'          },
-    { '<leader>dc', '<Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>', desc = 'LSP Capabilities',     },
-    { '<leader>dd', '<Cmd>LazyDev debug<CR>',                                 desc = 'LazyDev Debug'         },
-    { '<leader>dh', '<Cmd>packloadall<Bar>checkhealth<CR>',                   desc = 'Check Health'          },
-    { '<leader>dl', '<Cmd>LazyDev lsp<CR>',                                   desc = 'LazyDev LSP'           },
-    { '<leader>dP', '<Cmd>=vim.tbl_keys(package.loaded)<CR>',                 desc = 'Loaded Packages'       },
-    { '<leader>dR', '<Cmd>=require("r.config").get_config()<CR>',             desc = 'R Config'              },
-    { '<leader>dS', '<Cmd>=require("snacks").meta.get()<CR>',                 desc = 'Snacks Meta'           },
-    { '<leader>dw', '<Cmd>=vim.lsp.buf.list_workspace_folders()<CR>',         desc = 'LSP Workspace Folders' },
+    {
+      '<leader>?',
+      function()
+        require('which-key').show({ global = false })
+      end,
+      desc = 'Buffer Keymaps (which-key)',
+    },
+    {
+      '<C-w><Space>',
+      function()
+        require('which-key').show({ keys = '<c-w>', loop = true })
+      end,
+      desc = 'Window Hydra Mode (which-key)',
+    },
   },
 }
