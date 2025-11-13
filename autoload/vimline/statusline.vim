@@ -9,6 +9,8 @@ let s:default.= "%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rul
 
 let s:left_sep = '🭛'
 
+au User Screenkey* redrawstatus
+
 function! vimline#statusline#() abort
   let l:ret = ''
   let l:state = state()
@@ -39,7 +41,8 @@ function! vimline#statusline#() abort
   " right-aligned
   let l:ret .= '%='
   let l:ret .= '%#Chromatophore_z#'
-  let l:ret .= vimline#recording#()
+  " let l:ret .= vimline#recording#()
+  let l:ret .= "%{v:lua.require'screenkey'.get_keys()}"
 
   return l:ret
 endfunction

@@ -1,6 +1,7 @@
 return {
-  -- TODO: try statusline component
+  -- TODO: what's going on with which-key doubling 
   'NStefan002/screenkey.nvim',
+  ---@type screenkey.config
   opts = {
     win_opts = {
       border = 'rounded',
@@ -25,10 +26,16 @@ return {
       modes = {},
     },
     show_leader = false,
-    group_mappings = false,
+    group_mappings = true,
     display_infront = {},
     display_behind = {},
     filter = function(keys)
+      local screenkey = require('screenkey')
+      for i, k in ipairs(keys) do
+        if screenkey.statusline_component_is_active() and k.key == '%' then
+          keys[i].key = '%%'
+        end
+      end
       return keys
     end,
     colorize = function(keys)
@@ -36,28 +43,41 @@ return {
     end,
     separator = '',
     keys = {
-      ['<TAB>'] = '󰌒',
-      ['<CR>'] = '󰌑',
-      ['<ESC>'] = '󱊷 ',
-      -- ['<SPACE>'] = '␣',
-      ['<BS>'] = '󰁮',
-      ['<DEL>'] = 'Del',
-      ['<HOME>'] = 'Home',
-      ['<END>'] = 'End',
+      ['%'] = '%%',
+      ['<Tab>'] = '󰌒 ',
+      ['<Cr>'] = '󰌑 ',
+      -- ['<Esc>'] = '󱊷 ',
+      -- ['<Space>'] = '␣',
+      ['<BS>'] = '󰁮 ',
+      -- ['CTRL'] = 'C-',
+      -- ['ALT'] = 'M-',
+      -- ['<leader>'] = '<leader>',
+      ['<Left>'] = ' ',
+      ['<Right>'] = ' ',
+      ['<Up>'] = ' ',
+      ['<Down>'] = ' ',
+      -- TEST: this
       ['<PAGEUP>'] = 'PgUp',
       ['<PAGEDOWN>'] = 'PgDn',
       ['<INSERT>'] = 'Ins',
-      ['CTRL'] = 'C-',
-      ['ALT'] = 'M-',
-      ['<leader>'] = '<leader>',
+      ['<DEL>'] = 'Del',
+      ['<HOME>'] = 'Home',
+      ['<END>'] = 'End',
     },
     notify_method = 'echo',
     log = {
-      min_level = vim.log.levels.OFF,
-      filepath = vim.fn.stdpath('data') .. '/screenkey_log',
+      -- min_level = 0,
+      filepath = vim.fn.stdpath('data') .. '/screenkey.log',
     },
   },
-  -- after = function()
+  -- after = vim.cmd.Screenkey,
+  after = function()
+    require('screenkey').toggle_statusline_component()
     -- vim.cmd.Screenkey()
-  -- end,
+    Snacks.toggle({
+      name = 'Screenkey',
+      get = require('screenkey').is_active,
+      set = require('screenkey').toggle,
+    }):map('<leader>uR')
+  end,
 }

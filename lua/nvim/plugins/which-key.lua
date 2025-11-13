@@ -139,17 +139,17 @@ return {
 
     wk.add({
       { 'cR', group = 'CoeRce', icon = { icon = '󰬴' } },
-      { 'cRc', coerce('c'), desc = 'camelcase' },
-      { 'cRm', coerce('m'), desc = 'mixedcase' },
-      { 'cRp', coerce('p'), desc = 'mixedcase' },
-      { 'cRs', coerce('s'), desc = 'snakecase' },
-      { 'cR_', coerce('_'), desc = 'snakecase' },
-      { 'cRu', coerce('u'), desc = 'UPPERCASE' },
-      { 'cRU', coerce('U'), desc = 'uppercase' },
-      { 'cR-', coerce('-'), desc = 'dashcase' },
-      { 'cRk', coerce('k'), desc = 'dashcase' },
-      { 'cR.', coerce('.'), desc = 'dotcase' },
-      { 'cR<Space>', coerce(' '), desc = 'spacecase' },
+      { 'cRc', coerce('c'), desc = 'coerceCamelCase' },
+      { 'cRm', coerce('m'), desc = 'coerceMixedCase' },
+      { 'cRp', coerce('p'), desc = 'coerceMixedcase' },
+      { 'cRs', coerce('s'), desc = 'coerce_snake_case' },
+      { 'cR_', coerce('_'), desc = 'coercesnakecase' },
+      { 'cRu', coerce('u'), desc = 'COERCE_UPPER_CASE' },
+      { 'cRU', coerce('U'), desc = 'COERCE_UPPER_CASE' },
+      { 'cR-', coerce('-'), desc = 'coerce-dash-case' },
+      { 'cRk', coerce('k'), desc = 'coerce-dash-case'  },
+      { 'cR.', coerce('.'), desc = 'coerce.dot.case'  },
+      { 'cR<Space>', coerce(' '), desc = 'coerce space case' },
     })
 
     -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
