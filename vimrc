@@ -199,13 +199,10 @@ nnoremap <leader>! <Cmd>call redir#prompt()<CR>
 " debug
 nnoremap <leader>db <Cmd>call debug#buffer()<CR>
 nnoremap <leader>df <Cmd>call debug#fold()<CR>
+nnoremap <leader>ds <Cmd>call debug#shell()<CR>
 
 if has('nvim')
-  nnoremap <leader>dB <Cmd>Blink status<CR>
-  nnoremap <leader>dc <Cmd>=vim.lsp.get_clients()[1].server_capabilities<CR>
-  nnoremap <leader>dd <Cmd>LazyDev debug<CR>
-  nnoremap <leader>dh <Cmd>packloadall<Bar>checkhealth<CR>
-  nnoremap <leader>dl <Cmd>LazyDev lsp<CR>
+  nnoremap <leader>dB <Cmd>BliLazyDev lsp<CR>
   nnoremap <leader>dP <Cmd>=vim.tbl_keys(package.loaded)<CR>
   nnoremap <leader>dR <Cmd>=require("r.config").get_config()<CR>
   nnoremap <leader>dS <Cmd>=require("snacks").meta.get()<CR>
@@ -475,12 +472,10 @@ call s:cabbrev('f', 'find')
 
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
-" Plug 'andymass/vim-matchup'
 Plug 'bullets-vim/bullets.vim'
 Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
-" Plug 'lervag/wiki.vim.git'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
@@ -493,6 +488,7 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-unimpaired'
 if !has('nvim')
+  Plug 'andymass/vim-matchup'
   Plug 'dense-analysis/ale'
   Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'
