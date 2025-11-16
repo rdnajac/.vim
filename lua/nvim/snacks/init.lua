@@ -115,9 +115,5 @@ return {
   keys = function()
     return require('nvim.snacks.keys')
   end,
-  after = function()
-    require('nvim.snacks.commands')
-    require('nvim.snacks.toggles')
-  end,
 }
 -- vim: fdl=2

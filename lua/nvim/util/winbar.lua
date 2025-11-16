@@ -102,10 +102,9 @@ M.lualine_winbar = {
 }
 
 M.lualine_inactive_winbar = {
-  lualine_b = {
-    { M.a, color = { fg = '#000000', gui = 'bold' } },
-  },
-  lualine_c = { M.b },
+  lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
+  lualine_b = { '%t' },
+  lualine_c = { M.winbar.b },
 }
 
 function M.render(a, b, c)
@@ -117,21 +116,31 @@ function M.render(a, b, c)
   local sec_b = b and sec('ab', sep .. ' ') .. sec('b', b) .. sec('bc', sep) or sec('c', sep)
   local sec_c = c and sec('c', c) or ''
   -- return string.format('%s%s%s', sec_a, sec_b, sec_c)
-  local ret = { sec_a, sec_b, sec_c }
-  return table.concat(ret)
+  return table.concat({ sec_a, sec_b, sec_c })
 end
 
 local ft_map = {
   dirvish = {
-    a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]],
+    -- a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]],
     b = [[%{%v:lua.nv.lsp.dirvish.status()%}]],
     c = [[ %{join(map if opts.ft == '(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]],
   },
-  help = {
-    a = [[%{%v:lua.nv.icons.filetype()%}]],
-    b = M.a,
-    c = '',
-  },
+  -- help = {
+  --   a = [[%{%v:lua.nv.icons.filetype()%}]],
+  --   b = M.a,
+  --   c = '',
+  -- },
+  -- man = {
+  --   a = 'MAN',
+  --   a = {
+  --     function()
+  --       return 'MAN'
+  --     end,
+  --   },
+  --   b = { 'filename', file_status = false },
+  --   y = 'progress',
+  --   -- z = { 'location' },
+  -- },
 }
 
 M.lualine_extensions = vim
@@ -142,6 +151,7 @@ M.lualine_extensions = vim
         lualine_a = { sec.a },
         lualine_b = { sec.b },
         lualine_c = { sec.c },
+        lualine_z = sec.z and { sec.z } or nil,
       },
       filetypes = { ft },
     }
