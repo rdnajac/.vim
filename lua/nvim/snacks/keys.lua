@@ -23,6 +23,7 @@ local M = {
 { '<leader>fC', function() Snacks.rename.rename_file() end, desc = 'Rename File'           },
 { '<leader>gg', function() Snacks.lazygit() end,            desc = 'Lazygit' ,             },
 { '<leader>S',  function() Snacks.scratch.select() end,     desc = 'Select Scratch Buffer' },
+{ '<leader>P',  function() Snacks.picker.resume({exclude={'pickers'}}) end, desc = 'Resume Picker' },
 { '<leader>un', function() Snacks.notifier.hide() end,      desc = 'Dismiss Notifications' },
 { '<leader>uz', function() Snacks.zen() end,                desc = 'Zen Mode'              },
 { '<leader>z',  function() Snacks.zen() end,                desc = 'Toggle Zen Mode'       },
@@ -49,6 +50,14 @@ local M = {
     end, desc = 'Notification History'
   },
 }
+
+vim.list_extend(M, {
+  '<leader>dpf',
+  function()
+    Snacks.profiler.pick({ filter = { def_plugin = vim.fn.input('Filter by plugin: ') } })
+  end,
+  desc = 'Profiler Filter by Plugin',
+})
 
 ---@alias LeaderLeaf string
 ---@alias LeaderMap table<string, LeaderLeaf|LeaderMap>
