@@ -202,7 +202,9 @@ nnoremap <leader>df <Cmd>call debug#fold()<CR>
 nnoremap <leader>ds <Cmd>call debug#shell()<CR>
 
 if has('nvim')
-  nnoremap <leader>dB <Cmd>BliLazyDev lsp<CR>
+  nnoremap <leader>dB <Cmd>Blink<CR>
+  nnoremap <leader>dld <Cmd>LazyDev debug<CR>
+  nnoremap <leader>dll <Cmd>LazyDev lsp<CR>
   nnoremap <leader>dP <Cmd>=vim.tbl_keys(package.loaded)<CR>
   nnoremap <leader>dR <Cmd>=require("r.config").get_config()<CR>
   nnoremap <leader>dS <Cmd>=require("snacks").meta.get()<CR>

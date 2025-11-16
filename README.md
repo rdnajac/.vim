@@ -9,6 +9,7 @@ My (n)vim configuration.
 - [ ] vim.pack to install/update neovim
 - [ ] <M-.> does what?
 - [ ] filter g0 like aerial for functions or M. in lua
+- [ ] edit = '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})',
 
 remote ui stuff
 

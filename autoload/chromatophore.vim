@@ -21,8 +21,6 @@ function! chromatophore#setup() abort
   call vim#hl#set('Chromatophore_z',  mode_color, eigengrau, 'bold')
 
   call vim#hl#link('Chromatophore', g:chromatophore_groups)
-  call vim#hl#link('Chromatophore_a', 'FloatTitle')
-  call vim#hl#link('Chromatophore_a', 'PmenuThumb')
 endfunction
 
 function! chromatophore#metachrosis() abort

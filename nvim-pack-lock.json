@@ -61,11 +61,11 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "95fe3c170753238d3ca4f760e79a991400677abc",
+      "rev": "abf6d190f2c06818489c0bd4b926e7e3a06c5e51",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "2696fb832677fcd06588806d006aff923a4185a7",
+      "rev": "0cfa59947416d14e36a41e6fe4f025abd8760301",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -74,11 +74,11 @@
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "f58c05f",
+      "rev": "13bfaaabaaf732cf58d14004ed79b331bb40b838",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "screenkey.nvim": {
-      "rev": "95f2fb1",
+      "rev": "ffe868e737d16d07a9792c8e04568cf8a2644cb7",
       "src": "https://git::@github.com/NStefan002/screenkey.nvim.git"
     },
     "sidekick.nvim": {
@@ -86,7 +86,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "3c5c23ba91e608bd89bb36d76cb005aa63d20dbf",
+      "rev": "836e07336ba523d4da480cd66f0241815393e98e",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {
@@ -114,7 +114,7 @@
       "src": "https://git::@github.com/tpope/vim-dadbod.git"
     },
     "vim-dirvish": {
-      "rev": "5d1d1ef",
+      "rev": "6be56227a4207c93cd8b607f52f567a1e13dddb1",
       "src": "https://git::@github.com/justinmk/vim-dirvish.git"
     },
     "vim-dispatch": {
@@ -142,7 +142,7 @@
       "src": "https://git::@github.com/tpope/vim-scriptease.git"
     },
     "vim-ug": {
-      "rev": "3ac372d",
+      "rev": "8905d3c85776e9f983a5f5b7368a78dc2fb58586",
       "src": "https://git::@github.com/justinmk/vim-ug.git"
     },
     "vim-unimpaired": {

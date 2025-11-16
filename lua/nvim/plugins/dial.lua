@@ -59,6 +59,10 @@ return {
         -- FIXME: doesn't work
         new({ '[ ]', '[x]' }),
       },
+      lua = {
+        new({ '_a', '_b', '_c' }, true),
+        new({ '_x', '_y', '_z' }, true),
+      },
       r = {
         new({ 'TRUE', 'FALSE' }),
         new({ 'fin', 'oza', 'pon' }),
