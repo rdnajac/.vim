@@ -58,11 +58,14 @@ local mini_icon_keys = {
 }
 
 ---@param key "directory"|"extension"|"file"|"filetype"|"os"
----@param lookup string
+---@param lookup? string
 ---@return string|"" icon, string? hl always return a string, hl group on success
 local function get_mini_icon(_, key, lookup)
   if not _G.MiniIcons then
     return ' ', nil
+  end
+  if key == 'filetype' and lookup == nil then
+    lookup = vim.bo.filetype
   end
   local icon, hl = _G.MiniIcons.get(key, lookup)
   return icon .. ' ', hl
