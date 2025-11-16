@@ -14,9 +14,10 @@ function! chromatophore#setup() abort
   call vim#hl#set('Chromatophore_a',  mode_color, black,     'bold,reverse')
   call vim#hl#set('Chromatophore_b',  mode_color, grey,      'bold')
   call vim#hl#set('Chromatophore_c',  mode_color, eigengrau)
-  call vim#hl#set('Chromatophore_z',  mode_color, eigengrau, 'bold')
   call vim#hl#set('Chromatophore_ab', mode_color, grey)
   call vim#hl#set('Chromatophore_bc', grey,       eigengrau)
+  call vim#hl#set('Chromatophore_ac', mode_color, eigengrau)
+  call vim#hl#set('Chromatophore_z',  mode_color, eigengrau, 'bold')
 
   call vim#hl#link('Chromatophore', g:chromatophore_groups)
   call vim#hl#link('Chromatophore_a', 'FloatTitle')

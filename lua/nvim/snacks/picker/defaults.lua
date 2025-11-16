@@ -57,7 +57,9 @@ local zoxide = function(picker)
   })
 end
 
+-- FIXME: 
 ---@type snacks.picker.Config
+---@type snacks.picker.files.Config: snacks.picker.proc.Config
 return {
   ---@param opts snacks.picker.Config
   config = function(opts)

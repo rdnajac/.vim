@@ -44,7 +44,8 @@ return {
       return require('sidekick').nes_jump_or_apply() or '<Tab>'
     end,
   },
-  { '<leader>a', desc = '+ai', mode = { 'n', 'v' } },
+  -- { '<leader>a', desc = '+ai', mode = { 'n', 'v' } },
+  { '<leader>a', group = 'ai', mode = { 'n', 'v' } },
   { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI' },
   { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI' },
   { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session' },
@@ -53,7 +54,7 @@ return {
   -- always send file in normal mode
   { '<leader>at', function() require('sidekick.cli').send({               msg='{file}'}) end, mode = { 'n' }, desc = 'Send File' },
   { '<leader>af', function() require('sidekick.cli').send({               msg='{file}'}) end, mode = { 'n' }, desc = 'Send File' },
-                                                                          
+
   -- always send 'this' (the selection) in visual mode                    
   { '<leader>at', function() require('sidekick.cli').send({               msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
   { '<leader>af', function() require('sidekick.cli').send({               msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },

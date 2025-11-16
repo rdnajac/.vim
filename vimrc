@@ -372,12 +372,12 @@ nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
 xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '.s \| '<,'>fold \| let &l:cms=s<CR>
 
 " you know what I mean... {{{3
-for act in ['c', 'd', 'y'] " change, delete, yank
-  for obj in ['w'] " paragraph, word
-    execute $'nnoremap {act}{obj} {act}i{obj}'
-    execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
-  endfor
-endfor
+" for act in ['c', 'd', 'y'] " change, delete, yank
+"   for obj in ['w'] " paragraph, word
+"     execute $'nnoremap {act}{obj} {act}i{obj}'
+"     execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
+"   endfor
+" endfor
 
 " don't capture whitespace in `gc`
 nmap gcap gcip

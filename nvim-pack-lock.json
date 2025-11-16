@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "de57322",
+      "rev": "b19413d214068f316c78978b08264ed1c41830ec",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.compat": {
@@ -45,11 +45,11 @@
       "src": "https://git::@github.com/mason-org/mason-lspconfig.nvim.git"
     },
     "mason.nvim": {
-      "rev": "ad7146a",
+      "rev": "57e5a8addb8c71fb063ee4acda466c7cf6ad2800",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "f43357b",
+      "rev": "dce9bc4e19d02d5c37fe71c16f40f8a5536b0386",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -57,11 +57,11 @@
       "src": "http://github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "b34fbdf",
+      "rev": "95fe3c170753238d3ca4f760e79a991400677abc",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "b5077407",
+      "rev": "2696fb832677fcd06588806d006aff923a4185a7",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -82,7 +82,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "dec29f5",
+      "rev": "3c5c23ba91e608bd89bb36d76cb005aa63d20dbf",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "todo-comments.nvim": {

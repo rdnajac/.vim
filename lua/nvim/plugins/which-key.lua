@@ -17,7 +17,9 @@ local spec = {
     { 'co', group = 'comment below' },
     { 'cO', group = 'comment above' },
     { 'gr', group = 'LSP', icon = { icon = '' } },
-    { '<leader>b', group = 'buffers', icon = { icon = '' } },
+
+    { '<leader>', group = '<leader>', icon = { icon = '' } },
+    -- { '<leader>b', group = 'buffers' },
     { '<leader>c', group = 'code' },
     { '<leader>d', group = 'debug' },
     { '<leader>dp', group = 'profiler' },
@@ -147,8 +149,8 @@ return {
       { 'cRu', coerce('u'), desc = 'COERCE_UPPER_CASE' },
       { 'cRU', coerce('U'), desc = 'COERCE_UPPER_CASE' },
       { 'cR-', coerce('-'), desc = 'coerce-dash-case' },
-      { 'cRk', coerce('k'), desc = 'coerce-dash-case'  },
-      { 'cR.', coerce('.'), desc = 'coerce.dot.case'  },
+      { 'cRk', coerce('k'), desc = 'coerce-dash-case' },
+      { 'cR.', coerce('.'), desc = 'coerce.dot.case' },
       { 'cR<Space>', coerce(' '), desc = 'coerce space case' },
     })
 

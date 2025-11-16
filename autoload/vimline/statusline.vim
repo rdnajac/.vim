@@ -41,8 +41,8 @@ function! vimline#statusline#() abort
   " right-aligned
   let l:ret .= '%='
   let l:ret .= '%#Chromatophore_z#'
-  " let l:ret .= vimline#recording#()
-  let l:ret .= "%{v:lua.require'screenkey'.get_keys()}"
+  let l:ret .= vimline#recording#()
+  " let l:ret .= "%{v:lua.require'screenkey'.get_keys()}"
 
   return l:ret
 endfunction

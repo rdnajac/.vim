@@ -28,8 +28,8 @@ local M = {
     return table.concat({
       '%h%w%q ', -- help/preview/quickfix
       path,
-      "%{% &readonly ? ' ' : '%M' %}",
-      "%{% &busy     ? '◐ ' : ''   %}",
+      [[%{% &readonly ? ' ' : '%M' %}]],
+      [[%{% &busy     ? '◐ ' : ''   %}]],
       [[%{% &ff !=# 'unix'  ? ' ff=' . &ff : ''  %}]],
       [[%{% &fenc !=# 'utf-8' && &fenc !=# ''  ? ' fenc=' . &fenc : ''  %}]],
     })
@@ -100,10 +100,9 @@ local M = {
 }
 
 function M.render(a, b, c)
-  -- stylua: ignore start
-  local function hl(s) return '%#Chromatophore_' .. s .. '#' end
-  local function sec(s, str) return hl(s) .. str end
-  --stylua: ignore end
+  local function sec(s, str)
+    return string.format('%%#Chromatophore_%s#%s', s, str)
+  end
   local sep = nv.icons.sep.component.rounded.left
   local sec_a = a and sec('a', a) or nil
   local sec_b = b and sec('ab', sep .. ' ') .. sec('b', b) .. sec('bc', sep) or sec('c', sep)
@@ -121,26 +120,23 @@ M.winbar = function(opts)
   opts.bt = vim.bo[opts.bufnr].buftype
   opts.ft = vim.bo[opts.bufnr].filetype
 
-  -- TODO: since only a needs opts, move things around
-  local winbar = M.a(opts)
+  local a, b, c
 
-  -- TODO: return early if inactive or help
   if opts.ft == 'dirvish' then
-    local a = function()
-      local path = vim.b.dirvish._dir
-      return nv.icons.directory[path] .. ' ' .. vim.fn.fnamemodify(path, ':~')
-    end
-    local a =
-      [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]]
-    local b = [[%{%v:lua.nv.lsp.dirvish.status()%}]]
-    local c = [[ %{join(map(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]]
-    return M.render(a, b, c)
+    a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]]
+    b = [[%{%v:lua.nv.lsp.dirvish.status()%}]]
+    c = [[ %{join(map(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]]
+  elseif opts.active and opts.bt ~= 'help' then
+    a = M.a(opts)
+    b = M.b()
+    c = M.c()
+  else
+    a = nv.icons.filetype(opts.ft)
+    b = M.a(opts)
+    c = ''
   end
 
-  if opts.active and opts.bt ~= 'help' then
-    return M.render(winbar, M.b(), M.c())
-  end
-  return M.render(nv.icons.filetype(opts.ft), winbar, '')
+  return M.render(a, b, c)
 end
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end
