@@ -1,7 +1,8 @@
 ---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
--- TODO: migrate to lualine?
 
-local M = {
+local M = {}
+
+M.winbar = {
   a = function(opts)
     local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
     local win = opts.win or vim.api.nvim_get_current_win()
@@ -90,13 +91,21 @@ local M = {
       end)
       :join('  ')
   end,
+}
 
-  c = function()
-    if nv.status.diagnostic.cond(vim.api.nvim_get_current_buf()) then
-      return nv.status.diagnostic[1]()
-    end
-    -- return '%<' .. table.concat(require('nvim.util.lsp.docsymbols')(), nv.icons.sep.item.right)
-  end,
+M.lualine_winbar = {
+  lualine_a = {
+    { M.winbar.a, color = { fg = '#000000', gui = 'bold' } },
+  },
+  lualine_b = { M.winbar.b },
+  lualine_c = { 'diagnostics' },
+}
+
+M.lualine_inactive_winbar = {
+  lualine_b = {
+    { M.a, color = { fg = '#000000', gui = 'bold' } },
+  },
+  lualine_c = { M.b },
 }
 
 function M.render(a, b, c)
@@ -112,32 +121,32 @@ function M.render(a, b, c)
   return table.concat(ret)
 end
 
-M.winbar = function(opts)
-  opts = opts or {}
-  opts.bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
-  opts.win = opts.win or vim.api.nvim_get_current_win()
-  opts.active = opts.active or (opts.win == tonumber(vim.g.actual_curwin))
-  opts.bt = vim.bo[opts.bufnr].buftype
-  opts.ft = vim.bo[opts.bufnr].filetype
+local ft_map = {
+  dirvish = {
+    a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]],
+    b = [[%{%v:lua.nv.lsp.dirvish.status()%}]],
+    c = [[ %{join(map if opts.ft == '(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]],
+  },
+  help = {
+    a = [[%{%v:lua.nv.icons.filetype()%}]],
+    b = M.a,
+    c = '',
+  },
+}
 
-  local a, b, c
-
-  if opts.ft == 'dirvish' then
-    a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]]
-    b = [[%{%v:lua.nv.lsp.dirvish.status()%}]]
-    c = [[ %{join(map(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]]
-  elseif opts.active and opts.bt ~= 'help' then
-    a = M.a(opts)
-    b = M.b()
-    c = M.c()
-  else
-    a = nv.icons.filetype(opts.ft)
-    b = M.a(opts)
-    c = ''
-  end
-
-  return M.render(a, b, c)
-end
+M.lualine_extensions = vim
+  .iter(pairs(ft_map))
+  :map(function(ft, sec)
+    return {
+      winbar = {
+        lualine_a = { sec.a },
+        lualine_b = { sec.b },
+        lualine_c = { sec.c },
+      },
+      filetypes = { ft },
+    }
+  end)
+  :totable()
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end
 ---@param opts? vim.api.keyset.eval_statusline
@@ -147,8 +156,4 @@ M.debug = function(opts)
   return vim.api.nvim_eval_statusline(nv.winbar(opts))
 end
 
-return setmetatable(M, {
-  __call = function()
-    return M.winbar()
-  end,
-})
+return M

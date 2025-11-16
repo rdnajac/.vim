@@ -64,11 +64,10 @@ return {
 
     -- run all `setup` functions in `nvim/config/*.lua` after startup
     vim.schedule(function()
-      vim.o.winbar = '%{%v:lua.nv.winbar()%}'
+      -- vim.o.winbar = '%{%v:lua.nv.winbar()%}'
       vim.tbl_map(function(f)
         require(f:sub(#vim.g.luaroot + 2, -5))
       end, vim.fn.globpath(vim.fs.joinpath(vim.g.luaroot, 'nvim', 'config'), '*', false, true))
-      require('nvim.lsp.dirvish').setup() -- initialize in-process LSP
     end)
     -- stylua: ignore start
     _G.dd = function(...) Snacks.debug.inspect(...) end

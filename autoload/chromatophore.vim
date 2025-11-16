@@ -10,9 +10,10 @@ function! chromatophore#setup() abort
 
   highlight! Black guifg=black
   call vim#hl#set('Chromatophore',    mode_color, 'NONE')
-  call vim#hl#set('ChromatophoreB',   mode_color, 'NONE',    'bold')
-  call vim#hl#set('Chromatophore_a',  mode_color, black,     'bold,reverse')
-  call vim#hl#set('Chromatophore_b',  mode_color, grey,      'bold')
+  call vim#hl#set('ChromatophoreB',   mode_color, 'NONE', 'bold')
+  " call vim#hl#set('Chromatophore_a',  mode_color, eigengrau,'bold,reverse')
+  call vim#hl#set('Chromatophore_a',  black,  mode_color, 'bold')
+  call vim#hl#set('Chromatophore_b',  mode_color, grey,       'bold')
   call vim#hl#set('Chromatophore_c',  mode_color, eigengrau)
   call vim#hl#set('Chromatophore_ab', mode_color, grey)
   call vim#hl#set('Chromatophore_bc', grey,       eigengrau)
