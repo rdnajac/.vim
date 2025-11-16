@@ -11,7 +11,6 @@ local on_filetype = function()
 
   inoremap <buffer> <M--> <-<Space>
   inoremap <buffer> <M-Bslash> <Bar>><Space>
-  inoremap <buffer> <space><space> viw
 
   nnoremap <buffer> <localleader>R <Plug>RStart
   nnoremap <buffer> ]r     <Plug>NextRChunk
@@ -73,7 +72,7 @@ local rstt = {
   { 'S', 'RStatusTCPStart' }, -- 4: nclientserver started the TCP server
   { 'S', 'RStatusTCPReady' }, -- 5: TCP server is ready
   { 'R', 'RStatusRStarting' }, -- 6: R started, but nvimcom was not loaded yet.
-  { 'R', 'RStatusReady' }, -- 7: nvimcom is loaded.
+  { '󰟔 ', 'RStatusReady' }, -- 7: nvimcom is loaded.
 }
 
 M.status = {
