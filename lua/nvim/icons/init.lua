@@ -82,6 +82,4 @@ for _, category in ipairs(mini_icon_keys) do
   })
 end
 
--- M.mini = require('nvim.util.icons.mini')
-
 return M

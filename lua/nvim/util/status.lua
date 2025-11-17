@@ -1,24 +1,6 @@
----@class nv.status.Component
----@field [1] fun(bufnr):string[]|string[]
----@field cond? fun(bufnr):boolean
----@field color? any
-
 local nv = _G.nv or require('nvim.util')
-local icons = nv.icons
 
 local M = {}
-
----@type nv.status.Component
-M.blink = {
-  function()
-    return vim.tbl_map(function(src)
-      return nv.icons.src[src] or ' '
-    end, nv.blink.get_providers())
-  end,
-  cond = function()
-    return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
-  end,
-}
 
 ---@type nv.status.Component
 M.diagnostic = {
@@ -50,7 +32,7 @@ M.diagnostic = {
 M.lsp = function(bufnr)
   local clients = vim.lsp.get_clients({ bufnr = bufnr or 0 })
   if #clients == 0 then
-    return { icons.lsp.unavailable .. ' ' }
+    return { nv.icons.lsp.unavailable .. ' ' }
   end
 
   return vim
@@ -61,11 +43,11 @@ M.lsp = function(bufnr)
         if ok and statusmod then
           local status = statusmod.get()
           local kind = status and status.kind or 'Inactive'
-          return (icons.copilot[kind] or icons.copilot.Inactive)[1]
+          return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
         end
-        return icons.copilot.Inactive[1]
+        return nv.icons.copilot.Inactive[1]
       else
-        local icon = icons.lsp.attached
+        local icon = nv.icons.lsp.attached
         local msgs = nv.lsp.progress(c.id)
         if #msgs > 0 then
           icon = icon .. ' ' .. table.concat(msgs, ' ')
@@ -88,26 +70,10 @@ M.treesitter = function(bufnr)
       if query == vim.bo.filetype then
         return ' '
       end
-      return icons.filetype[query]
+      return nv.icons.filetype[query]
     end, vim.tbl_keys(queries))
   end
   return {}
 end
 
--- TODO: add me
-M.profiler = Snacks.profiler.status
--- {
---   function()
---     return ("%s %d events"):format(M.config.icons.status, #M.core.events)
---   end,
---   color = "DiagnosticError",
---   cond = function()
---     return M.core.running
---   end,
--- }
-
-return setmetatable(M, {
-  __call = function()
-    return M.status()
-  end,
-})
+return M

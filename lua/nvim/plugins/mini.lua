@@ -134,7 +134,7 @@ return {
   'nvim-mini/mini.nvim',
   event = 'VimEnter',
   config = function()
-    require('mini.icons').setup(nv.icons.mini)
+    require('mini.icons').setup(require('nvim.icons.mini'))
     -- require('mini.misc').setup_termbg_sync()
     for minimod, opts in pairs(miniopts()) do
       require('mini.' .. minimod).setup(opts)

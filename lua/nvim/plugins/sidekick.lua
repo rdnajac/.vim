@@ -5,7 +5,7 @@ return {
   opts = {},
   after = function()
     vim.lsp.enable('copilot')
-    vim.lsp.inline_completion.enable()
+    -- vim.lsp.inline_completion.enable()
 
     local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
 

@@ -1,7 +1,7 @@
 local M = {}
 
 local modname = function(path)
-  local name = vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
+  local name = vim.fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/', '.')
   return name:sub(-4) == 'init' and name:sub(1, -6) or name
 end
 
@@ -10,40 +10,23 @@ local formats = {
     return module
   end,
   require = function(module)
-    return "require('" .. module .. "')"
+    return ([[require('%s')]]):format(module)
   end,
-  lua_require = function(module, func)
-    return "lua require('" .. module .. "')." .. func .. '()'
-  end,
-  print_require = function(module, func)
-    return "=require('" .. module .. "')." .. func .. '()'
+  require_func = function(module)
+    return ([[require('%s').%s()]]):format(module, vim.fn.expand('<cword>'))
   end,
 }
 
-local function _yank(format_fn, ...)
-  local module = modname(vim.fn.expand('%:p'))
-  if module == '' then
-    return
-  end
-  local text = format_fn(module, ...)
+local function yankmod(format)
+  local text = formats[format](modname(vim.fn.expand('%:p')))
+  Snacks.notify.info('yanked: ' .. text)
   vim.fn.setreg('*', text)
-  print('yanked: ' .. text)
 end
 
-M.name = function()
-  _yank(formats.module)
-end
+-- stylua: ignore start
+M.require      = function() yankmod('require')      end
+M.require_func = function() yankmod('require_func') end
 
-M.require = function()
-  _yank(formats.require)
-end
-
-M.func = function()
-  _yank(formats.lua_require, vim.fn.expand('<cword>'))
-end
-
-M.print = function()
-  _yank(formats.print_require, vim.fn.expand('<cword>'))
-end
+M.test = function() yankmod('test') end
 
 return M

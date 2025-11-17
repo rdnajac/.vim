@@ -1,4 +1,3 @@
-local winbar = require('nvim.util.winbar')
 -- TODO: https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets
 local M = {
   'nvim-lualine/lualine.nvim',
@@ -13,8 +12,8 @@ local M = {
           winbar = { 'netrw' },
         },
         ignore_focus = {
-	  'man',
-          'help',
+          -- 'man',
+          -- 'help',
         },
         theme = {
           normal = {
@@ -22,30 +21,29 @@ local M = {
             b = 'Chromatophore_b',
             c = 'Chromatophore_c',
           },
-          -- inactive = {
-          --   a = 'Chromatophore_a',
-          --   b = 'Chromatophore_b',
-          --   c = 'Chromatophore_c',
-          -- },
-          inactive = {
-            a = 'Chromatophore_b',
-            b = 'Chromatophore_c',
-            c = 'Chromatophore',
-          },
         },
         -- use_mode_colors = false,
       },
-      sections = {},
+      -- sections = {},
       inactive_sections = {},
       tabline = {
         lualine_a = {
           { '%{fnamemodify(getcwd(), ":~:h").."/"}', color = { fg = '#000000', gui = 'bold' } },
         },
         lualine_b = { 'tabs' },
+        lualine_c = { Snacks.profiler.status() },
       },
-      winbar = winbar.lualine_winbar,
-      inactive_winbar = winbar.lualine_inactive_winbar,
-      extensions = winbar.lualine_extensions,
+      winbar = {
+        lualine_a = { nv.winbar.a },
+        lualine_b = { nv.winbar.b },
+        lualine_c = { 'diagnostics' },
+      },
+      inactive_winbar = {
+        lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
+        lualine_b = { '%t' },
+        -- lualine_c = { M.winbar.b },
+      },
+      extensions = vim.list_extend({ 'man' }, nv.winbar.lualine_extensions),
     }
     -- local man = require('lualine/extensions/man')
     -- man.winbar = man.sections

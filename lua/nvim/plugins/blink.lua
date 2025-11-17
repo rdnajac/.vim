@@ -1,7 +1,33 @@
 -- `https://cmp.saghen.dev/`
--- use the winborder or default to 'single'
--- local border = vim.o.winborder == '' and 'single' or nil
--- TODO: make a toggle v vim.b.completion with nv.munchies.flag
+---@type blink.cmp.Config
+local opts = {
+  cmdline = { enabled = false },
+  -- fuzzy = { implementation = 'lua' },
+  keymap = {
+    ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+    ['<Tab>'] = {
+      function(cmp)
+        if cmp.snippet_active() then
+          return cmp.accept()
+        else
+          return cmp.select_and_accept()
+        end
+      end,
+      'snippet_forward',
+      function()
+        return require('sidekick').nes_jump_or_apply()
+      end,
+      function()
+        return vim.lsp.inline_completion.get()
+      end,
+      'fallback',
+    },
+  },
+  signature = {
+    enabled = true,
+    window = { show_documentation = false },
+  },
+}
 
 -- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
 ---@param ctx blink.cmp.DrawItemContext
@@ -9,111 +35,79 @@ local component_highlight = function(ctx)
   return { { group = ctx.kind_hl, priority = 20000 } }
 end
 
-local M = {
-  'Saghen/blink.cmp',
-  event = 'InsertEnter',
-  build = 'BlinkCmp build',
-  ---@type blink.cmp.Config
-  opts = {
-    cmdline = { enabled = false },
-    completion = {
-      accept = { auto_brackets = { enabled = true } },
-      documentation = {
-        auto_show = false,
-        -- window = { border = border }
-      },
-      ghost_text = { enabled = false },
-      trigger = {
-        show_on_keyword = true,
-        show_on_accept_on_trigger_character = true,
-        show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
-      },
-      list = { selection = { preselect = true, auto_insert = true } },
-      menu = {
-        auto_show = false,
-        auto_show_delay_ms = 1000,
-        ---@param ctx blink.cmp.Context
-        ---@returns number the delay in milliseconds
-        -- auto_show_delay_ms = function(ctx, _)
-        --   if vim.tbl_contains({ '.', '/', "'" }, ctx.trigger.initial_character) then
-        --     return 0
-        --   end
-        --   return 1337
-        -- end,
-        -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
-        direction_priority = function()
-          local ctx = require('blink.cmp').get_context()
-          local item = require('blink.cmp').get_selected_item()
-          if ctx == nil or item == nil then
-            return { 's', 'n' }
-          end
+opts.completion = {
+  accept = { auto_brackets = { enabled = true } },
+  documentation = {
+    auto_show = false,
+  },
+  ghost_text = { enabled = false },
+  -- keyword = {},
+  trigger = {
+    show_on_keyword = true,
+    show_on_accept_on_trigger_character = true,
+    show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+  },
+  list = { selection = { preselect = true, auto_insert = true } },
+  menu = {
+    auto_show = true,
+    -- auto_show_delay_ms = 1000,
+    ---@param ctx blink.cmp.Context
+    ---@returns number the delay in milliseconds
+    auto_show_delay_ms = function(ctx, _)
+      if vim.tbl_contains({ '.', '/', "'", '@' }, ctx.trigger.initial_character) then
+        return 0
+      end
+      return 1337
+    end,
 
-          local item_text = item.textEdit ~= nil and item.textEdit.newText
-            or item.insertText
-            or item.label
-          local is_multi_line = item_text:find('\n') ~= nil
+    -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    direction_priority = function()
+      local cmp = require('blink.cmp')
+      local ctx = cmp.get_context()
+      local item = cmp.get_selected_item()
 
-          -- after showing the menu upwards, we want to maintain that direction
-          -- until we re-open the menu, so store the context id in a global variable
-          if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
-            vim.g.blink_cmp_upwards_ctx_id = ctx.id
-            return { 'n', 's' }
-          end
-          return { 's', 'n' }
-        end,
-        ---  @type blink.cmp.Draw
-        draw = {
-          treesitter = { 'lsp' },
-          ---@ type blink.cmp.DrawColumnDefinition[]
-          columns = {
-            { 'source_id', 'kind_icon' },
-            { 'label', 'label_description', gap = 1 },
-          },
-          ---@type table<string, blink.cmp.DrawComponent>
-          components = {
-            source_id = {
-              ellipsis = false,
-              text = function(ctx)
-                return (nv.icons.src[ctx.source_id] or ' ') .. ctx.icon_gap
-              end,
-              highlight = component_highlight,
-            },
-            kind_icon = {
-              text = function(ctx)
-                return nv.icons.kinds[ctx.kind] or ''
-              end,
-              highlight = component_highlight,
-            },
-          },
+      if ctx == nil or item == nil then
+        return { 's', 'n' }
+      end
+
+      local item_text = item.textEdit ~= nil and item.textEdit.newText
+        or item.insertText
+        or item.label
+      local is_multi_line = item_text:find('\n') ~= nil
+
+      -- after showing the menu upwards, we want to maintain that direction
+      -- until we re-open the menu, so store the context id in a global variable
+      if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
+        vim.g.blink_cmp_upwards_ctx_id = ctx.id
+        return { 'n', 's' }
+      end
+      return { 's', 'n' }
+    end,
+
+    ---@type blink.cmp.Draw
+    draw = {
+      treesitter = { 'lsp' },
+      ---@type blink.cmp.DrawColumnDefinition[]
+      columns = {
+        { 'source_id', 'kind_icon' },
+        { 'label', 'label_description', gap = 1 },
+      },
+      ---@type table<string, blink.cmp.DrawComponent>
+      components = {
+        source_id = {
+          ellipsis = false,
+          text = function(ctx)
+            return (nv.icons.src[ctx.source_id] or ' ') .. ctx.icon_gap
+          end,
+          highlight = component_highlight,
         },
-      },
-    },
-    -- fuzzy = { implementation = 'lua' },
-    keymap = {
-      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
-      ['<Tab>'] = {
-        function(cmp)
-          if cmp.snippet_active() then
-            return cmp.accept()
-          else
-            return cmp.select_and_accept()
-          end
-        end,
-        'snippet_forward',
-        function()
-          return require('sidekick').nes_jump_or_apply()
-        end,
-        function()
-          return vim.lsp.inline_completion.get()
-        end,
-        'fallback',
-      },
-    },
-    signature = {
-      enabled = true,
-      window = {
-        -- border = border,
-        show_documentation = false,
+        kind_icon = {
+          text = function(ctx)
+            return nv.icons.kinds[ctx.kind] or ''
+          end,
+          highlight = component_highlight,
+        },
       },
     },
   },
@@ -121,6 +115,15 @@ local M = {
 
 ---@type table<string, blink.cmp.SourceProviderConfig>
 local default_providers = {
+  buffer = {
+    opts = {
+      get_bufnrs = function()
+        return vim.tbl_filter(function(bufnr)
+          return vim.bo[bufnr].buftype == ''
+        end, vim.api.nvim_list_bufs())
+      end,
+    },
+  },
   lsp = {
     score_offset = -1,
     ---@ param ctx blink.cmp.Context
@@ -165,30 +168,22 @@ local ft_sources = {
   vim = { 'env', 'lsp' },
 }
 
-local providers = {
-  buffer = {
-    opts = {
-      get_bufnrs = function()
-        return vim.tbl_filter(function(bufnr)
-          return vim.bo[bufnr].buftype == ''
-        end, vim.api.nvim_list_bufs())
-      end,
-    },
-  },
-}
-
-M.opts.sources = {
+opts.sources = {
   ---@return blink.cmp.SourceList[]
   default = function()
-    if nv.treesitter.is_comment() then
-      return { 'buffer' }
-    end
-    local defaults = vim.tbl_keys(default_providers)
+    local defaults = vim.tbl_filter(function(src)
+      return nv.treesitter.is_comment() and src ~= 'snippets' or true
+    end, vim.tbl_keys(default_providers))
     return vim.list_extend(defaults, ft_sources[vim.bo.filetype] or {})
   end,
 
-  -- TODO:  connect these to their respective repos
-  providers = vim.tbl_extend('force', {}, providers, default_providers, {
+  per_filetype = {
+    -- sql = { 'dadbod' },
+    -- optionally inherit from the `default` sources
+    -- lua = { inherit_defaults = true, 'lazydev' },
+  },
+  ---@module "
+  providers = vim.tbl_extend('force', {}, default_providers, {
     lazydev = {
       name = 'LazyDev',
       module = 'lazydev.integrations.blink',
@@ -213,27 +208,19 @@ M.opts.sources = {
   }),
 }
 
--- FIXME:
-nv.blink = M
-nv.blink.get_providers = function(mode)
-  mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
-
-  local ok, sources = pcall(require, 'blink.cmp.sources.lib')
-  if not ok or not sources then
-    return {}
-  end
-
-  local cmp_mode = ({
-    i = 'default',
-    c = 'cmdline',
-    t = 'terminal',
-  })[mode] or 'default'
-
-  return vim.tbl_keys(sources.get_enabled_providers(cmp_mode))
-end
+---@class blink.cmp.SourceMeta
+---@field name string `user/repo`
+---@field config blink.cmp.SourceProviderConfigPartial
+-- TODO:
+local extra = {}
 
 return {
-  M,
+  {
+    'Saghen/blink.cmp',
+    -- event = 'InsertEnter',
+    build = 'BlinkCmp build',
+    opts = opts,
+  },
   { 'bydlw98/blink-cmp-env' },
   { 'Saghen/blink.compat' }, -- must be loaded before any cmp sources
   { 'R-nvim/cmp-r' },

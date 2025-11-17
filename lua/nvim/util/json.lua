@@ -11,7 +11,7 @@ function M.format(opts)
     return 1
   end
   local this_filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(0), ':p')
-  local sort_keys = false
+  local sort_keys = vim.b.sort_keys == 1
   if this_filename:match('snippets/') then
     sort_keys = true
   end

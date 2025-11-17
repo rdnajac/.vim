@@ -9,7 +9,7 @@ let s:default.= "%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rul
 
 let s:left_sep = '🭛'
 
-au User Screenkey* redrawstatus
+" au User Screenkey* redrawstatus
 
 function! vimline#statusline#() abort
   let l:ret = ''

@@ -1,5 +1,3 @@
-local M = {}
-
 local prefixes = {
   'nvim.util',
   'nvim',
@@ -8,11 +6,12 @@ local prefixes = {
 }
 
 local stats = { hits = 0, misses = 0 }
-function M.stats()
-  return stats
-end
 
-_G.nv = setmetatable(M, {
+_G.nv = setmetatable({
+  _stats = function()
+    return stats
+  end,
+}, {
   __index = function(t, k)
     for _, prefix in ipairs(prefixes) do
       local ok, mod = pcall(require, prefix .. '.' .. k)
@@ -64,7 +63,6 @@ return {
 
     -- run all `setup` functions in `nvim/config/*.lua` after startup
     vim.schedule(function()
-      -- vim.o.winbar = '%{%v:lua.nv.winbar()%}'
       vim.tbl_map(function(f)
         require(f:sub(#vim.g.luaroot + 2, -5))
       end, vim.fn.globpath(vim.fs.joinpath(vim.g.luaroot, 'nvim', 'config'), '*', false, true))

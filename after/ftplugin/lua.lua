@@ -12,11 +12,9 @@ nmap('crF', nv.fn.coerce.scopeform, 'M.foo = function() → local function foo()
 -- FIXME: conflicts with abolish
 -- nmap('crm',   nv.fn.coerce.scope,     'local x ↔ M.x')
 
-nmap('ym',    nv.fn.yankmod.name,    'yank lua module name')
-nmap('yM',    nv.fn.yankmod.require, 'yank require(...) form')
-nmap('yr',    nv.fn.yankmod.func,    'yank require + function')
-nmap('yR',    nv.fn.yankmod.print,   'print require + function')
-nmap('y<CR>', nv.fn.yankmod.print,   'print require + function')
+nmap('yr',   require('nvim.util.fn.yankmod').require,    'yank require + function')
+nmap('yR',    require('nvim.util.fn.yankmod').require_func,   'print require + function')
+--nmap('y<CR>', require('nvim.util.fn.yankmod').print,   'print require + function')
 -- stylua: ignore end
 
 vim.b.minisurround_config = {

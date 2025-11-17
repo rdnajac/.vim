@@ -19,3 +19,8 @@ error('this file should not be required directly')
 -- function vim.api.nvim_create_autocmd(event, opts) end
 
 ---@param fn fun(args: vim.api.keyset.create_autocmd.callback_args): boolean?
+
+---@class nv.status.Component
+---@field [1] fun(bufnr):string[]|string[]
+---@field cond? fun(bufnr):boolean
+---@field color? any

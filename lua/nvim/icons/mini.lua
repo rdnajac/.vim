@@ -1,5 +1,6 @@
 local directory = {
   ghostty = { '󰊠', 'Green' },
+  ['LazyVim'] = { '󰒲', 'Blue' },
 }
 
 local extension = {
@@ -24,7 +25,7 @@ local file = {
   dot_zshenv = { ' ', 'Green' },
   dot_zshprofile = { ' ', 'Green' },
   dot_zshrc = { ' ', 'Green' },
-  ['ghostty/config'] = { '👻', 'Green' },
+  -- ['ghostty/config'] = { '👻', 'Green' },
 }
 
 local filetype = {
@@ -53,7 +54,8 @@ M.use_file_extension = function(ext, _)
   return ext:sub(-3) ~= 'scm'
 end
 
-M.test = function()
+---@diagnostic disable-next-line
+local test = function()
   local tests = {
     directory = { 'ghostty', 'src', 'mini.nvim' },
     file = {
