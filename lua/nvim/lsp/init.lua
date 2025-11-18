@@ -35,7 +35,7 @@ M.spec = {
   },
   {
     'mason-org/mason-lspconfig.nvim',
-    enabled = true,
+    enabled = false,
     lazy = true,
     opts = {
       ensure_installed = {},
@@ -60,7 +60,7 @@ M.status = {
   function()
     local clients = vim.lsp.get_clients({ bufnr = 0 })
     if #clients == 0 then
-      return { nv.icons.lsp.unavailable .. ' ' }
+      return nv.icons.lsp.unavailable .. ' '
     end
 
     return vim

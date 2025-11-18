@@ -8,17 +8,9 @@
       "rev": "9f21d6c7c16ccafdbd2d99f632a80c743c2a715a",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
-    "blink-cmp-env": {
-      "rev": "99af62c",
-      "src": "https://github.com/bydlw98/blink-cmp-env.git"
-    },
     "blink.cmp": {
       "rev": "b19413d214068f316c78978b08264ed1c41830ec",
       "src": "https://git::@github.com/Saghen/blink.cmp.git"
-    },
-    "blink.compat": {
-      "rev": "1454f14",
-      "src": "https://github.com/Saghen/blink.compat.git"
     },
     "bullets.vim": {
       "rev": "1c13e51",
@@ -27,10 +19,6 @@
     "chezmoi.vim": {
       "rev": "73b30df",
       "src": "http://github.com/alker0/chezmoi.vim.git"
-    },
-    "cmp-r": {
-      "rev": "3b03cba",
-      "src": "https://github.com/R-nvim/cmp-r.git"
     },
     "dial.nvim": {
       "rev": "f0404ec",
@@ -43,10 +31,6 @@
     "lualine.nvim": {
       "rev": "3946f0122255bc377d14a59b27b609fb3ab25768",
       "src": "https://git::@github.com/nvim-lualine/lualine.nvim.git"
-    },
-    "mason-lspconfig.nvim": {
-      "rev": "b1d9a91",
-      "src": "https://git::@github.com/mason-org/mason-lspconfig.nvim.git"
     },
     "mason.nvim": {
       "rev": "57e5a8addb8c71fb063ee4acda466c7cf6ad2800",
@@ -76,10 +60,6 @@
     "render-markdown.nvim": {
       "rev": "6e0e8902dac70fecbdd8ce557d142062a621ec38",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
-    },
-    "screenkey.nvim": {
-      "rev": "ffe868e737d16d07a9792c8e04568cf8a2644cb7",
-      "src": "https://git::@github.com/NStefan002/screenkey.nvim.git"
     },
     "sidekick.nvim": {
       "rev": "c2bdf8c",

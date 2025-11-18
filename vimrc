@@ -510,6 +510,7 @@ if !has('nvim')
   Plug 'vuciv/golf'
 else
   Plug 'folke/tokyonight.nvim'
+  Plug 'nvim-mini/mini.nvim',
   Plug 'saxon1964/neovim-tips'
 endif
 call plug#end() " don't plug#end() if neovim...

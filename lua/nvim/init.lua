@@ -59,14 +59,15 @@ return {
     -- FIXME: doesn't play nice with a fresh vim.pack.add
     require('vim._extui').enable({})
     require('nvim.tokyonight')
+    require('nvim.mini')
     require('nvim/util/git/extmarks')
 
-    -- run all `setup` functions in `nvim/config/*.lua` after startup
     vim.schedule(function()
       vim.tbl_map(function(f)
         require(f:sub(#vim.g.luaroot + 2, -5))
       end, vim.fn.globpath(vim.fs.joinpath(vim.g.luaroot, 'nvim', 'config'), '*', false, true))
     end)
+
     -- stylua: ignore start
     _G.dd = function(...) Snacks.debug.inspect(...) end
     _G.bt = function(...) Snacks.debug.backtrace(...) end

@@ -93,6 +93,7 @@ local miniopts = function()
         -- perf = { pattern = 'PERF', group = 'MiniHipatternsNote' },
       },
     },
+    icons = require('nvim.mini.icons'),
     surround = {
       mappings = {
         add = 'ys',
@@ -130,26 +131,18 @@ local miniopts = function()
   }
 end
 
-return {
-  'nvim-mini/mini.nvim',
-  event = 'VimEnter',
-  config = function()
-    require('mini.icons').setup(require('nvim.icons.mini'))
-    -- require('mini.misc').setup_termbg_sync()
-    for minimod, opts in pairs(miniopts()) do
-      require('mini.' .. minimod).setup(opts)
-    end
-  end,
-  keys = function()
-    -- Remap adding surrounding to Visual mode selection
-    vim.keymap.del('x', 'ys')
-    vim.keymap.set('x', 'S', ':<C-u>lua MiniSurround.add("visual")<CR>', { silent = true })
+-- require('mini.misc').setup_termbg_sync()
+for minimod, opts in pairs(miniopts()) do
+  require('mini.' .. minimod).setup(opts)
+end
 
-    -- Make special mapping for "add surrounding for line"
-    vim.keymap.set('n', 'yss', 'ys_', { remap = true })
-    return {
-      { '<leader>fm', MiniFiles.open },
-    }
-  end,
-}
+vim.schedule(function()
+  -- Remap adding surrounding to Visual mode selection
+  vim.keymap.del('x', 'ys')
+  vim.keymap.set('x', 'S', ':<C-u>lua MiniSurround.add("visual")<CR>', { silent = true })
+
+  -- Make special mapping for "add surrounding for line"
+  vim.keymap.set('n', 'yss', 'ys_', { remap = true })
+  vim.keymap.set('n', '<leader>fm', MiniFiles.open, { desc = 'MiniFiles' })
+end)
 -- vim: fdl=2

@@ -161,11 +161,8 @@ local default_providers = {
 
 local ft_sources = {
   lua = { 'lazydev' },
-  r = { 'cmp_r' },
-  rmd = { 'cmp_r' },
-  quarto = { 'cmp_r' },
-  sh = { 'env', 'lsp' },
-  vim = { 'env', 'lsp' },
+  -- sh = { 'env', 'lsp' },
+  -- vim = { 'env', 'lsp' },
 }
 
 opts.sources = {
@@ -174,13 +171,14 @@ opts.sources = {
     local defaults = vim.tbl_filter(function(src)
       return nv.treesitter.is_comment() and src ~= 'snippets' or true
     end, vim.tbl_keys(default_providers))
-    return vim.list_extend(defaults, ft_sources[vim.bo.filetype] or {})
+    -- return vim.list_extend(defaults, ft_sources[vim.bo.filetype] or {})
+    return defaults
   end,
 
   per_filetype = {
     -- sql = { 'dadbod' },
     -- optionally inherit from the `default` sources
-    -- lua = { inherit_defaults = true, 'lazydev' },
+    lua = { inherit_defaults = true, 'lazydev' },
   },
   ---@module "
   providers = vim.tbl_extend('force', {}, default_providers, {
@@ -214,11 +212,14 @@ local extras = {
 
 -- vim.list_extend(opts.sources.providers, vim.tbl_values(extras))
 
-return vim.list_extend({
+return
+--vim.list_extend({
+{
   {
     'Saghen/blink.cmp',
     -- event = 'InsertEnter',
     build = 'BlinkCmp build',
     opts = opts,
   },
-}, vim.tbl_keys(extras))
+}
+--}, vim.tbl_keys(extras))
