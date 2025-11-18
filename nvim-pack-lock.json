@@ -5,7 +5,7 @@
       "src": "http://github.com/LazyVim/LazyVim.git"
     },
     "R.nvim": {
-      "rev": "fef9903",
+      "rev": "9f21d6c7c16ccafdbd2d99f632a80c743c2a715a",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "blink-cmp-env": {
@@ -74,7 +74,7 @@
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "6118138174c8fbda4b9cce23d4d0137c2334fece",
+      "rev": "6e0e8902dac70fecbdd8ce557d142062a621ec38",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "screenkey.nvim": {

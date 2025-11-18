@@ -189,6 +189,14 @@ opts.sources = {
       module = 'lazydev.integrations.blink',
       score_offset = 100,
     },
+  }),
+}
+
+---@class blink.cmp.SourceMeta
+---@field name string `user/repo`
+---@field config blink.cmp.SourceProviderConfigPartial
+local extras = {
+  ['bydlw98/blink-cmp-env'] = {
     env = {
       name = 'env',
       module = 'blink-cmp-env',
@@ -201,27 +209,16 @@ opts.sources = {
         show_documentation_window = true,
       },
     },
-    cmp_r = {
-      name = 'cmp_r',
-      module = 'blink.compat.source',
-    },
-  }),
+  },
 }
 
----@class blink.cmp.SourceMeta
----@field name string `user/repo`
----@field config blink.cmp.SourceProviderConfigPartial
--- TODO:
-local extra = {}
+-- vim.list_extend(opts.sources.providers, vim.tbl_values(extras))
 
-return {
+return vim.list_extend({
   {
     'Saghen/blink.cmp',
     -- event = 'InsertEnter',
     build = 'BlinkCmp build',
     opts = opts,
   },
-  { 'bydlw98/blink-cmp-env' },
-  { 'Saghen/blink.compat' }, -- must be loaded before any cmp sources
-  { 'R-nvim/cmp-r' },
-}
+}, vim.tbl_keys(extras))
