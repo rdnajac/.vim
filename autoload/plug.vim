@@ -1,4 +1,4 @@
-silent! source ~/GitHub/junegunn/vim-plug/plug.vim
+" silent! source ~/GitHub/junegunn/vim-plug/plug.vim
 
 function! plug#begin(...)
   if a:0 > 0

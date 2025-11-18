@@ -163,9 +163,9 @@ command! Restart
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
-command! -nargs=? -complete=dir Explore Dirvish <args>
-command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
-command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
+" command! -nargs=? -complete=dir Explore Dirvish <args>
+" command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
+" command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
 
 " }}}1
 " Section: keymaps {{{1

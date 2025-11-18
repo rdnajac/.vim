@@ -46,6 +46,9 @@ local load = function(plug_data)
 end
 
 vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}), { load = load })
+-- vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}))
+-- vim.pack.add(nv.specs)
+-- vim.pack.add(vim_plugins)
 
 return {
   init = function()
