@@ -35,61 +35,46 @@ M.a = function(opts)
   })
 end
 
-M.b = function()
-  ---@type fun():string[]|nv.status.Component
-  local parts = {
-    function()
-      if vim.bo.buftype == 'terminal' then
-        return "%{% &buftype == 'terminal' ? ' %{&channel}' : '' %}"
-      end
-      return "%{% &buflisted ? '%n' : '󱪟 ' %}" .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
-    end,
-    nv.status.treesitter,
-    nv.status.lsp,
-    nv.blink.status,
-    require('nvim.plugins.r').status,
-  }
-  return vim
-    .iter(parts)
-    :map(function(p)
-      local value
-      if type(p) == 'string' then
-        value = p
-      elseif type(p) == 'function' then
-        value = p()
-      elseif type(p) == 'table' then
-        if p.cond == nil or p.cond() then
-          local f = p[1]
-          if type(f) == 'function' then
-            value = f()
-          elseif type(f) == 'table' then
-            value = f
-          elseif type(f) == 'string' then
-            value = { f }
-          end
-        end
-      end
-      local ret
-      if type(value) == 'table' then
-        ret = table.concat(value, ' ')
-      elseif type(value) == 'string' then
-        ret = value
-      end
-      if ret ~= nil then
-        -- FIXME:
-        -- if type(p) == 'table' and p.color ~= nil then
-        --   local color = vim.is_callable(p.color) and p.color() or p.color
-        --   ret = string.format('%%#%s#%s%%#Chromatophore_b#', color, ret)
-        -- end
-        return ret
-      end
-      return nil
-    end)
-    :filter(function(v)
-      return v ~= nil and v ~= ''
-    end)
-    :join('  ')
-end
+-- return vim
+--   .iter(parts)
+--   :map(function(p)
+--     local value
+--     if type(p) == 'string' then
+--       value = p
+--     elseif type(p) == 'function' then
+--       value = p()
+--     elseif type(p) == 'table' then
+--       if p.cond == nil or p.cond() then
+--         local f = p[1]
+--         if type(f) == 'function' then
+--           value = f()
+--         elseif type(f) == 'table' then
+--           value = f
+--         elseif type(f) == 'string' then
+--           value = { f }
+--         end
+--       end
+--     end
+--     local ret
+--     if type(value) == 'table' then
+--       ret = table.concat(value, ' ')
+--     elseif type(value) == 'string' then
+--       ret = value
+--     end
+--     if ret ~= nil then
+--       -- FIXME:
+--       -- if type(p) == 'table' and p.color ~= nil then
+--       --   local color = vim.is_callable(p.color) and p.color() or p.color
+--       --   ret = string.format('%%#%s#%s%%#Chromatophore_b#', color, ret)
+--       -- end
+--       return ret
+--     end
+--     return nil
+--   end)
+--   :filter(function(v)
+--     return v ~= nil and v ~= ''
+--   end)
+--   :join('  ')
 
 function M.render(a, b, c)
   local function sec(s, str)
@@ -131,7 +116,7 @@ M.lualine_extensions = vim
 M.debug = function(opts)
   opts = opts or {}
   opts.use_winbar = true
-  -- TODO: 
+  -- TODO:
   return vim.api.nvim_eval_statusline(nv.winbar(opts))
 end
 

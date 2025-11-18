@@ -1,9 +1,7 @@
--- scope (indent)
 vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent' })
-
+vim.keymap.set({ 'n', 't' }, '<c-\\>', Snacks.terminal.toggle)
+vim.keymap.set('v', '<leader>/', Snacks.picker.grep_word)
 -- stylua: ignore start
-vim.keymap.set({'n','t'}, '<c-\\>', function() Snacks.terminal.toggle() end)
-vim.keymap.set('v', '<leader>/', function() Snacks.picker.grep_word() end)
 vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
 -- stylua: ignore end
 

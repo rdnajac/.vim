@@ -154,6 +154,25 @@ M.is_comment = function(...)
     or false
 end
 
+M.status = {
+  function()
+    local ret = {}
+    local highlighter = require('vim.treesitter.highlighter')
+    local hl = highlighter.active[vim.api.nvim_get_current_buf()]
+    ---@diagnostic disable-next-line: invisible
+    local queries = hl and hl._queries
+    if type(queries) == 'table' then
+      ret = vim.tbl_map(function(query)
+        if query == vim.bo.filetype then
+          return ' '
+        end
+        return nv.icons.filetype[query]
+      end, vim.tbl_keys(queries))
+    end
+    return table.concat(ret, ' ')
+  end,
+}
+
 return setmetatable(M, {
   __index = function(t, k)
     t[k] = require('nvim.treesitter.' .. k)

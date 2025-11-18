@@ -34,6 +34,9 @@ M.is_nonempty_list = function(x)
   return vim.islist(x) and #x > 0
 end
 
+-- TODO: 
+-- M.modname(path)
+
 --- Get list of submodules in a given subdirectory of `nvim/`
 ---@param subdir string subdirectory of `nvim/` to search
 ---@return string[] list of module names ready for `require()`

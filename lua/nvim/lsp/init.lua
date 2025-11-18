@@ -56,6 +56,38 @@ M.attached = function(buf)
     :join(', ')
 end
 
+M.status = {
+  function()
+    local clients = vim.lsp.get_clients({ bufnr = 0 })
+    if #clients == 0 then
+      return { nv.icons.lsp.unavailable .. ' ' }
+    end
+
+    return vim
+      .iter(clients)
+      :map(function(c)
+        if c.name == 'copilot' and package.loaded['sidekick'] then
+          local ok, statusmod = pcall(require, 'sidekick.status')
+          if ok and statusmod then
+            local status = statusmod.get()
+            local kind = status and status.kind or 'Inactive'
+            return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
+          end
+          return nv.icons.copilot.Inactive[1]
+        else
+          local icon = nv.icons.lsp.attached
+          local msgs = nv.lsp.progress(c.id)
+          if #msgs > 0 then
+            icon = icon .. ' ' .. table.concat(msgs, ' ')
+          end
+          return icon
+        end
+      end)
+      -- :totable()
+      :join(' ')
+  end,
+}
+
 return setmetatable(M, {
   __index = function(t, k)
     t[k] = require('nvim.lsp.' .. k)

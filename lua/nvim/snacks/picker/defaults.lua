@@ -51,13 +51,14 @@ local zoxide = function(picker)
       resume.state[picker.opts.source].opts.cwd = item.file
       z:close()
     end,
+    layout = 'mydefault',
     on_close = function()
       Snacks.picker.resume()
     end,
   })
 end
 
--- FIXME: 
+-- FIXME:
 ---@type snacks.picker.Config
 ---@type snacks.picker.files.Config: snacks.picker.proc.Config
 return {

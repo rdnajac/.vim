@@ -1,3 +1,31 @@
+local M = {}
+
+---@type nv.status.Component
+M.status = {
+  ---@param bufnr? number
+  ---@return string
+  function(bufnr)
+    bufnr = bufnr or 0
+    local counts = vim.diagnostic.count(bufnr)
+    local signs = vim.diagnostic.config().signs
+    return vim
+      .iter(pairs(counts))
+      :map(function(severity, count)
+        return string.format(
+          '%%#%s#%s:%d%%*',
+          signs and signs.numhl[severity] or '',
+          signs and signs.text[severity] or '',
+          count or ''
+        )
+      end)
+      :join('')
+  end,
+  cond = function(bufnr)
+    return not vim.tbl_isempty(vim.diagnostic.count(bufnr or 0))
+  end,
+}
+
+
 ---@type vim.diagnostic.Opts
 local opts = {
   float = { source = true },
@@ -20,3 +48,5 @@ local opts = {
 local unused = 'smoke test'
 
 vim.diagnostic.config(opts)
+
+return M
