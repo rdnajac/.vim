@@ -1,5 +1,7 @@
 local M = { 'R-nvim/R.nvim' }
 
+-- M.build = [[git submodule update --recursive]]
+
 local on_filetype = function()
   vim.cmd([[
   setlocal foldmethod=expr 
@@ -38,13 +40,13 @@ local on_filetype = function()
 end
 
 M.config = function()
-  vim.g.rout_follow_colorscheme = true
   ---@module "r"
   ---@type RConfigUserOpts
   local opts = {
     R_args = { '--quiet', '--no-save' },
     user_maps_only = true,
     quarto_chunk_hl = { highlight = false },
+    Rout_more_colors = true,
     hook = {
       on_filetype = on_filetype,
       after_config = function()

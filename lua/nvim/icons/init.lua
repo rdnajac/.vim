@@ -1,5 +1,5 @@
 local icons = {
-  src = { -- blink sources
+  src = {
     buffer = ' ',
     cmdline = ' ',
     copilot = ' ',
@@ -9,7 +9,6 @@ local icons = {
     omni = ' ',
     path = ' ',
     snippets = ' ',
-    cmp_r = ' ',
   },
   diff = { add = '▎', change = '▎', delete = '' },
   mason = {

@@ -7,6 +7,7 @@ return {
   sections = {
     { section = 'header' },
     {
+      pane = 2,
       icon = ' ',
       title = 'Files',
       section = 'recent_files',
@@ -14,22 +15,34 @@ return {
       key = 'f',
       action = ':Recent',
     },
-    -- { icon = ' ', key = 'f', desc = 'Find File', action = ':Files' },
-    { icon = ' ', key = 'n', desc = 'New File', action = ':enew | startinsert', hidden = true },
-    -- TODO: 2 cols, no recent files, only useful COMMMANDS
+    { icon = ' ', key = 'f', desc = 'Find File', action = ':Files' },
+    { icon = ' ', key = 'n', desc = 'New File', action = ':enew | startinsert' },
+    -- { icon = ' ', key = '-', desc = 'Open Directory', action = ':e $PWD' },
     {
+      icon = ' ',
+      key = '-',
+      desc = 'Open Directory',
+      action = function()
+        ---@type snacks.picker.explorer.Config
+        local opts = {
+          -- show_preview = function()
+          --   return true
+          -- end,
+        }
+        Snacks.picker.explorer(opts)
+      end,
+    },
+    {
+      pane = 2,
       icon = '',
       title = 'Plugins',
-      { icon = ' ', key = 'u', desc = 'Update', action = ':PlugUpdate', indent = 2 },
-      { icon = ' ', key = 'm', desc = 'Mason', action = ':Mason', indent = 2 },
-      { icon = '󰒲 ', key = 'g', desc = 'Lazygit', action = ':lua Snacks.lazygit()', indent = 2 },
       indent = 2,
       key = 'p',
       action = ':PlugStatus',
+      { icon = ' ', key = 'u', desc = 'Update', action = ':PlugUpdate', indent = 2 },
+      { icon = ' ', key = 'm', desc = 'Mason', action = ':Mason', indent = 2 },
+      { icon = '󰒲 ', key = 'g', desc = 'Lazygit', action = ':lua Snacks.lazygit()', indent = 2 },
     },
-    { icon = ' ', key = 'c', desc = 'Neovim Config', action = ':Files stdpath.config' },
-    -- { icon = ' ', key = 's', desc = 'Restore Session', section = 'session' },
-    { icon = ' ', key = 'q', desc = 'Quit', action = ':qa' },
     { section = 'terminal', cmd = 'cowsay ' .. dijkstra, indent = 10, padding = 1 },
     {
       function()
@@ -46,7 +59,8 @@ return {
     },
   },
   formats = {
-    header = { '%s' .. '\nNVIM ' .. tostring(vim.version()), align = 'center' },
+    -- header = { '%s' .. '\nNVIM ' .. tostring(vim.version()), align = 'center' },
+    header = { ('%%s\nNVIM %s'):format(tostring(vim.version())), align = 'center' },
   },
   -- wo = { winbar = '', winhighlight = { 'WinBar:NONE' } },
 }

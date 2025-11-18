@@ -10,7 +10,7 @@ local M = {
         section_separators = { left = '', right = '' },
         disabled_filetypes = { -- Filetypes to disable lualine for.
           statusline = {},
-          winbar = { 'netrw' },
+          winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_input' },
         },
         ignore_focus = {
           -- 'man',
