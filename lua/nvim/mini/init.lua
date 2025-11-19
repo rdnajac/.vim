@@ -145,4 +145,30 @@ vim.schedule(function()
   vim.keymap.set('n', 'yss', 'ys_', { remap = true })
   vim.keymap.set('n', '<leader>fm', MiniFiles.open, { desc = 'MiniFiles' })
 end)
+
+local buffer_local_vars = {
+  lua = {
+    minisurround_config = {
+      custom_surroundings = {
+        U = { output = { left = 'function()\n', right = '\nend' } },
+        u = { output = { left = 'function()\n  ', right = '\nend' } },
+        i = { output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' } },
+        s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
+      },
+    },
+  },
+}
+
+local aug = vim.api.nvim_create_augroup('mini', {})
+for ft, v in pairs(buffer_local_vars) do
+  for k, v2 in pairs(v) do
+    vim.api.nvim_create_autocmd('FileType', {
+      group = aug,
+      pattern = ft,
+      callback = function()
+        vim.b[k] = v2
+      end,
+    })
+  end
+end
 -- vim: fdl=2

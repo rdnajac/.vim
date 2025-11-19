@@ -11,20 +11,10 @@ nmap('crM', nv.fn.coerce.formscope, 'local function foo() → M.foo = function()
 nmap('crF', nv.fn.coerce.scopeform, 'M.foo = function() → local function foo()')
 -- FIXME: conflicts with abolish
 -- nmap('crm',   nv.fn.coerce.scope,     'local x ↔ M.x')
-
 nmap('yr',   require('nvim.util.fn.yankmod').require,    'yank require + function')
 nmap('yR',    require('nvim.util.fn.yankmod').require_func,   'print require + function')
 --nmap('y<CR>', require('nvim.util.fn.yankmod').print,   'print require + function')
 -- stylua: ignore end
-
-vim.b.minisurround_config = {
-  custom_surroundings = {
-    U = { output = { left = 'function()\n', right = '\nend' } },
-    u = { output = { left = 'function()\n  ', right = '\nend' } },
-    i = { output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' } },
-    s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
-  },
-}
 
 Snacks.util.on_module('mini.splitjoin', function()
   local gen_hook = MiniSplitjoin.gen_hook
@@ -41,7 +31,6 @@ end)
 local aug = vim.api.nvim_create_augroup('lua', {})
 
 -- TODO: only disable highlighting inside of `vim.cmd([[...]])`
-
 vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
   group = aug,
   callback = function()
@@ -49,7 +38,6 @@ vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
   end,
 })
-
 vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
   group = aug,
   callback = function()
