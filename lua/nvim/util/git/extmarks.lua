@@ -145,42 +145,44 @@ local function add_status_extmarks(buffer, status)
   end
 end
 
-local aug = vim.api.nvim_create_augroup('git-extmarks', {})
+local setup = function(ev)
+  local buffer = ev.buf or vim.api.nvim_get_current_buf()
+  if vim.b[buffer].git_status_started then
+    return
+  end
+  vim.b[buffer].git_status_started = true
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'dirvish', 'oil', 'netrw' },
-  group = aug,
-  callback = function(ev)
-    local buffer = ev.buf or vim.api.nvim_get_current_buf()
-    if vim.b[buffer].git_status_started then
-      return
+  local current_status, last_dir
+
+  local refresh = Snacks.util.debounce(function()
+    local current_dir = get_path(buffer)
+    if current_dir and current_dir ~= last_dir then
+      last_dir = current_dir
+      load_git_status(buffer, function(status)
+        current_status = status
+        add_status_extmarks(buffer, status)
+      end)
+    elseif current_status then
+      add_status_extmarks(buffer, current_status)
     end
-    vim.b[buffer].git_status_started = true
+  end, { ms = 50 })
 
-    local current_status, last_dir
+  refresh()
 
-    local refresh = Snacks.util.debounce(function()
-      local current_dir = get_path(buffer)
-      if current_dir and current_dir ~= last_dir then
-        last_dir = current_dir
-        load_git_status(buffer, function(status)
-          current_status = status
-          add_status_extmarks(buffer, status)
-        end)
-      elseif current_status then
-        add_status_extmarks(buffer, current_status)
-      end
-    end, { ms = 50 })
+  vim.api.nvim_create_autocmd(
+    { 'BufReadPost', 'BufWritePost', 'WinEnter', 'DirChanged', 'CursorMoved' },
+    {
+      buffer = buffer,
+      group = aug,
+      callback = refresh,
+    }
+  )
+end
 
-    refresh()
+-- local aug = vim.api.nvim_create_augroup('git-extmarks', {})
+-- vim.api.nvim_create_autocmd('FileType', {
+--   pattern = { 'dirvish', 'oil', 'netrw' },
+--   group = aug,
+-- })
 
-    vim.api.nvim_create_autocmd(
-      { 'BufReadPost', 'BufWritePost', 'WinEnter', 'DirChanged', 'CursorMoved' },
-      {
-        buffer = buffer,
-        group = aug,
-        callback = refresh,
-      }
-    )
-  end,
-})
+return { setup = setup }

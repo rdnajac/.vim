@@ -4,13 +4,12 @@ let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 setlocal comments=:---\ "
 " setlocal nonumber signcolumn=yes:1
 setlocal foldtext=v:lua.nv.fn.foldtext()
+setlocal foldmethod=expr
 
 iabbrev <buffer> fu function()
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> \ig --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
-
-inoremap <buffer> req<Tab> require(')<Left><Left>'
 
 " NOTE: don't need `tpope/vim-apathy` for lua anymore:
 " from `$VIMRUNTIME/runtime/ftplugin/lua.lua`
@@ -29,12 +28,5 @@ let b:surround_115 = "vim.schedule(function()\n \r \nend)"
 " coerce
 " vim global to `vim.g.%s =`
 nnoremap crv ^d3wivim.g.<Esc>
-" vim.g to `let g:%s =`
+" `vim.g.%s` to `let g:%s =`
 nnoremap crV ^df4wilet<Space>g:<Esc>
-
-if !has('nvim')
-  finish
-endif
-setlocal foldmethod=expr
-
-lua << EOF

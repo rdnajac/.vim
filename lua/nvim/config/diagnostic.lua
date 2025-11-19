@@ -25,7 +25,6 @@ M.status = {
   end,
 }
 
-
 ---@type vim.diagnostic.Opts
 local opts = {
   float = { source = true },

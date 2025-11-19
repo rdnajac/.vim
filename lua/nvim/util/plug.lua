@@ -81,8 +81,8 @@ function Plugin:tospec()
   if self.enabled == false then
     return nil
   end
-  local spec = { src = 'https://github.com/' .. self[1] .. '.git' }
-  -- local spec = { src = 'https://git::@github.com/' .. self[1] .. '.git' }
+  -- local spec = { src = 'https://github.com/' .. self[1] .. '.git' }
+  local spec = { src = 'https://git::@github.com/' .. self[1] .. '.git' }
   spec.version = self.version or self.branch or nil
   -- HACK: remove this once default branches become `main`
   -- spec.version = vim.startswith(self[1], 'nvim-treesitter') and 'main' or nil

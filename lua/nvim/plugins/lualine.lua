@@ -25,7 +25,14 @@ local M = {
         },
         -- use_mode_colors = false,
       },
-      -- sections = {},
+      sections = {
+        lualine_a = { 'mode' },
+        lualine_b = { 'branch', },
+        lualine_c = { 'filename' },
+        lualine_x = { 'encoding', 'fileformat', 'filetype' },
+        lualine_y = { 'progress' },
+        lualine_z = { 'location' },
+      },
       inactive_sections = {},
       tabline = {
         lualine_a = {
@@ -51,7 +58,7 @@ local M = {
           nv.blink.status,
           -- { require('nvim.plugins.r').status },
         },
-        lualine_c = { 'diagnostics' },
+        lualine_c = { 'diff', 'diagnostics' },
       },
       inactive_winbar = {
         lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },

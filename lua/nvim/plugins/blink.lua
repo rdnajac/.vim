@@ -134,7 +134,7 @@ local default_providers = {
       --   return kind[name]
       -- end, { 'Keyword', 'Snippet' })
       local ret = vim.tbl_filter(function(item)
-        return item.kind ~= kind.Keyword -- and item.kind ~= kind.Snippet
+        return item.kind ~= kind.Snippet -- and item.kind ~= kind.Snippet
       end, items)
       --     return not (item.source ~= 'lazydev' and lazy_labels[item.label])
       return ret

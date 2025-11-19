@@ -1,4 +1,8 @@
-" silent! source ~/GitHub/junegunn/vim-plug/plug.vim
+silent! source ~/GitHub/junegunn/vim-plug/plug.vim
+if !has('nvim')
+    let g:plug_home = expand('~/.local/share/nvim/site/pack/core/opt/')
+  finish
+endif
 
 function! plug#begin(...)
   if a:0 > 0

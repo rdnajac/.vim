@@ -34,17 +34,21 @@ M.is_nonempty_list = function(x)
   return vim.islist(x) and #x > 0
 end
 
--- TODO: 
--- M.modname(path)
+-- TODO:
+M.modname = function(path)
+  -- return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/', '.')
+  return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
+end
 
 --- Get list of submodules in a given subdirectory of `nvim/`
 ---@param subdir string subdirectory of `nvim/` to search
 ---@return string[] list of module names ready for `require()`
 M.submodules = function(subdir)
-  local path = vim.fs.joinpath(vim.g.luaroot, 'nvim', subdir)
+  local luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
+  local path = vim.fs.joinpath(luaroot, 'nvim', subdir)
   local files = vim.fn.globpath(path, '*.lua', false, true)
   return vim.tbl_map(function(f)
-    return f:sub(#vim.g.luaroot + 2, -5)
+    return f:sub(#luaroot + 2, -5)
   end, files)
 end
 

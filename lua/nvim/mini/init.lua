@@ -160,6 +160,7 @@ local buffer_local_vars = {
 }
 
 local aug = vim.api.nvim_create_augroup('mini', {})
+
 for ft, v in pairs(buffer_local_vars) do
   for k, v2 in pairs(v) do
     vim.api.nvim_create_autocmd('FileType', {

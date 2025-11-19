@@ -3,7 +3,7 @@ local aug = vim.api.nvim_create_augroup('treesitter', {})
 -- TODO: ensure installed
 local autostart_filetypes = {
   'css',
-  'html',
+  -- 'html',
   'javascript',
   'json',
   'lua',

@@ -1,5 +1,5 @@
 -- ---@type "statusline"|"window"|
--- vim.g.screenkey = 
+-- vim.g.screenkey =
 return {
   -- TODO: what's going on with which-key doubling keys pressed?
   'NStefan002/screenkey.nvim',

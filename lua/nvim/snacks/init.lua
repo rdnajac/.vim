@@ -81,6 +81,7 @@ return {
       layouts = require('nvim.snacks.picker.layouts'),
       sources = {
         buffers = {
+          layout = 'mydefault',
           input = {
             keys = {
               ['<c-x>'] = { 'bufdelete', mode = { 'n', 'i' } },

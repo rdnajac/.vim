@@ -27,6 +27,6 @@ endfunction
 " {user_repo} should be in the format "username/repository".
 " Returns the full git URL for cloning.
 function! git#url(user_repo) abort
-  return 'https://github.com/' . a:user_repo . '.git'
-  " return 'https://git::@github.com/' .. a:user_repo .. '.git'
+  " return 'https://github.com/' . a:user_repo . '.git'
+  return 'https://git::@github.com/' .. a:user_repo .. '.git'
 endfunction

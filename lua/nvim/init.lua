@@ -1,7 +1,6 @@
 local prefixes = {
   'nvim.util',
   'nvim',
-  'nvim.config',
   'nvim.plugins',
 }
 
@@ -35,20 +34,17 @@ local vim_plugins = vim.islist(vim.g.plugs) and vim.g.plugs
     return plug.uri
   end, vim.tbl_values(vim.g.plugs or {}))
 
----@param plug_data { spec: vim.pack.Spec, path: string }
-local load = function(plug_data)
-  local spec = plug_data.spec
-  local name = spec.name
-  vim.cmd.packadd({ args = { name }, bang = true, magic = { file = false } })
-  if spec.data and vim.is_callable(spec.data.setup) then
-    spec.data.setup()
-  end
-end
-
-vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}), { load = load })
--- vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}))
--- vim.pack.add(nv.specs)
--- vim.pack.add(vim_plugins)
+vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}), {
+  ---@param plug_data { spec: vim.pack.Spec, path: string }
+  load = function(plug_data)
+    local spec = plug_data.spec
+    local name = spec.name
+    vim.cmd.packadd({ args = { name }, bang = true, magic = { file = false } })
+    if spec.data and vim.is_callable(spec.data.setup) then
+      spec.data.setup()
+    end
+  end,
+})
 
 return {
   init = function()
@@ -59,16 +55,13 @@ return {
     -- these must be set before extui is enabled
     vim.o.cmdheight = 0
     vim.o.winborder = 'rounded'
-    -- FIXME: doesn't play nice with a fresh vim.pack.add
     require('vim._extui').enable({})
     require('nvim.tokyonight')
     require('nvim.mini')
     require('nvim/util/git/extmarks')
 
     vim.schedule(function()
-      vim.tbl_map(function(f)
-        require(f:sub(#vim.g.luaroot + 2, -5))
-      end, vim.fn.globpath(vim.fs.joinpath(vim.g.luaroot, 'nvim', 'config'), '*', false, true))
+      require('nvim.config')
     end)
 
     -- stylua: ignore start
