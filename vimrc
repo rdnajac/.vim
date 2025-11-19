@@ -523,4 +523,6 @@ else
   packadd! hlyank
 endif
 packadd! cfilter
+
+set shell=/opt/homebrew/bin/fish
 " vim: foldlevel=0 foldmethod=marker

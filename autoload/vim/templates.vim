@@ -5,7 +5,7 @@ function! s:read_template(fname)
   endif
 endfunction
 
-augroup lsp_template
+augroup vimrc_template
   autocmd!
   autocmd BufReadPost *.template execute 'set filetype=' . fnamemodify(expand('<afile>'), ':p:t:r:e')
   autocmd BufNewFile */after/lsp/*.lua call <SID>read_template('lsp.lua.template')
