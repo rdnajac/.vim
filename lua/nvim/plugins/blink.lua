@@ -98,7 +98,7 @@ opts.completion = {
         source_id = {
           ellipsis = false,
           text = function(ctx)
-            return (nv.icons.src[ctx.source_id] or ' ') .. ctx.icon_gap
+            return (nv.blink.icons[ctx.source_id] or ' ') .. ctx.icon_gap
           end,
           highlight = component_highlight,
         },

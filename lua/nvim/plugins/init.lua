@@ -1,15 +1,3 @@
-local M = {
-  require('nvim.snacks'),
-}
-
-vim.tbl_map(function(mod)
-  vim.list_extend(M, require('nvim.' .. mod).spec)
-end, {
-  'lazy',
-  'lsp',
-  'treesitter',
-})
-
 local path = vim.fs.dirname(debug.getinfo(1).source:sub(2))
 local files = vim.fn.globpath(path, '*.lua', false, true)
 local iter = vim.iter(files)
@@ -24,4 +12,4 @@ local plugins = iter
   :flatten()
   :totable()
 
-return vim.list_extend(M, plugins)
+return plugins

@@ -46,7 +46,6 @@ function Plugin:schedule_after()
 end
 
 function Plugin.new(t)
-  -- print(vim.inspect(t))
   local self = setmetatable(t, Plugin)
   self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
   -- store things to be passed to `vim.pack.Spec.data`

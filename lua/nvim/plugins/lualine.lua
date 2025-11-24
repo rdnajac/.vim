@@ -27,7 +27,7 @@ local M = {
       },
       sections = {
         lualine_a = { 'mode' },
-        lualine_b = { 'branch', },
+        lualine_b = { 'branch' },
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
         lualine_y = { 'progress' },
@@ -36,9 +36,19 @@ local M = {
       inactive_sections = {},
       tabline = {
         lualine_a = {
-          { '%{fnamemodify(getcwd(), ":~:h").."/"}', color = { fg = '#000000', gui = 'bold' } },
+          { [[%{fnamemodify(getcwd(), ':~:h')..'/'}]], color = 'Chromatophore_a' },
         },
-        lualine_b = { 'tabs' },
+        lualine_b = {
+          {
+            'tabs',
+            mode = 0,
+            use_mode_colors = false,
+            path = 0,
+            tabs_color = { active = nil, inactive = nil },
+            show_modified_status = true,
+            symbols = { modified = ',+' },
+          },
+        },
         lualine_c = { Snacks.profiler.status() },
       },
       winbar = {

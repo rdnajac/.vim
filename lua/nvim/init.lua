@@ -25,16 +25,26 @@ _G.nv = setmetatable({
   end,
 })
 
-nv.specs = vim.tbl_values(vim.tbl_map(function(plugin)
-  return nv.plug(plugin):tospec()
-end, require('nvim.plugins')))
+nv.specs = vim
+  .iter({ 'snacks', 'lazy', 'lsp', 'treesitter', 'mini', 'plugins' })
+  :map(function(mod)
+    local m = require('nvim.' .. mod)
+    return (m.spec and m.spec) or (vim.islist(m) and m) or { m }
+  end)
+  :flatten()
+  :map(function(plugin)
+    return nv.plug(plugin):tospec()
+  end)
+  :totable()
 
 local vim_plugins = vim.islist(vim.g.plugs) and vim.g.plugs
   or vim.tbl_map(function(plug)
     return plug.uri
   end, vim.tbl_values(vim.g.plugs or {}))
 
-vim.pack.add(vim.list_extend(nv.specs, vim_plugins or {}), {
+vim.list_extend(nv.specs, vim_plugins or {})
+
+vim.pack.add(nv.specs, {
   ---@param plug_data { spec: vim.pack.Spec, path: string }
   load = function(plug_data)
     local spec = plug_data.spec
@@ -57,7 +67,6 @@ return {
     vim.o.winborder = 'rounded'
     require('vim._extui').enable({})
     require('nvim.tokyonight')
-    require('nvim.mini')
     require('nvim/util/git/extmarks')
 
     vim.schedule(function()

@@ -111,6 +111,7 @@ local leader = {
     j = 'jumps',
     k = 'keymaps',
     l = {
+      c = 'lsp_config',
       s = 'lsp_symbols',
       S = 'lsp_workspace_symbols',
       i = 'lsp_incoming_calls',

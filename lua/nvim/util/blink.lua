@@ -11,11 +11,25 @@ M.get_providers = function(mode)
   return vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
 end
 
+-- stylua: ignore
+M.icons = {
+  buffer    = '',
+  cmdline   = '',
+  copilot   = '',
+  env       = '',
+  lazydev   = '󰒲',
+  lsp       = '',
+  omni      = '',
+  path      = '',
+  snippets  = '',
+}
+
 local provider_icons = function()
   return vim
     .iter(M.get_providers())
     :map(function(src)
-      return nv.icons.src[src] or ' '
+      -- return nv.icons.src[src] or ' '
+      return M.icons[src] or ' '
     end)
     :join(' ')
 end

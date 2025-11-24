@@ -7,7 +7,8 @@ vim.api.nvim_create_autocmd('FileType', {
   pattern = 'dirvish',
   callback = function(ev)
     -- XXX: dirvish doesn't support highlighting of icons yet
-    require('nvim.icons.fs').render()
+    -- require('nvim.icons.fs').render()
+    require('nvim.util.icons.fs').render()
     require('nvim.util.git.extmarks').setup(ev)
     vim.lsp.buf_attach_client(0, nv.lsp.dirvish.client_id)
     -- BUG: workaround for https://github.com/justinmk/vim-dirvish/issues/257

@@ -1,5 +1,6 @@
 local M = { 'R-nvim/R.nvim' }
 
+-- TODO: check update hook
 -- M.build = [[git submodule update --recursive]]
 
 local on_filetype = function()

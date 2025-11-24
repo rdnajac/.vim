@@ -68,7 +68,8 @@ return {
     local icon_map = { grep = '󰱽', files = '' }
     local icon = icon_map[opts.finder] or ' '
     local name = opts.finder:sub(1, 1):upper() .. opts.finder:sub(2)
-    local searchpath = opts.dirs and 'Multiple Paths' or vim.fn.fnamemodify(opts.cwd, ':~')
+    local searchpath = (opts.dirs and (#opts.dirs == 1 and opts.dirs[1] or 'Multiple Paths'))
+      or vim.fn.fnamemodify(opts.cwd, ':~')
 
     opts.title = string.format('%s %s [ %s ]', icon, name, searchpath)
     if vim.islist(opts.ft) and #opts.ft > 0 then

@@ -131,45 +131,68 @@ local miniopts = function()
   }
 end
 
--- require('mini.misc').setup_termbg_sync()
-for minimod, opts in pairs(miniopts()) do
-  require('mini.' .. minimod).setup(opts)
-end
+return {
+  'nvim-mini/mini.nvim',
+  config = function()
+    -- require('mini.misc').setup_termbg_sync()
+    for minimod, opts in pairs(miniopts()) do
+      require('mini.' .. minimod).setup(opts)
+    end
+  end,
+  after = function()
+    -- Remap adding surrounding to Visual mode selection
+    vim.keymap.del('x', 'ys')
+    vim.keymap.set('x', 'S', ':<C-u>lua MiniSurround.add("visual")<CR>', { silent = true })
 
-vim.schedule(function()
-  -- Remap adding surrounding to Visual mode selection
-  vim.keymap.del('x', 'ys')
-  vim.keymap.set('x', 'S', ':<C-u>lua MiniSurround.add("visual")<CR>', { silent = true })
+    -- Make special mapping for "add surrounding for line"
+    vim.keymap.set('n', 'yss', 'ys_', { remap = true })
+    vim.keymap.set('n', '<leader>fm', MiniFiles.open, { desc = 'MiniFiles' })
 
-  -- Make special mapping for "add surrounding for line"
-  vim.keymap.set('n', 'yss', 'ys_', { remap = true })
-  vim.keymap.set('n', '<leader>fm', MiniFiles.open, { desc = 'MiniFiles' })
-end)
-
-local buffer_local_vars = {
-  lua = {
-    minisurround_config = {
-      custom_surroundings = {
-        U = { output = { left = 'function()\n', right = '\nend' } },
-        u = { output = { left = 'function()\n  ', right = '\nend' } },
-        i = { output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' } },
-        s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
+    local buffer_local_vars = {
+      lua = {
+        minisurround_config = {
+          custom_surroundings = {
+            U = { output = { left = 'function()\n', right = '\nend' } },
+            u = { output = { left = 'function()\n  ', right = '\nend' } },
+            i = {
+              output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' },
+            },
+            s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
+          },
+        },
       },
-    },
-  },
+      markdown = {
+        minisurround_config = {
+          custom_surroundings = {
+            -- Markdown link. Common usage:
+            -- `saiwL` + [type/paste link] + <CR> - add link
+            -- `sdL` - delete link
+            -- `srLL` + [type/paste link] + <CR> - replace link
+            L = {
+              input = { '%[().-()%]%(.-%)' },
+              output = function()
+                local link = require('mini.surround').user_input('Link: ')
+                return { left = '[', right = '](' .. link .. ')' }
+              end,
+            },
+          },
+        },
+      },
+    }
+
+    local aug = vim.api.nvim_create_augroup('mini', {})
+
+    for ft, v in pairs(buffer_local_vars) do
+      for k, v2 in pairs(v) do
+        vim.api.nvim_create_autocmd('FileType', {
+          group = aug,
+          pattern = ft,
+          callback = function()
+            vim.b[k] = v2
+          end,
+        })
+      end
+    end
+  end,
 }
-
-local aug = vim.api.nvim_create_augroup('mini', {})
-
-for ft, v in pairs(buffer_local_vars) do
-  for k, v2 in pairs(v) do
-    vim.api.nvim_create_autocmd('FileType', {
-      group = aug,
-      pattern = ft,
-      callback = function()
-        vim.b[k] = v2
-      end,
-    })
-  end
-end
 -- vim: fdl=2

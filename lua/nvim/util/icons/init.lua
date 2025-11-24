@@ -1,15 +1,4 @@
 local icons = {
-  src = {
-    buffer = ' ',
-    cmdline = ' ',
-    copilot = ' ',
-    env = ' ',
-    lazydev = '󰒲 ',
-    lsp = ' ',
-    omni = ' ',
-    path = ' ',
-    snippets = ' ',
-  },
   diff = { add = '▎', change = '▎', delete = '' },
   mason = {
     package_installed = '✓',
@@ -57,25 +46,25 @@ local mini_icon_keys = {
 }
 
 ---@param key "directory"|"extension"|"file"|"filetype"|"os"
----@param lookup? string
----@return string|"" icon, string? hl always return a string, hl group on success
+---@param lookup string?
+---@return string icon, string? hl always return a string, hl group on success
 local function get_mini_icon(_, key, lookup)
   if not _G.MiniIcons then
-    return ' ', nil
+    return '󰟢', nil
   end
-  if key == 'filetype' and lookup == nil then
-    lookup = vim.bo.filetype
+  if not lookup then
+    lookup = key == 'filetype' and vim.bo.filetype or vim.api.nvim_buf_get_name(0)
   end
   local icon, hl = _G.MiniIcons.get(key, lookup)
   return icon .. ' ', hl
 end
 
-for _, category in ipairs(mini_icon_keys) do
+for _, key in ipairs(mini_icon_keys) do
   local function _get_mini_icon(_, lookup)
-    return get_mini_icon(_, category, lookup)
+    return get_mini_icon(_, key, lookup)
   end
 
-  M[category] = setmetatable({}, {
+  M[key] = setmetatable({}, {
     __index = _get_mini_icon,
     __call = _get_mini_icon,
   })

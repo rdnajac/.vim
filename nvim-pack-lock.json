@@ -5,7 +5,7 @@
       "src": "https://git::@github.com/LazyVim/LazyVim.git"
     },
     "R.nvim": {
-      "rev": "9f21d6c7c16ccafdbd2d99f632a80c743c2a715a",
+      "rev": "5e8a2e181eecc1e34c8eb93eaf1d59e05a803b5f",
       "src": "https://git::@github.com/R-nvim/R.nvim.git"
     },
     "blink.cmp": {
@@ -37,7 +37,7 @@
       "src": "https://git::@github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "b409fd1d8b9ea7ec7c0923eb2562b52ed5d1ab0a",
+      "rev": "6e885e4c27743ae6bf5957ea78ce86c032835f09",
       "src": "https://git::@github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -45,7 +45,7 @@
       "src": "https://git::@github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "b7c48a7111534b66bee077da8035ac7208a294ff",
+      "rev": "e0fae251f8459940331960106d4bd9457cec23de",
       "src": "https://git::@github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
@@ -118,7 +118,7 @@
       "src": "https://git::@github.com/tpope/vim-rsi.git"
     },
     "vim-scriptease": {
-      "rev": "cdb5981d47ac98221a408ae2e7cae66524d9e872",
+      "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
       "src": "https://git::@github.com/tpope/vim-scriptease.git"
     },
     "vim-ug": {
