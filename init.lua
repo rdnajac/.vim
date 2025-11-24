@@ -8,14 +8,11 @@ function vim.print(...)
   return vim._print(true, ...)
 end
 
--- vim.g.stdpath = vim.tbl_map(function(d)
---   return { [d] = vim.fn.stdpath(d) }
--- end, { 'cache', 'config', 'data', 'state' })
-local stdpath_dict = {}
-vim.tbl_map(function(d)
-  stdpath_dict[d] = vim.fn.stdpath(d)
-end, { 'cache', 'config', 'data', 'state' })
-vim.g.stdpath = stdpath_dict
+vim.g.stdpath = vim.iter({ 'cache', 'config', 'data', 'state' }):fold({}, function(stdpath, d)
+  stdpath[d] = vim.fn.stdpath(d)
+  return stdpath
+end)
+
 vim.g.plug_home = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
 vim.g.loaded_netrw = false
 
@@ -37,6 +34,7 @@ vim.cmd([[
 
 -- the rest if the owl
 require('nvim').init()
+
 vim.api.nvim_create_user_command('Hardcopy', function()
   local file = vim.api.nvim_buf_get_name(0)
   -- local commandstring = ([[vim -Nu NONE -c "e %s | hardcopy | qa!"]]):format(file)

@@ -5,11 +5,11 @@
       "src": "https://git::@github.com/LazyVim/LazyVim.git"
     },
     "R.nvim": {
-      "rev": "5e8a2e181eecc1e34c8eb93eaf1d59e05a803b5f",
+      "rev": "b1de52b8f667341a4388eb7752c4f32ea704fada",
       "src": "https://git::@github.com/R-nvim/R.nvim.git"
     },
     "blink.cmp": {
-      "rev": "73ea297bc665c936b51797d5a55599536ffee0d8",
+      "rev": "74967d4f9e6bffd4f707493917503e9d9c73e92c",
       "src": "https://git::@github.com/Saghen/blink.cmp.git"
     },
     "bullets.vim": {
@@ -21,7 +21,7 @@
       "src": "https://git::@github.com/alker0/chezmoi.vim.git"
     },
     "dial.nvim": {
-      "rev": "f0404ec1f83a03f2c3457e60087c6331d1cbb83f",
+      "rev": "f97c0c7fa7d5111bc04a91d0f693900fb2d95861",
       "src": "https://git::@github.com/monaqa/dial.nvim.git"
     },
     "lazydev.nvim": {
@@ -29,7 +29,7 @@
       "src": "https://git::@github.com/folke/lazydev.nvim.git"
     },
     "lualine.nvim": {
-      "rev": "3946f0122255bc377d14a59b27b609fb3ab25768",
+      "rev": "47f91c416daef12db467145e16bed5bbfe00add8",
       "src": "https://git::@github.com/nvim-lualine/lualine.nvim.git"
     },
     "mason.nvim": {
@@ -37,7 +37,7 @@
       "src": "https://git::@github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "6e885e4c27743ae6bf5957ea78ce86c032835f09",
+      "rev": "72b0194c56c984476c5975b62eb340fd1aa1686a",
       "src": "https://git::@github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
@@ -45,11 +45,11 @@
       "src": "https://git::@github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "e0fae251f8459940331960106d4bd9457cec23de",
+      "rev": "30a2b191bccf541ce1797946324c9329e90ec448",
       "src": "https://git::@github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "bb83a676128d95c865e40ba71376d883bdadec14",
+      "rev": "3bbae7b32e0cc417438e54ec77eb7083e5f38c0f",
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },

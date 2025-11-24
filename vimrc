@@ -1,5 +1,10 @@
 scriptencoding utf-8
 
+function s:chsh(shell) abort
+  let &shell = systemlist('which ' . a:shell)[0]
+endfunction
+call s:chsh('dash')
+
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
@@ -523,5 +528,4 @@ else
 endif
 packadd! cfilter
 
-set shell=/opt/homebrew/bin/fish
 " vim: foldlevel=0 foldmethod=marker

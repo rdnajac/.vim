@@ -111,7 +111,10 @@ local function add_status_extmarks(buffer, status)
 
   local function get_icon(code)
     local k = nv.git.short_codes[code]
-    return nv.icons.git[vim.fn.tolower(k or '')] or code, 'SnacksPickerGitStatus' .. (k or '')
+    local k = nv.git.short_codes[code]
+    -- local icon = nv.icons.git[vim.fn.tolower(k or '')] or code
+    local icon = code
+    return icon, 'SnacksPickerGitStatus' .. (k or '')
   end
 
   for n = 1, vim.api.nvim_buf_line_count(buffer) do
@@ -138,6 +141,7 @@ local function add_status_extmarks(buffer, status)
             virt_text = virt,
             virt_text_pos = 'eol',
             priority = 1000,
+            hl_mode = 'combine',
           })
         end
       end

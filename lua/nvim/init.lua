@@ -42,7 +42,7 @@ local vim_plugins = vim.islist(vim.g.plugs) and vim.g.plugs
     return plug.uri
   end, vim.tbl_values(vim.g.plugs or {}))
 
-vim.list_extend(nv.specs, vim_plugins or {})
+vim.list_extend(nv.specs, vim_plugins)
 
 vim.pack.add(nv.specs, {
   ---@param plug_data { spec: vim.pack.Spec, path: string }
@@ -67,7 +67,6 @@ return {
     vim.o.winborder = 'rounded'
     require('vim._extui').enable({})
     require('nvim.tokyonight')
-    require('nvim/util/git/extmarks')
 
     vim.schedule(function()
       require('nvim.config')
