@@ -3,7 +3,7 @@ scriptencoding utf-8
 function s:chsh(shell) abort
   let &shell = systemlist('which ' . a:shell)[0]
 endfunction
-call s:chsh('dash')
+" call s:chsh('dash')
 
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
@@ -514,7 +514,6 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
 else
-  Plug 'folke/tokyonight.nvim'
   Plug 'saxon1964/neovim-tips'
 endif
 call plug#end() " don't plug#end() if neovim...

@@ -14,26 +14,6 @@ function M.info(module)
   local modInfo = vim.loader.find(module)[1]
   return modInfo and modInfo.modpath or module
 end
----
---- from shared.lua
---- @generic T
---- @param root string
---- @param mod T
---- @return T
-M.defer_require = function(root, mod)
-  return setmetatable({ _submodules = mod }, {
-    ---@param t table<string, any>
-    ---@param k string
-    __index = function(t, k)
-      if not mod[k] then
-        return
-      end
-      local name = string.format('%s.%s', root, k)
-      t[k] = require(name)
-      return t[k]
-    end,
-  })
-end
 
 --- Iterate over modules under $XDG_CONFIG_HOME/nvim/lua
 ---@param fn fun(modname: string)   -- callback with the module name (e.g. "plug.mini.foo")

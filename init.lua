@@ -29,19 +29,12 @@ end
 vim.cmd([[
   runtime vimrc
   let s:me = resolve(expand('<sfile>:p'))
-  " echom s:me
+  " echueuuueeeom s:me
 ]])
 
 -- the rest if the owl
-require('nvim').init()
-
-vim.api.nvim_create_user_command('Hardcopy', function()
-  local file = vim.api.nvim_buf_get_name(0)
-  -- local commandstring = ([[vim -Nu NONE -c "e %s | hardcopy | qa!"]]):format(file)
-  local commandstring = ([[vim -Nu NONE -es -c "e %s" -c "hardcopy" -c "qa!"]]):format(file)
-  local cmd = vim.split(commandstring, ' ')
-
-  vim.system(cmd)
-  local obj = vim.system(cmd):wait()
-  dd(obj)
-end, {})
+require('nvim')
+-- stylua: ignore start
+_G.dd = function(...) Snacks.debug.inspect(...) end
+_G.bt = function(...) Snacks.debug.backtrace(...) end
+_G.p  = function(...) Snacks.debug.profile(...) end

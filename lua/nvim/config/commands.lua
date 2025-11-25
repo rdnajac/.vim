@@ -11,6 +11,23 @@ local function to_camel_case(str)
     :gsub('^%l', string.upper)
 end
 
+-- local pickers
+--
+-- Snacks.picker.pickers({
+--   enter = false,
+--   live = false,
+--   show_empty = true,
+--   on_show = function(p)
+--     return p:close()
+--   end,
+--   on_close = function(p)
+--     pickers = vim.tbl_map(function(m)
+--       return m.text
+--     end, p:items())
+--   end,
+-- })
+local cmds = {}
+
 vim
   .iter(vim.tbl_keys(Snacks.picker))
   :filter(function(name)
@@ -22,10 +39,13 @@ vim
       'lazy',
       'meta',
       'setup',
+      'select',
+      'util',
     }, name)
   end)
   :each(function(name)
     local cmd = to_camel_case(name)
+    cmds[#cmds + 1] = cmd
     -- currently, this only guards against `:Man`
     if vim.fn.exists(':' .. cmd) ~= 2 then
       vim.api.nvim_create_user_command(cmd, function(args)
@@ -41,3 +61,16 @@ vim
       end, { nargs = '?', desc = 'Snacks Picker: ' .. cmd })
     end
   end)
+
+-- dd(require('snacks.picker.source.meta').pickers())
+
+vim.api.nvim_create_user_command('Hardcopy', function()
+  local file = vim.api.nvim_buf_get_name(0)
+  -- local commandstring = ([[vim -Nu NONE -c "e %s | hardcopy | qa!"]]):format(file)
+  local commandstring = ([[vim -Nu NONE -es -c "e %s" -c "hardcopy" -c "qa!"]]):format(file)
+  local cmd = vim.split(commandstring, ' ')
+
+  vim.system(cmd)
+  local obj = vim.system(cmd):wait()
+  dd(obj)
+end, {})

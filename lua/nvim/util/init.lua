@@ -1,10 +1,3 @@
-local M = {}
-
-M.fn = require('nvim.util.fn')
-
-return setmetatable(M, {
-  __index = function(t, k)
-    t[k] = require('nvim.util.' .. k)
-    return t[k]
-  end,
-})
+return vim.defaulttable(function(k)
+  return require('nvim.util.' .. k)
+end)

@@ -2,7 +2,9 @@
 -- build a table from all the files in this dir
 -- each file returns a function, so lazily load them by
 -- setting a metatable on the module table and the filename is the function
-local M = {}
+local M = vim.defaulttable(function(k)
+  return require('nvim.util.fn.' .. k)
+end)
 
 --- Get all lines from a buffer
 --- @param bufnr number? buffer number, defaults to current buffer
@@ -90,10 +92,5 @@ M.extmark_leaks = function()
   dd(counts)
 end
 
-return setmetatable(M, {
-  __index = function(_, k)
-    t[k] = require('nvim.util.fn.' .. k)
-    return t[k]
-  end,
-})
+return M
 -- vim: fdm=expr fdl=0 fml=1
