@@ -1,6 +1,6 @@
 silent! source ~/GitHub/junegunn/vim-plug/plug.vim
 if !has('nvim')
-    let g:plug_home = expand('~/.local/share/nvim/site/pack/core/opt/')
+  let g:plug_home = expand('~/.local/share/nvim/site/pack/core/opt/')
   finish
 endif
 

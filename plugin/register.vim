@@ -10,9 +10,9 @@ vnoremap <leader>d "_d
 
 " yank path current file path, with and without line number
 nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
-nnoremap yP <Cmd>let @*=expand('%:p:~') . ':' . line('.')<CR>
+nnoremap yP <Cmd>let @*=printf('%s:%d', expand('%:p:~'), line('.'))<CR>
+cnoremap <M-y> <Cmd>let @*=getcmdline()<CR>
 
-" https://github.com/mhinz/vim-galore?tab=readme-ov-file#quickly-edit-your-macros
 " nnoremap <leader>cm :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
 " edit macro recorded in q
 nnoremap <leader>cM :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>

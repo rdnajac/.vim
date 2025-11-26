@@ -6,3 +6,16 @@ nnoremap <buffer> o <Cmd>lua nv.fn.new()<CR>
 nnoremap <buffer> D <Cmd>lua vim.lsp.buf.code_action({filter=function(action) return action.command and action.command.command == 'delete' end, apply=true})<CR>
 nnoremap <buffer> C <Cmd>lua vim.lsp.buf.code_action({filter=function(action) return action.command and action.command.command == 'rename' end, apply=true})<CR>
 nnoremap <buffer> t o<Esc>:r !find '<C-R>=substitute(getline(line(".")-1),"\\n","","g")<CR>' -maxdepth 1 -print0 \| xargs -0 ls -Fd<CR>:silent! keeppatterns %s/\/\//\//g<CR>:silent! keeppatterns %s/[^a-zA-Z0-9\/]$//g<CR>:silent! keeppatterns g/^$/d _<CR>"_dd\| :lua require('nvim.icons.fs').render()<CR>
+
+if !has('nvim')
+  finish
+endif
+lua << EOF
+-- XXX: `dirvish#add_icon_fn()` doesn't support highlighting
+require('nvim.util.icons.fs').render()
+require('nvim.util.git.extmarks').setup()
+vim.lsp.buf_attach_client(0, nv.lsp.dirvish.client_id)
+-- BUG: https://github.com/justinmk/vim-dirvish/issues/257
+vim.opt_local.listchars = vim.opt.listchars:get()
+vim.opt_local.listchars:remove('precedes')
+EOF

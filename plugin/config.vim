@@ -1,3 +1,5 @@
+let g:dirvish_mode = ':sort ,^.*[\/],'
+" lua vim.g.dirvish_mode = [[:sort ,^.*[\/],]]
 let g:eunuch_interpreters = {
       \ '.':      '/bin/sh',
       \ 'sh':     'bash',

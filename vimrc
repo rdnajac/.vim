@@ -120,7 +120,7 @@ augroup vimrc
   autocmd!
   au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
-  au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
+  " au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   au BufWritePre * silent! call vim#mkdir#(expand('<afile>'))
   au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
@@ -154,9 +154,10 @@ augroup END
 
 " }}}1
 " Section: commands {{{1
-command! -nargs=1 Info call vim#notify#info(eval(<q-args>))
-command! -nargs=1 Warn call vim#notify#warn(eval(<q-args>))
-command! -nargs=1 Error call vim#notify#error(eval(<q-args>))
+for level in keys(g:vim#notify#levels)
+  execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(<q-args>)',
+	\ toupper(strpart(level, 0, 1))..strpart(level, 1), level)
+endfor
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
@@ -302,7 +303,8 @@ nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
-nnoremap cdP :execute 'edit ' . plug_home . '/' \| pwd<CR>
+noremap cdP :<C-U>execute 'edit '.plug_home.'/'<CR>
+" <Bar>pwd<CR>
 
 nmap <expr> cq change#quote()
 
@@ -328,7 +330,11 @@ nmap gy "xyygcc"xp<Up>
 nmap gY "xyygcc"xP
 nmap vv Vgc
 
-" `unimpaired`
+" bracket mappings
+nnoremap [o <C-o>
+nnoremap ]o <C-i>
+
+" assumes `unimpaired` exchange
 nmap zJ ]ekJ
 
 " `surround`
@@ -477,6 +483,15 @@ call s:cabbrev('snacks', 'lua Snacks')
 call s:cabbrev('f', 'find')
 " }}}1
 
+if has('nvim')
+  packadd! nvim.difftool
+  packadd! nvim.undotree
+else
+  packadd! editorconfig
+  packadd! hlyank
+endif
+packadd! cfilter
+
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
@@ -517,14 +532,4 @@ else
   Plug 'saxon1964/neovim-tips'
 endif
 call plug#end() " don't plug#end() if neovim...
-
-if has('nvim')
-  packadd! nvim.difftool
-  packadd! nvim.undotree
-else
-  packadd! editorconfig
-  packadd! hlyank
-endif
-packadd! cfilter
-
 " vim: foldlevel=0 foldmethod=marker

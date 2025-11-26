@@ -43,6 +43,31 @@ function! ooze#send(text) abort
   return l:bytes
 endfunction
 
+function! ooze#line() abort
+  let l:ft = &filetype
+  let l:line = getline('.')
+
+  if l:ft ==# 'qf\|pager'
+    return 0
+  endif
+
+  if l:line[0] ==# '#' && l:line[1] ==# '!'
+    Info bang
+    return 0
+  endif
+
+  if l:ft ==# 'vim' || l:ft ==# 'lua'
+    " check if the line contains the word `function`
+    " if it does, call ooze#fn that calls the function
+    " see yankmkd for capturing and converting modnames
+    execute (l:ft ==# 'lua' ? 'lua ' : '') . l:line
+    Info (l:ft ==# 'lua' ? ' ' : ' ') . '[[' . l:line . ']]'
+    return 1
+  endif
+
+  return ooze#send(l:line)
+endfunction
+
 function! ooze#file() abort
   if &ft ==# 'vim'
     execute 'source %'
