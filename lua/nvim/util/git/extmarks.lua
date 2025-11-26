@@ -150,7 +150,7 @@ local function add_status_extmarks(buffer, status)
 end
 
 local setup = function(ev)
-  local buffer = ev.buf or vim.api.nvim_get_current_buf()
+  local buffer = ev and ev.buf or vim.api.nvim_get_current_buf()
   if vim.b[buffer].git_status_started then
     return
   end

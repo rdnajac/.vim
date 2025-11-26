@@ -9,7 +9,7 @@
       "src": "https://git::@github.com/R-nvim/R.nvim.git"
     },
     "blink.cmp": {
-      "rev": "74967d4f9e6bffd4f707493917503e9d9c73e92c",
+      "rev": "f13226770b4947eb7e66befbeb53c3db39f13e25",
       "src": "https://git::@github.com/Saghen/blink.cmp.git"
     },
     "bullets.vim": {
@@ -23,6 +23,10 @@
     "dial.nvim": {
       "rev": "f97c0c7fa7d5111bc04a91d0f693900fb2d95861",
       "src": "https://git::@github.com/monaqa/dial.nvim.git"
+    },
+    "lazy.nvim": {
+      "rev": "85c7ff3711b730b4030d03144f6db6375044ae82",
+      "src": "https://git::@github.com/folke/lazy.nvim.git"
     },
     "lazydev.nvim": {
       "rev": "5231c62aa83c2f8dc8e7ba957aa77098cda1257d",
@@ -41,15 +45,15 @@
       "src": "https://git::@github.com/nvim-mini/mini.nvim.git"
     },
     "neovim-tips": {
-      "rev": "347c45b6b9f0f5fc5aaef8b308b3707b739e0862",
+      "rev": "b8c02411907ce1a5ded18a922a894a5dfb5c89a5",
       "src": "https://git::@github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "30a2b191bccf541ce1797946324c9329e90ec448",
+      "rev": "f1237a8b3c243608a7116fa1ad216c441d7c2264",
       "src": "https://git::@github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "3bbae7b32e0cc417438e54ec77eb7083e5f38c0f",
+      "rev": "c5871d9d870c866fea9f271f1a3b3f29049a4793",
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },

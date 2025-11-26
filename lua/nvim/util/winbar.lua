@@ -35,47 +35,6 @@ M.a = function(opts)
   })
 end
 
--- return vim
---   .iter(parts)
---   :map(function(p)
---     local value
---     if type(p) == 'string' then
---       value = p
---     elseif type(p) == 'function' then
---       value = p()
---     elseif type(p) == 'table' then
---       if p.cond == nil or p.cond() then
---         local f = p[1]
---         if type(f) == 'function' then
---           value = f()
---         elseif type(f) == 'table' then
---           value = f
---         elseif type(f) == 'string' then
---           value = { f }
---         end
---       end
---     end
---     local ret
---     if type(value) == 'table' then
---       ret = table.concat(value, ' ')
---     elseif type(value) == 'string' then
---       ret = value
---     end
---     if ret ~= nil then
---       -- FIXME:
---       -- if type(p) == 'table' and p.color ~= nil then
---       --   local color = vim.is_callable(p.color) and p.color() or p.color
---       --   ret = string.format('%%#%s#%s%%#Chromatophore_b#', color, ret)
---       -- end
---       return ret
---     end
---     return nil
---   end)
---   :filter(function(v)
---     return v ~= nil and v ~= ''
---   end)
---   :join('  ')
-
 function M.render(a, b, c)
   local function sec(s, str)
     return string.format('%%#Chromatophore_%s#%s', s, str)

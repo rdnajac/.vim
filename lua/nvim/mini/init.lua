@@ -107,6 +107,9 @@ local miniopts = function()
         suffix_next = '',
       },
       search_method = 'cover_or_next',
+      custom_surroundings = {
+        B = { output = { left = '{', right = '}' } },
+      },
     },
     splitjoin = {
       -- TODO: remove commas when joining

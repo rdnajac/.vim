@@ -32,8 +32,16 @@ vim.cmd([[
   " echueuuueeeom s:me
 ]])
 
--- the rest if the owl
-require('nvim')
+vim.o.pumblend = 0
+vim.o.pumborder = 'rounded'
+vim.o.pumheight = 10
+vim.o.cmdheight = 0
+vim.o.winborder = 'rounded'
+require('vim._extui').enable({})
+local ok, nv = pcall(require, 'nvim')
+if not ok then
+  require('vim._extui').enable({ enable = false })
+end
 -- stylua: ignore start
 _G.dd = function(...) Snacks.debug.inspect(...) end
 _G.bt = function(...) Snacks.debug.backtrace(...) end

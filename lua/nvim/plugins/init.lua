@@ -1,5 +1,5 @@
 local path = vim.fs.dirname(debug.getinfo(1).source:sub(2))
-local files = vim.fn.globpath(path, '*.lua', false, true)
+local files = vim.fn.globpath(path, '*', false, true)
 local iter = vim.iter(files)
 local plugins = iter
   :filter(function(f)

@@ -1,4 +1,4 @@
--- `https://cmp.saghen.dev/`
+--- `https://cmp.saghen.dev/`
 ---@type blink.cmp.Config
 local opts = {
   cmdline = { enabled = false },
@@ -27,6 +27,20 @@ local opts = {
     enabled = true,
     window = { show_documentation = false },
   },
+  completion = {
+    accept = { auto_brackets = { enabled = true } },
+    documentation = {
+      auto_show = false,
+    },
+    ghost_text = { enabled = false },
+    -- keyword = {},
+    trigger = {
+      show_on_keyword = true,
+      show_on_accept_on_trigger_character = true,
+      show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+    },
+    list = { selection = { preselect = true, auto_insert = true } },
+  },
 }
 
 -- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
@@ -35,79 +49,59 @@ local component_highlight = function(ctx)
   return { { group = ctx.kind_hl, priority = 20000 } }
 end
 
-opts.completion = {
-  accept = { auto_brackets = { enabled = true } },
-  documentation = {
-    auto_show = false,
-  },
-  ghost_text = { enabled = false },
-  -- keyword = {},
-  trigger = {
-    show_on_keyword = true,
-    show_on_accept_on_trigger_character = true,
-    show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
-  },
-  list = { selection = { preselect = true, auto_insert = true } },
-  menu = {
-    auto_show = true,
-    -- auto_show_delay_ms = 1000,
-    ---@param ctx blink.cmp.Context
-    ---@returns number the delay in milliseconds
-    auto_show_delay_ms = function(ctx, _)
-      if vim.tbl_contains({ '.', '/', "'", '@' }, ctx.trigger.initial_character) then
-        return 0
-      end
-      return 1337
-    end,
+opts.completion.menu = {
+  auto_show = true,
+  ---@param ctx blink.cmp.Context
+  ---@returns number the delay in milliseconds
+  auto_show_delay_ms = function(ctx, _)
+    if vim.tbl_contains({ '.', '/', "'", '@' }, ctx.trigger.initial_character) then
+      return 0
+    end
+    return 420
+  end,
 
-    -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
-    ---@diagnostic disable-next-line: assign-type-mismatch
-    direction_priority = function()
-      local cmp = require('blink.cmp')
-      local ctx = cmp.get_context()
-      local item = cmp.get_selected_item()
-
-      if ctx == nil or item == nil then
-        return { 's', 'n' }
-      end
-
-      local item_text = item.textEdit ~= nil and item.textEdit.newText
-        or item.insertText
-        or item.label
-      local is_multi_line = item_text:find('\n') ~= nil
-
+  -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
+  ---@diagnostic disable-next-line: assign-type-mismatch
+  direction_priority = function()
+    local cmp = require('blink.cmp')
+    local ctx = cmp.get_context()
+    local item = cmp.get_selected_item()
+    if ctx and item then
+      local item_text = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
+      -- local is_multi_line = item_text:find('\n') ~= nil
       -- after showing the menu upwards, we want to maintain that direction
       -- until we re-open the menu, so store the context id in a global variable
-      if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
+      -- if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
+      if item_text:find('\n') or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
         vim.g.blink_cmp_upwards_ctx_id = ctx.id
         return { 'n', 's' }
       end
-      return { 's', 'n' }
-    end,
+    end
+    return { 's', 'n' }
+  end,
 
-    ---@type blink.cmp.Draw
-    draw = {
-      treesitter = { 'lsp' },
-      ---@type blink.cmp.DrawColumnDefinition[]
-      columns = {
-        { 'source_id', 'kind_icon' },
-        { 'label', 'label_description', gap = 1 },
+  ---@type blink.cmp.Draw
+  draw = {
+    treesitter = { 'lsp' },
+    ---@type blink.cmp.DrawColumnDefinition[]
+    columns = {
+      { 'source_id', 'kind_icon' },
+      { 'label', 'label_description', gap = 1 },
+    },
+    ---@type table<string, blink.cmp.DrawComponent>
+    components = {
+      source_id = {
+        ellipsis = false,
+        text = function(ctx)
+          return (nv.blink.icons[ctx.source_id] or ' ') .. ctx.icon_gap
+        end,
+        highlight = component_highlight,
       },
-      ---@type table<string, blink.cmp.DrawComponent>
-      components = {
-        source_id = {
-          ellipsis = false,
-          text = function(ctx)
-            return (nv.blink.icons[ctx.source_id] or ' ') .. ctx.icon_gap
-          end,
-          highlight = component_highlight,
-        },
-        kind_icon = {
-          text = function(ctx)
-            return nv.icons.kinds[ctx.kind] or ''
-          end,
-          highlight = component_highlight,
-        },
+      kind_icon = {
+        text = function(ctx)
+          return nv.icons.kinds[ctx.kind] or ''
+        end,
+        highlight = component_highlight,
       },
     },
   },
@@ -126,8 +120,8 @@ local default_providers = {
   },
   lsp = {
     score_offset = -1,
-    ---@ param ctx blink.cmp.Context
-    ---@ param items blink.cmp.CompletionItem[]
+    ---@param ctx blink.cmp.Context
+    ---@param items blink.cmp.CompletionItem[]
     transform_items = function(ctx, items)
       local kind = require('blink.cmp.types').CompletionItemKind
       -- local exclude = vim.tbl_map(function(name)
@@ -159,28 +153,17 @@ local default_providers = {
   },
 }
 
-local ft_sources = {
-  lua = { 'lazydev' },
-  -- sh = { 'env', 'lsp' },
-  -- vim = { 'env', 'lsp' },
-}
-
 opts.sources = {
   ---@return blink.cmp.SourceList[]
   default = function()
-    local defaults = vim.tbl_filter(function(src)
+    return vim.tbl_filter(function(src)
       return nv.treesitter.is_comment() and src ~= 'snippets' or true
     end, vim.tbl_keys(default_providers))
-    -- return vim.list_extend(defaults, ft_sources[vim.bo.filetype] or {})
-    return defaults
   end,
-
   per_filetype = {
-    -- sql = { 'dadbod' },
-    -- optionally inherit from the `default` sources
     lua = { inherit_defaults = true, 'lazydev' },
+    -- sql = { 'dadbod' },
   },
-  ---@module "
   providers = vim.tbl_extend('force', {}, default_providers, {
     lazydev = {
       name = 'LazyDev',
@@ -262,5 +245,12 @@ M.status = {
     return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
   end,
 }
+
+M.after = function()
+  -- NOTE: In the GUI and in a supporting terminal,
+  -- `<C-I>` can be mapped separately from `<Tab>`,
+  -- Except in tmux: `https://github.com/tmux/tmux/issues/2705`
+  vim.keymap.set('n', '<C-I>', '<Tab>', { desc = 'restore <C-i>' })
+end
 
 return M
