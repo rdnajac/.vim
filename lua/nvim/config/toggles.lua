@@ -142,6 +142,8 @@ if package.loaded['sidekick'] then
   }
 end
 
+-- TODO: extui
+
 for key, opts in pairs(toggles) do
   Snacks.toggle.new(opts):map(key)
 end

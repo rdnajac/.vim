@@ -11,7 +11,6 @@ nv.import = function(modname)
 end
 
 local submodules = {
-  'nvim.config',
   'nvim.tokyonight',
   'nvim.snacks',
   'nvim.blink',
@@ -20,6 +19,7 @@ local submodules = {
   'nvim.mini',
   'nvim.plugins',
   'nvim.treesitter',
+  'nvim.config',
 }
 
 nv.specs = vim
@@ -34,12 +34,20 @@ nv.specs = vim
   end)
   :totable()
 
-local vim_plugins = vim.islist(vim.g.plugs) and vim.g.plugs
+local vim_plugins = vim.islist(vim.g.plugs)
+    -- plugins can be returned as-is
+    -- TODO: check if they are in url form
+    and vim.g.plugs
+  -- if it's a dict, it's probably from `vim-plug`
+  -- return the composed uri and pass that to `vim.pack.add`
   or vim.tbl_map(function(plug)
     return plug.uri
   end, vim.tbl_values(vim.g.plugs or {}))
 
-vim.pack.add(vim.list_extend(nv.specs, vim_plugins), {
+vim.list_extend(nv.specs, vim_plugins)
+
+vim.pack.add(nv.specs, {
+  -- confirm = false,
   ---@param plug_data { spec: vim.pack.Spec, path: string }
   load = function(plug_data)
     local spec = plug_data.spec

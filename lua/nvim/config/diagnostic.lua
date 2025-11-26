@@ -8,18 +8,17 @@ M.status = {
     bufnr = bufnr or 0
     local counts = vim.diagnostic.count(bufnr)
     local signs = vim.diagnostic.config().signs
+    if not signs then
+      return ''
+    end
     return vim
       .iter(pairs(counts))
       :map(function(severity, count)
-        return string.format(
-          '%%#%s#%s:%d%%*',
-          signs and signs.numhl[severity] or '',
-          signs and signs.text[severity] or '',
-          count or ''
-        )
+        return string.format('%%#%s#%s:%d%%*', signs.numhl[severity], signs.text[severity], count)
       end)
       :join('')
   end,
+  ---@param bufnr? number
   cond = function(bufnr)
     return not vim.tbl_isempty(vim.diagnostic.count(bufnr or 0))
   end,
