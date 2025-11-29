@@ -4,7 +4,7 @@ return {
   ---@type snacks.Config
   opts = {
     bigfile = {
-      ---@param ctx {buf: number, ft:string}
+      ---@param ctx { buf: number, ft: string }
       setup = function(ctx)
         vim.b.completion = false
         vim.b.minihipatterns_disable = true
@@ -16,8 +16,9 @@ return {
         vim.schedule(function()
           if vim.api.nvim_buf_is_valid(ctx.buf) then
             -- for json files, keep the filetype as json
-            -- for other files, set the syntax to the detected filetype
-            vim.bo[ctx.buf][ctx.ft == 'json' and 'filetype' or 'syntax'] = ctx.ft
+            -- for other files, set the syntax to the detected ft
+            local opt = ctx.ft == 'json' and 'filetype' or 'syntax'
+            vim.bo[ctx.buf][opt] = ctx.ft
           end
         end)
       end,
@@ -30,7 +31,7 @@ return {
     -- notifier = { enabled = false },
     notifier = require('nvim.snacks.notifier'),
     quickfile = { enabled = true },
-    -- scratch = { template = 'local x = \n\nprint(x)' },
+    scratch = { template = 'local x = \n\nprint(x)' },
     terminal = { enabled = true },
     scope = {
       keys = {
@@ -40,20 +41,8 @@ return {
           -- ag = { min_size = 1, edge = false, cursor = false, treesitter = { enabled = false }, desc = "buffer" },
         },
         jump = {
-          ['[i'] = {
-            min_size = 1,
-            bottom = false,
-            cursor = false,
-            edge = true,
-            desc = 'jump to top edge of scope',
-          },
-          [']i'] = {
-            min_size = 1,
-            bottom = true,
-            cursor = false,
-            edge = true,
-            desc = 'jump to bottom edge of scope',
-          },
+          ['[i'] = { min_size = 1, bottom = false, cursor = false, edge = true },
+          [']i'] = { min_size = 1, bottom = true, cursor = false, edge = true },
         },
       },
     },
@@ -67,43 +56,7 @@ return {
         git_hl = false, -- use Git Signs hl for fold icons
       },
     },
-    picker = {
-      debug = {
-        -- scores = true, -- show scores in the list
-        -- leaks = true, -- show when pickers don't get garbage collected
-        -- explorer = true, -- show explorer debug info
-        -- files = true, -- show file debug info
-        -- grep = true, -- show file debug info
-        -- proc = true, -- show proc debug info
-        -- extmarks = true, -- show extmarks errors
-      },
-      -- layout = { preset = 'mydefault' },
-      layouts = require('nvim.snacks.picker.layouts'),
-      sources = {
-        buffers = {
-          layout = 'mydefault',
-          input = {
-            keys = {
-              ['<c-x>'] = { 'bufdelete', mode = { 'n', 'i' } },
-            },
-          },
-          list = { keys = { ['D'] = 'bufdelete' } },
-        },
-        explorer = require('nvim.snacks.picker.explorer'),
-        autocmds = require('nvim.snacks.picker.nvimcfg'),
-        keymaps = require('nvim.snacks.picker.nvimcfg'),
-        files = require('nvim.snacks.picker.defaults'),
-        git_status = { layout = 'left' },
-        grep = require('nvim.snacks.picker.defaults'),
-        icons = { layout = { preset = 'insert' } },
-        recent = {
-          config = function(p)
-            p.filter = {}
-          end,
-        },
-        zoxide = { confirm = 'edit' },
-      },
-    },
+    picker = require('nvim.snacks.picker'),
     styles = {
       lazygit = { height = 0, width = 0 },
       terminal = { wo = { winhighlight = 'Normal:Character' } },

@@ -5,10 +5,8 @@ vim.o.pumheight = 10
 vim.o.winborder = 'rounded'
 require('vim._extui').enable({})
 
---FIXME: fails when installing new pluugin before startup
--- vim.schedule(function()
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
+-- FIXME: fails when installing new plugin before startup
+local init = function()
     local confdir = vim.fs.joinpath(nv.root, 'config')
     local files = vim.fn.globpath(confdir, '*.lua', false, true)
     local iter = vim.iter(files)
@@ -18,7 +16,9 @@ vim.api.nvim_create_autocmd('VimEnter', {
       end)
       :map(nv.fn.modname)
       :each(nv.import)
-  end,
-})
+  end
+
+vim.schedule(init)
+-- vim.api.nvim_create_autocmd('VimEnter', { callback = init })
 
 return {}

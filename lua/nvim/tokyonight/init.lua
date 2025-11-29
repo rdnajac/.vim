@@ -1,7 +1,7 @@
 local M = { 'folke/tokyonight.nvim' }
 
 local mycolors = {
-  -- tokyonight = '#24283b',
+  tokyonight = '#24283b',
   black = '#000000',
   eigengrau = '#16161d',
   blue = '#14afff',
@@ -24,6 +24,7 @@ local myhighlights = function(colors)
     WinBar        = { bg = mycolors.lualine },
     WinBorder     = { bg = mycolors.lualine },
     SpecialWindow = { bg = mycolors.eigengrau },
+    SignColumn    = { fg = mycolors.lualine, bg = mycolors.tokyonight },
   }
 end
 

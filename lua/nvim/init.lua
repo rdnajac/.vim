@@ -22,6 +22,7 @@ local submodules = {
   'nvim.config',
 }
 
+-- TODO: specs should be a dictionary of [1] to spec
 nv.specs = vim
   .iter(submodules)
   :map(nv.import)

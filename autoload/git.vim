@@ -12,12 +12,12 @@ function! git#root(...) abort
   endif
 
   if exists('*FugitiveGitDir')
-    return fnamemodify(FugitiveGitDir(a:000), ':p:h')
+    let l:gitdir = FugitiveGitDir(a:000), ':p:h:h'
+  else
+    let l:buf = a:0 ? a:1 : bufnr('%')
+    let l:bufnr = type(l:buf) == v:t_string ? bufnr(l:buf) : l:buf
+    let l:gitdir = finddir('.git', fnamemodify(bufname(l:bufnr), ':p') . ';')
   endif
-
-  let l:buf = a:0 ? a:1 : bufnr('%')
-  let l:bufnr = type(l:buf) == v:t_string ? bufnr(l:buf) : l:buf
-  let l:gitdir = finddir('.git', fnamemodify(bufname(l:bufnr), ':p') . ';')
   return empty(l:gitdir) ? '' : fnamemodify(l:gitdir, ':p:h:h')
 endfunction
 
@@ -27,6 +27,9 @@ endfunction
 " {user_repo} should be in the format "username/repository".
 " Returns the full git URL for cloning.
 function! git#url(user_repo) abort
-  " return 'https://github.com/' . a:user_repo . '.git'
   return 'https://git::@github.com/' .. a:user_repo .. '.git'
+endfunction
+
+function! git#repo(user_repo) abort
+  return 'https://github.com/' .. a:user_repo .. '.git'
 endfunction

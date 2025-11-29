@@ -1,0 +1,3 @@
+[submodule "/Users/rdn/.vim/pack/opt/vim-lol"]
+	path = /Users/rdn/.vim/pack/opt/vim-lol
+	url = https://github.com/rdnajac/vim-lol.git

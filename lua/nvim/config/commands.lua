@@ -1,7 +1,3 @@
-if not Snacks then
-  print('no snacks?')
-  return
-end
 Snacks.picker.scriptnames = function()
   require('nvim.snacks.picker.scriptnames')
 end

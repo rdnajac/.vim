@@ -13,9 +13,9 @@ nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
 nnoremap yP <Cmd>let @*=printf('%s:%d', expand('%:p:~'), line('.'))<CR>
 cnoremap <M-y> <Cmd>let @*=getcmdline()<CR>
 
-" nnoremap <leader>cm :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
-" edit macro recorded in q
-nnoremap <leader>cM :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
+" 'change macro'
+nnoremap cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
+nnoremap cM :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
 
 function s:set_clipboard() abort
   if !has('nvim')
@@ -39,9 +39,7 @@ endfunction
 
 function! s:yankring() abort
   if v:event.operator ==# 'y'
-    for i in range(9, 1, -1)
-      call setreg(string(i), getreg(string(i - 1)))
-    endfor
+    call map(range(9, 1, -1), {_, i -> setreg(string(i), getreg(string(i-1)))})
   endif
 endfunction
 
@@ -55,3 +53,7 @@ augroup vimrc_yank
     autocmd UIEnter * call s:set_clipboard()
   endif
 augroup END
+
+1
+2
+3

@@ -77,7 +77,7 @@ local leader = {
     b = 'buffers',
     f = 'files',
     g = 'git_files',
-    p = 'projects',
+    P = 'projects',
     r = 'recent',
   },
   F = 'smart',
@@ -176,14 +176,20 @@ local function picker_pair(desc, key, dir_or_opts, picker_opts)
 end
 
 local picker_pairs = {
-  Dotfiles = { '.', vim.g['chezmoi#source_dir_path'], { hidden = true } },
+  Dotfiles = {
+    '.',
+    vim.g['chezmoi#source_dir_path'],
+    {
+      hidden = true,
+      exclude = { '.archive' },
+    },
+  },
   DataFiles = { 'd', vim.g.stdpath.data },
   GitHubRepos = { 'G', '~/GitHub/' },
-
   config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
   VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
   plugins = { 'p', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
-  Plugins = { 'P', vim.g.plug_home },
+  -- Plugins = { 'P', vim.g.plug_home },
   everything = { 'e', { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } } },
   Everything = { 'E', { dirs = vim.api.nvim_list_runtime_paths() } },
 }

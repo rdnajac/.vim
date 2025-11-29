@@ -29,7 +29,7 @@ end
 local M = {}
 
 ---@module 'snacks'
-M.mydefault = {
+M.mylayout = {
   preset = 'ivy',
   reverse = true,
   ---@type snacks.layout.Box[]

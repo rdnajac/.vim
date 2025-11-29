@@ -13,7 +13,7 @@ endif
 lua << EOF
 -- XXX: `dirvish#add_icon_fn()` doesn't support highlighting
 require('nvim.util.icons.fs').render()
-require('nvim.util.git.extmarks').setup()
+-- require('nvim.util.git.extmarks').setup()
 vim.lsp.buf_attach_client(0, nv.lsp.dirvish.client_id)
 -- BUG: https://github.com/justinmk/vim-dirvish/issues/257
 vim.opt_local.listchars = vim.opt.listchars:get()

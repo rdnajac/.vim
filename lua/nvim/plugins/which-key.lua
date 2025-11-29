@@ -1,7 +1,3 @@
--- TODO: function for fetching icon based on where the plugin was defined and whether it was vim or lua
--- TODO: do the same for descriptions of cmd mappings
--- TODO: find missing descriptions
--- TODO: add groups and icons
 local spec = {
   {
     mode = { 'n', 'v' },
@@ -11,31 +7,46 @@ local spec = {
     { 'g', group = 'goto' },
     { 'z', group = 'fold' },
   },
-  {
-    mode = { 'n' },
-    -- add groups
-    { 'co', group = 'comment below' },
-    { 'cO', group = 'comment above' },
-    { 'gr', group = 'LSP', icon = { icon = '' } },
-
-    { '<leader>', group = '<leader>', icon = { icon = '' } },
-    -- { '<leader>b', group = 'buffers' },
-    { '<leader>c', group = 'code' },
-    { '<leader>d', group = 'debug' },
-    { '<leader>dp', group = 'profiler' },
-    { '<leader>f', group = 'file/find' },
-    { '<leader>g', group = 'git' },
-    { '<leader>s', group = 'search' },
-    { '<leader>u', group = 'ui' },
-    { '<leader>x', group = 'quickfix' },
-    { '<localleader>l', group = 'vimtex' },
-    { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
-
-    --  add descriptions
-    { 'gx', desc = 'Open with system app' },
-  },
   { hidden = true, { 'g~' }, { 'g#' }, { 'g*' }, { 'gc' } },
 }
+
+local groups = {
+  { 'co', group = 'comment below' },
+  { 'cO', group = 'comment above' },
+  { 'gr', group = 'LSP', icon = { icon = '' } },
+  { '<leader>', group = '<leader>', icon = { icon = '' } },
+  { '<leader>b', group = 'buffers' },
+  { '<leader>c', group = 'code' },
+  { '<leader>d', group = 'debug' },
+  { '<leader>dp', group = 'profiler' },
+  { '<leader>f', group = 'file/find' },
+  { '<leader>g', group = 'git' },
+  { '<leader>s', group = 'search' },
+  { '<leader>u', group = 'ui' },
+  { '<leader>x', group = 'quickfix' },
+  { '<localleader>l', group = 'vimtex' },
+  { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
+  { 'Z', group = 'Z' },
+}
+
+local descriptions = {
+  cdc = [[stdpath('config')]],
+  cdC = [[stdpath('cache')]],
+  cdd = [[stdpath('data')]],
+  cds = [[stdpath('state')]],
+  gx = 'Open with system app',
+  ZQ = ':q!',
+  ZZ = ':x',
+}
+
+spec[#spec + 1] = {}
+
+for key, desc in pairs(descriptions) do
+  table.insert(spec[#spec], { key, desc = desc })
+  -- groups[#groups + 1] = { key, desc = desc }
+end
+
+vim.list_extend(spec, groups)
 
 -- from lazyvim
 local objects = {

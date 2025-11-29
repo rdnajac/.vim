@@ -105,7 +105,6 @@ else
   set smoothscroll
   set jumpoptions+=view
   set mousescroll=hor:0
-  set nocdhome
 
   " default on in vim
   set startofline
@@ -155,23 +154,17 @@ augroup END
 " }}}1
 " Section: commands {{{1
 for level in keys(g:vim#notify#levels)
-  execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(<q-args>)',
+  execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
 	\ toupper(strpart(level, 0, 1))..strpart(level, 1), level)
 endfor
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
-command! -bang Quit call quit#buffer(<q-bang>)
-
 command! Restart
       \ let sesh = fnameescape(stdpath('state') .. '/Session.vim') |
       \ execute printf('mksession! %s | confirm silent! noautocmd restart silent source %s', sesh, sesh)
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
-
-" command! -nargs=? -complete=dir Explore Dirvish <args>
-" command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
-" command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
 
 " }}}1
 " Section: keymaps {{{1
@@ -292,24 +285,20 @@ nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
 " `dc` dm dq dr `ds` du dx `dy` dz
 " `gb` `gc` `gl` `gs` `gy`
 " vm vo vq `vv` vz
-" yc `yd` ym `yo` `yp` yq `yr` `ys` `yu` yx yz
+" `yc` yd ym `yo` `yp` yq `yr` `ys` `yu` yx yz
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
+
+nnoremap <expr> cq change#quote()
 
 " delete/yank comment
 nmap dc dgc
 nmap yc ygc
 
-nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
-nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
-nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
-
-noremap cdP :<C-U>execute 'edit '.plug_home.'/'<CR>
-" <Bar>pwd<CR>
-
-nmap <expr> cq change#quote()
-
 nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
 xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
+
+" `fugitive`
+nnoremap gcd :Gcd<Bar>pwd<CR>
 
 " open file in a new window when or jump to line number when appropriate
 nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
@@ -318,9 +307,6 @@ nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
 " select last changed text (ie pasted text)
 " TODO: does gv already do this?
 nnoremap gV `[V`]
-
-" `fugitive`
-nnoremap gcd :Gcd<Bar>pwd<CR>
 
 nnoremap zq <Cmd>Format<CR>
 nnoremap ZX <Cmd>Zoxide<CR>
@@ -532,4 +518,6 @@ else
   Plug 'saxon1964/neovim-tips'
 endif
 call plug#end() " don't plug#end() if neovim...
+"packadd! vim-lol
+"call lol#cat()
 " vim: foldlevel=0 foldmethod=marker

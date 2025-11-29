@@ -38,10 +38,10 @@ local miniopts = function()
     },
     diff = {
       view = {
-        -- style = 'number'
-        signs = nv.icons.diff,
+        style = 'number',
+        -- signs = nv.icons.diff,
         -- signs = { add = '▎', change = '▎', delete = '' },
-        style = 'sign',
+        -- style = 'sign',
       },
     },
     extra = {},

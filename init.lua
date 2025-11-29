@@ -38,10 +38,12 @@ vim.o.pumheight = 10
 vim.o.cmdheight = 0
 vim.o.winborder = 'rounded'
 require('vim._extui').enable({})
+
 local ok, nv = pcall(require, 'nvim')
-if not ok then
+if not ok or not nv then
   require('vim._extui').enable({ enable = false })
 end
+
 -- stylua: ignore start
 _G.dd = function(...) Snacks.debug.inspect(...) end
 _G.bt = function(...) Snacks.debug.backtrace(...) end

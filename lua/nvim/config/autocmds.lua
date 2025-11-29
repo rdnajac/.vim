@@ -3,7 +3,7 @@ local aug = vim.api.nvim_create_augroup('nvimrc', {})
 
 --- @param event vim.api.keyset.events|vim.api.keyset.events[]
 --- @param pattern? string|string[]
---- @param cb? fun(ev:vim.api.create_autocmd.callback.args)
+--- @param cb? fun(ev:vim.api.keyset.create_autocmd.callback_args)
 local function audebug(event, pattern, cb)
   if type(pattern) == 'function' then
     cb = pattern
@@ -14,6 +14,9 @@ local function audebug(event, pattern, cb)
     pattern = pattern,
     callback = function(ev)
       dd(ev)
+      if cb and vim.is_callable(cb) then
+        cb(ev)
+      end
     end,
   })
 end

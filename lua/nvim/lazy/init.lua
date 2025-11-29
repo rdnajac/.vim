@@ -14,14 +14,8 @@ vim.api.nvim_create_autocmd(lazy_file_events, {
 
 local M = {}
 
--- local lazyspecs = vim.g.plugs
--- print(vim.g.plugs)
-
 M.spec = {
---  {
---    'folke/lazy.nvim',
-----    opts = {},
---  },
+  { 'folke/lazy.nvim' },
   { 'LazyVim/LazyVim' },
   {
     'folke/lazydev.nvim',

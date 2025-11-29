@@ -57,10 +57,9 @@ return {
 
   -- always send 'this' (the selection) in visual mode                    
   { '<leader>at', function() require('sidekick.cli').send({               msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
+  -- { '<leader>at', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
   { '<leader>af', function() require('sidekick.cli').send({               msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
-  { '<leader>at', function() require('sidekick.cli').send({               msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
-  { '<leader>af', function() require('sidekick.cli').send({               msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
-  -- { '<leader>av', function() require('sidekick.cli').send({msg='{selection}'}) end, mode = { 'x' }, desc = 'Send Visual Selection' },
+  -- { '<leader>af', function() require('sidekick.cli').send({name='copilot',msg='{this}'}) end, mode = { 'x' }, desc = 'Send This' },
 
   { '<C-.>',      function() require('sidekick.cli').toggle('copilot') end,   mode = { 'n', 't', 'i', 'x' }, desc = 'Sidekick Toggle' },
 },
