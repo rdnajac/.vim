@@ -1,3 +1,4 @@
+local nv = _G.nv or require('nvim.util')
 vim.bo.syntax = 'ON' -- Keep using legacy syntax for `vim-endwise`
 -- vim.wo.foldmethod = 'expr' -- foldexpression already set by ftplugin
 
@@ -16,17 +17,19 @@ nmap('yR',    require('nvim.util.fn.yankmod').require_func,   'print require + f
 --nmap('y<CR>', require('nvim.util.fn.yankmod').print,   'print require + function')
 -- stylua: ignore end
 
-Snacks.util.on_module('mini.splitjoin', function()
-  local gen_hook = MiniSplitjoin.gen_hook
-  local curly = { brackets = { '%b{}' } }
-  local add_comma_curly = gen_hook.add_trailing_separator(curly)
-  local del_comma_curly = gen_hook.del_trailing_separator(curly)
-  local pad_curly = gen_hook.pad_brackets(curly)
-  vim.b.minisplitjoin_config = {
-    split = { hooks_post = { add_comma_curly } },
-    join = { hooks_post = { del_comma_curly, pad_curly } },
-  }
-end)
+if Snacks then
+  Snacks.util.on_module('mini.splitjoin', function()
+    local gen_hook = MiniSplitjoin.gen_hook
+    local curly = { brackets = { '%b{}' } }
+    local add_comma_curly = gen_hook.add_trailing_separator(curly)
+    local del_comma_curly = gen_hook.del_trailing_separator(curly)
+    local pad_curly = gen_hook.pad_brackets(curly)
+    vim.b.minisplitjoin_config = {
+      split = { hooks_post = { add_comma_curly } },
+      join = { hooks_post = { del_comma_curly, pad_curly } },
+    }
+  end)
+end
 
 local aug = vim.api.nvim_create_augroup('lua', {})
 

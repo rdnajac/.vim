@@ -26,25 +26,6 @@ if vim.env.PROF then
 end
 
 --- loads vim settings and exports vim.g.plugins
-vim.cmd([[
-  runtime vimrc
-  let s:me = resolve(expand('<sfile>:p'))
-  " echueuuueeeom s:me
-]])
+vim.cmd.runtime('vimrc')
 
-vim.o.pumblend = 0
-vim.o.pumborder = 'rounded'
-vim.o.pumheight = 10
-vim.o.cmdheight = 0
-vim.o.winborder = 'rounded'
-require('vim._extui').enable({})
-
-local ok, nv = pcall(require, 'nvim')
-if not ok or not nv then
-  require('vim._extui').enable({ enable = false })
-end
-
--- stylua: ignore start
-_G.dd = function(...) Snacks.debug.inspect(...) end
-_G.bt = function(...) Snacks.debug.backtrace(...) end
-_G.p  = function(...) Snacks.debug.profile(...) end
+require('nvim')

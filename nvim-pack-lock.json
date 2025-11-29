@@ -8,6 +8,10 @@
       "rev": "b1de52b8f667341a4388eb7752c4f32ea704fada",
       "src": "https://git::@github.com/R-nvim/R.nvim.git"
     },
+    "ale": {
+      "rev": "ca1da76d5e91e42f676654905c0c7b6d074b8068",
+      "src": "https://git::@github.com/dense-analysis/ale.git"
+    },
     "blink.cmp": {
       "rev": "f13226770b4947eb7e66befbeb53c3db39f13e25",
       "src": "https://git::@github.com/Saghen/blink.cmp.git"
@@ -126,7 +130,7 @@
       "src": "https://git::@github.com/tpope/vim-scriptease.git"
     },
     "vim-ug": {
-      "rev": "8905d3c85776e9f983a5f5b7368a78dc2fb58586",
+      "rev": "460736d4073dacccd13eb8eac1cf7a994f521aaf",
       "src": "https://git::@github.com/justinmk/vim-ug.git"
     },
     "vim-unimpaired": {

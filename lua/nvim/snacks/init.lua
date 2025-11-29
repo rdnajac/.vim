@@ -1,6 +1,5 @@
-return {
+local M = {
   'folke/snacks.nvim',
-  ---@module "snacks"
   ---@type snacks.Config
   opts = {
     bigfile = {
@@ -67,4 +66,11 @@ return {
     return require('nvim.snacks.keys')
   end,
 }
+
+-- stylua: ignore start
+_G.dd = function(...) Snacks.debug.inspect(...) end
+_G.bt = function(...) Snacks.debug.backtrace(...) end
+_G.p  = function(...) Snacks.debug.profile(...) end
+-- stylua: ignore end
+return M
 -- vim: fdl=2

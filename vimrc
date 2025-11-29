@@ -481,6 +481,7 @@ packadd! cfilter
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
+Plug 'dense-analysis/ale'
 Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
@@ -497,7 +498,6 @@ Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-unimpaired'
 if !has('nvim')
   Plug 'andymass/vim-matchup'
-  Plug 'dense-analysis/ale'
   Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'

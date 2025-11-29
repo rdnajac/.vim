@@ -18,7 +18,6 @@ local init = function()
       :each(nv.import)
   end
 
-vim.schedule(init)
--- vim.api.nvim_create_autocmd('VimEnter', { callback = init })
+vim.api.nvim_create_autocmd('VimEnter', { callback = init })
 
 return {}
