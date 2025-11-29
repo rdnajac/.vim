@@ -1,0 +1,19 @@
+name: action
+run-name: ${{ github.actor }} action
+on: [push]
+jobs:
+  act:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v5
+      - run: echo "💡 ${{ github.repository }} has been cloned to the runner on a ${{ runner.os }} server ."
+      - name: rtp
+        env:
+          HOME: ${{ github.workspace }}
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y vim
+          # vim -es --not-a-term -u NONE -i NONE -c "echo &rtp" -c "qa"
+          vim -es --not-a-term -u NONE -i NONE -c 'redir => g:out | echo &rtp | redir END | qall!' -c 'call writefile(split(g:out, "\n"), "/dev/stdout")'
+      - run: echo "🍏 This job's status is ${{ job.status }}."

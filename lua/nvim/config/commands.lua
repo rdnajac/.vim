@@ -67,7 +67,7 @@ vim
 vim.api.nvim_create_user_command('Hardcopy', function()
   local file = vim.api.nvim_buf_get_name(0)
   -- local commandstring = ([[vim -Nu NONE -c "e %s | hardcopy | qa!"]]):format(file)
-  local commandstring = ([[vim -Nu NONE -es -c "e %s" -c "hardcopy" -c "qa!"]]):format(file)
+  local commandstring = ([[vim --not-a-term -Nu NONE -es -c "e %s" -c "hardcopy" -c "qa!"]]):format(file)
   local cmd = vim.split(commandstring, ' ')
 
   vim.system(cmd)

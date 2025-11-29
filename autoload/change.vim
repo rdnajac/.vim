@@ -18,6 +18,5 @@ function! change#quote() abort
       endif
     endfor
   endfor
-
   return ''
 endfunction
