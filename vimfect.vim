@@ -8,7 +8,7 @@ let s:vimfect_opt = s:joinpath([s:gitroot, 'pack', 'vimfect', 'opt'])
 let s:vimfect_start = s:joinpath([s:gitroot, 'pack', 'vimfect', 'start'])
 
 function s:add_submodule(user_repo)
-  execute printf('Git submodule add %s %s', git#repo(a:user_repo), s:joinpath([s:optdir, fnamemodify(a:user_repo, ':t')]))
+  execute printf('Git submodule add %s %s', git#repo(a:user_repo), s:joinpath([s:vimfect_opt, fnamemodify(a:user_repo, ':t')]))
 endfunction
 
 " call s:add_submodule('rdnajac/vim-lol')

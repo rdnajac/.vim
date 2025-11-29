@@ -64,7 +64,6 @@ set viewoptions-=options      " keep mkview minimal
 set cursorline
 set termguicolors
 let &laststatus = has('nvim') ? 3 : 2
-set statusline=%!vimline#statusline#()
 
 " statuscolumn
 " set foldcolumn=1
