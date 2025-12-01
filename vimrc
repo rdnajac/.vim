@@ -161,7 +161,7 @@ command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
 command! Restart
       \ let sesh = fnameescape(stdpath('state') .. '/Session.vim') |
-      \ execute printf('mksession! %s | confirm silent! noautocmd restart silent source %s', sesh, sesh)
+      \ execute printf('mksession! %s | confirm restart silent source %s', sesh, sesh)
 
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
@@ -514,6 +514,8 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
 else
+  Plug 'folke/tokyonight.nvim'
+  Plug 'folke/snacks.nvim'
   Plug 'saxon1964/neovim-tips'
 endif
 call plug#end() " don't plug#end() if neovim...

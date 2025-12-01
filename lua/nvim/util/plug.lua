@@ -196,12 +196,15 @@ end, {
   end,
 })
 
+-- local function loadfn(fn) end
+
 return setmetatable({
   get_keys = function()
     return vim.tbl_map(function(p)
       return vim.is_callable(p) and p() or p
     end, vim.tbl_values(keys))
   end,
+  -- loadfn = loadfn,
   unloaded = function()
     return vim.tbl_map(
       function(p)

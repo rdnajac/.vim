@@ -8,12 +8,11 @@ return {
     -- proc = true, -- show proc debug info
     -- extmarks = true, -- show extmarks errors
   },
-  -- layout = { preset = 'mydefault' },
   layouts = require('nvim.snacks.picker.layouts'),
   sources = {
     autocmds = require('nvim.snacks.picker.nvimcfg'),
     buffers = {
-      layout = 'mydefault',
+      layout = 'mylayout',
       input = {
         keys = {
           ['<c-x>'] = { 'bufdelete', mode = { 'n', 'i' } },

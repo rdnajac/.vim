@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# -e Ex mode
+# -s Silent mode
+# -u {vimrc}
+# -i {viminfo}
+vim -es -u vimrc -i NONE -c "PlugInstall" -c "qa"

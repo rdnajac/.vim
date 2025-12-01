@@ -38,6 +38,7 @@ endfunction
 
 if has('nvim')
   function! plug#end()
+    " lua dd(vim.g.plugs)
     " lua vim.g.plugs = vim.tbl_map(function(plug) return plug.uri end, vim.tbl_values(vim.g.plugs or {}))
   endfunction
 
