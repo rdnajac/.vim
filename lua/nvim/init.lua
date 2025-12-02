@@ -11,8 +11,8 @@ nv.import = function(modname)
 end
 
 local submodules = {
-  'nvim.tokyonight',
-  'nvim.snacks',
+  -- 'nvim.tokyonight',
+  -- 'nvim.snacks',
   'nvim.blink',
   'nvim.lazy',
   'nvim.lsp',
@@ -22,6 +22,8 @@ local submodules = {
   'nvim.config',
 }
 
+local specdict = {}
+
 -- TODO: specs should be a dictionary of [1] to spec
 nv.specs = vim
   .iter(submodules)
@@ -30,8 +32,10 @@ nv.specs = vim
     return (m.spec and m.spec) or (vim.islist(m) and m) or { m }
   end)
   :flatten()
-  :map(function(plugin)
-    return nv.plug(plugin):tospec()
+  :map(function(p)
+    local plugin = nv.plug(p)
+    specdict[plugin[1]] = plugin
+    return plugin:tospec()
   end)
   :totable()
 

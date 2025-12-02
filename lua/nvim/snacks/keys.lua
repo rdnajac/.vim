@@ -6,7 +6,7 @@ vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', {
 -- stylua: ignore end
 
 local all = { hidden = true, nofile = true } -- opts for buffers (all)
-local notifier = false -- whether to use the notifier window
+local notifier = true -- whether to use the notifier window
 
 -- stylua: ignore
 local M = {

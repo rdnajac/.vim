@@ -45,8 +45,8 @@ M.config = function()
   ---@type RConfigUserOpts
   local opts = {
     R_args = { '--quiet', '--no-save' },
-    user_maps_only = true,
-    quarto_chunk_hl = { highlight = false },
+    -- user_maps_only = true,
+    -- quarto_chunk_hl = { highlight = false },
     Rout_more_colors = true,
     hook = {
       on_filetype = on_filetype,

@@ -14,17 +14,12 @@ vim.g.transparent = true
 ---@param colors ColorScheme
 ---@return tokyonight.Highlights
 local myhighlights = function(colors)
-  -- stylua: ignore
   return {
-    Normal        = vim.g.transparent and { bg = colors.black } or nil,
-    Cmdline       = { bg = colors.black },
-    Statement     = { fg = colors.red },
-    Special       = { fg = colors.red, bold = true },
-    SpellBad      = { bg = colors.red },
-    WinBar        = { bg = mycolors.lualine },
-    WinBorder     = { bg = mycolors.lualine },
-    SpecialWindow = { bg = mycolors.eigengrau },
-    SignColumn    = { fg = mycolors.lualine, bg = mycolors.tokyonight },
+    Normal = vim.g.transparent ~= true and { bg = colors.black } or nil,
+    -- ['@keyword'] = { fg = colors.red },
+    Special = { fg = colors.red, bold = true },
+    SpellBad = { bg = colors.red },
+    FoldColumn = { fg = mycolors.lualine, bg = mycolors.black },
   }
 end
 
@@ -42,10 +37,14 @@ local opts = function()
     },
     dim_inactive = true,
     on_colors = function(colors)
-      vim.tbl_extend('force', colors, mycolors)
+      for k, v in pairs(mycolors) do
+        colors[k] = v
+      end
     end,
     on_highlights = function(hl, colors)
-      vim.tbl_extend('force', hl, myhighlights(colors))
+      for k, v in pairs(myhighlights(colors)) do
+        hl[k] = v
+      end
     end,
     plugins = {
       all = false,
@@ -90,12 +89,13 @@ local opts = function()
 end
 
 M.config = function()
-  require('tokyonight').setup(opts())
-  ---
-  --- @type ColorScheme, tokyonight.Highlights, tokyonight.Config
-  M.colors, M.groups, M.opts = require('tokyonight').load()
-
-  -- `load()` won't trigger ColorScheme autocommand, so do it here
+  local opts = opts()
+  require('tokyonight').setup(opts)
+  -- ---
+  -- --- @type ColorScheme, tokyonight.Highlights, tokyonight.Config
+  M.colors, M.groups, M.opts = require('tokyonight').load(opts)
+  --
+  -- -- `load()` won't trigger ColorScheme autocommand, so do it here
   vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 

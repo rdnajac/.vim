@@ -1,3 +1,7 @@
+local M = {
+  'MeanderingProgramMer/render-markdown.nvim',
+  enabled = false,
+}
 --- @module "render-markdown"
 --- @type render.md.UserConfig
 vim.g.render_markdown_config = {
@@ -41,18 +45,4 @@ vim.g.render_markdown_config = {
   },
 }
 
-return {
-  { 'MeanderingProgramMer/render-markdown.nvim' },
-  -- toggles = {
-  --   {
-  --     '<leader>um',
-  --     -- name = 'Render Markdown',
-  --     get = function()
-  --       return require('render-markdown.state').enabled
-  --     end,
-  --     set = function(state)
-  --       require('render-markdown').set(state)
-  --     end,
-  --   },
-  -- },
-}
+return M

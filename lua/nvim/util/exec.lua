@@ -1,4 +1,6 @@
-local M = vim.defaulttable()
+local M = {}
+M.cmd = {}
+M.abr = {}
 local index = vim.fn.expand('$VIMRUNTIME/doc/index.txt')
 -- local options = vim.fn.expand('$VIMRUNTIME/doc/options.txt')
 
@@ -15,7 +17,7 @@ local function _exec(cmd)
   return vim.api.nvim_exec2(cmd, { output = true }).output
 end
 
-local function exec(cmd)
+M.exec = function(cmd)
   return vim.split(_exec(cmd), '\n', { trimempty = true })
 end
 
@@ -26,7 +28,7 @@ end
 
 ---@type highlightClass[]
 M.highlight = vim
-  .iter(exec('highlight'))
+  .iter(M.exec('highlight'))
   :map(function(line)
     local group, def = line:match('^(%S+)%s*xxx%s(.*)$')
     if group and def then
@@ -48,16 +50,8 @@ M.highlight = vim
   end)
   :totable()
 
-M.scriptnames = function()
-  return vim
-    .iter(exec('scriptnames'))
-    :map(function(line)
-      local idx, path = line:match('^%s*(%d+):%s+(.*)$')
-      return { idx = tonumber(idx), file = path }
-    end)
-    :totable()
-end
-
 return setmetatable(M, {
-  __call = exec,
+  __call = function(...)
+    return M.exec(...)
+  end,
 })

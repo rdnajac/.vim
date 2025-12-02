@@ -14,6 +14,6 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y vim
-          # vim -es --not-a-term -u NONE -i NONE -c "echo &rtp" -c "qa"
-          vim -es --not-a-term -u NONE -i NONE -c 'redir => g:out | echo &rtp | redir END | qall!' -c 'call writefile(split(g:out, "\n"), "/dev/stdout")'
+          echo 'starting vim...'
+          vim -es --not-a-term -u NONE -i NONE -c 'redir => g:out | echo &rtp | redir END | call writefile(split(g:out, "\n"), "/dev/stdout") | qall!'
       - run: echo "🍏 This job's status is ${{ job.status }}."

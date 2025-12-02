@@ -14,6 +14,30 @@ vim.api.nvim_create_autocmd(lazy_file_events, {
 
 local M = {}
 
+M.init = function()
+  local lazypath = vim.fs.joinpath(vim.g.plug_home, 'lazy.nvim')
+  vim.opt.rtp:prepend(lazypath)
+
+  require('lazy').setup(require('nvim.lazy.spec'), {
+    dev = {
+      path = vim.g.plug_home,
+      fallback = true,
+    },
+    performance = {
+      reset_packpath = false,
+      rtp = { reset = false },
+    },
+    profiling = {
+      loader = false,
+      require = false,
+    },
+    pkg = { enabled = false },
+    rocks = { enabled = false },
+    -- install = { colorscheme = { 'tokyonight' } },
+    change_detection = { enabled = false, notify = false },
+  })
+end
+
 M.spec = {
   { 'folke/lazy.nvim' },
   { 'LazyVim/LazyVim' },

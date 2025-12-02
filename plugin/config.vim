@@ -70,14 +70,20 @@ else
 	\ ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
 endif
 
-nnoremap <leader>ai <Cmd>ALEInfo<CR>
-nnoremap <leader>af <Cmd>ALEFix<CR>
+nnoremap <leader>aD <Cmd>ALEGoToDefinition<CR>
+nnoremap <leader>aF <Cmd>ALEFix<CR>
+nnoremap <leader>aI <Cmd>ALEInfo<CR>
 nnoremap <leader>al <Cmd>ALELint<CR>
 nnoremap <leader>an <Cmd>ALENext<CR>
 nnoremap <leader>ap <Cmd>ALEPrevious<CR>
 nnoremap <leader>aq <Cmd>ALEDetail<CR>
-nnoremap <leader>ad <Cmd>ALEGoToDefinition<CR>
 nnoremap <leader>ar <Cmd>ALEFindReferences<CR>
+
+
+augroup myalesettings
+  au BufRead,BufNewFile */.github/*/*.y{,a}ml let b:ale_linters = {'yaml': ['actionlint']}
+augroup END
+
 " }}}
 
 " vim: fdm=marker fdl=0

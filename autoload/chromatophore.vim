@@ -72,7 +72,7 @@ function! chromatophore#metachrosis() abort
   for l:suffix in ['', '_b', '_c', '_z']
     execute printf('highlight Chromatophore%s guifg=%s', l:suffix, l:color)
   endfor
-  execute 'highlight Chromatophore_a guibg='..l:color
-  execute 'highlight lualine_transitional_lualine_a_normal_to_lualine_b_normal guifg='..l:color
+  execute 'highlight Chromatophore_a guibg=' . l:color
+  execute 'highlight lualine_transitional_lualine_a_normal_to_lualine_b_normal guifg=' . l:color
   lua if  package.loaded['lualine'] then require('lualine').refresh() end
 endfunction

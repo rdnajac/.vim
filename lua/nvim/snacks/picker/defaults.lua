@@ -99,7 +99,7 @@ local function title(opts)
       ' '
     )
   end
-  return ret
+  return ret .. '\nnewline'
 end
 
 ---@type snacks.picker.Config
@@ -108,7 +108,6 @@ return {
   ---@param opts snacks.picker.files.Config
   config = function(opts)
     opts.cwd = opts.cwd or Snacks.git.get_root() or vim.fn.getcwd()
-    opts.layout = { preset = 'mylayout' }
     -- hide the preview window if the screen is too narrow
     if vim.o.columns < 100 or opts.finder == 'grep' then
       opts.layout.auto_hide = { 'preview' }

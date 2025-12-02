@@ -110,13 +110,13 @@ opts.completion.menu = {
 ---@type table<string, blink.cmp.SourceProviderConfig>
 local default_providers = {
   buffer = {
-    opts = {
-      get_bufnrs = function()
-        return vim.tbl_filter(function(bufnr)
-          return vim.bo[bufnr].buftype == ''
-        end, vim.api.nvim_list_bufs())
-      end,
-    },
+    -- opts = {
+    --   get_bufnrs = function()
+    --     return vim.tbl_filter(function(bufnr)
+    --       return vim.bo[bufnr].buftype == ''
+    --     end, vim.api.nvim_list_bufs())
+    --   end,
+    -- },
   },
   lsp = {
     score_offset = -1,

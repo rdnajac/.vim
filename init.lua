@@ -18,14 +18,11 @@ vim.g.loaded_netrw = false
 
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_home, 'snacks.nvim'))
-  ---@type snacks.profiler.Config
-  local opts = {
+  require('snacks.profiler').startup({
     -- startup = { event = 'UIEnter' },
-  }
-  require('snacks.profiler').startup(opts)
+  })
 end
 
---- loads vim settings and exports vim.g.plugins
 vim.cmd.runtime('vimrc')
 
 local vim_plugins = vim.islist(vim.g.plugs) and vim.g.plugs -- TODO: check if they are in url form

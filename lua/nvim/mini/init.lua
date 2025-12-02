@@ -112,7 +112,7 @@ local miniopts = function()
       },
     },
     splitjoin = {
-      -- TODO: remove commas when joining
+      -- TODO: respect shiftwidth
       mappings = {
         toggle = 'g~',
         split = 'gS',

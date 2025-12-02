@@ -4,7 +4,7 @@ local NIGHTLY_API = 'https://api.github.com/repos/neovim/neovim/releases/tags/ni
 local ASSET = 'nvim-macos-arm64.tar.gz'
 local TAR_BASE = 'https://github.com/neovim/neovim/releases/download/'
 local DATA_HOME = vim.env.XDG_DATA_HOME or vim.fs.joinpath(vim.env.HOME, '.local', 'share')
-local INSTALL_DIR = vim.fs.joinpath(DATA_HOME, 'nvim')
+local INSTALL_DIR = vim.fs.joinpath(DATA_HOME, '.neovim')
 local LOCALBIN = vim.fs.joinpath(vim.env.HOME, '.local', 'bin')
 local TARPATH = vim.fs.joinpath(vim.fn.stdpath('run'), ASSET)
 

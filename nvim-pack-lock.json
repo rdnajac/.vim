@@ -5,7 +5,7 @@
       "src": "https://git::@github.com/LazyVim/LazyVim.git"
     },
     "R.nvim": {
-      "rev": "e94fd0d19771a599c15f7f66f1f9af14f1b69722",
+      "rev": "eff6229d3c8aee21fec3c42415e679a580872e53",
       "src": "https://git::@github.com/R-nvim/R.nvim.git"
     },
     "ale": {
@@ -57,7 +57,7 @@
       "src": "https://git::@github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "00c906abb9550e72bc0c640545b5499b9525bb40",
+      "rev": "c5623d3486c1cda5f73e28a3a4abb454f708c48c",
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },
@@ -66,7 +66,7 @@
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "6e0e8902dac70fecbdd8ce557d142062a621ec38",
+      "rev": "b2b135347e299ffbf7f4123fb7811899b0c9f4b8",
       "src": "https://git::@github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {

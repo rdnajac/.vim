@@ -10,7 +10,7 @@ setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
 set wildignore+=.DS_Store
 set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
-
+set number
 set switchbuf+=vsplit
 
 " general {{{2

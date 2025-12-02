@@ -42,7 +42,7 @@ local descriptions = {
 spec[#spec + 1] = {}
 
 for key, desc in pairs(descriptions) do
-  table.insert(spec[#spec], { key, desc = desc })
+  table.insert(spec, { key, desc = desc })
   -- groups[#groups + 1] = { key, desc = desc }
 end
 
