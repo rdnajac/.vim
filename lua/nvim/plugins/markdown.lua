@@ -1,6 +1,6 @@
 local M = {
   'MeanderingProgramMer/render-markdown.nvim',
-  enabled = false,
+  enabled = true,
 }
 --- @module "render-markdown"
 --- @type render.md.UserConfig

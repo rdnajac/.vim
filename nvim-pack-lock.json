@@ -53,11 +53,11 @@
       "src": "https://git::@github.com/saxon1964/neovim-tips.git"
     },
     "nvim-lspconfig": {
-      "rev": "effe4bf2e1afb881ea67291c648b68dd3dfc927a",
+      "rev": "7757d54716b26280b1b1785d89364a016a29c445",
       "src": "https://git::@github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "c5623d3486c1cda5f73e28a3a4abb454f708c48c",
+      "rev": "857fb97bb65c8a71b0c4a568cfcfef95679854d5",
       "src": "https://git::@github.com/nvim-treesitter/nvim-treesitter.git",
       "version": "'main'"
     },

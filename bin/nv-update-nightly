@@ -1,10 +1,26 @@
 #!/usr/bin/env -S nvim -l
 
+-- detect OS and ARCH first
+local system = setmetatable({
+  os_map = { Darwin = 'macos', Linux = 'linux' },
+  arch_map = { x86_64 = 'x86_64', arm64 = 'arm64', aarch64 = 'arm64' },
+}, {
+  __index = function(t, k)
+    if k == 'os' or k == 'arch' then
+      local cmd = k == 'os' and 'uname -s' or 'uname -m'
+      local uname = vim.fn.systemlist(cmd)[1] or ''
+      local map = k == 'os' and t.os_map or t.arch_map
+      local val = map[uname] or error(('Unsupported %s: %s'):format(k:upper(), uname))
+      rawset(t, k, val)
+      return val
+    end
+  end,
+})
+
 local NIGHTLY_API = 'https://api.github.com/repos/neovim/neovim/releases/tags/nightly'
-local ASSET = 'nvim-macos-arm64.tar.gz'
 local TAR_BASE = 'https://github.com/neovim/neovim/releases/download/'
-local DATA_HOME = vim.env.XDG_DATA_HOME or vim.fs.joinpath(vim.env.HOME, '.local', 'share')
-local INSTALL_DIR = vim.fs.joinpath(DATA_HOME, '.neovim')
+local ASSET = ('nvim-%s-%s.tar.gz'):format(system.os, system.arch)
+local INSTALL_DIR = vim.fs.joinpath(vim.env.HOME, '.' .. ASSET:gsub('%.tar%.gz$', ''))
 local LOCALBIN = vim.fs.joinpath(vim.env.HOME, '.local', 'bin')
 local TARPATH = vim.fs.joinpath(vim.fn.stdpath('run'), ASSET)
 
@@ -113,3 +129,5 @@ do
   local new_version = out:match('^NVIM v([^\n]+)') or 'unknown'
   print(('✅ Neovim upgraded from %s → %s'):format(old_version, new_version))
 end
+
+-- vim: ft=lua

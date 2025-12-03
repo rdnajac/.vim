@@ -2,23 +2,41 @@
 
 My (n)vim configuration.
 
-## 
-
 ## TODO
 
 - [ ] Who is VIMDIR? VIMHOME?
-- [ ] snacks profiler or todo comments
-- [ ] vim.pack to install/update neovim
 - [ ] <M-.> does what?
-- [ ] filter g0 like aerial for functions or M. in lua
 - [ ] `edit = '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})'`
 
-remote ui stuff
+## vim pipes
 
-- [ ] start an instance of nvim in the background without a ui attached
-- [ ] on startup, attach to ui, then try out remote plugins and eval expr
-- [ ] neovim as an http server attach to instance view the buffers (logfiles)
+Taken from an infographic attributed to
+[Barry Arthur](http://of-vim-and-vigor.blogspot.com)
 
+| cmd                  | dot-repeatable? | undoable? | example                                                                |
+| -------------------- | --------------- | --------- | ---------------------------------------------------------------------- |
+| read (`:help :r!`)   | no              | yes       | `:0r !cmd` inserts the output of cmd onto the first line of the buffer |
+| write (`:help :w_c`) | no              | no        | `:w !cmd` is not the same as `:w!cmd`, note the space                  |
+| filter (`:help :!`)  | yes\*           | yes\*     | `!!cmd` is not the same as `:.                                         |
+
+> \* `!!` form is repeatable; motion forms are repeatable and undoable
+
+Notes:
+
+- use `:silent` to suppress `Press <Enter>` prompts
+- use `:redraw` to fix the screen if something was printed with `:silent`
+- pay attention to how `|` behaves in the `!` command (shell pipe)
+- use <C-j> to print `^@` to use as newlines in `!`
+
+### more examples
+
+- `:r !date^@-join`
+- `:r !uuencode file file`
+- `:w !sudo tee %`
+- `:w !sudo dd of=%`
+- `:%! xxd [-r]`
+- `:%! column -t`
+- `:%! sort`
 
 ## netrw
 
@@ -97,6 +115,13 @@ To clean up:
 rm -rf ~/.local/state/nvim/{*.log,sessions,swap,undo}
 ```
 
+## Snacks
+
+Snacks.image can also render math, like the formula for null hypothesis testing:
+
+$$
+Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
+$$
 
 ## Resources and references
 
@@ -109,24 +134,9 @@ rm -rf ~/.local/state/nvim/{*.log,sessions,swap,undo}
 - [No Plugins](https://github.com/changemewtf/no_plugins)
 
 - [Neovim](https://neovim.io/)
-- [Neovim config without plugins](https://boltless.me/posts/neovim-config-without-plugins-2025/)
 - [`lazy.nvim` plugin manager](https://lazy.folke.io/)
 - [LazyVim](https://www.lazyvim.org)
 - [`lsp-zero`](https://lsp-zero.netlify.app/docs/)
-
-### Pipes
-
-This image should be displayed if Snacks.image is working correctly.
-
-![Vim Pipes](./assets/vim-pipes.png)
-
-Snacks.image can also render math, like the formula for null hypothesis testing:
-
-$$
-Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
-$$
-
-
 ---
 
 > Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-
