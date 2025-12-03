@@ -1,31 +1,47 @@
 #!/bin/sh
 
-# Directories
-INSTALL_DIR="$HOME/.neovim"
-LOCALBIN="$HOME/.local/bin"
-ASSET="nvim-macos-arm64.tar.gz"
+die() {
+	printf "%s\n" "$1"
+	exit "${2:-1}"
+}
+
+# Detect OS
+case "$(uname -s)" in
+Darwin) OS_NAME="macos" ;;
+Linux) OS_NAME="linux" ;;
+*) die "Unsupported OS: $(uname -s)" ;;
+esac
+
+# Detect architecture
+case "$(uname -m)" in
+x86_64) ARCH_NAME="x86_64" ;;
+arm64 | aarch64) ARCH_NAME="arm64" ;;
+*) die "Unsupported architecture: $(uname -m)" ;;
+esac
+
+# Determine asset
+ASSET="nvim-${OS_NAME}-${ARCH_NAME}.tar.gz"
 TARPATH="/tmp/$ASSET"
 TAR_BASE="https://github.com/neovim/neovim/releases/download/nightly"
 
-# Create directories
+# Install directories
+INSTALL_DIR="$HOME/.${ASSET%.tar.gz}"
+LOCALBIN="$HOME/.local/bin"
+
+# Prepare directories
+rm -rf "$INSTALL_DIR"
 mkdir -p "$INSTALL_DIR" "$LOCALBIN"
 
-# Download nightly
-echo "→ Downloading Neovim nightly..."
-curl -L "$TAR_BASE/$ASSET" -o "$TARPATH" || { echo "Download failed"; exit 1; }
+printf "→ Downloading Neovim nightly (%s)...\n" "$ASSET"
+curl -L "$TAR_BASE/$ASSET" -o "$TARPATH" || die "Download failed"
 
-# Extract
-echo "→ Installing..."
-rm -rf "$INSTALL_DIR/bin" "$INSTALL_DIR/lib" "$INSTALL_DIR/share"
-tar -xzf "$TARPATH" -C "$INSTALL_DIR" --strip-components=1
+printf "→ Installing Neovim...\n"
+tar -xzf "$TARPATH" -C "$INSTALL_DIR" --strip-components=1 || die "Extraction failed"
 
-# Symlink
-ln -sf "$INSTALL_DIR/bin/nvim" "$LOCALBIN/nvim"
+ln -sf "$INSTALL_DIR/bin/nvim" "$LOCALBIN/nvim" || die "Failed to link nvim to $LOCALBIN"
 
-# Clean up
 rm -f "$TARPATH"
 
-# Verify
-"$LOCALBIN/nvim" --version
+"$LOCALBIN/nvim" --version || die "Neovim failed to run"
 
-echo "✅ Neovim installed to $LOCALBIN/nvim"
+printf "neovim nightly installed!\n"

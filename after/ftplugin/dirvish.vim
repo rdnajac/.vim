@@ -1,3 +1,5 @@
+setlocal nonumber
+
 nnoremap <buffer> <Left> <Plug>(dirvish_up)
 nnoremap <buffer> <Right> <Cmd>call dirvish#open("edit", 0)<CR>
 nnoremap <buffer> h <Plug>(dirvish_up)
