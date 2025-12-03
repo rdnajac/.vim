@@ -474,6 +474,7 @@ if has('nvim')
 else
   packadd! editorconfig
   packadd! hlyank
+  packadd vim-jetpack
 endif
 packadd! cfilter
 
