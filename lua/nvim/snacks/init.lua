@@ -23,7 +23,7 @@ local M = {
       end,
     },
     dashboard = require('nvim.snacks.dashboard'),
-    explorer = { replace_netrw = false },
+    explorer = { replace_netrw = true },
     image = { enabled = true },
     indent = { indent = { only_current = true, only_scope = true } },
     input = { enabled = true },
@@ -69,6 +69,10 @@ local M = {
       require('nvim.snacks.picker.scriptnames')
     end
 
+    vim.cmd([[
+      command! LazyGit :lua Snacks.lazygit()
+    ]])
+
     -- assumes input is [a-z],_
     local function to_camel_case(str)
       return str
@@ -78,21 +82,6 @@ local M = {
         :gsub('^%l', string.upper)
     end
 
-    -- local pickers
-    --
-    -- Snacks.picker.pickers({
-    --   enter = false,
-    --   live = false,
-    --   show_empty = true,
-    --   on_show = function(p)
-    --     return p:close()
-    --   end,
-    --   on_close = function(p)
-    --     pickers = vim.tbl_map(function(m)
-    --       return m.text
-    --     end, p:items())
-    --   end,
-    -- })
     local cmds = {}
 
     vim

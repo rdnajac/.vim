@@ -149,4 +149,16 @@ M.notify = function()
   Snacks.notify.info(msg, { title = 'Startup Time', ft = 'markdown' })
 end
 
+M.dashboard_startuptime = function()
+  local ms = _G.t['VimEnter']
+  local icon = '⚡ '
+  return {
+    align = 'center',
+    text = {
+      { icon .. 'Neovim entered in ', hl = 'footer' },
+      { ms .. 'ms', hl = 'special' },
+    },
+  }
+end
+
 return M

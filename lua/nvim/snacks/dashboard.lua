@@ -1,60 +1,29 @@
-local dijkstra =
-  [[The computing scientist's main challenge is not to get confused by the complexities of his own making.]]
-
+local dijkstra = [[
+"The computing scientist's main challenge is not to get
+confused by the complexities of his own making."
+]]
 local version = 'NVIM ' .. tostring(vim.version())
+local cmd = ([[{ cowsay %s; printf "\n\t%s\n"; } | lolcat ]]):format(dijkstra, version)
+
 ---@module "snacks"
 ---@class snacks.dashboard.Config
 return {
+  preset = {
+    keys = {
+      { icon = ' ', key = 'f', title = 'Files', action = ':Recent' },
+      { section = 'recent_files', indent = 2 },
+      -- stylua: ignore start
+      { icon = ' ', key = 'n', action = ':ene | star', desc = 'New File' },
+      { icon = ' ', key = '-', action = ':Explorer',   desc = 'Open Directory' },
+      { icon = ' ', key = 'u', action = ':PlugUpdate', desc = 'Update Plugins' },
+      { icon = ' ', key = 'm', action = ':Mason',      desc = 'Mason' },
+      { icon = '󰒲 ', key = 'g', action = ':LazyGit',    desc = 'LazyGit' },
+      -- stylua: ignore end
+    },
+  },
   sections = {
     { section = 'header' },
-    { icon = ' ', key = 'n', desc = 'New File', action = ':enew | startinsert' },
-    {
-      icon = ' ',
-      key = 'f',
-      title = 'Files',
-      section = 'recent_files',
-      indent = 2,
-      action = ':Recent',
-    },
-    {
-      icon = ' ',
-      key = '-',
-      desc = 'Open Directory',
-      action = function()
-        ---@type snacks.picker.explorer.Config
-        local opts = {
-          -- show_preview = function()
-          --   return true
-          -- end,
-        }
-        Snacks.picker.explorer(opts)
-      end,
-    },
-    { icon = ' ', key = 'u', desc = 'Update Plugins', action = ':PlugUpdate' },
-    { icon = ' ', key = 'm', desc = 'Mason', action = ':Mason' },
-    { icon = '󰒲 ', key = 'g', desc = 'Lazygit', action = ':lua Snacks.lazygit()' },
-    {
-      section = 'terminal',
-      cmd = string.format([[ (cowsay "%s"; printf "%s") | lolcat ]], dijkstra, version),
-      indent = 10,
-      padding = 1,
-    },
-    -- { desc = version, align = 'center' },
-    -- {
-    --   function()
-    --     local ms = _G.t['VimEnter']
-    --     local icon = '⚡ '
-    --     return {
-    --       align = 'center',
-    --       text = {
-    --         { icon .. 'Neovim entered in ', hl = 'footer' },
-    --         { ms .. 'ms', hl = 'special' },
-    --       },
-    --     }
-    --   end,
-    -- },
-  },
-  formats = {
-    -- header = { ('%%s\nNVIM %s'):format(tostring(vim.version())), align = 'center' },
+    { section = 'keys' },
+    { section = 'terminal', cmd = cmd, indent = 10, padding = 1, height = 12 },
   },
 }
