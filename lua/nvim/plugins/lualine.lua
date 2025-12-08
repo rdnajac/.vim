@@ -49,7 +49,7 @@ local M = {
             symbols = { modified = ',+' },
           },
         },
-        lualine_c = { Snacks.profiler.status() },
+        -- lualine_c = { Snacks.profiler.status() },
       },
       winbar = {
         lualine_a = { nv.winbar.a },

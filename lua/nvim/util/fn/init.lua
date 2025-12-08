@@ -72,7 +72,6 @@ end
 
 M.extmark_leaks = function()
   local counts = {}
-
   for name, ns in pairs(vim.api.nvim_get_namespaces()) do
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       local count = #vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
@@ -92,5 +91,10 @@ M.extmark_leaks = function()
   dd(counts)
 end
 
+M.is_curwin = function()
+  return vim.fn.win_getid() ~= vim.g.statusline_winid
+end
+
 return M
+
 -- vim: fdm=expr fdl=0 fml=1

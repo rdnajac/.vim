@@ -167,20 +167,12 @@ return {
 
     -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
   end,
-  keys = {
-    {
-      '<leader>?',
-      function()
-        require('which-key').show({ global = false })
-      end,
-      desc = 'Buffer Keymaps (which-key)',
-    },
-    {
-      '<C-w><Space>',
-      function()
-        require('which-key').show({ keys = '<c-w>', loop = true })
-      end,
-      desc = 'Window Hydra Mode (which-key)',
-    },
-  },
+  keys = function()
+    local wk = require('which-key')
+    -- stylua: ignore
+    return {
+      { '<leader>?', function() wk.show({global=false}) end, desc = 'Buffer Keymaps (which-key)' },
+      { '<C-w><Space>', function() wk.show({keys='<C-w>', loop=true}) end, desc = 'Window Hydra Mode (which-key)' },
+    }
+  end,
 }

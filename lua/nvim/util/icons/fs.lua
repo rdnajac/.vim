@@ -49,6 +49,7 @@ M.render = function(bufnr)
     local fname = to_file(line)
     if fname then
       local entry = M.get(fname)
+      -- dd(entry)
       vim.api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
         sign_text = entry.icon,
         sign_hl_group = entry.hl,
@@ -56,7 +57,8 @@ M.render = function(bufnr)
       })
     end
   end
-  nv.fn.defer_redraw(50) -- PERF: force redraw to avoid flicker
+  -- PERF: force redraw to avoid flicker
+  nv.fn.defer_redraw(50)
 end
 
 return M

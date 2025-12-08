@@ -32,8 +32,7 @@ local opts = {
   severity_sort = true,
   signs = (function()
     local icon, hl = {}, {}
-    ---@param k number
-    ---@param v string
+    ---@type number, string
     for k, v in ipairs(vim.diagnostic.severity) do
       local diagnostic = v:sub(1, 1) .. v:sub(2):lower()
       icon[k] = nv.icons.diagnostics[diagnostic]

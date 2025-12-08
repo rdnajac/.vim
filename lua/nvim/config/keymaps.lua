@@ -3,7 +3,7 @@ local function nnoremap(lhs, rhs, opts)
 end
 
 -- nnoremap('zS', vim.showpos)
-nnoremap('<leader>ui', vim.show_pos)
+nnoremap('<leader>ui', vim.show_pos, { desc = 'vim.show_pos()' })
 nnoremap('<leader>uI', function()
   vim.treesitter.inspect_tree()
   vim.api.nvim_input('I')
@@ -39,6 +39,7 @@ local diagnostic_goto = function(next)
     })
   end
 end
+
 nnoremap(']d', diagnostic_goto(true), { desc = 'Next Diagnostic' })
 nnoremap('[d', diagnostic_goto(false), { desc = 'Prev Diagnostic' })
 

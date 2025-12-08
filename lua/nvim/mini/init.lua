@@ -1,41 +1,12 @@
--- TODO: See `:h mini.nvim-buffer-local-config` and `:h mini.nvim-disabling-recipes`.
 local miniopts = function()
-  local ai = require('mini.ai')
-  local ex = require('mini.extra')
-  local hi = require('mini.hipatterns')
   return {
-    ai = {
-      n_lines = 500,
-      custom_textobjects = {
-        -- f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
-        -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
-        -- d = { '%f[%d]%d+' }, -- digits
-        d = ex.gen_ai_spec.number,
-        e = { -- Word with case
-          {
-            '%u[%l%d]+%f[^%l%d]',
-            '%f[%S][%l%d]+%f[^%l%d]',
-            '%f[%P][%l%d]+%f[^%l%d]',
-            '^[%l%d]+%f[^%l%d]',
-          },
-          '^().*()$',
-        },
-        g = ex.gen_ai_spec.buffer(), -- buffer
-        o = ai.gen_spec.treesitter({ -- code block
-          a = { '@block.outer', '@conditional.outer', '@loop.outer' },
-          i = { '@block.inner', '@conditional.inner', '@loop.inner' },
-        }),
-        t = { '<([%p%w]-)%f[^<%w][^<>]->.-</%1>', '^<.->().*()</[^/]->$' }, -- tags
-        u = ai.gen_spec.function_call(), -- u for "Usage"
-        U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
-      },
-    },
     align = {
       mappings = {
         start = 'gA',
         start_with_preview = 'g|',
       },
     },
+    extra = {},
     diff = {
       view = {
         style = 'number',
@@ -44,7 +15,6 @@ local miniopts = function()
         -- style = 'sign',
       },
     },
-    extra = {},
     files = {
       content = {
         filter = nil,
@@ -79,20 +49,7 @@ local miniopts = function()
         width_preview = 25,
       },
     },
-    hipatterns = {
-      highlighters = {
-        source_code = nv.source_code_hi,
-        hex_color = hi.gen_highlighter.hex_color(),
-        --  TODO: don't schedule this setup...
-        -- fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
-        -- warning = { pattern = 'WARNING', group = 'MiniHipatternsFixme' },
-        -- hack = { pattern = 'HACK', group = 'MiniHipatternsHack' },
-        -- section = { pattern = 'Section', group = 'MiniHipatternsHack' },
-        -- todo = { pattern = 'TODO', group = 'MiniHipatternsTodo' },
-        -- note = { pattern = 'NOTE', group = 'MiniHipatternsNote' },
-        -- perf = { pattern = 'PERF', group = 'MiniHipatternsNote' },
-      },
-    },
+    hipatterns = require('nvim.mini.hipatterns'),
     icons = require('nvim.mini.icons'),
     surround = {
       mappings = {
@@ -134,10 +91,56 @@ local miniopts = function()
   }
 end
 
+-- `:h mini.nvim-buffer-local-config`
+-- `:h mini.nvim-disabling-recipes`
+local buffer_local_vars = {
+  lua = {
+    minisurround_config = {
+      custom_surroundings = {
+        U = { output = { left = 'function()\n', right = '\nend' } },
+        u = { output = { left = 'function()\n  ', right = '\nend' } },
+        i = {
+          output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' },
+        },
+        s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
+      },
+    },
+  },
+  markdown = {
+    minisurround_config = {
+      custom_surroundings = {
+        -- `saiwL` + [type/paste link] + <CR> - add link
+        -- `sdL` - delete link
+        -- `srLL` + [type/paste link] + <CR> - replace link
+        L = {
+          input = { '%[().-()%]%(.-%)' },
+          output = function()
+            local link = require('mini.surround').user_input('Link: ')
+            return { left = '[', right = '](' .. link .. ')' }
+          end,
+        },
+      },
+    },
+  },
+}
+
+local aug = vim.api.nvim_create_augroup('minibufvar', {})
+for ft, v in pairs(buffer_local_vars) do
+  for k, v2 in pairs(v) do
+    vim.api.nvim_create_autocmd('FileType', {
+      group = aug,
+      pattern = ft,
+      callback = function()
+        vim.b[k] = v2
+      end,
+    })
+  end
+end
+
 return {
   'nvim-mini/mini.nvim',
   config = function()
-    -- require('mini.misc').setup_termbg_sync()
+    require('mini.misc').setup_termbg_sync()
     for minimod, opts in pairs(miniopts()) do
       require('mini.' .. minimod).setup(opts)
     end
@@ -150,52 +153,6 @@ return {
     -- Make special mapping for "add surrounding for line"
     vim.keymap.set('n', 'yss', 'ys_', { remap = true })
     vim.keymap.set('n', '<leader>fm', MiniFiles.open, { desc = 'MiniFiles' })
-
-    local buffer_local_vars = {
-      lua = {
-        minisurround_config = {
-          custom_surroundings = {
-            U = { output = { left = 'function()\n', right = '\nend' } },
-            u = { output = { left = 'function()\n  ', right = '\nend' } },
-            i = {
-              output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' },
-            },
-            s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
-          },
-        },
-      },
-      markdown = {
-        minisurround_config = {
-          custom_surroundings = {
-            -- Markdown link. Common usage:
-            -- `saiwL` + [type/paste link] + <CR> - add link
-            -- `sdL` - delete link
-            -- `srLL` + [type/paste link] + <CR> - replace link
-            L = {
-              input = { '%[().-()%]%(.-%)' },
-              output = function()
-                local link = require('mini.surround').user_input('Link: ')
-                return { left = '[', right = '](' .. link .. ')' }
-              end,
-            },
-          },
-        },
-      },
-    }
-
-    local aug = vim.api.nvim_create_augroup('mini', {})
-
-    for ft, v in pairs(buffer_local_vars) do
-      for k, v2 in pairs(v) do
-        vim.api.nvim_create_autocmd('FileType', {
-          group = aug,
-          pattern = ft,
-          callback = function()
-            vim.b[k] = v2
-          end,
-        })
-      end
-    end
   end,
 }
 -- vim: fdl=2

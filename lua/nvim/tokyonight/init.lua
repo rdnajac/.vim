@@ -1,11 +1,11 @@
 local M = { 'folke/tokyonight.nvim' }
 
 local mycolors = {
-  tokyonight = '#24283b',
+  -- tokyonight = '#24283b',
   black = '#000000',
   eigengrau = '#16161d',
   blue = '#14afff',
-  green = '#39ff14',
+  -- green = '#39ff14',
   lualine = '#3b4261',
 }
 
@@ -18,8 +18,8 @@ local myhighlights = function(colors)
     Normal = vim.g.transparent ~= true and { bg = colors.black } or nil,
     -- ['@keyword'] = { fg = colors.red },
     Special = { fg = colors.red, bold = true },
+    Number = { fg = colors.blue },
     SpellBad = { bg = colors.red },
-    FoldColumn = { fg = mycolors.lualine, bg = mycolors.black },
   }
 end
 

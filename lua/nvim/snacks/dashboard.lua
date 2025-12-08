@@ -44,19 +44,19 @@ return {
       { icon = '󰒲 ', key = 'g', desc = 'Lazygit', action = ':lua Snacks.lazygit()', indent = 2 },
     },
     { section = 'terminal', cmd = 'cowsay ' .. dijkstra, indent = 10, padding = 1 },
-    {
-      function()
-        local ms = _G.t['VimEnter']
-        local icon = '⚡ '
-        return {
-          align = 'center',
-          text = {
-            { icon .. 'Neovim entered in ', hl = 'footer' },
-            { ms .. 'ms', hl = 'special' },
-          },
-        }
-      end,
-    },
+    -- {
+    --   function()
+    --     local ms = _G.t['VimEnter']
+    --     local icon = '⚡ '
+    --     return {
+    --       align = 'center',
+    --       text = {
+    --         { icon .. 'Neovim entered in ', hl = 'footer' },
+    --         { ms .. 'ms', hl = 'special' },
+    --       },
+    --     }
+    --   end,
+    -- },
   },
   formats = {
     -- header = { '%s' .. '\nNVIM ' .. tostring(vim.version()), align = 'center' },

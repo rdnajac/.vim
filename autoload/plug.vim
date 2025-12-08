@@ -2,13 +2,13 @@ if exists('g:loaded_jetpack')
   " Info 'exists'
   function! plug#begin(...)
     call jetpack#begin()
-    call jetpack#add("tani/vim-jetpack")
+    call jetpack#add('tani/vim-jetpack')
   endfunction
   command! -nargs=+ -bar Plug call jetpack#add(<args>)
   function! plug#end()
     if exists('g:loaded_jetpack')
       call jetpack#end()
-      call jetpack#sync()
+      " call jetpack#sync()
     endif
   endfunction
 elseif has('nvim')
@@ -51,7 +51,6 @@ elseif has('nvim')
   endfunction
 
   function! plug#end()
-    " lua dd(vim.g.plugs)
-    " lua vim.g.plugs = vim.tbl_map(function(plug) return plug.uri end, vim.tbl_values(vim.g.plugs or {}))
+    lua vim.pack.add(vim.tbl_map(function(plug) return plug.uri end, vim.tbl_values(vim.g.plugs)))
   endfunction
 endif

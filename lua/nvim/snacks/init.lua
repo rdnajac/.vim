@@ -48,12 +48,11 @@ local M = {
     scroll = { enabled = true },
     -- statuscolumn = { enabled = false },
     statuscolumn = {
-      left = { 'mark', 'sign' }, -- priority of signs on the left (high to low)
-      right = { 'fold', 'git' }, -- priority of signs on the right (high to low)
-      folds = {
-        open = false, -- show open fold icons
-        git_hl = false, -- use Git Signs hl for fold icons
-      },
+      left = { 'mark', 'sign' },
+      -- left = { 'mark' },
+      -- left = {},
+      right = { 'fold' },
+      folds = { open = true, git_hl = true },
     },
     picker = require('nvim.snacks.picker'),
     styles = {

@@ -1,26 +1,23 @@
 let g:chromatophore_groups = [
-      \ 'MsgArea',
-      \ 'Pmenu',
-      \ 'Pmenusbar',
       \ 'String',
       \ 'FloatBorder',
       \ 'FloatFooter',
       \ 'FloatFooter',
+      \ 'MsgArea',
       \ 'MsgSeparator',
+      \ 'Pmenu',
+      \ 'Pmenusbar',
+      \ 'StatusLineNC',
+      \ 'StatusLineTermNC',
       \ 'WinBar',
       \ 'helpSectionDelim',
       \ 'SnacksScratchTitle',
       \ 'SnacksDashboardHeader',
       \ 'SnacksDashboardFooter',
       \ 'SnacksDashboardTerminal',
-      \  '@markup.raw.markdown_inline',
-      \ 'StatusLineNC',
-      \ 'StatusLineTermNC',
+      \ '@markup.raw.markdown_inline',
       \ ]
 
-      " \ 'SnacksDashboardDesc',
-      " \ 'SnacksDashboardIcon',
-      " \ 'SnacksDashboardKey',
 augroup chromatophore
   autocmd!
   if has('nvim')

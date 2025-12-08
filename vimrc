@@ -10,7 +10,6 @@ setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
 set wildignore+=.DS_Store
 set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
-set number
 set switchbuf+=vsplit
 
 " general {{{2
@@ -68,8 +67,8 @@ let &laststatus = has('nvim') ? 3 : 2
 " statuscolumn
 " set foldcolumn=1
 " set numberwidth=3
-" set signcolumn=number
-set signcolumn=auto
+set number
+set signcolumn=number
 
 augroup vimrc_ui
   " no cursorline in insert mode
@@ -159,10 +158,6 @@ endfor
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
-command! Restart
-      \ let sesh = fnameescape(stdpath('state') .. '/Session.vim') |
-      \ execute printf('mksession! %s | confirm restart silent source %s', sesh, sesh)
-
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 " }}}1
@@ -515,8 +510,8 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
 else
-  Plug 'folke/tokyonight.nvim'
-  Plug 'folke/snacks.nvim'
+  " Plug 'folke/tokyonight.nvim'
+  " Plug 'folke/snacks.nvim'
   Plug 'saxon1964/neovim-tips'
 endif
 call plug#end() " don't plug#end() if neovim...

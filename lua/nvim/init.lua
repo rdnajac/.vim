@@ -1,4 +1,5 @@
 _G.nv = require('nvim.util')
+
 nv.root = vim.fs.dirname(vim.fs.abspath(debug.getinfo(1).source:sub(2)))
 nv.import = function(modname)
   local require = nv.fn.xprequire
@@ -11,8 +12,8 @@ nv.import = function(modname)
 end
 
 local submodules = {
-  -- 'nvim.tokyonight',
-  -- 'nvim.snacks',
+  'nvim.tokyonight',
+  'nvim.snacks',
   'nvim.blink',
   'nvim.lazy',
   'nvim.lsp',
@@ -39,6 +40,8 @@ nv.specs = vim
   end)
   :totable()
 
+  -- TODO: decouple the custom loading from the plugin management
+  -- emit an autcmd like jetpac kand hook the setup funcs to those autocmds
 vim.pack.add(nv.specs, {
   -- confirm = false,
   ---@param plug_data { spec: vim.pack.Spec, path: string }

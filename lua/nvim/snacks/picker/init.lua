@@ -24,6 +24,7 @@ return {
     files = require('nvim.snacks.picker.defaults'),
     git_status = { layout = 'left' },
     grep = require('nvim.snacks.picker.defaults'),
+    help = { layout = 'ivy_split' },
     icons = { layout = { preset = 'insert' } },
     keymaps = require('nvim.snacks.picker.nvimcfg'),
     recent = {

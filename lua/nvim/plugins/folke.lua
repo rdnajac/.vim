@@ -88,6 +88,7 @@ return {
     -- enabled = false,
     lazy = true,
     opts = {
+      -- FIXME: extmarks not placed with statuscolun hook
       keywords = { Section = { icon = '󰚟', color = 'title' } },
       -- highlight = { keyword = 'bg', },
       colors = {
