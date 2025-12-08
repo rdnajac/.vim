@@ -17,12 +17,25 @@ jobs:
   #         echo 'starting vim...'
   #         vim -es --not-a-term -u NONE -i NONE -c 'redir => g:out | echo &rtp | redir END | call writefile(split(g:out, "\n"), "/dev/stdout") | qall!'
   #     - run: echo "🍏 This job's status is ${{ job.status }}."
-  install-neovim:
+
+  # install-neovim:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
+  #   steps:
+  #     - uses: actions/checkout@v5
+  #     - run: ./bin/scripts/install-neovim.sh
+  #     # open and close neovim headless
+  #     - run: ~/.local/bin/nvim --headless -c 'lua io.stdout:write("hi from nvim!\n")' -c 'q'
+
+  test-vim:
     runs-on: ubuntu-latest
-    container:
-      image: mcr.microsoft.com/vscode/devcontainers/base:ubuntu
     steps:
       - uses: actions/checkout@v5
-      - run: ./bin/scripts/install-neovim.sh
+      - run: which vim
+      # - run: ./bin/scripts/install-neovim.sh
       # open and close neovim headless
-      - run: ~/.local/bin/nvim --headless -c 'lua io.stdout:write("hi from nvim!\n")' -c 'q'
+      # - run: ~/.local/bin/nvim --headless -c 'lua io.stdout:write("hi from nvim!\n")' -c 'q'
+      # - run: vim -es --not-a-term -u NONE -i NONE -c 'redir => g:out | echo &rtp | redir END | call writefile(split(g:out, "\n"), "/dev/stdout") | qall!'
+      # - run: echo "🍏 This job's status is ${{ job.status }}."
+      #

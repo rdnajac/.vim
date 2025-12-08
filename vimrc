@@ -150,15 +150,47 @@ augroup vimrc_filetype
 augroup END
 
 " }}}1
-" Section: commands {{{1
+" Section: commands/config/chezmoi {{{1
 for level in keys(g:vim#notify#levels)
   execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
-	\ toupper(strpart(level, 0, 1))..strpart(level, 1), level)
+	\ toupper(strpart(level, 0, 1)) .. strpart(level, 1), level)
 endfor
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
 command! -nargs=0 Format call execute#inPlace('call format#buffer()')
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
+
+let g:eunuch_interpreters = {
+      \ '.':      '/bin/sh',
+      \ 'sh':     'bash',
+      \ 'bash':   'bash',
+      \ 'lua':    'nvim -l',
+      \ 'python': 'python3',
+      \ 'r':      'Rscript',
+      \ 'rmd':    'Rscript',
+      \ 'zsh':    'zsh',
+      \ }
+
+let g:vimtex_format_enabled = 1              " built-in formatexpr
+let g:vimtex_mappings_disable = {'n': ['K']} " disable normal `K`
+let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
+
+if exists('g:chezmoi#source_dir_path')
+  " let g:chezmoi#source_dir_path = expand('~/.local/share/chezmoi')
+  let g:chezmoi#use_tmp_buffer = 1
+
+  augroup chezmoi
+    autocmd!
+    " automatically `chezmoi add` aliases and binfiles
+    au BufWritePost ~/.bash_aliases,~/bin/* silent! execute
+	  \ '!chezmoi add "%" --no-tty >/dev/null 2>&1' | redraw!
+
+    " immediately `chezmoi apply` changes when writing to a chezmoi file
+    exe printf('au BufWritePost %s/* silent! !chezmoi apply --force --source-path "%%"',
+	  \ g:chezmoi#source_dir_path)
+
+  augroup END
+endif
 
 " }}}1
 " Section: keymaps {{{1
@@ -477,7 +509,6 @@ call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'dense-analysis/ale'
-Plug 'justinmk/vim-dirvish'
 Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
@@ -492,6 +523,7 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-unimpaired'
 if !has('nvim')
+  Plug 'justinmk/vim-dirvish'
   Plug 'andymass/vim-matchup'
   Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'

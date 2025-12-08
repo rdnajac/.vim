@@ -4,13 +4,6 @@ return {
     enabled = false,
     lazy = true,
     opts = {
-      right = {
-        {
-          title = 'Dirvish',
-          ft = 'dirvish',
-          -- size = { height = 0.5 },
-        },
-      },
       wo = {
         -- Setting to `true`, will add an edgy winbar.
         -- Setting to `false`, won't set any winbar.

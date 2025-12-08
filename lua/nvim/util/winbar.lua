@@ -50,7 +50,7 @@ end
 local ft_map = {
   dirvish = {
     a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]],
-    b = [[%{%v:lua.nv.lsp.dirvish.status()%}]],
+    -- b = [[%{%v:lua.nv.lsp.dirvish.status()%}]],
     c = [[ %{join(map if opts.ft == '(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]],
   },
 }

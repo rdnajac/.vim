@@ -1,23 +1,21 @@
 local dijkstra =
-  [["The computing scientist's main challenge is not to get confused by the complexities of his own making."]]
+  [[The computing scientist's main challenge is not to get confused by the complexities of his own making.]]
 
+local version = 'NVIM ' .. tostring(vim.version())
 ---@module "snacks"
 ---@class snacks.dashboard.Config
 return {
   sections = {
     { section = 'header' },
+    { icon = ' ', key = 'n', desc = 'New File', action = ':enew | startinsert' },
     {
-      pane = 2,
       icon = ' ',
+      key = 'f',
       title = 'Files',
       section = 'recent_files',
       indent = 2,
-      key = 'f',
       action = ':Recent',
     },
-    { icon = ' ', key = 'f', desc = 'Find File', action = ':Files' },
-    { icon = ' ', key = 'n', desc = 'New File', action = ':enew | startinsert' },
-    -- { icon = ' ', key = '-', desc = 'Open Directory', action = ':e $PWD' },
     {
       icon = ' ',
       key = '-',
@@ -32,18 +30,16 @@ return {
         Snacks.picker.explorer(opts)
       end,
     },
+    { icon = ' ', key = 'u', desc = 'Update Plugins', action = ':PlugUpdate' },
+    { icon = ' ', key = 'm', desc = 'Mason', action = ':Mason' },
+    { icon = '󰒲 ', key = 'g', desc = 'Lazygit', action = ':lua Snacks.lazygit()' },
     {
-      pane = 2,
-      icon = '',
-      title = 'Plugins',
-      indent = 2,
-      key = 'p',
-      action = ':PlugStatus',
-      { icon = ' ', key = 'u', desc = 'Update', action = ':PlugUpdate', indent = 2 },
-      { icon = ' ', key = 'm', desc = 'Mason', action = ':Mason', indent = 2 },
-      { icon = '󰒲 ', key = 'g', desc = 'Lazygit', action = ':lua Snacks.lazygit()', indent = 2 },
+      section = 'terminal',
+      cmd = string.format([[ (cowsay "%s"; printf "%s") | lolcat ]], dijkstra, version),
+      indent = 10,
+      padding = 1,
     },
-    { section = 'terminal', cmd = 'cowsay ' .. dijkstra, indent = 10, padding = 1 },
+    -- { desc = version, align = 'center' },
     -- {
     --   function()
     --     local ms = _G.t['VimEnter']
@@ -59,8 +55,6 @@ return {
     -- },
   },
   formats = {
-    -- header = { '%s' .. '\nNVIM ' .. tostring(vim.version()), align = 'center' },
-    header = { ('%%s\nNVIM %s'):format(tostring(vim.version())), align = 'center' },
+    -- header = { ('%%s\nNVIM %s'):format(tostring(vim.version())), align = 'center' },
   },
-  -- wo = { winbar = '', winhighlight = { 'WinBar:NONE' } },
 }

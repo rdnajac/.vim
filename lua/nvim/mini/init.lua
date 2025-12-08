@@ -1,5 +1,6 @@
 local miniopts = function()
   return {
+    ai = require('nvim.mini.ai'),
     align = {
       mappings = {
         start = 'gA',

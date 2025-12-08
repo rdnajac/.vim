@@ -8,7 +8,7 @@ local M = {
         component_separators = { left = '', right = '' },
         -- section_separators = nv.icons.sep.section.rounded,
         section_separators = { left = '', right = '' },
-        disabled_filetypes = { -- Filetypes to disable lualine for.
+        disabled_filetypes = {
           statusline = {},
           winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_input' },
         },
@@ -16,13 +16,9 @@ local M = {
           -- 'man',
           -- 'help',
         },
-        theme = {
-          normal = {
-            a = 'Chromatophore_a',
-            b = 'Chromatophore_b',
-            c = 'Chromatophore_c',
-          },
-        },
+        -- theme = {
+        --   normal = { a = 'Chromatophore_a', b = 'Chromatophore_b', c = 'Chromatophore_c' },
+        -- },
         -- use_mode_colors = false,
       },
       sections = {
@@ -30,8 +26,15 @@ local M = {
         lualine_b = { 'branch' },
         lualine_c = { 'filename' },
         lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        lualine_y = { 'progress' },
-        lualine_z = { 'location' },
+        -- lualine_y = { 'progress' },
+        lualine_y = {},
+        lualine_z = {},
+        -- lualine_z = {
+        -- { '%{vimline#recording#()}' },
+        -- function()
+        --   return vim.fn['vimline#recording#']()
+        -- end,
+        -- },
       },
       inactive_sections = {},
       tabline = {

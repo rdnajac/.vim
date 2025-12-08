@@ -35,7 +35,8 @@ function! vimline#recording#() abort
 
   let contents = s:sanitize_reg_contents(getreg(reg))
 
-  return printf('%%<%s [%s%s] ', contents, icon, reg)
+  " return printf('%%<%s [%s%s] ', contents, icon, reg)
+  return printf('%s [%s%s] ', contents, icon, reg)
 endfunction
 
 augroup vimline_recording
