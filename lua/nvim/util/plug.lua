@@ -186,34 +186,32 @@ end, {
   end,
 })
 
+local unloaded = function()
+  return vim.tbl_map(
+    function(p)
+      return p.spec.name
+    end,
+    vim.tbl_filter(function(p)
+      return not p.active
+    end, vim.pack.get())
+  )
+end
+
 command('PlugClean', function(opts)
-  local plugs = #opts.fargs > 0 and opts.fargs or nv.plug.unloaded()
+  local plugs = #opts.fargs > 0 and opts.fargs or unloaded()
   vim.pack.del(plugs)
 end, {
   nargs = '*',
   complete = function(_, _, _)
-    return nv.plug.unloaded()
+    return unloaded()
   end,
 })
-
--- local function loadfn(fn) end
 
 return setmetatable({
   get_keys = function()
     return vim.tbl_map(function(p)
       return vim.is_callable(p) and p() or p
     end, vim.tbl_values(keys))
-  end,
-  -- loadfn = loadfn,
-  unloaded = function()
-    return vim.tbl_map(
-      function(p)
-        return p.spec.name
-      end,
-      vim.tbl_filter(function(p)
-        return not p.active
-      end, vim.pack.get())
-    )
   end,
 }, {
   __call = function(_, k)

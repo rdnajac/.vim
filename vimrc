@@ -198,6 +198,9 @@ nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
 
+nnoremap - :Explorer<CR>
+" nmap - <leader>fm
+
 vmap  :sort<CR>
 
 " diff?
@@ -501,10 +504,10 @@ if has('nvim')
 else
   packadd! editorconfig
   packadd! hlyank
-  packadd vim-jetpack
 endif
 packadd! cfilter
 
+" packadd vim-jetpack
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
@@ -546,7 +549,5 @@ else
   " Plug 'folke/snacks.nvim'
   Plug 'saxon1964/neovim-tips'
 endif
-call plug#end() " don't plug#end() if neovim...
-"packadd! vim-lol
-"call lol#cat()
+call plug#end()
 " vim: foldlevel=0 foldmethod=marker

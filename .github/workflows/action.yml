@@ -38,4 +38,4 @@ jobs:
       # - run: ~/.local/bin/nvim --headless -c 'lua io.stdout:write("hi from nvim!\n")' -c 'q'
       # - run: vim -es --not-a-term -u NONE -i NONE -c 'redir => g:out | echo &rtp | redir END | call writefile(split(g:out, "\n"), "/dev/stdout") | qall!'
       # - run: echo "🍏 This job's status is ${{ job.status }}."
-      #
+

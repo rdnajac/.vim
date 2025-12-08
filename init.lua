@@ -18,7 +18,6 @@ vim.api.nvim_create_user_command('Restart', function()
 end, {})
 
 vim.g.plug_home = vim.fs.joinpath(vim.g.stdpath.data, 'site', 'pack', 'core', 'opt')
-vim.g.loaded_netrw = false
 
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fs.joinpath(vim.g.plug_home, 'snacks.nvim'))
