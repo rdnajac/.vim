@@ -1,6 +1,7 @@
 _G.nv = require('nvim.util')
 
 local submodules = {
+  'nvim.config',
   'nvim.tokyonight',
   'nvim.snacks',
   'nvim.lazy',
@@ -8,7 +9,6 @@ local submodules = {
   'nvim.mini',
   'nvim.plugins',
   'nvim.treesitter',
-  'nvim.config',
 }
 
 local specdict = {}
@@ -28,10 +28,7 @@ nv.specs = vim
   :totable()
 
 nv.init = function()
-  -- TODO: decouple the custom loading from the plugin management
-  -- emit an autcmd like jetpack and hook the setup funcs to those autocmds
   vim.pack.add(nv.specs, {
-    -- confirm = false,
     ---@param plug_data {spec: vim.pack.Spec, path: string}
     load = function(plug_data)
       local spec = plug_data.spec
