@@ -7,7 +7,7 @@ function! plug#begin(...)
     if a:0 > 0
       let g:plug_home = fnamemodify(expand(a:1), ':p')
     elseif !exists('g:plug_home')
-      let g:plug_home = expand('~/.vim/plugged')
+      let g:plug_home = join([ stdpath('data'), 'site', 'pack', 'core', 'opt' ], '/')
     endif
     let g:plugs = {}
     let g:plugs_order = []
@@ -43,7 +43,15 @@ function! plug#end()
   delcommand Plug
   if exists('g:loaded_jetpack')
     call jetpack#end()
+    for name in jetpack#names()
+      if !jetpack#tap(name)
+	call jetpack#sync()
+	break
+      endif
+    endfor
   elseif has('nvim')
+    lua vim.loader.enable()
+    " lua vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
     " lua vim.pack.add(vim.tbl_map(function(plug) return plug.uri end, vim.tbl_values(vim.g.plugs)))
     lua vim.pack.add(vim.g.plugs_order)
   endif

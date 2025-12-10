@@ -95,6 +95,10 @@ M.is_curwin = function()
   return vim.fn.win_getid() ~= vim.g.statusline_winid
 end
 
+M.sprintf = function(s, ...)
+  return s:format(...)
+end
+
 return M
 
 -- vim: fdm=expr fdl=0 fml=1

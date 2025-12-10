@@ -1,6 +1,7 @@
 local M = {}
 
-local lsp_config_dir = vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp')
+-- local lsp_config_dir = vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp')
+local lsp_config_dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'after', 'lsp')
 ---@type string[]
 M.servers = vim.tbl_map(function(path)
   return path:match('^.+/(.+)$'):sub(1, -5)

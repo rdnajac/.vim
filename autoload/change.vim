@@ -20,3 +20,13 @@ function! change#quote() abort
   endfor
   return ''
 endfunction
+
+function s:chsh(shell) abort
+  let &shell = systemlist('which ' . a:shell)[0]
+endfunction
+" call s:chsh('dash')
+
+function! change#shell(s) abort
+  return s:chsh(a:s)
+endfunction
+" call change#shell('dash')

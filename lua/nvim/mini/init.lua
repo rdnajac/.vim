@@ -126,17 +126,16 @@ local buffer_local_vars = {
 }
 
 local aug = vim.api.nvim_create_augroup('minibufvar', {})
-for ft, v in pairs(buffer_local_vars) do
-  for k, v2 in pairs(v) do
-    vim.api.nvim_create_autocmd('FileType', {
-      group = aug,
-      pattern = ft,
-      callback = function()
-        vim.b[k] = v2
-      end,
-    })
-  end
-end
+local filetypes = vim.tbl_keys(buffer_local_vars)
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = filetypes,
+  group = aug,
+  callback = function(ev)
+    for k, v in pairs(buffer_local_vars[ev.match]) do
+      vim.b[k] = v
+    end
+  end,
+})
 
 return {
   'nvim-mini/mini.nvim',
@@ -145,15 +144,6 @@ return {
     for minimod, opts in pairs(miniopts()) do
       require('mini.' .. minimod).setup(opts)
     end
-  end,
-  after = function()
-    -- Remap adding surrounding to Visual mode selection
-    vim.keymap.del('x', 'ys')
-    vim.keymap.set('x', 'S', ':<C-u>lua MiniSurround.add("visual")<CR>', { silent = true })
-
-    -- Make special mapping for "add surrounding for line"
-    vim.keymap.set('n', 'yss', 'ys_', { remap = true })
-    vim.keymap.set('n', '<leader>fm', MiniFiles.open, { desc = 'MiniFiles' })
   end,
 }
 -- vim: fdl=2

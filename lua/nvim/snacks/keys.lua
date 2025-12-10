@@ -57,7 +57,7 @@ vim.list_extend(M, {
   desc = 'Profiler Filter by Plugin',
 })
 
----@alias LeaderLeaf string
+---@alias LeaderLeaf string|function
 ---@alias LeaderMap table<string, LeaderLeaf|LeaderMap>
 
 ---@type LeaderMap
@@ -77,6 +77,7 @@ local leader = {
     b = 'buffers',
     f = 'files',
     g = 'git_files',
+    m = MiniFiles.open,
     P = 'projects',
     r = 'recent',
   },
@@ -148,7 +149,10 @@ local function walk(tbl, seq)
     if type(v) == 'table' then
       walk(v, new_seq)
     else
-      table.insert(M, { '<leader>' .. new_seq, Snacks.picker[v], desc = v })
+      local lhs = '<leader>' .. new_seq
+      local rhs = vim.is_callable(v) and v or Snacks.picker[v]
+      local desc = vim.is_callable(v) and tostring(v) or v
+      table.insert(M, { lhs, rhs, desc = desc })
     end
   end)
 end
@@ -186,10 +190,9 @@ local picker_pairs = {
   },
   DataFiles = { 'd', vim.g.stdpath.data },
   GitHubRepos = { 'G', '~/GitHub/' },
-  config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
+  config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' }, exclude = { 'lsp' } } },
   VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
   plugins = { 'p', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
-  -- Plugins = { 'P', vim.g.plug_home },
   everything = { 'e', { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } } },
   Everything = { 'E', { dirs = vim.api.nvim_list_runtime_paths() } },
 }

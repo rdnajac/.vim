@@ -1,6 +1,10 @@
-local M = {
+-- stylua: ignore start
+_G.dd = function(...) Snacks.debug.inspect(...) end
+_G.bt = function(...) Snacks.debug.backtrace(...) end
+_G.p  = function(...) Snacks.debug.profile(...) end
+-- stylua: ignore end
+return {
   'folke/snacks.nvim',
-  -- dir = vim.fs.joinpath(vim.g.plug_home, 'snacks.nvim'),
   ---@type snacks.Config
   opts = {
     bigfile = {
@@ -119,10 +123,3 @@ local M = {
       end)
   end,
 }
-
--- stylua: ignore start
-_G.dd = function(...) Snacks.debug.inspect(...) end
-_G.bt = function(...) Snacks.debug.backtrace(...) end
-_G.p  = function(...) Snacks.debug.profile(...) end
--- stylua: ignore end
-return M

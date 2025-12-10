@@ -16,11 +16,8 @@ M.a = function(opts)
     path = '%t'
   else
     local maybe_path = ''
-    if bt == 'acwrite' and ft == 'nvim-pack' then
-      maybe_path = vim.g.plug_home
-    elseif bt == 'terminal' then
+    if bt == 'terminal' then
       maybe_path = vim.b[bufnr].osc7_dir
-      -- or vim.env.PWD -- not updated on dir change?
     end
     path = vim.fn.fnamemodify(maybe_path or vim.fn.getcwd(), ':~')
   end

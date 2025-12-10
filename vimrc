@@ -1,10 +1,4 @@
 scriptencoding utf-8
-
-function s:chsh(shell) abort
-  let &shell = systemlist('which ' . a:shell)[0]
-endfunction
-" call s:chsh('dash')
-
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
@@ -91,6 +85,24 @@ augroup END
 
 " }}}1
 " Section: neovim {{{1
+if exists('*stdpath')
+  " let g:stdpath = map([ 'cache', 'config', 'data', 'state'], {_, d -> d: stdpath(d)})
+  let g:stdpath = {
+	\  'cache' : stdpath('cache'),
+	\ 'config' : stdpath('config'),
+	\   'data' : stdpath('data'),
+	\  'state' : stdpath('state'),
+	\ }
+endif
+
+if exists(':restart') == 2
+  let s:sesh = g:stdpath['state'] . '/Session.vim'
+  function s:restart() abort
+    execute printf('mksession! %s | confirm restart silent source %s', s:sesh, s:sesh)
+  endfunction
+  command! Restart call s:restart()
+endif
+
 if !has('nvim')
   call vimrc#init_vim()
 else
@@ -153,7 +165,7 @@ augroup END
 " Section: commands/config/chezmoi {{{1
 for level in keys(g:vim#notify#levels)
   execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
-	\ toupper(strpart(level, 0, 1)) .. strpart(level, 1), level)
+	\ toupper(strpart(level, 0, 1)) . strpart(level, 1), level)
 endfor
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
@@ -545,9 +557,7 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
 else
-  " Plug 'folke/tokyonight.nvim'
-  " Plug 'folke/snacks.nvim'
-  Plug 'saxon1964/neovim-tips'
+  " Plug 'saxon1964/neovim-tips'
 endif
 call plug#end()
-" vim: foldlevel=0 foldmethod=marker
+" vim: fdl=0 fdm=marker

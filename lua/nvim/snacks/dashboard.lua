@@ -18,6 +18,7 @@ return {
       { icon = ' ', key = 'u', action = ':PlugUpdate', desc = 'Update Plugins' },
       { icon = ' ', key = 'm', action = ':Mason',      desc = 'Mason' },
       { icon = '󰒲 ', key = 'g', action = ':LazyGit',    desc = 'LazyGit' },
+      { icon = ' ', key = 'R', action = ':restart',    desc = 'Restart Neovim' },
       -- stylua: ignore end
     },
   },
