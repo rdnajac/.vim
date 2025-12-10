@@ -12,7 +12,7 @@ let g:mydirs = {
       \ 'c': g:stdpath.config,
       \ 'C': g:stdpath.cache,
       \ 'd': g:stdpath.data,
-      \ 's': g:stdpath.state,
+      \ 's': g:stdpath.state
       \ }
 
 for [key, value] in items(g:mydirs)

@@ -1,16 +1,5 @@
 _G.nv = require('nvim.util')
 
-nv.root = vim.fs.dirname(vim.fs.abspath(debug.getinfo(1).source:sub(2)))
-nv.import = function(modname)
-  local require = nv.fn.xprequire
-  local module = require(modname)
-  if type(module) == 'table' then
-    local key = modname:match('([^./]+)$')
-    rawset(_G.nv, key, module)
-  end
-  return module
-end
-
 local submodules = {
   'nvim.tokyonight',
   'nvim.snacks',
@@ -25,7 +14,6 @@ local submodules = {
 
 local specdict = {}
 
--- TODO: specs should be a dictionary of [1] to spec
 nv.specs = vim
   .iter(submodules)
   :map(nv.import)
@@ -39,5 +27,21 @@ nv.specs = vim
     return plugin:tospec()
   end)
   :totable()
+
+nv.init = function()
+  -- TODO: decouple the custom loading from the plugin management
+  -- emit an autcmd like jetpack and hook the setup funcs to those autocmds
+  vim.pack.add(nv.specs, {
+    -- confirm = false,
+    ---@param plug_data {spec: vim.pack.Spec, path: string}
+    load = function(plug_data)
+      local spec = plug_data.spec
+      vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
+      if spec.data and vim.is_callable(spec.data.setup) then
+        spec.data.setup()
+      end
+    end,
+  })
+end
 
 return nv

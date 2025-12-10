@@ -1,10 +1,9 @@
---- `https://cmp.saghen.dev/`
+-- `https://cmp.saghen.dev/`
 ---@type blink.cmp.Config
 local opts = {
   cmdline = { enabled = false },
   -- fuzzy = { implementation = 'lua' },
   keymap = {
-    ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
     ['<Tab>'] = {
       function(cmp)
         if cmp.snippet_active() then
@@ -29,9 +28,7 @@ local opts = {
   },
   completion = {
     accept = { auto_brackets = { enabled = true } },
-    documentation = {
-      auto_show = false,
-    },
+    documentation = { auto_show = false },
     ghost_text = { enabled = false },
     -- keyword = {},
     trigger = {
@@ -42,6 +39,8 @@ local opts = {
     list = { selection = { preselect = true, auto_insert = true } },
   },
 }
+
+local M = {}
 
 -- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
 ---@param ctx blink.cmp.DrawItemContext
@@ -93,7 +92,7 @@ opts.completion.menu = {
       source_id = {
         ellipsis = false,
         text = function(ctx)
-          return (nv.blink.icons[ctx.source_id] or ' ') .. ctx.icon_gap
+          return (M.icons[ctx.source_id] or ' ') .. ctx.icon_gap
         end,
         highlight = component_highlight,
       },
@@ -173,6 +172,20 @@ opts.sources = {
   }),
 }
 
+M.spec = {
+  {
+    'Saghen/blink.cmp',
+    -- event = 'InsertEnter',
+    build = 'BlinkCmp build',
+    opts = opts,
+    after = function()
+      -- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
+      -- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
+      vim.keymap.set('n', '<C-I>', '<Tab>', { desc = 'restore <C-i>' })
+    end,
+  },
+}
+
 ---@class blink.cmp.SourceMeta
 ---@field name string `user/repo`
 ---@field config blink.cmp.SourceProviderConfigPartial
@@ -194,17 +207,6 @@ local extras = {
 }
 
 -- vim.list_extend(opts.sources.providers, vim.tbl_values(extras))
-local M = {
-  spec = {
-    {
-      'Saghen/blink.cmp',
-      -- event = 'InsertEnter',
-      build = 'BlinkCmp build',
-      opts = opts,
-    },
-  },
-}
-
 M.get_providers = function(mode)
   mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
   local cmp_mode = ({
@@ -217,40 +219,28 @@ end
 
 -- stylua: ignore
 M.icons = {
-  buffer    = '',
-  cmdline   = '',
-  copilot   = '',
-  env       = '',
-  lazydev   = '󰒲',
-  lsp       = '',
-  omni      = '',
-  path      = '',
-  snippets  = '',
+  buffer   = '',
+  cmdline  = '',
+  copilot  = '',
+  env      = '',
+  lazydev  = '󰒲',
+  lsp      = '',
+  omni     = '',
+  path     = '',
+  snippets = '',
 }
 
-local provider_icons = function()
-  return vim
-    .iter(M.get_providers())
-    :map(function(src)
-      -- return nv.icons.src[src] or ' '
-      return M.icons[src] or ' '
-    end)
-    :join(' ')
+local function to_icon(provider)
+  return M.icons[provider] or ' '
 end
 
----@type nv.status.Component
 M.status = {
-  provider_icons,
+  function()
+    return vim.iter(M.get_providers()):map(to_icon):join(' ')
+  end,
   cond = function()
     return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
   end,
 }
-
-M.after = function()
-  -- NOTE: In the GUI and in a supporting terminal,
-  -- `<C-I>` can be mapped separately from `<Tab>`,
-  -- Except in tmux: `https://github.com/tmux/tmux/issues/2705`
-  vim.keymap.set('n', '<C-I>', '<Tab>', { desc = 'restore <C-i>' })
-end
 
 return M

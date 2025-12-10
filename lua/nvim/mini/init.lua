@@ -52,23 +52,7 @@ local miniopts = function()
     },
     hipatterns = require('nvim.mini.hipatterns'),
     icons = require('nvim.mini.icons'),
-    surround = {
-      mappings = {
-        add = 'ys',
-        delete = 'ds',
-        find = '',
-        find_left = '',
-        highlight = '',
-        replace = 'cs',
-        -- Add this only if you don't want to use extended mappings
-        suffix_last = '',
-        suffix_next = '',
-      },
-      search_method = 'cover_or_next',
-      custom_surroundings = {
-        B = { output = { left = '{', right = '}' } },
-      },
-    },
+    surround = require('nvim.mini.surround'),
     splitjoin = {
       -- TODO: respect shiftwidth
       mappings = {
@@ -92,6 +76,7 @@ local miniopts = function()
   }
 end
 
+-- `src`
 -- `:h mini.nvim-buffer-local-config`
 -- `:h mini.nvim-disabling-recipes`
 local buffer_local_vars = {
@@ -146,4 +131,5 @@ return {
     end
   end,
 }
--- vim: fdl=2
+
+-- vim: fdl=2 fdm=expr

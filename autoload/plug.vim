@@ -32,7 +32,7 @@ function plug#(repo, ...)
     try
       let l:repo = s:trim(a:repo)
       " let g:plugs[l:repo] = {'uri': git#url(l:repo)}
-      call add(g:plugs_order, git#url(l:repo))
+      call add(g:plugs_order, git#repo(l:repo))
     catch
       Error repo . ' ' . v:exception
     endtry

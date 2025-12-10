@@ -7,7 +7,7 @@ require('vim._extui').enable({})
 
 -- FIXME: fails when installing new plugin before startup
 local init = function()
-  local confdir = vim.fs.joinpath(nv.root, 'config')
+  local confdir = vim.fs.dirname(vim.fs.abspath(debug.getinfo(1).source:sub(2)))
   local files = vim.fn.globpath(confdir, '*.lua', false, true)
   local iter = vim.iter(files)
   iter
@@ -15,7 +15,9 @@ local init = function()
       return not vim.endswith(mod, 'init.lua')
     end)
     :map(nv.fn.modname)
-    :each(nv.import)
+    :each(function(f)
+      nv.import(f)
+    end)
 end
 
 vim.api.nvim_create_autocmd('VimEnter', { callback = init })

@@ -1,3 +1,7 @@
+if not Snacks then
+  vim.cmd([[Warn "'skipping toggles'"]])
+  return
+end
 Snacks.toggle.animate():map('<leader>ua')
 Snacks.toggle.diagnostics():map('<leader>ud')
 Snacks.toggle.dim():map('<leader>uD')
