@@ -1,12 +1,12 @@
 return {
   debug = {
-    -- scores = true, -- show scores in the list
-    -- leaks = true, -- show when pickers don't get garbage collected
-    -- explorer = true, -- show explorer debug info
-    -- files = true, -- show file debug info
-    -- grep = true, -- show file debug info
-    -- proc = true, -- show proc debug info
-    -- extmarks = true, -- show extmarks errors
+    -- scores = true,
+    -- leaks = true,
+    -- explorer = true,
+    -- files = true,
+    -- grep = true,
+    -- proc = true,
+    -- extmarks = true,
   },
   layouts = require('nvim.snacks.picker.layouts'),
   sources = {

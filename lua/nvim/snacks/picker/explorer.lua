@@ -5,10 +5,9 @@ return {
   win = {
     list = {
       keys = {
+        ['-'] = 'explorer_up',
         ['<Left>'] = 'explorer_up',
         ['<Right>'] = 'confirm',
-        ['<BS>'] = 'explorer_up',
-        ['P'] = 'toggle_preview',
       },
     },
   },
@@ -68,17 +67,16 @@ return {
     picker.main = preview_win.win
     picker.preview.win:toggle()
   end,
-  on_close = function(picker)
-    picker.preview.win:close()
-  end,
   layout = {
     preset = 'sidebar',
     preview = false, ---@diagnostic disable-line
   },
   actions = {
-    -- `<A-p>`
     toggle_preview = function(picker) --[[Override]]
       picker.preview.win:toggle()
     end,
   },
+  -- on_close = function(picker)
+  --   picker.preview.win:close()
+  -- end,
 }

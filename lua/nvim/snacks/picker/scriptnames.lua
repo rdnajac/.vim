@@ -1,4 +1,4 @@
----@type { idx: number, file : string }
+---@type {idx: number, file: string}
 local scriptnames = vim
   .iter(nv.exec('scriptnames'))
   :map(function(line)
@@ -6,8 +6,6 @@ local scriptnames = vim
     return { idx = tonumber(idx), file = path }
   end)
   :totable()
-
-  print(scriptnames)
 
 -- Snacks.picker({
 --   title = 'Scriptnames',
