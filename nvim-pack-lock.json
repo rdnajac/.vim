@@ -8,6 +8,10 @@
       "rev": "ca1da76d5e91e42f676654905c0c7b6d074b8068",
       "src": "https://github.com/dense-analysis/ale.git"
     },
+    "blink-cmp-env": {
+      "rev": "99af62c1f9aa46005e8f50ad4ccee581946546ca",
+      "src": "https://github.com/bydlw98/blink-cmp-env.git"
+    },
     "blink.cmp": {
       "rev": "3b83374f982103a9423432e1edbf5c17ef8ca509",
       "src": "https://github.com/Saghen/blink.cmp.git"

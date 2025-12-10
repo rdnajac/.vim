@@ -1,46 +1,60 @@
 -- `https://cmp.saghen.dev/`
----@type blink.cmp.Config
-local opts = {
-  cmdline = { enabled = false },
-  -- fuzzy = { implementation = 'lua' },
-  keymap = {
-    ['<Tab>'] = {
-      function(cmp)
-        if cmp.snippet_active() then
-          return cmp.accept()
-        else
-          return cmp.select_and_accept()
-        end
-      end,
-      'snippet_forward',
-      function()
-        return require('sidekick').nes_jump_or_apply()
-      end,
-      function()
-        return vim.lsp.inline_completion.get()
-      end,
-      'fallback',
+local M = {
+  {
+    'Saghen/blink.cmp',
+    -- event = 'InsertEnter',
+    build = 'BlinkCmp build',
+    ---@type blink.cmp.Config
+    opts = {
+      cmdline = { enabled = false },
+      -- fuzzy = { implementation = 'lua' },
+      keymap = {
+        ['<Tab>'] = {
+          function(cmp)
+            if cmp.snippet_active() then
+              return cmp.accept()
+            else
+              return cmp.select_and_accept()
+            end
+          end,
+          'snippet_forward',
+          function()
+            return require('sidekick').nes_jump_or_apply()
+          end,
+          function()
+            return vim.lsp.inline_completion.get()
+          end,
+          'fallback',
+        },
+      },
+      signature = {
+        enabled = true,
+        window = { show_documentation = false },
+      },
+      completion = {
+        accept = { auto_brackets = { enabled = true } },
+        documentation = { auto_show = false },
+        ghost_text = { enabled = false },
+        -- keyword = {},
+        trigger = {
+          show_on_keyword = true,
+          show_on_accept_on_trigger_character = true,
+          show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+        },
+        list = { selection = { preselect = true, auto_insert = true } },
+      },
     },
-  },
-  signature = {
-    enabled = true,
-    window = { show_documentation = false },
-  },
-  completion = {
-    accept = { auto_brackets = { enabled = true } },
-    documentation = { auto_show = false },
-    ghost_text = { enabled = false },
-    -- keyword = {},
-    trigger = {
-      show_on_keyword = true,
-      show_on_accept_on_trigger_character = true,
-      show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
-    },
-    list = { selection = { preselect = true, auto_insert = true } },
+    after = function()
+      -- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
+      -- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
+      vim.keymap.set('n', '<C-i>', '<Tab>', { desc = 'restore <C-i>' })
+    end,
   },
 }
 
-local M = {}
+local function to_icon(provider)
+  return nv.icons.blink[provider] or ' '
+end
 
 -- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
 ---@param ctx blink.cmp.DrawItemContext
@@ -48,7 +62,7 @@ local component_highlight = function(ctx)
   return { { group = ctx.kind_hl, priority = 20000 } }
 end
 
-opts.completion.menu = {
+M[1].opts.completion.menu = {
   auto_show = true,
   ---@param ctx blink.cmp.Context
   ---@returns number the delay in milliseconds
@@ -92,7 +106,7 @@ opts.completion.menu = {
       source_id = {
         ellipsis = false,
         text = function(ctx)
-          return (M.icons[ctx.source_id] or ' ') .. ctx.icon_gap
+          return to_icon(ctx.source_name) .. ctx.icon_gap
         end,
         highlight = component_highlight,
       },
@@ -119,18 +133,17 @@ local default_providers = {
   },
   lsp = {
     score_offset = -1,
-    ---@param ctx blink.cmp.Context
-    ---@param items blink.cmp.CompletionItem[]
-    transform_items = function(ctx, items)
+    transform_items = function(_, items)
       local kind = require('blink.cmp.types').CompletionItemKind
-      -- local exclude = vim.tbl_map(function(name)
-      --   return kind[name]
-      -- end, { 'Keyword', 'Snippet' })
-      local ret = vim.tbl_filter(function(item)
-        return item.kind ~= kind.Snippet -- and item.kind ~= kind.Snippet
+      local exclude = vim.tbl_map(function(k)
+        return kind[k]
+      end, {
+        'Snippet',
+        -- 'Keyword'
+      })
+      return vim.tbl_filter(function(item)
+        return not vim.tbl_contains(exclude, item.kind)
       end, items)
-      --     return not (item.source ~= 'lazydev' and lazy_labels[item.label])
-      return ret
     end,
   },
   path = {
@@ -152,7 +165,7 @@ local default_providers = {
   },
 }
 
-opts.sources = {
+M[1].opts.sources = {
   ---@return blink.cmp.SourceList[]
   default = function()
     return vim.tbl_filter(function(src)
@@ -172,23 +185,7 @@ opts.sources = {
   }),
 }
 
-M.spec = {
-  {
-    'Saghen/blink.cmp',
-    -- event = 'InsertEnter',
-    build = 'BlinkCmp build',
-    opts = opts,
-    after = function()
-      -- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
-      -- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
-      vim.keymap.set('n', '<C-I>', '<Tab>', { desc = 'restore <C-i>' })
-    end,
-  },
-}
-
----@class blink.cmp.SourceMeta
----@field name string `user/repo`
----@field config blink.cmp.SourceProviderConfigPartial
+---@type table<string, blink.cmp.SourceProviderConfigPartial>
 local extras = {
   ['bydlw98/blink-cmp-env'] = {
     env = {
@@ -206,41 +203,26 @@ local extras = {
   },
 }
 
--- vim.list_extend(opts.sources.providers, vim.tbl_values(extras))
-M.get_providers = function(mode)
+for k, v in pairs(extras) do
+  table.insert(M, { k })
+  M[1].opts.sources.providers = vim.tbl_extend('force', M[1].opts.sources.providers, v)
+end
+
+local providers = function(mode)
   mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
-  local cmp_mode = ({
-    i = 'default',
-    c = 'cmdline',
-    t = 'terminal',
-  })[mode] or 'default'
+  local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode] or 'default'
   return vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
 end
 
--- stylua: ignore
-M.icons = {
-  buffer   = '',
-  cmdline  = '',
-  copilot  = '',
-  env      = '',
-  lazydev  = '󰒲',
-  lsp      = '',
-  omni     = '',
-  path     = '',
-  snippets = '',
-}
-
-local function to_icon(provider)
-  return M.icons[provider] or ' '
-end
-
-M.status = {
-  function()
-    return vim.iter(M.get_providers()):map(to_icon):join(' ')
-  end,
-  cond = function()
-    return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
-  end,
+nv.blink = {
+  status = {
+    function()
+      return vim.iter(providers()):map(to_icon):join(' ')
+    end,
+    cond = function()
+      return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
+    end,
+  },
 }
 
 return M

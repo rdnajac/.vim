@@ -3,7 +3,6 @@ _G.nv = require('nvim.util')
 local submodules = {
   'nvim.tokyonight',
   'nvim.snacks',
-  'nvim.blink',
   'nvim.lazy',
   'nvim.lsp',
   'nvim.mini',

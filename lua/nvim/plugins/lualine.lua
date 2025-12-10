@@ -11,6 +11,7 @@ local M = {
         disabled_filetypes = {
           statusline = {},
           winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_input' },
+          tabline = { 'snacks_dashboard' },
         },
         ignore_focus = {
           -- 'man',
@@ -21,39 +22,55 @@ local M = {
         -- },
         -- use_mode_colors = false,
       },
+
       sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch' },
-        lualine_c = { 'filename' },
-        lualine_x = { 'encoding', 'fileformat', 'filetype' },
-        -- lualine_y = { 'progress' },
+        lualine_a = {
+          {
+            function()
+              return nv.path.relative_parts()[1]
+            end,
+          },
+        },
+        lualine_b = { nv.path.relative_parts()[2] },
+        lualine_c = {},
+        lualine_x = {},
         lualine_y = {},
-        lualine_z = {},
-        -- lualine_z = {
-        -- { '%{vimline#recording#()}' },
-        -- function()
-        --   return vim.fn['vimline#recording#']()
-        -- end,
-        -- },
+        lualine_z = { Snacks.profiler.status() },
       },
+
       inactive_sections = {},
+
       tabline = {
         lualine_a = {
-          { [[%{fnamemodify(getcwd(), ':~:h')..'/'}]], color = 'Chromatophore_a' },
+          {
+            function()
+              return vim.fn.fnamemodify(Snacks.git.get_root(), ':p:~')
+            end,
+            cond = function()
+              return vim.bo.filetype ~= 'snacks_dashboard'
+            end,
+          },
         },
         lualine_b = {
           {
             'tabs',
-            mode = 0,
-            use_mode_colors = false,
+            -- mode = 0,
+            use_mode_colors = true,
             path = 0,
-            tabs_color = { active = nil, inactive = nil },
+            -- tabs_color = { active = nil, inactive = nil },
             show_modified_status = true,
             symbols = { modified = ',+' },
+            cond = function()
+              return vim.bo.filetype ~= 'snacks_dashboard'
+            end,
           },
         },
-        -- lualine_c = { Snacks.profiler.status() },
+        lualine_c = {
+          { 'diff', separator = '', cond = function() return vim.bo.filetype ~= 'snacks_dashboard' end },
+          { 'diagnostics', separator = '', cond = function() return vim.bo.filetype ~= 'snacks_dashboard' end },
+        },
       },
+
       winbar = {
         lualine_a = { nv.winbar.a },
         lualine_b = {
@@ -71,8 +88,8 @@ local M = {
           nv.blink.status,
           -- { require('nvim.plugins.r').status },
         },
-        lualine_c = { 'diff', 'diagnostics' },
       },
+
       inactive_winbar = {
         lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
         lualine_b = { '%t' },

@@ -1,9 +1,14 @@
 local icons = {
-  diff = { add = '▎', change = '▎', delete = '' },
-  mason = {
-    package_installed = '✓',
-    package_pending = '➜',
-    package_uninstalled = '✗',
+  blink = {
+    buffer = '',
+    cmdline = '',
+    copilot = '',
+    env = '',
+    lazydev = '󰒲',
+    lsp = '',
+    omni = '',
+    path = '',
+    snippets = '',
   },
   -- TODO: add support for highlight groups
   copilot = {
@@ -11,6 +16,12 @@ local icons = {
     Inactive = { ' ', 'MsgArea' },
     Warning = { ' ', 'DiagnosticWarn' },
     Normal = { ' ', 'Special' },
+  },
+  diff = { add = '▎', change = '▎', delete = '' },
+  mason = {
+    package_installed = '✓',
+    package_pending = '➜',
+    package_uninstalled = '✗',
   },
   sep = {
     -- component and section separators appear as they

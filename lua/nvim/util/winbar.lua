@@ -11,20 +11,17 @@ M.a = function(opts)
 
   if bt == '' then
     local active = opts.active or (win == tonumber(vim.g.actual_curwin))
-    path = active and '%t' or '%f'
+    -- path = active and '%t' or '%f'
+    path = active and nv.path.relative_parts(bufnr)[2] or '%t'
   elseif bt == 'help' then
     path = '%t'
-  else
-    local maybe_path = ''
-    if bt == 'terminal' then
-      maybe_path = vim.b[bufnr].osc7_dir
-    end
-    path = vim.fn.fnamemodify(maybe_path or vim.fn.getcwd(), ':~')
+  elseif bt == 'terminal' then
+    path = vim.fn.fnamemodify(vim.b[bufnr].osc7_dir or vim.fn.getcwd(), ':~')
   end
 
   return table.concat({
     '%h%w%q ', -- help/preview/quickfix
-    path,
+    path or '',
     [[%{% &readonly ? ' ' : '%M' %}]],
     [[%{% &busy     ? '◐ ' : ''   %}]],
     [[%{% &ff !=# 'unix'  ? ' ff=' . &ff : ''  %}]],

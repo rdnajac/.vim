@@ -99,7 +99,7 @@ M.config = function()
   vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 
--- write colors opts and grouos to a file: ~/.vim/tokyonight/debug/{colors,opts,groups}.lua
+-- write colors opts and groups to a file: ~/.vim/tokyonight/debug/{colors,opts,groups}.lua
 -- use nv.file.write
 M.debug = function()
   local debug_dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'gen', 'tokyonight', 'debug')
