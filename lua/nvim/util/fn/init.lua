@@ -6,6 +6,10 @@ local M = vim.defaulttable(function(k)
   return require('nvim.util.fn.' .. k)
 end)
 
+M.ensure_list = function(t)
+  return vim.islist(t) and t or { t }
+end
+
 --- Get all lines from a buffer
 --- @param bufnr number? buffer number, defaults to current buffer
 --- @return string[]|{} lines of the buffer, empty list if buffer has no lines
@@ -17,7 +21,7 @@ M.get_buf_lines = function(bufnr)
 end
 
 ---@param line number
----@param col number
+---@param col r
 ---@return string
 M.get_syn_name = function(line, col)
   return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name')

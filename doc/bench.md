@@ -1,13 +1,17 @@
 # lua profiling and benchmarking
 
-## getting a list of files from a known directory
+## file discovery
 
-### `globpath()`
+Getting a list of files from a known directory
 
+### vim.fn
 
+`globpath()`
 
-M.globpath = function()
-  return vim.fn.globpath(vim.o.runtimepath, pattern, true, true)
-end
+```lua
+ local files = vim.fn.globpath(vim.o.runtimepath, pattern, true, true)
+```
 
+### vim.fs
 
+### vim.uv

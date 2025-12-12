@@ -7,7 +7,6 @@ nv.statuscolumn = function()
 
   local sstc = Snacks.statuscolumn.get()
   if vim.bo.filetype == 'dirvish' or vim.bo.buftype == 'terminal' then
-    -- if vim.bo.buftype == 'nofile' then
     return sstc
   end
   -- remove the click fold
@@ -29,8 +28,8 @@ nv.statuscolumn = function()
   end
   -- local ret2 = right and vim.trim(right) ~= '' and right or ''
   -- return string.format([[%s%s]], ret, ret2)
-  local sep = '▎'
-  -- local sep = '▏'
+  -- local sep = '▎'
+  local sep = '▏'
   return string.format('%%=%s%s', ret, sep)
 end
 

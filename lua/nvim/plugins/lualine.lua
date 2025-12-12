@@ -9,7 +9,8 @@ local M = {
         -- section_separators = nv.icons.sep.section.rounded,
         section_separators = { left = '', right = '' },
         disabled_filetypes = {
-          statusline = {},
+	  -- FIXME: 
+          statusline = { pattern = 'snacks_dashboard' },
           winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_input' },
           tabline = { 'snacks_dashboard' },
         },

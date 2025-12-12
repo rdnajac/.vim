@@ -47,7 +47,7 @@ local M = {
     after = function()
       -- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
       -- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
-      vim.keymap.set('n', '<C-i>', '<Tab>', { desc = 'restore <C-i>' })
+      -- vim.keymap.set('n', '<C-i>', '<Tab>', { desc = 'restore <C-i>' })
     end,
   },
 }

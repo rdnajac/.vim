@@ -7,6 +7,9 @@ if !has('nvim')
 endif
 set nocdhome " default on neovim on unix, off on Windows or vim
 
+if !exists('g:plug_home') ||  !exists('g:stdpath')
+  finish
+endif
 let g:mydirs = {
       \ 'P': g:plug_home,
       \ 'c': g:stdpath.config,

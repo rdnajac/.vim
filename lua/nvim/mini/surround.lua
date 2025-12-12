@@ -1,6 +1,6 @@
 vim.schedule(function()
   -- Remap adding surrounding to Visual mode selection
-  vim.keymap.del('x', 'ys')
+  -- vim.keymap.del('x', 'ys')
   vim.keymap.set('x', 'S', ':<C-u>lua MiniSurround.add("visual")<CR>', { silent = true })
 
   -- Make special mapping for "add surrounding for line"

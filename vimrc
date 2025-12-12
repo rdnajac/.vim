@@ -270,7 +270,7 @@ nnoremap <C-BS> g;
 
 " wincmds {{{3
 " `<C-e>` scrolls the window downwards by [count] lines
-" `<C-^>` (`<C-6>`) which edits the alternate  buffer`:e #`
+" `<C-^>` (`<C-6>`) which edits the alternate buffer `:e #`
 nnoremap      <C-e>      <C-^>
 nnoremap <C-w><C-e> <C-w><C-^>
 " see `:h sbp`
@@ -329,6 +329,7 @@ nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
 " `yc` yd ym `yo` `yp` yq `yr` `ys` `yu` yx yz
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
 
+" FIXME: 
 nnoremap <expr> cq change#quote()
 
 " delete/yank comment
@@ -557,7 +558,7 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
 else
-  " Plug 'saxon1964/neovim-tips'
+  Plug 'nvim-mini/mini.nvim'
 endif
 call plug#end()
 " vim: fdl=0 fdm=marker

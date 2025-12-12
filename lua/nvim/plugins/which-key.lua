@@ -129,20 +129,22 @@ return {
     },
     show_help = false,
     sort = { 'order', 'alphanum', 'case', 'mod' },
-    spec = spec,
+    -- spec = spec,
     -- triggers = {
     --   { '<auto>', mode = 'nixsotc' },
     -- },
   },
   after = function()
-    -- only show certain registers
+    -- override: only show select registers
     ---@diagnostic disable: inject-field
     require('which-key.plugins.registers').registers = [[*+"-:.%/#=_01234567890qZ]]
 
     local wk = require('which-key')
-
+    -- bt()
+    wk.add(require('nvim.snacks.keys'))
     -- HACK: global key registration
     wk.add(nv.plug.get_keys())
+    wk.add(spec)
 
     local function coerce(char)
       return function()
