@@ -1,6 +1,6 @@
 return {
   'folke/sidekick.nvim',
-  lazy = true,
+  enabled = true,
   ---@type sidekick.Config
   opts = {},
   after = function()
@@ -13,35 +13,41 @@ return {
       return vim.lsp and vim.lsp.inline_completion
     end
 
-    vim.api.nvim_create_autocmd('User', {
-      group = aug,
-      pattern = 'BlinkCmpMenuOpen',
-      callback = function()
-        if has_inline() and vim.lsp.inline_completion.is_enabled() then
-          vim.b.inline_completion_toggle = true
-          -- vim.lsp.inline_completion.enable(false)
-          pcall(vim.lsp.inline_completion.enable, false)
-        end
-      end,
-    })
+    -- vim.api.nvim_create_autocmd('User', {
+    --   group = aug,
+    --   pattern = 'BlinkCmpMenuOpen',
+    --   callback = function()
+    --     if has_inline() and vim.lsp.inline_completion.is_enabled() then
+    --       vim.b.inline_completion_toggle = true
+    --       -- vim.lsp.inline_completion.enable(false)
+    --       pcall(vim.lsp.inline_completion.enable, false)
+    --     end
+    --   end,
+    -- })
+    -- vim.api.nvim_create_autocmd('User', {
+    --   group = aug,
+    --   pattern = 'BlinkCmpMenuClose',
+    --   callback = function()
+    --     if has_inline() and vim.b.inline_completion_toggle then
+    --       -- vim.lsp.inline_completion.enable(true)
+    --       pcall(vim.lsp.inline_completion.enable, true)
+    --       vim.b.inline_completion_toggle = nil
+    --     end
+    --   end,
+    -- })
 
-    vim.api.nvim_create_autocmd('User', {
-      group = aug,
-      pattern = 'BlinkCmpMenuClose',
-      callback = function()
-        if has_inline() and vim.b.inline_completion_toggle then
-          -- vim.lsp.inline_completion.enable(true)
-          pcall(vim.lsp.inline_completion.enable, true)
-          vim.b.inline_completion_toggle = nil
-        end
-      end,
-    })
+    -- Snacks.util.on_key('<C-Space>', function()
+    --   require('sidekick').clear()
+    -- end)
+
+    -- Snacks.util.on_key('<C-Space>', require('sidekick').clear)
+
   end,
   -- stylua: ignore
   keys = {
   { mode = 'n', expr = true, '<Tab>',
     function()
-      return require('sidekick').nes_jump_or_apply() or '<Tab>'
+      return require('sidekick').nes_jump_or_apply() and '' or '<Tab>'
     end,
   },
   -- { '<leader>a', desc = '+ai', mode = { 'n', 'v' } },

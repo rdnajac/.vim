@@ -19,6 +19,9 @@ local M = {
           end,
           'snippet_forward',
           function()
+            if not package.loaded['sidekick'] then
+              return false
+            end
             return require('sidekick').nes_jump_or_apply()
           end,
           function()
@@ -204,6 +207,7 @@ local extras = {
 }
 
 for k, v in pairs(extras) do
+  -- vim.list_extend(M, { k })
   table.insert(M, { k })
   M[1].opts.sources.providers = vim.tbl_extend('force', M[1].opts.sources.providers, v)
 end

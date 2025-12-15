@@ -84,13 +84,12 @@ local M = {
                 .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
             end,
           },
-          nv.treesitter.status,
-          nv.lsp.status,
-          nv.blink.status,
+          -- nv.treesitter.status,
+          -- nv.lsp.status,
+          -- nv.blink.status,
           -- { require('nvim.plugins.r').status },
         },
       },
-
       inactive_winbar = {
         lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
         lualine_b = { '%t' },
