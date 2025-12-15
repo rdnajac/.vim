@@ -210,9 +210,6 @@ nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
 
-nnoremap - :Explorer<CR>
-" nmap - <leader>fm
-
 vmap  :sort<CR>
 
 " diff?

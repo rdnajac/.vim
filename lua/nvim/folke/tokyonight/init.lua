@@ -19,7 +19,7 @@ local myhighlights = function(c)
     Number = { fg = c.blue },
     Special = { fg = c.red, bold = true },
     SpellBad = { bg = c.red },
-    Statement = { fg = c.red },
+    -- Statement = { fg = c.red },
     StatusLine = { bg = 'NONE' },
     -- lsp
     -- ['@property'] = { fg = c.yellow },

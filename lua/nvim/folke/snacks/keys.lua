@@ -17,6 +17,7 @@ local notifier = true -- whether to use the notifier window
 
 -- stylua: ignore
 local M = {
+{ '-',function() Snacks.explorer.open({cwd = vim.fn.fnamemodify('', ':p')}) end, desc = 'Explorer'},
 { ',,',         function() Snacks.picker.buffers() end,     desc = 'Buffers'               },
 { '<leader>.',  function() Snacks.scratch() end,            desc = 'Toggle Scratch Buffer' },
 { '<leader>bB', function() Snacks.picker.buffers(all) end,  desc = 'Buffers (all)'         },
