@@ -44,7 +44,6 @@ local M = {}
 M.spec = {
   {
     'nvim-treesitter/nvim-treesitter',
-    branch = 'main',
     build = install_defaults,
     keys = function()
       local selection = require('nvim.treesitter.selection')
@@ -57,6 +56,7 @@ M.spec = {
   },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
+    -- TODO: should be updated soon
     branch = 'main',
     enabled = false,
     opts = {
