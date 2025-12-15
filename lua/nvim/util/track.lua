@@ -132,6 +132,24 @@ M.write_log = function()
   })
 end
 
+M.write_init_log = function(start_time)
+  local end_time = vim.uv.hrtime()
+  local info = debug.getinfo(2, 'S')
+  local filename = info and info.source:sub(2) or vim.env.MYVIMRC or 'unknown'
+
+  vim.api.nvim_create_autocmd('VimEnter', {
+    callback = function()
+      local startup_time = (end_time - start_time) / 1e6
+      local logpath = vim.fs.joinpath(vim.fn.stdpath('data'), 'init_startuptime.log')
+      local f = io.open(logpath, 'a+')
+      if f then
+        f:write(('%s: %.6f\n'):format(vim.fs.basename(filename), startup_time))
+        f:close()
+      end
+    end,
+  })
+end
+
 M.notify = function()
   local stats = {} -- placeholder
   local msg = table.concat({

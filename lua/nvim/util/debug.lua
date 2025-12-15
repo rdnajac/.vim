@@ -17,9 +17,11 @@ end
 
 local print_debug = function()
   local ft = vim.bo.filetype
-  -- local word = vim.fn.expand('<cword>')
-  local word = vim.fn.expand('<cWORD>')
   local row = vim.api.nvim_win_get_cursor(0)[1]
+  local word = vim.fn.expand('<cWORD>')
+  if word:sub(-1) == ',' then
+    word = word:sub(1, -2)
+  end
   local templates = {
     -- lua = string.format("print('%s = ' .. vim.inspect(%s))", word, word),
     lua = 'print(' .. word .. ')',

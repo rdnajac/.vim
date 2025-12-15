@@ -1,15 +1,3 @@
---- what junegunn/vim-plug returns as `g:plugs`
----@class vimPlugSpec
----@field uri string Git URL of the plugin repository.
----@field dir string Local directory where the plugin is installed.
----@field frozen integer Whether the plugin is frozen (0 or 1).
----@field branch string Branch name if specified.
-
----@alias PluginTable table<string, vimPlugSpec>
-vim.g.plugs = vim.g.plugs or {}
-
-local nv = _G.nv or require('nvim.util')
-
 --- @class Plugin
 --- @field [1] string The plugin name in `user/repo` format.
 --- @field enabled boolean Defaults to `true`.
@@ -55,6 +43,7 @@ function Plugin.new(t)
       return self:setup()
     end,
   }
+
   -- TODO:
   -- if config is false, skip setup entirely
   -- a missing did_setup should skip setup entirely
@@ -174,8 +163,8 @@ end, {
 })
 
 command('PlugStatus', function(opts)
-  local plugin = nv.fn.is_nonempty_string(opts.fargs) and opts.fargs or nil
-  vim._print(true, vim.pack.get(plugin, { info = opts.bang }))
+  local plugins = #opts.fargs > 0 and opts.fargs or nil
+  dd(true, vim.pack.get(plugins, { info = opts.bang }))
 end, {
   bang = true,
   nargs = '*',
@@ -187,6 +176,7 @@ end, {
 })
 
 local unloaded = function()
+  -- return vim.iter(
   return vim.tbl_map(
     function(p)
       return p.spec.name
