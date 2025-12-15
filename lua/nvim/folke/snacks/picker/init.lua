@@ -8,9 +8,9 @@ return {
     -- proc = true,
     -- extmarks = true,
   },
-  layouts = require('nvim.snacks.picker.layouts'),
+  layouts = require('nvim.folke.snacks.picker.layouts'),
   sources = {
-    autocmds = require('nvim.snacks.picker.nvimcfg'),
+    -- autocmds = require('nvim.folke.snacks.picker.nvimcfg'),
     buffers = {
       layout = 'mylayout',
       input = {
@@ -20,13 +20,13 @@ return {
       },
       list = { keys = { ['D'] = 'bufdelete' } },
     },
-    explorer = require('nvim.snacks.picker.explorer'),
-    files = require('nvim.snacks.picker.defaults'),
+    explorer = require('nvim.folke.snacks.picker.explorer'),
+    files = require('nvim.folke.snacks.picker.defaults'),
     git_status = { layout = 'left' },
-    grep = require('nvim.snacks.picker.defaults'),
+    grep = require('nvim.folke.snacks.picker.defaults'),
     help = { layout = 'ivy_split' },
     icons = { layout = { preset = 'insert' } },
-    keymaps = require('nvim.snacks.picker.nvimcfg'),
+    keymaps = require('nvim.folke.snacks.picker.nvimcfg'),
     recent = {
       config = function(p)
         p.filter = {}

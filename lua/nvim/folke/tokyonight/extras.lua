@@ -1,16 +1,18 @@
 -- see ~/.local/share/nvim/site/pack/core/opt/tokyonight/lua/tokyonight/extra/
 ---
 ---@type table<string, {ext:string, url:string, label:string, subdir?: string, sep?:string}>
--- stylua: ignore
 local extras = {
-  eza            = { ext = "yml", url = "https://eza.rocks", label = "eza" },
-  fish           = { ext = "fish", url = "https://fishshell.com/docs/current/index.html", label = "Fish" },
-  fish_themes    = { ext = "theme", url = "https://fishshell.com/docs/current/interactive.html#syntax-highlighting", label = "Fish Themes" },
-  ghostty        = { ext = "", url = "https://github.com/ghostty-org/ghostty", label = "Ghostty" },
-  lua            = { ext = "lua", url = "https://www.lua.org", label = "Lua Table for testing" },
-  slack          = { ext = "txt", url = "https://slack.com", label = "Slack" },
-  spotify_player = { ext = "toml", url = "https://github.com/aome510/spotify-player", label = "Spotify Player" },
-  tmux           = { ext = "tmux", url = "https://github.com/tmux/tmux/wiki", label = "Tmux" },
+  eza = { ext = 'yml', url = 'https://eza.rocks', label = 'eza' },
+  fish = { ext = 'fish', url = 'https://fishshell.com/docs/current/index.html', label = 'Fish' },
+  fish_themes = {
+    ext = 'theme',
+    url = 'https://fishshell.com/docs/current/interactive.html#syntax-highlighting',
+    label = 'Fish Themes',
+  },
+  ghostty = { ext = '', url = 'https://github.com/ghostty-org/ghostty', label = 'Ghostty' },
+  lua = { ext = 'lua', url = 'https://www.lua.org', label = 'Lua Table for testing' },
+  slack = { ext = 'txt', url = 'https://slack.com', label = 'Slack' },
+  tmux = { ext = 'tmux', url = 'https://github.com/tmux/tmux/wiki', label = 'Tmux' },
 }
 
 local style = 'midnight'

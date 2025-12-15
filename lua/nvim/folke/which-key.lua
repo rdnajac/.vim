@@ -1,3 +1,39 @@
+-- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
+local wk = require('which-key')
+wk.setup({
+  keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
+  preset = 'helix',
+  replace = {
+    desc = {
+      -- { '<Plug>%(?(.*)%)?', '%1' },
+      { '^%+', '' },
+      { '<[cC]md>', ':' },
+      { '<[cC][rR]>', '󰌑 ' },
+      { '<[sS]ilent>', '' },
+      { '^lua%s+', '' },
+      { '^call%s+', '' },
+      -- { '^:%s*', '' },
+    },
+  },
+  show_help = false,
+  sort = { 'order', 'alphanum', 'case', 'mod' },
+  spec = {
+    '<leader>?',
+    function()
+      wk.show({ global = false })
+    end,
+    desc = 'Buffer Keymaps (which-key)',
+  },
+  {
+    '<C-w><Space>',
+    function()
+      wk.show({ keys = '<C-w>', loop = true })
+    end,
+    desc = 'Window Hydra Mode (which-key)',
+  },
+  -- triggers = { { '<auto>', mode = 'nixsotc' } },
+})
+
 local spec = {
   {
     mode = { 'n', 'v' },
@@ -23,7 +59,6 @@ local groups = {
   { '<leader>g', group = 'git' },
   { '<leader>s', group = 'search' },
   { '<leader>u', group = 'ui' },
-  { '<leader>x', group = 'quickfix' },
   { '<localleader>l', group = 'vimtex' },
   { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
   { 'Z', group = 'Z' },
@@ -109,72 +144,36 @@ end)
 
 spec = vim.list_extend(spec, ret)
 
-return {
-  'folke/which-key.nvim',
-  ---@class wk.Opts
-  opts = {
-    keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
-    preset = 'helix',
-    replace = {
-      desc = {
-        -- { '<Plug>%(?(.*)%)?', '%1' },
-        { '^%+', '' },
-        { '<[cC]md>', ':' },
-        { '<[cC][rR]>', '󰌑 ' },
-        { '<[sS]ilent>', '' },
-        { '^lua%s+', '' },
-        { '^call%s+', '' },
-        -- { '^:%s*', '' },
-      },
-    },
-    show_help = false,
-    sort = { 'order', 'alphanum', 'case', 'mod' },
-    -- spec = spec,
-    -- triggers = {
-    --   { '<auto>', mode = 'nixsotc' },
-    -- },
-  },
-  after = function()
-    -- override: only show select registers
-    ---@diagnostic disable: inject-field
-    require('which-key.plugins.registers').registers = [[*+"-:.%/#=_01234567890qZ]]
+vim.schedule(function()
+  -- override: only show select registers
+  ---@diagnostic disable: inject-field
+  require('which-key.plugins.registers').registers = [[*+"-:.%/#=_01234567890qZ]]
 
-    local wk = require('which-key')
-    -- bt()
-    wk.add(require('nvim.snacks.keys'))
+  wk.add(spec)
+  wk.add(require('nvim.folke.snacks.keys'))
+  if nv and nv.plug then
     -- HACK: global key registration
     wk.add(nv.plug.get_keys())
-    wk.add(spec)
+  end
 
-    local function coerce(char)
-      return function()
-        vim.api.nvim_feedkeys(vim.keycode('<Plug>(abolish-coerce-word)') .. char, 'nt', false)
-      end
+  local function coerce(char)
+    return function()
+      vim.api.nvim_feedkeys(vim.keycode('<Plug>(abolish-coerce-word)') .. char, 'nt', false)
     end
+  end
 
-    wk.add({
-      { 'cR', group = 'CoeRce', icon = { icon = '󰬴' } },
-      { 'cRc', coerce('c'), desc = 'coerceCamelCase' },
-      { 'cRm', coerce('m'), desc = 'coerceMixedCase' },
-      { 'cRp', coerce('p'), desc = 'coerceMixedcase' },
-      { 'cRs', coerce('s'), desc = 'coerce_snake_case' },
-      { 'cR_', coerce('_'), desc = 'coercesnakecase' },
-      { 'cRu', coerce('u'), desc = 'COERCE_UPPER_CASE' },
-      { 'cRU', coerce('U'), desc = 'COERCE_UPPER_CASE' },
-      { 'cR-', coerce('-'), desc = 'coerce-dash-case' },
-      { 'cRk', coerce('k'), desc = 'coerce-dash-case' },
-      { 'cR.', coerce('.'), desc = 'coerce.dot.case' },
-      { 'cR<Space>', coerce(' '), desc = 'coerce space case' },
-    })
-
-    -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
-  end,
-  keys = function()
-    local wk = require('which-key')
-    -- stylua: ignore
-    return {
-      { '<leader>?', function() wk.show({global=false}) end, desc = 'Buffer Keymaps (which-key)' },
-      { '<C-w><Space>', function() wk.show({keys='<C-w>', loop=true}) end, desc = 'Window Hydra Mode (which-key)' },
-    }
-  end,
-}
+  wk.add({
+    { 'cR', group = 'CoeRce', icon = { icon = '󰬴' } },
+    { 'cRc', coerce('c'), desc = 'coerceCamelCase' },
+    { 'cRm', coerce('m'), desc = 'coerceMixedCase' },
+    { 'cRp', coerce('p'), desc = 'coerceMixedcase' },
+    { 'cRs', coerce('s'), desc = 'coerce_snake_case' },
+    { 'cR_', coerce('_'), desc = 'coercesnakecase' },
+    { 'cRu', coerce('u'), desc = 'COERCE_UPPER_CASE' },
+    { 'cRU', coerce('U'), desc = 'COERCE_UPPER_CASE' },
+    { 'cR-', coerce('-'), desc = 'coerce-dash-case' },
+    { 'cRk', coerce('k'), desc = 'coerce-dash-case' },
+    { 'cR.', coerce('.'), desc = 'coerce.dot.case' },
+    { 'cR<Space>', coerce(' '), desc = 'coerce space case' },
+  })
+end)

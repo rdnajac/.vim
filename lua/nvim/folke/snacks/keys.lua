@@ -1,3 +1,10 @@
+Snacks.util.on_key('<Esc>', function()
+  vim.cmd.nohlsearch()
+  if package.loaded['sidekick'] then
+    require('sidekick').clear()
+  end
+end)
+
 vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent' })
 vim.keymap.set({ 'n', 't' }, '<c-\\>', Snacks.terminal.toggle)
 vim.keymap.set('v', '<leader>/', Snacks.picker.grep_word)
@@ -77,7 +84,7 @@ local leader = {
     b = 'buffers',
     f = 'files',
     g = 'git_files',
-    m = MiniFiles.open,
+    -- m = MiniFiles.open,
     P = 'projects',
     r = 'recent',
   },
@@ -188,7 +195,7 @@ local picker_pairs = {
       exclude = { '.archive' },
     },
   },
-  DataFiles = { 'd', vim.g.stdpath.data },
+  DataFiles = { 'd', vim.fn.stdpath('data') },
   GitHubRepos = { 'G', '~/GitHub/' },
   config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' }, exclude = { 'lsp' } } },
   VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },

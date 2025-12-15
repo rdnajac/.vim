@@ -1,12 +1,12 @@
 require('snacks').setup({
-  bigfile = require('nvim.snacks.bigfile'),
-  dashboard = require('nvim.snacks.dashboard'),
+  bigfile = require('nvim.folke.snacks.bigfile'),
+  dashboard = require('nvim.folke.snacks.dashboard'),
   explorer = { replace_netrw = true },
   image = { enabled = true },
   indent = { indent = { only_current = true, only_scope = true } },
   input = { enabled = true },
-  notifier = { enabled = false },
-  -- notifier = require('nvim.snacks.notifier'),
+  -- notifier = { enabled = false },
+  notifier = require('nvim.folke.snacks.notifier'),
   quickfile = { enabled = true },
   scratch = { template = 'local x = \n\nprint(x)' },
   terminal = { enabled = true },
@@ -25,17 +25,14 @@ require('snacks').setup({
   },
   scroll = { enabled = true },
   statuscolumn = {
-    -- enabled = false,
     left = { 'mark', 'sign' },
     right = { 'fold' },
     folds = { open = true, git_hl = true },
   },
-  picker = require('nvim.snacks.picker'),
+  picker = require('nvim.folke.snacks.picker'),
   styles = {
     lazygit = { height = 0, width = 0 },
     terminal = { wo = { winhighlight = 'Normal:Character' } },
   },
   words = { enabled = true },
 })
-
-return { init = function() end }

@@ -1,5 +1,5 @@
 return {
-  ---@param ctx { buf: number, ft: string }
+  ---@param ctx {buf:number, ft:string}
   setup = function(ctx)
     vim.b.completion = false
     vim.b.minihipatterns_disable = true
