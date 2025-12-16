@@ -33,69 +33,7 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Use treesitter folding for select filetypes',
 })
 
-local function install_defaults()
-  local parsers = require('nvim.treesitter.parsers')
-  vim.cmd('TSUpdate | TSInstall! ' .. table.concat(parsers, ' '))
-end
-
 local M = {}
-
--- ~/.local/share/nvim/site/pack/core/opt/LazyVim/lua/lazyvim/plugins/treesitter.lua
-M.spec = {
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = install_defaults,
-    keys = function()
-      local selection = require('nvim.treesitter.selection')
-      return {
-        { '<C-Space>', selection.start },
-        { '<C-Space>', selection.increment, mode = 'x' },
-        { '<BS>', selection.decrement, mode = 'x' },
-      }
-    end,
-  },
-  {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    -- TODO: should be updated soon
-    branch = 'main',
-    enabled = false,
-    opts = {
-      move = { set_jumps = true },
-      select = {
-        lookahead = true,
-        selection_modes = {
-          ['@parameter.outer'] = 'v', -- charwise
-          ['@function.outer'] = 'V', -- linewise
-          ['@class.outer'] = '<c-v>', -- blockwise
-        },
-        include_surrounding_whitespace = false,
-      },
-    },
-    keys = function()
-      -- You can also use captures from other query groups like `locals.scm`
-      -- vim.keymap.set({ 'x', 'o' }, 'as', function()
-      -- require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals')
-      -- end)
-      local function select_textobject(textobject)
-        return require('nvim-treesitter-textobjects.select').select_textobject(
-          textobject,
-          'textobjects'
-        )
-      end
-      return {
-	-- stylua: ignore
-        {
-          mode = { 'x', 'o' },
-          {'af', function() select_textobject('@function.outer') end,},
-          {'if', function() select_textobject('@function.inner') end,},
-          {'ac', function() select_textobject('@class.outer') end,},
-          {'ic', function() select_textobject('@class.inner') end,},
-        },
-      }
-    end,
-  },
-  { 'nvim-treesitter/nvim-treesitter-context' },
-}
 
 M._installed = nil ---@type table<string,string>?
 ---@param update boolean?

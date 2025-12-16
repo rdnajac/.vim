@@ -17,6 +17,7 @@ return {
     ---@param elements string[] The elements to cycle through
     ---@param word? boolean Whether the elements are words (true) or symbols (false). Default: false
     ---@param cyclic? boolean Whether the cycle is cyclic (true) or not (false). Default: true
+    ---@return Augend
     local new = function(elements, word, cyclic)
       return augend.constant.new({
         elements = elements,
@@ -34,7 +35,7 @@ return {
       augend.constant.alias.en_weekday_full,
       augend.constant.alias.bool,
       augend.constant.alias.Bool,
-      new({ 'and', 'or' }, true),
+      -- new({ 'and', 'or' }, true),
       new({ '&&', '||' }),
       new({ 'top', 'middle', 'bottom' }, true),
       new({ 'left', 'center', 'right' }, true),

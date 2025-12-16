@@ -66,35 +66,35 @@ local component_highlight = function(ctx)
 end
 
 M[1].opts.completion.menu = {
-  auto_show = true,
+  -- auto_show = true,
   ---@param ctx blink.cmp.Context
   ---@returns number the delay in milliseconds
-  auto_show_delay_ms = function(ctx, _)
-    if vim.tbl_contains({ '.', '/', "'", '@' }, ctx.trigger.initial_character) then
-      return 0
-    end
-    return 420
-  end,
+  -- auto_show_delay_ms = function(ctx, _)
+  --   if vim.tbl_contains({ '.', '/', "'", '@' }, ctx.trigger.initial_character) then
+  --     return 0
+  --   end
+  --   return 420
+  -- end,
 
   -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
   ---@diagnostic disable-next-line: assign-type-mismatch
-  direction_priority = function()
-    local cmp = require('blink.cmp')
-    local ctx = cmp.get_context()
-    local item = cmp.get_selected_item()
-    if ctx and item then
-      local item_text = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
-      -- local is_multi_line = item_text:find('\n') ~= nil
-      -- after showing the menu upwards, we want to maintain that direction
-      -- until we re-open the menu, so store the context id in a global variable
-      -- if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
-      if item_text:find('\n') or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
-        vim.g.blink_cmp_upwards_ctx_id = ctx.id
-        return { 'n', 's' }
-      end
-    end
-    return { 's', 'n' }
-  end,
+  -- direction_priority = function()
+  --   local cmp = require('blink.cmp')
+  --   local ctx = cmp.get_context()
+  --   local item = cmp.get_selected_item()
+  --   if ctx and item then
+  --     local item_text = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
+  --     -- local is_multi_line = item_text:find('\n') ~= nil
+  --     -- after showing the menu upwards, we want to maintain that direction
+  --     -- until we re-open the menu, so store the context id in a global variable
+  --     -- if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
+  --     if item_text:find('\n') or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
+  --       vim.g.blink_cmp_upwards_ctx_id = ctx.id
+  --       return { 'n', 's' }
+  --     end
+  --   end
+  --   return { 's', 'n' }
+  -- end,
 
   ---@type blink.cmp.Draw
   draw = {

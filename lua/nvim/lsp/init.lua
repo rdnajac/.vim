@@ -11,9 +11,9 @@ vim.schedule(function()
   vim.lsp.enable(M.servers) -- enable all LSP servers defined in `lsp/`
 end)
 
---- `blink.cmp` will automatically set some capabilities:
+--- NOTE: `blink.cmp` will automatically set some capabilities:
 --- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
---- see `vim.lsp.protocol.make_client_capabilities()` for nvim's defaults
+--- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
 vim.lsp.config('*', {
   --- @param client vim.lsp.Client
   --- @param bufnr integer
@@ -23,29 +23,6 @@ vim.lsp.config('*', {
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = bufnr })
   end,
 })
-
-M.spec = {
-  { 'neovim/nvim-lspconfig' },
-  {
-    'mason-org/mason.nvim',
-    opts = function()
-      return { ui = { icons = nv.icons.mason } }
-    end,
-    build = vim.cmd.MasonUpdate,
-    keys = { { '<leader>cm', '<Cmd>Mason<CR>', desc = 'Mason' } },
-  },
-  {
-    'mason-org/mason-lspconfig.nvim',
-    enabled = false,
-    lazy = true,
-    opts = {
-      ensure_installed = {},
-      automatic_enable = false,
-    },
-  },
-  -- { 'SmiteshP/nvim-navic' },
-  -- { 'b0o/SchemaStore.nvim' },
-}
 
 ---@param buf? number
 M.attached = function(buf)

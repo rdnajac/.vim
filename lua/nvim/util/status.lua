@@ -1,5 +1,18 @@
 ---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
 
+-- Statusline component
+-- function M.status()
+--   return {
+--     function()
+--       return ("%s %d events"):format(M.config.icons.status, #M.core.events)
+--     end,
+--     color = "DiagnosticError",
+--     cond = function()
+--       return M.core.running
+--     end,
+--   }
+-- end
+
 local M = {}
 
 M.a = function(opts)
@@ -41,36 +54,20 @@ function M.render(a, b, c)
   return table.concat({ sec_a, sec_b, sec_c })
 end
 
-local ft_map = {
-  dirvish = {
-    a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]],
-    -- b = [[%{%v:lua.nv.lsp.dirvish.status()%}]],
-    c = [[ %{join(map if opts.ft == '(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]],
-  },
-}
-
-M.lualine_extensions = vim
-  .iter(pairs(ft_map))
-  :map(function(ft, sec)
-    return {
-      winbar = {
-        lualine_a = { sec.a },
-        lualine_b = { sec.b },
-        lualine_c = { sec.c },
-        lualine_z = sec.z and { sec.z } or nil,
-      },
-      filetypes = { ft },
-    }
-  end)
-  :totable()
-
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end
+
 ---@param opts? vim.api.keyset.eval_statusline
-M.debug = function(opts)
+---             - winid: (number) |window-ID| of the window to use as context
+---             - maxwidth: (number) Maximum width of statusline.
+---             - fillchar: (string) Character to fill blank spaces in the statusline
+---             - highlights: (boolean) Return highlight information.
+---             - use_winbar: (boolean) Evaluate winbar instead of statusline.
+---             - use_tabline: (boolean) Evaluate tabline instead of statusline.
+---             - use_statuscol_lnum: nv.winbar(opts))(number) Evaluate statuscolumn for this line number
+M.debug = function(str, opts)
   opts = opts or {}
-  opts.use_winbar = true
-  -- TODO:
-  return vim.api.nvim_eval_statusline(nv.winbar(opts))
+  -- opts.use_winbar = true
+  return vim.api.nvim_eval_statusline(str, opts)
 end
 
 return M
