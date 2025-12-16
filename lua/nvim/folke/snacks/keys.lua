@@ -8,16 +8,15 @@ end)
 vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent' })
 vim.keymap.set({ 'n', 't' }, '<c-\\>', Snacks.terminal.toggle)
 vim.keymap.set('v', '<leader>/', Snacks.picker.grep_word)
--- stylua: ignore start
-vim.keymap.set('n', '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', { desc = 'Grep <cWORD>' })
--- stylua: ignore end
 
 local all = { hidden = true, nofile = true } -- opts for buffers (all)
 local notifier = true -- whether to use the notifier window
+local parent_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
 
 -- stylua: ignore
 local M = {
-{ '-',function() Snacks.explorer.open({cwd = vim.fn.fnamemodify('', ':p')}) end, desc = 'Explorer'},
+{ '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', desc = 'Grep <cWORD>' },
+{ '-', function() Snacks.explorer.open({ cwd = parent_dir }) end, desc = 'Explorer' },
 { ',,',         function() Snacks.picker.buffers() end,     desc = 'Buffers'               },
 { '<leader>.',  function() Snacks.scratch() end,            desc = 'Toggle Scratch Buffer' },
 { '<leader>bB', function() Snacks.picker.buffers(all) end,  desc = 'Buffers (all)'         },
@@ -120,6 +119,7 @@ local leader = {
     j = 'jumps',
     k = 'keymaps',
     l = {
+      'lsp',
       c = 'lsp_config',
       s = 'lsp_symbols',
       S = 'lsp_workspace_symbols',
@@ -151,6 +151,10 @@ local leader = {
 ---@param tbl LeaderMap the leader map table
 ---@param seq? string current key sequence
 local function walk(tbl, seq)
+  -- TODO: don't add literal 1 to the keys
+  if tbl[1] then
+    table.insert(M, { '<leader>' .. seq, group = tbl[1] })
+  end
   vim.iter(tbl):each(function(k, v)
     local key = tostring(k)
     local new_seq = seq .. key
@@ -187,6 +191,7 @@ local function picker_pair(desc, key, dir_or_opts, picker_opts)
   }
 end
 
+-- TODO: incorperate `cd`
 local picker_pairs = {
   Dotfiles = {
     '.',
@@ -198,7 +203,8 @@ local picker_pairs = {
   },
   DataFiles = { 'd', vim.fn.stdpath('data') },
   GitHubRepos = { 'G', '~/GitHub/' },
-  config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' }, exclude = { 'lsp' } } },
+  -- config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' }, exclude = { 'lsp' } } },
+  config = { 'c', vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
   VIMRUNTIME = { 'v', '$VIMRUNTIME', { ft = { 'lua', 'vim' } } },
   plugins = { 'p', vim.g.plug_home, { ft = { 'lua', 'vim' } } },
   everything = { 'e', { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } } },

@@ -299,7 +299,8 @@ nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
 
 " bookmarks {{{3
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
-nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
+" nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
+nnoremap <Bslash>i  <Cmd>call edit#luamod('nvim')<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 
 " resize splits {{{3

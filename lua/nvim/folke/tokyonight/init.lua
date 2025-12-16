@@ -94,7 +94,7 @@ local function extend_opts_plugins()
   end
 end
 
--- extend_opts_plugins()
+extend_opts_plugins()
 -- require('tokyonight').setup(opts)
 
 --- @type ColorScheme, tokyonight.Highlights, tokyonight.Config
