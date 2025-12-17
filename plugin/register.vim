@@ -39,7 +39,10 @@ endfunction
 
 function! s:yankring() abort
   if v:event.operator ==# 'y'
-    call map(range(9, 1, -1), {_, i -> setreg(string(i), getreg(string(i-1)))})
+    " call map(range(9, 1, -1), {_, i -> setreg(string(i), getreg(string(i-1)))})
+    for i in range(9, 1, -1)
+      call setreg(string(i), getreg(string(i - 1)))
+    endfor
   endif
 endfunction
 

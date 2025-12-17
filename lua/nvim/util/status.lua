@@ -15,7 +15,7 @@
 
 local M = {}
 
-M.a = function(opts)
+M.buffer = function(opts)
   local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
   local win = opts.win or vim.api.nvim_get_current_win()
   local bt = opts.bt or vim.bo[bufnr].buftype

@@ -1,12 +1,17 @@
-local nv = _G.nv or {}
+vim.schedule(function()
+  vim.o.statuscolumn = '%!v:lua.nv.statuscolumn()'
+end)
 
-nv.statuscolumn = function()
+return function()
   if not Snacks then
     return ''
   end
 
   local sstc = Snacks.statuscolumn.get()
-  if vim.bo.filetype == 'dirvish' or vim.bo.buftype == 'terminal' then
+  if
+    vim.bo.buftype == 'terminal'
+    or vim.tbl_contains({ 'dirvish', 'snacks_dashboard' }, vim.bo.filetype)
+  then
     return sstc
   end
   -- remove the click fold
@@ -17,6 +22,7 @@ nv.statuscolumn = function()
   local left, num, right = sstc:match('^(.-)%%=(%d+)(.*)$')
   local ret
   -- left signs override numbers
+  -- TODO: perfer diagnostics over git?
   if left and vim.trim(left) ~= '' then
     ret = left .. ' '
   elseif num then
@@ -32,5 +38,3 @@ nv.statuscolumn = function()
   local sep = '▏'
   return string.format('%%=%s%s', ret, sep)
 end
-
-vim.o.statuscolumn = '%!v:lua.nv.statuscolumn()'

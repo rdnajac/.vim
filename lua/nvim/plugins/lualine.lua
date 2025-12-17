@@ -41,7 +41,7 @@ M.opts.sections = {
 
 M.opts.inactive_sections = {}
 
-M.tabline = {
+M.opts.tabline = {
   lualine_a = {
     {
       function()
@@ -61,18 +61,12 @@ M.tabline = {
     },
   },
   lualine_c = {
-    {
-      'diff',
-      separator = '',
-    },
-    {
-      'diagnostics',
-      separator = '',
-    },
+    -- { 'diff', separator = '' },
+    -- { 'diagnostics', separator = '' },
   },
 }
 
-M.winbar = {
+M.opts.winbar = {
   lualine_a = { nv.status.buffer },
   lualine_b = {
     {
@@ -88,9 +82,16 @@ M.winbar = {
     -- nv.blink.status,
     -- { require('nvim.plugins.r').status },
   },
+  lualine_c = {
+    {
+      function()
+        return vim.diagnostic.status()
+      end,
+    },
+  },
 }
 
-M.inactive_winbar = {
+M.opts.inactive_winbar = {
   lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
   lualine_b = { '%t' },
   -- lualine_c = { M.winbar.b },

@@ -45,7 +45,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "ad95655ec5d13ff7c728d731eb9fd39f34395a03",
+      "rev": "0d7d33e40f0c27f57cb29654ed78cab17d705e68",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
@@ -57,7 +57,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "686af1e08c47a72e1f969ba2b40a424446d882cf",
+      "rev": "07d088bf8bdadd159eb807b90eaee86a4778383f",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {

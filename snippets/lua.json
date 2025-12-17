@@ -4,21 +4,14 @@
     "description": "Module skeleton",
     "prefix": "local M"
   },
-  "M.func": {
+  "function": {
     "body": [
-      "function M.${1}($2)",
+      "function ${1}($2)",
       "  $0",
       "end\n"
     ],
-    "description": "Module function",
-    "prefix": "function M."
-  },
-  "assigment": {
-    "body": [
-      "local ${1:varName} = ${0:value}"
-    ],
-    "description": "define a variable",
-    "prefix": "local"
+    "description": "function",
+    "prefix": "function"
   },
   "augroup": {
     "body": "local aug = vim.api.nvim_create_augroup('$0', {})",
