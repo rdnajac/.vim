@@ -1,7 +1,3 @@
-vim.schedule(function()
-  vim.o.statuscolumn = '%!v:lua.nv.statuscolumn()'
-end)
-
 return function()
   if not Snacks then
     return ''

@@ -30,9 +30,9 @@ set virtualedit=block
 set whichwrap+=<,>,[,],h,l
 
 " indent {{{2
+" set nowrap TODO: set this in a ftplugin?
 set breakindent
 set linebreak
-set nowrap
 set shiftround
 " don't change tabstop!
 set shiftwidth=2 softtabstop=2
@@ -327,7 +327,7 @@ nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
 " `yc` yd ym `yo` `yp` yq `yr` `ys` `yu` yx yz
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
 
-" FIXME: 
+" FIXME:
 nnoremap <expr> cq change#quote()
 
 " delete/yank comment
