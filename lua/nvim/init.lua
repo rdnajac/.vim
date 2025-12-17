@@ -2,21 +2,15 @@ _G.nv = setmetatable({
   import = function(modname)
     -- local require = require('nvim.util.xprequire')
     local module = require(modname)
-    -- print('importing ' .. modname)
-    if not module then
-      error('no mod')
-    end
     local key = modname:match('([^./]+)$')
     rawset(nv, key, module)
     return module
   end,
+  --- Get a `vim.iter` over the files in the caller's directory
+  ---@return Iter
   submodules = function()
-    local info = debug.getinfo(2, 'S')
-    if not info or info.source:sub(1, 1) ~= '@' then
-      return {}
-    end
-    local path = vim.fs.dirname(info.source:sub(2))
-    local files = vim.fn.globpath(path, '*.lua', false, true)
+    local caller_path = vim.fs.dirname(debug.getinfo(2, 'S').source:sub(2))
+    local files = vim.fn.globpath(caller_path, '*.lua', false, true)
     return vim
       .iter(files)
       :filter(function(f)
@@ -36,35 +30,46 @@ _G.nv = setmetatable({
   end,
 })
 
+-- ---@param dir? string defaults to the calling script's directory
+-- ---@param pattern? string defaults to `*` if omitted
+-- ---@param antipattern? string defaults to `init.lua` if omitted
+-- ---return Iter
+-- ---@return string[] files
+-- submodules = function(dir, pattern, antipattern)
+--   dir = dir or vim.fs.dirname(debug.getinfo(2, 'S').source:sub(2))
+--   pattern = pattern or '*'
+--   antipattern = antipattern or 'init.lua'
+--   return vim.tbl_filter(function(fname)
+--     return not vim.endswith(fname, antipattern)
+--   end, vim.fn.globpath(dir, pattern, false, true))
+-- end,
+
 local script = debug.getinfo(1, 'S').source:sub(2)
-for name, type_ in vim.fs.dir(vim.fs.dirname(script)) do
-  if type_ == 'directory' and name ~= 'util' then
-    nv.import('nvim.' .. name)
-  end
-end
+local iter = vim.iter(vim.fs.dir(vim.fs.dirname(script)))
+local specs = iter
+  :filter(function(name, type_)
+    return type_ == 'directory' and not vim.tbl_contains({ 'folke', 'util' }, name)
+  end)
+  :map(function(name)
+    return nv.import('nvim.' .. name)
+  end)
+  :filter(function(mod)
+    return type(mod) == 'table'
+  end)
+  :fold({}, function(acc, mod)
+    for _, v in ipairs(mod.spec and mod.spec or mod) do
+      table.insert(acc, nv.plug(v):tospec())
+    end
+    return acc
+  end)
 
-local function packadd(specs)
-  local speclist = vim
-    .iter(specs)
-    :map(function(p)
-      return nv.plug(p):tospec()
-    end)
-    :totable()
-
-  vim.pack.add(speclist, {
-    ---@param plug_data {spec: vim.pack.Spec, path: string}
-    load = function(plug_data)
-      local spec = plug_data.spec
-      vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-      if spec.data and vim.is_callable(spec.data.setup) then
-        -- print('setup ' .. spec.name)
-        spec.data.setup()
-      end
-    end,
-  })
-end
-
-packadd(nv.plugins)
-packadd(nv.folke.spec)
-packadd(nv.lsp.spec)
-packadd(nv.treesitter.spec)
+vim.pack.add(specs, {
+  ---@param plug_data {spec: vim.pack.Spec, path: string}
+  load = function(plug_data)
+    local spec = plug_data.spec
+    vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
+    if spec.data and vim.is_callable(spec.data.setup) then
+      spec.data.setup()
+    end
+  end,
+})

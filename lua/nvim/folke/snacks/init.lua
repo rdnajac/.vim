@@ -5,8 +5,7 @@ require('snacks').setup({
   image = { enabled = true },
   indent = { indent = { only_current = true, only_scope = true } },
   input = { enabled = true },
-  notifier = { enabled = false },
-  -- notifier = require('nvim.folke.snacks.notifier'),
+  notifier = require('nvim.folke.snacks.notifier'),
   quickfile = { enabled = true },
   scratch = { template = 'local x = \n\nprint(x)' },
   terminal = { enabled = true },
@@ -33,7 +32,7 @@ require('snacks').setup({
   styles = {
     lazygit = { height = 0, width = 0 },
     terminal = { wo = { winhighlight = 'Normal:Character' } },
-    notification_history = { height = 0.9, width = 0.9 },
+    notification_history = { height = 0.9, width = 0.9, wo = { wrap = false } },
   },
   words = { enabled = true },
 })

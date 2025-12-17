@@ -1,4 +1,3 @@
--- autocmd for dir changed to dd(Ev)
 local aug = vim.api.nvim_create_augroup('nvimrc', {})
 
 --- @param event vim.api.keyset.events|vim.api.keyset.events[]

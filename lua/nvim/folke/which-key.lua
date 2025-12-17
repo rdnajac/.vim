@@ -156,6 +156,7 @@ vim.schedule(function()
     wk.add(nv.plug.get_keys())
   end
 
+  -- TODO: move me!
   local function coerce(char)
     return function()
       vim.api.nvim_feedkeys(vim.keycode('<Plug>(abolish-coerce-word)') .. char, 'nt', false)

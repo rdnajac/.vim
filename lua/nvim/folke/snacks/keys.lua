@@ -11,12 +11,11 @@ vim.keymap.set('v', '<leader>/', Snacks.picker.grep_word)
 
 local all = { hidden = true, nofile = true } -- opts for buffers (all)
 local notifier = true -- whether to use the notifier window
-local parent_dir = vim.fs.dirname(vim.api.nvim_buf_get_name(0))
 
 -- stylua: ignore
 local M = {
 { '<leader>sW', 'viW<Cmd>lua Snacks.picker.grep_word()<CR>', desc = 'Grep <cWORD>' },
-{ '-', function() Snacks.explorer.open({ cwd = parent_dir }) end, desc = 'Explorer' },
+{ '-', function() Snacks.explorer.open({ cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))}) end, desc = 'Explorer' },
 { ',,',         function() Snacks.picker.buffers() end,     desc = 'Buffers'               },
 { '<leader>.',  function() Snacks.scratch() end,            desc = 'Toggle Scratch Buffer' },
 { '<leader>bB', function() Snacks.picker.buffers(all) end,  desc = 'Buffers (all)'         },

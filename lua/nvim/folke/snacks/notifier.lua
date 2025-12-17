@@ -1,3 +1,6 @@
+---@param buf number
+---@param notif snacks.notifier.Notif
+---@param ctx snacks.notifier.ctx
 local function style(buf, notif, ctx)
   vim.api.nvim_buf_set_lines(buf, 0, 1, false, { '', '' })
   vim.api.nvim_buf_set_lines(buf, 2, -1, false, vim.split(notif.msg, '\n'))
@@ -34,6 +37,22 @@ local function style(buf, notif, ctx)
   })
 end
 
+---@type snacks.notifier.Config
 return {
+  -- date_format: string = "%R",
+  -- filter?: fun(notif: snacks.notifier.Notif):boolean,
+  -- gap: integer = 0,
+  -- height: table,
+  -- icons: table,
+  -- keep?: fun(notif: snacks.notifier.Notif):boolean,
+  -- level: integer = 0,
+  -- margin: table,
+  -- more_format: boolean|string,
+  -- padding: boolean = true,
+  -- refresh: integer = 50,
+  -- sort: table,
   style = style,
+  -- timeout: integer = 3000,
+  -- top_down: boolean = true,
+  -- width: table,
 }

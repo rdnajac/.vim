@@ -92,6 +92,10 @@ M.dir_precise = function()
     :totable()
 end
 
+M.readdir = function()
+  return vim.fn.readdir(config_cache)
+end
+
 -- build benches list from M
 local benches = {}
 for label, fn in pairs(M) do
