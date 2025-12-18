@@ -30,7 +30,6 @@ M.sources = {
   buffers = {
     layout = 'mylayout',
     input = { keys = { ['<C-x>'] = { 'bufdelete', mode = { 'n', 'i' } } } },
-    list = { keys = { ['D'] = 'bufdelete' } },
   },
   explorer = require('nvim.folke.snacks.picker.explorer'),
   files = require('nvim.folke.snacks.picker.defaults'),

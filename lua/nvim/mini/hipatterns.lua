@@ -2,7 +2,7 @@ local hi = require('mini.hipatterns')
 
 local function in_comment(buf_id, line, col)
   if vim.treesitter.highlighter.active[buf_id] then
-    return nv.treesitter.is_comment({ line, col })
+    return require('nvim.treesitter').is_comment({ line, col })
   end
   local synid = vim.fn.synID(line + 1, col + 1, 1)
   local name = vim.fn.synIDattr(synid, 'name')

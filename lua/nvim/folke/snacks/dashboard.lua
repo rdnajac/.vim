@@ -1,3 +1,10 @@
+local short_header = [[
+ ███╗   ██╗██╗   ██╗██╗███╗   ███╗
+ ████╗  ██║██║   ██║██║████╗ ████║
+ ██╔██╗ ██║██║   ██║██║██╔████╔██║
+ ██║╚██╗██║╚██╗ ██╔╝██║██║╚██╔╝██║
+ ██║ ╚████║ ╚████╔╝ ██║██║ ╚═╝ ██║
+ ╚═╝  ╚═══╝  ╚═══╝  ╚═╝╚═╝     ╚═╝]]
 local dijkstra = [[
 "The computing scientist's main challenge is not to get
 confused by the complexities of his own making."
@@ -23,7 +30,18 @@ return {
     },
   },
   sections = {
-    { section = 'header' },
+    function()
+      if vim.o.columns < 56 then
+        return {
+          pane = 1,
+          header = short_header,
+          padding = 2,
+          align = 'left',
+        }
+      else
+        return { section = 'header' }
+      end
+    end,
     { section = 'keys' },
     { section = 'terminal', cmd = cmd, indent = 10, padding = 1, height = 12 },
   },

@@ -172,7 +172,7 @@ M[1].opts.sources = {
   ---@return blink.cmp.SourceList[]
   default = function()
     return vim.tbl_filter(function(src)
-      return nv.treesitter.is_comment() and src ~= 'snippets' or true
+      return require('nvim.treesitter').is_comment() and src ~= 'snippets' or true
     end, vim.tbl_keys(default_providers))
   end,
   per_filetype = {

@@ -1,11 +1,8 @@
 Snacks.util.on_key('<Esc>', function()
   vim.cmd.nohlsearch()
-  if package.loaded['sidekick'] then
-    require('sidekick').clear()
-  end
 end)
 
-vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent' })
+vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent', remap = true })
 vim.keymap.set({ 'n', 't' }, '<c-\\>', Snacks.terminal.toggle)
 vim.keymap.set('v', '<leader>/', Snacks.picker.grep_word)
 

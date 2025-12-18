@@ -85,6 +85,11 @@ return {
         end,
       })
     end,
+
+    sidekick_send = function(...)
+      -- name = 'copilot'
+      return require('sidekick.cli.picker.snacks').send(...)
+    end,
   },
   ---@param opts snacks.picker.files.Config
   config = function(opts)
@@ -101,6 +106,7 @@ return {
       keys = {
         ['`'] = { 'toggle', mode = { 'i', 'n' } },
         ['~'] = { 'zoxide', mode = { 'i', 'n' } },
+        ['<M-a>'] = { 'sidekick_send', mode = { 'n', 'i' } },
         ['<M-c>'] = { 'clear', mode = { 'i', 'n' } },
         ['<M-d>'] = { 'debug', mode = { 'i', 'n' } },
       },

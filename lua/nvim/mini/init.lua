@@ -24,12 +24,16 @@ local buffer_local_configs = {
   lua = {
     minisurround_config = {
       custom_surroundings = {
+        u = { output = { left = 'function() ', right = ' end' } },
         U = { output = { left = 'function()\n', right = '\nend' } },
-        u = { output = { left = 'function()\n  ', right = '\nend' } },
         i = {
           output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' },
         },
-        s = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
+        s = {
+          input = { '%[%[().-()%]%]' },
+          output = { left = '[[', right = ']]' },
+        },
+        S = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
       },
     },
   },

@@ -32,7 +32,7 @@ M.start = function()
     return vim.cmd('normal! viW')
   end
 
-  if nv.treesitter.is_comment() then
+  if require('nvim.treesitter').is_comment() then
     skip = true
     return vim.cmd('normal! viW')
   end
