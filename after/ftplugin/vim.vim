@@ -6,4 +6,6 @@ setlocal commentstring=\"\ %s
 nnoremap <buffer> <leader>ch <Cmd>call edit#ch()<CR>
 nnoremap <buffer> gch        <Cmd>call edit#ch()<CR>
 
+nnoremap <buffer> <M-CR> <Cmd>so %<CR>
+
 ia <buffer> enc scriptencoding utf-8

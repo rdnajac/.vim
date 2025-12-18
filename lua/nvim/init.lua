@@ -1,32 +1,40 @@
+-- local files = vim.fn.globpath('.', '*', false, true)
+-- dd(files)
+-- print('once')
+
 _G.nv = setmetatable({
   import = function(modname)
-    -- local require = require('nvim.util.fn.xprequire')
-    -- local mod = require(modname)
     local ok, mod = pcall(require, modname)
-    if not ok and mod then
-      local key = modname:match('([^./]+)$')
+    if ok and mod then
+      -- local key = modname:match('([^./]+)$')
+      local key = vim.fn.fnamemodify(modname, ':t')
+      -- print(modname .. ' ' .. key)
       rawset(nv, key, mod)
     end
     return mod
   end,
 
-  --- Get a `vim.iter` over the files in the caller's directory
-  ---@param dir? string defaults to the calling script's directory
-  ---@param pattern? string defaults to `*` if omitted
-  ---@param antipattern? string defaults to `init.lua` if omitted
-  ---return Iter
-  ---return string[] files
-  submodules = function(dir, pattern, antipattern)
-    dir = dir or vim.fs.dirname(debug.getinfo(2, 'S').source:sub(2))
-    pattern = pattern or '*'
-    antipattern = antipattern or 'init.lua'
+  ---@param opts? {dir?: string, pattern?: string}
+  ---@return string[] files
+  submodules = function(opts)
+    opts = opts or {}
+    local dir = opts.dir or vim.fs.dirname(debug.getinfo(2, 'S').source:sub(2))
+    local pattern = opts.pattern or '*'
     local files = vim.fn.globpath(dir, pattern, false, true)
-    local iter = vim.iter(files)
-    return iter
+    dd(dir)
+
+    return vim
+      .iter(files)
       :filter(function(f)
-        return not vim.endswith(f, antipattern)
+        if vim.fn.isdirectory(f) == 1 then
+          return vim.uv.fs_stat(f .. '/init.lua') ~= nil
+        else
+          return not vim.endswith(f, 'init.lua')
+        end
       end)
-      :map(require('nvim.util.fn').modname)
+      :map(function(f)
+        return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??')
+      end)
       :totable()
   end,
 }, {
