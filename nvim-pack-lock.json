@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "b14922e5c4b30efe0857256989b72eaf1f14109f",
+      "rev": "e72fc4443f2f91e023d0edd168074ba16898e970",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "bullets.vim": {
@@ -125,7 +125,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "6e1229e23c3bbe93487ef62458b1241a2d8ff6af",
+      "rev": "aed184681f177ae6071e56cd7a2b9441261fca52",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

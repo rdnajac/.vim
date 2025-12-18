@@ -3,6 +3,7 @@ vim.bo.syntax = 'ON' -- Keep using legacy syntax for `vim-endwise`
 
 local fn = require('nvim.util.fn')
 -- stylua: ignore
+-- TODO: make this a lsp action
 local mappings = {
   { 'crf', fn.coerce.form,          'local function foo() ↔ local foo = function()' },
   { 'crM', fn.coerce.formscope,     'local function foo() → M.foo = function()' },
@@ -31,20 +32,24 @@ end
 
 local aug = vim.api.nvim_create_augroup('lua', {})
 
--- TODO: only disable highlighting inside of `vim.cmd([[...]])`
-vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
-  group = aug,
-  callback = function()
-    vim.b.old_hl = Snacks.util.color('LspReferenceText', 'bg')
-    Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
-  end,
-})
-vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
-  group = aug,
-  callback = function()
-    if vim.b.old_hl then
-      Snacks.util.set_hl({ LspReferenceText = { bg = vim.b.old_hl } })
-      vim.b.old_hl = nil
-    end
-  end,
-})
+if Snacks then
+  vim.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { buffer = true })
+
+  -- TODO: only disable highlighting inside of `vim.cmd([[...]])`
+  vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
+    group = aug,
+    callback = function()
+      vim.b.old_hl = Snacks.util.color('LspReferenceText', 'bg')
+      Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
+    end,
+  })
+  vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
+    group = aug,
+    callback = function()
+      if vim.b.old_hl then
+        Snacks.util.set_hl({ LspReferenceText = { bg = vim.b.old_hl } })
+        vim.b.old_hl = nil
+      end
+    end,
+  })
+end
