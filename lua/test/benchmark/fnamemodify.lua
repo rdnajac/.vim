@@ -1,16 +1,22 @@
-local benchmark = require('test.benchmark')
+local bench = require('test.benchmark').run
 
-local config_dir = vim.fn.stdpath('config') .. '/after/lsp'
-local files = vim.fn.globpath(config_dir, '*.lua', true, true)
+local files = vim.api.nvim_get_runtime_file('lua/nvim/*/init.lua', true)
 
-benchmark.run({
+local foo = function(f)
+  return vim.fn.fnamemodify(f, ':h:t')
+end
+
+local x = vim.tbl_map(foo, files)
+print(x)
+
+local M = {
   ['vim.fs.basename + sub'] = function()
     return vim.tbl_map(function(path)
       local name = vim.fs.basename(path)
       return name:match('(.+)%.lua$') or name
     end, files)
   end,
-  ['fnamemodify :t:r'] = function()
+  ['fnamemodify :t'] = function()
     return vim.tbl_map(function(path)
       return vim.fn.fnamemodify(path, ':t:r')
     end, files)
@@ -26,4 +32,6 @@ benchmark.run({
       return name:match('(.+)%.lua$') or name
     end, files)
   end,
-})
+}
+
+-- bench(M)
