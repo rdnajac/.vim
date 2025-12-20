@@ -1,6 +1,7 @@
 ---@meta
 error('this file should not be required directly')
 
+-- _G.nv = require('nvim.util')
 _G.nv.fn = require('nvim.util.fn')
 
 --- what junegunn/vim-plug returns as `g:plugs`
