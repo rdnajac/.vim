@@ -1,36 +1,32 @@
-_G.nv = setmetatable({}, {
+-- ~/.local/share/nvim/site/pack/core/opt/snacks.nvim/lua/snacks/init.lua
+local M = setmetatable({}, {
   __index = function(t, k)
-    local ok, mod = pcall(require, 'nvim.util.' .. k)
-    if not ok then
-      return nil
-    end
-    rawset(t, k, mod)
-    return mod
+    -- print('access: '..k)
+    t[k] = require('nvim.util.' .. k)
+    return rawget(t, k)
   end,
 })
 
-local submodules = vim.tbl_map(function(f)
-  return f:match('^.*lua/(nvim/.*)/init%.lua')
-end, vim.api.nvim_get_runtime_file('lua/nvim/*/init.lua', true))
+_G.nv = M
 
-local iter = vim.iter(submodules)
-
-local specs = iter
-  :map(function(modname)
-    local ok, mod = pcall(require, modname)
-    if ok and mod then
-      local key = modname:match('([^./]+)$')
-      -- local key = vim.fn.fnamemodify(modname, ':t')
-      -- print(modname .. ' ' .. key)
-      rawset(nv, key, mod)
-    end
+local files = vim.api.nvim_get_runtime_file('lua/nvim/*/init.lua', true)
+local specs = vim
+  .iter(files)
+  :map(function(fname)
+    -- convert filename to module name
+    local modname = fname:match('^.*lua/(nvim/.*)/init%.lua')
+    local mod = dofile(fname)
+    local key = modname:match('([^./]+)$')
+    rawset(M, key, mod)
     return mod
   end)
   :map(function(mod)
-    return type(mod) == 'table' and ((mod.spec and mod.spec) or mod) or nil
+    if type(mod) == 'table' then
+      return mod.spec or mod -- plugins
+    end
   end)
-  :fold({}, function(acc, t)
-    for _, v in ipairs(t) do
+  :fold({}, function(acc, speclist)
+    for _, v in ipairs(speclist) do
       table.insert(acc, nv.plug(v):tospec())
     end
     return acc
@@ -46,3 +42,5 @@ vim.pack.add(specs, {
     end
   end,
 })
+
+return M
