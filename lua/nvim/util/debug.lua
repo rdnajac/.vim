@@ -42,4 +42,63 @@ M.print = function()
   print_debug()
 end
 
+M.source = function()
+  local me = debug.getinfo(1, 'S')
+  -- .source:sub(2) when to sub? @...
+  local dir = vim.fs.dirname(me.source:sub(2))
+
+  local i = 1
+  while true do
+    i = i + 1
+    -- info and (info.source == me.source or info.source == '@' .. vim.env.MYVIMRC or info.what ~= 'Lua')
+    local info = debug.getinfo(i, 'S')
+    if not info then
+      error('Could not `debug.getinfo()`')
+    end
+
+    local src = info.source
+    -- source = vim.uv.fs_realpath(source) or source
+    src = src:sub(1, 1) == '@' and src:sub(2) or src
+    if not vim.startswith(src, dir) then
+      return vim.fs.abspath(src)
+    end
+  end
+  return src .. ':' .. info.linedefined
+end
+
+local get_upvalue = function(func, name)
+  local i = 1
+  while true do
+    local n = debug.getupvalue(func, i)
+    if not n then
+      break
+    end
+    if n == name then
+      dd(n)
+      return
+    end
+    i = i + 1
+  end
+  error('upvalue not found: ' .. name)
+end
+
+-- local func = Snacks.picker.local
+-- get_upvalue(func, name)
+
+function M.set_upvalue(func, name, value)
+  local i = 1
+  while true do
+    local n = debug.getupvalue(func, i)
+    if not n then
+      break
+    end
+    if n == name then
+      debug.setupvalue(func, i, value)
+      return
+    end
+    i = i + 1
+  end
+  error('upvalue not found: ' .. name)
+end
+
 return M

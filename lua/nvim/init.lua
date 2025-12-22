@@ -9,6 +9,9 @@ local M = setmetatable({}, {
 
 _G.nv = M
 
+-- TODO: register notify setup
+-- TODO: register debug setup
+
 local files = vim.api.nvim_get_runtime_file('lua/nvim/*/init.lua', true)
 local specs = vim
   .iter(files)

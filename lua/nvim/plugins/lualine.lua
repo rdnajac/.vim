@@ -24,20 +24,20 @@ local M = {
   },
 }
 
-M.opts.sections = {
-  lualine_a = {
-    {
-      function()
-        return nv.path.relative_parts()[1]
-      end,
-    },
-  },
-  lualine_b = { nv.path.relative_parts()[2] },
-  lualine_c = {},
-  lualine_x = {},
-  lualine_y = {},
-  lualine_z = { Snacks and Snacks.profiler.status() or nil },
-}
+-- M.opts.sections = {
+--   lualine_a = {
+--     {
+--       function()
+--         return nv.path.relative_parts()[1]
+--       end,
+--     },
+--   },
+--   lualine_b = { nv.path.relative_parts()[2] },
+--   lualine_c = {},
+--   lualine_x = {},
+--   lualine_y = {},
+--   -- lualine_z = { Snacks and Snacks.profiler.status() or nil },
+-- }
 
 M.opts.inactive_sections = {}
 
@@ -83,11 +83,11 @@ M.opts.winbar = {
     -- { require('nvim.plugins.r').status },
   },
   lualine_c = {
-    {
-      function()
-        return vim.diagnostic.status()
-      end,
-    },
+    -- {
+    --   function()
+    --     return vim.diagnostic.status()
+    --   end,
+    -- },
   },
 }
 

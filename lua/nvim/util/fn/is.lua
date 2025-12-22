@@ -1,1 +1,0 @@
--- useful function for checking if things are, in fact, things

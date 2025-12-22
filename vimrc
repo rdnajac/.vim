@@ -30,7 +30,8 @@ set virtualedit=block
 set whichwrap+=<,>,[,],h,l
 
 " indent {{{2
-" set nowrap TODO: set this in a ftplugin?
+" TODO: set this in a ftplugin?
+" set nowrap
 set breakindent
 set linebreak
 set shiftround
@@ -300,7 +301,8 @@ nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
 " bookmarks {{{3
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 " nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
-nnoremap <Bslash>i  <Cmd>call edit#luamod('nvim')<CR>
+nnoremap <Bslash>n  <Cmd>call edit#luamod('nvim')<CR>
+nnoremap <Bslash>i  <Cmd>call edit#('~/.vim/init.lua')<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 
 " resize splits {{{3

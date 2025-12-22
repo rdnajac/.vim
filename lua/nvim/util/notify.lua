@@ -1,28 +1,48 @@
-local M = {}
+local M = setmetatable({}, {
+  __call = function(t, ...)
+    return t.notify(...)
+  end,
+})
 
 -- Highlight groups for different log levels
 -- 1 = DEBUG, 2 = INFO, 3 = WARN, 4 = ERROR
 local groups = { 'Ok', 'More', 'Warning', 'Error' }
--- local groups = require('nvim.config.diagnostic').opts.signs.numhl
 
 --- Override for vim.notify that provides additional highlighting
 --- @param msg string
---- @param level vim.log.levels|nil
+--- @param level? vim.log.levels|nil
 --- @param opts? table
 M.notify = function(msg, level, opts)
-  local hl = groups[level or 1] .. 'Msg'
-  vim.api.nvim_echo({ { msg, hl } }, true, { err = level == vim.log.levels.ERROR })
+  vim.api.nvim_echo(
+    { { msg, groups[level or 1] .. 'Msg' } },
+    true,
+    { err = level == vim.log.levels.ERROR }
+  )
 end
+
+---@param msg string|string[]
+---@param opts? snacks.notify.Opts
+function M.snacks_notify(msg, opts)
+  opts = opts or {}
+  local notify = vim[opts.once and 'notify_once' or 'notify'] --[[@as fun(...)]]
+  notify = vim.in_fast_event() and vim.schedule_wrap(notify) or notify
+  msg = type(msg) == 'table' and table.concat(msg, '\n') or msg --[[@as string]]
+  msg = vim.trim(msg)
+  opts.title = opts.title or 'Snacks'
+  return notify(msg, opts.level, opts)
+end
+
+-- stylua: ignore start
+function M.warn(msg, opts)  return M.notify(msg, vim.tbl_extend("keep", { level = vim.log.levels.WARN }, opts or {})) end
+function M.info(msg, opts)  return M.notify(msg, vim.tbl_extend("keep", { level = vim.log.levels.INFO }, opts or {})) end
+function M.error(msg, opts) return M.notify(msg, vim.tbl_extend("keep", { level = vim.log.levels.ERROR }, opts or {})) end
+-- stylua: ignore end
 
 M.setup = function()
-  -- vim.notify = M.notify
-  -- for level in string.gmatch('notify info warn error', '%S+') do
-  --   Snacks.notify[level]('Notifier enabled!')
-  -- end
+  vim.notify = M.notify
+  for level in string.gmatch('notify info warn error', '%S+') do
+    Snacks.notify[level]('Notifier enabled!')
+  end
 end
 
-return setmetatable(M, {
-  __call = function(_, ...)
-    return M.notify(...)
-  end,
-})
+return M
