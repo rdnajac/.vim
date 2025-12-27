@@ -1,11 +1,11 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "d8eeaabfe74acb034eacf3793c459609b9fe7ebe",
+      "rev": "daaf4fdb74b36c3b692b7d06acf5238acf8ff8be",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
-      "rev": "ca1da76d5e91e42f676654905c0c7b6d074b8068",
+      "rev": "8eb4803da99a575bc827a6c814e63b1053b7002f",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink-cmp-env": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "37ce860d8eeeee92d60b9a72db21e369d97e6a75",
+      "rev": "18712d9d292dd362067de74d3b54eb90ce860ba9",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "bullets.vim": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/alker0/chezmoi.vim.git"
     },
     "dial.nvim": {
-      "rev": "f97c0c7fa7d5111bc04a91d0f693900fb2d95861",
+      "rev": "f2634758455cfa52a8acea6f142dcd6271a1bf57",
       "src": "https://github.com/monaqa/dial.nvim.git"
     },
     "lazydev.nvim": {
@@ -41,15 +41,15 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "b7231b65d15611a99168bc5a94a84cb8e4c85c21",
+      "rev": "e7a8e5a0920df1435172d42fb32e474bbb30d021",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "c4f67bf85b01a57e3c130352c0a0e453ab8cd5b9",
+      "rev": "d696e36d5792daf828f8c8e8d4b9aa90c1a10c2a",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "4fc09bee78e91bf4ba471cdab4bf9dfa37fde51c",
+      "rev": "36fcb4a4238928f0b627e1ab84ade0acc1facc2c",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
@@ -125,7 +125,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "aed184681f177ae6071e56cd7a2b9441261fca52",
+      "rev": "f5c37462c690da9a0d05cd12a7b9595b10b56200",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

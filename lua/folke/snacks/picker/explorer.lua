@@ -18,20 +18,13 @@ return {
     local clamp_width = function(value)
       return math.max(20, math.min(100, value))
     end
-    local position = picker.resolved_layout.layout.position
     local rel = picker.layout.root
     local update = function(win) ---@param win snacks.win
       local border = win:border_size().left + win:border_size().right
       win.opts.row = vim.api.nvim_win_get_position(rel.win)[1]
       win.opts.height = 0.8
-      if position == 'left' then
-        win.opts.col = vim.api.nvim_win_get_width(rel.win) + gap
-        win.opts.width = clamp_width(vim.o.columns - border - win.opts.col)
-      end
-      if position == 'right' then
-        win.opts.col = -vim.api.nvim_win_get_width(rel.win) - gap
-        win.opts.width = clamp_width(vim.o.columns - border + win.opts.col)
-      end
+      win.opts.col = vim.api.nvim_win_get_width(rel.win) + gap
+      win.opts.width = clamp_width(vim.o.columns - border - win.opts.col)
       win:update()
     end
     local preview_win = Snacks.win.new({
@@ -68,7 +61,7 @@ return {
     picker.preview.win:toggle()
   end,
   layout = {
-    preset = 'sidebar',
+    -- preset = 'sidebar',
     preview = false, ---@diagnostic disable-line
   },
   actions = {

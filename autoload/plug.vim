@@ -46,11 +46,9 @@ function! plug#end()
       endif
     endfor
   elseif has('nvim')
-    lua vim.loader.enable()
     " lua vim.g.plug_home = vim.fs.joinpath(vim.fn.stdpath('data'), 'site', 'pack', 'core', 'opt')
     " lua vim.pack.add(vim.tbl_map(function(plug) return plug.uri end, vim.tbl_values(vim.g.plugs)))
     " lua vim.g.plugins = vim.tbl_map(function(plug) return plug.uri end, vim.tbl_values(vim.g.plugs)))
     let g:myplugins = map(copy(g:plugs_order), '"https://github.com/"..v:val..".git"')
-    lua vim.pack.add(vim.g.myplugins)
   endif
 endfunction

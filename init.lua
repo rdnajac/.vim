@@ -1,6 +1,4 @@
-vim.cmd.runtime('vimrc')
--- Show a notification with a pretty printed dump of the object(s)
--- with lua treesitter highlighting and the location of the caller
+vim.loader.enable()
 
 -- local bit = require('bit')
 -- local MAX_INSPECT_LINES = bit.lshift(2, 10)
@@ -76,26 +74,45 @@ end
 _G.p = function(...) Snacks.debug.profile(...) end
 -- _G.dd = function(...)
 -- _G.bt = function(...)
-
 if vim.env.PROF then
-  vim.cmd.packadd('snacks.nvim')
-  require('snacks.profiler').startup({})
-end
+  local plug_home = vim.g.plug_home or '/Users/rdn/.local/share/nvim/site/pack/core/opt'
+  local snacks = plug_home .. '/snacks.nvim'
+  vim.opt.rtp:append(snacks)
 
-if vim.env.LAZY then
-  return require('nvim.lazy').bootstrap()
-end
-
-vim.pack.add(
-  vim.tbl_map(function(plugin)
-    return 'https://github.com/folke/' .. plugin .. '.nvim.git'
-  end, { 'snacks', 'tokyonight', 'which-key' }),
-  {
-    load = function(data)
-      vim.cmd.packadd({ data.spec.name, bang = true })
-      require('nvim.folke.' .. data.spec.name:sub(1, -6))
-    end,
+  ---@type snacks.profiler.Config
+  local opts = {
+    thresholds = {
+      time = { 2, 10 },
+      pct = { 10, 20 },
+      count = { 10, 100 },
+      ---@type table<string, snacks.profiler.Pick|fun():snacks.profiler.Pick?>
+      presets = {
+        startup = { min_time = 0.1, sort = false },
+        on_stop = {},
+        filter_by_plugin = function()
+          return { filter = { def_plugin = vim.fn.input('Filter by plugin: ') } }
+        end,
+      },
+    },
   }
-)
+  require('snacks.profiler').startup(opts)
+end
 
+vim.cmd.runtime('vimrc')
+-- if vim.env.LAZY then return require('nvim.lazy').bootstrap() end
+if vim.g.myplugins ~= nil then
+  vim.pack.add(vim.g.myplugins)
+end
+
+vim.o.cmdheight = 0
+vim.o.winborder = 'rounded'
+
+require('vim._extui').enable({})
+
+require('folke.snacks')
+require('folke.tokyonight')
+require('folke.which-key')
 require('nvim')
+require('nvim.mini')
+
+vim.o.statuscolumn = '%!v:lua.nv.statuscolumn()'

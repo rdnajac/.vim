@@ -24,17 +24,17 @@ local function config_confirm(p, item)
   p:action({ 'jump' })
 end
 
-M.layouts = require('nvim.folke.snacks.picker.layouts')
+M.layouts = require('folke.snacks.picker.layouts')
 M.sources = {
   -- autocmds = { confirm = config_confirm },
   buffers = {
     layout = 'mylayout',
     input = { keys = { ['<C-x>'] = { 'bufdelete', mode = { 'n', 'i' } } } },
   },
-  explorer = require('nvim.folke.snacks.picker.explorer'),
-  files = require('nvim.folke.snacks.picker.defaults'),
+  explorer = require('folke.snacks.picker.explorer'),
+  files = require('folke.snacks.picker.defaults'),
   git_status = { layout = 'left' },
-  grep = require('nvim.folke.snacks.picker.defaults'),
+  grep = require('folke.snacks.picker.defaults'),
   help = { layout = 'ivy_split' },
   icons = { layout = { preset = 'insert' } },
   keymaps = { confirm = config_confirm },

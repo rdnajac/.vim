@@ -150,7 +150,7 @@ vim.schedule(function()
   require('which-key.plugins.registers').registers = [[*+"-:.%/#=_01234567890qZ]]
 
   wk.add(spec)
-  wk.add(require('nvim.folke.snacks.keys'))
+  wk.add(require('folke.snacks.keys'))
   if nv and nv.plug then
     -- HACK: global key registration
     wk.add(nv.plug.get_keys())

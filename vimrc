@@ -117,12 +117,15 @@ else
   set jumpoptions+=view
   set mousescroll=hor:0
 
-  " default on in vim
-  set startofline
+  set pumblend=0
+  set pumborder=rounded
+  set pumheight=10
+
+  set startofline " default in vim
   " try running `:options` for more...
   hi link vimMap @keyword
   " disable the default popup menu
-  aunmenu PopUp | autocmd! nvim.popupmenu
+  " aunmenu PopUp | autocmd! nvim.popupmenu
 endif
 " }}}1
 " Section: autocmds {{{1
@@ -504,14 +507,15 @@ endfunction
 
 call s:cabbrev('vv', 'verbose')
 call s:cabbrev('scp', '!scp %')
-call s:cabbrev('require', 'lua require')
-call s:cabbrev('man', 'Man')
-call s:cabbrev('Snacks', 'lua Snacks')
-call s:cabbrev('snacks', 'lua Snacks')
+call s:cabbrev('r', 'lua require')
+call s:cabbrev('m', 'Man')
+call s:cabbrev('s', 'lua Snacks')
 call s:cabbrev('f', 'find')
+call s:cabbrev('l', 'lua')
 " }}}1
 
 if has('nvim')
+  packadd! nvim
   packadd! nvim.difftool
   packadd! nvim.undotree
 else
@@ -558,7 +562,9 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
 else
-  Plug 'nvim-mini/mini.nvim'
+  Plug 'folke/snacks.nvim'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'folke/which-key.nvim'
 endif
 call plug#end()
 " vim: fdl=0 fdm=marker

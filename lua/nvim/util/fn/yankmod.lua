@@ -13,7 +13,7 @@ local formats = {
     return ([[require('%s')]]):format(module)
   end,
   require_func = function(module)
- -- TODO: make this gopd
+    -- TODO: make this gopd
     if vim.trim(vim.fn.expand('<cword>')) == '' then
       return ([[require('%s')]]):format(module)
     end

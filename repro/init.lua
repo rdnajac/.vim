@@ -9,7 +9,7 @@ end
 
 local specs = {
   -- 'neovim/neovim',
-  'tani/vim-jetpack'
+  'tani/vim-jetpack',
 }
 -- print(specs)
 

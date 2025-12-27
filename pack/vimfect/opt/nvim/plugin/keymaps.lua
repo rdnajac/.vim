@@ -50,10 +50,10 @@ for i, init_lua in ipairs(vim.fn.globpath(lua_root, 'nvim/**/init.lua', true, tr
 end
 
 vim.schedule(function()
-  local ok, wk = pcall(require, 'which-key')
-  if ok and wk then
-    return wk.add(keys)
-  end
+  -- local ok, wk = pcall(require, 'which-key')
+  -- if ok and wk then
+  --   return wk.add(keys)
+  -- end
   for _, v in ipairs(keys) do
     vim.keymap.set('n', v[1], v[2], { desc = v.desc })
   end
