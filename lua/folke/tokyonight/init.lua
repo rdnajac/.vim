@@ -1,3 +1,4 @@
+
 local mycolors = {
   -- tokyonight = '#24283b',
   black = '#000000',
@@ -29,9 +30,52 @@ local myhighlights = function(c)
   }
 end
 
+
+local M = {}
+
+-- ~/.local/share/nvim/site/pack/core/opt/tokyonight.nvim/lua/tokyonight/groups/
+M.plugins = function()
+  local plugins = { all = false }
+  local groups = require('tokyonight.groups')
+
+  for plugin, group in pairs(groups.plugins) do
+    if vim.fn.isdirectory(vim.g.plug_home .. '/' .. plugin) ~= 0 then
+      plugins[group] = true
+    end
+  end
+
+  -- `mini.nvim`
+  for _, mod in ipairs({
+    -- 'animate',
+    -- 'clue',
+    -- 'completion',
+    -- 'cursorword',
+    -- 'deps',
+    'diff',
+    'files',
+    'hipatterns',
+    'icons',
+    -- 'indentscope',
+    -- 'jump',
+    -- 'map',
+    -- 'notify',
+    -- 'operators'
+    -- 'pick',
+    -- 'starter',
+    -- 'statusline',
+    'surround',
+    -- 'tabline',
+    -- 'test',
+    -- 'trailspace',
+  }) do
+    plugins['mini_' .. mod] = true
+  end
+  return plugins
+end
+
 vim.g.transparent = true
 
----@return tokyonight.Config
+---@type tokyonight.Config
 local opts = {
   style = 'night',
   transparent = vim.g.transparent == true,
@@ -53,48 +97,10 @@ local opts = {
       hl[k] = v
     end
   end,
-  plugins = {
-    all = false,
-    -- mini = true,
-  },
+  -- plugins = { all = false },
+  plugins = M.plugins(),
 }
 
--- ~/.local/share/nvim/site/pack/core/opt/tokyonight.nvim/lua/tokyonight/groups/
-local function extend_opts_plugins()
-  for plugin, group in pairs(require('tokyonight.groups').plugins) do
-    if vim.fn.isdirectory(vim.g.plug_home .. '/' .. plugin) ~= 0 then
-      opts.plugins[group] = true
-    end
-  end
-
-  for _, mod in ipairs({
-    -- 'animate',
-    -- 'clue',
-    -- 'completion',
-    -- 'cursorword',
-    -- 'deps',
-    'diff',
-    'files',
-    'hipatterns',
-    'icons',
-    -- 'indentscope',
-    -- 'jump',
-    -- 'map',
-    -- 'notify',
-    -- 'operators',
-    -- 'pick',
-    -- 'starter',
-    -- 'statusline',
-    'surround',
-    -- 'tabline',
-    -- 'test',
-    -- 'trailspace',
-  }) do
-    opts.plugins['mini_' .. mod] = true
-  end
-end
-
-extend_opts_plugins()
 -- require('tokyonight').setup(opts)
 
 --- @type ColorScheme, tokyonight.Highlights, tokyonight.Config
@@ -102,3 +108,4 @@ local colors, groups, opts = require('tokyonight').load(opts)
 
 -- `load()` won't trigger ColorScheme autocommand, so do it here
 vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+return M

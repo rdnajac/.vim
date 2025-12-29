@@ -1,3 +1,5 @@
+local M = {}
+
 local map = {
   tmux = {
     cmd = { 'tmux', 'list-keys', '-N' },
@@ -16,7 +18,7 @@ local function capture_external_keybinds(tool)
   return keys
 end
 
-local function capture_tmux_keys()
+M.tmux_keys = function()
   local keys = vim.tbl_map(function(k)
     local prefix, lhs, desc = k:match('^(%S+)%s+(%S+)%s+(.+)$')
     lhs = #lhs > 1 and '<' .. lhs .. '>' or lhs
@@ -27,9 +29,7 @@ local function capture_tmux_keys()
   return keys
 end
 
-print(capture_tmux_keys())
-
-local function capture_ghostty_keys()
+M.ghostty_keys = function()
   local keys = vim.tbl_map(function(k)
     local keymap, action = k:sub(#'keybind =  '):match('^(.+)=(.+)$')
     return { keymap = keymap, action = action }
@@ -38,4 +38,4 @@ local function capture_ghostty_keys()
   return keys
 end
 
--- print(capture_ghostty_keys())
+return M

@@ -61,26 +61,28 @@ end
 ---   - {int,int}: row,col
 --- @return boolean
 M.is_comment = function(...)
-  local args = { ... }
+  local nargs = select('#', ...)
   local pos
 
-  if #args == 0 then
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    pos = { cursor[1] - 1, cursor[2] }
-  elseif #args == 1 and type(args[1]) == 'table' then
-    pos = args[1]
-  elseif #args == 2 and type(args[1]) == 'number' and type(args[2]) == 'number' then
-    pos = { args[1], args[2] }
-  elseif #args == 1 and type(args[1]) == 'number' then
-    error('is_comment: single integer is ambiguous, expected {row,col}')
+  if nargs == 0 then
+    pos = vim.pos.cursor(vim.api.nvim_win_get_cursor(0))
+  elseif nargs == 1 then
+    local arg = select(1, ...)
+    if type(arg) == 'table' then
+      pos = vim.pos.extmark(arg)
+    else
+      error('is_comment: single integer is ambiguous, expected {row,col}')
+    end
+  elseif nargs == 2 then
+    pos = vim.pos(...)
   else
     error('is_comment: invalid arguments')
   end
 
   -- HACK: subtract 1 from col to avoid edge cases
-  pos[2] = math.max(0, pos[2] - 1)
+  pos = vim.pos(pos.row, math.max(0, pos.col - 1))
 
-  local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos })
+  local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos:to_extmark() })
   return ok
       and node
       and vim.tbl_contains({

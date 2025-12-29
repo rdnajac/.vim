@@ -7,7 +7,6 @@ local foo = function(f)
 end
 
 local x = vim.tbl_map(foo, files)
-print(x)
 
 local M = {
   ['vim.fs.basename + sub'] = function()

@@ -2,14 +2,14 @@
 
 -- detect OS and ARCH first
 local system = setmetatable({
-  os_map = { Darwin = 'macos', Linux = 'linux' },
-  arch_map = { x86_64 = 'x86_64', arm64 = 'arm64', aarch64 = 'arm64' },
+  os = { Darwin = 'macos', Linux = 'linux' },
+  arch = { x86_64 = 'x86_64', arm64 = 'arm64', aarch64 = 'arm64' },
 }, {
   __index = function(t, k)
     if k == 'os' or k == 'arch' then
       local cmd = k == 'os' and 'uname -s' or 'uname -m'
       local uname = vim.fn.systemlist(cmd)[1] or ''
-      local map = k == 'os' and t.os_map or t.arch_map
+      local map = k == 'os' and t.os or t.arch
       local val = map[uname] or error(('Unsupported %s: %s'):format(k:upper(), uname))
       rawset(t, k, val)
       return val
@@ -26,8 +26,6 @@ local TARPATH = vim.fs.joinpath(vim.fn.stdpath('run'), ASSET)
 
 vim.fn.mkdir(INSTALL_DIR, 'p')
 vim.fn.mkdir(LOCALBIN, 'p')
-
--- helpers --------------------------------------------------------------------
 
 local function die(msg)
   print('✗ ' .. msg)

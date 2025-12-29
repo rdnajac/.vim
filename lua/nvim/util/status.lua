@@ -1,21 +1,14 @@
----@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
-
--- Statusline component
--- function M.status()
---   return {
---     function()
---       return ("%s %d events"):format(M.config.icons.status, #M.core.events)
---     end,
---     color = "DiagnosticError",
---     cond = function()
---       return M.core.running
---     end,
---   }
--- end
+---@class status.component
+---@field [1] string|fun(table?):string
+---@field color? string|table
+---@field cond? fun():boolean
 
 local M = {}
 
+---@param opts? {bufnr?:integer,win?:integer,bt?:string,ft?:string,active?:boolean}
+---@return string
 M.buffer = function(opts)
+  opts = opts or {}
   local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
   local win = opts.win or vim.api.nvim_get_current_win()
   local bt = opts.bt or vim.bo[bufnr].buftype
@@ -41,6 +34,10 @@ M.buffer = function(opts)
     [[%{% &fenc !=# 'utf-8' && &fenc !=# ''  ? ' fenc=' . &fenc : ''  %}]],
   })
 end
+
+M.treesitter = nv.treesitter.status
+M.lsp = nv.lsp.status
+M.blink = nv.blink.status
 
 function M.render(a, b, c)
   local function sec(s, str)

@@ -1,9 +1,14 @@
-return function()
-  if not Snacks then
-    return ''
-  end
+---@type snacks.statuscolumn.Config
+local opts = {
+  left = { 'mark', 'sign' },
+  right = { 'fold' },
+  folds = { open = true, git_hl = true },
+}
 
-  local sstc = Snacks.statuscolumn.get()
+local orig = Snacks.statuscolumn.get
+
+Snacks.statuscolumn.get = function()
+  local sstc = orig()
   if
     vim.bo.buftype == 'terminal'
     or vim.tbl_contains({ 'dirvish', 'snacks_dashboard' }, vim.bo.filetype)
@@ -34,3 +39,5 @@ return function()
   local sep = '▏'
   return string.format('%%=%s%s', ret, sep)
 end
+
+return opts

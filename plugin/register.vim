@@ -13,6 +13,10 @@ nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
 nnoremap yP <Cmd>let @*=printf('%s:%d', expand('%:p:~'), line('.'))<CR>
 cnoremap <M-y> <Cmd>let @*=getcmdline()<CR>
 
+if has('nvim')
+  nnoremap yu <Cmd>lua require('nvim.util.debug.printval')()<CR>
+endif
+
 " 'change macro'
 nnoremap cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
 nnoremap cM :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
@@ -53,10 +57,7 @@ augroup vimrc_yank
   autocmd TextYankPost * ++once call s:fallback()
   if has('nvim')
     autocmd TextYankPost * silent! lua vim.hl.on_yank()
+    " autocmd TextYankPost * silent! lua vim.hl.on_yank {higroup='Visual', timeout=300}
     autocmd UIEnter * call s:set_clipboard()
   endif
 augroup END
-
-1
-2
-3

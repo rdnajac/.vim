@@ -31,7 +31,6 @@ local keys = {
     desc = 'Quickfix List',
     icon = { icon = '' },
   },
-  { 'yu', nv.debug.print, desc = 'Debug print <cword>' },
 }
 
 -- TODO: convert to viml
@@ -58,3 +57,7 @@ vim.schedule(function()
     vim.keymap.set('n', v[1], v[2], { desc = v.desc })
   end
 end)
+
+-- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
+-- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
+-- vim.keymap.set('n', '<C-i>', '<Tab>', { desc = 'restore <C-i>' })

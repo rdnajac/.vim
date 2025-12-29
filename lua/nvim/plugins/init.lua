@@ -1,11 +1,13 @@
 -- collect specs from meta-modules
 -- TODO: include mini?
-local plugins = vim.iter({ 'lazy', 'lsp', 'mini', 'treesitter' }):fold({}, function(acc, name)
+local plugins = vim.iter({ 'blink', 'lazy', 'lsp', 'mini', 'treesitter' }):fold({}, function(acc, name)
   for _, spec in ipairs(require('nvim.' .. name).spec) do
     table.insert(acc, spec)
   end
   return acc
 end)
+
+dd(plugins)
 
 if not package.loaded['lazy'] then
   local this_dir = vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2))

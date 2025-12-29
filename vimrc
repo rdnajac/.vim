@@ -173,7 +173,7 @@ for level in keys(g:vim#notify#levels)
 endfor
 
 command! -nargs=* Diff call diff#wrap(<f-args>)
-command! -nargs=0 Format call execute#inPlace('call format#buffer()')
+command! -nargs=0 Format call vim#cmd#format()
 command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
 
 let g:eunuch_interpreters = {

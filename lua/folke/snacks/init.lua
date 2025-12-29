@@ -23,11 +23,7 @@ require('snacks').setup({
     },
   },
   scroll = { enabled = true },
-  statuscolumn = {
-    left = { 'mark', 'sign' },
-    right = { 'fold' },
-    folds = { open = true, git_hl = true },
-  },
+  statuscolumn = require('folke.snacks.statuscolumn'),
   picker = require('folke.snacks.picker'),
   styles = {
     lazygit = { height = 0, width = 0 },

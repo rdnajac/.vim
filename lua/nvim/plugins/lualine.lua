@@ -8,7 +8,7 @@ local M = {
       section_separators = { left = '', right = '' },
       disabled_filetypes = {
         statusline = { pattern = 'snacks_dashboard' },
-        winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_input' },
+        winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker*_list', 'snacks_picker_input' },
         tabline = { 'snacks_dashboard' },
       },
       ignore_focus = {

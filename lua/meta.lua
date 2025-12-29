@@ -1,6 +1,8 @@
 ---@meta
 error('this file should not be required directly')
 
+---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
+
 -- _G.nv = require('nvim.util')
 _G.nv.fn = require('nvim.util.fn')
 
