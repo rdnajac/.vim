@@ -67,7 +67,7 @@ M.opts.tabline = {
 }
 
 M.opts.winbar = {
-  lualine_a = { nv.status.buffer },
+  lualine_a = { require('nvim.util.status').buffer },
   lualine_b = {
     {
       function()

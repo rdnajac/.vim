@@ -1,3 +1,4 @@
+-- TODO: register notify setup
 local M = setmetatable({}, {
   __call = function(t, ...)
     return t.notify(...)

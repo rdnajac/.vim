@@ -16,13 +16,13 @@ opts.sources = {
   },
 }
 
-if pcall(require, 'lazydev.integrations.blink') then
-  providers.lazydev = {
-    name = 'LazyDev',
-    module = 'lazydev.integrations.blink',
-    score_offset = 100,
-  }
-end
+-- if pcall(require, 'lazydev.integrations.blink') then
+providers.lazydev = {
+  name = 'LazyDev',
+  module = 'lazydev.integrations.blink',
+  score_offset = 100,
+}
+-- end
 
 local spec = {
   {

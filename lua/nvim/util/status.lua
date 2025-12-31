@@ -35,9 +35,11 @@ M.buffer = function(opts)
   })
 end
 
-M.treesitter = nv.treesitter.status
-M.lsp = nv.lsp.status
-M.blink = nv.blink.status
+vim.schedule(function()
+  M.treesitter = nv.treesitter.status
+  M.lsp = nv.lsp.status
+  M.blink = nv.blink.status
+end)
 
 function M.render(a, b, c)
   local function sec(s, str)

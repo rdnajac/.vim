@@ -1,82 +1,36 @@
 vim.loader.enable()
 
-local debug = require('nvim.util.debug')
-_G.bt = require('nvim.util.debug').bt
-_G.dd = require('nvim.util.debug').dd
-_G.pp = require('nvim.util.debug').pp
+local debug_util = require('nvim.util.debug')
+_G.bt = debug_util.bt
+_G.dd = debug_util.dd
+_G.pp = debug_util.pp
 
 if vim.env.PROF then
-  local plug_home = vim.g.plug_home or '/Users/rdn/.local/share/nvim/site/pack/core/opt'
-  local snacks = plug_home .. '/snacks.nvim'
-  vim.opt.rtp:append(snacks)
-
-  ---@type snacks.profiler.Config
-  local opts = {
-    thresholds = {
-      time = { 1, 10 },
-      pct = { 1, 20 },
-      count = { 1, 100 },
-      ---@type table<string, snacks.profiler.Pick|fun():snacks.profiler.Pick?>
-      presets = {
-        startup = { min_time = 0.1, sort = false },
-        on_stop = {},
-        filter_by_plugin = function()
-          return { filter = { def_plugin = vim.fn.input('Filter by plugin: ') } }
-        end,
-      },
-    },
-  }
-  require('snacks.profiler').startup(opts)
+  require('folke.snacks.profiler')
 end
 
 vim.cmd.runtime('vimrc')
--- if vim.env.LAZY then return require('nvim.lazy').bootstrap() end
+
 if vim.g.myplugins ~= nil then
   vim.pack.add(vim.g.myplugins)
 end
 
 vim.o.cmdheight = 0
 vim.o.winborder = 'rounded'
-
 require('vim._extui').enable({})
 
 require('folke.snacks')
 require('folke.tokyonight')
 require('folke.which-key')
 
-_G.nv = {
-  blink = require('nvim.blink'),
-  lazy = require('nvim.lazy'),
-  lsp = require('nvim.lsp'),
-  treesitter = require('nvim.treesitter'),
-}
+_G.nv = require('nvim')
 
--- TODO: register notify setup
--- TODO: register debug setup
-setmetatable(nv, {
-  -- new index that just oprints wjen a module is required
-  __newindex = function(t, k, v)
-    print('set: ' .. k)
-    rawset(t, k, v)
-  end,
-  __index = function(t, k)
-    -- vim.schedule(function()
-    --   print('access: ' .. k)
-    -- end)
-    t[k] = require('nvim.util.' .. k)
-    return rawget(t, k)
-  end,
-})
-
-local plugins = require('nvim.plugins')
-local iter = vim.iter(plugins)
-local specs = iter
+local specs = vim
+  .iter(nv.plugins)
   :map(function(p)
     return nv.plug(p):tospec()
   end)
   :totable()
-
--- if vim.v.vim_did_enter == 1 then return end
 
 vim.pack.add(specs, {
   ---@param plug_data {spec: vim.pack.Spec, path: string}
@@ -88,5 +42,3 @@ vim.pack.add(specs, {
     end
   end,
 })
-
-return M
