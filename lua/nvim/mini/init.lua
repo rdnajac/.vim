@@ -7,20 +7,17 @@ return {
       'nvim-mini/mini.nvim',
       config = function()
         -- require('mini.misc').setup_termbg_sync()
-        local miniopts = {
+        for minimod, opts in pairs({
           ai = require('nvim.mini.ai'),
           align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
-          extra = {},
           diff = { view = { style = 'number' } },
-          files = require('nvim.mini.files'),
+          extra = {},
           hipatterns = require('nvim.mini.hipatterns'),
           icons = require('nvim.mini.icons'),
           splitjoin = require('nvim.mini.splitjoin'),
           surround = require('nvim.mini.surround'),
-        }
-
-        -- call set up for each available module
-        for minimod, opts in pairs(miniopts) do
+        }) do
+          -- call set up for each available module
           require('mini.' .. minimod).setup(opts)
         end
 

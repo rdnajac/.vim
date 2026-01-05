@@ -205,6 +205,6 @@ return setmetatable({
   end,
 }, {
   __call = function(_, k)
-    return Plugin.new(k)
+    return Plugin.new(k):tospec()
   end,
 })

@@ -18,25 +18,21 @@ vim.api.nvim_create_user_command('Plug', function(opts)
   table.insert(plugins, 'https://github.com/' .. opts.args:gsub([[']], '') .. '.git')
 end, { nargs = 1 })
 
-vim.cmd.runtime('vimrc')
+vim.cmd([[
+" FIXME: 
+  " color scheme2
+  runtime vimrc
+]])
 
 vim.pack.add(plugins)
 
 require('folke.snacks')
-require('folke.tokyonight').colorscheme()
--- vim.cmd.colorscheme('tokyomidnight')
+require('folke.tokyonight')
 require('folke.which-key')
 
 _G.nv = require('nvim')
 
-local specs = vim
-  .iter(nv.plugins)
-  :map(function(p)
-    return nv.plug(p):tospec()
-  end)
-  :totable()
-
-vim.pack.add(specs, {
+vim.pack.add(vim.iter(nv.plugins):map(nv.plug):totable(), {
   ---@param plug_data {spec: vim.pack.Spec, path: string}
   load = function(plug_data)
     local spec = plug_data.spec

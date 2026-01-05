@@ -1,24 +1,21 @@
 local aug = vim.api.nvim_create_augroup('treesitter', {})
 
--- TODO: ensure installed
-local autostart_filetypes = {
-  'css',
-  -- 'html',
-  'javascript',
-  'json',
-  'lua',
-  'markdown',
-  'python',
-  'sh',
-  'toml',
-  'typescript',
-  'vim',
-  'yaml',
-  'zsh',
-}
-
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = autostart_filetypes,
+  pattern = {
+    'css',
+    'html',
+    'javascript',
+    'json',
+    'lua',
+    'markdown',
+    'python',
+    'sh',
+    'toml',
+    'typescript',
+    'vim',
+    'yaml',
+    'zsh',
+  },
   group = aug,
   callback = function(ev)
     vim.treesitter.start(ev.buf)
@@ -54,13 +51,13 @@ M.install_cli = function()
   -- TODO:  call mason install utility
 end
 
---- Check if the current node is a comment node
+--- Parse position arguments into a vim.pos object
 --- @param ... any
 ---   - no args: use cursor
 ---   - (int,int): row,col
 ---   - {int,int}: row,col
---- @return boolean
-M.is_comment = function(...)
+--- @return vim.pos
+local function get_pos(...)
   local nargs = select('#', ...)
   local pos
 
@@ -71,16 +68,28 @@ M.is_comment = function(...)
     if type(arg) == 'table' then
       pos = vim.pos.extmark(arg)
     else
-      error('is_comment: single integer is ambiguous, expected {row,col}')
+      error('get_pos: single integer is ambiguous, expected {row,col}')
     end
   elseif nargs == 2 then
     pos = vim.pos(...)
   else
-    error('is_comment: invalid arguments')
+    error('get_pos: invalid arguments')
   end
 
+  return pos
+end
+
+--- Check if the current node is a comment node
+--- @param ... any
+---   - no args: use cursor
+---   - (int,int): row,col
+---   - {int,int}: row,col
+--- @return boolean
+M.is_comment = function(...)
+  local pos = get_pos(...)
+
   -- HACK: subtract 1 from col to avoid edge cases
-  pos = vim.pos(pos.row, math.max(0, pos.col - 1))
+  -- pos = vim.pos(pos.row, math.max(0, pos.col - 1)) --[[@cast ]]
 
   local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos:to_extmark() })
   return ok

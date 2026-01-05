@@ -1,24 +1,24 @@
-local nv = {
-  submodules = require('nvim.util.submodules'),
-  fn = { ensure_list = require('nvim.util.fn').ensure_list },
-}
--- collect specs from meta-modules
--- TODO: include mini?
 local plugins = vim
   .iter({ 'blink', 'lazy', 'lsp', 'mini', 'treesitter' })
   :fold({}, function(acc, name)
-    for _, spec in ipairs(require('nvim.' .. name).spec) do
-      table.insert(acc, spec)
-    end
-    return acc
+    local spec = require('nvim.' .. name).spec
+    return vim.list_extend(acc, spec)
   end)
 
 if not package.loaded['lazy'] then
   local this_dir = vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2))
-  local submodules = nv.submodules({ dir = this_dir })
-  local iter = vim.iter(submodules)
-  local plugins2 = iter:map(require):map(nv.fn.ensure_list):flatten():totable()
-  vim.list_extend(plugins, plugins2)
+  local files = vim.fn.globpath(this_dir, '*', false, true)
+
+  vim
+    .iter(files)
+    :filter(function(f)
+      return not vim.endswith(f, 'init.lua')
+    end)
+    :map(dofile)
+    :each(function(t)
+      local spec = vim.islist(t) and t or { t }
+      vim.list_extend(plugins, spec)
+    end)
 end
 
 return plugins

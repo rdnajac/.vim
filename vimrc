@@ -519,8 +519,6 @@ call s:cabbrev('l', 'lua')
 " }}}1
 
 if has('nvim')
-
-  packadd! nvim
   packadd! nvim.difftool
   packadd! nvim.undotree
 else
@@ -529,7 +527,6 @@ else
 endif
 packadd! cfilter
 
-silent! colorscheme tokyonight
 " packadd vim-jetpack
 silent! call plug#begin()
 Plug 'alker0/chezmoi.vim'

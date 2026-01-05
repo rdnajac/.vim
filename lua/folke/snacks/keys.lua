@@ -80,7 +80,6 @@ local leader = {
     b = 'buffers',
     f = 'files',
     g = 'git_files',
-    -- m = MiniFiles.open,
     P = 'projects',
     r = 'recent',
   },

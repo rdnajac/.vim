@@ -45,4 +45,5 @@ local parsers = {
 }
 
 -- local snacks_image_supported_filetypes = Snacks.image.langs()
-return vim.tbl_extend('force', {}, defaults, parsers)
+-- return vim.tbl_extend('force', {}, defaults, parsers)
+return parsers

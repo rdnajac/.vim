@@ -90,50 +90,58 @@ function M.gen(groups)
   return vim.list_extend(lines, vim.list.unique(links))
 end
 
---- Write content to a file in the colors directory
----@param filename string The name of the file (without directory path)
----@param content string|string[] Content to write (string or array of lines)
-local function write(filename, content)
-  local f = require('nvim.util.file')
-  local filepath = vim.fs.joinpath(vim.fn.stdpath('config'), 'colors', filename)
-  if type(content) == 'table' then
-    f.write_lines(filepath, content)
-  else
-    f.write(filepath, content)
-  end
+M.extra_lua = function(...)
+  return require('tokyonight.extra.lua').generate(...)
 end
 
-M.tokyonight_extra_lua = function(colors, groups)
-  return require('tokyonight.extra.lua').generate(colors, groups)
+M.extra_vim = function(...)
+  return require('tokyonight.extra.vim').generate(...)
 end
 
-M.tokyonight_extra_vim = function(colors, groups, opts)
-  local colors, groups, opts = require('tokyonight.theme').setup(opts)
-  return require('tokyonight.extra.vim').generate()
-end
+local hi = {}
 
 --- Write executed highlights from nvim.util.exec to file
 --- Converts highlight definitions and links to Vim highlight commands
 --- Output file: `tokyonight_highlight.vim`
 function M.exec()
-  local exec = require('nvim.util.exec')
-  local highlight_lines = vim
-    .iter(exec.highlight)
-    :map(function(hl)
-      if hl.link then
-        return ('hi! link %s %s'):format(hl.group, hl.link)
-      elseif hl.def then
-        local parts = vim
-          .iter(pairs(hl.def))
-          :map(function(k, v)
-            return ('%s=%s'):format(k, v)
-          end)
-          :totable()
-        return ('hi %s %s'):format(hl.group, table.concat(parts, ' '))
+  local highlights = vim.api.nvim_exec2('highlight', { output = true })
+  local lines = vim.split(highlights.output, '\n', { trimempty = true })
+  return vim
+    .iter(lines)
+    :map(function(line)
+      local group, def = line:match('^(%S+)%s*xxx%s(.*)$')
+      if group and def then
+        return group, def
+      end
+      error('bad regex')
+    end)
+    :map(function(group, def)
+      if vim.startswith(def, 'links to ') then
+        local target = def:match('links to (%S+)')
+        return { group = group, link = target }
+      else
+        local hl_def = {}
+        for key, value in def:gmatch('(%w+)=([^%s]+)') do
+          hl_def[key] = value
+        end
+        return { group = group, def = hl_def }
       end
     end)
+    --   if hl.link then
+    --     return ('hi! link %s %s'):format(hl.group, hl.link)
+    --   elseif hl.def then
+    --     local parts = vim
+    --       .iter(pairs(hl.def))
+    --       :map(function(k, v)
+    --         return ('%s=%s'):format(k, v)
+    --       end)
+    --       :totable()
+    --     return ('hi %s %s'):format(hl.group, table.concat(parts, ' '))
+    --   end
+    -- end)
     :totable()
-  write_to_colors_file('tokyonight_highlight.vim', highlight_lines)
 end
+
+print(M.exec())
 
 return M

@@ -71,6 +71,15 @@ M.plugins = function()
   return plugins
 end
 
+M.get_plugins = function()
+  local ok, plugins = pcall(require, 'folke.tokyonight.gen.plugins')
+  if not ok then
+    M.generate_plugins()
+    return M.plugins()
+  end
+  return plugins
+end
+
 vim.g.transparent = true
 
 ---@type tokyonight.Config
@@ -95,24 +104,51 @@ local opts = {
       hl[k] = v
     end
   end,
-  plugins = { all = false },
-  -- plugins = M.plugins(),
+  -- plugins = { all = false },
+  plugins = M.get_plugins(),
 }
 
 M.config = function()
   require('tokyonight').setup(opts)
 end
 
+M.setup = function()
+  return require('tokyonight.theme').setup(opts)
+end
+
 M.colorscheme = function()
   ---@type ColorScheme, tokyonight.Highlights, tokyonight.Config
-  M.colors, M.groups, M.opts = require('tokyonight.theme').setup(opts)
+  M.colors, M.groups, M.opts = M.setup()
   -- `load()` won't trigger ColorScheme autocommand, so do it here
   vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 
-M.gen = require('folke.tokyonight.scheme').gen
+--- Write content to a file in the colors directory
+---@param filename string The name of the file (can include subdirectory path)
+---@param content string|string[] Content to write (string or array of lines)
+M.write = function(filename, content)
+  local f = require('nvim.util.file')
+  local filepath = filename
+  if type(content) == 'table' then
+    f.write_lines(filepath, content)
+  else
+    f.write(filepath, content)
+  end
+end
 
-M.colorscheme()
-M.gen(M.groups)
+M.write_groups = function()
+  local groups = M.groups
+  local content = 'return ' .. vim.inspect(groups)
+  M.write('gen/groups.lua', content)
+end
+
+--- Generate the plugins.lua file with current plugin configuration
+M.generate_plugins = function()
+  local plugins = M.plugins()
+  local content = 'return ' .. vim.inspect(plugins)
+  M.write('gen/plugins.lua', content)
+end
+
+M.setup()
 
 return M
