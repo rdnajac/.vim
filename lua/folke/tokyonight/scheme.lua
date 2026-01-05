@@ -1,16 +1,13 @@
 local M = {}
 
----@return string[]
-function M.generate_vim_scheme(opts)
-  opts = opts or {}
-  opts.plugins = { all = false } -- disable plugins for scheme generation
-  local _, groups, _ = require('tokyonight').load(opts)
-
+--- Generate Vim colorscheme highlight commands from highlight groups
+---@param groups tokyonight.Highlights Highlight groups table
+---@return string[] lines Array of Vim highlight commands
+function M.gen(groups)
   local lines = {
     'hi clear',
     "let g:colors_name = 'tokyonight'",
   }
-
   local mapping = { fg = 'guifg', bg = 'guibg', sp = 'guisp' }
   local attrs = {
     'bold',
@@ -27,52 +24,56 @@ function M.generate_vim_scheme(opts)
     'altfont',
   }
 
-  local function to_table(t, fn)
-    local ret = {}
-    for k, v in vim.spairs(t) do
-      local result = fn(k, v)
-      if result ~= nil then
-        ret[#ret + 1] = result
-      end
+  local function build_props(hl)
+    local props = vim
+      .iter(vim.spairs(hl))
+      :filter(function(k)
+        print(k)
+        return mapping[k]
+      end)
+      :map(function(k, v)
+        return ('%s=%s'):format(mapping[k], v)
+      end)
+      :totable()
+
+    local gui = vim
+      .iter(vim.spairs(hl))
+      :filter(function(k, v)
+        return vim.tbl_contains(attrs, k) and v
+      end)
+      :map(function(k)
+        return k
+      end)
+      :totable()
+
+    if #gui > 0 then
+      table.insert(props, ('gui=%s'):format(table.concat(gui, ',')))
     end
-    return ret
+
+    if not hl.bg then
+      table.insert(props, 'guibg=NONE')
+    end
+
+    return props
   end
 
   -- build highlight definitions and links
-  local links = {}
-  for name, hl in vim.spairs(groups) do
-    if not vim.startswith(name, '@') then -- skip treesitter/semantic tokens
+  local links = vim
+    .iter(vim.spairs(groups))
+    :filter(function(name)
+      return not vim.startswith(name, '@')
+    end)
+    :map(function(name, hl)
       if type(hl) == 'string' and not vim.startswith(hl, '@') then
         hl = { link = hl }
       end
 
       if hl.link then
-        if groups[hl.link] then
-          links[#links + 1] = ('hi! link %s %s'):format(name, hl.link)
-        end
+        return groups[hl.link] and ('hi! link %s %s'):format(name, hl.link) or nil
       elseif type(hl) == 'table' then
-        local props = to_table(hl, function(k, v)
-          if mapping[k] then
-            return ('%s=%s'):format(mapping[k], v)
-          end
-        end)
-
-        local gui = to_table(hl, function(k, v)
-          if vim.tbl_contains(attrs, k) and v then
-            return k
-          end
-        end)
-
-        if #gui > 0 then
-          props[#props + 1] = ('gui=%s'):format(table.concat(gui, ','))
-        end
-
-        if not hl.bg then
-          props[#props + 1] = 'guibg=NONE'
-        end
-
+        local props = build_props(hl)
         if #props > 0 then
-          lines[#lines + 1] = ('hi %s %s'):format(name, table.concat(props, ' '))
+          table.insert(lines, ('hi %s %s'):format(name, table.concat(props, ' ')))
         else
           vim.schedule(function()
             vim.notify(
@@ -82,18 +83,57 @@ function M.generate_vim_scheme(opts)
           end)
         end
       end
-    end
-  end
+    end)
+    :totable()
 
   -- add links at the end to ensure the original groups are defined
   return vim.list_extend(lines, vim.list.unique(links))
 end
 
-M.write_vim_scheme = function()
-  local write_dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'colors')
-  local fname = vim.fs.joinpath(write_dir, 'tokyomidnight.vim')
-  print('Writing ' .. fname)
-  nv.file.write_lines(fname, M.generate_vim_scheme())
+--- Write content to a file in the colors directory
+---@param filename string The name of the file (without directory path)
+---@param content string|string[] Content to write (string or array of lines)
+local function write(filename, content)
+  local f = require('nvim.util.file')
+  local filepath = vim.fs.joinpath(vim.fn.stdpath('config'), 'colors', filename)
+  if type(content) == 'table' then
+    f.write_lines(filepath, content)
+  else
+    f.write(filepath, content)
+  end
+end
+
+M.tokyonight_extra_lua = function(colors, groups)
+  return require('tokyonight.extra.lua').generate(colors, groups)
+end
+
+M.tokyonight_extra_vim = function(colors, groups, opts)
+  local colors, groups, opts = require('tokyonight.theme').setup(opts)
+  return require('tokyonight.extra.vim').generate()
+end
+
+--- Write executed highlights from nvim.util.exec to file
+--- Converts highlight definitions and links to Vim highlight commands
+--- Output file: `tokyonight_highlight.vim`
+function M.exec()
+  local exec = require('nvim.util.exec')
+  local highlight_lines = vim
+    .iter(exec.highlight)
+    :map(function(hl)
+      if hl.link then
+        return ('hi! link %s %s'):format(hl.group, hl.link)
+      elseif hl.def then
+        local parts = vim
+          .iter(pairs(hl.def))
+          :map(function(k, v)
+            return ('%s=%s'):format(k, v)
+          end)
+          :totable()
+        return ('hi %s %s'):format(hl.group, table.concat(parts, ' '))
+      end
+    end)
+    :totable()
+  write_to_colors_file('tokyonight_highlight.vim', highlight_lines)
 end
 
 return M

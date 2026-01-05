@@ -1,4 +1,7 @@
 vim.loader.enable()
+vim.o.cmdheight = 0
+vim.o.winborder = 'rounded'
+require('vim._extui').enable({})
 
 local debug_util = require('nvim.util.debug')
 _G.bt = debug_util.bt
@@ -9,18 +12,19 @@ if vim.env.PROF then
   require('folke.snacks.profiler')
 end
 
+local plugins = {}
+
+vim.api.nvim_create_user_command('Plug', function(opts)
+  table.insert(plugins, 'https://github.com/' .. opts.args:gsub([[']], '') .. '.git')
+end, { nargs = 1 })
+
 vim.cmd.runtime('vimrc')
 
-if vim.g.myplugins ~= nil then
-  vim.pack.add(vim.g.myplugins)
-end
-
-vim.o.cmdheight = 0
-vim.o.winborder = 'rounded'
-require('vim._extui').enable({})
+vim.pack.add(plugins)
 
 require('folke.snacks')
-require('folke.tokyonight')
+require('folke.tokyonight').colorscheme()
+-- vim.cmd.colorscheme('tokyomidnight')
 require('folke.which-key')
 
 _G.nv = require('nvim')

@@ -12,13 +12,9 @@ for line in io.lines(index) do
   end
 end
 
--- capture text from commands
-local function _exec(cmd)
-  return vim.api.nvim_exec2(cmd, { output = true }).output
-end
-
 M.exec = function(cmd)
-  return vim.split(_exec(cmd), '\n', { trimempty = true })
+  local res = vim.api.nvim_exec2(cmd, { output = true })
+  return vim.split(res.output, '\n', { trimempty = true })
 end
 
 ---@class highlightClass

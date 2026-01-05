@@ -96,6 +96,10 @@ if exists('*stdpath')
 	\ }
 endif
 
+if !exists('g:plug_home')
+  let g:plug_home = join([ stdpath('data'), 'site', 'pack', 'core', 'opt' ], '/')
+endif
+
 if exists(':restart') == 2
   let s:sesh = g:stdpath['state'] . '/Session.vim'
   function s:restart() abort
@@ -515,6 +519,7 @@ call s:cabbrev('l', 'lua')
 " }}}1
 
 if has('nvim')
+
   packadd! nvim
   packadd! nvim.difftool
   packadd! nvim.undotree
@@ -524,8 +529,9 @@ else
 endif
 packadd! cfilter
 
+silent! colorscheme tokyonight
 " packadd vim-jetpack
-call plug#begin()
+silent! call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'dense-analysis/ale'
@@ -566,5 +572,5 @@ else
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
 endif
-call plug#end()
+silent! call plug#end()
 " vim: fdl=0 fdm=marker

@@ -27,6 +27,7 @@ return {
       win.opts.width = clamp_width(vim.o.columns - border - win.opts.col)
       win:update()
     end
+
     local preview_win = Snacks.win.new({
       relative = 'editor',
       external = false,
@@ -46,6 +47,7 @@ return {
         picker:show_preview()
       end,
     })
+
     rel:on('WinLeave', function()
       vim.schedule(function()
         if not picker:is_focused() then
@@ -53,22 +55,20 @@ return {
         end
       end)
     end)
+
     rel:on('WinResized', function()
       update(preview_win)
     end)
+
     picker.preview.win = preview_win
     picker.main = preview_win.win
     picker.preview.win:toggle()
   end,
-  layout = {
-    -- preset = 'sidebar',
-    preview = false, ---@diagnostic disable-line
-  },
-  actions = {
-    toggle_preview = function(picker) --[[Override]]
-      picker.preview.win:toggle()
-    end,
-  },
+  -- actions = {
+  --   toggle_preview = function(picker) --[[Override]]
+  --     picker.preview.win:toggle()
+  --   end,
+  -- },
   -- on_close = function(picker)
   --   picker.preview.win:close()
   -- end,

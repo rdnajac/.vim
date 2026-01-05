@@ -1,4 +1,3 @@
-
 local mycolors = {
   -- tokyonight = '#24283b',
   black = '#000000',
@@ -29,7 +28,6 @@ local myhighlights = function(c)
     -- ['@variable.member'] = { fg = c.blue },
   }
 end
-
 
 local M = {}
 
@@ -97,15 +95,24 @@ local opts = {
       hl[k] = v
     end
   end,
-  -- plugins = { all = false },
-  plugins = M.plugins(),
+  plugins = { all = false },
+  -- plugins = M.plugins(),
 }
 
--- require('tokyonight').setup(opts)
+M.config = function()
+  require('tokyonight').setup(opts)
+end
 
---- @type ColorScheme, tokyonight.Highlights, tokyonight.Config
-local colors, groups, opts = require('tokyonight').load(opts)
+M.colorscheme = function()
+  ---@type ColorScheme, tokyonight.Highlights, tokyonight.Config
+  M.colors, M.groups, M.opts = require('tokyonight.theme').setup(opts)
+  -- `load()` won't trigger ColorScheme autocommand, so do it here
+  vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+end
 
--- `load()` won't trigger ColorScheme autocommand, so do it here
-vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+M.gen = require('folke.tokyonight.scheme').gen
+
+M.colorscheme()
+M.gen(M.groups)
+
 return M
