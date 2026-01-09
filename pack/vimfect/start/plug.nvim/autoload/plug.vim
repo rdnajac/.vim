@@ -18,4 +18,10 @@ if exists('g:loaded_jetpack')
       endfor
     endif
   endfunction
+  finish
 endif
+
+function! plug#begin(...)
+  let g:plugs = []
+  command! -nargs=1 Plug call add(g:plugs, git#repo(<args>))
+endfunction

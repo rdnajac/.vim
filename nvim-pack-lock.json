@@ -37,19 +37,19 @@
       "src": "https://github.com/nvim-lualine/lualine.nvim.git"
     },
     "mason.nvim": {
-      "rev": "57e5a8addb8c71fb063ee4acda466c7cf6ad2800",
+      "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "02fc1af931cb6e7bb475e4977f530073cfdcc20d",
+      "rev": "fb4ccfed03c1f0d9db702f93a65cb4c0c6c2832b",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "0b38bc74487e73489624d61396af7805af9cc75f",
+      "rev": "5a82e10b2df0ed31bec642c1c0344baee7c458b6",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "b033ab331ca0bccbd93c3c2b4f886fdfc09abec0",
+      "rev": "de878155ca66c49b027b1380e4e60a6c665b2630",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
@@ -57,7 +57,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "da6a7b25471ab23824f3429225973186eb0b62d2",
+      "rev": "73a6ebc842cf81926eb1d424820b800f6f6a1227",
       "src": "https://github.com/MeanderingProgramMer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
@@ -89,7 +89,7 @@
       "src": "https://github.com/tpope/vim-characterize.git"
     },
     "vim-dadbod": {
-      "rev": "e95afed23712f969f83b4857a24cf9d59114c2e6",
+      "rev": "6d1d41da4873a445c5605f2005ad2c68c99d8770",
       "src": "https://github.com/tpope/vim-dadbod.git"
     },
     "vim-dispatch": {

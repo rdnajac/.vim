@@ -18,17 +18,14 @@ Snacks.toggle.treesitter():map('<leader>ut')
 Snacks.toggle.words():map('<leader>uW')
 Snacks.toggle.zoom():map('<leader>uZ')
 
--- additional option toggles
-local options = {
+for opt, key in pairs({
   autochdir = '<leader>ac',
-}
-
-for opt, key in pairs(options) do
+}) do
   Snacks.toggle.option(opt):map(key)
 end
 
 ---@type table<string, snacks.toggle.Opts>
-local toggles = {
+return {
   ['<leader>ai'] = {
     name = 'Inline Completion',
     get = function()
@@ -85,70 +82,27 @@ local toggles = {
       vim.opt_local.colorcolumn = state and col or ''
     end,
   },
-}
-
-if package.loaded['render-markdown'] then
-  toggles['<leader>um'] = {
-    name = 'Render Markdown',
+  ['<leader>uG'] = {
+    name = 'MiniDiff Signs',
     get = function()
-      return require('render-markdown.state').enabled
+      return vim.g.minidiff_disable ~= true
     end,
     set = function(state)
-      require('render-markdown').set(state)
+      vim.g.minidiff_disable = not state
+      MiniDiff.toggle(0)
+      nv.fn.defer_redraw()
     end,
-  }
-end
-
--- if MiniDiff ~= nil then
-toggles['<leader>uG'] = {
-  name = 'MiniDiff Signs',
-  get = function()
-    return vim.g.minidiff_disable ~= true
-  end,
-  set = function(state)
-    vim.g.minidiff_disable = not state
-    MiniDiff.toggle(0)
-    nv.fn.defer_redraw()
-  end,
-}
-
-toggles['<leader>go'] = {
-  name = 'MiniDiff Overlay',
-  get = function()
-    local data = MiniDiff.get_buf_data(0)
-    return data and data.overlay == true or false
-  end,
-  set = function(_)
-    MiniDiff.toggle_overlay(0)
-    nv.fn.defer_redraw()
-  end,
-}
--- end
-
-if package.loaded['treesitter-context'] then
-  local tsc = require('treesitter-context')
-  toggles['<leader>ux'] = {
-    name = 'Treesitter Context',
-    get = tsc.enabled,
-    set = tsc.toggle,
-  }
-end
-
-if package.loaded['sidekick'] then
-  toggles['<leader>uN'] = {
-    name = 'Sidekick NES',
+  },
+  ['<leader>go'] = {
+    name = 'MiniDiff Overlay',
     get = function()
-      return require('sidekick.nes').enabled
+      local data = MiniDiff.get_buf_data(0)
+      return data and data.overlay == true or false
     end,
-    set = function(state)
-      require('sidekick.nes').enable(state)
+    set = function(_)
+      MiniDiff.toggle_overlay(0)
+      nv.fn.defer_redraw()
     end,
-  }
-end
-
--- TODO: extui
-
-for key, opts in pairs(toggles) do
-  Snacks.toggle.new(opts):map(key)
-end
+  },
+}
 -- vim: fdl=1

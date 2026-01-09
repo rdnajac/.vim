@@ -1,3 +1,31 @@
+local autocmds = function()
+  local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
+  vim.api.nvim_create_autocmd('User', {
+    group = aug,
+    pattern = 'BlinkCmpMenuOpen',
+    callback = function()
+      if vim.lsp.inline_completion.is_enabled() then
+        _G.inline_completion_toggle = true
+        -- vim.lsp.inline_completion.enable(false)
+        pcall(vim.lsp.inline_completion.enable, false)
+      end
+    end,
+  })
+  vim.api.nvim_create_autocmd('User', {
+    group = aug,
+    pattern = 'BlinkCmpMenuClose',
+    callback = function()
+      if _G.inline_completion_toggle then
+        -- vim.lsp.inline_completion.enable(true)
+        pcall(vim.lsp.inline_completion.enable, true)
+        _G.inline_completion_toggle = nil
+      end
+    end,
+  })
+end
+-- vim.schedule(autocmds)
+-- vim.lsp.enable('copilot')
+vim.lsp.inline_completion.enable()
 return {
   'folke/sidekick.nvim',
   enabled = true,
@@ -5,34 +33,6 @@ return {
   opts = {
     cli = { win = { layout = 'float' } },
   },
-  after = function()
-    -- vim.lsp.enable('copilot')
-    -- vim.lsp.inline_completion.enable()
-
-    -- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
-    -- vim.api.nvim_create_autocmd('User', {
-    --   group = aug,
-    --   pattern = 'BlinkCmpMenuOpen',
-    --   callback = function()
-    --     if vim.lsp.inline_completion.is_enabled() then
-    --       vim.b.inline_completion_toggle = true
-    --       -- vim.lsp.inline_completion.enable(false)
-    --       pcall(vim.lsp.inline_completion.enable, false)
-    --     end
-    --   end,
-    -- })
-    -- vim.api.nvim_create_autocmd('User', {
-    --   group = aug,
-    --   pattern = 'BlinkCmpMenuClose',
-    --   callback = function()
-    --     if vim.b.inline_completion_toggle then
-    --       -- vim.lsp.inline_completion.enable(true)
-    --       pcall(vim.lsp.inline_completion.enable, true)
-    --       vim.b.inline_completion_toggle = nil
-    --     end
-    --   end,
-    -- })
-  end,
   -- stylua: ignore
   keys = {
   { mode = 'n', expr = true, '<Tab>',
@@ -55,5 +55,16 @@ return {
       require('sidekick.cli').toggle('copilot')
     end,
   },
+  },
+  toggles = {
+    ['<leader>uN'] = {
+      name = 'Sidekick NES',
+      get = function()
+        return require('sidekick.nes').enabled
+      end,
+      set = function(state)
+        require('sidekick.nes').enable(state)
+      end,
+    },
   },
 }

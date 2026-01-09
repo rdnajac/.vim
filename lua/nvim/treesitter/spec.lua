@@ -1,12 +1,10 @@
-local function install_defaults()
-  local parsers = require('nvim.treesitter.parsers')
-  vim.cmd('TSUpdate | TSInstall! ' .. table.concat(parsers, ' '))
-end
-
 return {
   {
     'nvim-treesitter/nvim-treesitter',
-    build = install_defaults,
+    build = function()
+      local parsers = require('nvim.treesitter.parsers')
+      vim.cmd('TSUpdate | TSInstall! ' .. table.concat(parsers, ' '))
+    end,
     keys = function()
       local selection = require('nvim.treesitter.selection')
       return {
@@ -18,8 +16,7 @@ return {
   },
   {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    -- TODO: should be updated soon
-    branch = 'main',
+    branch = 'main', -- TODO: should be updated soon
     enabled = false,
     opts = {
       move = { set_jumps = true },
@@ -69,5 +66,16 @@ return {
     --   zindex = 20, -- The Z-index of the context window
     --   on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
     -- },
+    toggles = {
+      ['<leader>ux'] = {
+        name = 'Treesitter Context',
+        get = function()
+          return require('treesitter-context').enabled()
+        end,
+        set = function()
+          require('treesitter-context').toggle()
+        end,
+      },
+    },
   },
 }

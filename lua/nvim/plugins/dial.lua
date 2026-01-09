@@ -7,7 +7,7 @@ local dials_by_ft = {
 
 return {
   'monaqa/dial.nvim',
-  event = 'BufWinEnter',
+  lazy = true,
   debug = function()
     return dials_by_ft
   end,

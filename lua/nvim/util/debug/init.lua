@@ -1,38 +1,38 @@
 local M = {}
 
--- local bit = require('bit')
--- local MAX_INSPECT_LINES = bit.lshift(2, 10)
 local MAX_INSPECT_LINES = 2 ^ 10
 
-M.source = function()
-  local me = debug.getinfo(1, 'S')
-  -- .source:sub(2) when to sub? @...
-  local dir = vim.fs.dirname(me.source:sub(2))
+local notify = function(...)
+  Snacks.notify.warn(...)
+end
 
-  local i = 1
-  while true do
-    i = i + 1
-    -- info and (info.source == me.source or info.source == '@' .. vim.env.MYVIMRC or info.what ~= 'Lua')
-    local info = debug.getinfo(i, 'S')
-    if not info then
-      error('Could not `debug.getinfo()`')
-    end
-
-    local src = info.source
-    -- source = vim.uv.fs_realpath(source) or source
-    src = src:sub(1, 1) == '@' and src:sub(2) or src
-    if not vim.startswith(src, dir) then
-      return vim.fs.abspath(src)
+local function get_caller(skip_levels, predicate)
+  for level = skip_levels or 2, 10 do
+    local info = debug.getinfo(level, 'S')
+    if info and info.what ~= 'C' and info.source ~= 'lua' then
+      if not predicate or predicate(info) then
+        return info
+      end
     end
   end
-  return src .. ':' .. info.linedefined
+end
+
+local function format_source(source)
+  return vim.fn.fnamemodify(source:sub(2), ':p:~:.')
+end
+
+local function should_include_in_trace(info)
+  return info
+    and info.what ~= 'C'
+    and info.source ~= 'lua'
+    and not info.source:find('snacks[/\\]debug')
 end
 
 -- Show a notification with a pretty backtrace
 ---@param msg? string|string[]
 ---@param opts? snacks.notify.Opts
 M.bt = function(msg, opts)
-  opts = vim.tbl_deep_extend('force', {
+  opts = vim.tbl_extend('force', {
     level = vim.log.levels.WARN,
     title = 'Backtrace',
   }, opts or {})
@@ -40,55 +40,30 @@ M.bt = function(msg, opts)
   local trace = type(msg) == 'table' and msg or type(msg) == 'string' and { msg } or {}
   for level = 2, 20 do
     local info = debug.getinfo(level, 'Sln')
-    if
-      info
-      and info.what ~= 'C'
-      and info.source ~= 'lua'
-      and not info.source:find('snacks[/\\]debug')
-    then
-      local line = '- `'
-        .. vim.fn.fnamemodify(info.source:sub(2), ':p:~:.')
-        .. '`:'
-        .. info.currentline
+    if should_include_in_trace(info) then
+      local line = '- `' .. format_source(info.source) .. '`:' .. info.currentline
       if info.name then
         line = line .. ' _in_ **' .. info.name .. '**'
       end
       table.insert(trace, line)
     end
   end
-  Snacks.notify(#trace > 0 and (table.concat(trace, '\n')) or '', opts)
+  notify(#trace > 0 and (table.concat(trace, '\n')) or '', opts)
 end
 
 M.dd = function(...)
   local len = select('#', ...) ---@type number
   local obj = { ... } ---@type unknown[]
-  local caller = debug.getinfo(1, 'S')
-  for level = 2, 10 do
-    local info = debug.getinfo(level, 'S')
-    if
-      info
-      and info.source ~= caller.source
-      and info.what ~= 'C'
-      and info.source ~= 'lua'
-      and info.source ~= '@' .. (os.getenv('MYVIMRC') or '')
-    then
-      caller = info
-      break
-    end
-  end
+  local me = debug.getinfo(1, 'S')
+  local caller = get_caller(2, function(info)
+    return info.source ~= me.source and info.source ~= '@' .. (os.getenv('MYVIMRC') or '')
+  end)
   vim.schedule(function()
-    local title = 'Debug: '
-      .. vim.fn.fnamemodify(caller.source:sub(2), ':~:.')
-      .. ':'
-      .. caller.linedefined
     local lines = vim.split(vim.inspect(len == 1 and obj[1] or len > 0 and obj or nil), '\n')
-    if #lines > MAX_INSPECT_LINES then
-      local c = #lines
-      lines = vim.list_slice(lines, 1, MAX_INSPECT_LINES)
-      lines[#lines + 1] = ''
-      lines[#lines + 1] = (c - MAX_INSPECT_LINES) .. ' more lines have been truncated …'
-    end
-    Snacks.notify.warn(lines, { title = title, ft = 'lua' })
+    notify(lines, {
+      title = 'Debug: ' .. format_source(caller.source) .. ':' .. caller.linedefined,
+      ft = 'lua',
+    })
   end)
 end
 
@@ -96,7 +71,7 @@ end
 -- * **flush**: set to `true` to use `jit.flush` in every iteration.
 -- * **count**: defaults to 100
 ---@param fn fun()
----@param opts? {count?: number, flush?: boolean, title?: string}
+---@param opts? {count?: number, flush?: boolean}
 M.pp = function(fn, opts)
   opts = vim.tbl_extend('force', { count = 100, flush = true }, opts or {})
   local uv = vim.uv
@@ -107,10 +82,7 @@ M.pp = function(fn, opts)
     end
     fn()
   end
-  Snacks.notify(
-    ((uv.hrtime() - start) / 1e6 / opts.count) .. 'ms',
-    { title = opts.title or 'Profile' }
-  )
+  notify(((uv.hrtime() - start) / 1e6 / opts.count) .. 'ms', { title = 'Profile' })
 end
 
 return M

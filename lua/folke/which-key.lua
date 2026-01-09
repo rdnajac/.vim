@@ -151,10 +151,6 @@ vim.schedule(function()
 
   wk.add(spec)
   wk.add(require('folke.snacks.keys'))
-  if nv and nv.plug then
-    -- HACK: global key registration
-    wk.add(nv.plug.get_keys())
-  end
 
   -- TODO: move me!
   local function coerce(char)

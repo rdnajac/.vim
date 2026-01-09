@@ -1,4 +1,20 @@
 return {
+  -- { 'folke/lazy.nvim' },
+  -- { 'LazyVim/LazyVim' },
+  {
+    'folke/lazydev.nvim',
+    opts = {
+      library = {
+        -- PERF: no longer necessary witH `$VIMRUNTIME/lua/uv/_meta.lua`
+        -- { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        -- { path = 'LazyVim', words = { 'LazyVim' } },
+        { path = 'snacks.nvim', words = { 'Snacks' } },
+        -- { path = 'lazy.nvim', words = { 'LazyVim' } },
+        { path = 'mini.nvim', words = { 'Mini.*' } },
+        { path = 'nvim', words = { 'nv' } },
+      },
+    },
+  },
   {
     'folke/edgy.nvim',
     enabled = false,
@@ -25,7 +41,24 @@ return {
   {
     'folke/flash.nvim',
     enabled = false,
-    opts = {},
+    opts = function()
+      vim.schedule(function()
+        vim.keymap.set(
+          { 'n', 'o', 'x' },
+          '<C-Space>',
+          function()
+            require('flash').treesitter({
+              actions = {
+                ['<C-Space>'] = 'next',
+                ['<BS>'] = 'prev',
+              },
+            })
+          end,
+          { desc = 'Treesitter incremental selection' }
+        )
+      end)
+      return {}
+    end,
     -- stylua: ignore
     keys = {
       { 'gj', mode = { 'n', 'o', 'x' }, function() require('flash').jump() end,       desc = 'Flash'                    },
@@ -34,16 +67,6 @@ return {
       { 'J',  mode = {           'x' }, function() require('flash').remote() end,     desc = 'Remote Flash'             },
       -- { '<C-s>', mode = { 'c' }, function() require('flash').toggle() end, desc = 'Toggle Flash Search' },
     },
-    after = function()
-      vim.keymap.set({ 'n', 'o', 'x' }, '<C-Space>', function()
-        require('flash').treesitter({
-          actions = {
-            ['<C-Space>'] = 'next',
-            ['<BS>'] = 'prev',
-          },
-        })
-      end, { desc = 'Treesitter incremental selection' })
-    end,
   },
   {
     'folke/noice.nvim',
@@ -78,31 +101,35 @@ return {
   },
   {
     'folke/todo-comments.nvim',
-    -- enabled = false,
+    enabled = true,
     lazy = true,
-    opts = {
-      -- FIXME: extmarks not placed with statuscolun hook
-      keywords = { Section = { icon = '󰚟', color = 'title' } },
-      -- highlight = { keyword = 'bg', },
-      colors = {
-        title = { '#7DCFFF' },
-        error = { '#DC2626' },
-        warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
-        info = { 'DiagnosticInfo', '#2563EB' },
-        hint = { 'DiagnosticHint', '#10B981' },
-        default = { 'Identifier', '#7C3AED' },
-        test = { 'Identifier', '#FF00FF' },
-      },
-    },
+    opts = function()
+      local cmds = { 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }
+      for _, cmd in ipairs(cmds) do
+        -- vim.cmd.delcommand(cmd)
+        vim.api.nvim_del_user_command(cmd)
+      end
+
+      return {
+        -- FIXME: extmarks not placed with statuscolun hook
+        keywords = { Section = { icon = '󰚟', color = 'title' } },
+        -- highlight = { keyword = 'bg', },
+        colors = {
+          title = { '#7DCFFF' },
+          error = { '#DC2626' },
+          warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
+          info = { 'DiagnosticInfo', '#2563EB' },
+          hint = { 'DiagnosticHint', '#10B981' },
+          default = { 'Identifier', '#7C3AED' },
+          test = { 'Identifier', '#FF00FF' },
+        },
+      }
+    end,
     keys = {
       -- stylua: ignore
       { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
     },
-    after = function()
-      for _, cmd in ipairs({ 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }) do
-        vim.cmd.delcommand(cmd)
-      end
-    end,
+    after = function() end,
   },
   {
     'folke/trouble.nvim',
@@ -126,4 +153,3 @@ return {
   },
   { 'folke/ts-comments.nvim', enabled = false, opts = {} },
 }
--- vim: fdl=1

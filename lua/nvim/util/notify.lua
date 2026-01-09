@@ -33,11 +33,11 @@ function M.snacks_notify(msg, opts)
   return notify(msg, opts.level, opts)
 end
 
--- stylua: ignore start
-function M.warn(msg, opts)  return M.notify(msg, vim.tbl_extend("keep", { level = vim.log.levels.WARN }, opts or {})) end
-function M.info(msg, opts)  return M.notify(msg, vim.tbl_extend("keep", { level = vim.log.levels.INFO }, opts or {})) end
-function M.error(msg, opts) return M.notify(msg, vim.tbl_extend("keep", { level = vim.log.levels.ERROR }, opts or {})) end
--- stylua: ignore end
+vim.tbl_map(function(level)
+  M[level] = function(msg, opts)
+    return M.notify(msg, vim.tbl_extend('keep', { level = vim.log.levels[level] }, opts or {}))
+  end
+end, { 'warn', 'info', 'error' })
 
 M.setup = function()
   vim.notify = M.notify

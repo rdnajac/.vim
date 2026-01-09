@@ -181,6 +181,9 @@ local function picker_pair(desc, key, dir_or_opts, picker_opts)
   end
   local explorer_opts = vim.deepcopy(opts)
   explorer_opts.focus = 'input'
+  explorer_opts.confirm = function(p, item)
+    p:action({ 'jump' })
+  end
   -- stylua: ignore
   return {
     { '<leader>f' .. key, function() Snacks.picker.explorer(explorer_opts) end, desc = desc },

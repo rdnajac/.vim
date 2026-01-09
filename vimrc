@@ -525,8 +525,10 @@ else
   packadd! editorconfig
   packadd! hlyank
 endif
-packadd! cfilter
+" packadd! cfilter
 
+" Section:plug
+packadd! plug.nvim
 " packadd vim-jetpack
 silent! call plug#begin()
 Plug 'alker0/chezmoi.vim'
@@ -546,7 +548,6 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-unimpaired'
 if !has('nvim')
-  Plug 'justinmk/vim-dirvish'
   Plug 'andymass/vim-matchup'
   Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'
@@ -557,17 +558,17 @@ if !has('nvim')
   " Plug 'tpope/vim-sensible'
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-tbone'
-  " Plug 'tpope/vim-vinegar'    " use dirvish
+  " Plug 'tpope/vim-vinegar'
+  Plug 'justinmk/vim-dirvish'
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
-else
-  Plug 'folke/snacks.nvim'
-  Plug 'folke/tokyonight.nvim'
-  Plug 'folke/which-key.nvim'
 endif
 silent! call plug#end()
 " vim: fdl=0 fdm=marker
+
+" let s:mylist = ["TodoFzfLua", "TodoLocList", "TodoQuickFix", "TodoTelescope" ]
+" echom s:mylist
