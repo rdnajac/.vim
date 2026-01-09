@@ -13,12 +13,14 @@ M.install_or_update = function(name_or_pkg)
   local registry = require('mason-registry')
   local function setup_handlers(pkg)
     pkg
-      :once('install:success', function(_pkg, _receipt)
-        Snacks.notify.info(pkg.name .. ' installed')
-      end)
-      :once('install:failed', function(_pkg, err)
-        Snacks.notify.error(pkg.name .. ' install failed: ' .. tostring(err))
-      end)
+      :once(
+        'install:success',
+        function(_pkg, _receipt) Snacks.notify.info(pkg.name .. ' installed') end
+      )
+      :once(
+        'install:failed',
+        function(_pkg, err) Snacks.notify.error(pkg.name .. ' install failed: ' .. tostring(err)) end
+      )
   end
   local function do_install(pkg)
     if pkg:is_installed() then
@@ -88,14 +90,16 @@ M.ensure_installed = function()
           end
         end
       )
-      :if_not_present(function()
-        notify(
-          ('[mason-lspconfig.nvim] Server %q is not a valid entry in ensure_installed. Make sure to only provide lspconfig server names.'):format(
-            server_name
-          ),
-          vim.log.levels.WARN
-        )
-      end)
+      :if_not_present(
+        function()
+          notify(
+            ('[mason-lspconfig.nvim] Server %q is not a valid entry in ensure_installed. Make sure to only provide lspconfig server names.'):format(
+              server_name
+            ),
+            vim.log.levels.WARN
+          )
+        end
+      )
   end
 end
 
@@ -155,9 +159,7 @@ M.automatic_enable({
     registry:off('package:install:success', enable_server_scheduled)
     registry:on('package:install:success', enable_server_scheduled)
   end,
-  enable_all = function()
-    _.each(enable_server, registry.get_installed_package_names())
-  end,
+  enable_all = function() _.each(enable_server, registry.get_installed_package_names()) end,
 })
 
 return M

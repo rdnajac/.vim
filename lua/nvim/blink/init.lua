@@ -6,9 +6,10 @@ local providers = require('nvim.blink.providers')
 opts.sources = {
   ---@return blink.cmp.SourceList[]
   default = function()
-    return vim.tbl_filter(function(src)
-      return require('nvim.treesitter').is_comment() and src ~= 'snippets' or true
-    end, vim.tbl_keys(providers))
+    return vim.tbl_filter(
+      function(src) return require('nvim.treesitter').is_comment() and src ~= 'snippets' or true end,
+      vim.tbl_keys(providers)
+    )
   end,
   per_filetype = {
     lua = { inherit_defaults = true, 'lazydev' },
@@ -54,14 +55,10 @@ M.status = {
   function()
     return vim
       .iter(get_providers())
-      :map(function(provider)
-        return nv.icons.blink[provider] or ' '
-      end)
+      :map(function(provider) return nv.icons.blink[provider] or ' ' end)
       :join(' ')
   end,
-  cond = function()
-    return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i'
-  end,
+  cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end,
 }
 
 return M

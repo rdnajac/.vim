@@ -17,9 +17,7 @@ vim.api.nvim_create_autocmd('FileType', {
     'zsh',
   },
   group = aug,
-  callback = function(ev)
-    vim.treesitter.start(ev.buf)
-  end,
+  callback = function(ev) vim.treesitter.start(ev.buf) end,
   desc = 'Automatically start tree-sitter',
 })
 

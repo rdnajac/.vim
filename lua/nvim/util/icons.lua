@@ -162,9 +162,7 @@ local function get_mini_icon(_, key, lookup)
 end
 
 for _, key in ipairs(mini_icon_keys) do
-  local function _get_mini_icon(_, lookup)
-    return get_mini_icon(_, key, lookup)
-  end
+  local function _get_mini_icon(_, lookup) return get_mini_icon(_, key, lookup) end
 
   M[key] = setmetatable({}, {
     __index = _get_mini_icon,

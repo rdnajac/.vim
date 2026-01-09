@@ -1,7 +1,5 @@
 local spec_names = function()
-  return vim.tbl_map(function(p)
-    return p.spec.name
-  end, vim.pack.get())
+  return vim.tbl_map(function(p) return p.spec.name end, vim.pack.get())
 end
 
 vim.api.nvim_create_user_command('PlugUpdate', function(opts)
@@ -38,7 +36,5 @@ vim.api.nvim_create_user_command('PlugClean', function(opts)
   vim.pack.del(plugs)
 end, {
   nargs = '*',
-  complete = function(_, _, _)
-    return unloaded()
-  end,
+  complete = function(_, _, _) return unloaded() end,
 })

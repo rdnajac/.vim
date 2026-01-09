@@ -18,9 +18,7 @@ local opts = {
         end
         return require('sidekick').nes_jump_or_apply()
       end,
-      function()
-        return vim.lsp.inline_completion.get()
-      end,
+      function() return vim.lsp.inline_completion.get() end,
       'fallback',
     },
   },
@@ -44,9 +42,7 @@ local opts = {
 
 -- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
 ---@param ctx blink.cmp.DrawItemContext
-local component_highlight = function(ctx)
-  return { { group = ctx.kind_hl, priority = 20000 } }
-end
+local component_highlight = function(ctx) return { { group = ctx.kind_hl, priority = 20000 } } end
 
 opts.completion.menu = {
   -- auto_show = true,
@@ -97,9 +93,7 @@ opts.completion.menu = {
         highlight = component_highlight,
       },
       kind_icon = {
-        text = function(ctx)
-          return nv.icons.kinds[ctx.kind] or ''
-        end,
+        text = function(ctx) return nv.icons.kinds[ctx.kind] or '' end,
         highlight = component_highlight,
       },
     },

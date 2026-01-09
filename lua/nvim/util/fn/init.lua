@@ -2,13 +2,9 @@
 -- build a table from all the files in this dir
 -- each file returns a function, so lazily load them by
 -- setting a metatable on the module table and the filename is the function
-local M = vim.defaulttable(function(k)
-  return require('nvim.util.fn.' .. k)
-end)
+local M = vim.defaulttable(function(k) return require('nvim.util.fn.' .. k) end)
 
-M.ensure_list = function(t)
-  return vim.islist(t) and t or { t }
-end
+M.ensure_list = function(t) return vim.islist(t) and t or { t } end
 
 --- Get all lines from a buffer
 --- @param bufnr number? buffer number, defaults to current buffer
@@ -23,22 +19,16 @@ end
 ---@param line number
 ---@param col r
 ---@return string
-M.get_syn_name = function(line, col)
-  return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name')
-end
+M.get_syn_name = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
 
 --- Returns false if x is nil, not a string, or an empty string
 ---@param x any
 ---@return boolean
-M.is_nonempty_string = function(x)
-  return type(x) == 'string' and x ~= ''
-end
+M.is_nonempty_string = function(x) return type(x) == 'string' and x ~= '' end
 
 --- Returns false if x is nil, not a list, or an empty list
 ---@param x any
-M.is_nonempty_list = function(x)
-  return vim.islist(x) and #x > 0
-end
+M.is_nonempty_list = function(x) return vim.islist(x) and #x > 0 end
 
 -- TODO:
 M.modname = function(path)
@@ -53,9 +43,7 @@ M.submodules = function(subdir)
   local luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
   local path = vim.fs.joinpath(luaroot, 'nvim', subdir)
   local files = vim.fn.globpath(path, '*.lua', false, true)
-  return vim.tbl_map(function(f)
-    return f:sub(#luaroot + 2, -5)
-  end, files)
+  return vim.tbl_map(function(f) return f:sub(#luaroot + 2, -5) end, files)
 end
 
 --- Deferred redraw after `t` milliseconds (default 200ms)
@@ -69,9 +57,10 @@ M.defer_redraw = function(t)
 end
 
 M.new = function()
-  vim.ui.input({ prompt = 'new file: ' }, function(input)
-    vim.cmd.edit(vim.fs.joinpath(vim.b.dirvish._dir, input))
-  end)
+  vim.ui.input(
+    { prompt = 'new file: ' },
+    function(input) vim.cmd.edit(vim.fs.joinpath(vim.b.dirvish._dir, input)) end
+  )
 end
 
 M.extmark_leaks = function()
@@ -89,19 +78,13 @@ M.extmark_leaks = function()
       end
     end
   end
-  table.sort(counts, function(a, b)
-    return a.count > b.count
-  end)
+  table.sort(counts, function(a, b) return a.count > b.count end)
   dd(counts)
 end
 
-M.is_curwin = function()
-  return vim.fn.win_getid() ~= vim.g.statusline_winid
-end
+M.is_curwin = function() return vim.fn.win_getid() ~= vim.g.statusline_winid end
 
-M.sprintf = function(s, ...)
-  return s:format(...)
-end
+M.sprintf = function(s, ...) return s:format(...) end
 
 return M
 

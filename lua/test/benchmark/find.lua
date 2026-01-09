@@ -5,18 +5,10 @@ local config_cache = vim.fn.stdpath('config')
 local path = config_cache .. '/after/lsp'
 
 benchmark.run({
-  globpath = function()
-    return vim.fn.globpath(vim.o.runtimepath, pattern, true, true)
-  end,
-  globpath_config = function()
-    return vim.fn.globpath(config_cache, pattern, true, true)
-  end,
-  globpath_config_precise = function()
-    return vim.fn.globpath(path, pattern, true, true)
-  end,
-  nvim_get_runtime_file = function()
-    return vim.api.nvim_get_runtime_file(pattern, true)
-  end,
+  globpath = function() return vim.fn.globpath(vim.o.runtimepath, pattern, true, true) end,
+  globpath_config = function() return vim.fn.globpath(config_cache, pattern, true, true) end,
+  globpath_config_precise = function() return vim.fn.globpath(path, pattern, true, true) end,
+  nvim_get_runtime_file = function() return vim.api.nvim_get_runtime_file(pattern, true) end,
   scandir = function()
     local fd = vim.loop.fs_scandir(config_cache)
     local items = {}
@@ -32,22 +24,10 @@ benchmark.run({
     return items
   end,
   dir = function()
-    return vim
-      .iter(vim.fs.dir(config_cache))
-      :map(function(name)
-        return name
-      end)
-      :totable()
+    return vim.iter(vim.fs.dir(config_cache)):map(function(name) return name end):totable()
   end,
   dir_precise = function()
-    return vim
-      .iter(vim.fs.dir(config_cache))
-      :map(function(name)
-        return name
-      end)
-      :totable()
+    return vim.iter(vim.fs.dir(config_cache)):map(function(name) return name end):totable()
   end,
-  readdir = function()
-    return vim.fn.readdir(config_cache)
-  end,
+  readdir = function() return vim.fn.readdir(config_cache) end,
 })

@@ -1,8 +1,6 @@
 -- sanitize lazy spec entries for my pluginmanager
 local M = setmetatable({}, {
-  __call = function(M, ...)
-    return M.sanitize(...)
-  end,
+  __call = function(M, ...) return M.sanitize(...) end,
 })
 
 function M.sanitize(plugin)

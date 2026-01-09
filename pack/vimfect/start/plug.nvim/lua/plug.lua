@@ -19,9 +19,7 @@ function M.plug(t)
   return plugin
 end
 
-function M.get_keys()
-  return vim.tbl_map(Util.get, vim.tbl_values(M.keys))
-end
+function M.get_keys() return vim.tbl_map(Util.get, vim.tbl_values(M.keys)) end
 
 ---@param plug_data {spec: vim.pack.Spec, path: string}
 function M.load(plug_data)
@@ -33,9 +31,7 @@ function M.load(plug_data)
 end
 
 return setmetatable(M, {
-  __call = function(_, t)
-    return M.plug(t)
-  end,
+  __call = function(_, t) return M.plug(t) end,
   -- TODO: __index should access the plugins table
   -- __index = function(t, k)
   -- if k == 'keys' then return

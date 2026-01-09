@@ -69,12 +69,8 @@ return {
     toggles = {
       ['<leader>ux'] = {
         name = 'Treesitter Context',
-        get = function()
-          return require('treesitter-context').enabled()
-        end,
-        set = function()
-          require('treesitter-context').toggle()
-        end,
+        get = function() return require('treesitter-context').enabled() end,
+        set = function() require('treesitter-context').toggle() end,
       },
     },
   },

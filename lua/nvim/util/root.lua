@@ -1,7 +1,5 @@
 local M = setmetatable({}, {
-  __call = function(m, ...)
-    return m.get(...)
-  end,
+  __call = function(m, ...) return m.get(...) end,
 })
 
 local realpath = function(path)
@@ -11,9 +9,7 @@ local realpath = function(path)
 end
 
 --- @param buf number
-local bufpath = function(buf)
-  return M.realpath(vim.api.nvim_buf_get_name(assert(buf)))
-end
+local bufpath = function(buf) return M.realpath(vim.api.nvim_buf_get_name(assert(buf))) end
 
 ---@class LazyRoot
 ---@field paths string[]
@@ -61,9 +57,10 @@ M.detectors = {
     end
     local roots = {} ---@type string[]
     local clients = vim.lsp.get_clients({ bufnr = buf })
-    clients = vim.tbl_filter(function(client)
-      return not vim.tbl_contains(vim.g.root_lsp_ignore or {}, client.name)
-    end, clients) --[[@as vim.lsp.Client[] ]]
+    clients = vim.tbl_filter(
+      function(client) return not vim.tbl_contains(vim.g.root_lsp_ignore or {}, client.name) end,
+      clients
+    ) --[[@as vim.lsp.Client[] ]]
     for _, client in pairs(clients) do
       local workspace = client.config.workspace_folders
       for _, ws in pairs(workspace or {}) do
@@ -88,9 +85,7 @@ function M.resolve(spec)
   elseif type(spec) == 'function' then
     return spec
   end
-  return function(buf)
-    return M.detectors.pattern(buf, spec)
-  end
+  return function(buf) return M.detectors.pattern(buf, spec) end
 end
 
 ---@param opts? { buf?: number, spec?: LazyRootSpec[], all?: boolean }
@@ -114,9 +109,7 @@ function M.detect(opts)
         roots[#roots + 1] = pp
       end
     end
-    table.sort(roots, function(a, b)
-      return #a > #b
-    end)
+    table.sort(roots, function(a, b) return #a > #b end)
     if #roots > 0 then
       ret[#ret + 1] = { spec = spec, paths = roots }
       if opts.all == false then
@@ -154,18 +147,18 @@ end
 M.cache = {}
 
 function M.setup()
-  vim.api.nvim_create_user_command('GetRoot', function()
-    Snacks.notify(M.info())
-  end, { desc = 'LazyVim roots for the current buffer' })
+  vim.api.nvim_create_user_command(
+    'GetRoot',
+    function() Snacks.notify(M.info()) end,
+    { desc = 'LazyVim roots for the current buffer' }
+  )
 
   -- FIX: doesn't properly clear cache in neo-tree `set_root` (which should happen presumably on `DirChanged`),
   -- probably because the event is triggered in the neo-tree buffer, therefore add `BufEnter`
   -- Maybe this is too frequent on `BufEnter` and something else should be done instead??
   vim.api.nvim_create_autocmd({ 'LspAttach', 'BufWritePost', 'DirChanged', 'BufEnter' }, {
     group = vim.api.nvim_create_augroup('lazyvim_root_cache', { clear = true }),
-    callback = function(event)
-      M.cache[event.buf] = nil
-    end,
+    callback = function(event) M.cache[event.buf] = nil end,
   })
 end
 

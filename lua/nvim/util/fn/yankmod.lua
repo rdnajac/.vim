@@ -6,12 +6,8 @@ local modname = function(path)
 end
 
 local formats = {
-  module = function(module)
-    return module
-  end,
-  require = function(module)
-    return ([[require('%s')]]):format(module)
-  end,
+  module = function(module) return module end,
+  require = function(module) return ([[require('%s')]]):format(module) end,
   require_func = function(module)
     -- TODO: make this gopd
     if vim.trim(vim.fn.expand('<cword>')) == '' then

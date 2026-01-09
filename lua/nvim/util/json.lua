@@ -28,9 +28,7 @@ end
 
 ---@param filename string
 ---@return table
-M.read = function(filename)
-  return vim.json.decode(nv.file.read(filename))
-end
+M.read = function(filename) return vim.json.decode(nv.file.read(filename)) end
 
 ---@param filename string
 ---@param contents string|string[]

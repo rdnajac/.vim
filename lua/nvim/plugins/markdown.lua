@@ -4,12 +4,8 @@ local M = {
   toggles = {
     ['<leader>um'] = {
       name = 'Render Markdown',
-      get = function()
-        return require('render-markdown.state').enabled
-      end,
-      set = function(state)
-        require('render-markdown').set(state)
-      end,
+      get = function() return require('render-markdown.state').enabled end,
+      set = function(state) require('render-markdown').set(state) end,
     },
   },
 }

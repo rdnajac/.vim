@@ -15,9 +15,7 @@ return {
   on_show = function(picker)
     local show = false
     local gap = 1
-    local clamp_width = function(value)
-      return math.max(20, math.min(100, value))
-    end
+    local clamp_width = function(value) return math.max(20, math.min(100, value)) end
     local rel = picker.layout.root
     local update = function(win) ---@param win snacks.win
       local border = win:border_size().left + win:border_size().right
@@ -56,9 +54,7 @@ return {
       end)
     end)
 
-    rel:on('WinResized', function()
-      update(preview_win)
-    end)
+    rel:on('WinResized', function() update(preview_win) end)
 
     picker.preview.win = preview_win
     picker.main = preview_win.win

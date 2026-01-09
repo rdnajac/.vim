@@ -34,9 +34,7 @@ M.flag = function(opts)
       local val = vim[scope][name]
       return val == '1' or val == 1 or val == true
     end,
-    set = function(state)
-      vim[scope][name] = state and 1 or 0
-    end,
+    set = function(state) vim[scope][name] = state and 1 or 0 end,
   })
   if mapping then
     toggle:map(mapping, { desc = desc })

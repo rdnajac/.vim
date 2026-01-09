@@ -14,9 +14,7 @@ benchmark.run({
           return not vim.endswith(f, 'init.lua')
         end
       end)
-      :map(function(f)
-        return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??')
-      end)
+      :map(function(f) return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??') end)
       :totable()
   end,
   ['globpath + iter inline'] = function()
@@ -29,9 +27,7 @@ benchmark.run({
           return not vim.endswith(f, 'init.lua')
         end
       end)
-      :map(function(f)
-        return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??')
-      end)
+      :map(function(f) return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??') end)
       :totable()
   end,
   ['fs.dir + table.insert'] = function()
@@ -50,17 +46,18 @@ benchmark.run({
   end,
   ['readdir + tbl_map'] = function()
     return vim.tbl_map(
-      function(name)
-        return 'nvim/' .. name:gsub('%.lua$', '')
-      end,
-      vim.fn.readdir(dir, function(name)
-        return (
-          (vim.fn.isdirectory(dir .. name) == 1 and vim.uv.fs_stat(dir .. name .. '/init.lua'))
-          or (name:match('%.lua$') and name ~= 'init.lua')
-        )
-            and 1
-          or 0
-      end)
+      function(name) return 'nvim/' .. name:gsub('%.lua$', '') end,
+      vim.fn.readdir(
+        dir,
+        function(name)
+          return (
+            (vim.fn.isdirectory(dir .. name) == 1 and vim.uv.fs_stat(dir .. name .. '/init.lua'))
+            or (name:match('%.lua$') and name ~= 'init.lua')
+          )
+              and 1
+            or 0
+        end
+      )
     )
   end,
   ['fs.dir + iter'] = function()
@@ -74,9 +71,7 @@ benchmark.run({
           return name:match('%.lua$') and name ~= 'init.lua'
         end
       end)
-      :map(function(name)
-        return 'nvim/' .. name:gsub('%.lua$', '')
-      end)
+      :map(function(name) return 'nvim/' .. name:gsub('%.lua$', '') end)
       :totable()
   end,
 })

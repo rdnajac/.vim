@@ -2,9 +2,7 @@
 local dbug = require('nvim.util.debug')
 _G.bt = dbug.bt
 -- _G.dd = dbug.dd
-_G.dd = function(...)
-  return Snacks and Snacks.debug(...) or vim.print(...)
-end
+_G.dd = function(...) return Snacks and Snacks.debug(...) or vim.print(...) end
 _G.pp = dbug.pp
 
 local M = {
@@ -17,13 +15,7 @@ local M = {
   plug = require('plug'),
 }
 -- collect specs
-M.specs = vim
-  .iter(vim.tbl_values(M))
-  :map(function(v)
-    return v.spec
-  end)
-  :flatten()
-  :totable()
+M.specs = vim.iter(vim.tbl_values(M)):map(function(v) return v.spec end):flatten():totable()
 
 return setmetatable(M, {
   -- __newindex = function(t, k, v)

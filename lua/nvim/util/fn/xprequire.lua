@@ -1,7 +1,5 @@
 local M = setmetatable({}, {
-  __call = function(M, ...)
-    return M.xprequire(...)
-  end,
+  __call = function(M, ...) return M.xprequire(...) end,
 })
 
 --- Same as require but handles errors gracefully

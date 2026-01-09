@@ -1,7 +1,5 @@
 local M = setmetatable({}, {
-  __call = function(M, ...)
-    return M.printval(...)
-  end,
+  __call = function(M, ...) return M.printval(...) end,
 })
 
 local debug_r = function()

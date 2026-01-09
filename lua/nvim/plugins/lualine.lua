@@ -44,9 +44,7 @@ M.opts.inactive_sections = {}
 M.opts.tabline = {
   lualine_a = {
     {
-      function()
-        return vim.fn.fnamemodify(Snacks.git.get_root() or '', ':p:~')
-      end,
+      function() return vim.fn.fnamemodify(Snacks.git.get_root() or '', ':p:~') end,
     },
   },
   lualine_b = {

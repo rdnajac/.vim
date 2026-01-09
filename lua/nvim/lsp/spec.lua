@@ -2,9 +2,7 @@ return {
   { 'neovim/nvim-lspconfig' },
   {
     'mason-org/mason.nvim',
-    opts = function()
-      return { ui = { icons = nv.icons.mason } }
-    end,
+    opts = function() return { ui = { icons = nv.icons.mason } } end,
     build = vim.cmd.MasonUpdate,
     keys = { { '<leader>cm', '<Cmd>Mason<CR>', desc = 'Mason' } },
   },

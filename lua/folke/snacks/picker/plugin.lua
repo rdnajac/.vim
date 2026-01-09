@@ -35,14 +35,8 @@ Snacks.picker({
   end,
   format = 'text',
   actions = {
-    confirm = function(picker, item)
-      Snacks.picker.files({ cwd = item.file })
-    end,
-    live_grep = function(picker, item)
-      Snacks.picker.pick('grep', { cwd = item.file })
-    end,
-    oldfiles = function(_, item)
-      Snacks.picker.recent({ cwd = item.file })
-    end,
+    confirm = function(picker, item) Snacks.picker.files({ cwd = item.file }) end,
+    live_grep = function(picker, item) Snacks.picker.pick('grep', { cwd = item.file }) end,
+    oldfiles = function(_, item) Snacks.picker.recent({ cwd = item.file }) end,
   },
 })

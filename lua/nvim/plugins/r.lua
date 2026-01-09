@@ -79,12 +79,8 @@ local rstt = {
 }
 
 M.status = {
-  function()
-    return rstt[vim.g.R_Nvim_status][1]
-  end,
-  color = function()
-    return rstt[vim.g.R_Nvim_status][2]
-  end,
+  function() return rstt[vim.g.R_Nvim_status][1] end,
+  color = function() return rstt[vim.g.R_Nvim_status][2] end,
   cond = function()
     if not vim.tbl_contains({ 'r', 'rmd', 'quarto' }, vim.bo.filetype) then
       return false

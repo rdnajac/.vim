@@ -8,9 +8,7 @@ local dials_by_ft = {
 return {
   'monaqa/dial.nvim',
   lazy = true,
-  debug = function()
-    return dials_by_ft
-  end,
+  debug = function() return dials_by_ft end,
   config = function()
     local augend = require('dial.augend')
 

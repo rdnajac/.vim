@@ -1,6 +1,4 @@
-Snacks.util.on_key('<Esc>', function()
-  vim.cmd.nohlsearch()
-end)
+Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
 
 vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent', remap = true })
 vim.keymap.set({ 'n', 't' }, '<c-\\>', Snacks.terminal.toggle)
@@ -54,9 +52,7 @@ local M = {
 
 vim.list_extend(M, {
   '<leader>dpf',
-  function()
-    Snacks.profiler.pick({ filter = { def_plugin = vim.fn.input('Filter by plugin: ') } })
-  end,
+  function() Snacks.profiler.pick({ filter = { def_plugin = vim.fn.input('Filter by plugin: ') } }) end,
   desc = 'Profiler Filter by Plugin',
 })
 
@@ -181,9 +177,7 @@ local function picker_pair(desc, key, dir_or_opts, picker_opts)
   end
   local explorer_opts = vim.deepcopy(opts)
   explorer_opts.focus = 'input'
-  explorer_opts.confirm = function(p, item)
-    p:action({ 'jump' })
-  end
+  explorer_opts.confirm = function(p, item) p:action({ 'jump' }) end
   -- stylua: ignore
   return {
     { '<leader>f' .. key, function() Snacks.picker.explorer(explorer_opts) end, desc = desc },

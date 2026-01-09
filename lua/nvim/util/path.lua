@@ -1,8 +1,6 @@
 local M = {}
 
-local function normalize(path)
-  return vim.fs.normalize(path, { _fast = true })
-end
+local function normalize(path) return vim.fs.normalize(path, { _fast = true }) end
 
 local function relative(p, b)
   local p_parts = vim.split(p:gsub('/+$', ''), '/', { plain = true })

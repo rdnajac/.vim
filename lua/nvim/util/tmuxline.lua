@@ -8,9 +8,7 @@
 -- This autocmd should only be loaded on the first call to this module
 vim.api.nvim_create_autocmd({ 'ModeChanged', 'DirChanged', 'BufEnter' }, {
   aug = vim.api.nvim_create_augroup('Tmuxline', {}),
-  callback = function()
-    vim.system({ 'tmux', 'refresh-client', '-S' })
-  end,
+  callback = function() vim.system({ 'tmux', 'refresh-client', '-S' }) end,
 })
 
 local M = function(line)

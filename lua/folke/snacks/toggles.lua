@@ -28,21 +28,13 @@ end
 return {
   ['<leader>ai'] = {
     name = 'Inline Completion',
-    get = function()
-      return vim.lsp.inline_completion.is_enabled()
-    end,
-    set = function(state)
-      vim.lsp.inline_completion.enable(state)
-    end,
+    get = function() return vim.lsp.inline_completion.is_enabled() end,
+    set = function(state) vim.lsp.inline_completion.enable(state) end,
   },
   ['<leader>uv'] = {
     name = 'Virtual Text',
-    get = function()
-      return vim.diagnostic.config().virtual_text ~= false
-    end,
-    set = function(state)
-      vim.diagnostic.config({ virtual_text = state })
-    end,
+    get = function() return vim.diagnostic.config().virtual_text ~= false end,
+    set = function(state) vim.diagnostic.config({ virtual_text = state }) end,
   },
   ['<leader>ub'] = {
     name = 'Translucency',
@@ -55,9 +47,7 @@ return {
   },
   ['<leader>uu'] = {
     name = 'LastStatus',
-    get = function()
-      return vim.o.laststatus > 0
-    end,
+    get = function() return vim.o.laststatus > 0 end,
     set = function(state)
       if not state then
         vim.b.lastlaststatus = vim.o.laststatus
@@ -84,9 +74,7 @@ return {
   },
   ['<leader>uG'] = {
     name = 'MiniDiff Signs',
-    get = function()
-      return vim.g.minidiff_disable ~= true
-    end,
+    get = function() return vim.g.minidiff_disable ~= true end,
     set = function(state)
       vim.g.minidiff_disable = not state
       MiniDiff.toggle(0)

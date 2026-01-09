@@ -19,16 +19,12 @@ wk.setup({
   sort = { 'order', 'alphanum', 'case', 'mod' },
   spec = {
     '<leader>?',
-    function()
-      wk.show({ global = false })
-    end,
+    function() wk.show({ global = false }) end,
     desc = 'Buffer Keymaps (which-key)',
   },
   {
     '<C-w><Space>',
-    function()
-      wk.show({ keys = '<C-w>', loop = true })
-    end,
+    function() wk.show({ keys = '<C-w>', loop = true }) end,
     desc = 'Window Hydra Mode (which-key)',
   },
   -- triggers = { { '<auto>', mode = 'nixsotc' } },

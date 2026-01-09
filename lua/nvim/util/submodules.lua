@@ -1,7 +1,5 @@
 local M = setmetatable({}, {
-  __call = function(M, ...)
-    return M.submodules(...)
-  end,
+  __call = function(M, ...) return M.submodules(...) end,
 })
 
 ---@param opts? {dir?: string, pattern?: string, level?: number}
@@ -22,9 +20,7 @@ function M.submodules(opts)
         return vim.endswith(f, '.lua') and not vim.endswith(f, 'init.lua')
       end
     end)
-    :map(function(f)
-      return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??')
-    end)
+    :map(function(f) return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??') end)
     :totable()
 end
 

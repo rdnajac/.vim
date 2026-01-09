@@ -38,9 +38,7 @@ local lua_root = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua')
 for i, init_lua in ipairs(vim.fn.globpath(lua_root, 'nvim/**/init.lua', true, true)) do
   table.insert(keys, {
     '<Bslash>' .. i,
-    function()
-      vim.fn['edit#'](init_lua)
-    end,
+    function() vim.fn['edit#'](init_lua) end,
     desc = 'Edit ' .. vim.fs.dirname(vim.fs.relpath(lua_root, init_lua)),
   })
   if i == 9 then

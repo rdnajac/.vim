@@ -62,12 +62,8 @@ M.attach = function(client, bufnr)
       lib.request_symbol(bufnr, lsp_callback, client)
     end
   end)
-  au({ 'CursorHold', 'CursorMoved' }, function()
-    lib.update_context(bufnr)
-  end)
-  au('BufDelete', function()
-    lib.clear_buffer_data(bufnr)
-  end)
+  au({ 'CursorHold', 'CursorMoved' }, function() lib.update_context(bufnr) end)
+  au('BufDelete', function() lib.clear_buffer_data(bufnr) end)
 
   -- First call
   vim.b[bufnr].navic_awaiting_lsp_response = true
@@ -75,7 +71,5 @@ M.attach = function(client, bufnr)
 end
 
 return setmetatable(M, {
-  __call = function(_, ...)
-    return M.get(...)
-  end,
+  __call = function(_, ...) return M.get(...) end,
 })

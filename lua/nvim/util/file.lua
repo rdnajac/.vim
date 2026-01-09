@@ -2,9 +2,7 @@ local M = {}
 
 ---@param path string
 ---@return string[]
-M.lines = function(path)
-  return vim.iter(io.lines(path)):totable() or {}
-end
+M.lines = function(path) return vim.iter(io.lines(path)):totable() or {} end
 
 ---@param op function
 ---@param ... any
@@ -38,8 +36,6 @@ end
 -- TODO:  vim.fn.writefile?
 ---@param path string
 ---@param lines string[]
-M.write_lines = function(path, lines)
-  M.write(path, table.concat(lines, '\n'))
-end
+M.write_lines = function(path, lines) M.write(path, table.concat(lines, '\n')) end
 
 return M

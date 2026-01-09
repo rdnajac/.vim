@@ -108,13 +108,9 @@ local opts = {
   plugins = M.get_plugins(),
 }
 
-M.config = function()
-  require('tokyonight').setup(opts)
-end
+M.config = function() require('tokyonight').setup(opts) end
 
-M.setup = function()
-  return require('tokyonight.theme').setup(opts)
-end
+M.setup = function() return require('tokyonight.theme').setup(opts) end
 
 M.colorscheme = function()
   ---@type ColorScheme, tokyonight.Highlights, tokyonight.Config

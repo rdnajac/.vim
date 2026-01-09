@@ -1,7 +1,5 @@
 local M = setmetatable({}, {
-  __call = function(M, ...)
-    return M.patch(...)
-  end,
+  __call = function(M, ...) return M.patch(...) end,
 })
 
 M.patch = function(mod, fun)

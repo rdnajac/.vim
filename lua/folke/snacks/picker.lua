@@ -44,9 +44,7 @@ M.sources = {
   help = { layout = 'ivy_split' },
   icons = { layout = { preset = 'insert' } },
   recent = {
-    config = function(p)
-      p.filter = {}
-    end,
+    config = function(p) p.filter = {} end,
   },
   zoxide = { confirm = 'edit' },
 }

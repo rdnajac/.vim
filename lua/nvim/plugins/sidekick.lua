@@ -59,12 +59,8 @@ return {
   toggles = {
     ['<leader>uN'] = {
       name = 'Sidekick NES',
-      get = function()
-        return require('sidekick.nes').enabled
-      end,
-      set = function(state)
-        require('sidekick.nes').enable(state)
-      end,
+      get = function() return require('sidekick.nes').enabled end,
+      set = function(state) require('sidekick.nes').enable(state) end,
     },
   },
 }

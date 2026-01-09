@@ -1,8 +1,6 @@
 -- TODO: register notify setup
 local M = setmetatable({}, {
-  __call = function(t, ...)
-    return t.notify(...)
-  end,
+  __call = function(t, ...) return t.notify(...) end,
 })
 
 -- Highlight groups for different log levels

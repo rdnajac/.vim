@@ -20,10 +20,10 @@ local header = function(cols)
       -- PERF: use lua?
       local n = vim.fn.strcharpart(line, 0, 10)
       -- if cols < 20 then
-        return n .. vim.fn.strcharpart(line, 27) -- nvim
+      return n .. vim.fn.strcharpart(line, 27) -- nvim
       -- return n .. vim.fn.strcharpart(line, 27, 9) -- nv
     end)
-    :join('\n') 
+    :join('\n')
 end
 
 local dijkstra = [[

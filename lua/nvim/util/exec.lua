@@ -47,7 +47,5 @@ M.highlight = vim
   :totable()
 
 return setmetatable(M, {
-  __call = function(...)
-    return M.exec(...)
-  end,
+  __call = function(...) return M.exec(...) end,
 })

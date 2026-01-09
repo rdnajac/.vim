@@ -11,9 +11,7 @@ local specs = {
   'tani/vim-jetpack',
 }
 
-local function gh(user_repo)
-  return 'https://github.com/' .. user_repo .. '.git'
-end
+local function gh(user_repo) return 'https://github.com/' .. user_repo .. '.git' end
 
 local plugs = vim.tbl_map(gh, specs)
 

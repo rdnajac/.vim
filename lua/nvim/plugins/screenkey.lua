@@ -41,9 +41,7 @@ return {
     --   end
     --   return keys
     -- end,
-    colorize = function(keys)
-      return keys
-    end,
+    colorize = function(keys) return keys end,
     separator = '',
     keys = {
       -- ['%'] = '%%',

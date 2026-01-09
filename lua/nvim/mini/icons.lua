@@ -40,14 +40,13 @@ local opts = {
 }
 
 for opt, v in pairs(opts) do
-  opts[opt] = vim.tbl_map(function(pair)
-    return { glyph = pair[1], hl = 'MiniIcons' .. pair[2] }
-  end, v)
+  opts[opt] = vim.tbl_map(
+    function(pair) return { glyph = pair[1], hl = 'MiniIcons' .. pair[2] } end,
+    v
+  )
 end
 
-opts.use_file_extension = function(ext, _)
-  return ext:sub(-3) ~= 'scm'
-end
+opts.use_file_extension = function(ext, _) return ext:sub(-3) ~= 'scm' end
 
 ---@diagnostic disable-next-line
 local test = function()

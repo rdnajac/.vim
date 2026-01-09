@@ -75,16 +75,10 @@ M.status = function()
   end)
 end
 
-M.test = function()
-  dd(M.status()[vim.uv.cwd()])
-end
+M.test = function() dd(M.status()[vim.uv.cwd()]) end
 
-M.short_status = function()
-  return M.Git(M.cmd('status', false))
-end
+M.short_status = function() return M.Git(M.cmd('status', false)) end
 
 return setmetatable(M, {
-  __call = function(_, cmd, bufnr_or_path)
-    return M.Git(cmd, bufnr_or_path)
-  end,
+  __call = function(_, cmd, bufnr_or_path) return M.Git(cmd, bufnr_or_path) end,
 })

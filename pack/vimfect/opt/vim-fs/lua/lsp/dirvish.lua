@@ -11,14 +11,10 @@ local capabilities = {
 local methods = {}
 
 --- @param callback function
-function methods.initialize(_, callback)
-  return callback(nil, { capabilities = capabilities })
-end
+function methods.initialize(_, callback) return callback(nil, { capabilities = capabilities }) end
 
 --- @param callback function
-function methods.shutdown(_, callback)
-  return callback(nil, nil)
-end
+function methods.shutdown(_, callback) return callback(nil, nil) end
 
 --- @return { path: string?, lnum: integer }
 local get_file_at_lnum = function(bufnr, lnum)
@@ -50,12 +46,8 @@ methods['textDocument/documentSymbol'] = function(params, callback)
   local symbols = vim
     .iter(files)
     :enumerate() -- yields index, value
-    :map(function(i, line)
-      return vim.trim(line), i
-    end)
-    :filter(function(line, _)
-      return line ~= ''
-    end)
+    :map(function(i, line) return vim.trim(line), i end)
+    :filter(function(line, _) return line ~= '' end)
     :map(function(line, i)
       local name = vim.fn.fnamemodify(line, ':t')
       local kind = vim.endswith(name, '/') and vim.lsp.protocol.SymbolKind.Namespace
@@ -189,13 +181,9 @@ local cmd = function(disp)
     return false
   end
 
-  function res.is_closing()
-    return closing
-  end
+  function res.is_closing() return closing end
 
-  function res.terminate()
-    closing = true
-  end
+  function res.terminate() closing = true end
 
   return res
 end

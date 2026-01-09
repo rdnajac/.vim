@@ -48,9 +48,7 @@ function Plugin:tospec()
         name = self.name,
         data = {
           build = self.build,
-          setup = function()
-            return self:setup()
-          end,
+          setup = function() return self:setup() end,
         },
       }
     or nil

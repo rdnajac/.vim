@@ -38,9 +38,7 @@ local function parse_build_cmd(build)
   return tokens
 end
 
-vim.tbl_map(function(s)
-  print(parse_build_cmd(s))
-end, inputs)
+vim.tbl_map(function(s) print(parse_build_cmd(s)) end, inputs)
 
 -- local first = tokens[1]
 -- local is_vim_cmd = false

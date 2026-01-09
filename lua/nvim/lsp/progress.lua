@@ -32,9 +32,10 @@ function M.process_progress(ev)
   end
 
   local msg = {} ---@type string[]
-  progress[client.id] = vim.tbl_filter(function(v)
-    return table.insert(msg, v.msg) or not v.done
-  end, p)
+  progress[client.id] = vim.tbl_filter(
+    function(v) return table.insert(msg, v.msg) or not v.done end,
+    p
+  )
 
   return {
     client_id = client.id,
@@ -84,13 +85,9 @@ M.get = function(client_id)
   if not p or #p == 0 then
     return {}
   end
-  return vim.tbl_map(function(v)
-    return v.msg
-  end, p)
+  return vim.tbl_map(function(v) return v.msg end, p)
 end
 
 return setmetatable(M, {
-  __call = function(_, client_id)
-    return M.get(client_id)
-  end,
+  __call = function(_, client_id) return M.get(client_id) end,
 })

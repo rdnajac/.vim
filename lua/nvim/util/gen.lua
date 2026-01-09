@@ -1,9 +1,7 @@
 local nv = _G.nv or require('nvim')
 
 local M = setmetatable({}, {
-  __call = function(M, ...)
-    return M.gen(...)
-  end,
+  __call = function(M, ...) return M.gen(...) end,
 })
 
 function M.gen()

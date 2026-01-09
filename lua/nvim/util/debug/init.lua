@@ -2,9 +2,7 @@ local M = {}
 
 local MAX_INSPECT_LINES = 2 ^ 10
 
-local notify = function(...)
-  Snacks.notify.warn(...)
-end
+local notify = function(...) Snacks.notify.warn(...) end
 
 local function get_caller(skip_levels, predicate)
   for level = skip_levels or 2, 10 do
@@ -17,9 +15,7 @@ local function get_caller(skip_levels, predicate)
   end
 end
 
-local function format_source(source)
-  return vim.fn.fnamemodify(source:sub(2), ':p:~:.')
-end
+local function format_source(source) return vim.fn.fnamemodify(source:sub(2), ':p:~:.') end
 
 local function should_include_in_trace(info)
   return info
@@ -55,9 +51,12 @@ M.dd = function(...)
   local len = select('#', ...) ---@type number
   local obj = { ... } ---@type unknown[]
   local me = debug.getinfo(1, 'S')
-  local caller = get_caller(2, function(info)
-    return info.source ~= me.source and info.source ~= '@' .. (os.getenv('MYVIMRC') or '')
-  end)
+  local caller = get_caller(
+    2,
+    function(info)
+      return info.source ~= me.source and info.source ~= '@' .. (os.getenv('MYVIMRC') or '')
+    end
+  )
   vim.schedule(function()
     local lines = vim.split(vim.inspect(len == 1 and obj[1] or len > 0 and obj or nil), '\n')
     notify(lines, {

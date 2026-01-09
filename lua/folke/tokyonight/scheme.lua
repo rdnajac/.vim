@@ -31,19 +31,13 @@ function M.gen(groups)
         print(k)
         return mapping[k]
       end)
-      :map(function(k, v)
-        return ('%s=%s'):format(mapping[k], v)
-      end)
+      :map(function(k, v) return ('%s=%s'):format(mapping[k], v) end)
       :totable()
 
     local gui = vim
       .iter(vim.spairs(hl))
-      :filter(function(k, v)
-        return vim.tbl_contains(attrs, k) and v
-      end)
-      :map(function(k)
-        return k
-      end)
+      :filter(function(k, v) return vim.tbl_contains(attrs, k) and v end)
+      :map(function(k) return k end)
       :totable()
 
     if #gui > 0 then
@@ -60,9 +54,7 @@ function M.gen(groups)
   -- build highlight definitions and links
   local links = vim
     .iter(vim.spairs(groups))
-    :filter(function(name)
-      return not vim.startswith(name, '@')
-    end)
+    :filter(function(name) return not vim.startswith(name, '@') end)
     :map(function(name, hl)
       if type(hl) == 'string' and not vim.startswith(hl, '@') then
         hl = { link = hl }
@@ -75,12 +67,14 @@ function M.gen(groups)
         if #props > 0 then
           table.insert(lines, ('hi %s %s'):format(name, table.concat(props, ' ')))
         else
-          vim.schedule(function()
-            vim.notify(
-              ('tokyonight: invalid highlight group: %s'):format(name),
-              vim.log.levels.WARN
-            )
-          end)
+          vim.schedule(
+            function()
+              vim.notify(
+                ('tokyonight: invalid highlight group: %s'):format(name),
+                vim.log.levels.WARN
+              )
+            end
+          )
         end
       end
     end)
@@ -90,13 +84,9 @@ function M.gen(groups)
   return vim.list_extend(lines, vim.list.unique(links))
 end
 
-M.extra_lua = function(...)
-  return require('tokyonight.extra.lua').generate(...)
-end
+M.extra_lua = function(...) return require('tokyonight.extra.lua').generate(...) end
 
-M.extra_vim = function(...)
-  return require('tokyonight.extra.vim').generate(...)
-end
+M.extra_vim = function(...) return require('tokyonight.extra.vim').generate(...) end
 
 local hi = {}
 

@@ -3,9 +3,10 @@ local M = {}
 -- local lsp_config_dir = vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp')
 local lsp_config_dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'after', 'lsp')
 ---@type string[]
-M.servers = vim.tbl_map(function(path)
-  return path:match('^.+/(.+)$'):sub(1, -5)
-end, vim.fn.globpath(lsp_config_dir, '*', false, true))
+M.servers = vim.tbl_map(
+  function(path) return path:match('^.+/(.+)$'):sub(1, -5) end,
+  vim.fn.globpath(lsp_config_dir, '*', false, true)
+)
 
 vim.schedule(function()
   vim.lsp.enable(M.servers) -- enable all LSP servers defined in `lsp/`
@@ -28,9 +29,7 @@ vim.lsp.config('*', {
 M.attached = function(buf)
   vim
     .iter(vim.lsp.get_clients({ bufnr = buf or vim.api.nvim_get_current_buf() }))
-    :map(function(c)
-      return c.name ~= 'copilot' and c.name or nil
-    end)
+    :map(function(c) return c.name ~= 'copilot' and c.name or nil end)
     :join(', ')
 end
 

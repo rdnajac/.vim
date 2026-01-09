@@ -33,9 +33,7 @@ return {
       self:refresh()
     end,
 
-    debugp = function(self)
-      Snacks.debug.inspect(self.opts)
-    end,
+    debugp = function(self) Snacks.debug.inspect(self.opts) end,
 
     gitroot = function(self)
       self:set_cwd(Snacks.git.get_root())
@@ -80,9 +78,7 @@ return {
           z:close()
         end,
         layout = 'mylayout',
-        on_close = function()
-          Snacks.picker.resume()
-        end,
+        on_close = function() Snacks.picker.resume() end,
       })
     end,
 

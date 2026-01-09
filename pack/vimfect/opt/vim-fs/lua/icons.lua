@@ -8,9 +8,7 @@ _G.icon_cache = ok and cache or {}
 
 vim.api.nvim_create_autocmd('VimLeavePre', {
   group = aug,
-  callback = function()
-    nv.file.write_json(cache_path, _G.icon_cache)
-  end,
+  callback = function() nv.file.write_json(cache_path, _G.icon_cache) end,
   desc = 'Save fs icon cache on exit',
 })
 

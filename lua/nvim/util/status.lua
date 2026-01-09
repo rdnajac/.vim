@@ -42,9 +42,7 @@ vim.schedule(function()
 end)
 
 function M.render(a, b, c)
-  local function sec(s, str)
-    return string.format('%%#Chromatophore_%s#%s', s, str)
-  end
+  local function sec(s, str) return string.format('%%#Chromatophore_%s#%s', s, str) end
   local sep = nv.icons.sep.component.rounded.left
   local sec_a = a and sec('a', a) or nil
   local sec_b = b and sec('ab', sep .. ' ') .. sec('b', b) .. sec('bc', sep) or sec('c', sep)

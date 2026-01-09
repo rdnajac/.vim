@@ -61,13 +61,9 @@ Snacks.picker.sources.todo = {
     local opts = picker.opts
     local kws = vim
       .iter(vim.tbl_keys(keywords))
-      :filter(function(kw)
-        return opts.keywords and vim.tbl_contains(opts.keywords, kw) or true
-      end)
+      :filter(function(kw) return opts.keywords and vim.tbl_contains(opts.keywords, kw) or true end)
       :totable()
-    table.sort(keywords, function(a, b)
-      return #b < #a
-    end)
+    table.sort(keywords, function(a, b) return #b < #a end)
     return ([[\b(%s):]]):format(table.concat(kws, '|'))
   end,
   format = function(item, picker)

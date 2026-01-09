@@ -21,15 +21,11 @@ function M.log(msg, store)
 end
 
 setmetatable(_G.t, {
-  __call = function(_, ...)
-    return M.log(...)
-  end,
+  __call = function(_, ...) return M.log(...) end,
 })
 
 vim.api.nvim_create_autocmd({ 'VimEnter', 'UIEnter', 'BufReadPost' }, {
-  callback = function(ev)
-    t(ev.event)
-  end,
+  callback = function(ev) t(ev.event) end,
   once = true,
 })
 
