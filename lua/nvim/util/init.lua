@@ -17,7 +17,7 @@ M.get_buf_lines = function(bufnr)
 end
 
 ---@param line number
----@param col r
+---@param col number
 ---@return string
 M.get_syn_name = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
 
@@ -30,11 +30,11 @@ M.is_nonempty_string = function(x) return type(x) == 'string' and x ~= '' end
 ---@param x any
 M.is_nonempty_list = function(x) return vim.islist(x) and #x > 0 end
 
--- TODO:
-M.modname = function(path)
-  -- return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/', '.')
-  return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??')
-end
+--- Convert a file path to a module name by trimming the lua root
+--- @param path string file path
+--- @return string module name suitable for `require()`
+-- HACK: don't convert slashes to dots as `require()` fixes that
+M.modname = function(path) return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??') end
 
 --- Get list of submodules in a given subdirectory of `nvim/`
 ---@param subdir string subdirectory of `nvim/` to search
@@ -87,5 +87,3 @@ M.is_curwin = function() return vim.fn.win_getid() ~= vim.g.statusline_winid end
 M.sprintf = function(s, ...) return s:format(...) end
 
 return M
-
--- vim: fdm=expr fdl=0 fml=1

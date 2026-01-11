@@ -7,8 +7,8 @@ return {
       library = {
         -- PERF: no longer necessary witH `$VIMRUNTIME/lua/uv/_meta.lua`
         -- { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-        -- { path = 'LazyVim', words = { 'LazyVim' } },
         { path = 'snacks.nvim', words = { 'Snacks' } },
+        -- { path = 'LazyVim', words = { 'LazyVim' } },
         -- { path = 'lazy.nvim', words = { 'LazyVim' } },
         { path = 'mini.nvim', words = { 'Mini.*' } },
         { path = 'nvim', words = { 'nv' } },
@@ -126,10 +126,8 @@ return {
       }
     end,
     keys = {
-      -- stylua: ignore
       { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
     },
-    after = function() end,
   },
   {
     'folke/trouble.nvim',

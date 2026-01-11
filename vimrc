@@ -517,7 +517,7 @@ call s:cabbrev('s', 'lua Snacks')
 call s:cabbrev('f', 'find')
 call s:cabbrev('l', 'lua')
 " }}}1
-
+" Section: pack {{{
 if has('nvim')
   packadd! nvim.difftool
   packadd! nvim.undotree
@@ -526,8 +526,6 @@ else
   packadd! hlyank
 endif
 " packadd! cfilter
-
-" Section:plug
 packadd! plug.nvim
 " packadd vim-jetpack
 silent! call plug#begin()
@@ -568,7 +566,5 @@ if !has('nvim')
   Plug 'vuciv/golf'
 endif
 silent! call plug#end()
+" }}}
 " vim: fdl=0 fdm=marker
-
-" let s:mylist = ["TodoFzfLua", "TodoLocList", "TodoQuickFix", "TodoTelescope" ]
-" echom s:mylist

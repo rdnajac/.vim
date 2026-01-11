@@ -1,16 +1,17 @@
 vim.bo.syntax = 'ON' -- Keep using legacy syntax for `vim-endwise`
 -- vim.wo.foldmethod = 'expr' -- foldexpression already set by ftplugin
 
-local fn = require('nvim.util.fn')
+local coerce = require('nvim.util.fn.coerce')
+local yankmod = require('nvim.util.fn.yankmod')
 -- stylua: ignore
 -- TODO: make this a lsp action
 local mappings = {
-  { 'crf', fn.coerce.form,          'local function foo() ↔ local foo = function()' },
-  { 'crM', fn.coerce.formscope,     'local function foo() → M.foo = function()' },
-  { 'crF', fn.coerce.scopeform,     'M.foo = function() → local function foo()' },
-  { 'crS', fn.coerce.scope,         'local x ↔ M.x' },
-  { 'yr',  fn.yankmod.require,      'yank require + function' },
-  { 'yR',  fn.yankmod.require_func, 'print require + function' },
+  { 'crf', coerce.form,          'local function foo() ↔ local foo = function()' },
+  { 'crM', coerce.formscope,     'local function foo() → M.foo = function()' },
+  { 'crF', coerce.scopeform,     'M.foo = function() → local function foo()' },
+  { 'crS', coerce.scope,         'local x ↔ M.x' },
+  { 'yr',  yankmod.require,      'yank require + function' },
+  { 'yR',  yankmod.require_func, 'print require + function' },
 }
 
 for _, map in ipairs(mappings) do

@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "daaf4fdb74b36c3b692b7d06acf5238acf8ff8be",
+      "rev": "b7de6e6f43d79e31b077096ca0089fde85190f46",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
@@ -41,15 +41,15 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "fb4ccfed03c1f0d9db702f93a65cb4c0c6c2832b",
+      "rev": "8dccba88fc4dce006ca0ad668067c9e0d5ce7702",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "5a82e10b2df0ed31bec642c1c0344baee7c458b6",
+      "rev": "92ee7d42320edfbb81f3cad851314ab197fa324a",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "de878155ca66c49b027b1380e4e60a6c665b2630",
+      "rev": "5a7e5638e7d220575b1c22c8a2e099b52231886e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
@@ -125,7 +125,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "a50f40783c1cade2e8e2994a9f4a8e038a0a57bc",
+      "rev": "3abfa1ff75b81c01e4305e8062549ac0ea5cc9b8",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

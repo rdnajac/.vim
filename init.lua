@@ -7,17 +7,19 @@ vim.o.winborder = 'rounded'
 require('vim._extui').enable({})
 
 _G.nv = require('nvim')
+_G.Plug = require('plug')
 
-local specs = vim.iter(nv.specs):map(nv.plug):totable()
--- vim.print(specs)
+-- plug begin
+vim.iter(nv.specs):each(Plug) --[[@as function]]
+vim.cmd([[runtime vimrc]]) -- exposes `g:plugs`
+-- vim.list_extend(Plug.specs, vim.g.plugs or {})
 
-vim.cmd([[runtime vimrc]]) -- Plug command adds urls to `g:plugs` global
-vim.list_extend(nv.plug.specs, vim.g.plugs or {}) -- merge in global plugs
-vim.pack.add(nv.plug.specs, { load = nv.plug.load }) -- install plugins
+vim.pack.add(Plug.specs, { load = Plug.load })
 
+-- plug end
 vim.schedule(function()
-  require('which-key').add(nv.plug.get_keys())
-  local toggles = vim.tbl_extend('force', nv.plug.toggles or {}, require('folke.snacks.toggles'))
+  require('which-key').add(Plug.get_keys())
+  local toggles = vim.tbl_extend('force', Plug.toggles or {}, require('folke.snacks.toggles'))
   for key, opts in pairs(toggles) do
     Snacks.toggle.new(opts):map(key)
   end

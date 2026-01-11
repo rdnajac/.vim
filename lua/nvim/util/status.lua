@@ -18,7 +18,8 @@ M.buffer = function(opts)
   if bt == '' then
     local active = opts.active or (win == tonumber(vim.g.actual_curwin))
     -- path = active and '%t' or '%f'
-    path = active and nv.path.relative_parts(bufnr)[2] or '%t'
+    -- path = active and nv.path.relative_parts(bufnr)[2] or '%t'
+    path = '%'
   elseif bt == 'help' then
     path = '%t'
   elseif bt == 'terminal' then
