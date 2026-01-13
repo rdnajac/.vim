@@ -2,19 +2,10 @@ local call = function(v) return vim.is_callable(v) and v() end
 local get = function(v) return call(v) or v end
 local gh = function(s) return string.format('https://github.com/%s.git', s) end
 
--- TODO: inject toggles field?
----@module 'snacks'
-
----@class plug.In
----@field [1] string The plugin name in `user/repo` format.
----@field enabled boolean Defaults to `true`.
-
----@alias plug.Out vim.pack.SpecResolved
----@alias vim.pack.SpecResolved { src: string, name: string, version: nil|string|vim.VersionRange, data: any|nil }
-
 ---@class Plugin
 ---@field name string The plugin name as evaluated by `vim.pack`.
----@field did_setup? boolean Tracks if `setup()` has been called.
+---@field did_setup boolean Tracks if `setup()` has been called.
+---@field enabled boolean Defaults to `true`.
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field config? boolean|fun():nil Setup fun or, if true, mod.setup({})
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
@@ -24,14 +15,12 @@ local gh = function(s) return string.format('https://github.com/%s.git', s) end
 ---@field version? string|vim.VersionRange
 ---@field branch? string
 ---@field toggles? table<string, string|fun()|table>
-local Plugin = {
-  did_setup = false,
-  enabled = true,
-}
+local Plugin = { did_setup = false, enabled = true }
 Plugin.__index = Plugin
 
 function Plugin.new(t)
   vim.validate('t', t, 'table')
+  vim.validate('[1]', t[1], 'string')
   t = require('nvim.lazy.sanitize')(t)
   local self = setmetatable(t, Plugin)
   self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`

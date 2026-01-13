@@ -1,25 +1,15 @@
--- TODO: finish this and notify modules
-local dbug = require('nvim.util.debug')
-_G.bt = dbug.bt
--- _G.dd = dbug.dd
-_G.dd = function(...) return Snacks and Snacks.debug(...) or vim.print(...) end
-_G.pp = dbug.pp
-
 local nv = require('nvim.util') -- exposes all util functions
+
 -- collect specs
--- nv.specs = vim.iter(vim.tbl_values(nv)):map(function(v) return v.spec end):flatten():totable()
 local specs = vim
-  .iter({ 'folke', 'blink', 'lsp', 'mini', 'treesitter', 'plugins' })
+  .iter({ 'blink', 'keymaps', 'lsp', 'mini', 'treesitter', 'plugins' })
   :map(function(v)
-    if v == 'folke' then
-      nv[v] = require('folke')
-    else
-      nv[v] = require('nvim.' .. v)
-    end
+    nv[v] = require('nvim.' .. v)
     return nv[v].spec
   end)
   :flatten()
   :totable()
 
 nv.specs = specs
+
 return nv

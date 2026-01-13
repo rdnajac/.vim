@@ -1,4 +1,8 @@
+---@module "snacks"
+
 local M = {}
+---@type snacks.picker.debug
+
 M.debug = {
   -- scores = true,
   -- leaks = true,
@@ -8,14 +12,6 @@ M.debug = {
   -- proc = true,
   -- extmarks = true,
 }
-
----@module "snacks"
-
---- Some picker sources (like keymaps and autocmds) have a default
---- confirm action that isn't as useful as just jumping to the file.
--- print('debugging...')
--- dd(item.item)
--- end
 
 M.layouts = require('folke.snacks.picker.layouts')
 

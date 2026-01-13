@@ -2,7 +2,25 @@ local M = {}
 
 local MAX_INSPECT_LINES = 2 ^ 10
 
-local notify = function(...) Snacks.notify.warn(...) end
+local notify = function(...) Snacks and Snacks.notify.warn(...) or vim.print(...) end
+
+-- Very simple function to profile a lua function.
+-- * **flush**: set to `true` to use `jit.flush` in every iteration.
+-- * **count**: defaults to 100
+---@param fn fun()
+---@param opts? {count?: number, flush?: boolean}
+M.profile = function(fn, opts)
+  opts = vim.tbl_extend('force', { count = 100, flush = true }, opts or {})
+  local uv = vim.uv
+  local start = uv.hrtime()
+  for _ = 1, opts.count, 1 do
+    if opts.flush then
+      jit.flush(fn, true)
+    end
+    fn()
+  end
+  notify(((uv.hrtime() - start) / 1e6 / opts.count) .. 'ms', { title = 'Profile' })
+end
 
 local function get_caller(skip_levels, predicate)
   for level = skip_levels or 2, 10 do
@@ -41,24 +59,6 @@ M.dd = function(...)
       ft = 'lua',
     })
   end)
-end
-
--- Very simple function to profile a lua function.
--- * **flush**: set to `true` to use `jit.flush` in every iteration.
--- * **count**: defaults to 100
----@param fn fun()
----@param opts? {count?: number, flush?: boolean}
-M.pp = function(fn, opts)
-  opts = vim.tbl_extend('force', { count = 100, flush = true }, opts or {})
-  local uv = vim.uv
-  local start = uv.hrtime()
-  for _ = 1, opts.count, 1 do
-    if opts.flush then
-      jit.flush(fn, true)
-    end
-    fn()
-  end
-  notify(((uv.hrtime() - start) / 1e6 / opts.count) .. 'ms', { title = 'Profile' })
 end
 
 return M

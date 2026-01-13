@@ -565,6 +565,10 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
   Plug 'vuciv/golf'
+else
+  Plug 'folke/snacks.nvim'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'folke/which-key.nvim'
 endif
 silent! call plug#end()
 " }}}

@@ -1,7 +1,7 @@
 -- vim.g.screenkey = ---@type "statusline"|"window"|
 -- vim.schedule(function() require('screenkey').toggle_statusline_component() end)
+-- BUG: what's going on with `which-key` doubling keys pressed?
 return {
-  -- BUG: what's going on with `which-key` doubling keys pressed?
   'NStefan002/screenkey.nvim',
   enabled = false,
   ---@type screenkey.config
