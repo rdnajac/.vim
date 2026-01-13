@@ -218,6 +218,7 @@ nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
 
+nmap  ciw
 vmap  :sort<CR>
 
 " diff?

@@ -12,7 +12,7 @@ local function title(opts)
   end
 
   local parts = { icon, name, '[' .. searchpath .. ']' }
-  if nv.fn.is_nonempty_list(opts.ft) then
+  if nv.is_nonempty_list(opts.ft) then
     vim.list_extend(parts, vim.tbl_map(nv.icons.filetype, opts.ft))
   end
 

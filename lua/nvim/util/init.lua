@@ -2,7 +2,7 @@
 -- build a table from all the files in this dir
 -- each file returns a function, so lazily load them by
 -- setting a metatable on the module table and the filename is the function
-local M = vim.defaulttable(function(k) return require('nvim.util.fn.' .. k) end)
+local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
 M.ensure_list = function(t) return vim.islist(t) and t or { t } end
 

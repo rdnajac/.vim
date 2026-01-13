@@ -24,29 +24,6 @@ local function should_include_in_trace(info)
     and not info.source:find('snacks[/\\]debug')
 end
 
--- Show a notification with a pretty backtrace
----@param msg? string|string[]
----@param opts? snacks.notify.Opts
-M.bt = function(msg, opts)
-  opts = vim.tbl_extend('force', {
-    level = vim.log.levels.WARN,
-    title = 'Backtrace',
-  }, opts or {})
-  ---@type string[]
-  local trace = type(msg) == 'table' and msg or type(msg) == 'string' and { msg } or {}
-  for level = 2, 20 do
-    local info = debug.getinfo(level, 'Sln')
-    if should_include_in_trace(info) then
-      local line = '- `' .. format_source(info.source) .. '`:' .. info.currentline
-      if info.name then
-        line = line .. ' _in_ **' .. info.name .. '**'
-      end
-      table.insert(trace, line)
-    end
-  end
-  notify(#trace > 0 and (table.concat(trace, '\n')) or '', opts)
-end
-
 M.dd = function(...)
   local len = select('#', ...) ---@type number
   local obj = { ... } ---@type unknown[]

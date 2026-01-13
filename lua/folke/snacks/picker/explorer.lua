@@ -65,6 +65,7 @@ return {
   --     picker.preview.win:toggle()
   --   end,
   -- },
+  -- TODO: confirm =
   -- on_close = function(picker)
   --   picker.preview.win:close()
   -- end,

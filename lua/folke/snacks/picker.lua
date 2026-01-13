@@ -24,7 +24,7 @@ M.sources = {
     ---@param p snacks.Picker
     ---@param item snacks.picker.Item
     confirm = function(p, item)
-      if not nv.fn.is_nonempty_string(item.file) then
+      if not nv.is_nonempty_string(item.file) then
         local info = vim.fn.getscriptinfo({ sid = item.item.sid })
         item.file = info and info[1] and info[1].name
         item.pos = { item.item.lnum, 0 }

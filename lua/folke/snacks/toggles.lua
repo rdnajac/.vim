@@ -1,16 +1,9 @@
-if not Snacks then
-  vim.cmd([[Warn "'skipping toggles'"]])
-  return
-end
-Snacks.toggle.animate():map('<leader>ua')
+-- Snacks.toggle.animate():map('<leader>ua')
 Snacks.toggle.diagnostics():map('<leader>ud')
 Snacks.toggle.dim():map('<leader>uD')
 Snacks.toggle.indent():map('<leader>ug')
 Snacks.toggle.inlay_hints():map('<leader>uh')
 Snacks.toggle.line_number():map('<leader>ul')
-Snacks.toggle.option('relativenumber', { name = 'Relative Number' }):map('<leader>uL')
-Snacks.toggle.option('spell', { name = 'Spelling' }):map('<leader>us')
-Snacks.toggle.option('wrap', { name = 'Wrap' }):map('<leader>uw')
 Snacks.toggle.profiler():map('<leader>dpp')
 Snacks.toggle.profiler_highlights():map('<leader>dph')
 Snacks.toggle.scroll():map('<leader>uS')
@@ -18,14 +11,13 @@ Snacks.toggle.treesitter():map('<leader>ut')
 Snacks.toggle.words():map('<leader>uW')
 Snacks.toggle.zoom():map('<leader>uZ')
 
-for opt, key in pairs({
-  autochdir = '<leader>ac',
-}) do
-  Snacks.toggle.option(opt):map(key)
-end
-
----@type table<string, snacks.toggle.Opts>
+---@type table<string, table|string|fun():snacks.toggle.Class|snacks.toggle.Opts>
 return {
+  ['<leader>ac'] = 'autochdir',
+  ['<leader>ua'] = Snacks.toggle.animate,
+  ['<leader>us'] = 'spell',
+  ['<leader>uL'] = 'relativenumber',
+  ['<leader>uw'] = 'wrap',
   ['<leader>ai'] = {
     name = 'Inline Completion',
     get = function() return vim.lsp.inline_completion.is_enabled() end,
@@ -78,7 +70,7 @@ return {
     set = function(state)
       vim.g.minidiff_disable = not state
       MiniDiff.toggle(0)
-      nv.fn.defer_redraw()
+      nv.defer_redraw()
     end,
   },
   ['<leader>go'] = {
@@ -89,7 +81,7 @@ return {
     end,
     set = function(_)
       MiniDiff.toggle_overlay(0)
-      nv.fn.defer_redraw()
+      nv.defer_redraw()
     end,
   },
 }

@@ -1,16 +1,16 @@
+local me = debug.getinfo(1, 'S').source:sub(2)
+local dir = vim.fn.fnamemodify(me, ':p:h')
+local files = vim.fn.globpath(dir, '*', false, true)
+
 local M = {}
 
-if not package.loaded['lazy'] then
-  local this_dir = vim.fs.dirname(debug.getinfo(1, 'S').source:sub(2))
-  local files = vim.fn.globpath(this_dir, '*', false, true)
-
-  M.spec = vim
-    .iter(files)
-    :filter(function(f) return not vim.endswith(f, 'init.lua') end)
-    :map(dofile)
-    :map(function(t) return vim.islist(t) and t or { t } end)
-    :flatten()
-    :totable()
-end
+M.spec = vim
+  .iter(files)
+  :filter(function(f) return not vim.endswith(f, 'init.lua') end)
+  :map(function(f)
+    local t = assert(dofile(f))
+    return vim.islist(t) and t or { t }
+  end)
+  :fold({}, function(acc, v) return vim.list_extend(acc, v) end)
 
 return M

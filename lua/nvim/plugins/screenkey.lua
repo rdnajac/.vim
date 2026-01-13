@@ -1,7 +1,7 @@
--- ---@type "statusline"|"window"|
--- vim.g.screenkey =
+-- vim.g.screenkey = ---@type "statusline"|"window"|
+-- vim.schedule(function() require('screenkey').toggle_statusline_component() end)
 return {
-  -- TODO: what's going on with which-key doubling keys pressed?
+  -- BUG: what's going on with `which-key` doubling keys pressed?
   'NStefan002/screenkey.nvim',
   enabled = false,
   ---@type screenkey.config
@@ -71,16 +71,16 @@ return {
       filepath = vim.fn.stdpath('data') .. '/screenkey.log',
     },
   },
-  -- after = vim.cmd.Screenkey,
-  after = function()
-    require('screenkey').toggle_statusline_component()
-    -- vim.cmd.Screenkey()
-    Snacks.toggle({
-      name = 'Screenkey',
-      -- get = require('screenkey').is_active,
-      get = require('screenkey').statusline_component_is_active,
-      -- set = require('screenkey').toggle,
-      set = require('screenkey').toggle_statusline_component,
-    }):map('<leader>uR')
+  toggles = function()
+    local screenkey = require('screenkey')
+    return {
+      ['<leader>uR'] = {
+        name = 'Screenkey statusline component',
+        -- get = screenkey.is_active,
+        get = screenkey.statusline_component_is_active,
+        -- set = screenkey.toggle,
+        set = screenkey.toggle_statusline_component,
+      },
+    }
   end,
 }

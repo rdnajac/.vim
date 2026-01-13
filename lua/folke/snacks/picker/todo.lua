@@ -41,7 +41,7 @@ local Highlight = {
     for _, pattern in pairs(patterns) do
       -- same as `vim.fn.match`, but returns a list
       local m = vim.fn.matchlist(str, [[\v\C]] .. pattern)
-      -- if nv.fn.is_nonempty_list(m) then
+      -- if nv.is_nonempty_list(m) then
       if #m > 1 and m[2] then
         local match = m[2]
         local kw = m[3] ~= '' and m[3] or m[2]

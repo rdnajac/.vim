@@ -58,9 +58,14 @@
     "prefix": "keys"
   },
   "map": {
-    "body": "vim.tbl_map(function(${2}) ${0} end, ${1:table}})",
+    "body": "vim.tbl_map(function(${2}) ${0} end, ${1:table})",
     "description": "vim.tbl_map",
     "prefix": "map"
+  },
+  "filter": {
+    "body": "vim.tbl_filter(function(${2}) ${0} end, ${1:table})",
+    "description": "vim.tbl_filter",
+    "prefix": "filter"
   },
   "mfunc": {
     "body": [

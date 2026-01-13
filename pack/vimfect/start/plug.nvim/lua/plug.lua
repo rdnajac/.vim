@@ -1,23 +1,29 @@
 local call = function(v) return vim.is_callable(v) and v() end
 local get = function(v) return call(v) or v end
+local gh = function(s) return string.format('https://github.com/%s.git', s) end
 
+-- TODO: inject toggles field?
 ---@module 'snacks'
 
----@class Plugin
+---@class plug.In
 ---@field [1] string The plugin name in `user/repo` format.
 ---@field enabled boolean Defaults to `true`.
+
+---@alias plug.Out vim.pack.SpecResolved
+---@alias vim.pack.SpecResolved { src: string, name: string, version: nil|string|vim.VersionRange, data: any|nil }
+
+---@class Plugin
 ---@field name string The plugin name as evaluated by `vim.pack`.
 ---@field did_setup? boolean Tracks if `setup()` has been called.
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field config? boolean|fun():nil Setup fun or, if true, mod.setup({})
----@field event? string |string[] Autocommand event(s) to lazy-load on.
+---@field event? string|string[] Autocommand event(s) to lazy-load on.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
 ---@field keys? table|fun():table Keymaps to bind for the plugin.
 ---@field opts? table|fun():table Options to pass to the plugin's `setup()`.
----@field toggles? snacks.toggle.Opts[]|fun():snacks.toggle.Opts[]
----@field version? string Git tag or version to checkout.
----@field branch? string Git branch to checkout.
----@field data? any additional data to pass to `vim.pack.add()`
+---@field version? string|vim.VersionRange
+---@field branch? string
+---@field toggles? table<string, string|fun()|table>
 local Plugin = {
   did_setup = false,
   enabled = true,
@@ -40,9 +46,9 @@ end
 ---@return vim.pack.SpecResolved|nil
 function Plugin:tospec()
   return {
-    src = 'https://github.com/' .. self[1] .. '.git',
+    src = gh(self[1]),
     version = self.version or self.branch or nil,
-    name = self.name,
+    name = self.name or self[1]:match('[^/]+$'),
     data = {
       build = self.build,
       setup = function() return self:setup() end,
@@ -59,7 +65,7 @@ function Plugin:setup()
     end
     local opts = get(self.opts)
     if type(opts) == 'table' then
-      local modname = self.name:gsub('%.nvim$', '')
+      local modname = self[1]:match('[^/]*$'):gsub('%.nvim$', '')
       require(modname).setup(opts)
     else -- opts likely nil, try calling config
       call(self.config)
@@ -67,46 +73,64 @@ function Plugin:setup()
     self.did_setup = true
   end
 
-  if self.event then -- lazyload on autocmd
-    -- print(self.name .. ' lazy loading on event: ' .. vim.inspect(self.event))
+  if self.event then
     require('nvim.lazy.load').on_event(self.event, setup)
   else
     setup()
   end
 end
 
-local M = { keys = {}, toggles = {}, specs = {} }
+local plugins = {}
+local keys = {}
+local toggles = {}
+local specs = {}
+local M = {}
 
 function M.plug(t)
-  local plugin = Plugin.new(t)
+  if type(t) == 'string' then
+    table.insert(plugins, t)
+  end
+  local p = Plugin.new(t)
 
-  if not plugin.enabled then
+  if not p.enabled then
     return
   end
-  M[plugin.name] = plugin
-  M.keys[plugin.name] = plugin.keys
-  if plugin.toggles then
-    M.toggles = vim.tbl_deep_extend('force', M.toggles, get(plugin.toggles))
-  end
-  table.insert(M.specs, plugin:tospec())
 
-  return plugin
+  local repo = p[1]
+  plugins[repo] = p
+  keys[repo] = p.keys
+  for k, v in pairs(p.toggles or {}) do
+    if toggles[k] ~= nil then
+      Snacks.notify.warn(string.format('Toggle key %q already registered', k))
+    end
+    toggles[k] = v
+  end
+
+  specs[#specs + 1] = p:tospec()
+
+  return p
 end
 
-function M.get_keys() return vim.tbl_map(get, vim.tbl_values(M.keys)) end
+M.add = function(repo)
+  -- print('add: ' .. repo)
+  table.insert(specs, gh(repo))
+end
+
+M.keys = function() return vim.tbl_map(get, vim.tbl_values(keys)) end
+M.specs = function() return specs end
+M.toggles = function() return toggles end
 
 ---@param plug_data {spec: vim.pack.Spec, path: string}
 function M.load(plug_data)
   local spec = plug_data.spec
   vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-  if spec.data and vim.is_callable(spec.data.setup) then
-    spec.data.setup()
+  if spec.data then
+    call(spec.data.setup)
   end
 end
 
 return setmetatable(M, {
   __call = function(_, t) return M.plug(t) end,
-  -- TODO: __index should access the plugins table
   -- __index = function(t, k)
   -- if k == 'keys' then return
   -- end
