@@ -71,15 +71,6 @@ M.plugins = function()
   return plugins
 end
 
-M.get_plugins = function()
-  local ok, plugins = pcall(require, 'folke.tokyonight.gen.plugins')
-  if not ok then
-    M.generate_plugins()
-    return M.plugins()
-  end
-  return plugins
-end
-
 vim.g.transparent = true
 
 ---@type tokyonight.Config
@@ -105,13 +96,11 @@ local opts = {
     end
   end,
   -- plugins = { all = false },
-  plugins = M.get_plugins(),
+  plugins = M.plugins(),
 }
 
 M.config = function() require('tokyonight').setup(opts) end
-
 M.setup = function() return require('tokyonight.theme').setup(opts) end
-
 M.colorscheme = function()
   ---@type ColorScheme, tokyonight.Highlights, tokyonight.Config
   M.colors, M.groups, M.opts = M.setup()
@@ -144,7 +133,5 @@ M.generate_plugins = function()
   local content = 'return ' .. vim.inspect(plugins)
   M.write('gen/plugins.lua', content)
 end
-
-M.setup()
 
 return M

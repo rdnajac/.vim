@@ -80,21 +80,9 @@
       "rev": "dcbfe065297d31823561ba787f51056c147aa682",
       "src": "https://github.com/tpope/vim-abolish.git"
     },
-    "vim-capslock": {
-      "rev": "2bd1d47d35ac489b150d284141b6dce743a307f5",
-      "src": "https://github.com/tpope/vim-capslock.git"
-    },
     "vim-characterize": {
       "rev": "a8bffac6cead6b2869d939ecad06312b187a4c79",
       "src": "https://github.com/tpope/vim-characterize.git"
-    },
-    "vim-dadbod": {
-      "rev": "6d1d41da4873a445c5605f2005ad2c68c99d8770",
-      "src": "https://github.com/tpope/vim-dadbod.git"
-    },
-    "vim-dispatch": {
-      "rev": "a2ff28abdb2d89725192db5b8562977d392a4d3f",
-      "src": "https://github.com/tpope/vim-dispatch.git"
     },
     "vim-endwise": {
       "rev": "4994afb0cdf956d9a665a14b9c834869e602c396",
@@ -108,17 +96,9 @@
       "rev": "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4",
       "src": "https://github.com/tpope/vim-fugitive.git"
     },
-    "vim-rsi": {
-      "rev": "45540637ead22f011e8215f1c90142e49d946a54",
-      "src": "https://github.com/tpope/vim-rsi.git"
-    },
     "vim-scriptease": {
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
       "src": "https://github.com/tpope/vim-scriptease.git"
-    },
-    "vim-ug": {
-      "rev": "fe29caefe340c104f6b0c3ed625a00e1abaf9b77",
-      "src": "https://github.com/justinmk/vim-ug.git"
     },
     "vim-unimpaired": {
       "rev": "db65482581a28e4ccf355be297f1864a4e66985c",

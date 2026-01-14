@@ -533,19 +533,19 @@ silent! call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'dense-analysis/ale'
-Plug 'justinmk/vim-ug'
+" Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-dadbod'
-Plug 'tpope/vim-dispatch'
+" Plug 'tpope/vim-dadbod'
+" Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-capslock'
+" Plug 'tpope/vim-rsi'
 if !has('nvim')
   Plug 'andymass/vim-matchup'
   Plug 'dstein64/vim-startuptime'
@@ -568,7 +568,6 @@ if !has('nvim')
 else
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
-  Plug 'folke/which-key.nvim'
 endif
 silent! call plug#end()
 " }}}

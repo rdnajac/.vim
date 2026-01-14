@@ -1,20 +1,18 @@
--- Snacks.toggle.animate():map('<leader>ua')
-Snacks.toggle.diagnostics():map('<leader>ud')
-Snacks.toggle.dim():map('<leader>uD')
-Snacks.toggle.indent():map('<leader>ug')
-Snacks.toggle.inlay_hints():map('<leader>uh')
-Snacks.toggle.line_number():map('<leader>ul')
-Snacks.toggle.profiler():map('<leader>dpp')
-Snacks.toggle.profiler_highlights():map('<leader>dph')
-Snacks.toggle.scroll():map('<leader>uS')
-Snacks.toggle.treesitter():map('<leader>ut')
-Snacks.toggle.words():map('<leader>uW')
-Snacks.toggle.zoom():map('<leader>uZ')
-
 ---@type table<string, table|string|fun():snacks.toggle.Class|snacks.toggle.Opts>
 return {
   ['<leader>ac'] = 'autochdir',
+  ['<leader>dpp'] = Snacks.toggle.profiler,
+  ['<leader>dph'] = Snacks.toggle.profiler_highlights,
   ['<leader>ua'] = Snacks.toggle.animate,
+  ['<leader>ud'] = Snacks.toggle.diagnostics,
+  ['<leader>uD'] = Snacks.toggle.dim,
+  ['<leader>ug'] = Snacks.toggle.indent,
+  ['<leader>uh'] = Snacks.toggle.inlay_hints,
+  ['<leader>ul'] = Snacks.toggle.line_number,
+  ['<leader>uS'] = Snacks.toggle.scroll,
+  ['<leader>ut'] = Snacks.toggle.treesitter,
+  ['<leader>uW'] = Snacks.toggle.words,
+  ['<leader>uZ'] = Snacks.toggle.zoom,
   ['<leader>us'] = 'spell',
   ['<leader>uL'] = 'relativenumber',
   ['<leader>uw'] = 'wrap',
@@ -62,26 +60,6 @@ return {
       local tw = vim.bo.textwidth
       local col = tostring(tw ~= 0 and tw or 81)
       vim.opt_local.colorcolumn = state and col or ''
-    end,
-  },
-  ['<leader>uG'] = {
-    name = 'MiniDiff Signs',
-    get = function() return vim.g.minidiff_disable ~= true end,
-    set = function(state)
-      vim.g.minidiff_disable = not state
-      MiniDiff.toggle(0)
-      nv.defer_redraw()
-    end,
-  },
-  ['<leader>go'] = {
-    name = 'MiniDiff Overlay',
-    get = function()
-      local data = MiniDiff.get_buf_data(0)
-      return data and data.overlay == true or false
-    end,
-    set = function(_)
-      MiniDiff.toggle_overlay(0)
-      nv.defer_redraw()
     end,
   },
 }

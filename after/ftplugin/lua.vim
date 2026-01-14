@@ -4,7 +4,7 @@ let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 setlocal nowrap
 setlocal comments=:---\ "
 " setlocal nonumber signcolumn=yes:1
-setlocal foldtext=v:lua.nv.foldtext()
+setlocal foldtext=v:lua.require"nvim.fn.foldtext"()
 setlocal foldmethod=expr
 
 iabbrev <buffer> fu function()

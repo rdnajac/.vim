@@ -1,3 +1,5 @@
+-- TODO: fold all comments
+
 -- fn/init.lua
 -- build a table from all the files in this dir
 -- each file returns a function, so lazily load them by
@@ -5,6 +7,9 @@
 local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
 M.ensure_list = function(t) return vim.islist(t) and t or { t } end
+M.is_curwin = function() return vim.fn.win_getid() ~= vim.g.statusline_winid end
+M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
+M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
 
 --- Get all lines from a buffer
 --- @param bufnr number? buffer number, defaults to current buffer
@@ -19,16 +24,7 @@ end
 ---@param line number
 ---@param col number
 ---@return string
-M.get_syn_name = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
-
---- Returns false if x is nil, not a string, or an empty string
----@param x any
----@return boolean
-M.is_nonempty_string = function(x) return type(x) == 'string' and x ~= '' end
-
---- Returns false if x is nil, not a list, or an empty list
----@param x any
-M.is_nonempty_list = function(x) return vim.islist(x) and #x > 0 end
+M.synname = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
 
 --- Convert a file path to a module name by trimming the lua root
 --- @param path string file path
@@ -48,42 +44,12 @@ end
 
 --- Deferred redraw after `t` milliseconds (default 200ms)
 ---@param t number? time in ms to defer
-M.defer_redraw = function(t)
+M.defer_redraw_win = function(t)
   vim.defer_fn(function()
     -- vim.cmd([[redraw!]])
     -- vim.cmd.redraw({ bang = true })
     Snacks.util.redraw(vim.api.nvim_get_current_win())
   end, t or 200)
 end
-
-M.new = function()
-  vim.ui.input(
-    { prompt = 'new file: ' },
-    function(input) vim.cmd.edit(vim.fs.joinpath(vim.b.dirvish._dir, input)) end
-  )
-end
-
-M.extmark_leaks = function()
-  local counts = {}
-  for name, ns in pairs(vim.api.nvim_get_namespaces()) do
-    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      local count = #vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
-      if count > 0 then
-        counts[#counts + 1] = {
-          name = name,
-          buf = buf,
-          count = count,
-          ft = vim.bo[buf].ft,
-        }
-      end
-    end
-  end
-  table.sort(counts, function(a, b) return a.count > b.count end)
-  dd(counts)
-end
-
-M.is_curwin = function() return vim.fn.win_getid() ~= vim.g.statusline_winid end
-
-M.sprintf = function(s, ...) return s:format(...) end
 
 return M

@@ -72,6 +72,28 @@ return {
           desc = 'Set buffer-local configs for mini.nvim modules',
         })
       end,
+      toggles = {
+        ['<leader>uG'] = {
+          name = 'MiniDiff Signs',
+          get = function() return vim.g.minidiff_disable ~= true end,
+          set = function(state)
+            vim.g.minidiff_disable = not state
+            MiniDiff.toggle(0)
+            nv.defer_redraw_win()
+          end,
+        },
+        ['<leader>go'] = {
+          name = 'MiniDiff Overlay',
+          get = function()
+            local data = MiniDiff.get_buf_data(0)
+            return data and data.overlay == true or false
+          end,
+          set = function(_)
+            MiniDiff.toggle_overlay(0)
+            nv.defer_redraw_win()
+          end,
+        },
+      },
     },
   },
 }

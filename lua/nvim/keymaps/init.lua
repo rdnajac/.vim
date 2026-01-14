@@ -40,7 +40,7 @@ M.spec = {
         -- triggers = { { '<auto>', mode = 'nixsotc' } },
       })
       -- add a field at runtime?
-      M.register = wk.add
+      -- M.register = wk.add
     end,
   },
 }

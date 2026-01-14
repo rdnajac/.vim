@@ -10,7 +10,7 @@ if !has('nvim')
   finish
 endif
 
-nnoremap <buffer> o <Cmd>lua nv.fn.new()<CR>
+nnoremap <buffer> o <Cmd>lua vim.ui.input( { prompt = 'new file: ' }, function(input) vim.cmd.edit(vim.fs.joinpath(vim.b.dirvish._dir, input)) end)
 nnoremap <buffer> D <Cmd>lua vim.lsp.buf.code_action({filter=function(action) return action.command and action.command.command == 'delete' end, apply=true})<CR>
 nnoremap <buffer> C <Cmd>lua vim.lsp.buf.code_action({filter=function(action) return action.command and action.command.command == 'rename' end, apply=true})<CR>
 
