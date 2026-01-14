@@ -1,6 +1,7 @@
 -- `https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets`
 local M = {
   'nvim-lualine/lualine.nvim',
+  enabled = false,
   opts = {
     options = {
       component_separators = { left = '', right = '' },
@@ -66,34 +67,34 @@ M.opts.tabline = {
 
 M.opts.winbar = {
   lualine_a = { require('nvim.util.status').buffer },
-  lualine_b = {
-    {
-      function()
-        if vim.bo.buftype == 'terminal' then
-          return "%{% &buftype == 'terminal' ? ' %{&channel}' : '' %}"
-        end
-        return "%{% &buflisted ? '%n' : '󱪟 ' %}" .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
-      end,
-    },
-    -- nv.treesitter.status,
-    -- nv.lsp.status,
-    -- nv.blink.status,
-    -- { require('nvim.plugins.r').status },
-  },
-  lualine_c = {
+  -- lualine_b = {
+  --   {
+  --     function()
+  --       if vim.bo.buftype == 'terminal' then
+  --         return "%{% &buftype == 'terminal' ? ' %{&channel}' : '' %}"
+  --       end
+  --       return "%{% &buflisted ? '%n' : '󱪟 ' %}" .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
+  --     end,
+  --   },
+  --   -- nv.treesitter.status,
+  --   -- nv.lsp.status,
+  --   -- nv.blink.status,
+  --   -- { require('nvim.plugins.r').status },
+  -- },
+  -- lualine_c = {
     -- {
     --   function()
     --     return vim.diagnostic.status()
     --   end,
     -- },
-  },
+  -- },
 }
 
-M.opts.inactive_winbar = {
-  lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
-  lualine_b = { '%t' },
-  -- lualine_c = { M.winbar.b },
-}
+-- M.opts.inactive_winbar = {
+--   lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
+--   lualine_b = { '%t' },
+--   -- lualine_c = { M.winbar.b },
+-- }
 
 return M
 -- vim: fdl=2

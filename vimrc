@@ -519,7 +519,8 @@ call s:cabbrev('s', 'lua Snacks')
 call s:cabbrev('f', 'find')
 call s:cabbrev('l', 'lua')
 " }}}1
-" Section: pack {{{
+" Section: pack {{{1
+" shipped plugins {{{2
 if has('nvim')
   packadd! nvim.difftool
   packadd! nvim.undotree
@@ -528,8 +529,8 @@ else
   packadd! hlyank
 endif
 " packadd! cfilter
-packadd! plug.nvim
-" packadd vim-jetpack
+" }}}
+
 silent! call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'

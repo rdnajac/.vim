@@ -1,15 +1,15 @@
 #!/usr/bin/env -S nvim -l
 
 -- detect OS and ARCH first
-local system = setmetatable({
-  os = { Darwin = 'macos', Linux = 'linux' },
-  arch = { x86_64 = 'x86_64', arm64 = 'arm64', aarch64 = 'arm64' },
-}, {
+local os_map = { Darwin = 'macos', Linux = 'linux' }
+local arch_map = { x86_64 = 'x86_64', arm64 = 'arm64', aarch64 = 'arm64' }
+
+local system = setmetatable({}, {
   __index = function(t, k)
     if k == 'os' or k == 'arch' then
       local cmd = k == 'os' and 'uname -s' or 'uname -m'
       local uname = vim.fn.systemlist(cmd)[1] or ''
-      local map = k == 'os' and t.os or t.arch
+      local map = k == 'os' and os_map or arch_map
       local val = map[uname] or error(('Unsupported %s: %s'):format(k:upper(), uname))
       rawset(t, k, val)
       return val
@@ -80,7 +80,10 @@ do
     die('Failed to fetch GitHub nightly metadata: ' .. tostring(err))
   end
 
-  local tag = nightly.tag_name or 'nightly'
+  local tag = nightly.tag_name
+  if not tag then
+    die('Missing tag_name in GitHub API response')
+  end
   local commit = nightly.target_commitish or ''
   local published = nightly.published_at or '?'
   local url = TAR_BASE .. tag .. '/' .. ASSET

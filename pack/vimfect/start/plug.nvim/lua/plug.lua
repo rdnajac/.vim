@@ -109,15 +109,6 @@ function M.load(plug_data)
   end
 end
 
---- Initialize which-key and munchies with collected plugin keys and toggles.
---- Should be called after all plugins are loaded.
-function M.init_mappings()
-  vim.schedule(function()
-    require('which-key').add(M.keys())
-    require('munchies').setup({ toggles = M.toggles() })
-  end)
-end
-
 return setmetatable(M, {
   __call = function(_, t) return M.plug(t) end,
   -- __index = function(t, k)

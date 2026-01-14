@@ -32,10 +32,6 @@
       "rev": "5231c62aa83c2f8dc8e7ba957aa77098cda1257d",
       "src": "https://github.com/folke/lazydev.nvim.git"
     },
-    "lualine.nvim": {
-      "rev": "47f91c416daef12db467145e16bed5bbfe00add8",
-      "src": "https://github.com/nvim-lualine/lualine.nvim.git"
-    },
     "mason.nvim": {
       "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
       "src": "https://github.com/mason-org/mason.nvim.git"

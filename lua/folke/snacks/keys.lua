@@ -1,3 +1,4 @@
+Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
 Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
 
 vim.keymap.set('n', 'dI', 'dai', { desc = 'Delete Indent', remap = true })

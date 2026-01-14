@@ -1,7 +1,11 @@
 vim.loader.enable()
+vim.pack.add({ vim.fn['git#repo']('folke/snacks.nvim') }, { confirm = false })
+assert(require('snacks')) -- snack attack!
 
 if vim.env.PROF then
-  require('folke.snacks.profiler')
+  Snacks.profiler.startup({
+    startup = { event = 'UIEnter' },
+  })
 end
 
 vim.o.cmdheight = 0
@@ -71,5 +75,12 @@ nv.specs = vim
   :totable()
 
 vim.pack.add(nv.specs, { load = Plug.load })
-vim.schedule(Plug.init_mappings)
+
 require('folke.tokyonight').setup()
+
+vim.schedule(function()
+  vim.lsp.enable(nv.lsp.servers())
+  require('which-key').add(Plug.keys())
+  require('munchies').setup({ toggles = Plug.toggles() })
+end)
+-- vim: fdm=syntax fdl=0 foldminlines=9

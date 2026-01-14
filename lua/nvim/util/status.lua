@@ -36,12 +36,6 @@ M.buffer = function(opts)
   })
 end
 
-vim.schedule(function()
-  M.treesitter = nv.treesitter.status
-  M.lsp = nv.lsp.status
-  M.blink = nv.blink.status
-end)
-
 function M.render(a, b, c)
   local function sec(s, str) return string.format('%%#Chromatophore_%s#%s', s, str) end
   local sep = nv.icons.sep.component.rounded.left
