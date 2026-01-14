@@ -1,3 +1,5 @@
+assert(Snacks)
+
 Snacks.picker.scriptnames = function() require('snacks.picker.scriptnames') end
 
 vim.cmd([[ command! LazyGit :lua Snacks.lazygit() ]])
@@ -11,7 +13,7 @@ local cmds = {}
 
 vim.schedule(function()
   -- TODO: work on this...
-  require('folke.snacks.toggles')
+  require('munchies.toggles')
   -- TODO: make commands when making keymaps
   vim
     .iter(vim.tbl_keys(Snacks.picker))

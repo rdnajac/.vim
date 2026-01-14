@@ -1,3 +1,7 @@
+if !has('nvim')
+  packadd vim-jetpack
+endif
+
 function! plug#begin(...)
   if !exists('g:loaded_jetpack')
     let g:plugs = []

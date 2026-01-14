@@ -1,6 +1,5 @@
 local call = function(v) return vim.is_callable(v) and v() end
 local get = function(v) return call(v) or v end
-local gh = function(s) return string.format('https://github.com/%s.git', s) end
 
 ---@class Plugin
 ---@field name string The plugin name as evaluated by `vim.pack`.
@@ -35,7 +34,7 @@ end
 ---@return vim.pack.SpecResolved|nil
 function Plugin:tospec()
   return {
-    src = gh(self[1]),
+    src = nv.gh(self[1]),
     version = self.version or self.branch or nil,
     name = self.name or self[1]:match('[^/]+$'),
     data = {
@@ -54,7 +53,7 @@ function Plugin:setup()
     end
     local opts = get(self.opts)
     if type(opts) == 'table' then
-      local modname = self[1]:match('[^/]*$'):gsub('%.nvim$', '')
+      local modname = self.name:gsub('%.nvim$', '')
       require(modname).setup(opts)
     else -- opts likely nil, try calling config
       call(self.config)
@@ -72,13 +71,9 @@ end
 local plugins = {}
 local keys = {}
 local toggles = {}
-local specs = {}
 local M = {}
 
 function M.plug(t)
-  if type(t) == 'string' then
-    table.insert(plugins, t)
-  end
   local p = Plugin.new(t)
 
   if not p.enabled then
@@ -94,19 +89,15 @@ function M.plug(t)
     end
     toggles[k] = v
   end
-
-  specs[#specs + 1] = p:tospec()
-
-  return p
+  return p:tospec()
 end
 
 M.add = function(repo)
   -- print('add: ' .. repo)
-  table.insert(specs, gh(repo))
+  table.insert(specs, nv.gh(repo))
 end
 
 M.keys = function() return vim.tbl_map(get, vim.tbl_values(keys)) end
-M.specs = function() return specs end
 M.toggles = function() return toggles end
 
 ---@param plug_data {spec: vim.pack.Spec, path: string}
@@ -116,6 +107,15 @@ function M.load(plug_data)
   if spec.data then
     call(spec.data.setup)
   end
+end
+
+--- Initialize which-key and munchies with collected plugin keys and toggles.
+--- Should be called after all plugins are loaded.
+function M.init_mappings()
+  vim.schedule(function()
+    require('which-key').add(M.keys())
+    require('munchies').setup({ toggles = M.toggles() })
+  end)
 end
 
 return setmetatable(M, {

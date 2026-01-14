@@ -4,10 +4,6 @@ if vim.env.PROF then
   require('folke.snacks.profiler')
 end
 
-_G.dd = function(...) return Snacks and Snacks.debug.inspect(...) or vim.print(...) end
-_G.bt = function(...) return Snacks and Snacks.debug.backtrace(...) or dd() end
-_G.pp = function(...) return Snacks and Snacks.debug.profile(...) or nv.debug.profile(...) end
-
 vim.o.cmdheight = 0
 vim.o.winborder = 'rounded'
 require('vim._extui').enable({})
@@ -19,9 +15,9 @@ require('snacks').setup({
   dashboard = require('folke.snacks.dashboard'),
   explorer = { replace_netrw = true },
   image = { enabled = true },
-  indent = { indent = { only_current = true, only_scope = true } },
+  indent = { indent = { only_current = false, only_scope = true } },
   input = { enabled = true },
-  notifier = require('folke.snacks.notifier'),
+  -- notifier = require('folke.snacks.notifier'),
   quickfile = { enabled = true },
   scratch = { template = 'local x = \n\nprint(x)' },
   terminal = { enabled = true },
@@ -49,31 +45,31 @@ require('snacks').setup({
   words = { enabled = true },
 })
 
-require('folke.snacks')
-require('folke.tokyonight').setup()
+_G.dd = Snacks.debug.inspect
+_G.bt = Snacks.debug.backtrace
+_G.pp = Snacks.debug.profile
 
-_G.nv = require('nvim')
+_G.nv = require('nvim.util')
+
+nv.notify.setup()
+
+nv.blink = require('nvim.blink')
+nv.lsp = require('nvim.lsp')
+nv.keymaps = require('nvim.keymaps')
+nv.mini = require('nvim.mini')
+nv.treesitter = require('nvim.treesitter')
+nv.plugins = require('nvim.plugins')
+
 _G.Plug = require('plug')
 
--- plug begin
-vim.iter(nv.specs):each(Plug) --[[@as function]]
--- plug end
-vim.pack.add(Plug.specs(), { load = Plug.load })
+-- collect specs
+nv.specs = vim
+  .iter({ 'blink', 'lsp', 'keymaps', 'mini', 'treesitter', 'plugins' })
+  :map(function(v) return nv[v].spec end)
+  :flatten()
+  :map(Plug --[[@as function]])
+  :totable()
 
--- TODO: encapsulate
-vim.schedule(function()
-  require('which-key').add(Plug.keys())
-  -- nv.keymaps.register(Plug.keys())
-
-  local toggles = vim.tbl_extend('error', Plug.toggles(), require('folke.snacks.toggles'))
-  for key, v in pairs(toggles) do
-    local type_ = type(v)
-    if type_ == 'table' then
-      Snacks.toggle.new(v):map(key)
-    elseif type_ == 'string' then
-      Snacks.toggle.option(v):map(key)
-    elseif type_ == 'function' then
-      v():map(key) -- preset toggles
-    end
-  end
-end)
+vim.pack.add(nv.specs, { load = Plug.load })
+vim.schedule(Plug.init_mappings)
+require('folke.tokyonight').setup()

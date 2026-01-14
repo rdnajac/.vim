@@ -37,10 +37,13 @@ vim.tbl_map(function(level)
   end
 end, { 'warn', 'info', 'error' })
 
-M.setup = function()
+M.setup = function(opts)
+  opts = opts or {}
   vim.notify = M.notify
-  for level in string.gmatch('notify info warn error', '%S+') do
-    Snacks.notify[level]('Notifier enabled!')
+  if opts.verbose == true then
+    for level in string.gmatch('notify info warn error', '%S+') do
+      Snacks.notify[level]('Notifier enabled!')
+    end
   end
 end
 

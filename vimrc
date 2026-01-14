@@ -310,6 +310,7 @@ nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 " nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
 nnoremap <Bslash>n  <Cmd>call edit#luamod('nvim')<CR>
+nnoremap <Bslash>u  <Cmd>call edit#luamod('nvim/util')<CR>
 nnoremap <Bslash>i  <Cmd>call edit#('~/.vim/init.lua')<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 

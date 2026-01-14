@@ -1,0 +1,3 @@
+#!/usr/bin/env -S nvim -l
+
+vim.pack.add({ nv.gh('neovim/neovim') }, { load = false })
