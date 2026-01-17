@@ -1,26 +1,6 @@
 local aug = vim.api.nvim_create_augroup('nvimrc', {})
 
---- @param event vim.api.keyset.events|vim.api.keyset.events[]
---- @param pattern? string|string[]
---- @param cb? fun(ev:vim.api.keyset.create_autocmd.callback_args)
-local function audebug(event, pattern, cb)
-  if type(pattern) == 'function' then
-    cb = pattern
-    pattern = '*'
-  end
-  return vim.api.nvim_create_autocmd(event, {
-    group = aug,
-    pattern = pattern,
-    callback = function(ev)
-      dd(ev)
-      if cb and vim.is_callable(cb) then
-        cb(ev)
-      end
-    end,
-  })
-end
-
-audebug('DirChanged')
+-- audebug('DirChanged')
 
 --- Shells can emit the "OSC 7" sequence to announce when the current directory (CWD) changed.
 --- If your terminal doesn't already do this for you, you can configure your shell to emit it.

@@ -1,5 +1,6 @@
 " https://www.reddit.com/r/vim/comments/ufgrl8/journey_to_the_ultimate_imap_jk_esc/
 " Map key chord `jk` to <Esc>.
+" TODO: try mini keymap's version finish if keymap exists
 let g:esc_j_lasttime = 0
 let g:esc_k_lasttime = 0
 

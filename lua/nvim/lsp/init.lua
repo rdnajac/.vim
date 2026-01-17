@@ -6,7 +6,7 @@ M.spec = {
   { 'neovim/nvim-lspconfig' },
   {
     'mason-org/mason.nvim',
-    opts = function() return { ui = { icons = nv.icons.mason } } end,
+    opts = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
     build = vim.cmd.MasonUpdate,
     keys = { { '<leader>cm', '<Cmd>Mason<CR>', desc = 'Mason' } },
   },

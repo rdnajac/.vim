@@ -1,17 +1,61 @@
 return {
-  -- { 'folke/lazy.nvim' },
-  -- { 'LazyVim/LazyVim' },
   {
-    'folke/lazydev.nvim',
+    'folke/sidekick.nvim',
+    enabled = true,
+    ---@type sidekick.Config
     opts = {
-      library = {
-        -- PERF: no longer necessary witH `$VIMRUNTIME/lua/uv/_meta.lua`
-        -- { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
-        -- { path = 'LazyVim', words = { 'LazyVim' } },
-        { path = 'snacks.nvim', words = { 'Snacks' } },
-        -- { path = 'lazy.nvim', words = { 'LazyVim' } },
-        { path = 'mini.nvim', words = { 'Mini.*' } },
-        { path = 'nvim/util', words = { 'nv' } },
+      cli = { win = { layout = 'float' } },
+    },
+    -- stylua: ignore
+    keys = {
+      -- TODO: 
+      { mode = 'n', expr = true, '<Tab>',
+        function() return
+	  require('sidekick').nes_jump_or_apply() and '' or '<Tab>' 
+	end,
+      },
+      { '<leader>a', group = 'ai', mode = { 'n', 'v' } },
+      {
+        '<leader>aa',
+        function() require('sidekick.cli').toggle('copilot') end,
+        desc = 'Sidekick Toggle CLI',
+      },
+      {
+        '<leader>aA',
+        function() require('sidekick.cli').toggle() end,
+        desc = 'Sidekick Toggle CLI',
+      },
+      {
+        '<leader>ad',
+        function() require('sidekick.cli').close() end,
+        desc = 'Detach a CLI Session',
+      },
+      {
+        '<leader>ap',
+        function() require('sidekick.cli').prompt() end,
+        desc = 'Sidekick Select Prompt',
+        mode = { 'n', 'x' },
+      },
+      {
+        '<leader>at',
+        function()
+          local msg = vim.fn.mode():sub(1, 1) == 'n' and '{file}' or '{this}'
+          require('sidekick.cli').send({ name = 'copilot', msg = msg })
+        end,
+        mode = { 'n', 'x' },
+        desc = 'Send This (file/selection)',
+      },
+      {
+        mode = { 'n', 't', 'i', 'x' },
+        '<C-.>',
+        function() require('sidekick.cli').toggle('copilot') end,
+      },
+    },
+    toggles = {
+      ['<leader>uN'] = {
+        name = 'Sidekick NES',
+        get = function() return require('sidekick.nes').enabled end,
+        set = function(state) require('sidekick.nes').enable(state) end,
       },
     },
   },
@@ -149,5 +193,15 @@ return {
       }
     end,
   },
-  { 'folke/ts-comments.nvim', enabled = false, opts = {} },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    toggles = {
+      ['<leader>um'] = {
+        name = 'Render Markdown',
+        get = function() return require('render-markdown.state').enabled end,
+        set = function(state) require('render-markdown').set(state) end,
+      },
+    },
+  },
 }
+-- vim: fdl=1 fdm=expr

@@ -570,6 +570,9 @@ if !has('nvim')
 else
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
+  " Plug 'nvim-mini/mini.nvim'
+  " Plug 'saxon1964/neovim-tips'
+  " Plug 'R-nvim/R.nvim'
 endif
 silent! call plug#end()
 " }}}

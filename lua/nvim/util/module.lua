@@ -15,6 +15,20 @@ function M.info(module)
   return modInfo and modInfo.modpath or module
 end
 
+M.automod = function()
+  -- TODO: make sure it should be `2`
+  local me = debug.getinfo(2, 'S').source:sub(2)
+  local dir = vim.fn.fnamemodify(me, ':p:h')
+  local files = vim.fn.globpath(dir, '*', false, true)
+
+  return vim
+    .iter(files)
+    :filter(function(f) return f ~= me end)
+    :map(dofile)
+    :map(function(t) return vim.islist(t) and t or { t } end)
+    :fold({}, function(acc, v) return vim.list_extend(acc, v) end)
+end
+
 --- Iterate over modules under $XDG_CONFIG_HOME/nvim/lua
 ---@param fn fun(modname: string)   -- callback with the module name (e.g. "plug.mini.foo")
 ---@param subpath? string           -- optional subpath inside lua/, e.g. "plug/mini"

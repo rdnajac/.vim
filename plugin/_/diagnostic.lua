@@ -3,7 +3,9 @@ local signs = (function()
   ---@type number, string
   for k, v in ipairs(vim.diagnostic.severity) do
     local diagnostic = v:sub(1, 1) .. v:sub(2):lower()
-    icon[k] = nv.icons.diagnostics[diagnostic]
+    if nv and nv.icons then
+      icon[k] = nv.icons.diagnostics[diagnostic]
+    end
     hl[k] = 'Diagnostic' .. diagnostic
   end
   return { text = icon, numhl = hl }

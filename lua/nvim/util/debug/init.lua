@@ -2,7 +2,8 @@ local M = {}
 
 local MAX_INSPECT_LINES = 2 ^ 10
 
-local notify = function(...) Snacks and Snacks.notify.warn(...) or vim.print(...) end
+local notify = _G.dd or vim.print
+-- local notify = function(...) Snacks and Snacks.notify.warn(...) or vim.print(...) end
 
 -- Very simple function to profile a lua function.
 -- * **flush**: set to `true` to use `jit.flush` in every iteration.
@@ -59,6 +60,19 @@ M.dd = function(...)
       ft = 'lua',
     })
   end)
+end
+
+local aug = vim.api.nvim_create_augroup('audebug', {})
+
+--- @param event vim.api.keyset.events|vim.api.keyset.events[]
+--- @param pattern? string|string[]
+--- @param cb? fun(ev:vim.api.keyset.create_autocmd.callback_args)
+M.audebug = function(event, pattern, cb)
+  return vim.api.nvim_create_autocmd(event, {
+    group = aug,
+    pattern = type(pattern) == 'string' and pattern or '*',
+    callback = vim.is_callable(cb) and cb or _G.dd,
+  })
 end
 
 return M

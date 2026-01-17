@@ -1,36 +1,30 @@
--- TODO: fold all comments
-local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
+local M = {}
 
+-- native
 M.gh = function(s) return string.format('https://github.com/%s.git', s) end
-M.is_curwin = function() return vim.fn.win_getid() ~= vim.g.statusline_winid end
-M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
 
---- Get all lines from a buffer
---- @param bufnr number? buffer number, defaults to current buffer
---- @return string[]|{} lines of the buffer, empty list if buffer has no lines
-M.get_buf_lines = function(bufnr)
+-- api
+M.get_buf_lines = function(bufnr, start, end_)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local nlines = vim.api.nvim_buf_line_count(bufnr)
-  -- NOTE: indexing is zero-based and end-exclusive
+  start = start or 0
+  end_ = end_ or vim.api.nvim_buf_line_count(bufnr)
   return vim.api.nvim_buf_get_lines(bufnr, 0, nlines, false)
 end
+M.is_curwin = function() return vim.api.nvim_get_current_win() ~= vim.g.statusline_winid end
 
----@param line number
----@param col number
----@return string
-M.synname = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
+-- shared
+M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 
---- Convert a file path to a module name by trimming the lua root
---- @param path string file path
---- @return string module name suitable for `require()`
--- HACK: don't convert slashes to dots as `require()` fixes that
-M.modname = function(path) return vim.fn.fnamemodify(path, ':r:s?^.*/lua/??') end
-
---- Deferred redraw after `t` milliseconds (default 200ms)
----@param t number? time in ms to defer
+-- snacks
 M.defer_redraw_win = function(t)
-  vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
+  -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
+  vim.defer_fn(
+    function()
+      vim.api.nvim__redraw({ win = vim.api.nvim_get_current_win(), valid = false, flush = false })
+    end,
+    t or 200
+  )
 end
 
 M.foldtext = function()

@@ -82,11 +82,11 @@ M.opts.winbar = {
   --   -- { require('nvim.plugins.r').status },
   -- },
   -- lualine_c = {
-    -- {
-    --   function()
-    --     return vim.diagnostic.status()
-    --   end,
-    -- },
+  -- {
+  --   function()
+  --     return vim.diagnostic.status()
+  --   end,
+  -- },
   -- },
 }
 

@@ -1,17 +1,6 @@
-local M = {
-  'MeanderingProgramMer/render-markdown.nvim',
-  enabled = true,
-  toggles = {
-    ['<leader>um'] = {
-      name = 'Render Markdown',
-      get = function() return require('render-markdown.state').enabled end,
-      set = function(state) require('render-markdown').set(state) end,
-    },
-  },
-}
---- @module "render-markdown"
---- @type render.md.UserConfig
-vim.g.render_markdown_config = {
+---@module "render-markdown"
+---@type render.md.UserConfig
+return {
   file_types = { 'markdown', 'rmd', 'quarto' },
   latex = { enabled = false },
   bullet = { right_pad = 1 },
@@ -51,5 +40,3 @@ vim.g.render_markdown_config = {
     enabled = false,
   },
 }
-
-return M

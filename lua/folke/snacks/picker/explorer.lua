@@ -1,4 +1,5 @@
 ---@module "snacks"
+-- TODO: add cd keymaps
 ---@type snacks.picker.explorer.Config
 return {
   ignored = true,

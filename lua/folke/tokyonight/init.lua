@@ -6,6 +6,7 @@ local mycolors = {
   green = '#39ff14', -- orig: #9ece6a
   lualine = '#3b4261',
 }
+local x = 1
 
 --- for the palette, go to:
 --- `~/.local/share/nvim/site/pack/core/opt/tokyonight.nvim/lua/tokyonight/colors/storm.lua`
@@ -14,8 +15,8 @@ local mycolors = {
 local myhighlights = function(c)
   return {
     -- Normal = vim.g.transparent ~= true and { bg = c.black } or nil,
-    Normal = { bg = c.black },
-    -- Function = { fg = c.blue },
+    -- Normal = { bg = c.black },
+    -- Number = { fg = c.blue },
     Number = { fg = c.blue },
     Special = { fg = c.red, bold = true },
     SpellBad = { bg = c.red },

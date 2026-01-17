@@ -1,6 +1,18 @@
 -- TODO: register notify setup
 local M = setmetatable({}, {
   __call = function(t, ...) return t.notify(...) end,
+  __index = function(t, k)
+    if k == 'warn' or k == 'info' or k == 'error' then
+      local fn = function(msg, opts)
+        return M.notify(
+          msg,
+          vim.tbl_extend('keep', { level = vim.log.levels[k:upper()] }, opts or {})
+        )
+      end
+      rawset(t, k, fn)
+      return fn
+    end
+  end,
 })
 
 -- Highlight groups for different log levels
@@ -30,12 +42,6 @@ function M.snacks_notify(msg, opts)
   opts.title = opts.title or 'Snacks'
   return notify(msg, opts.level, opts)
 end
-
-vim.tbl_map(function(level)
-  M[level] = function(msg, opts)
-    return M.notify(msg, vim.tbl_extend('keep', { level = vim.log.levels[level] }, opts or {}))
-  end
-end, { 'warn', 'info', 'error' })
 
 M.setup = function(opts)
   opts = opts or {}

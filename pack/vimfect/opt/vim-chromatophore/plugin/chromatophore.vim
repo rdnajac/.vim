@@ -11,10 +11,6 @@ let g:chromatophore_groups = [
       \ 'StatusLineTermNC',
       \ 'WinBar',
       \ 'helpSectionDelim',
-      \ 'SnacksScratchTitle',
-      \ 'SnacksDashboardHeader',
-      \ 'SnacksDashboardFooter',
-      \ 'SnacksDashboardTerminal',
       \ '@markup.raw.markdown_inline',
       \ ]
 

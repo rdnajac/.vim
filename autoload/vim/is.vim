@@ -1,5 +1,5 @@
 " functions for checking if things are things in vim
-function! is#comment() abort
+function is#comment() abort
   if a:0 >= 2
     let lnum = a:1
     let col  = a:2
@@ -11,4 +11,8 @@ function! is#comment() abort
   let synid = synID(lnum + 1, col + 1, 1)
   let name  = synIDattr(synid, 'name')
   return !empty(name) && name =~# 'Comment'
+endfunction
+
+function is#curwin() abort
+  return win_getid() != g:statusline_winid
 endfunction
