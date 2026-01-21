@@ -1,62 +1,31 @@
 return {
   {
-    'folke/sidekick.nvim',
-    enabled = true,
-    ---@type sidekick.Config
-    opts = {
-      cli = { win = { layout = 'float' } },
-    },
-    -- stylua: ignore
+    'folke/todo-comments.nvim',
+    enabled = false,
+    opts = function()
+      local cmds = { 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }
+      for _, cmd in ipairs(cmds) do
+        -- vim.cmd.delcommand(cmd)
+        vim.api.nvim_del_user_command(cmd)
+      end
+      -- Section: rv
+      return {
+        keywords = { Section = { icon = '󰚟', color = 'title' } },
+        -- highlight = { keyword = 'bg', },
+        colors = {
+          title = { '#7DCFFF' },
+          error = { '#DC2626' },
+          warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
+          info = { 'DiagnosticInfo', '#2563EB' },
+          hint = { 'DiagnosticHint', '#10B981' },
+          default = { 'Identifier', '#7C3AED' },
+          test = { 'Identifier', '#FF00FF' },
+        },
+      }
+    end,
     keys = {
-      -- TODO: 
-      { mode = 'n', expr = true, '<Tab>',
-        function() return
-	  require('sidekick').nes_jump_or_apply() and '' or '<Tab>' 
-	end,
-      },
-      { '<leader>a', group = 'ai', mode = { 'n', 'v' } },
-      {
-        '<leader>aa',
-        function() require('sidekick.cli').toggle('copilot') end,
-        desc = 'Sidekick Toggle CLI',
-      },
-      {
-        '<leader>aA',
-        function() require('sidekick.cli').toggle() end,
-        desc = 'Sidekick Toggle CLI',
-      },
-      {
-        '<leader>ad',
-        function() require('sidekick.cli').close() end,
-        desc = 'Detach a CLI Session',
-      },
-      {
-        '<leader>ap',
-        function() require('sidekick.cli').prompt() end,
-        desc = 'Sidekick Select Prompt',
-        mode = { 'n', 'x' },
-      },
-      {
-        '<leader>at',
-        function()
-          local msg = vim.fn.mode():sub(1, 1) == 'n' and '{file}' or '{this}'
-          require('sidekick.cli').send({ name = 'copilot', msg = msg })
-        end,
-        mode = { 'n', 'x' },
-        desc = 'Send This (file/selection)',
-      },
-      {
-        mode = { 'n', 't', 'i', 'x' },
-        '<C-.>',
-        function() require('sidekick.cli').toggle('copilot') end,
-      },
-    },
-    toggles = {
-      ['<leader>uN'] = {
-        name = 'Sidekick NES',
-        get = function() return require('sidekick.nes').enabled end,
-        set = function(state) require('sidekick.nes').enable(state) end,
-      },
+      -- TODO: rewrite without this plugin
+      { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
     },
   },
   {
@@ -144,36 +113,6 @@ return {
     },
   },
   {
-    'folke/todo-comments.nvim',
-    enabled = true,
-    lazy = true,
-    opts = function()
-      local cmds = { 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }
-      for _, cmd in ipairs(cmds) do
-        -- vim.cmd.delcommand(cmd)
-        vim.api.nvim_del_user_command(cmd)
-      end
-
-      return {
-        -- FIXME: extmarks not placed with statuscolun hook
-        keywords = { Section = { icon = '󰚟', color = 'title' } },
-        -- highlight = { keyword = 'bg', },
-        colors = {
-          title = { '#7DCFFF' },
-          error = { '#DC2626' },
-          warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
-          info = { 'DiagnosticInfo', '#2563EB' },
-          hint = { 'DiagnosticHint', '#10B981' },
-          default = { 'Identifier', '#7C3AED' },
-          test = { 'Identifier', '#FF00FF' },
-        },
-      }
-    end,
-    keys = {
-      { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
-    },
-  },
-  {
     'folke/trouble.nvim',
     enabled = false,
     opts = {},
@@ -192,16 +131,6 @@ return {
         cond = symbols.has,
       }
     end,
-  },
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    toggles = {
-      ['<leader>um'] = {
-        name = 'Render Markdown',
-        get = function() return require('render-markdown.state').enabled end,
-        set = function(state) require('render-markdown').set(state) end,
-      },
-    },
   },
 }
 -- vim: fdl=1 fdm=expr

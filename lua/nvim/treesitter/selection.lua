@@ -59,4 +59,10 @@ M.decrement = function()
   end
 end
 
+M.create_mappings = function()
+  vim.keymap.set('n', '<C-Space>', M.start, { desc = 'Start ts selection' })
+  vim.keymap.set('x', '<C-Space>', M.increment, { desc = 'Increment ts selection' })
+  vim.keymap.set('x', '<BS>', M.decrement, { desc = 'Decrement ts selection' })
+end
+
 return M

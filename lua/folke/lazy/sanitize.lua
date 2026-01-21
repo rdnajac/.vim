@@ -11,7 +11,7 @@ function M.sanitize(plugin)
 
   -- handle `LazyFile` event from `LazyVim`
   if plugin.lazy == true or plugin.event == 'LazyFile' then
-    plugin.event = require('nvim.lazy.file').events
+    plugin.event = require('folke.lazy.file').events
   end
 
   return plugin

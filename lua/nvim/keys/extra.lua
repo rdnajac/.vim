@@ -6,6 +6,12 @@ local function ptogglelist(cmd)
 end
 
 local keys = {
+  { { 'n', 't' }, '<c-\\>', Snacks.terminal.toggle },
+  { 'v', '<leader>/', Snacks.picker.grep_word },
+  { '-', function() Snacks.explorer.open({ cwd = vim.fn.fnamemodify('%', ':p:h') }) end },
+  { ',,', Snacks.picker.buffers },
+  { '\\\\', Snacks.dashboard.open },
+  { 'n', 'dI', 'dai', { desc = 'Delete Indent', remap = true } },
   { '<leader>ui', '<Cmd>Inspect<CR>' },
   { '<leader>uI', '<Cmd>Inspect!<CR>' },
   {
@@ -29,11 +35,9 @@ local keys = {
       ptogglelist(vim.cmd[vim.fn.getqflist({ winid = 0 }).winid ~= 0 and 'cclose' or 'copen'])
     end,
     desc = 'Quickfix List',
-    icon = { icon = '' },
   },
 }
 
--- TODO: convert to viml
 local lua_root = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua')
 for i, init_lua in ipairs(vim.fn.globpath(lua_root, 'nvim/**/init.lua', true, true)) do
   table.insert(keys, {
@@ -46,16 +50,4 @@ for i, init_lua in ipairs(vim.fn.globpath(lua_root, 'nvim/**/init.lua', true, tr
   end
 end
 
-vim.schedule(function()
-  -- local ok, wk = pcall(require, 'which-key')
-  -- if ok and wk then
-  --   return wk.add(keys)
-  -- end
-  for _, v in ipairs(keys) do
-    vim.keymap.set('n', v[1], v[2], { desc = v.desc })
-  end
-end)
-
--- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
--- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
--- vim.keymap.set('n', '<C-i>', '<Tab>', { desc = 'restore <C-i>' })
+return keys

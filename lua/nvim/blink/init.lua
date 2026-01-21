@@ -8,7 +8,7 @@ opts.sources = {
   default = function()
     return vim.tbl_filter(
       function(src) return require('nvim.treesitter').is_comment() and src ~= 'snippets' or true end,
-      vim.tbl_keys(providers)
+      vim.tbl_keys(providers) -- capture default providers
     )
   end,
   per_filetype = {
@@ -25,25 +25,17 @@ providers.lazydev = {
 }
 -- end
 
-local spec = {
-  {
-    'Saghen/blink.cmp',
-    opts = opts,
-    -- event = 'InsertEnter',
-    build = 'BlinkCmp build',
-  },
-}
-
 local extras = require('nvim.blink.extras')
 
-opts.sources.providers = vim.iter(extras):fold(providers, function(acc, repo, config)
-  table.insert(spec, { repo })
-  return vim.tbl_extend('force', acc, config)
-end)
+opts.sources.providers = vim.iter(extras):fold(
+  providers,
+  function(acc, repo, config) return vim.tbl_extend('force', acc, config) end
+)
 
-local M = {}
-
-M.spec = spec
+local M = {
+  opts = opts,
+  community_sources = vim.tbl_keys(extras),
+}
 
 local get_providers = function(mode)
   mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)

@@ -2,27 +2,6 @@
 --- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
 local M = {}
 
-M.spec = {
-  { 'neovim/nvim-lspconfig' },
-  {
-    'mason-org/mason.nvim',
-    opts = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
-    build = vim.cmd.MasonUpdate,
-    keys = { { '<leader>cm', '<Cmd>Mason<CR>', desc = 'Mason' } },
-  },
-  {
-    'mason-org/mason-lspconfig.nvim',
-    enabled = false,
-    lazy = true,
-    opts = {
-      ensure_installed = {},
-      automatic_enable = false,
-    },
-  },
-  -- { 'SmiteshP/nvim-navic' },
-  -- { 'b0o/SchemaStore.nvim' },
-}
-
 ---@return string[]
 M.servers = function()
   -- local lsp_config_dir = vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp')

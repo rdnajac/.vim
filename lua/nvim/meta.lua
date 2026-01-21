@@ -1,14 +1,11 @@
 ---@meta
 error('this file should not be required directly')
 
----@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
-
 nv.blink = require('nvim.blink')
-nv.keys = require('nvim.keymaps')
+nv.keys = require('nvim.keys')
 nv.lsp = require('nvim.lsp')
 nv.mini = require('nvim.mini')
-nv.ts = require('nvim.treesitter')
-nv.plugins = require('nvim.plugins')
+nv.treesitter = require('nvim.treesitter')
 
 nv.debug = require('nvim.util.debug')
 nv.echoserver = require('nvim.util.echoserver')
@@ -26,7 +23,7 @@ nv.munchies = require('nvim.util.munchies')
 nv.notify = require('nvim.util.notify')
 nv.patch = require('nvim.util.patch')
 nv.path = require('nvim.util.path')
-nv.plug = require('plug')
+nv.plug = require('nvim.util.plug')
 nv.root = require('nvim.util.root')
 nv.snippets = require('nvim.util.snippets')
 nv.status = require('nvim.util.status')
@@ -34,10 +31,3 @@ nv.submodules = require('nvim.util.submodules')
 nv.tmuxline = require('nvim.util.tmuxline')
 nv.track = require('nvim.util.track')
 nv.wget = require('nvim.util.wget')
-
---- what junegunn/vim-plug returns as `g:plugs`
----@class vimPlugSpec
----@field uri string Git URL of the plugin repository.
----@field dir string Local directory where the plugin is installed.
----@field frozen integer Whether the plugin is frozen (0 or 1).
----@field branch string Branch name if specified.

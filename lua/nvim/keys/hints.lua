@@ -1,17 +1,18 @@
-local wk = require('which-key')
-local spec = {
-  {
-    mode = { 'n', 'v' },
-    -- TODO: add each bracket mapping manually
-    { '[', group = 'prev' },
-    { ']', group = 'next' },
-    { 'g', group = 'goto' },
-    { 'z', group = 'fold' },
-  },
+local M = {}
+
+M.hidden = {
   { hidden = true, { 'g~' }, { 'g#' }, { 'g*' }, { 'gc' } },
 }
 
-local groups = {
+M.groups_nv = {
+  mode = { 'n', 'v' },
+  { '[', group = 'prev' },
+  { ']', group = 'next' },
+  { 'g', group = 'goto' },
+  { 'z', group = 'fold' },
+}
+
+M.groups_n = {
   { 'co', group = 'comment below' },
   { 'cO', group = 'comment above' },
   { 'gr', group = 'LSP', icon = { icon = '' } },
@@ -29,24 +30,16 @@ local groups = {
   { 'Z', group = 'Z' },
 }
 
-local descriptions = {
-  cdc = [[stdpath('config')]],
-  cdC = [[stdpath('cache')]],
-  cdd = [[stdpath('data')]],
-  cds = [[stdpath('state')]],
-  gx = 'Open with system app',
-  ZQ = ':q!',
-  ZZ = ':x',
-}
-
-spec[#spec + 1] = {}
-
-for key, desc in pairs(descriptions) do
-  table.insert(spec, { key, desc = desc })
-  -- groups[#groups + 1] = { key, desc = desc }
-end
-
-vim.list_extend(spec, groups)
+-- TODO: move to dedicated cd plugin
+-- local descriptions = {
+--   cdc = [[stdpath('config')]],
+--   cdC = [[stdpath('cache')]],
+--   cdd = [[stdpath('data')]],
+--   cds = [[stdpath('state')]],
+--   gx = 'Open with system app',
+--   ZQ = ':q!',
+--   ZZ = ':x',
+-- }
 
 -- from lazyvim
 local objects = {
@@ -92,7 +85,7 @@ local mappings = {
 -- mappings.goto_right = nil
 
 ---@type wk.Spec[]
-local ret = vim.iter(mappings):fold({ mode = { 'o', 'x' } }, function(acc, name, prefix)
+M.textobjects = vim.iter(mappings):fold({ mode = { 'o', 'x' } }, function(acc, name, prefix)
   name = name:match('^%a+_(.+)') or name
   acc[#acc + 1] = { prefix, group = name }
   vim.iter(objects):each(function(obj)
@@ -105,7 +98,4 @@ local ret = vim.iter(mappings):fold({ mode = { 'o', 'x' } }, function(acc, name,
   return acc
 end)
 
-spec = vim.list_extend(spec, ret)
-
-wk.add(spec)
-wk.add(require('folke.snacks.keys'))
+return M

@@ -1,36 +1,8 @@
-local aug = vim.api.nvim_create_augroup('treesitter', {})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = {
-    'css',
-    'html',
-    'javascript',
-    'json',
-    'lua',
-    'markdown',
-    'python',
-    'sh',
-    'toml',
-    'typescript',
-    'vim',
-    'yaml',
-    'zsh',
-  },
-  group = aug,
-  callback = function(ev) vim.treesitter.start(ev.buf) end,
-  desc = 'Automatically start tree-sitter',
-})
-
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'markdown', 'r', 'rmd', 'quarto' },
-  group = aug,
-  command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
-  desc = 'Use treesitter folding for select filetypes',
-})
-
 local M = {}
 
-M._installed = nil ---@type table<string,string>?
+---@type table<string,string>?
+M._installed = nil
+
 ---@param update boolean?
 function M.get_installed(update)
   if update then
@@ -42,53 +14,13 @@ function M.get_installed(update)
   return M._installed or {}
 end
 
-M.install_cli = function()
-  if vim.fn.executable('tree-sitter') == 1 then
-    return
-  end
-  -- TODO:  call mason install utility
-end
-
---- Parse position arguments into a vim.pos object
---- @param ... any
----   - no args: use cursor
----   - (int,int): row,col
----   - {int,int}: row,col
---- @return vim.pos
-local function get_pos(...)
-  local nargs = select('#', ...)
-  local pos
-
-  if nargs == 0 then
-    pos = vim.pos.cursor(vim.api.nvim_win_get_cursor(0))
-  elseif nargs == 1 then
-    local arg = select(1, ...)
-    if type(arg) == 'table' then
-      pos = vim.pos.extmark(arg)
-    else
-      error('get_pos: single integer is ambiguous, expected {row,col}')
-    end
-  elseif nargs == 2 then
-    pos = vim.pos(...)
-  else
-    error('get_pos: invalid arguments')
-  end
-
-  return pos
-end
-
 --- Check if the current node is a comment node
---- @param ... any
----   - no args: use cursor
----   - (int,int): row,col
----   - {int,int}: row,col
---- @return boolean
+---@param ... any no args: use cursor
+---@return boolean
 M.is_comment = function(...)
-  local pos = get_pos(...)
-
+  local pos = require('nvim.util.pos')(...)
   -- HACK: subtract 1 from col to avoid edge cases
-  -- pos = vim.pos(pos.row, math.max(0, pos.col - 1)) --[[@cast ]]
-
+  -- pos = vim.pos(pos.row, math.max(0, pos.col - 1))
   local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos:to_extmark() })
   return ok
       and node
@@ -119,6 +51,13 @@ M.status = {
     return table.concat(ret, ' ')
   end,
 }
+
+M.install_cli = function()
+  if vim.fn.executable('tree-sitter') == 1 then
+    return
+  end
+  -- TODO: use mason install utility
+end
 
 return setmetatable(M, {
   __index = function(t, k)

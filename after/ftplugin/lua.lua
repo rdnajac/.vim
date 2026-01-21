@@ -1,8 +1,12 @@
-vim.bo.syntax = 'ON' -- Keep using legacy syntax for `vim-endwise`
--- vim.wo.foldmethod = 'expr' -- foldexpression already set by ftplugin
+if vim.g.loaded_endwise == 1 then
+  vim.bo.syntax = 'ON' -- keep using legacy syntax
+end
+vim.wo.foldmethod = 'expr'
+vim.wo.foldtext = [[v:lua.require'nvim.util'.foldtext()]]
 
 local coerce = require('nvim.util.fn.coerce')
 local yankmod = require('nvim.util.fn.yankmod')
+
 -- stylua: ignore
 -- TODO: make this a lsp action
 local mappings = {
@@ -10,6 +14,8 @@ local mappings = {
   { 'crM', coerce.formscope,     'local function foo() → M.foo = function()' },
   { 'crF', coerce.scopeform,     'M.foo = function() → local function foo()' },
   { 'crS', coerce.scope,         'local x ↔ M.x' },
+  { 'crv', '^d3wivim.g.<Esc>',   'CoeRce Vim global to `vim.g.%s =`' },
+  { 'crV', '^df4wilet g:<Esc>', ' CoeRce `vim.g.%s` to `let g:%s =`' },
   { 'yr',  yankmod.require,      'yank require + function' },
   { 'yR',  yankmod.require_func, 'print require + function' },
 }
@@ -18,6 +24,16 @@ for _, map in ipairs(mappings) do
   local lhs, rhs, desc = unpack(map)
   vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
 end
+
+vim.b.minisurround_config = {
+  custom_surroundings = {
+    U = { output = { left = 'function()\n', right = '\nend' } },
+    u = { output = { left = 'function() ', right = ' end' } },
+    i = { output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' } },
+    S = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
+    s = { input = { '%[%[().-()%]%]' }, output = { left = '[[', right = ']]' } },
+  },
+}
 
 if MiniSplitjoin then
   local gen_hook = MiniSplitjoin.gen_hook

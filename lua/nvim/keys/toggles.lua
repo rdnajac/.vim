@@ -16,11 +16,6 @@ return {
   ['<leader>us'] = 'spell',
   ['<leader>uL'] = 'relativenumber',
   ['<leader>uw'] = 'wrap',
-  ['<leader>ai'] = {
-    name = 'Inline Completion',
-    get = function() return vim.lsp.inline_completion.is_enabled() end,
-    set = function(state) vim.lsp.inline_completion.enable(state) end,
-  },
   ['<leader>uv'] = {
     name = 'Virtual Text',
     get = function() return vim.diagnostic.config().virtual_text ~= false end,

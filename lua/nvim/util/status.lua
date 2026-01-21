@@ -5,6 +5,8 @@
 
 local M = {}
 
+---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
+
 ---@param opts? {bufnr?:integer,win?:integer,bt?:string,ft?:string,active?:boolean}
 ---@return string
 M.buffer = function(opts)

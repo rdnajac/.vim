@@ -29,7 +29,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "c9d3bc2df3015d82eabe3d2d88dac1ef5746e9e8",
+      "rev": "c163117900c17d4abf30bc09452a261c8536060c",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "d19def46c112c26c17adeef88dd1253cc6d623a1",
+      "rev": "ec034813775d7e2974c7551c8c34499a828963f8",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
@@ -55,10 +55,6 @@
     "snacks.nvim": {
       "rev": "fe7cfe9800a182274d0f868a74b7263b8c0c020b",
       "src": "https://github.com/folke/snacks.nvim.git"
-    },
-    "todo-comments.nvim": {
-      "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
-      "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
@@ -93,7 +89,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "3abfa1ff75b81c01e4305e8062549ac0ea5cc9b8",
+      "rev": "f707368022cdb851716be0d2970b90599c84a6a6",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

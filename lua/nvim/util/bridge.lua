@@ -1,6 +1,26 @@
 --- utility functions that cross the LUA-VIMSCRIPT BRIDGE
 local M = {}
 
+M.foldtext = function()
+  local start = vim.fn.getline(vim.v.foldstart)
+
+  -- if first line of the fold is just an opening brace
+  if vim.trim(start) == '{' then
+    local next = vim.fn.getline(vim.v.foldstart + 1)
+    -- return start .. ' ' .. vim.trim(next) .. ' ...'
+    return string.format('%s %s ...', start, vim.trim(next))
+  end
+
+  if vim.endswith(start, '{') then
+    local end_brace = vim.fn.getline(vim.v.foldend):match('},?$')
+
+    if start:match('{%s*$') and (end_brace == '}' or end_brace == '},') then
+      return start .. ' ... ' .. end_brace
+    end
+  end
+
+  return start
+end
 ---@param line number
 ---@param col number
 ---@return string

@@ -3,27 +3,46 @@ local get = function(v) return call(v) or v end
 
 ---@class Plugin
 ---@field name string The plugin name as evaluated by `vim.pack`.
+---@field data? any
 ---@field did_setup boolean Tracks if `setup()` has been called.
 ---@field enabled boolean Defaults to `true`.
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field config? boolean|fun():nil Setup fun or, if true, mod.setup({})
----@field event? string|string[] Autocommand event(s) to lazy-load on.
----@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
----@field keys? table|fun():table Keymaps to bind for the plugin.
+---@field keys? table Keymaps to bind for the plugin.
 ---@field opts? table|fun():table Options to pass to the plugin's `setup()`.
 ---@field version? string|vim.VersionRange
 ---@field branch? string
 ---@field toggles? table<string, string|fun()|table>
+---@field event? string|string[] Autocommand event(s) to lazy-load on.
+---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
 local Plugin = { did_setup = false, enabled = true }
 Plugin.__index = Plugin
 
-function Plugin.new(t)
+function Plugin.new(...)
+  local args = { ... }
+  local t, str
+  for _, arg in ipairs(args) do
+    if type(arg) == 'table' then
+      t = arg
+    elseif type(arg) == 'string' then
+      str = arg
+    end
+  end
   vim.validate('t', t, 'table')
+  if not t[1] and str then
+    t[1] = str
+  end
   vim.validate('[1]', t[1], 'string')
-  t = require('nvim.lazy.sanitize')(t)
   local self = setmetatable(t, Plugin)
   self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
   return self
+end
+
+local M = {}
+
+function M.plug(...)
+  local p = Plugin.new(...)
+  return p.enabled and p or nil
 end
 
 ---@class plugin.Data passed as `spec.data` to `vim.pack.add()`
@@ -37,11 +56,23 @@ function Plugin:tospec()
     src = nv.gh(self[1]),
     version = self.version or self.branch or nil,
     name = self.name or self[1]:match('[^/]+$'),
-    data = {
+    data = self.data or {
       build = self.build,
       setup = function() return self:setup() end,
     },
   }
+end
+
+local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
+---@param event string|string[]
+-- TODO: handle User events and patterns
+local on_event = function(event, cb)
+  vim.api.nvim_create_autocmd(event, {
+    callback = cb,
+    group = aug,
+    -- nested = true,
+    once = true,
+  })
 end
 
 --- Call the `Plugin`'s `config` function if it exists, otherwise
@@ -62,55 +93,23 @@ function Plugin:setup()
   end
 
   if self.event then
-    require('nvim.lazy.load').on_event(self.event, setup)
+    on_event(self.event, setup)
   else
     setup()
   end
 end
 
-local plugins = {}
-local keys = {}
-local toggles = {}
-local M = {}
-
-function M.plug(t)
-  local p = Plugin.new(t)
-
-  if not p.enabled then
-    return
-  end
-
-  local repo = p[1]
-  plugins[repo] = p
-  keys[repo] = p.keys
-  for k, v in pairs(p.toggles or {}) do
-    if toggles[k] ~= nil then
-      Snacks.notify.warn(string.format('Toggle key %q already registered', k))
-    end
-    toggles[k] = v
-  end
-  return p:tospec()
-end
-
-M.add = function(repo)
-  -- print('add: ' .. repo)
-  table.insert(specs, nv.gh(repo))
-end
-
-M.keys = function() return vim.tbl_map(get, vim.tbl_values(keys)) end
-M.toggles = function() return toggles end
-
 ---@param plug_data {spec: vim.pack.Spec, path: string}
 function M.load(plug_data)
   local spec = plug_data.spec
   vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-  if spec.data then
+  if spec.data then -- call setup if callable
     call(spec.data.setup)
   end
 end
 
 return setmetatable(M, {
-  __call = function(_, t) return M.plug(t) end,
+  __call = function(_, ...) return M.plug(...) end,
   -- __index = function(t, k)
   -- if k == 'keys' then return
   -- end

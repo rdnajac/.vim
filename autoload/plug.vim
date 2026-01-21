@@ -17,7 +17,10 @@ endfunction
 function! plug#end()
   delcommand Plug
   if !exists('g:loaded_jetpack')
-    lua vim.pack.add(vim.g.plugs)
+    if has('nvim')
+      lua vim.loader.enable()
+      lua vim.pack.add(vim.g.plugs)
+    endif
   else
     call jetpack#end()
     for name in jetpack#names()

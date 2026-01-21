@@ -1,26 +1,22 @@
-local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
-vim.api.nvim_create_autocmd('User', {
-  group = aug,
-  pattern = 'BlinkCmpMenuOpen',
-  callback = function()
-    if vim.lsp.inline_completion.is_enabled() then
-      _G.inline_completion_toggle = true
-      -- vim.lsp.inline_completion.enable(false)
-      pcall(vim.lsp.inline_completion.enable, false)
-    end
-  end,
+local toggle_inline_completion = Snacks.toggle.new({
+  name = 'Inline Completion',
+  get = function() return vim.lsp.inline_completion.is_enabled() end,
+  set = function(state) vim.lsp.inline_completion.enable(state) end,
 })
-vim.api.nvim_create_autocmd('User', {
-  group = aug,
-  pattern = 'BlinkCmpMenuClose',
-  callback = function()
-    if _G.inline_completion_toggle then
-      -- vim.lsp.inline_completion.enable(true)
-      pcall(vim.lsp.inline_completion.enable, true)
-      _G.inline_completion_toggle = nil
-    end
-  end,
-})
+
+toggle_inline_completion:map('<leader>ai')
+
+-- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
+-- vim.api.nvim_create_autocmd('User', {
+--   group = aug,
+--   pattern = 'BlinkCmpMenuOpen',
+--   callback = function() toggle_inline_completion:toggle() end,
+-- })
+-- vim.api.nvim_create_autocmd('User', {
+--   group = aug,
+--   pattern = 'BlinkCmpMenuClose',
+--   callback = function() toggle_inline_completion:toggle() end,
+-- })
 
 ---  vim.keymap.set('i', '<Tab>', function()
 ---   if not vim.lsp.inline_completion.get() then
@@ -30,3 +26,7 @@ vim.api.nvim_create_autocmd('User', {
 -- vim.schedule(autocmds)
 -- vim.lsp.enable('copilot')
 vim.lsp.inline_completion.enable()
+
+-- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
+-- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
+-- vim.keymap.set('n', '<C-i>', '<Tab>', { desc = 'restore <C-i>' })

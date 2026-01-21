@@ -1,108 +1,137 @@
 -- TODO:
 -- > e7a8e5a0 │ feat(base16): add 'folke/snacks.nvim' integration
 -- > 126a9a99 │ feat(hues): add 'folke/snacks.nvim' integration
-local M = {}
-
-M.mods = function()
-  return {
-    ai = require('nvim.mini.ai'),
-    align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
-    diff = { view = { style = 'number' } },
-    extra = {},
-    hipatterns = require('nvim.mini.hipatterns'), --#690420
-    -- hipatterns = nv.mini.hipatterns, --#690420
-    icons = require('nvim.mini.icons'),
-    splitjoin = require('nvim.mini.splitjoin'),
-    surround = require('nvim.mini.surround'),
-  }
-end
-
 -- `:h mini.nvim-buffer-local-config`
 -- `:h mini.nvim-disabling-recipes`
-local buffer_local_configs = {
-  lua = {
-    minisurround_config = {
-      custom_surroundings = {
-        u = { output = { left = 'function() ', right = ' end' } },
-        U = { output = { left = 'function()\n', right = '\nend' } },
-        i = {
-          output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' },
+
+local M = {}
+
+M.opts = {
+  ai = function()
+    local ai = require('mini.ai')
+    local ex = require('mini.extra')
+    return {
+      n_lines = 500,
+      custom_textobjects = {
+        -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
+        -- d = { '%f[%d]%d+' }, -- digits
+        d = ex.gen_ai_spec.number,
+        e = { -- Word with case
+          {
+            '%u[%l%d]+%f[^%l%d]',
+            '%f[%S][%l%d]+%f[^%l%d]',
+            '%f[%P][%l%d]+%f[^%l%d]',
+            '^[%l%d]+%f[^%l%d]',
+          },
+          '^().*()$',
         },
-        s = {
-          input = { '%[%[().-()%]%]' },
-          output = { left = '[[', right = ']]' },
-        },
-        S = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
+        -- f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
+        g = ex.gen_ai_spec.buffer(), -- buffer
+        o = ai.gen_spec.treesitter({ -- code block
+          a = { '@block.outer', '@conditional.outer', '@loop.outer' },
+          i = { '@block.inner', '@conditional.inner', '@loop.inner' },
+        }),
+        t = { '<([%p%w]-)%f[^<%w][^<>]->.-</%1>', '^<.->().*()</[^/]->$' }, -- tags
+        u = ai.gen_spec.function_call(), -- u for "Usage"
+        U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
       },
-    },
-  },
-  markdown = {
-    minisurround_config = {
-      custom_surroundings = {
-        -- `saiwL` + [type/paste link] + <CR> - add link
-        -- `sdL` - delete link
-        -- `srLL` + [type/paste link] + <CR> - replace link
-        L = {
-          input = { '%[().-()%]%(.-%)' },
-          output = function()
-            local link = require('mini.surround').user_input('Link: ')
-            return { left = '[', right = '](' .. link .. ')' }
+    }
+  end,
+  align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
+  diff = { view = { style = 'number' } },
+  extra = {},
+  hipatterns = function()
+    local hi = require('mini.hipatterns')
+    local function in_comment(buf_id, line, col)
+      if vim.treesitter.highlighter.active[buf_id] then
+        return require('nvim.treesitter').is_comment({ line, col })
+      end
+      local synid = vim.fn.synID(line + 1, col + 1, 1)
+      local name = vim.fn.synIDattr(synid, 'name')
+      return name and name:find('Comment') ~= nil
+    end
+    return {
+      highlighters = {
+        hex_color = hi.gen_highlighter.hex_color(),
+        fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
+        warning = { pattern = 'WARNING', group = 'MiniHipatternsFixme' },
+        hack = { pattern = 'HACK', group = 'MiniHipatternsHack' },
+        section = { pattern = 'Section', group = 'MiniHipatternsHack' },
+        todo = { pattern = 'TODO', group = 'MiniHipatternsTodo' },
+        note = { pattern = 'NOTE', group = 'MiniHipatternsNote' },
+        perf = { pattern = 'PERF', group = 'MiniHipatternsNote' },
+        source_code = { -- highlights strings in comments wrapped in `backticks`
+          pattern = '`[^`\n]+`',
+          group = function(buf_id, match, data)
+            -- convert from 1- to 0-indexed
+            local line = data.line - 1
+            local col = data.from_col - 1
+            return in_comment(buf_id, line, col) and 'String' or nil
           end,
+          extmark_opts = {
+            priority = 10000,
+            hl_mode = 'combine',
+            spell = false,
+          },
         },
       },
+    }
+  end,
+  icons = require('nvim.mini.icons'),
+  -- TODO: respect shiftwidth
+  splitjoin = {
+    mappings = {
+      toggle = 'g~',
+      split = 'gS',
+      join = 'gJ',
+    },
+    -- Detection options: where split/join should be done
+    detect = {
+      -- Array of Lua patterns to detect region with arguments.
+      -- Default: { '%b()', '%b[]', '%b{}' }
+      brackets = nil,
+      -- String Lua pattern defining argument separator
+      separator = ',',
+      -- Array of Lua patterns for sub-regions to exclude separators from.
+      -- Enables correct detection in presence of nested brackets and quotes.
+      -- Default: { '%b()', '%b[]', '%b{}', '%b""', "%b''" }
+      exclude_regions = nil,
     },
   },
+  surround = function()
+    vim.schedule(function()
+      -- vim.keymap.del('x', 'ys')
+      vim.keymap.set('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], {})
+      vim.keymap.set('n', 'yss', 'ys_', { remap = true, desc = 'surround line' })
+    end)
+    return {
+      mappings = {
+        add = 'ys',
+        delete = 'ds',
+        find = '',
+        find_left = '',
+        highlight = '',
+        replace = 'cs',
+        -- Add this only if you don't want to use extended mappings
+        suffix_last = '',
+        suffix_next = '',
+      },
+      search_method = 'cover_or_next',
+      custom_surroundings = {
+        B = { output = { left = '{', right = '}' } },
+      },
+    }
+  end,
 }
 
 M.setup = function()
   -- require('mini.misc').setup_termbg_sync()
-  for minimod, opts in pairs(M.mods()) do
+  -- for minimod, opts in pairs(nv.mini.opts) do
+  for minimod, opts in pairs(M.opts) do
     -- call set up for each available module
+    opts = vim.is_callable(opts) and opts() or opts
     require('mini.' .. minimod).setup(opts)
   end
-
-  local aug = vim.api.nvim_create_augroup('minibufvar', {})
-  local filetypes = vim.tbl_keys(buffer_local_configs)
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = filetypes,
-    group = aug,
-    callback = function(ev)
-      for k, v in pairs(buffer_local_configs[ev.match]) do
-        vim.b[k] = v
-      end
-    end,
-    desc = 'Set buffer-local configs for mini.nvim modules',
-  })
 end
-
--- local minispec = { 'nvim-mini/mini.nvim' }
-M.spec = {
-  {
-    'nvim-mini/mini.nvim',
-    config = M.setup,
-    toggles = {
-      ['<leader>uG'] = {
-        name = 'MiniDiff Signs',
-        get = function() return vim.g.minidiff_disable ~= true end,
-        set = function(state)
-          vim.g.minidiff_disable = not state
-          MiniDiff.toggle(0)
-          nv.defer_redraw_win()
-        end,
-      },
-      ['<leader>go'] = {
-        name = 'MiniDiff Overlay',
-        get = function()
-          local data = MiniDiff.get_buf_data(0)
-          return data and data.overlay == true or false
-        end,
-        set = function(_)
-          MiniDiff.toggle_overlay(0)
-          nv.defer_redraw_win()
-        end,
-      },
-    },
-  },
-}
 
 return M

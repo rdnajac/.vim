@@ -4,34 +4,40 @@ setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
 set wildignore+=.DS_Store
 set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
-set switchbuf+=vsplit
 
 " general {{{2
-set foldlevel=99
-" set foldlevelstart=99
-set foldminlines=3
-set foldopen+=insert,jump
-set foldtext=fold#text()
-set foldmethod=marker
-set ignorecase
-set jumpoptions+=stack
-set mouse=a
-set report=0
-set scrolloff=8
-set shortmess+=aAcCI
-set shortmess-=o
-set showmatch
-set smartcase
 set splitbelow splitright
+set switchbuf+=vsplit
 set splitkeep=screen
 set timeoutlen=420
 set updatetime=69
+
+" navigation {{{ 2
+set jumpoptions+=stack
+set mouse=a
+set scrolloff=8
 set virtualedit=block
 set whichwrap+=<,>,[,],h,l
 
+" searching {{{ 2
+set ignorecase
+set smartcase
+
+" notifications {{{ 2
+set report=0
+set shortmess+=aAcCI
+set shortmess-=o
+set showmatch
+
+" fold {{{ 2
+set foldlevel=99
+" set foldlevelstart=99
+" set foldminlines=3
+set foldopen+=insert,jump
+set foldmethod=marker
+
 " indent {{{2
-" TODO: set this in a ftplugin?
-" set nowrap
+" set nowrap TODO: set this in a ftplugin?
 set breakindent
 set linebreak
 set shiftround
@@ -55,15 +61,11 @@ set sessionoptions-=folds
 set viewoptions-=options      " keep mkview minimal
 
 " ui {{{2
-set cursorline
-set termguicolors
 let &laststatus = has('nvim') ? 3 : 2
-
-" statuscolumn
-" set foldcolumn=1
-" set numberwidth=3
+set cursorline
 set number
 set signcolumn=number
+set termguicolors
 
 augroup vimrc_ui
   " no cursorline in insert mode
@@ -117,6 +119,7 @@ else
   let &backupskip .= ',' . expand('$HOME/.local/*')
   set undofile
 
+  " more navigation
   set smoothscroll
   set jumpoptions+=view
   set mousescroll=hor:0
@@ -124,12 +127,16 @@ else
   set pumblend=0
   set pumborder=rounded
   set pumheight=10
+  set winborder=rounded
 
   set startofline " default in vim
   " try running `:options` for more...
-  hi link vimMap @keyword
-  " disable the default popup menu
+
+  " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
+
+  " TODO: treesitter highlight group module
+  hi link vimMap @keyword
 endif
 " }}}1
 " Section: autocmds {{{1
@@ -228,33 +235,34 @@ vmap  :sort<CR>
 let g:mapleader = ' '
 let g:maplocalleader = '\'
 
-" vim.lsp.hover overrides the default K mapping
-nnoremap <leader>q :q!<CR>
-nnoremap <leader>Q :wqa!<CR>
 nnoremap <leader>- <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
-nnoremap <leader>K <Cmd>norm! K<CR>
-nnoremap <leader>r <Cmd>Restart<CR>
-nnoremap <leader>R <Cmd>restart!<CR>
+nnoremap <leader>K <Cmd>normal! K<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
+
+nnoremap <leader>Q :wqa!<CR>
 nnoremap <leader>m <Cmd>messages<CR>
-nnoremap <leader>h <Cmd>Help<CR>
+nnoremap <leader>q <Cmd>quit!<CR>
 nnoremap <leader>w <Cmd>write!<CR>
-nnoremap <leader>! <Cmd>call redir#prompt()<CR>
+
+if has('nvim')
+  nnoremap <leader>h <Cmd>Help<CR>
+  nnoremap <leader>r <Cmd>Restart<CR>
+  nnoremap <leader>R <Cmd>restart!<CR>
+else
+  nnoremap <leader>h :help<Space>
+endif
 
 " debug
 nnoremap <leader>db <Cmd>call debug#buffer()<CR>
 nnoremap <leader>df <Cmd>call debug#fold()<CR>
 nnoremap <leader>ds <Cmd>call debug#shell()<CR>
-
 if has('nvim')
   nnoremap <leader>dB <Cmd>Blink<CR>
+  nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
   nnoremap <leader>dld <Cmd>LazyDev debug<CR>
   nnoremap <leader>dll <Cmd>LazyDev lsp<CR>
-  nnoremap <leader>dP <Cmd>=vim.tbl_keys(package.loaded)<CR>
-  nnoremap <leader>dR <Cmd>=require("r.config").get_config()<CR>
-  nnoremap <leader>dS <Cmd>=require("snacks").meta.get()<CR>
-  nnoremap <leader>dw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
+  nnoremap <leader>dlw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 endif
 
 " file
@@ -311,6 +319,7 @@ nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 " nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
 nnoremap <Bslash>n  <Cmd>call edit#luamod('nvim')<CR>
 nnoremap <Bslash>u  <Cmd>call edit#luamod('nvim/util')<CR>
+nnoremap <Bslash>p  <Cmd>call edit#luamod('nvim/util/plug')<CR>
 nnoremap <Bslash>i  <Cmd>call edit#('~/.vim/init.lua')<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 
@@ -338,7 +347,7 @@ nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
 " `yc` yd ym `yo` `yp` yq `yr` `ys` `yu` yx yz
 " `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
 
-" FIXME:
+" FIXME: this isn't working...
 nnoremap <expr> cq change#quote()
 
 " delete/yank comment
@@ -572,7 +581,8 @@ else
   Plug 'folke/tokyonight.nvim'
   " Plug 'nvim-mini/mini.nvim'
   " Plug 'saxon1964/neovim-tips'
-  " Plug 'R-nvim/R.nvim'
+  Plug 'neovim/nvim-lspconfig'
+  " Plug 'b0o/SchemaStore.nvim'
 endif
 silent! call plug#end()
 " }}}

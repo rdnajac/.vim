@@ -1,35 +1,37 @@
-local M = {}
+local me = debug.getinfo(1, 'S').source:sub(2)
+local dir = vim.fn.fnamemodify(me, ':p:h')
+local files = vim.fn.globpath(dir, '*', false, true)
 
-M.blink = require('nvim.blink')
-M.keymaps = require('nvim.keymaps')
-M.lazy = require('nvim.lazy')
-M.lsp = require('nvim.lsp')
-M.mini = require('nvim.mini')
--- M.plugins = require('nvim.plugins')
-M.treesitter = require('nvim.treesitter')
+--- nvim config
+vim.notify = require('nvim.util.notify').notify
 
+-- XXX: experimental!
+vim.o.cmdheight = 0
+require('vim._extui').enable({})
+
+-- see `vim._defer_require
 local _submodules = {
   blink = true,
-  keymaps = true,
-  lazy = true,
+  keys = true,
   lsp = true,
   mini = true,
-  -- plugins = true,
   treesitter = true,
 }
 
-return setmetatable(M, {
+return setmetatable({}, {
   __index = function(t, k)
+    -- print(k)
     if _submodules[k] then
       -- lazy load runtime modules in the `nv` namespace
-      -- t[k] = require('nv.' .. k)
-      return t[k]
+      local mod = require('nvim.' .. k)
+      rawset(t, k, mod)
+      return mod
     else
       -- expose all utils  on the `nv` module
       local mod = require('nvim.util')[k]
       if mod ~= nil then
-        t[k] = mod
-        return t[k]
+        rawset(t, k, mod)
+        return mod
       end
     end
   end,
