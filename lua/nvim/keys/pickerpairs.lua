@@ -5,32 +5,27 @@ local function picker_pair(key, opts)
   explorer_opts.focus = 'input'
   explorer_opts.confirm = function(p, item) p:action({ 'jump' }) end
 
-  return {
-    { '<leader>f' .. key, function() Snacks.picker.explorer(explorer_opts) end },
-    -- { '<leader>f' .. key, function() Snacks.picker.files(opts) end },
-    { '<leader>s' .. key, function() Snacks.picker.grep(opts) end },
-  }
+  M[#M + 1] = { '<leader>f' .. key, function() Snacks.picker.explorer(explorer_opts) end }
+  M[#M + 1] = { '<leader>s' .. key, function() Snacks.picker.grep(opts) end }
 end
-
--- TODO: incorperate `cd`
--- { 'c', vim.fn.stdpath('config') },
--- { 'C', vim.fn.stdpath('cache') },
--- { 'D', vim.fn.stdpath('data') },
-
 
 for k, opts in pairs({
   ['.'] = { cwd = vim.g['chezmoi#source_dir_path'], hidden = true, exclude = { '.archive' } },
+  sc = { cwd = vim.fn.stdpath('cache') },
+  sd = { cwd = vim.fn.stdpath('data') },
   -- R = { cwd = '~/GitHub/' },
-  c = { cwd = vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
-  C = { cwd = vim.fn.stdpath('config'), { ft = { 'lua', 'vim' } } },
-  p = { cwd = vim.g.plug_home, ft = { 'lua', 'vim' } },
-  P = { cwd = vim.g.plug_home, ft = { 'lua', 'vim' } },
-  v = { cwd = '$VIMRUNTIME', ft = { 'lua', 'vim' } },
-  V = { cwd = '$VIMRUNTIME' },
-  e = { dirs = vim.api.nvim_list_runtime_paths(), ft = { 'lua', 'vim' } },
-  E = { dirs = vim.api.nvim_list_runtime_paths() },
 }) do
-  vim.list_extend(M, picker_pair(k, opts))
+  picker_pair(k, opts)
+end
+
+for k, opts in pairs({
+  c = { cwd = vim.fn.stdpath('config') },
+  p = { cwd = vim.g.plug_home },
+  v = { cwd = '$VIMRUNTIME' },
+  e = { dirs = vim.api.nvim_list_runtime_paths() },
+}) do
+  picker_pair(string.upper(k), opts) -- uppercase searches for all filetypes
+  picker_pair(k, vim.tbl_extend('force', {}, opts, { ft = { 'lua', 'vim' } }))
 end
 
 return M

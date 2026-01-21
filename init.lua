@@ -75,9 +75,9 @@ local specs = vim
   :map(nv.plug --[[@as fun(k: string, v: table): Plugin]])
   :filter(function(p) return p.enabled ~= false end)
   :map(function(p)
-    -- collect keys and toggles
-    vim.list_extend(keys, p.keys or {})
-    vim.tbl_extend('error', toggles, p.toggles or {})
+    vim.list_extend(keys, p.keys or {}) -- collect keys
+    -- toggles = vim.tbl_extend('error', toggles, p.toggles or {})
+    toggles = vim.tbl_extend('error', toggles, p.toggles or {})
     return p
   end)
   :map(function(p) return p:tospec() end)
@@ -87,8 +87,8 @@ local specs = vim
 if vim.v.vim_did_enter == 0 then
   vim.pack.add(specs, { load = nv.plug.load })
   vim.schedule(function()
-    nv.keys.add(keys)
-    nv.keys.register_toggles(toggles)
+    nv.keys(keys)
+    nv.keys(toggles)
   end)
 end
 
