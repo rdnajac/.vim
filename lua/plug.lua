@@ -1,6 +1,7 @@
 ---@class Plugin
 ---@field name string The plugin name as evaluated by `vim.pack`.
 ---@field data? any
+---@field src? string
 ---@field did_setup boolean Tracks if `setup()` has been called.
 ---@field enabled boolean Defaults to `true`.
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
@@ -12,7 +13,7 @@
 ---@field toggles? table<string, string|fun()|table>
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
-local Plugin = { did_setup = false, enabled = true }
+local Plugin = {}
 Plugin.__index = Plugin
 
 function Plugin.new(...)
@@ -26,16 +27,17 @@ function Plugin.new(...)
     end
   end
   vim.validate('t', t, 'table')
+  -- vim.validate('str', str, 'string', true)
   if not t[1] and str then
     t[1] = str
   end
   vim.validate('[1]', t[1], 'string')
   local self = setmetatable(t, Plugin)
+  self.did_setup = false
+  self.enabled = self.enabled or true
   self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
   return self
 end
-
-local M = {}
 
 ---@class plugin.Data passed as `spec.data` to `vim.pack.add()`
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
@@ -45,7 +47,7 @@ local M = {}
 ---@return vim.pack.SpecResolved|nil
 function Plugin:tospec()
   return {
-    src = nv.gh(self[1]),
+    src = self.src or nv.gh(self[1]),
     version = self.version or self.branch or nil,
     name = self.name or self[1]:match('[^/]+$'),
     data = self.data or {
@@ -58,13 +60,13 @@ function Plugin:tospec()
 end
 
 local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
+--- execute a callback once at an event
 ---@param event string|string[]
 ---@param cb fun() the module's setup function with opts
 local on_event = function(event, cb)
   vim.api.nvim_create_autocmd(event, {
     callback = cb,
     group = aug,
-    -- TODO: handle User events and patterns
     -- nested = true,
     once = true,
   })
@@ -91,6 +93,8 @@ function Plugin:setup()
   return self.event and on_event(self.event, setup) or setup()
 end
 
-return setmetatable(M, {
-  __call = Plugin.new,
+return setmetatable(Plugin, {
+  __call = function(_, ...)
+    return Plugin.new(...)
+  end,
 })

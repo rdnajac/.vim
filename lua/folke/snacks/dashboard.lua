@@ -42,16 +42,19 @@ end
 return {
   preset = {
     keys = {
-      { icon = ' ', key = 'f', title = 'Files', action = ':Recent' },
-      { section = 'recent_files', indent = 2 },
-      -- stylua: ignore start
-      { icon = ' ', key = 'n', action = ':ene | star', desc = 'New File' },
-      { icon = ' ', key = '-', action = ':Explorer',   desc = 'Open Directory' },
-      { icon = ' ', key = 'u', action = ':PlugUpdate', desc = 'Update Plugins' },
-      { icon = ' ', key = 'm', action = ':Mason',      desc = 'Mason' },
-      { icon = '󰒲 ', key = 'g', action = ':LazyGit',    desc = 'LazyGit' },
-      { icon = ' ', key = 'R', action = ':restart',    desc = 'Restart Neovim' },
-      -- stylua: ignore end
+      { icon = ' ', key = 'n', desc = 'New File       ', action = ':ene | star' },
+      { icon = ' ', key = '-', desc = 'Open Directory ', action = ':Explorer' },
+      { icon = ' ', key = 'U', desc = 'Update Plugins ', action = ':PlugUpdate' },
+      { icon = ' ', key = 'M', desc = 'Mason          ', action = ':Mason' },
+      { icon = '󰒲 ', key = 'G', desc = 'LazyGit        ', action = ':LazyGit' },
+      {
+        icon = ' ',
+        key = 'C',
+        des = 'Open Config Dir',
+        action = [[:exe 'edit ' . stdpath('config')]],
+      },
+      { icon = ' ', key = 'D', desc = 'Open Data Dir  ', action = ':e stdpath("data")' },
+      { icon = ' ', key = 'R', desc = 'Restart Neovim ', action = ':restart' },
     },
   },
   sections = {

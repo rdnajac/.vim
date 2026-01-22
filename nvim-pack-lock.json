@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "R.nvim": {
+      "rev": "c193a580aa65eed29a346552a1ad3a85f0b4b9b9",
+      "src": "https://github.com/R-nvim/R.nvim.git"
+    },
     "ale": {
       "rev": "8eb4803da99a575bc827a6c814e63b1053b7002f",
       "src": "https://github.com/dense-analysis/ale.git"

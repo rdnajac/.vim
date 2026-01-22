@@ -25,17 +25,14 @@ providers.lazydev = {
 }
 -- end
 
-local extras = require('nvim.blink.extras')
+local extras = {}
 
-opts.sources.providers = vim.iter(extras):fold(
-  providers,
-  function(acc, repo, config) return vim.tbl_extend('force', acc, config) end
-)
-
-local M = {
-  opts = opts,
-  community_sources = vim.tbl_keys(extras),
-}
+opts.sources.providers = vim
+  .iter(require('nvim.blink.extras'))
+  :fold(providers, function(acc, repo, config)
+    extras[#extras + 1] = repo
+    return vim.tbl_extend('force', acc, config)
+  end)
 
 local get_providers = function(mode)
   mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
@@ -43,14 +40,18 @@ local get_providers = function(mode)
   return vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
 end
 
-M.status = {
-  function()
-    return vim
-      .iter(get_providers())
-      :map(function(provider) return nv.icons.blink[provider] or ' ' end)
-      :join(' ')
-  end,
-  cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end,
+local M = {
+  opts = opts,
+  extras = extras,
+  status = {
+    function()
+      return vim
+        .iter(get_providers())
+        :map(function(provider) return nv.icons.blink[provider] or ' ' end)
+        :join(' ')
+    end,
+    cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end,
+  },
 }
 
 return M

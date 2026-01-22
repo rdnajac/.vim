@@ -1,13 +1,6 @@
-local me = debug.getinfo(1, 'S').source:sub(2)
-local dir = vim.fn.fnamemodify(me, ':p:h')
-local files = vim.fn.globpath(dir, '*', false, true)
-
---- nvim config
-vim.notify = require('nvim.util.notify').notify
-
--- XXX: experimental!
-vim.o.cmdheight = 0
-require('vim._extui').enable({})
+-- local me = debug.getinfo(1, 'S').source:sub(2)
+-- local dir = vim.fn.fnamemodify(me, ':p:h')
+-- local files = vim.fn.globpath(dir, '*', false, true)
 
 -- see `vim._defer_require
 local _submodules = {

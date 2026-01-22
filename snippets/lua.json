@@ -4,6 +4,11 @@
     "body": "vim.iter($1)\n  :${0}",
     "description": ""
   },
+  "finish": {
+    "prefix": "finish",
+    "body": "if ${1:true} then return end\n$0",
+    "description": "early return"
+  },
   "M": {
     "body": "local M = {}\n\n$0\n\nreturn M",
     "description": "Module skeleton",
@@ -25,8 +30,8 @@
   },
   "autocmd": {
     "body": [
-      "vim.api.nvim_create_autocmd({'${1:event}'}, {",
-        "  pattern = { '${2:*}' },",
+      "vim.api.nvim_create_autocmd({'${1:FileType}'}, {",
+        "  pattern = '${2:*}',",
         "  group = aug,",
         "  callback = function()",
         "    ${0}",
@@ -35,7 +40,7 @@
         "})"
     ],
     "description": "autocmd",
-    "prefix": "autocmd"
+    "prefix": "au"
   },
   "elseif": {
     "body": [
@@ -126,5 +131,9 @@
   "Win Valid": {
     "prefix": "winvalid",
     "body": "vim.api.nvim_win_is_valid(${1:win})"
+  },
+  "file exists": {
+    "body": "local fileExists = vim.uv.fs_stat(\"${1:filepath}\") ~= nil",
+    "prefix": "file exists"
   }
 }

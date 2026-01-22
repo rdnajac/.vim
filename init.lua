@@ -1,14 +1,13 @@
 --- init.lua
+require('nvim.util.track')
+
 --- 1. source vimrc
 ---  - relies on autoload/plug.vim to override vim-plug calls
 ---  - enables `vim.loader` and `vim.pack.add`s base plugins
-vim.cmd([[runtime vimrc]])
+vim.cmd([[ runtime vimrc | colorscheme tokyonight_generated ]])
 
---- 2. expose and setup `Snacks`
+--- 2. snack attack!
 require('snacks')
-assert(Snacks)
-
--- declare global debug helpers
 _G.bt = Snacks.debug.backtrace
 _G.dd = Snacks.debug.inspect
 _G.p = Snacks.debug.profile
@@ -57,27 +56,23 @@ local opts = {
 }
 Snacks.setup(opts)
 
--- TODO: cache result as colorscheme so we don't have to setup each time
---- 3. setup theme early
-require('folke.tokyonight').setup()
-
---- 4. global state
+--- 3. global state, overrides, nightly features
 _G.nv = require('nvim')
+vim.notify = nv.notify
+-- XXX: experimental
+vim.o.cmdheight = 0
+require('vim._extui').enable({})
 
---- 5. load plugins and build specs
-local plugins = require('plugins')
-local specs = vim
-  .iter(plugins)
-  :map(nv.plug --[[@as fun(k: string, v: table): Plugin]])
-  :filter(function(p) return p.enabled ~= false end)
-  :map(function(p) return p:tospec() end)
-  :totable()
+--- 4. load plugin table and convert to `vim.pack.Spec`s
+local Plugins = require('plugins')
+local Plug = require('plug')
+local specs = vim.iter(Plugins):map(Plug):filter(function(p) return p.enabled end):totable()
 
---- 6. load plugins and initialize keys
+--- 5. load plugins and register keys
 if vim.v.vim_did_enter == 0 then
-  vim.pack.add(specs, {
+  vim.pack.add(vim.tbl_map(function(p) return p:tospec() end, specs), {
+    --- @param plug_data {spec: vim.pack.Spec, path: string}
     load = function(plug_data)
-      ---@type vim.pack.Spec
       local spec = plug_data.spec
       vim.cmd.packadd({ spec.name, bang = true })
       if spec.data then
@@ -90,4 +85,4 @@ if vim.v.vim_did_enter == 0 then
     end,
   })
 end
---- vim: fdl=0 fdm=expr foldminlines=9
+--- vim: fdl=0 fdm=expr foldminlines=19

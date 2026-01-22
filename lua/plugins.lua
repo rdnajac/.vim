@@ -160,11 +160,11 @@ local M = {
   },
 }
 
-for _, v in pairs(nv.blink.community_sources) do
-  M[v] = { data = v }
+for _, v in ipairs(nv.blink.extras) do
+  M[v] = {}
 end
 
----@diagnostic disable-next-line: unused-local
+---@diagnostic disable-next-line
 local _key_counts = function()
   local ret = {}
   for _, v in pairs(M) do

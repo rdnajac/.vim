@@ -1,5 +1,4 @@
-nv.treesitter.selection.create_mappings()
-
+local nv = _G.nv or require('nvim')
 local aug = vim.api.nvim_create_augroup('treesitter', {})
 
 vim.api.nvim_create_autocmd('FileType', {
@@ -15,3 +14,5 @@ vim.api.nvim_create_autocmd('FileType', {
   command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
   desc = 'Use treesitter folding for select filetypes',
 })
+
+nv.treesitter.selection.create_mappings()

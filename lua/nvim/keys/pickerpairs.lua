@@ -1,3 +1,4 @@
+-- TODO: just make everything open a directory in explorer
 local M = {}
 
 local function picker_pair(key, opts)

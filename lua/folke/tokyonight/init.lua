@@ -1,3 +1,4 @@
+-- write cache
 local mycolors = {
   -- tokyonight = '#24283b',
   black = '#000000',
@@ -6,10 +7,8 @@ local mycolors = {
   green = '#39ff14', -- orig: #9ece6a
   lualine = '#3b4261',
 }
-local x = 1
 
---- for the palette, go to:
---- `~/.local/share/nvim/site/pack/core/opt/tokyonight.nvim/lua/tokyonight/colors/storm.lua`
+--- for the original palette, see: `tokyonight.colors.storm`
 ---@param c ColorScheme
 ---@return tokyonight.Highlights
 local myhighlights = function(c)
@@ -32,40 +31,23 @@ end
 
 local M = {}
 
--- ~/.local/share/nvim/site/pack/core/opt/tokyonight.nvim/lua/tokyonight/groups/
-M.plugins = function()
+local myplugins = function()
   local plugins = { all = false }
-  local groups = require('tokyonight.groups')
-
-  for plugin, group in pairs(groups.plugins) do
-    if vim.fn.isdirectory(vim.g.plug_home .. '/' .. plugin) ~= 0 then
-      plugins[group] = true
-    end
-  end
+  vim
+    .iter(require('tokyonight.groups').plugins)
+    :filter(function(plugin) return vim.uv.fs_stat(vim.g.plug_home .. '/' .. plugin) end)
+    :each(function(plugin, group) plugins[group] = true end)
 
   -- `mini.nvim`
   for _, mod in ipairs({
-    -- 'animate',
-    -- 'clue',
-    -- 'completion',
-    -- 'cursorword',
-    -- 'deps',
+    -- 'animate', 'clue', 'completion', 'cursorword', 'deps',
     'diff',
     'files',
     'hipatterns',
     'icons',
-    -- 'indentscope',
-    -- 'jump',
-    -- 'map',
-    -- 'notify',
-    -- 'operators'
-    -- 'pick',
-    -- 'starter',
-    -- 'statusline',
+    -- 'indentscope', 'jump', 'map', 'notify', 'operators' 'pick', 'starter',
     'surround',
-    -- 'tabline',
-    -- 'test',
-    -- 'trailspace',
+    -- 'statusline', 'tabline', 'test', 'trailspace',
   }) do
     plugins['mini_' .. mod] = true
   end
@@ -74,65 +56,164 @@ end
 
 vim.g.transparent = true
 
----@type tokyonight.Config
-local opts = {
-  style = 'night',
-  transparent = vim.g.transparent == true,
-  styles = {
-    comments = { italic = true },
-    keywords = { italic = false, bold = true },
-    variables = { italic = false },
-    floats = vim.g.transparent == true and 'transparent' or nil,
-    sidebars = vim.g.transparent == true and 'transparent' or nil,
-  },
-  dim_inactive = true,
-  on_colors = function(colors)
-    for k, v in pairs(mycolors) do
-      colors[k] = v
-    end
-  end,
-  on_highlights = function(hl, colors)
-    for k, v in pairs(myhighlights(colors)) do
-      hl[k] = v
-    end
-  end,
-  -- plugins = { all = false },
-  plugins = M.plugins(),
-}
+---@return tokyonight.Config
+local _opts = function()
+  return {
+    style = 'night',
+    transparent = vim.g.transparent == true,
+    styles = {
+      comments = { italic = true },
+      keywords = { italic = false, bold = true },
+      variables = { italic = false },
+      floats = vim.g.transparent == true and 'transparent' or nil,
+      sidebars = vim.g.transparent == true and 'transparent' or nil,
+    },
+    dim_inactive = true,
+    on_colors = function(colors)
+      for k, v in pairs(mycolors) do
+        colors[k] = v
+      end
+    end,
+    on_highlights = function(hl, colors)
+      for k, v in pairs(myhighlights(colors)) do
+        hl[k] = v
+      end
+    end,
+    plugins = M.cache('plugins', myplugins),
+  }
+end
 
-M.config = function() require('tokyonight').setup(opts) end
-M.setup = function() return require('tokyonight.theme').setup(opts) end
-M.colorscheme = function()
-  ---@type ColorScheme, tokyonight.Highlights, tokyonight.Config
+--- Calls `require('tokyonight').setup` with local opts which
+--- are then merged with the default opts and stored on
+--- `require('tokyonight.config').options` This is referred to
+--- as config since it fits the common pattern `plugin.setup(opts)`.
+M.config = function() require('tokyonight').setup(_opts()) end
+
+--- require('tokyonight').setup actually points to this function (unused here)
+M._setup = function() require('tokyonight.config').setup() end
+
+---@alias retvals {ColorScheme, tokyonight.Highlights, tokyonight.Config}
+
+--- The actual setup function (usually called from `require.('tokyonight').load`).
+--- Here, opts are still merged with the default opts, but not stored.
+---@return ColorScheme, tokyonight.Highlights, tokyonight.Config
+M.setup = function() return require('tokyonight.theme').setup(_opts()) end
+
+--- get low
+---@return ColorScheme, tokyonight.Highlights, tokyonight.Config
+local _load = function()
+  local opts = require('tokyonight.config').extend(_opts())
+  local colors = require('tokyonight.colors').setup(opts)
+  local groups = require('tokyonight.groups').setup(colors, opts)
+  return opts, colors, groups
+end
+
+  local opts = require('tokyonight.config').extend(_opts())
+print(opts)
+
+--- Call setup and store results on this module
+M._colorscheme = function()
   M.colors, M.groups, M.opts = M.setup()
-  -- `load()` won't trigger ColorScheme autocommand, so do it here
+end
+
+--- Setup highlights and trigger `ColorScheme` autocmd since `setup` does not
+M.colorscheme = function()
+  M._colorscheme()
   vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 
---- Write content to a file in the colors directory
----@param filename string The name of the file (can include subdirectory path)
----@param content string|string[] Content to write (string or array of lines)
-M.write = function(filename, content)
+--- Write content to a file
+---@param path string Absolute path to the file
+---@param content any Content to write (string, list, or table)
+local write = function(path, content)
   local f = require('nvim.util.file')
-  local filepath = filename
-  if type(content) == 'table' then
-    f.write_lines(filepath, content)
+  local output
+  if type(content) == 'string' then
+    output = content
+  elseif vim.islist(content) and type(content[1]) == 'string' then
+    output = table.concat(content, '\n')
   else
-    f.write(filepath, content)
+    output = vim.inspect(content)
+  end
+  f.write(path, output)
+end
+
+--- Load table from cache or generate and cache it
+---@param name string The name suffix for tokyonight_<name>.lua
+---@param generator function Function to generate data if cache miss
+M.cache = function(name, generator)
+  -- `~/.cache/nvim/colors/`
+  local path = vim.fs.joinpath(vim.fn.stdpath('cache'), 'colors', 'tokyonight_' .. name .. '.lua')
+  if vim.uv.fs_stat(path) then
+    local ok, data = pcall(dofile, path)
+    if ok and data then
+      return data
+    end
+  end
+  local data = generator()
+  write(path, data)
+  return data
+end
+
+function M.gen(user_opts)
+  local lines = {}
+  for group, hl in pairs(groups) do
+    hl = type(hl) == 'string' and { link = hl } or hl
+    table.insert(
+      lines,
+      string.format(
+        'vim.api.nvim_set_hl(0, %q, %s)',
+        group,
+        vim.inspect(hl, { newline = '', indent = '' })
+      )
+    )
+  end
+
+  local path = vim.fs.joinpath(vim.env.HOME, '.vim', 'colors', 'tokyonight_generated.lua')
+  write(path, lines)
+  return path
+end
+
+---@param user_opts? tokyonight.Config
+---@param force? boolean Force regeneration of cache
+function M.__setup(user_opts, force)
+  local groups = force and nil
+    or M.cache('groups', function()
+      local opts = require('tokyonight.config').extend(user_opts)
+      local colors = require('tokyonight.colors').setup(opts)
+      return require('tokyonight.groups').setup(colors, opts)
+    end)
+
+  if not groups or force then
+    local opts = require('tokyonight.config').extend(user_opts)
+    local colors = require('tokyonight.colors').setup(opts)
+    groups = require('tokyonight.groups').setup(colors, opts)
+    local cache_path = vim.fs.joinpath(vim.fn.stdpath('cache'), 'colors', 'tokyonight_groups.lua')
+    write(cache_path, groups)
+  end
+
+  local opts = require('tokyonight.config').extend(user_opts)
+  local colors = require('tokyonight.colors').setup(opts)
+
+  for group, hl in pairs(groups) do
+    hl = type(hl) == 'string' and { link = hl } or hl
+    vim.api.nvim_set_hl(0, group, hl)
+  end
+  M.terminal(colors)
+  return colors, groups, opts
+end
+
+---@param colors ColorScheme
+function M.terminal(colors)
+    -- stylua: ignore
+  for idx, name in ipairs({
+    'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white',
+  }) do
+    vim.g['terminal_color_' .. (idx - 1)] = colors.terminal[name]
+    vim.g['terminal_color_' .. (idx + 7)] = colors.terminal[name .. '_bright']
   end
 end
 
-M.write_groups = function()
-  local groups = M.groups
-  local content = 'return ' .. vim.inspect(groups)
-  M.write('gen/groups.lua', content)
-end
-
---- Generate the plugins.lua file with current plugin configuration
-M.generate_plugins = function()
-  local plugins = M.plugins()
-  local content = 'return ' .. vim.inspect(plugins)
-  M.write('gen/plugins.lua', content)
-end
+M.gen(opts())
 
 return M
