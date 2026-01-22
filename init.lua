@@ -66,7 +66,6 @@ _G.nv = require('nvim')
 
 --- 5. load plugins and build specs
 local plugins = require('plugins')
-
 local specs = vim
   .iter(plugins)
   :map(nv.plug --[[@as fun(k: string, v: table): Plugin]])
@@ -75,22 +74,20 @@ local specs = vim
   :totable()
 
 --- 6. load plugins and initialize keys
----@param plug_data {spec: vim.pack.Spec, path: string}
-local load = function(plug_data)
-  local spec = plug_data.spec
-  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-  if spec.data then
-    nv.keys(spec.data.keys)
-    nv.keys(spec.data.toggles)
-    if vim.is_callable(spec.data.setup) then
-      spec.data.setup()
-    end
-  end
-end
-
 if vim.v.vim_did_enter == 0 then
-  vim.pack.add(specs, { load = load })
-  vim.schedule(nv.keys.setup)
+  vim.pack.add(specs, {
+    load = function(plug_data)
+      ---@type vim.pack.Spec
+      local spec = plug_data.spec
+      vim.cmd.packadd({ spec.name, bang = true })
+      if spec.data then
+        nv.keys(spec.data.keys)
+        nv.keys(spec.data.toggles)
+        if vim.is_callable(spec.data.setup) then
+          spec.data.setup()
+        end
+      end
+    end,
+  })
 end
-
 --- vim: fdl=0 fdm=expr foldminlines=9

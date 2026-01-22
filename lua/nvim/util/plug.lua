@@ -1,6 +1,3 @@
-local call = function(v) return vim.is_callable(v) and v() end
-local get = function(v) return call(v) or v end
-
 ---@class Plugin
 ---@field name string The plugin name as evaluated by `vim.pack`.
 ---@field data? any
@@ -62,11 +59,12 @@ end
 
 local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
 ---@param event string|string[]
--- TODO: handle User events and patterns
+---@param cb fun() the module's setup function with opts
 local on_event = function(event, cb)
   vim.api.nvim_create_autocmd(event, {
     callback = cb,
     group = aug,
+    -- TODO: handle User events and patterns
     -- nested = true,
     once = true,
   })
@@ -79,21 +77,18 @@ function Plugin:setup()
     if self.did_setup then
       return
     end
-    local opts = get(self.opts)
+    local opts = vim.is_callable(self.opts) and self.opts() or self.opts
     if type(opts) == 'table' then
       local modname = self.name:gsub('%.nvim$', '')
       require(modname).setup(opts)
-    else -- opts likely nil, try calling config
-      call(self.config)
+    elseif vim.is_callable(self.config) then
+      self.config()
+    else
+      return
     end
     self.did_setup = true
   end
-
-  if self.event then
-    on_event(self.event, setup)
-  else
-    setup()
-  end
+  return self.event and on_event(self.event, setup) or setup()
 end
 
 return setmetatable(M, {
