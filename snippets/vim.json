@@ -23,9 +23,9 @@
     "prefix": "ifeq",
     "body": [
       "if !exists('g:${1}')",
-      "  let g:${1} = ${2:1}", 
+      "  let g:${1} = ${2:1}",
       "endif"],
-    "description": "Global variable declaration"
+      "description": "Global variable declaration"
   },
 
   "ifne": {

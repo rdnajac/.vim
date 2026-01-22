@@ -83,6 +83,7 @@ local M = {
             { '<[cC][rR]>', '󰌑 ' },
             { '<[sS]ilent>', '' },
             { '^lua%s+', '' },
+            { '^lua%s+', '' },
             { '^call%s+', '' },
             -- { '^:%s*', '' },
           },
@@ -148,6 +149,10 @@ local M = {
       })
     end,
   },
+  ['monaqa/dial.nvim'] = {
+    config = function() require('plugins.dial') end,
+    lazy = true,
+  },
   ['Saghen/blink.cmp'] = {
     opts = nv.blink.opts,
     -- event = 'InsertEnter',
@@ -159,6 +164,18 @@ for _, v in pairs(nv.blink.community_sources) do
   M[v] = { data = v }
 end
 
-return M
+---@diagnostic disable-next-line: unused-local
+local _key_counts = function()
+  local ret = {}
+  for _, v in pairs(M) do
+    if type(v) == 'table' and v ~= M._key_counts then
+      for key in pairs(v) do
+        ret[key] = (ret[key] or 0) + 1
+      end
+    end
+  end
+  return ret
+end
 
+return M
 -- vim: fdl=1 fdm=expr fdl=5

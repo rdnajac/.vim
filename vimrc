@@ -269,7 +269,7 @@ endif
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
-nnoremap <leader>fs <Cmd>call edit#snippet()<CR>
+nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
@@ -316,12 +316,18 @@ nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
 
 " bookmarks {{{3
 nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
-" nnoremap <Bslash>i  <Cmd>call edit#(expand('$MYVIMRC'))<CR>
-nnoremap <Bslash>n  <Cmd>call edit#luamod('nvim')<CR>
-nnoremap <Bslash>u  <Cmd>call edit#luamod('nvim/util')<CR>
-nnoremap <Bslash>p  <Cmd>call edit#luamod('nvim/util/plug')<CR>
 nnoremap <Bslash>i  <Cmd>call edit#('~/.vim/init.lua')<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
+
+for [k, v] in items({
+      \ 'n' : 'nvim',
+      \ 'k' : 'nvim/keys',
+      \ 'p' : 'nvim/util/plug',
+      \ 'P' : 'plugins',
+      \ 'u' : 'nvim/util',
+      \ })
+  execute $'nnoremap <Bslash>{k}  <Cmd>call edit#luamod("{v}")<CR>'
+endfor
 
 " resize splits {{{3
 nnoremap <C-W><Up>    :     resize +10<CR>

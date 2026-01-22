@@ -27,12 +27,10 @@ return setmetatable({}, {
       rawset(t, k, mod)
       return mod
     else
-      -- expose all utils  on the `nv` module
+      -- expose all utils on the `nv` module
       local mod = require('nvim.util')[k]
-      if mod ~= nil then
         rawset(t, k, mod)
         return mod
-      end
     end
   end,
 })

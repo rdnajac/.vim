@@ -64,32 +64,33 @@ require('folke.tokyonight').setup()
 --- 4. global state
 _G.nv = require('nvim')
 
---- 5. load plugins, keys, toggles
+--- 5. load plugins and build specs
 local plugins = require('plugins')
-local keys = require('nvim.keys.extra')
-local toggles = require('nvim.keys.toggles')
 
---- 6. iterate over plugins to build specs, keys, toggles
 local specs = vim
   .iter(plugins)
   :map(nv.plug --[[@as fun(k: string, v: table): Plugin]])
   :filter(function(p) return p.enabled ~= false end)
-  :map(function(p)
-    vim.list_extend(keys, p.keys or {}) -- collect keys
-    -- toggles = vim.tbl_extend('error', toggles, p.toggles or {})
-    toggles = vim.tbl_extend('error', toggles, p.toggles or {})
-    return p
-  end)
   :map(function(p) return p:tospec() end)
   :totable()
 
---- 7. load plugins, keys, toggles before UIEnter
+--- 6. load plugins and initialize keys
+---@param plug_data {spec: vim.pack.Spec, path: string}
+local load = function(plug_data)
+  local spec = plug_data.spec
+  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
+  if spec.data then
+    nv.keys(spec.data.keys)
+    nv.keys(spec.data.toggles)
+    if vim.is_callable(spec.data.setup) then
+      spec.data.setup()
+    end
+  end
+end
+
 if vim.v.vim_did_enter == 0 then
-  vim.pack.add(specs, { load = nv.plug.load })
-  vim.schedule(function()
-    nv.keys(keys)
-    nv.keys(toggles)
-  end)
+  vim.pack.add(specs, { load = load })
+  vim.schedule(nv.keys.setup)
 end
 
 --- vim: fdl=0 fdm=expr foldminlines=9

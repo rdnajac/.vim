@@ -40,11 +40,6 @@ end
 
 local M = {}
 
-function M.plug(...)
-  local p = Plugin.new(...)
-  return p.enabled and p or nil
-end
-
 ---@class plugin.Data passed as `spec.data` to `vim.pack.add()`
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field setup? fun():nil Setup function to call after loading the plugin.
@@ -58,7 +53,9 @@ function Plugin:tospec()
     name = self.name or self[1]:match('[^/]+$'),
     data = self.data or {
       build = self.build,
+      keys = self.keys,
       setup = function() return self:setup() end,
+      toggles = self.toggles,
     },
   }
 end
@@ -99,18 +96,6 @@ function Plugin:setup()
   end
 end
 
----@param plug_data {spec: vim.pack.Spec, path: string}
-function M.load(plug_data)
-  local spec = plug_data.spec
-  vim.cmd.packadd({ spec.name, bang = true, magic = { file = false } })
-  if spec.data then -- call setup if callable
-    call(spec.data.setup)
-  end
-end
-
 return setmetatable(M, {
-  __call = function(_, ...) return M.plug(...) end,
-  -- __index = function(t, k)
-  -- if k == 'keys' then return
-  -- end
+  __call = Plugin.new,
 })

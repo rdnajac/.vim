@@ -3,17 +3,15 @@ Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
 
 local M = {}
 
-local modes = { n = true, v = true, x = true, i = true, t = true, o = true, c = true, s = true }
+local modes = { 'n', 'v', 'x', 'i', 't', 'o', 'c', 's' }
+local function has_mode(t) return type(t[1]) == 'table' or vim.tbl_contains(modes, t[1]) end
 
-local function parse_keymap(t)
+local function _parse(t)
   -- stylua: ignore start
-  -- skip if not a table
   if type(t) ~= 'table' then return end
-  -- return if already in correct format: { mode, lhs, rhs, opts }
-  if type(t[1]) == 'table' or modes[t[1]] then return unpack(t) end
+  if has_mode(t) then return unpack(t) end
   -- stylua: ignore end
 
-  -- Extract mode and opts from named fields
   local lhs, rhs, opts = t[1], t[2], t[3]
   opts = type(opts) == 'table' and opts or {}
   for k, v in pairs(t) do
@@ -24,41 +22,30 @@ local function parse_keymap(t)
   return t.mode or 'n', lhs, rhs, opts
 end
 
-local function add(t)
-  local is_list = t and type(t[1]) == 'table' and not modes[t[1]]
-  for _, keymap in pairs(is_list and t or { t }) do
-    local mode, lhs, rhs, opts = parse_keymap(keymap)
-    -- if mode and lhs and rhs then
-    vim.keymap.set(mode, lhs, rhs, opts)
-    -- end
+M.queue = {}
+M.toggles = require('nvim.keys.toggles')
+
+function M.setup()
+  for _, mod in ipairs({ 'extra', 'brackets', 'pickerpairs' }) do
+    vim.list_extend(M.queue, require('nvim.keys.' .. mod))
   end
+
+  vim.iter(M.queue):map(_parse):each(vim.keymap.set)
+  -- stylua: ignore
+  vim.iter(M.toggles):each(function(key, v)
+    if type(v) == 'string' then Snacks.toggle.option(v):map(key)
+    elseif type(v) == 'table' then Snacks.toggle.new(v):map(key)
+    elseif type(v) == 'function' then v():map(key)
+    end
+  end)
 end
 
---- Register toggles from plugin specs and custom toggles
----@param toggles table<string, snacks.toggle.Opts|string|function>
-local function register_toggles(toggles)
-  for key, v in pairs(toggles) do
-    local type_ = type(v)
-    if type_ == 'table' then
-      Snacks.toggle.new(v):map(key)
-    elseif type_ == 'string' then
-      Snacks.toggle.option(v):map(key)
-    elseif type_ == 'function' then
-      v():map(key) -- preset toggles
+return setmetatable(M, {
+  __call = function(_, t)
+    if vim.islist(t) then
+      vim.list_extend(M.queue, t)
+    elseif type(t) == 'table' then
+      M.toggles = vim.tbl_extend('error', M.toggles, t)
     end
-  end
-end
-
-setmetatable(M, {
-  __call = function(_, k)
-    if vim.islist(k) then
-      print('is list')
-      return add(k)
-    end
-
-    print('is not list')
-    register_toggles(k)
   end,
 })
-
-return M

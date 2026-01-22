@@ -1,4 +1,9 @@
 {
+  "iter": {
+    "prefix": "iter",
+    "body": "vim.iter($1)\n  :${0}",
+    "description": ""
+  },
   "M": {
     "body": "local M = {}\n\n$0\n\nreturn M",
     "description": "Module skeleton",
