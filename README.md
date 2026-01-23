@@ -5,8 +5,14 @@ My (n)vim configuration.
 ## TODO
 
 - [ ] Who is VIMDIR? VIMHOME?
+- [ ] vim-nvim notification library
 - [ ] <M-.> does what?
 - [ ] `edit = '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})'`
+
+## Bugs
+
+`https://github.com/folke/lazydev.nvim/issues/136#issuecomment-3773651709`
+
 
 ## vim pipes
 

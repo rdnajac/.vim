@@ -178,4 +178,4 @@ local _key_counts = function()
 end
 
 return M
--- vim: fdl=1 fdm=expr fdl=5
+-- vim: fdl=1 fdm=expr

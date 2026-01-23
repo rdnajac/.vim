@@ -32,7 +32,6 @@ return {
   },
   ['<leader>uu'] = {
     name = 'LastStatus',
-    -- get = function() return vim.o.laststatus > 0 end,
     get = function() return vim.o.laststatus > 0 end,
     set = function(state)
       if not state then

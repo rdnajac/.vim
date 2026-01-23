@@ -289,9 +289,9 @@ nnoremap      <C-e>      <C-^>
 nnoremap <C-w><C-e> <C-w><C-^>
 " see `:h sbp`
 
-for [lhs, rhs] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
-  execute printf('nnoremap <S-%s> <Cmd>wincmd %s<CR>', lhs, rhs)
-  execute printf('tnoremap <S-%s> <Cmd>wincmd %s<CR>', lhs, rhs)
+for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
+  execute $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
+  execute $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
 endfor
 
 " TODO: S-Tab not detected?
@@ -319,10 +319,11 @@ nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
 nnoremap <Bslash>i  <Cmd>call edit#('~/.vim/init.lua')<CR>
 nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 
+" jump to specific modules under lua/
 for [k, v] in items({
       \ 'n' : 'nvim',
       \ 'k' : 'nvim/keys',
-      \ 'p' : 'nvim/util/plug',
+      \ 'p' : 'plug',
       \ 'P' : 'plugins',
       \ 'u' : 'nvim/util',
       \ })
@@ -367,8 +368,8 @@ xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
 nnoremap gcd :Gcd<Bar>pwd<CR>
 
 " open file in a new window when or jump to line number when appropriate
-nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
-      \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
+" nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
+      " \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
 
 " select last changed text (ie pasted text)
 " TODO: does gv already do this?
