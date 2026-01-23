@@ -21,8 +21,7 @@ local mappings = {
 }
 
 for _, map in ipairs(mappings) do
-  local lhs, rhs, desc = unpack(map)
-  vim.keymap.set('n', lhs, rhs, { buffer = true, desc = desc })
+  vim.keymap.set('n', map[1], map[2], { buffer = true, desc = map[3] })
 end
 
 vim.b.minisurround_config = {

@@ -13,30 +13,33 @@
 ---@field toggles? table<string, string|fun()|table>
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
-local Plugin = {}
+local Plugin = {
+  enabled = true,
+  did_setup = false,
+}
 Plugin.__index = Plugin
 
+-- TODO: add the other validators...
 function Plugin.new(...)
-  local args = { ... }
-  local t, str
-  for _, arg in ipairs(args) do
-    if type(arg) == 'table' then
-      t = arg
-    elseif type(arg) == 'string' then
-      str = arg
+  function Plugin.new(...)
+    local self = {}
+
+    for i = 1, select('#', ...) do
+      local v = select(i, ...)
+      if type(v) == 'table' then
+        self = vim.tbl_deep_extend('force', self, v)
+      elseif type(v) == 'string' then
+        self[1] = self[1] or v
+      end
     end
+
+    vim.validate('[1]', self[1], 'string')
+    vim.validate('keys', self.keys, vim.islist, true)
+    vim.validate('opts', self.opts, { 'table', 'function' }, true)
+    vim.validate('toggles', self.toggles, 'table', true)
+
+    return setmetatable(self, Plugin)
   end
-  vim.validate('t', t, 'table')
-  -- vim.validate('str', str, 'string', true)
-  if not t[1] and str then
-    t[1] = str
-  end
-  vim.validate('[1]', t[1], 'string')
-  local self = setmetatable(t, Plugin)
-  self.did_setup = false
-  self.enabled = self.enabled or true
-  self.name = self[1]:match('[^/]+$') -- `repo` part of `user/repo`
-  return self
 end
 
 ---@class plugin.Data passed as `spec.data` to `vim.pack.add()`
@@ -52,9 +55,7 @@ function Plugin:tospec()
     name = self.name or self[1]:match('[^/]+$'),
     data = self.data or {
       build = self.build,
-      keys = self.keys,
       setup = function() return self:setup() end,
-      toggles = self.toggles,
     },
   }
 end
@@ -72,29 +73,45 @@ local on_event = function(event, cb)
   })
 end
 
+function Plugin:modname()
+  local name = self.name or self[1]:match('[^/]+$')
+  return name:gsub('%.nvim$', '')
+end
+
+function Plugin:register_keys()
+  local _keys = require('nvim.keys')
+  if self.keys then
+    _keys.map(self.keys)
+  end
+  if self.toggles then
+    for key, v in pairs(self.toggles) do
+      _keys.map_snacks_toggle(key, v)
+    end
+  end
+end
+
 --- Call the `Plugin`'s `config` function if it exists, otherwise
 --- call the named module's `setup` function with `opts` they exist.
 function Plugin:setup()
-  local function setup()
+  local function _setup()
     if self.did_setup then
       return
     end
     local opts = vim.is_callable(self.opts) and self.opts() or self.opts
     if type(opts) == 'table' then
-      local modname = self.name:gsub('%.nvim$', '')
-      require(modname).setup(opts)
+      require(self:modname()).setup(opts)
     elseif vim.is_callable(self.config) then
       self.config()
-    else
-      return
     end
+    self:register_keys()
     self.did_setup = true
   end
-  return self.event and on_event(self.event, setup) or setup()
+  return self.event and on_event(self.event, _setup) or _setup()
 end
 
+---@diagnostic disable-next-line
+local packadd = function(specs) vim.pack.add(specs) end
+
 return setmetatable(Plugin, {
-  __call = function(_, ...)
-    return Plugin.new(...)
-  end,
+  __call = function(_, ...) return Plugin.new(...) end,
 })

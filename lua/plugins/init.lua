@@ -1,6 +1,14 @@
 local nv = _G.nv or require('nvim')
 
 local M = {
+  ['rdnajac/vim-lol'] = {
+    enabled = true,
+    keys = vim
+      .iter({ 'extra', 'brackets', 'pickerpairs' })
+      :map(function(mod) return require('nvim.keys.' .. mod) end)
+      :fold({}, function(acc, src) return vim.list_extend(acc, src) end),
+    toggles = require('munchies.toggles'),
+  },
   ['nvim-mini/mini.nvim'] = {
     config = require('nvim.mini').setup,
     toggles = {
@@ -36,6 +44,7 @@ local M = {
     },
   },
   ['folke/sidekick.nvim'] = {
+    enabled = true,
     ---@type sidekick.Config
     opts = {
       cli = { win = { layout = 'float' } },
@@ -135,7 +144,7 @@ local M = {
     },
   },
   ['R-nvim/R.nvim'] = {
-    enabled = false,
+    enabled = true,
     config = function()
       require('r').setup({
         R_args = { '--quiet', '--no-save' },

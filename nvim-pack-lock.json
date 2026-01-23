@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "c193a580aa65eed29a346552a1ad3a85f0b4b9b9",
+      "rev": "c33cdd96b7783dff33ad26c9666549f34cff81aa",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "820f1ddf634ec267412e403711bf74be26cac677",
+      "rev": "b137f63d89d0285ca76eed12e1923220e0aff8c1",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "bullets.vim": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "c163117900c17d4abf30bc09452a261c8536060c",
+      "rev": "9b935c218ddba02e5dc75c94f90143bce1f7c646",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "ec034813775d7e2974c7551c8c34499a828963f8",
+      "rev": "88f1dfc211c3a2fb47f1451fd5edc972ec697e58",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
@@ -87,6 +87,10 @@
     "vim-fugitive": {
       "rev": "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4",
       "src": "https://github.com/tpope/vim-fugitive.git"
+    },
+    "vim-lol": {
+      "rev": "8b8ea9b252a2c25294b981e97bc007a212e850ca",
+      "src": "https://github.com/rdnajac/vim-lol.git"
     },
     "vim-scriptease": {
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",

@@ -52,8 +52,8 @@ local function parse_git_status(git_status_stdout, git_ls_tree_stdout, cwd)
     local working_status = line:sub(2, 2)
     local filename = line:sub(4):gsub('/$', '')
 
-    if in_subdir then
-      filename = vim.startswith(filename, rel_path .. '/') and filename:sub(#rel_path + 2) or nil
+    if in_subdir and filename then
+      filename = vim.startswith(filename, rel_path .. '/') and filename:sub(#rel_path + 2)
     end
 
     if filename then
