@@ -128,5 +128,5 @@ end
 local packadd = function(specs) vim.pack.add(specs) end
 
 return setmetatable(Plugin, {
-  __call = function(_, ...) return Plugin.new(...) end,
+  __call = function(_, ...) return Plugin.new(...):tospec() end,
 })

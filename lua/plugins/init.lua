@@ -1,6 +1,7 @@
 local nv = _G.nv or require('nvim')
 
 local M = {
+  ['rdnajac/.vim'] = { enabled = false },
   ['rdnajac/vim-lol'] = {
     enabled = true,
     keys = vim

@@ -54,19 +54,23 @@ local opts = {
 }
 Snacks.setup(opts)
 
---- 3. global state, overrides, nightly features
+--- 3. make nvim state globally available
 _G.nv = require('nvim')
+
+-- override defaults
 -- vim.notify = nv.notify
+--
+-- BUG: ui2 error on declining to install
+vim.o.cmdheight = 0 -- XXX: experimental!
+require('vim._extui').enable({})
 
 --- 4. load the plugin table and convert to specs
 local specs = vim
   .iter(require('plugins'))
   :filter(function(_, v) return v.enabled ~= false end)
   :map(require('plug') --[[@as fun()]])
-  :map(function(p) return p:tospec() end)
   :totable()
 
-require('vim._extui').enable({})
 --- 5. add plugins via `vim.pack.add` with custom loader
 --- that calls the plugin's setup function with opts table
 ---@param plug_data {spec: vim.pack.Spec, path: string}
@@ -79,8 +83,4 @@ end
 -- since the table containing the setup function is already cached
 vim.pack.add(specs, { load = _load })
 
--- BUG: ui2 error on declining to install
-vim.o.cmdheight = 0 -- XXX: experimental!
-require('vim._extui').enable({})
-
--- vim: fdl=0 fdm=expr foldminlines=9
+-- vim: fdl=0 fdm=expr

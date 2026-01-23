@@ -32,7 +32,7 @@ set showmatch
 " fold {{{ 2
 set foldlevel=99
 " set foldlevelstart=99
-" set foldminlines=3
+set foldminlines=5
 set foldopen+=insert,jump
 set foldmethod=marker
 

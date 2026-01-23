@@ -108,7 +108,7 @@ local _load = function()
   return opts, colors, groups
 end
 
-  local opts = require('tokyonight.config').extend(_opts())
+local opts = require('tokyonight.config').extend(_opts())
 print(opts)
 
 --- Call setup and store results on this module

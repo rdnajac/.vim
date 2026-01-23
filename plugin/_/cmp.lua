@@ -20,7 +20,7 @@ if Snacks then
   toggle_inline_completion:map('<leader>ai')
 end
 
--- FIXME: 
+-- FIXME:
 -- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
 -- vim.api.nvim_create_autocmd('User', {
 --   group = aug,
