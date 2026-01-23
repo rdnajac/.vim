@@ -2,14 +2,7 @@
 -- local dir = vim.fn.fnamemodify(me, ':p:h')
 -- local files = vim.fn.globpath(dir, '*', false, true)
 
-vim.schedule(function()
-  -- XXX: experimental!
-  vim.o.cmdheight = 0
-  -- BUG: ui2 error on declining to install plugins
-  require('vim._extui').enable({})
-end)
-
--- see `vim._defer_require
+-- see `vim._defer_require`
 local _submodules = {
   blink = true,
   keys = true,

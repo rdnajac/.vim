@@ -56,7 +56,7 @@ Snacks.setup(opts)
 
 --- 3. global state, overrides, nightly features
 _G.nv = require('nvim')
-vim.notify = nv.notify
+-- vim.notify = nv.notify
 
 --- 4. load the plugin table and convert to specs
 local specs = vim
@@ -66,7 +66,7 @@ local specs = vim
   :map(function(p) return p:tospec() end)
   :totable()
 
--- require('vim._extui').enable({})
+require('vim._extui').enable({})
 --- 5. add plugins via `vim.pack.add` with custom loader
 --- that calls the plugin's setup function with opts table
 ---@param plug_data {spec: vim.pack.Spec, path: string}
@@ -78,5 +78,9 @@ end
 -- TODO: alternatively, use default load and call each setup after
 -- since the table containing the setup function is already cached
 vim.pack.add(specs, { load = _load })
+
+-- BUG: ui2 error on declining to install
+vim.o.cmdheight = 0 -- XXX: experimental!
+require('vim._extui').enable({})
 
 -- vim: fdl=0 fdm=expr foldminlines=9

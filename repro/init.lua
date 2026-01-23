@@ -1,9 +1,9 @@
-#!/usr/bin/env -S NVIM_APPNAME=.vim/repro nvim -u
-local root = vim.fn.expand('~/.vim/repro')
+#!/usr/bin/env -S NVIM_APPNAME=.repro nvim -u
 
-for _, d in ipairs({ 'config', 'data', 'state', 'cache' }) do
-  local var = ('XDG_%s_HOME'):format(d:upper())
-  vim.env[var] = vim.fs.joinpath(root, d)
+local root = vim.fn.expand('~/.repro')
+-- set stdpaths to use  a temporary directory
+for _, name in ipairs({ 'config', 'data', 'state', 'cache' }) do
+  vim.env[('XDG_%s_HOME'):format(name:upper())] = root .. '/' .. name
 end
 
 local specs = {
@@ -14,17 +14,6 @@ local specs = {
 local function gh(user_repo) return 'https://github.com/' .. user_repo .. '.git' end
 
 local plugs = vim.tbl_map(gh, specs)
-
--- vim.pack.add(plugs, { confirm = true, load = false })
+vim.o.cmdheight = 0
+require('vim._extui').enable({})
 vim.pack.add(plugs)
-
--- local specs = {
---   'folke/tokyonight.nvim',
---   'folke/snacks.nvim',
--- }
--- -- info(vim.tbl_map(gh, specs))
--- vim.pack.add(, { confirm = false })
---
--- vim.cmd([[
---   color tokyonight
--- ]])

@@ -14,32 +14,47 @@
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
 local Plugin = {
-  enabled = true,
   did_setup = false,
+  enabled = true,
 }
 Plugin.__index = Plugin
 
--- TODO: add the other validators...
-function Plugin.new(...)
-  function Plugin.new(...)
-    local self = {}
+---@diagnostic disable-next-line
+local function _resolve_self(...)
+  local self = {}
 
-    for i = 1, select('#', ...) do
-      local v = select(i, ...)
-      if type(v) == 'table' then
-        self = vim.tbl_deep_extend('force', self, v)
-      elseif type(v) == 'string' then
-        self[1] = self[1] or v
-      end
+  for i = 1, select('#', ...) do
+    local v = select(i, ...)
+    if type(v) == 'table' then
+      self = vim.tbl_deep_extend('force', self, v)
+    elseif type(v) == 'string' then
+      self[1] = self[1] or v
     end
-
-    vim.validate('[1]', self[1], 'string')
-    vim.validate('keys', self.keys, vim.islist, true)
-    vim.validate('opts', self.opts, { 'table', 'function' }, true)
-    vim.validate('toggles', self.toggles, 'table', true)
-
-    return setmetatable(self, Plugin)
   end
+
+  return self
+end
+
+-- -- FIXME: cannot use '...' outside a vararg function
+-- local function _resolve_self_it(...)
+--   return vim
+--     .iter(1, select('#', ...))
+--     :map(function(i) return select(i, ...) end)
+--     :fold({}, function(acc, v)
+--       v = type(v) == 'table' and v or { v }
+--       return vim.tbl_deep_extend('force', acc, v)
+--     end)
+-- end
+
+function Plugin.new(...)
+  local self = _resolve_self(...)
+
+  vim.validate('[1]', self[1], 'string')
+  vim.validate('keys', self.keys, vim.islist, true)
+  vim.validate('opts', self.opts, { 'table', 'function' }, true)
+  vim.validate('toggles', self.toggles, 'table', true)
+
+  return setmetatable(self, Plugin)
 end
 
 ---@class plugin.Data passed as `spec.data` to `vim.pack.add()`
