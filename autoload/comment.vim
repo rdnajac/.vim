@@ -1,5 +1,6 @@
 " autoload/comment.vim
 " NOTE:  is <ESC>
+" TODO: check if in cmment before gcc
 function! s:insert_comment(tag, above) abort
   execute 'normal ' . (a:above ? 'O' : 'o') . a:tag . 'gcc'
   call feedkeys('A')

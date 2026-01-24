@@ -126,7 +126,6 @@ M.opts = {
 
 M.setup = function()
   -- require('mini.misc').setup_termbg_sync()
-  -- for minimod, opts in pairs(nv.mini.opts) do
   for minimod, opts in pairs(M.opts) do
     -- call set up for each available module
     opts = vim.is_callable(opts) and opts() or opts
@@ -135,3 +134,4 @@ M.setup = function()
 end
 
 return M
+-- vim: fdl=1 fdm=expr

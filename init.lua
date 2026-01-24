@@ -54,33 +54,22 @@ local opts = {
 }
 Snacks.setup(opts)
 
---- 3. make nvim state globally available
+--- 3. global config state
 _G.nv = require('nvim')
 
--- override defaults
--- vim.notify = nv.notify
---
--- BUG: ui2 error on declining to install
-vim.o.cmdheight = 0 -- XXX: experimental!
-require('vim._extui').enable({})
-
---- 4. load the plugin table and convert to specs
-local specs = vim
+--- 4. import plugin table and convert to specs
+nv.specs = vim
   .iter(require('plugins'))
   :filter(function(_, v) return v.enabled ~= false end)
   :map(require('plug') --[[@as fun()]])
   :totable()
 
---- 5. add plugins via `vim.pack.add` with custom loader
---- that calls the plugin's setup function with opts table
+--- 5. `packadd` plugins with custom loader for setup
 ---@param plug_data {spec: vim.pack.Spec, path: string}
-local _load = function(plug_data)
+local function _load(plug_data)
   vim.cmd.packadd({ plug_data.spec.name, bang = true })
-  vim.tbl_get(plug_data, 'spec', 'data', 'setup')()
+  return vim.tbl_get(plug_data.spec, 'data', 'setup')()
 end
 
--- TODO: alternatively, use default load and call each setup after
--- since the table containing the setup function is already cached
-vim.pack.add(specs, { load = _load })
-
+vim.pack.add(nv.specs, { load = _load })
 -- vim: fdl=0 fdm=expr

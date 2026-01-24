@@ -9,7 +9,7 @@ local formats = {
   module = function(module) return module end,
   require = function(module) return ([[require('%s')]]):format(module) end,
   require_func = function(module)
-    -- TODO: make this gopd
+    -- TODO: make this good
     if vim.trim(vim.fn.expand('<cword>')) == '' then
       return ([[require('%s')]]):format(module)
     end

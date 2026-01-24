@@ -1,9 +1,7 @@
 -- TODO: no snippets in middle of word
 -- `https://cmp.saghen.dev/`
-local opts = require('nvim.blink.opts')
 local providers = require('nvim.blink.providers')
-
-opts.sources = {
+local sources = {
   ---@return blink.cmp.SourceList[]
   default = function()
     return vim.tbl_filter(
@@ -17,6 +15,7 @@ opts.sources = {
   },
 }
 
+-- -- add LazyDev provider if available
 -- if pcall(require, 'lazydev.integrations.blink') then
 providers.lazydev = {
   name = 'LazyDev',
@@ -25,12 +24,12 @@ providers.lazydev = {
 }
 -- end
 
-local extras = {}
+local specs = {}
 
-opts.sources.providers = vim
-  .iter(require('nvim.blink.extras'))
+sources.providers = vim
+  .iter(require('nvim.blink.specs'))
   :fold(providers, function(acc, repo, config)
-    extras[#extras + 1] = repo
+    specs[#specs + 1] = repo
     return vim.tbl_extend('force', acc, config)
   end)
 
@@ -40,9 +39,10 @@ local get_providers = function(mode)
   return vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
 end
 
-local M = {
-  opts = opts,
-  extras = extras,
+return {
+  completion = require('nvim.blink.completion'),
+  specs = specs,
+  sources = sources,
   status = {
     function()
       return vim
@@ -53,5 +53,3 @@ local M = {
     cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end,
   },
 }
-
-return M

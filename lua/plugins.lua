@@ -11,7 +11,13 @@ local M = {
     toggles = require('munchies.toggles'),
   },
   ['nvim-mini/mini.nvim'] = {
-    config = require('nvim.mini').setup,
+    config = function()
+      -- require('mini.misc').setup_termbg_sync()
+      vim
+        .iter(nv.mini.opts)
+        :map(function(k, v) return 'mini.' .. k, vim.is_callable(v) and v() or v end)
+        :each(function(modname, opts) require(modname).setup(opts) end)
+    end,
     toggles = {
       ['<leader>uG'] = {
         name = 'MiniDiff Signs',
@@ -114,8 +120,37 @@ local M = {
     end,
   },
   ['mason-org/mason.nvim'] = {
-    opts = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
+    opts = {
+      package_installed = '✓',
+      package_pending = '➜',
+      package_uninstalled = '✗',
+    },
     build = vim.cmd.MasonUpdate,
+  },
+  ['nvim-lualine/lualine.nvim'] = {
+    enabled = false,
+    -- `https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets`
+    opts = {
+      options = {
+        component_separators = { left = '', right = '' },
+        -- section_separators = nv.icons.sep.section.rounded,
+        section_separators = { left = '', right = '' },
+        disabled_filetypes = {
+          statusline = { pattern = 'snacks_dashboard' },
+          winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_list', 'snacks_picker_input' },
+          tabline = { 'snacks_dashboard' },
+        },
+        ignore_focus = {
+          -- 'man',
+          -- 'help',
+        },
+        -- theme = {
+        --   normal = { a = 'Chromatophore_a', b = 'Chromatophore_b', c = 'Chromatophore_c' },
+        -- },
+        -- use_mode_colors = false,
+      },
+      extensions = { 'man' },
+    },
   },
   ['nvim-treesitter/nvim-treesitter'] = {
     build = function()
@@ -160,17 +195,82 @@ local M = {
     end,
   },
   ['monaqa/dial.nvim'] = {
-    config = function() require('plugins.dial') end,
-    lazy = true,
+    config = function() require('nvim.keys.dial') end,
+    -- lazy = true,
+    -- keys = {
+    --   { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
+    --   { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
+    --   { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
+    --   { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
+    -- },
+  },
+  ['NStefan002/screenkey.nvim'] = {
+    enabled = false,
+    opts = function() return require('nvim.keys.opts').screenkey() end,
+    toggles = {
+      ['<leader>uk'] = {
+        name = 'Screenkey floating window',
+        get = function() return require('screenkey').is_active() end,
+        set = function() return require('screenkey').toggle() end,
+      },
+      ['<leader>uK'] = {
+        name = 'Screenkey statusline component',
+        get = function() return require('screenkey').statusline_component_is_active() end,
+        set = function() return require('screenkey').toggle_statusline_component() end,
+      },
+    },
   },
   ['Saghen/blink.cmp'] = {
-    opts = nv.blink.opts,
+    ---@type blink.cmp.Config
+    opts = {
+      cmdline = { enabled = false },
+      -- fuzzy = { implementation = 'lua' },
+      keymap = {
+        ['<Tab>'] = {
+          function(cmp)
+            if cmp.snippet_active() then
+              return cmp.accept()
+            else
+              return cmp.select_and_accept()
+            end
+          end,
+          'snippet_forward',
+          function()
+            if not package.loaded['sidekick'] then
+              return false
+            end
+            return require('sidekick').nes_jump_or_apply()
+          end,
+          function() return vim.lsp.inline_completion.get() end,
+          'fallback',
+        },
+      },
+      signature = {
+        enabled = true,
+        window = { show_documentation = false },
+      },
+      completion = {
+        accept = { auto_brackets = { enabled = true } },
+        documentation = { auto_show = false },
+        ghost_text = { enabled = false },
+        -- keyword = {},
+        list = { selection = { preselect = true, auto_insert = true } },
+        trigger = {
+          show_on_keyword = true,
+          show_on_accept_on_trigger_character = true,
+          show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+        },
+        menu = nv.blink.completion.menu,
+      },
+      providers = nv.blink.providers,
+      sources = nv.blink.sources,
+    },
     -- event = 'InsertEnter',
     build = 'BlinkCmp build',
   },
 }
 
-for _, v in ipairs(nv.blink.extras) do
+for _, v in ipairs(nv.blink.specs) do
   M[v] = {}
 end
 
@@ -186,6 +286,7 @@ local _key_counts = function()
   end
   return ret
 end
+-- print(_key_counts())
 
 return M
 -- vim: fdl=1 fdm=expr
