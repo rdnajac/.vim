@@ -1,65 +1,28 @@
----Sandwich input string between <Cmd> and <CR>.
----@param body string
-local function cmdcr(body)
-  local cmd_sequences = '<Cmd>'
-  local cr_sequences = '<CR>'
-  return cmd_sequences .. body .. cr_sequences
+local SELECT_FMT = '<Cmd>lua require"dial.command".select_augend_%s(%s)<CR>'
+local SETOP_FMT = '<Cmd>let &opfunc="dial#operator#%s_%s"<CR>'
+local TEXTOBJ = '<Cmd>lua require("dial.command").textobj()<CR>'
+
+local function cmd(direction, mode, group, count)
+  if count ~= nil and type(count) ~= 'number' then
+    error('count must be a integer.')
+  end
+
+  local group_arg = group and vim.fn.string(group) or ''
+  local prefix = tostring(count or '')
+
+  local select = string.format(SELECT_FMT, mode, group_arg)
+  local setop = string.format(SETOP_FMT, direction, mode)
+  local textobj = (mode == 'normal' or mode == 'gnormal') and TEXTOBJ or ''
+
+  return prefix .. select .. setop .. 'g@' .. textobj
 end
 
-
----Output command sequence which provides dial operation.
----@param direction direction
----@param mode mode
----@param group? string
----@param count? integer
-local function _cmd_sequence(direction, mode, group, count)
-  local select
-  if group == nil then
-    select = cmdcr([[lua require"dial.command".select_augend_]] .. mode .. '()')
-  else
-    select = cmdcr(
-      [[lua require"dial.command".select_augend_]] .. mode .. [[(]] .. vim.fn.string(group) .. [[)]]
-    )
-  end
-  -- command.select_augend_normal(vim.v.count, group)
-  local setopfunc = cmdcr([[let &opfunc="dial#operator#]] .. direction .. '_' .. mode .. [["]])
-  local textobj = (mode == 'normal' or mode == 'gnormal') and cmdcr([[lua require("dial.command").textobj()]]) or ''
-
-  if count ~= nil then
-    if type(count) ~= 'number' then
-      error('count must be a integer.')
-    end
-    return count .. select .. setopfunc .. 'g@' .. textobj
-  end
-  return select .. setopfunc .. 'g@' .. textobj
-end
-
----Functional interface
----@param direction direction
----@param mode mode
----@param group? string
----@param count? integer
 local function manipulate(direction, mode, group, count)
-  if count == nil then
-    count = vim.v.count1
-  end
   vim.cmd.normal({
-    vim.api.nvim_replace_termcodes(_cmd_sequence(direction, mode, group, count), true, true, true),
+    vim.keycode(cmd(direction, mode, group, count or vim.v.count1)),
     bang = true,
   })
 end
-
-require('dial.map').manipulate('increment', 'gvisual')
-local map = {
-  inc_normal = function(group) return _cmd_sequence('increment', 'normal', group) end,
-  dec_normal = function(group) return _cmd_sequence('decrement', 'normal', group) end,
-  inc_gnormal = function(group) return _cmd_sequence('increment', 'gnormal', group) end,
-  dec_gnormal = function(group) return _cmd_sequence('decrement', 'gnormal', group) end,
-  inc_visual = function(group) return _cmd_sequence('increment', 'visual', group) end,
-  dec_visual = function(group) return _cmd_sequence('decrement', 'visual', group) end,
-  inc_gvisual = function(group) return _cmd_sequence('increment', 'gvisual', group) end,
-  dec_gvisual = function(group) return _cmd_sequence('decrement', 'gvisual', group) end,
-}
 
 local M = {}
 
@@ -68,32 +31,28 @@ local dials_by_ft = {
   zsh = 'sh',
 }
 
+local visual_modes = { v = true, V = true, ['\22'] = true }
+
 ---@param increment boolean
 ---@param g? boolean
-M.dial = function(increment, g)
-  local is_visual = vim.tbl_contains({ 'v', 'V', '\22' }, vim.fn.mode(true))
-
-  ---@type "inc_normal"|"dec_normal"|"inc_gvisual"|"dec_visual"
-  local fn = string.format(
-    '%s%s%s',
-    increment and 'inc' or 'dec',
-    g and '_g' or '_',
-    is_visual and 'visual' or 'normal'
-  )
+function M.dial(increment, g)
+  local is_visual = visual_modes[vim.fn.mode(true)]
+  local mode = (g and 'g' or '') .. (is_visual and 'visual' or 'normal')
+  local direction = increment and 'increment' or 'decrement'
   local group = dials_by_ft[vim.bo.filetype] or 'default'
-  -- XXX: 
-  -- return require('dial.map')[fn](group)
-  return map[fn](group)
+
+  manipulate(direction, mode, group)
 end
 
-for k, v in pairs({
-  ['<C-a>'] = function() return M.dial(true) end,
-  ['<C-x>'] = function() return M.dial(false) end,
-  ['g<C-a>'] = function() return M.dial(true, true) end,
-  ['g<C-x>'] = function() return M.dial(false, true) end,
-}) do
-  vim.keymap.set('n', k, v, { expr = true })
-  vim.keymap.set('x', k, v, { expr = true })
+local keymaps = {
+  ['<C-a>'] = { inc = true },
+  ['<C-x>'] = { inc = false },
+  ['g<C-a>'] = { inc = true, g = true },
+  ['g<C-x>'] = { inc = false, g = true },
+}
+
+for lhs, spec in pairs(keymaps) do
+  vim.keymap.set({ 'n', 'x' }, lhs, function() M.dial(spec.inc, spec.g) end)
 end
 
 local augend = require('dial.augend')
@@ -137,14 +96,8 @@ local groups = {
     augend.hexcolor.new({ case = 'lower' }),
     augend.hexcolor.new({ case = 'upper' }),
   },
-  json = {
-    augend.semver.alias.semver,
-  },
-  markdown = {
-    augend.misc.alias.markdown_header,
-    -- FIXME: doesn't work
-    new({ '[ ]', '[x]' }),
-  },
+  json = { augend.semver.alias.semver },
+  markdown = { augend.misc.alias.markdown_header },
   lua = {
     new({ '_a', '_b', '_c' }, true),
     new({ '_x', '_y', '_z' }, true),
@@ -162,8 +115,6 @@ local groups = {
   },
   vim = {
     new({ 'echom', 'execute' }),
-    -- new({ 'opt', 'start' }),
-    -- new({ 'autoload', 'plugin' }),
   },
 }
 
@@ -181,6 +132,7 @@ end
 
 require('dial.config').augends:register_group(groups)
 
-return setmetatable(M, {
-  __call = function(M, ...) return M.dial(...) end,
-})
+-- setmetatable(M, {
+--   __call = function(M, ...) return M.dial(...) end,
+-- })
+return M
