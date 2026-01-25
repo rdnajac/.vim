@@ -6,9 +6,9 @@ vim.cmd([[ runtime vimrc | colorscheme tokyonight_generated ]])
 
 --- 2. snack attack!
 require('snacks')
-_G.bt = Snacks.debug.backtrace
+-- _G.bt = Snacks.debug.backtrace
 _G.dd = Snacks.debug.inspect
-_G.p = Snacks.debug.profile
+-- _G.p = Snacks.debug.profile
 
 -- optional profiling
 if vim.env.PROF then
