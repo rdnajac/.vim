@@ -116,21 +116,6 @@ return {
     'folke/trouble.nvim',
     enabled = false,
     opts = {},
-    status = function()
-      local trouble = require('trouble')
-      local symbols = trouble.statusline({
-        mode = 'symbols',
-        groups = {},
-        title = false,
-        filter = { range = true },
-        format = '{kind_icon}{symbol.name:Normal}',
-        hl_group = 'lualine_c_normal',
-      })
-      return {
-        symbols and symbols.get,
-        cond = symbols.has,
-      }
-    end,
   },
 }
 -- vim: fdl=1 fdm=expr

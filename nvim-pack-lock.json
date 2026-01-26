@@ -5,7 +5,7 @@
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
-      "rev": "8eb4803da99a575bc827a6c814e63b1053b7002f",
+      "rev": "6d9962946172fda4f25f9f5773b601aa4b2bedaf",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink-cmp-env": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "81aca2f9815e26f638f697df1d828ca290847b64",
+      "rev": "568ede7e79172a0fe7c9d631454a97ad968deaf2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {

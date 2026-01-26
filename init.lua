@@ -54,22 +54,22 @@ local opts = {
 }
 Snacks.setup(opts)
 
---- 3. global config state
+--- 4. global config table
+--- - sets up ui2 (`_extui`) on require
+--- - exposes all utility modules lazily
 _G.nv = require('nvim')
 
---- 4. import plugin table and convert to specs
-nv.specs = vim
-  .iter(require('plugins'))
-  :filter(function(_, v) return v.enabled ~= false end)
-  :map(require('plug') --[[@as fun()]])
-  :totable()
+--- 5. import plugin table and convert to specs
+local Plug = require('plug') --[[@as fun()]]
+local iter = vim.iter(require('nvim.plugins'))
+local specs = iter:filter(function(_, v) return v.enabled ~= false end):map(Plug):totable()
 
---- 5. `packadd` plugins with custom loader for setup
+--- 6. `packadd` plugins with custom loader for setup
 ---@param plug_data {spec: vim.pack.Spec, path: string}
 local function _load(plug_data)
   vim.cmd.packadd({ plug_data.spec.name, bang = true })
   return vim.tbl_get(plug_data.spec, 'data', 'setup')()
 end
 
-vim.pack.add(nv.specs, { load = _load })
+vim.pack.add(specs, { load = _load })
 -- vim: fdl=0 fdm=expr
