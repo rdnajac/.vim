@@ -2,6 +2,7 @@ if !has('nvim')
   finish
 endif
 
+" TODO: just declare the commands used, pick pickers otherwise
 " register commands
 lua vim.schedule(function() require('munchies.command') end)
 command! LazyGit :lua Snacks.lazygit()
@@ -29,7 +30,8 @@ nnoremap <leader>dpf <Cmd>lua Snacks.profiler.pick({ filter = { def_plugin = vim
 nnoremap <leader>dps <Cmd>lua Snacks.profiler.scratch()<CR>
 
 " explorer
-nnoremap <leader>e <Cmd>lua Snacks.explorer()<CR>
+nnoremap <leader>e <Cmd>lua Snacks.explorer.reveal()<CR>
+nnoremap <leader>E <Cmd>lua Snacks.explorer.open()<CR>
 
 " Find mappings
 nnoremap <leader>F <Cmd>lua Snacks.picker.smart()<CR>

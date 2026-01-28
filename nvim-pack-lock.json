@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "c33cdd96b7783dff33ad26c9666549f34cff81aa",
+      "rev": "3e0825258318650c92faa79c49531797e443abbf",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
@@ -40,12 +40,16 @@
       "rev": "9b935c218ddba02e5dc75c94f90143bce1f7c646",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
+    "neovim": {
+      "rev": "027b7d6bbb4f164b95f1588b250a02020d85b029",
+      "src": "https://github.com/neovim/neovim.git"
+    },
     "nvim-lspconfig": {
-      "rev": "92ee7d42320edfbb81f3cad851314ab197fa324a",
+      "rev": "ff9c0af8f9b2097fdd2695058db7e04c193908aa",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-treesitter": {
-      "rev": "568ede7e79172a0fe7c9d631454a97ad968deaf2",
+      "rev": "f8bbc3177d929dc86e272c41cc15219f0a7aa1ac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {

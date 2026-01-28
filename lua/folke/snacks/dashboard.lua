@@ -46,6 +46,7 @@ return {
       { icon = ' ', key = '-', desc = 'Open Directory ', action = ':Explorer' },
       { icon = ' ', key = 'U', desc = 'Update Plugins ', action = ':PlugUpdate' },
       { icon = ' ', key = 'M', desc = 'Mason          ', action = ':Mason' },
+      -- { icon = ' ', key = 'M', desc = 'Mason          ', action = vim.cmd.Mason },
       { icon = '󰒲 ', key = 'G', desc = 'LazyGit        ', action = ':LazyGit' },
       {
         icon = ' ',
@@ -53,6 +54,8 @@ return {
         des = 'Open Config Dir',
         action = [[:exe 'edit ' . stdpath('config')]],
       },
+      -- TODO: better edit shortcuts (that avtually wotk)
+      -- checkhealth command
       { icon = ' ', key = 'D', desc = 'Open Data Dir  ', action = ':e stdpath("data")' },
       { icon = ' ', key = 'R', desc = 'Restart Neovim ', action = ':restart' },
     },

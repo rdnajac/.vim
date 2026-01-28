@@ -1,4 +1,5 @@
 --- init.lua
+-- require('jit.p').start('ri1', '/tmp/profile')
 --- 1. source vimrc
 ---  - relies on autoload/plug.vim to override vim-plug calls
 ---  - enables `vim.loader` and `vim.pack.add`s base plugins
@@ -6,9 +7,9 @@ vim.cmd([[ runtime vimrc | colorscheme tokyonight_generated ]])
 
 --- 2. snack attack!
 require('snacks')
--- _G.bt = Snacks.debug.backtrace
 _G.dd = Snacks.debug.inspect
--- _G.p = Snacks.debug.profile
+_G.bt = Snacks.debug.backtrace
+_G.p = Snacks.debug.profile
 
 -- optional profiling
 if vim.env.PROF then
@@ -54,22 +55,19 @@ local opts = {
 }
 Snacks.setup(opts)
 
---- 4. global config table
---- - sets up ui2 (`_extui`) on require
---- - exposes all utility modules lazily
+--- 3. expose global config table
+--- - sets up ui2 (`_extui`)
+--- - lazily loads utility modules
 _G.nv = require('nvim')
 
---- 5. import plugin table and convert to specs
-local Plug = require('plug') --[[@as fun()]]
-local iter = vim.iter(require('nvim.plugins'))
-local specs = iter:filter(function(_, v) return v.enabled ~= false end):map(Plug):totable()
+--- 5. import plug module convert plugins table to specs
+local Plug = require('plug')
+local plugins = require('plugins')
+local specs = Plug.to_spec(plugins)
 
 --- 6. `packadd` plugins with custom loader for setup
----@param plug_data {spec: vim.pack.Spec, path: string}
-local function _load(plug_data)
-  vim.cmd.packadd({ plug_data.spec.name, bang = true })
-  return vim.tbl_get(plug_data.spec, 'data', 'setup')()
+if vim.v.vim_did_enter == 0 then
+  vim.pack.add(specs, { load = Plug._load })
 end
-
-vim.pack.add(specs, { load = _load })
+-- require('jit.p').stop()
 -- vim: fdl=0 fdm=expr

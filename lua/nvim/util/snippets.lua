@@ -1,10 +1,13 @@
+--- should be able to reag/manage package
+-- fo
+
 --- @class Snippet
 --- @field prefix string
 --- @field body string
 --- @field description string
 
 local snippets_dir = vim.fn.stdpath('config') .. '/snippets'
-local pkg = nv.file.read_json(snippets_dir .. '/package.json')
+local pkg = nv.json.read(snippets_dir .. '/package.json')
 
 --- Load snippet files for a given filetype
 --- @param filetype string The filetype to search for
@@ -38,7 +41,7 @@ local function load_snippets(filetype)
 
   local result = {}
   for _, path in ipairs(paths) do
-    local snippets = nv.file.read_json(path)
+    local snippets = nv.json.read(path)
     if snippets then
       result = vim.tbl_extend('force', result, snippets)
     end

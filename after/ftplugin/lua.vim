@@ -1,7 +1,8 @@
 " let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
 let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 
-setlocal nowrap
+setlocal nowrap           " don't wrap lines
+setlocal formatoptions-=o " don't continue comments with `o`
 
 " TODO: write the snippets
 iabbrev <buffer> fu function()

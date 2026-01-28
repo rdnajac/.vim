@@ -1,4 +1,3 @@
-local M = {}
 -- local me = debug.getinfo(1, 'S').source:sub(2)
 -- local dir = vim.fn.fnamemodify(me, ':p:h')
 -- local files = vim.fn.globpath(dir, '*', false, true)
@@ -25,18 +24,18 @@ local _submodules = {
   treesitter = true,
 }
 
-  -- lazy load runtime modules in the `nv` namespace
-  -- expose all utils on the `nv` module
-local __index = function(t, k)
-  local mod = _submodules[k] and require('nvim.' .. k) or require('nvim.util')[k]
-  rawset(t, k, mod)
-  return mod
+--- works as a `createfn` for defaulttable or the __index metamethod
+---@param k key
+---@return table the module under `nvim/` or `nvim/util/`
+local _index = function(k)
+  return _submodules[k] and require('nvim.' .. k) or require('nvim.util')[k]
 end
 
--- index = function(k)
--- return vim.defaulttable(function(k)
-
-setmetatable(M, {
-  __index = __index,
-})
-return M
+return vim.defaulttable(_index)
+-- return setmetatable({}, {
+--   __index = function(t, k)
+--     local mod = _index(k)
+--     rawset(t, k, mod)
+--     return mod
+--   end,
+-- })

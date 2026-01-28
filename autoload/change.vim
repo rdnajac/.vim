@@ -1,3 +1,4 @@
+" TODO: requires surround... maybe move to surround dedicated plugin
 " change the closest quote to the other type (single to double or vice versa)
 "   'string'
 "   "string"
@@ -20,13 +21,3 @@ function! change#quote() abort
   endfor
   return ''
 endfunction
-
-function s:chsh(shell) abort
-  let &shell = systemlist('which ' . a:shell)[0]
-endfunction
-" call s:chsh('dash')
-
-function! change#shell(s) abort
-  return s:chsh(a:s)
-endfunction
-" call change#shell('dash')

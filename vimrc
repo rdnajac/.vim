@@ -29,6 +29,24 @@ set shortmess+=aAcCI
 set shortmess-=o
 set showmatch
 
+" appearance of chars {{{ 2
+set fillchars= " reset
+" set fillchars+=diff:╱
+" set fillchars+=eob:,
+" set fillchars+=stl:\ ,
+set fillchars+=fold:\ ,
+set fillchars+=foldclose:▸,
+set fillchars+=foldopen:▾,
+" set fillchars+=foldsep:\ ,
+
+set list
+set listchars= " reset
+set listchars+=trail:¿,
+set listchars+=tab:→\ ",
+set listchars+=extends:…,
+set listchars+=precedes:…,
+set listchars+=nbsp:+
+
 " fold {{{ 2
 set foldlevel=99
 " set foldlevelstart=99
@@ -324,7 +342,7 @@ for [k, v] in items({
       \ 'n' : 'nvim',
       \ 'k' : 'nvim/keys',
       \ 'p' : 'plug',
-      \ 'P' : 'plugins',
+      \ 'P' : 'nvim/plugins',
       \ 'u' : 'nvim/util',
       \ })
   execute $'nnoremap <Bslash>{k}  <Cmd>call edit#luamod("{v}")<CR>'
@@ -346,57 +364,21 @@ nnoremap <leader><Tab>] <Cmd>tabnext<CR>
 nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
 
 " key pairs in normal mode {{{2
-" `https://gist.github.com/romainl/1f93db9dc976ba851bbb`
-" `cd` cm co cp `cq` `cr` `cs` cu cx cy cz
-" `dc` dm dq dr `ds` du dx `dy` dz
-" `gb` `gc` `gl` `gs` `gy`
-" vm vo vq `vv` vz
-" `yc` yd ym `yo` `yp` yq `yr` `ys` `yu` yx yz
-" `zq` ZA ... ZP, `ZQ` ... `ZX` `ZZ`
-
-" FIXME: this isn't working...
-nnoremap <expr> cq change#quote()
-
-" delete/yank comment
-nmap dc dgc
-nmap yc ygc
-
-nnoremap gb vi'"zy:!open https://github.com/<C-R>z<CR>
-xnoremap gb    "zy:!open https://github.com/<C-R>z<CR>
-
-" `fugitive`
-nnoremap gcd :Gcd<Bar>pwd<CR>
-
-" open file in a new window when or jump to line number when appropriate
-" nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
-      " \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
+" see `doc/keys.md`
 
 " select last changed text (ie pasted text)
-" TODO: does gv already do this?
+" TODO: doesn't gv already do this? see: *gv* *v_gv* *reselect-Visual*
 nnoremap gV `[V`]
 
 nnoremap zq <Cmd>Format<CR>
-nnoremap ZX <Cmd>Zoxide<CR>
 
 " resursive keymaps
-nmap gy "xyygcc"xp<Up>
-nmap gY "xyygcc"xP
-nmap vv Vgc
 
-" bracket mappings
-nnoremap [o <C-o>
-nnoremap ]o <C-i>
-
-" assumes `unimpaired` exchange
+" TODO: move to 'brackets'
+" requires `vim-unimpaired` exchange
 nmap zJ ]ekJ
 
-" `surround`
-nmap S viWS
-vmap ` S`
-vmap F Sf
-
-" qol {{{2
-" change/delete current word {{{3
+" change/delete current word {{{2
 nnoremap c*   *``cgn
 nnoremap c#   *``cgN
 nnoremap cg* g*``cgn
@@ -406,44 +388,25 @@ nnoremap d#   *``dgN
 nnoremap dg* g*``dgn
 nnoremap dg# g*``dgN
 
-" better indenting {{{3
+" better indenting {{{2
 vnoremap < <gv
 vnoremap > >gv
 nnoremap > V`]>
 nnoremap < V`]<
 
-" substitutions {{{3
+" substitutions {{{2
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
 xnoremap s :s/\%V<C-R><C-W>/
 
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
 nnoremap g. :%s//<C-r>./g<ESC>
 
-" folding {{{3
-" better search if auto pausing folds
-" set foldopen-=search
-" nnoremap <silent> / zn/
-
-nnoremap          zv zMzvzz
-nnoremap <silent> zj zcjzOzz
-nnoremap <silent> zk zckzOzz
-" close folds when moving left at beginning of line
-" TODO: make it wrap like whichwrap+=h or (col('.') == 1 ? 'gk$' : 'h')
-nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
-
-" save, override, and restore commentstring to get nice folds
-xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '.s \| '<,'>fold \| let &l:cms=s<CR>
-
-" you know what I mean... {{{3
 " for act in ['c', 'd', 'y'] " change, delete, yank
 "   for obj in ['w'] " paragraph, word
 "     execute $'nnoremap {act}{obj} {act}i{obj}'
 "     execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
 "   endfor
 " endfor
-
-" don't capture whitespace in `gc`
-nmap gcap gcip
 
 " command definitions are more robust than abbreviations
 command! W w!
@@ -465,26 +428,6 @@ inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
 
-" insert comments {{{3
-let s:comment_map = {
-      \ 'o': '',
-      \ 'b': 'BUG: ',
-      \ 'f': 'FIXME: ',
-      \ 'h': 'HACK: ',
-      \ 'n': 'NOTE: ',
-      \ 'p': 'PERF: ',
-      \ 't': 'TODO: ',
-      \ 'x': 'XXX: ',
-      \ 'i': 'stylua: ignore',
-      \ }
-
-" map `co` and `cO` to insert comments with specific tags
-for [key, val] in items(s:comment_map)
-  execute printf('nmap co%s :call comment#below("%s")<CR>', key, val)
-  execute printf('nmap cO%s :call comment#above("%s")<CR>', key, val)
-  execute printf('nmap co%s :call comment#above("%s")<CR>', toupper(key), val)
-endfor
-
 " easier completion  {{{3
 inoremap <silent> ,o <C-x><C-o>
 " inoremap <silent> ,f <C-x><C-f>
@@ -494,6 +437,7 @@ inoremap <silent> ,o <C-x><C-o>
 " inoremap <silent> ,t <C-x><C-]>
 " inoremap <silent> ,u <C-x><C-u>
 inoremap <silent> ,i <Cmd>Icons<CR>
+
 " cmdline {{{2
 " completion {{{3
 " see `:h |cmdline-completion|.`
@@ -507,9 +451,9 @@ set wildmode=longest:full,full " Same as above, but cycle through the first patc
 " set wildmode=noselect:full   " Show 'wildmenu' without selecting, then cycle full matches
 " set wildmode=noselect:lastused,full " Same as above, but buffer matches are sorted by time last used
 
-" Up and Down arrow keys to navigate completion menu
+" navigate completion menu with arrow keys
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
-cnoremap <expr> <Up> wildmenumode() ? "\<C-p>" : "\<Up>"
+cnoremap <expr> <Up>   wildmenumode() ? "\<C-p>" : "\<Up>"
 
 " abbreviations {{{3
 nnoremap ?? :verbose set ?<Left>

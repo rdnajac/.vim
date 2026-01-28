@@ -1,3 +1,10 @@
 #!/usr/bin/env -S nvim -l
 
-vim.pack.add({ nv.gh('neovim/neovim') }, { load = false })
+local spec = {
+  src = 'https://github.com/neovim/neovim.git',
+  data = {
+    build = function() end,
+  },
+}
+
+vim.pack.add({ spec }, { load = false })

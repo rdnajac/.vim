@@ -19,7 +19,7 @@ local Plugin = {
 }
 Plugin.__index = Plugin
 
----@diagnostic disable-next-line
+--- merge and convert dict-like k, v params
 local function _resolve_self(...)
   local self = {}
 
@@ -62,8 +62,8 @@ end
 ---@field setup? fun():nil Setup function to call after loading the plugin.
 
 --- Convert the `Plugin` to a `vim.pack.Spec` for use with `vim.pack`.
----@return vim.pack.SpecResolved|nil
-function Plugin:tospec()
+---@return vim.pack.Spec
+function Plugin:to_spec()
   return {
     src = self.src or nv.gh(self[1]),
     version = self.version or self.branch or nil,
@@ -124,9 +124,17 @@ function Plugin:setup()
   return self.event and on_event(self.event, _setup) or _setup()
 end
 
----@diagnostic disable-next-line
-local packadd = function(specs) vim.pack.add(specs) end
+---@param ... any
+---@return vim.pack.Spec
+local call = function(...) return Plugin.new(...):to_spec() end
+local to_spec = function(plugins)
+  return vim.iter(plugins):filter(function(_, v) return v.enabled ~= false end):map(call):totable()
+end
 
-return setmetatable(Plugin, {
-  __call = function(_, ...) return Plugin.new(...):tospec() end,
-})
+---@param plug_data {spec: vim.pack.Spec, path: string}
+local function _load(plug_data)
+  vim.cmd.packadd({ plug_data.spec.name, bang = true })
+  return vim.tbl_get(plug_data.spec, 'data', 'setup')()
+end
+
+return { to_spec = to_spec, _load = _load }

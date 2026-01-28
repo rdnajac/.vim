@@ -1,12 +1,15 @@
 -- TODO: just make everything open a directory in explorer
+-- no really this is a big waste of time
+-- just record the important dirs and perform searches  there 
 local M = {}
 
 local function picker_pair(key, opts)
-  local explorer_opts = vim.deepcopy(opts)
-  explorer_opts.focus = 'input'
-  explorer_opts.confirm = function(p, _) p:action({ 'jump' }) end
-  M[#M + 1] = { '<leader>f' .. key, function() Snacks.picker.explorer(explorer_opts) end }
+  -- local explorer_opts = vim.deepcopy(opts)
+  -- explorer_opts.focus = 'input'
+  -- explorer_opts.confirm = function(p, _) p:action({ 'jump' }) end
+  -- M[#M + 1] = { '<leader>f' .. key, function() Snacks.picker.explorer(explorer_opts) end }
   M[#M + 1] = { '<leader>s' .. key, function() Snacks.picker.grep(opts) end }
+  M[#M + 1] = { '<leader>f' .. key, function() Snacks.picker.files(opts) end }
 end
 
 for k, opts in pairs({

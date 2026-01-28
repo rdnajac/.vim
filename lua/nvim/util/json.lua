@@ -1,3 +1,4 @@
+local nv = _G.nv or require('nvim')
 local M = {}
 
 -- local function format_lines(content)
@@ -33,9 +34,12 @@ M.read = function(filename) return vim.json.decode(nv.file.read(filename)) end
 ---@param filename string
 ---@param contents string|string[]
 M.write = function(filename, contents)
-  return require('nvim.util.file').write_lines(
+  return nv.file.write(
     filename,
-    vim.split(vim.json.encode(contents, { indent = '\t', sort_keys = false }), '\n')
+    table.concat(
+      vim.split(vim.json.encode(contents, { indent = '\t', sort_keys = false }), '\n'),
+      '\n'
+    )
   )
 end
 

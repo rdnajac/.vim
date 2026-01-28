@@ -1,6 +1,0 @@
-[submodule "vim-lol"]
-	path = pack/vimfect/opt/vim-lol
-	url = https://github.com/rdnajac/vim-lol.git
-[submodule "vim-jetpack"]
-	path = pack/vimfect/opt/vim-jetpack
-	url = https://github.com/tani/vim-jetpack.git

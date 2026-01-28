@@ -8,17 +8,22 @@ if !has('nvim')
 endif
 set nocdhome " default on neovim on unix, off on Windows or vim
 
-if !exists('g:plug_home') ||  !exists('g:stdpath')
-  finish
-endif
-let g:mydirs = {
-      \ 'P': g:plug_home,
-      \ 'c': g:stdpath.config,
-      \ 'C': g:stdpath.cache,
-      \ 'd': g:stdpath.data,
-      \ 's': g:stdpath.state
+let s:dirs = {
+      \ '~': $HOME,
+      \ 'V': $VIMRUNTIME,
       \ }
 
-for [key, value] in items(g:mydirs)
+if exists('g:plug_home')
+  let s:dirs.P = g:plug_home
+endif
+
+if exists('g:stdpath')
+  let s:dirs.c = stdpath('config')
+  let s:dirs.C = stdpath('cache')
+  let s:dirs.d = stdpath('data')
+  let s:dirs.s = stdpath('state')
+endif
+
+for [key, value] in items(s:dirs)
   execute $'nnoremap cd{key} <Cmd>edit {value}<CR>'
 endfor

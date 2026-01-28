@@ -110,10 +110,8 @@
     "prefix": "print"
   },
   "return": {
-    "body": [
-      "return ${1:M}$0"
-    ],
-    "description": "return value",
+    "body": "return ${1:M}$0",
+    "description": "return",
     "prefix": "return"
   },
   "Current Win": {
