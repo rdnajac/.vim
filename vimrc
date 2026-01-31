@@ -117,7 +117,8 @@ if exists('*stdpath')
 endif
 
 if !exists('g:plug_home')
-  let g:plug_home = join([ stdpath('data'), 'site', 'pack', 'core', 'opt' ], '/')
+  " let g:plug_home = join([ stdpath('data'), 'site', 'pack', 'core', 'opt' ], '/')
+  let g:plug_home = expand('~/.local/share/nvim/site/pack/core/opt')
 endif
 
 if exists(':restart') == 2
@@ -162,14 +163,18 @@ augroup vimrc
   autocmd!
   au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
-  " au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
-  au BufWritePre * silent! call vim#mkdir#(expand('<afile>'))
-  au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
-  " restore cursor position
+  " create parent directories when saving files
+  au BufWritePre * silent! call vim#mkdir#(expand('<afile>'))
+
+  " automatically reload certain config files when they are saved 
+  " au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
+  " au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
+
+  " restore cursor position upon reopening files
   au BufWinEnter * exec "silent! normal! g`\"zv"
 
-  " immediately quit the command line window
+  " immediately quit the command line window if opened with `q`
   au CmdwinEnter * quit
 
   " automatically reload files that have been changed outside of Vim
@@ -182,30 +187,28 @@ augroup vimrc
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
 
-  au VimLeave * if v:dying | echom "help im dying: " . v:dying | endif
+  au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
 augroup END
 
 augroup vimrc_filetype
   autocmd!
+  " fix JSON conceallevel and use lua formatter
   au FileType json,jsonc,json5 setlocal cole=0 et fex=v:lua.nv.json.format()
+  
+  " close certain buffers with `q`
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
-  au FileType lua,json call vim#auto#braces()
 
+  " don't list certain buffer types (see ...?)
   au FileType man,netrw,snacks_explorer setlocal nobuflisted
 augroup END
 
 " }}}1
-" Section: commands/config/chezmoi {{{1
-for level in keys(g:vim#notify#levels)
-  execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
-	\ toupper(strpart(level, 0, 1)) . strpart(level, 1), level)
-endfor
+" Section: commands/config {{{1
+command! -nargs=* Diff call cmd#diff#(<f-args>)
+command! -nargs=0 Format call cmd#format()
+command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
-command! -nargs=* Diff call diff#wrap(<f-args>)
-command! -nargs=0 Format call vim#cmd#format()
-command! -nargs=1 -complete=customlist,scp#complete Scp call scp#(<f-args>)
-
-let g:eunuch_interpreters = {
+let g:eunuch_interprepers = {
       \ '.':      '/bin/sh',
       \ 'sh':     'bash',
       \ 'bash':   'bash',
@@ -219,23 +222,6 @@ let g:eunuch_interpreters = {
 let g:vimtex_format_enabled = 1              " built-in formatexpr
 let g:vimtex_mappings_disable = {'n': ['K']} " disable normal `K`
 let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
-
-if exists('g:chezmoi#source_dir_path')
-  " let g:chezmoi#source_dir_path = expand('~/.local/share/chezmoi')
-  let g:chezmoi#use_tmp_buffer = 1
-
-  augroup chezmoi
-    autocmd!
-    " automatically `chezmoi add` aliases and binfiles
-    au BufWritePost ~/.bash_aliases,~/bin/* silent! execute
-	  \ '!chezmoi add "%" --no-tty >/dev/null 2>&1' | redraw!
-
-    " immediately `chezmoi apply` changes when writing to a chezmoi file
-    exe printf('au BufWritePost %s/* silent! !chezmoi apply --force --source-path "%%"',
-	  \ g:chezmoi#source_dir_path)
-
-  augroup END
-endif
 
 " }}}1
 " Section: keymaps {{{1
@@ -272,9 +258,9 @@ else
 endif
 
 " debug
-nnoremap <leader>db <Cmd>call debug#buffer()<CR>
-nnoremap <leader>df <Cmd>call debug#fold()<CR>
-nnoremap <leader>ds <Cmd>call debug#shell()<CR>
+nnoremap <leader>db <Cmd>call vim#debug#buffer()<CR>
+nnoremap <leader>df <Cmd>call vim#debug#fold()<CR>
+nnoremap <leader>ds <Cmd>call vim#debug#shell()<CR>
 if has('nvim')
   nnoremap <leader>dB <Cmd>Blink<CR>
   nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
@@ -290,11 +276,6 @@ nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
-
-" git
-nnoremap <leader>ga <Cmd>!git add %<CR>
-nnoremap <leader>gN <Cmd>execute '!open' git#url('neovim/neovim')<CR>
-nnoremap <leader>gZ <Cmd>execute '!open' git#url('lazyvim/lazyvim')<CR>
 
 " navigate buffers, windows, and tabs {{{2
 nnoremap <BS> :bprevious<CR>

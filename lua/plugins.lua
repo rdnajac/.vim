@@ -5,7 +5,7 @@ local M = {
   ['rdnajac/vim-lol'] = {
     enabled = true,
     keys = vim
-      .iter({ 'extra', 'brackets', 'pickerpairs' })
+      .iter({ 'extra', 'brackets' })
       :map(function(mod) return require('nvim.keys.' .. mod) end)
       :fold({}, function(acc, src) return vim.list_extend(acc, src) end),
     ---@type table<string, table|string|fun():snacks.toggle.Class|snacks.toggle.Opts>
