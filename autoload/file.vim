@@ -16,7 +16,7 @@ endfunction
 
 function! file#rename() abort
   if has('nvim')
-    lua Snacks.rename.renme_file()
+    lua Snacks.rename.rename_file()
   elseif exists(':Rename')
     Rename
   else

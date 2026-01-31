@@ -68,7 +68,8 @@ function! s:edit(file, ...) abort
 endfunction
 
 function! edit#vimrc(...) abort
-  call call('s:edit', extend([g:my#vimrc], a:000))
+  let vimrc = g:VIMDIR . '/vimrc'
+  call call('s:edit', extend([vimrc], a:000))
 endfunction
 
 function! edit#luamod(name) abort
@@ -104,7 +105,7 @@ function! edit#filetype(...) abort
     let l:dir = a:2
   endif
 
-  call s:edit(join([g:my#vimdir, l:dir, &filetype . l:ext], '/'))
+  call s:edit(join([g:VIMDIR, l:dir, &filetype . l:ext], '/'))
 endfunction
 
 function! edit#snippet() abort

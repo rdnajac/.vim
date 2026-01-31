@@ -25,4 +25,4 @@ inoremap <buffer> `$  ```console<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
-vnoremap <leader>k :call hyperlink#()<CR>
+vnoremap <leader>k :call fn#hyperlink#()<CR>

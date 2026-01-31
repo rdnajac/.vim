@@ -1,5 +1,5 @@
 " https://gist.github.com/romainl/b00ccf58d40f522186528012fd8cd13d
-function! opfunc#substitute(type, ...)
+function! vim#opfunc#substitute(type, ...)
   let cur = getpos("''")
   call cursor(cur[1], cur[2])
   let cword = expand('<cword>')
@@ -22,7 +22,7 @@ nmap <silent> gs m':set opfunc=Substitute<CR>g@
 "                          to current line
 
 
-function! opfunc#format(type, ...)
+function! vim#opfunc#format(type, ...)
   if !empty(&formatprg)
     normal! '[v']gq
     call s:err_undo()

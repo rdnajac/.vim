@@ -2,9 +2,6 @@ if !has('nvim')
   finish
 endif
 
-" TODO: just declare the commands used, pick pickers otherwise
-" register commands
-lua vim.schedule(function() require('munchies.command') end)
 command! LazyGit :lua Snacks.lazygit()
 
 nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
@@ -108,3 +105,90 @@ nnoremap <leader>un <Cmd>lua Snacks.notifier.hide()<CR>
 nnoremap <leader>uz <Cmd>lua Snacks.zen()<CR>
 nnoremap <leader>z <Cmd>lua Snacks.zen()<CR>
 nnoremap <leader>Z <Cmd>lua Snacks.zen.zoom()<CR>
+
+" picker pairs
+nnoremap <leader>fe <Cmd>lua Snacks.picker.files({ dirs = vim.api.nvim_list_runtime_paths() })<CR>
+nnoremap <leader>se <Cmd>lua Snacks.picker.grep({ dirs = vim.api.nvim_list_runtime_paths() })<CR>
+
+nnoremap <leader>fc <Cmd>lua Snacks.picker.files({ cwd = vim.g.VIMDIR })<CR>
+nnoremap <leader>sc <Cmd>lua Snacks.picker.grep({  cwd = vim.g.VIMDIR })<CR>
+
+let s:commands = [
+      \ 'Autocmds',
+      \ 'Colorschemes',
+      \ 'Commands',
+      \ 'Files',
+      \ 'Grep',
+      \ 'Help',
+      \ 'Keymaps',
+      \ 'Registers',
+      \ 'Spelling',
+      \ 'Undo',
+      \ 'Zoxide'
+      \ ]
+
+  " TODO: use map?
+for [_, cmd] in items(s:commands)
+  execute printf('command %s :lua Snacks.picker.%s()<CR>', cmd, tolower(cmd))
+endfor
+
+finish
+let s:commands = [
+      \ 'Actions',
+      \ 'Buffers',
+      \ 'Cliphist',
+      \ 'CommandHistory',
+      \ 'Diagnostics',
+      \ 'DiagnosticsBuffer',
+      \ 'Explorer',
+      \ 'GhActions',
+      \ 'GhDiff',
+      \ 'GhIssue',
+      \ 'GhLabels',
+      \ 'GhPr',
+      \ 'GhReactions',
+      \ 'GitBranches',
+      \ 'GitDiff',
+      \ 'GitFiles',
+      \ 'GitGrep',
+      \ 'GitLog',
+      \ 'GitLogFile',
+      \ 'GitLogLine',
+      \ 'GitStash',
+      \ 'GitStatus',
+      \ 'GrepBuffers',
+      \ 'GrepWord',
+      \ 'Highlights',
+      \ 'Icons',
+      \ 'Jumps',
+      \ 'Lines',
+      \ 'Loclist',
+      \ 'LspConfig',
+      \ 'LspDeclarations',
+      \ 'LspDefinitions',
+      \ 'LspImplementations',
+      \ 'LspIncomingCalls',
+      \ 'LspOutgoingCalls',
+      \ 'LspReferences',
+      \ 'LspSymbols',
+      \ 'LspTypeDefinitions',
+      \ 'LspWorkspaceSymbols',
+      \ 'Marks',
+      \ 'Notifications',
+      \ 'Pick',
+      \ 'PickerActions',
+      \ 'PickerFormat',
+      \ 'PickerLayouts',
+      \ 'PickerPreview',
+      \ 'Pickers',
+      \ 'Preview',
+      \ 'Projects',
+      \ 'Qflist',
+      \ 'Recent',
+      \ 'Resume',
+      \ 'Scratch',
+      \ 'SearchHistory',
+      \ 'Smart',
+      \ 'Tags',
+      \ 'Treesitter',
+      \]

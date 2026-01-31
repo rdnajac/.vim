@@ -6,7 +6,7 @@ if exists(':DiffOrig') != 2
   command DiffOrig vnew +set\ bt=nofile | r ++edit # | 0d_ | call s:diffthese()
 endif
 
-function! diff#wrap(...) abort
+function! cmd#diff#(...) abort
   let l:winnr = winnr('$')
 
   if a:0 == 0

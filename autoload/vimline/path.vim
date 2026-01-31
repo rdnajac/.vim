@@ -58,22 +58,22 @@ function! s:make_suffix(file, cwd) abort
   return s:relative_path(a:file, a:cwd)
 endfunction
 
-function! path#root(path) abort
+function! vimline#path#root(path) abort
   return git#root(a:path)
 endfunction
 
-function! path#relative(path, base) abort
+function! vimline#path#relative(path, base) abort
   return s:relative_path(a:path, a:base)
 endfunction
 
-function! path#relative_parts(...) abort
+function! vimline#path#relative_parts(...) abort
   let buf  = a:0 ? a:1 : bufnr('%')
   let file = fnamemodify(bufname(buf), ':p')
   if file ==# '' || (!filereadable(file) && !isdirectory(file))
     return ['', '']
   endif
 
-  let root = path#root(file)
+  let root = vimline#path#root(file)
   " let cwd  = getcwd()
   let cwd = getcwd(0,0)
 

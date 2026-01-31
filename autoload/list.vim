@@ -1,4 +1,7 @@
-" list functions from vim-apathy
+" small library to extend v:t_list
+" based on list functions from `tpope/vim-apathy`
+" TODO: add doc
+
 function! list#uniq(list) abort
   let i = 0
   let seen = {}

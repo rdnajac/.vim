@@ -1,3 +1,5 @@
+let g:vimrc#dir = split(&runtimepath, ',')[0]
+
 function! vimrc#init_vim() abort
   call vim#defaults#()
   call vim#sensible#()
@@ -34,7 +36,7 @@ function! vimrc#toggles() abort
   nnoremap yo~ :set autochdir!<BAR>set autochdir?<CR>
 endfunction
 
-" `apathy#Prepend()` but only for path
+" like `apathy#Prepend()` but only for path
 function! vimrc#apathy(...) abort
   let orig = getbufvar('', '&path')
   let val = list#join(list#uniq(call('list#split', a:000 + [orig])))

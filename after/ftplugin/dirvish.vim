@@ -22,4 +22,17 @@ vim.lsp.buf_attach_client(0, nv.lsp.dirvish.client_id)
 -- BUG: https://github.com/justinmk/vim-dirvish/issues/257
 vim.opt_local.listchars = vim.opt.listchars:get()
 vim.opt_local.listchars:remove('precedes')
+
+-- local dirvish_line = {
+  -- a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]],
+  -- b = [[%{%v:lua.nv.lsp.dirvish.status()%}]],
+  -- c = [[ %{join(map if opts.ft == '(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]],
+-- }
 EOF
+
+" let g:dirvish_mode = ':sort ,^.*[\/],'
+" lua vim.g.dirvish_mode = [[:sort ,^.*[\/],]]
+" if dirvish:
+" command! -nargs=? -complete=dir Explore Dirvish <args>
+" command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
+" command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>

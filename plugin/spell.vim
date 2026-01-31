@@ -1,5 +1,5 @@
 " see `:h :mkspell`
-let &spellfile = my#vimdir . '/.spell/en.utf-8.add'
+let &spellfile = g:VIMDIR . '/.spell/en.utf-8.add'
 
 augroup spelling
   autocmd!

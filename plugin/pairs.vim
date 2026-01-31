@@ -1,8 +1,9 @@
-function! vim#auto#braces() abort
+function! s:autobraces() abort
   inoremap <buffer> {<Space> {}<Left>
   inoremap <buffer> {<CR> {<CR>}<Esc>O
 endfunction
 
+au FileType lua,json call s:autobraces()
 " TODO: write a function to replace var with the opening and closing chars
 " inoremap <buffer> ( ()<Left>
 " inoremap <buffer> ' ''<Left>

@@ -1,4 +1,5 @@
 function! s:read_template(fname)
+  " TODO: find templates relative to this script: <afile>?
   let l:fpath = stdpath('config') . '/templates/' . a:fname
   if filereadable(l:fpath)
     execute '0r ' . l:fpath

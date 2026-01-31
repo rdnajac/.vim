@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-function greek#setup() " {{{
+function vim#greek#setup() " {{{
 " Uppercase Greek letters " {{{
 iabbrev \Alpha Α
 iabbrev \Beta Β

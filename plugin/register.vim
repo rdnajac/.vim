@@ -13,10 +13,6 @@ nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
 nnoremap yP <Cmd>let @*=printf('%s:%d', expand('%:p:~'), line('.'))<CR>
 cnoremap <M-y> <Cmd>let @*=getcmdline()<CR>
 
-if has('nvim')
-  nnoremap yu <Cmd>lua require('nvim.util.debug.printval')()<CR>
-endif
-
 " 'change macro'
 nnoremap cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
 nnoremap cM :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
@@ -36,7 +32,7 @@ function s:fallback() abort
     " map default yank to system clipboard
     nnoremap <expr> y v:register == '"' ? '"+y' : 'y'
     vnoremap <expr> y v:register == '"' ? '"+y' : 'y'
-    " copy the last yanked text to the system clipboard
+  " copy the last yanked text to the system clipboard
     silent let @+ = getreg('"')
   endif
 endfunction
@@ -61,3 +57,8 @@ augroup vimrc_yank
     autocmd UIEnter * call s:set_clipboard()
   endif
 augroup END
+
+if has('nvim')
+  nnoremap yu <Cmd>lua require('nvim.util.debug.printval')()<CR>
+  lua vim.schedule(function() require('which-key.plugins.registers').registers = [[*+"-:.%/#=_0123456789]] end)
+endif

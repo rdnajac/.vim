@@ -1,6 +1,5 @@
 ""
 " Set and link highlight group colors
-
 function! vim#hl#set(group, fg, bg, ...) abort
   let l:attr = (a:0 > 0 && !empty(a:1)) ? a:1 : 'NONE'
   " Use highlight! to override existing settings

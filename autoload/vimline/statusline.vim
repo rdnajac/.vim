@@ -15,7 +15,7 @@ function! vimline#statusline#() abort
   let l:ret = ''
   let l:state = state()
   let l:mode = mode()
-  let [l:cwd, l:file] = path#relative_parts()
+  let [l:cwd, l:file] = vimline#path#relative_parts()
 
   let l:ret .= '%#Chromatophore_a# '
   let l:ret .= mode ==# 'n' ? ' ' : l:mode
