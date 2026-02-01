@@ -2,9 +2,11 @@
 " Description:  vim colorscheme inspired by tokyonight
 " Author:       rdnajac
 
-" if !has('nvim')
-"   require('tokyonight').load()
-" endif
+if has('nvim')
+  " colorscheme tokyonight_generated
+  source tokyonight_generated.lua
+  finish
+endif
 
 hi clear
 if exists('syntax_on')

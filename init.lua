@@ -3,7 +3,7 @@
 --- 1. source vimrc
 ---  - relies on autoload/plug.vim to override vim-plug calls
 ---  - enables `vim.loader` and `vim.pack.add`s base plugins
-vim.cmd([[ runtime vimrc | colorscheme tokyonight_generated ]])
+vim.cmd([[ runtime vimrc ]])
 
 --- 2. snack attack!
 require('snacks')
