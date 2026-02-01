@@ -120,8 +120,14 @@ function Plugin:setup()
     end
     self:register_keys()
     self.did_setup = true
+    -- print('Setup complete for', self:modname()) 
   end
-  return self.event and on_event(self.event, _setup) or _setup()
+  if self.event then
+    -- print('Setting up', self:modname(), 'on event', vim.inspect(self.event))
+    on_event(self.event, _setup)
+  else
+    _setup()
+  end
 end
 
 ---@param ... any

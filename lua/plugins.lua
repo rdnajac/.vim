@@ -255,6 +255,7 @@ local M = {
   },
   ['monaqa/dial.nvim'] = {
     config = function() require('nvim.keys.dial') end,
+    event = 'UIEnter',
     -- lazy = true,
     -- keys = {
     --   { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
@@ -324,8 +325,8 @@ local M = {
       providers = nv.blink.providers,
       sources = nv.blink.sources,
     },
-    -- event = 'InsertEnter',
     build = 'BlinkCmp build',
+    event = 'UIEnter',
   },
 }
 
