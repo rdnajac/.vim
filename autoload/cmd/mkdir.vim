@@ -9,7 +9,7 @@ endfunction
 
 " Create parent directories if they do not exist when saving a file
 " but skip if the file path looks like a URI (e.g. scp://, oil://)
-function! vim#mkdir#(file) abort
+function! cmd#mkdir#(file) abort
   if empty(&buftype) && !s:is_url(a:file)
     " need to expand again to handle `~` and `..`
     let l:dir = fnamemodify(expand(a:file), ':p:h')

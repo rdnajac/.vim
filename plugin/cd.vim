@@ -14,7 +14,7 @@ let s:dirs = {
       \ '~': $HOME,
       \ 'G': $HOME.'/GitHub/',
       \ 'p': g:plug_home,
-      \ 'v': g:['vimrc#dir'],
+      \ 'v': g:vimrc#dir,
       \ 'V': $VIMRUNTIME,
       \ }
 

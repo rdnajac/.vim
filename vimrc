@@ -130,7 +130,10 @@ if exists(':restart') == 2
 endif
 
 if !has('nvim')
-  call vimrc#init_vim()
+  call vim#defaults#()
+  call vim#sensible#()
+  call vimrc#toggles()
+  color scheme
 else
   set backup backupext=.bak
   let &backupdir = g:stdpath['state'] . '/backup//'
@@ -165,7 +168,7 @@ augroup vimrc
   au BufLeave vimrc normal! mV
 
   " create parent directories when saving files
-  au BufWritePre * silent! call vim#mkdir#(expand('<afile>'))
+  au BufWritePre * silent! call cmd#mkdir#(expand('<afile>'))
 
   " automatically reload certain config files when they are saved 
   " au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
@@ -205,7 +208,10 @@ augroup END
 " }}}1
 " Section: commands/config {{{1
 command! -nargs=* Diff call cmd#diff#(<f-args>)
-command! -nargs=0 Format call cmd#format()
+
+command! -nargs=0 Format call cmd#format#()
+nnoremap zq <Cmd>Format<CR>
+
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
 let g:eunuch_interprepers = {
@@ -225,6 +231,9 @@ let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
 
 " }}}1
 " Section: keymaps {{{1
+let g:mapleader = ' '
+let g:maplocalleader = '\'
+
 nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
@@ -232,13 +241,11 @@ nnoremap ~ `
 nmap  ciw
 vmap  :sort<CR>
 
-" diff?
+" TODO: diff?
 " nnoremap dp     dp]c
 " nnoremap do     do]c
-" `<leader>` {{{2
-let g:mapleader = ' '
-let g:maplocalleader = '\'
 
+" `<leader>` {{{2
 nnoremap <leader>- <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 nnoremap <leader>K <Cmd>normal! K<CR>
@@ -350,8 +357,6 @@ nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
 " select last changed text (ie pasted text)
 " TODO: doesn't gv already do this? see: *gv* *v_gv* *reselect-Visual*
 nnoremap gV `[V`]
-
-nnoremap zq <Cmd>Format<CR>
 
 " resursive keymaps
 
@@ -472,42 +477,42 @@ endif
 " packadd! cfilter
 " }}}
 
-silent! call plug#begin()
+call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'dense-analysis/ale'
+Plug 'dstein64/vim-startuptime'
+  Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-characterize'
-" Plug 'tpope/vim-dadbod'
-" Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/vim-capslock'
+" Plug 'tpope/vim-dadbod'
+" Plug 'tpope/vim-dispatch'
 " Plug 'tpope/vim-rsi'
+" Plug 'tpope/vim-tbone'
+Plug 'vuciv/golf'
 if !has('nvim')
   Plug 'andymass/vim-matchup'
-  Plug 'dstein64/vim-startuptime'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'romainl/vim-redir'
-  " Plug 'tpope/vim-commentary' " use vim9 commentary
   Plug 'tpope/vim-repeat'
-  " Plug 'tpope/vim-sensible'
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-tbone'
-  " Plug 'tpope/vim-vinegar'
-  Plug 'justinmk/vim-dirvish'
+  " Plug 'tpope/vim-commentary' " use vim9 commentary
+  " Plug 'tpope/vim-sensible'   " use vim#sensible#
+  " Plug 'tpope/vim-vinegar'    " use vim-dirvish
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
-  Plug 'vuciv/golf'
 else
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
@@ -516,6 +521,6 @@ else
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
 endif
-silent! call plug#end()
+call plug#end()
 " }}}
 " vim: fdl=0 fdm=marker

@@ -31,3 +31,19 @@ for [key, val] in items(s:comments)
   execute printf('nmap co%s :call comment#above("%s")<CR>', toupper(key), val)
 endfor
 
+if has('nvim')
+  finish
+endif
+
+" BUG: still does not work with the version of vim on homebrew
+" VIM - Vi IMproved 9.1 (2024 Jan 02, compiled Oct 12 2025 14:37:02)
+" macOS version - arm64
+" Included patches: 1-1850
+
+packadd comment
+" see `:h package-comment`
+" issue: https://github.com/vim/vim/issues/14171
+" commit: https://github.com/vim/vim/commit/fa6300872732f80b770a768e785ae2b189d3e684
+" suspect: import autoload 'comment.vim'
+" HACK: manually sourcing this resolves E1041 `Toggle`
+source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
