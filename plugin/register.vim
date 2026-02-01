@@ -32,7 +32,7 @@ function s:fallback() abort
     " map default yank to system clipboard
     nnoremap <expr> y v:register == '"' ? '"+y' : 'y'
     vnoremap <expr> y v:register == '"' ? '"+y' : 'y'
-  " copy the last yanked text to the system clipboard
+    " copy the last yanked text to the system clipboard
     silent let @+ = getreg('"')
   endif
 endfunction
@@ -60,5 +60,8 @@ augroup END
 
 if has('nvim')
   nnoremap yu <Cmd>lua require('nvim.util.debug.printval')()<CR>
-  lua vim.schedule(function() require('which-key.plugins.registers').registers = [[*+"-:.%/#=_0123456789]] end)
+  if luaeval('package.loaded["which-key"] ~= nil')
+    lua vim.schedule(function() require('which-key.plugins.registers').registers = [[*+"-:.%/#=_0123456789]] end)
+  endif
+
 endif

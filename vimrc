@@ -1,4 +1,8 @@
+" $MYVIMRC
 scriptencoding utf-8
+" color scheme
+color tokyonight_generated
+
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
@@ -133,7 +137,6 @@ if !has('nvim')
   call vim#defaults#()
   call vim#sensible#()
   call vimrc#toggles()
-  color scheme
 else
   set backup backupext=.bak
   let &backupdir = g:stdpath['state'] . '/backup//'
@@ -482,7 +485,6 @@ Plug 'alker0/chezmoi.vim'
 Plug 'bullets-vim/bullets.vim'
 Plug 'dense-analysis/ale'
 Plug 'dstein64/vim-startuptime'
-  Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
@@ -508,6 +510,7 @@ if !has('nvim')
   " Plug 'tpope/vim-commentary' " use vim9 commentary
   " Plug 'tpope/vim-sensible'   " use vim#sensible#
   " Plug 'tpope/vim-vinegar'    " use vim-dirvish
+  Plug 'justinmk/vim-dirvish'
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
@@ -517,9 +520,9 @@ else
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   " Plug 'nvim-mini/mini.nvim'
-  " Plug 'saxon1964/neovim-tips'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
+  " Plug 'saxon1964/neovim-tips'
 endif
 call plug#end()
 " }}}

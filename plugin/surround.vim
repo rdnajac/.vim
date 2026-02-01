@@ -4,8 +4,8 @@ vmap ` S`
 vmap F Sf
 
 " toggle 'single' or "double" quotes
-nmap cq cs"'
-nmap cQ cs'"
+nmap cq <Cmd>call execute#inPlace("normal cs\"'")<CR>
+nmap cQ <Cmd>call execute#inPlace("normal cs'\"")<CR>
 
 " relies on `cs` from vim-surround
 " nmap <expr> cq change#quote()

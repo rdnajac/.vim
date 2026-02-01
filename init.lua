@@ -69,5 +69,6 @@ local specs = Plug.to_spec(plugins)
 if vim.v.vim_did_enter == 0 then
   vim.pack.add(specs, { load = Plug._load })
 end
+
 -- require('jit.p').stop()
 -- vim: fdl=0 fdm=expr

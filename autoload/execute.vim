@@ -29,4 +29,3 @@ function! execute#s(command) abort
   " Optional second arg: default flags for :substitute
   execute 'keeppatterns' a:command . a:0 ? a:1 : ''
 endfunction
-
