@@ -3,6 +3,6 @@
 .vimlog.txt
 Session.vim
 gen
-jetpack
+pack/jetpack
 plugged
 tags

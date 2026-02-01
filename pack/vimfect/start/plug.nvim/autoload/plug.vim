@@ -1,5 +1,11 @@
 if !has('nvim')
-  packadd vim-jetpack
+  let s:jetpath = '~/.vim/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim'
+  if !filereadable(expand(s:jetpath))
+    execute printf('!curl -fLo %s --create-dirs ' .
+	  \ 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim',
+	  \ s:jetpath)
+    packadd vim-jetpack
+  endif
 endif
 
 function! plug#begin(...)
