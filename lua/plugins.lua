@@ -1,8 +1,10 @@
 local nv = _G.nv or require('nvim')
 
+-- substitue with capture group
+-- :%s/\['\([^']\+\)'\] = {/{ '\1',/
 local M = {
-  ['rdnajac/.vim'] = { enabled = false },
-  ['rdnajac/vim-lol'] = {
+  {
+    'rdnajac/vim-lol',
     enabled = true,
     keys = vim
       .iter({ 'extra', 'brackets' })
@@ -69,7 +71,8 @@ local M = {
       },
     },
   },
-  ['nvim-mini/mini.nvim'] = {
+  {
+    'nvim-mini/mini.nvim',
     config = function()
       -- require('mini.misc').setup_termbg_sync()
       vim
@@ -100,7 +103,8 @@ local M = {
       },
     },
   },
-  ['folke/lazydev.nvim'] = {
+  {
+    'folke/lazydev.nvim',
     opts = {
       library = {
         { path = 'snacks.nvim', words = { 'Snacks' } },
@@ -109,7 +113,8 @@ local M = {
       },
     },
   },
-  ['folke/sidekick.nvim'] = {
+  {
+    'folke/sidekick.nvim',
     enabled = true,
     ---@type sidekick.Config
     opts = {
@@ -142,7 +147,8 @@ local M = {
       },
     },
   },
-  ['folke/which-key.nvim'] = {
+  {
+    'folke/which-key.nvim',
     enabled = true,
     -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
     config = function()
@@ -178,7 +184,8 @@ local M = {
       })
     end,
   },
-  ['mason-org/mason.nvim'] = {
+  {
+    'mason-org/mason.nvim',
     opts = {
       package_installed = '✓',
       package_pending = '➜',
@@ -186,7 +193,8 @@ local M = {
     },
     build = vim.cmd.MasonUpdate,
   },
-  ['nvim-lualine/lualine.nvim'] = {
+  {
+    'nvim-lualine/lualine.nvim',
     enabled = false,
     -- `https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets`
     opts = {
@@ -211,14 +219,16 @@ local M = {
       extensions = { 'man' },
     },
   },
-  ['nvim-treesitter/nvim-treesitter'] = {
+  {
+    'nvim-treesitter/nvim-treesitter',
     build = function()
       vim.cmd(
         ([[TSUpdate | TSInstall! %s]]):format(table.concat(nv.treesitter.parsers.to_install, ' '))
       )
     end,
   },
-  ['nvim-treesitter/nvim-treesitter-context'] = {
+  {
+    'nvim-treesitter/nvim-treesitter-context',
     toggles = {
       ['<leader>ux'] = {
         name = 'Treesitter Context',
@@ -227,7 +237,8 @@ local M = {
       },
     },
   },
-  ['MeanderingProgrammer/render-markdown.nvim'] = {
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
     -- TODO: this should be init
     config = function() vim.g.render_markdown_config = nv.md end,
     toggles = {
@@ -238,7 +249,8 @@ local M = {
       },
     },
   },
-  ['R-nvim/R.nvim'] = {
+  {
+    'R-nvim/R.nvim',
     enabled = true,
     config = function()
       require('r').setup({
@@ -253,7 +265,8 @@ local M = {
       })
     end,
   },
-  ['monaqa/dial.nvim'] = {
+  {
+    'monaqa/dial.nvim',
     config = function() require('nvim.keys.dial') end,
     event = 'UIEnter',
     -- lazy = true,
@@ -264,7 +277,8 @@ local M = {
     --   { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
     -- },
   },
-  ['NStefan002/screenkey.nvim'] = {
+  {
+    'NStefan002/screenkey.nvim',
     enabled = false,
     opts = function() return require('nvim.keys.opts').screenkey() end,
     toggles = {
@@ -280,7 +294,8 @@ local M = {
       },
     },
   },
-  ['Saghen/blink.cmp'] = {
+  {
+    'Saghen/blink.cmp',
     ---@type blink.cmp.Config
     opts = {
       cmdline = { enabled = false },
@@ -332,7 +347,7 @@ local M = {
 
 -- extend blink community sources
 for _, v in ipairs(nv.blink.specs) do
-  M[v] = {}
+  M[#M + 1] = { v }
 end
 
 -- extend folke ui plugins

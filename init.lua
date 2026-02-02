@@ -60,15 +60,28 @@ Snacks.setup(opts)
 --- - lazily loads utility modules
 _G.nv = require('nvim')
 
---- 5. import plug module convert plugins table to specs
+--- 4. import plug module convert plugins table to specs
 local Plug = require('plug')
 local plugins = require('plugins')
-local specs = Plug.to_spec(plugins)
+local iter = vim.iter(plugins)
+local specs = iter
+  :filter(function(v) return v.enabled ~= false end)
+  :map(Plug.new)
+  :map(function(p) return p:to_spec() end)
+  :totable()
+
+--- 5. custom loader to `packadd` and run setup function
+---@param plug_data {spec: vim.pack.Spec, path: string}
+local function _load(plug_data)
+  vim.cmd.packadd({ plug_data.spec.name, bang = true })
+  return vim.tbl_get(plug_data.spec, 'data', 'setup')()
+end
 
 --- 6. `packadd` plugins with custom loader for setup
 if vim.v.vim_did_enter == 0 then
-  vim.pack.add(specs, { load = Plug._load })
+  vim.pack.add(specs, { load = _load })
 end
 
 -- require('jit.p').stop()
+
 -- vim: fdl=0 fdm=expr

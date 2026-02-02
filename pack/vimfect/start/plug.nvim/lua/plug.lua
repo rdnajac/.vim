@@ -19,41 +19,12 @@ local Plugin = {
 }
 Plugin.__index = Plugin
 
---- merge and convert dict-like k, v params
-local function _resolve_self(...)
-  local self = {}
-
-  for i = 1, select('#', ...) do
-    local v = select(i, ...)
-    if type(v) == 'table' then
-      self = vim.tbl_deep_extend('force', self, v)
-    elseif type(v) == 'string' then
-      self[1] = self[1] or v
-    end
-  end
-
-  return self
-end
-
--- -- FIXME: cannot use '...' outside a vararg function
--- local function _resolve_self_it(...)
---   return vim
---     .iter(1, select('#', ...))
---     :map(function(i) return select(i, ...) end)
---     :fold({}, function(acc, v)
---       v = type(v) == 'table' and v or { v }
---       return vim.tbl_deep_extend('force', acc, v)
---     end)
--- end
-
-function Plugin.new(...)
-  local self = _resolve_self(...)
-
+function Plugin.new(v)
+  local self = v
   vim.validate('[1]', self[1], 'string')
   vim.validate('keys', self.keys, vim.islist, true)
   vim.validate('opts', self.opts, { 'table', 'function' }, true)
   vim.validate('toggles', self.toggles, 'table', true)
-
   return setmetatable(self, Plugin)
 end
 
@@ -130,17 +101,4 @@ function Plugin:setup()
   end
 end
 
----@param ... any
----@return vim.pack.Spec
-local call = function(...) return Plugin.new(...):to_spec() end
-local to_spec = function(plugins)
-  return vim.iter(plugins):filter(function(_, v) return v.enabled ~= false end):map(call):totable()
-end
-
----@param plug_data {spec: vim.pack.Spec, path: string}
-local function _load(plug_data)
-  vim.cmd.packadd({ plug_data.spec.name, bang = true })
-  return vim.tbl_get(plug_data.spec, 'data', 'setup')()
-end
-
-return { to_spec = to_spec, _load = _load }
+return Plugin
