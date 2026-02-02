@@ -63,5 +63,4 @@ if has('nvim')
   if luaeval('package.loaded["which-key"] ~= nil')
     lua vim.schedule(function() require('which-key.plugins.registers').registers = [[*+"-:.%/#=_0123456789]] end)
   endif
-
 endif

@@ -3,24 +3,16 @@ nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
-if !has('nvim')
-  finish
-endif
-set nocdhome " default on neovim on unix, off on Windows or vim
-
 " TODO: make line continuations in vim act like a bulleted list
 let s:dirs = {
-      \ '.': g:chezmoi#source_dir_path,
       \ '~': $HOME,
       \ 'G': $HOME.'/GitHub/',
       \ 'p': g:plug_home,
       \ 'v': g:vimrc#dir,
       \ 'V': $VIMRUNTIME,
+      \ '.': '~/.local/share/chezmoi/',
       \ }
-
-if exists('g:plug_home')
-  let s:dirs.P = g:plug_home
-endif
+" g:chezmoi#source_dir_path
 
 if exists('g:stdpath')
   let s:dirs.c = stdpath('config')
@@ -30,6 +22,29 @@ if exists('g:stdpath')
 endif
 
 for [key, value] in items(s:dirs)
-  execute $'nnoremap cd{key} <Cmd>edit {value}<CR>'
-  " FIXME: if explorer is already open this should behave differently
+  execute printf('nnoremap cd%s <Cmd>edit %s<CR>', key, fnamemodify(value, ":~"))
+  " PERF : if explorer is already open this should behave differently
 endfor
+
+if !has('nvim')
+  finish
+endif
+set nocdhome " default on neovim on unix, off on Windows or vim
+
+" handle OSC 7 dir change requests
+augroup cd_osc7
+  autocmd!
+  " autocmd TermRequest * call term#print_request()
+  autocmd TermRequest * call term#handleOSC7()
+
+  " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
+  " Shells can emit the `OSC 7` sequence to announce when the current directory (CWD) changed.
+  " If your terminal doesn't already do this for you, you can configure your shell to emit it.
+  "
+  " To configure bash to emit OSC 7:
+  " print_osc7() { printf '\033]7;file://%s\033\\' "$PWD"; }
+  " PROMPT_COMMAND='print_osc7'
+
+  " ~/.local/share/chezmoi/dot_config/zsh/dot_zshrc:65
+  " printf "\033]7;file://./foo/bar\033\\"
+augroup END
