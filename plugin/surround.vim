@@ -1,7 +1,12 @@
 " plugin/surround.vim
+if has('nvim') && luaeval('package.loaded["which-key"] ~= nil')
+  xmap <silent> S :<C-U>lua MiniSurround.add('visual')<CR>
+  nmap yss ys_
+endif
+
 nmap S viWS
-vmap ` S`
-vmap F Sf
+xmap ` S`
+xmap F Sf
 
 " toggle 'single' or "double" quotes
 nmap cq <Cmd>call execute#inPlace("normal cs\"'")<CR>

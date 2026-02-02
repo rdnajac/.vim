@@ -8,7 +8,6 @@ end
 local keys = {
   { { 'n', 't' }, '<c-\\>', Snacks.terminal.toggle },
   { 'v', '<leader>/', Snacks.picker.grep_word },
-  { '-', function() Snacks.explorer.open({ cwd = vim.fn.fnamemodify('%', ':p:h') }) end },
   { ',,', Snacks.picker.buffers },
   { '\\\\', Snacks.dashboard.open },
   { 'n', 'dI', 'dai', { desc = 'Delete Indent', remap = true } },

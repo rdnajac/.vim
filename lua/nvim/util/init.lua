@@ -50,4 +50,17 @@ M.foldtext = function()
   return table.concat(parts, ' ')
 end
 
+-- count keys used in all subtables of M
+M.key_counts = function()
+  local ret = {}
+  for _, v in pairs(M) do
+    if type(v) == 'table' --[[and v ~= M.key_counts]] then
+      for key in pairs(v) do
+        ret[key] = (ret[key] or 0) + 1
+      end
+    end
+  end
+  return ret
+end
+
 return M

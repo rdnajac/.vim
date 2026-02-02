@@ -40,9 +40,13 @@ local get_providers = function(mode)
 end
 
 return {
+  -- only the completion menu is configured here
   completion = require('nvim.blink.completion'),
-  specs = specs,
+  -- completion sources and providers just defined
   sources = sources,
+  -- additional plugins to install
+  specs = specs,
+  -- statusline component showing active completion sources
   status = {
     function()
       return vim

@@ -1,8 +1,10 @@
 " $MYVIMRC
 scriptencoding utf-8
-" color scheme
-color tokyonight_generated
-
+if has('nvim')
+  color tokyonight_generated
+else
+  color scheme
+endif
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
@@ -173,7 +175,7 @@ augroup vimrc
   " create parent directories when saving files
   au BufWritePre * silent! call cmd#mkdir#(expand('<afile>'))
 
-  " automatically reload certain config files when they are saved 
+  " automatically reload certain config files when they are saved
   " au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
   " au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
 
@@ -200,7 +202,7 @@ augroup vimrc_filetype
   autocmd!
   " fix JSON conceallevel and use lua formatter
   au FileType json,jsonc,json5 setlocal cole=0 et fex=v:lua.nv.json.format()
-  
+
   " close certain buffers with `q`
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
 
@@ -332,8 +334,7 @@ nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
 for [k, v] in items({
       \ 'n' : 'nvim',
       \ 'k' : 'nvim/keys',
-      \ 'p' : 'plug',
-      \ 'P' : 'nvim/plugins',
+      \ 'p' : 'plugins',
       \ 'u' : 'nvim/util',
       \ })
   execute $'nnoremap <Bslash>{k}  <Cmd>call edit#luamod("{v}")<CR>'

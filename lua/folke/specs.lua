@@ -1,13 +1,15 @@
 return {
   {
     'folke/todo-comments.nvim',
-    enabled = false,
+    enabled = true,
     opts = function()
-      local cmds = { 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }
-      for _, cmd in ipairs(cmds) do
-        -- vim.cmd.delcommand(cmd)
-        vim.api.nvim_del_user_command(cmd)
-      end
+      vim.schedule(function()
+        local cmds = { 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }
+        for _, cmd in ipairs(cmds) do
+          -- vim.cmd.delcommand(cmd)
+          vim.api.nvim_del_user_command(cmd)
+        end
+      end)
       -- Section: rv
       return {
         keywords = { Section = { icon = '󰚟', color = 'title' } },

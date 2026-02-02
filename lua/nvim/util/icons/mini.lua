@@ -1,3 +1,4 @@
+-- opts for MiniIcons
 local opts = {
   directory = {
     ghostty = { '󰊠', 'Green' },

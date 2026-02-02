@@ -4,7 +4,6 @@ error('this file should not be required directly')
 nv.blink = require('nvim.blink')
 nv.keys = require('nvim.keys')
 nv.lsp = require('nvim.lsp')
-nv.mini = require('nvim.mini')
 nv.treesitter = require('nvim.treesitter')
 
 -- TODO: write an appropriate gen script for this

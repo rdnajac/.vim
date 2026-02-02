@@ -75,11 +75,107 @@ local M = {
     'nvim-mini/mini.nvim',
     config = function()
       -- require('mini.misc').setup_termbg_sync()
-      vim
-        .iter(nv.mini.opts)
-        :map(function(k, v) return 'mini.' .. k, vim.is_callable(v) and v() or v end)
-        :each(function(modname, opts) require(modname).setup(opts) end)
+      for modname, opts in pairs({
+        ai = function()
+          local ai = require('mini.ai')
+          local ex = require('mini.extra')
+          return {
+            n_lines = 500,
+            custom_textobjects = {
+              -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
+              -- d = { '%f[%d]%d+' }, -- digits
+              d = ex.gen_ai_spec.number,
+              e = { -- Word with case
+                {
+                  '%u[%l%d]+%f[^%l%d]',
+                  '%f[%S][%l%d]+%f[^%l%d]',
+                  '%f[%P][%l%d]+%f[^%l%d]',
+                  '^[%l%d]+%f[^%l%d]',
+                },
+                '^().*()$',
+              },
+              -- f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
+              g = ex.gen_ai_spec.buffer(), -- buffer
+              o = ai.gen_spec.treesitter({ -- code block
+                a = { '@block.outer', '@conditional.outer', '@loop.outer' },
+                i = { '@block.inner', '@conditional.inner', '@loop.inner' },
+              }),
+              t = { '<([%p%w]-)%f[^<%w][^<>]->.-</%1>', '^<.->().*()</[^/]->$' }, -- tags
+              u = ai.gen_spec.function_call(), -- u for "Usage"
+              U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
+            },
+          }
+        end,
+        align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
+        -- comment removed since native commenting added to neovim
+        diff = { view = { style = 'number' } },
+        extra = {},
+        files = { options = { use_as_default_explorer = false } },
+        hipatterns = function()
+          local hi = require('mini.hipatterns')
+          local function in_comment(buf_id, line, col)
+            if vim.treesitter.highlighter.active[buf_id] then
+              return require('nvim.treesitter').is_comment({ line, col })
+            end
+            local synid = vim.fn.synID(line + 1, col + 1, 1)
+            local name = vim.fn.synIDattr(synid, 'name')
+            return name and name:find('Comment') ~= nil
+          end
+          return {
+            highlighters = {
+              hex_color = hi.gen_highlighter.hex_color(),
+              fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
+              warning = { pattern = 'WARNING', group = 'MiniHipatternsFixme' },
+              hack = { pattern = 'HACK', group = 'MiniHipatternsHack' },
+              section = { pattern = 'Section', group = 'MiniHipatternsHack' },
+              todo = { pattern = 'TODO', group = 'MiniHipatternsTodo' },
+              note = { pattern = 'NOTE', group = 'MiniHipatternsNote' },
+              perf = { pattern = 'PERF', group = 'MiniHipatternsNote' },
+              source_code = { -- highlights strings in comments wrapped in `backticks`
+                pattern = '`[^`\n]+`',
+                group = function(buf_id, match, data)
+                  -- convert from 1- to 0-indexed
+                  local line = data.line - 1
+                  local col = data.from_col - 1
+                  return in_comment(buf_id, line, col) and 'String' or nil
+                end,
+                extmark_opts = {
+                  priority = 10000,
+                  hl_mode = 'combine',
+                  spell = false,
+                },
+              },
+            },
+          }
+        end,
+        icons = require('nvim.util.icons.mini'),
+        -- TODO: keymao for jk escape...
+        splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' } }, -- TODO: respect shiftwidth
+        surround = {
+          mappings = {
+            add = 'ys',
+            delete = 'ds',
+            find = '',
+            find_left = '',
+            highlight = '',
+            replace = 'cs',
+            -- Add this only if you don't want to use extended mappings
+            suffix_last = '',
+            suffix_next = '',
+          },
+          search_method = 'cover_or_next',
+          custom_surroundings = {
+            B = { output = { left = '{', right = '}' } },
+          },
+        },
+      }) do
+        require('mini.' .. modname).setup(vim.is_callable(opts) and opts() or opts)
+      end
     end,
+    keys = {
+      { '<leader>fm', function() MiniFiles.open() end },
+      { '-', function() MiniFiles.open() end },
+    },
     toggles = {
       ['<leader>uG'] = {
         name = 'MiniDiff Signs',
@@ -269,7 +365,6 @@ local M = {
     'monaqa/dial.nvim',
     config = function() require('nvim.keys.dial') end,
     event = 'UIEnter',
-    -- lazy = true,
     -- keys = {
     --   { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
     --   { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
@@ -296,10 +391,23 @@ local M = {
   },
   {
     'Saghen/blink.cmp',
+    ---@module "blink.cmp"
     ---@type blink.cmp.Config
     opts = {
       cmdline = { enabled = false },
-      -- fuzzy = { implementation = 'lua' },
+      completion = {
+        accept = { auto_brackets = { enabled = true } },
+        documentation = { auto_show = false },
+        ghost_text = { enabled = false },
+        -- keyword = {},
+        list = { selection = { preselect = true, auto_insert = true } },
+        trigger = {
+          show_on_keyword = true,
+          show_on_accept_on_trigger_character = true,
+          show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+        },
+        menu = nv.blink.completion.menu,
+      },
       keymap = {
         ['<Tab>'] = {
           function(cmp)
@@ -321,23 +429,10 @@ local M = {
         },
       },
       signature = {
-        enabled = true,
-        window = { show_documentation = false },
+        -- enabled = false, -- default = is `true`
+        -- window = { show_documentation = false },
+        -- TODO: check this
       },
-      completion = {
-        accept = { auto_brackets = { enabled = true } },
-        documentation = { auto_show = false },
-        ghost_text = { enabled = false },
-        -- keyword = {},
-        list = { selection = { preselect = true, auto_insert = true } },
-        trigger = {
-          show_on_keyword = true,
-          show_on_accept_on_trigger_character = true,
-          show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
-        },
-        menu = nv.blink.completion.menu,
-      },
-      providers = nv.blink.providers,
       sources = nv.blink.sources,
     },
     build = 'BlinkCmp build',
@@ -350,22 +445,8 @@ for _, v in ipairs(nv.blink.specs) do
   M[#M + 1] = { v }
 end
 
--- extend folke ui plugins
--- local folkeplugs = require()
-
----@diagnostic disable-next-line
-local _key_counts = function()
-  local ret = {}
-  for _, v in pairs(M) do
-    if type(v) == 'table' and v ~= M._key_counts then
-      for key in pairs(v) do
-        ret[key] = (ret[key] or 0) + 1
-      end
-    end
-  end
-  return ret
-end
--- print(_key_counts())
+-- add folke ui plugins
+vim.list_extend(M, require('folke.specs'))
 
 return M
 -- vim: fdl=1 fdm=expr
