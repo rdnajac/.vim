@@ -1,3 +1,4 @@
+-- TODO: get these automatically by checking the runtime dir
 -- default tree-sitter parsers bundled with neovim: `~/.local/share/nvim/lib/nvim/parser/`
 local defaults = { 'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
 -- `~/.local/share/nvim/site/`
