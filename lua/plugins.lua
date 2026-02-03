@@ -73,6 +73,7 @@ local M = {
   },
   {
     'nvim-mini/mini.nvim',
+    enabled = true,
     config = function()
       -- require('mini.misc').setup_termbg_sync()
       for modname, opts in pairs({
@@ -201,7 +202,9 @@ local M = {
   },
   {
     'folke/lazydev.nvim',
+    enabled = true,
     opts = {
+      -- integrations = { cmp = false },
       library = {
         { path = 'snacks.nvim', words = { 'Snacks' } },
         { path = 'mini.nvim', words = { 'Mini.*' } },
@@ -211,7 +214,6 @@ local M = {
   },
   {
     'folke/sidekick.nvim',
-    enabled = true,
     ---@type sidekick.Config
     opts = {
       cli = { win = { layout = 'float' } },
@@ -282,6 +284,7 @@ local M = {
   },
   {
     'mason-org/mason.nvim',
+    enabled = true,
     opts = {
       package_installed = '✓',
       package_pending = '➜',
@@ -300,7 +303,7 @@ local M = {
         section_separators = { left = '', right = '' },
         disabled_filetypes = {
           statusline = { pattern = 'snacks_dashboard' },
-          winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_list', 'snacks_picker_input' },
+          -- winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_list', 'snacks_picker_input' },
           tabline = { 'snacks_dashboard' },
         },
         ignore_focus = {
@@ -313,10 +316,19 @@ local M = {
         -- use_mode_colors = false,
       },
       extensions = { 'man' },
+      sections = {},
+      inactive_sections = {},
+      tabline = {},
+      winbar = {
+        -- lualine_a = { require('nvim.util.status').buffer },
+        lualine_a = { nv.blink.status },
+      },
+      inactive_winbar = {},
     },
   },
   {
     'nvim-treesitter/nvim-treesitter',
+    enabled = true,
     build = function()
       vim.cmd(
         ([[TSUpdate | TSInstall! %s]]):format(table.concat(nv.treesitter.parsers.to_install, ' '))
@@ -335,6 +347,7 @@ local M = {
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
+    enabled = true,
     -- TODO: this should be init
     config = function() vim.g.render_markdown_config = nv.md end,
     toggles = {
@@ -347,7 +360,6 @@ local M = {
   },
   {
     'R-nvim/R.nvim',
-    enabled = true,
     config = function()
       require('r').setup({
         R_args = { '--quiet', '--no-save' },
@@ -391,6 +403,7 @@ local M = {
   },
   {
     'Saghen/blink.cmp',
+    enabled = true,
     ---@module "blink.cmp"
     ---@type blink.cmp.Config
     opts = {
@@ -447,6 +460,10 @@ end
 
 -- add folke ui plugins
 vim.list_extend(M, require('folke.specs'))
+
+-- filter plugins early
+M = vim.tbl_filter(function(t) return t.enabled ~= false end, M)
+-- M = vim.tbl_filter(function(t) return t.enabled == true end, M)
 
 return M
 -- vim: fdl=1 fdm=expr

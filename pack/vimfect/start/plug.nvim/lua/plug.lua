@@ -1,24 +1,25 @@
 ---@class Plugin
----@field name string The plugin name as evaluated by `vim.pack`.
----@field data? any
----@field src? string
+---@field [1] string Plugin identifier (GitHub owner/repo or name).
+---@field name? string The plugin name as evaluated by `vim.pack`. Defaults to repo name.
+---@field data? any Custom data to pass to `vim.pack.add()`.
+---@field src? string Plugin source URL. Defaults to GitHub via `nv.gh()`.
 ---@field did_setup boolean Tracks if `setup()` has been called.
----@field enabled boolean Defaults to `true`.
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field config? boolean|fun():nil Setup fun or, if true, mod.setup({})
 ---@field keys? table Keymaps to bind for the plugin.
 ---@field opts? table|fun():table Options to pass to the plugin's `setup()`.
----@field version? string|vim.VersionRange
----@field branch? string
----@field toggles? table<string, string|fun()|table>
+---@field version? string|vim.VersionRange Version constraint for the plugin.
+---@field branch? string Git branch to use.
+---@field toggles? table<string, string|fun()|table> Snacks.nvim toggles to register.
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
-local Plugin = {
-  did_setup = false,
-  enabled = true,
-}
+local Plugin = {}
 Plugin.__index = Plugin
 
+--- Create a new Plugin instance from a specification table.
+---
+--- @param v table Plugin specification with required `[1]` field.
+--- @return Plugin
 function Plugin.new(v)
   local self = v
   vim.validate('[1]', self[1], 'string')
@@ -76,9 +77,19 @@ function Plugin:register_keys()
   end
 end
 
---- Call the `Plugin`'s `config` function if it exists, otherwise
---- call the named module's `setup` function with `opts` they exist.
+--- Call the Plugin's configuration or setup function.
+---
+--- Executes the plugin's configuration in the following order:
+--- 1. If `opts` is a function, calls it to get options
+--- 2. If `opts` is a table, calls `require(modname).setup(opts)`
+--- 3. If `config` is callable, calls it
+--- 4. Registers keymaps and toggles
+---
+--- If `event` is specified, defers setup until the event fires.
+--- Ensures setup runs only once via `did_setup` flag.
 function Plugin:setup()
+  self.did_setup = false
+
   local function _setup()
     if self.did_setup then
       return
@@ -91,10 +102,9 @@ function Plugin:setup()
     end
     self:register_keys()
     self.did_setup = true
-    -- print('Setup complete for', self:modname()) 
   end
+
   if self.event then
-    -- print('Setting up', self:modname(), 'on event', vim.inspect(self.event))
     on_event(self.event, _setup)
   else
     _setup()

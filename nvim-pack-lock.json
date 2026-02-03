@@ -44,10 +44,6 @@
       "rev": "9b935c218ddba02e5dc75c94f90143bce1f7c646",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
-    "neovim": {
-      "rev": "1906da52dbc9876046ec9866a5aae25309d7587e",
-      "src": "https://github.com/neovim/neovim.git"
-    },
     "nvim-lspconfig": {
       "rev": "3f58aeca0c6ece8a9fb8782ea3fcb6024f285be3",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
@@ -61,7 +57,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "48934b49a2363b49ae1d698ed4cb30fb79d7efe8",
+      "rev": "b3efd6408e4e4d66d6caaee0579e72b579bc0884",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
@@ -87,10 +83,6 @@
     "vim-characterize": {
       "rev": "a8bffac6cead6b2869d939ecad06312b187a4c79",
       "src": "https://github.com/tpope/vim-characterize.git"
-    },
-    "vim-dirvish": {
-      "rev": "6be56227a4207c93cd8b607f52f567a1e13dddb1",
-      "src": "https://github.com/justinmk/vim-dirvish.git"
     },
     "vim-endwise": {
       "rev": "4994afb0cdf956d9a665a14b9c834869e602c396",

@@ -5,7 +5,7 @@ My (n)vim configuration.
 ## TODO
 
 - [ ] Who is VIMDIR? VIMHOME?
-- [ ] vim-nvim notification library
+- [x] vim-nvim notification library
 - [ ] <M-.> does what?
 - [ ] `edit = '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})'`
 
@@ -13,17 +13,16 @@ My (n)vim configuration.
 
 `https://github.com/folke/lazydev.nvim/issues/136#issuecomment-3773651709`
 
-
 ## vim pipes
 
 Taken from an infographic attributed to
 [Barry Arthur](http://of-vim-and-vigor.blogspot.com)
 
-| cmd                  | dot-repeatable? | undoable? | example                                                                |
-| -------------------- | --------------- | --------- | ---------------------------------------------------------------------- |
-| read (`:help :r!`)   | no              | yes       | `:0r !cmd` inserts the output of cmd onto the first line of the buffer |
-| write (`:help :w_c`) | no              | no        | `:w !cmd` is not the same as `:w!cmd`, note the space                  |
-| filter (`:help :!`)  | yes\*           | yes\*     | `!!cmd` is not the same as `:.                                         |
+| cmd                  | dot-repeatable? | undoable? | example                                               |
+| -------------------- | --------------- | --------- | ----------------------------------------------------- |
+| read (`:help :r!`)   | no              | yes       | `:0r !cmd` puts cmd output into top of buffer         |
+| write (`:help :w_c`) | no              | no        | `:w !cmd` is not the same as `:w!cmd`, note the space |
+| filter (`:help :!`)  | yes\*           | yes\*     | `!!cmd` is not the same as `:.                        |
 
 > \* `!!` form is repeatable; motion forms are repeatable and undoable
 
@@ -143,6 +142,7 @@ $$
 - [`lazy.nvim` plugin manager](https://lazy.folke.io/)
 - [LazyVim](https://www.lazyvim.org)
 - [`lsp-zero`](https://lsp-zero.netlify.app/docs/)
+
 ---
 
 > Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-

@@ -5,7 +5,6 @@
 -- override defaults
 -- vim.notify = nv.notify
 -- vim.print = dd
-
 vim.o.cmdheight = 0 -- XXX: experimental!
 -- BUG: ui2 error on declining to install
 -- vim.schedule callback: ...dn/.neovim/share/nvim/runtime/lua/vim/_extui/cmdline.lua:140: Invalid window id: 1002
