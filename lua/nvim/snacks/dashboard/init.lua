@@ -13,11 +13,11 @@ return {
     },
   },
   sections = {
-    function() return { header = require('folke.snacks.dashboard.header')(vim.o.columns) } end,
+    function() return { header = require('nvim.snacks.dashboard.header')(vim.o.columns) } end,
     { section = 'keys' },
     {
       section = 'terminal',
-      cmd = require('folke.snacks.dashboard.welcome')(),
+      cmd = require('nvim.snacks.dashboard.welcome')(),
       indent = 10,
       padding = 1,
       height = 12,

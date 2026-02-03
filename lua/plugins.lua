@@ -4,6 +4,62 @@ local nv = _G.nv or require('nvim')
 -- :%s/\['\([^']\+\)'\] = {/{ '\1',/
 local M = {
   {
+    'folke/snacks.nvim',
+    ---@type snacks.Config
+    opts = {
+      bigfile = require('nvim.snacks.bigfile'),
+      dashboard = require('nvim.snacks.dashboard'),
+      explorer = { replace_netrw = true },
+      image = { enabled = true },
+      indent = { indent = { only_current = false, only_scope = true } },
+      input = { enabled = true },
+      -- notifier = require('nvim.snacks.notifier'),
+      quickfile = { enabled = true },
+      scratch = { template = 'local x = \n\nprint(x)' },
+      terminal = { enabled = true },
+      scope = {
+        keys = {
+          textobject = {
+            ii = { min_size = 2, edge = false, cursor = false, desc = 'inner scope' },
+            ai = { min_size = 2, cursor = false, desc = 'full scope' },
+            -- ag = { min_size = 1, edge = false, cursor = false, treesitter = { enabled = false }, desc = "buffer" },
+          },
+          jump = {
+            ['[i'] = { min_size = 1, bottom = false, cursor = false, edge = true },
+            [']i'] = { min_size = 1, bottom = true, cursor = false, edge = true },
+          },
+        },
+      },
+      scroll = { enabled = true },
+      statuscolumn = require('nvim.snacks.statuscolumn'),
+      picker = require('nvim.snacks.picker'),
+      styles = {
+        lazygit = { height = 0, width = 0 },
+        terminal = { wo = { winhighlight = 'Normal:Character' } },
+        notification_history = { height = 0.9, width = 0.9, wo = { wrap = false } },
+      },
+      words = { enabled = true },
+    },
+    toggles = {
+      ['<leader>ac'] = 'autochdir',
+      ['<leader>dpp'] = 'profiler',
+      ['<leader>dph'] = 'profiler_highlights',
+      ['<leader>ua'] = 'animate',
+      ['<leader>ud'] = 'diagnostics',
+      ['<leader>uD'] = 'dim',
+      ['<leader>ug'] = 'indent',
+      ['<leader>uh'] = 'inlay_hints',
+      ['<leader>ul'] = 'line_number',
+      ['<leader>uS'] = 'scroll',
+      ['<leader>ut'] = 'treesitter',
+      ['<leader>uW'] = 'words',
+      ['<leader>uZ'] = 'zoom',
+      ['<leader>us'] = 'spell',
+      ['<leader>uL'] = 'relativenumber',
+      ['<leader>uw'] = 'wrap',
+    },
+  },
+  {
     'rdnajac/vim-lol',
     enabled = true,
     keys = vim
@@ -12,22 +68,6 @@ local M = {
       :fold({}, function(acc, src) return vim.list_extend(acc, src) end),
     ---@type table<string, table|string|fun():snacks.toggle.Class|snacks.toggle.Opts>
     toggles = {
-      ['<leader>ac'] = 'autochdir',
-      ['<leader>dpp'] = Snacks.toggle.profiler,
-      ['<leader>dph'] = Snacks.toggle.profiler_highlights,
-      ['<leader>ua'] = Snacks.toggle.animate,
-      ['<leader>ud'] = Snacks.toggle.diagnostics,
-      ['<leader>uD'] = Snacks.toggle.dim,
-      ['<leader>ug'] = Snacks.toggle.indent,
-      ['<leader>uh'] = Snacks.toggle.inlay_hints,
-      ['<leader>ul'] = Snacks.toggle.line_number,
-      ['<leader>uS'] = Snacks.toggle.scroll,
-      ['<leader>ut'] = Snacks.toggle.treesitter,
-      ['<leader>uW'] = Snacks.toggle.words,
-      ['<leader>uZ'] = Snacks.toggle.zoom,
-      ['<leader>us'] = 'spell',
-      ['<leader>uL'] = 'relativenumber',
-      ['<leader>uw'] = 'wrap',
       ['<leader>uv'] = {
         name = 'Virtual Text',
         get = function() return vim.diagnostic.config().virtual_text ~= false end,
@@ -35,7 +75,7 @@ local M = {
       },
       ['<leader>ub'] = {
         name = 'Translucency',
-        get = Snacks.util.is_transparent,
+        get = function() return Snacks.util.is_transparent() end,
         set = function(state)
           local bg = Snacks.util.color('Normal', 'bg') or '#24283B'
           Snacks.util.set_hl({ Normal = { bg = state and 'none' or bg } })
@@ -73,7 +113,6 @@ local M = {
   },
   {
     'nvim-mini/mini.nvim',
-    enabled = true,
     config = function()
       -- require('mini.misc').setup_termbg_sync()
       for modname, opts in pairs({
@@ -202,7 +241,6 @@ local M = {
   },
   {
     'folke/lazydev.nvim',
-    enabled = true,
     opts = {
       -- integrations = { cmp = false },
       library = {
@@ -247,7 +285,6 @@ local M = {
   },
   {
     'folke/which-key.nvim',
-    enabled = true,
     -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
     config = function()
       local wk = require('which-key')
@@ -284,7 +321,6 @@ local M = {
   },
   {
     'mason-org/mason.nvim',
-    enabled = true,
     opts = {
       package_installed = '✓',
       package_pending = '➜',
@@ -328,7 +364,6 @@ local M = {
   },
   {
     'nvim-treesitter/nvim-treesitter',
-    enabled = true,
     build = function()
       vim.cmd(
         ([[TSUpdate | TSInstall! %s]]):format(table.concat(nv.treesitter.parsers.to_install, ' '))
@@ -403,7 +438,6 @@ local M = {
   },
   {
     'Saghen/blink.cmp',
-    enabled = true,
     ---@module "blink.cmp"
     ---@type blink.cmp.Config
     opts = {

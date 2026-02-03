@@ -13,7 +13,7 @@ M.debug = {
   -- extmarks = true,
 }
 
-M.layouts = require('folke.snacks.picker.layouts')
+M.layouts = require('nvim.snacks.picker.layouts')
 
 M.sources = {
   keymaps = {
@@ -29,9 +29,9 @@ M.sources = {
     end,
   },
   -- autocmds = { confirm =  },
-  explorer = require('folke.snacks.picker.explorer'),
-  files = require('folke.snacks.picker.defaults'),
-  grep = require('folke.snacks.picker.defaults'),
+  explorer = require('nvim.snacks.picker.explorer'),
+  files = require('nvim.snacks.picker.defaults'),
+  grep = require('nvim.snacks.picker.defaults'),
   buffers = {
     layout = 'mylayout',
     input = { keys = { ['<C-x>'] = { 'bufdelete', mode = { 'n', 'i' } } } },

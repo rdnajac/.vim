@@ -19,6 +19,7 @@ local _submodules = {
   blink = true,
   keys = true,
   lsp = true,
+  snacks = true,
   treesitter = true,
 }
 

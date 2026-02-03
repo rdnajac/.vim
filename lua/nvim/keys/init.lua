@@ -22,10 +22,17 @@ local M = {}
 
 M.map = function(t) vim.iter(t):map(_parse):each(vim.keymap.set) end
 M.map_snacks_toggle = function(key, v)
-  -- stylua: ignore
-  if type(v) == 'string' then Snacks.toggle.option(v):map(key)
-  elseif type(v) == 'table' then Snacks.toggle.new(v):map(key)
-  elseif type(v) == 'function' then v():map(key) end
+  if type(v) == 'table' then
+    Snacks.toggle.new(v):map(key)
+  end
+  if type(v) == 'string' then
+    if Snacks.toggle[v] ~= nil then
+      Snacks.toggle[v]():map(key)
+    else
+      Snacks.toggle.option(v):map(key)
+    end
+  end
+  -- elseif type(v) == 'function' then v():map(key) end
 end
 
 return M

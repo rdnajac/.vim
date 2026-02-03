@@ -6,10 +6,6 @@ local function ptogglelist(cmd)
 end
 
 local keys = {
-  { { 'n', 't' }, '<c-\\>', Snacks.terminal.toggle },
-  { 'v', '<leader>/', Snacks.picker.grep_word },
-  { ',,', Snacks.picker.buffers },
-  { '\\\\', Snacks.dashboard.open },
   { 'n', 'dI', 'dai', { desc = 'Delete Indent', remap = true } },
   { '<leader>ui', '<Cmd>Inspect<CR>' },
   { '<leader>uI', '<Cmd>Inspect!<CR>' },

@@ -185,7 +185,7 @@ augroup vimrc
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
   " automatically resize splits when the window is resized
-  au VimResized * let t=tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet t
+  au VimResized * let t=tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet! t
 
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
 
@@ -509,9 +509,7 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
-  Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
-  " Plug 'nvim-mini/mini.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
   " Plug 'saxon1964/neovim-tips'

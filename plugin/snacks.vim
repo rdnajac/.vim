@@ -3,6 +3,11 @@ if !has('nvim')
 endif
 
 command! LazyGit :lua Snacks.lazygit()
+" nnoremap <C-Bslash> <Cmd>
+  " { { 'n', 't' }, '<c-\\>', Snacks.terminal.toggle },
+  " { 'v', '<leader>/', Snacks.picker.grep_word },
+  " { ',,', Snacks.picker.buffers },
+  " { '\\\\', Snacks.dashboard.open },
 
 nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
