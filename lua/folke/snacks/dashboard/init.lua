@@ -17,7 +17,7 @@ return {
     { section = 'keys' },
     {
       section = 'terminal',
-      cmd = require('folke.snacks.dashboard.welcome'),
+      cmd = require('folke.snacks.dashboard.welcome')(),
       indent = 10,
       padding = 1,
       height = 12,
