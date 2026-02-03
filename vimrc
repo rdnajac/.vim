@@ -1,10 +1,6 @@
 " $MYVIMRC
 scriptencoding utf-8
-if has('nvim')
-  color tokyonight_generated
-else
-  color scheme
-endif
+color scheme
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
@@ -189,25 +185,20 @@ augroup vimrc
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
   " automatically resize splits when the window is resized
-  au VimResized * let t = tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet t
+  au VimResized * let t=tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet t
 
+  au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
+
+  " fix JSON conceallevel and use lua formatter
+  au FileType json,jsonc,json5 setlocal cole=0 et fex=v:lua.nv.json.format()
+  " close certain buffers with `q`
+  au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
+  " don't list certain buffer types (see ...?)
+  au FileType man,netrw,snacks_explorer setlocal nobuflisted
   " terminal stuff
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
 
-  au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
-augroup END
-
-augroup vimrc_filetype
-  autocmd!
-  " fix JSON conceallevel and use lua formatter
-  au FileType json,jsonc,json5 setlocal cole=0 et fex=v:lua.nv.json.format()
-
-  " close certain buffers with `q`
-  au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
-
-  " don't list certain buffer types (see ...?)
-  au FileType man,netrw,snacks_explorer setlocal nobuflisted
 augroup END
 
 " }}}1
