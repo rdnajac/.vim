@@ -111,4 +111,7 @@ function Plugin:setup()
   end
 end
 
+setmetatable(Plugin, {
+  __call = function(_, t) return Plugin.new(t):to_spec() end,
+})
 return Plugin
