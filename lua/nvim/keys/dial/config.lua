@@ -48,11 +48,18 @@ local filetype = {
   },
   json = { augend.semver.alias.semver },
   markdown = { augend.misc.alias.markdown_header },
-  lua = { new({ '_a', '_a', '_c', '_x', '_y', '_z' }, true) },
+  lua = {
+    new({ '_a', '_a', '_c', '_x', '_y', '_z' }, true),
+  },
   r = {
     new({ 'TRUE', 'FALSE' }),
   },
-  vim = { new({ 'echom', 'execute' }) },
+  sh = {
+    new({ 'bash', 'sh', 'zsh' }),
+  },
+  vim = {
+    new({ 'echom', 'execute' }),
+  },
 }
 
 filetype.rmd = vim.tbl_extend('force', {}, filetype.markdown, filetype.r)

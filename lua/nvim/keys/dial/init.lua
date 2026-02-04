@@ -1,4 +1,6 @@
 -- second,second,third
+package.preload['dial.config'] = function() return require('nvim.keys.dial.config') end
+
 local SELECT = [[lua require('dial.command').select_augend_%s(%s)]]
 local TXTOBJ = [[lua require('dial.command').textobj()]]
 local OPFUNC = [[let &opfunc='dial#operator#%s_%s']]
