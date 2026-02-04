@@ -13,6 +13,7 @@
 ---@field toggles? table<string, string|fun()|table> Snacks.nvim toggles to register.
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
+---@field init? fun():nil Called just before `packadd`ing the plugin.
 local Plugin = {}
 Plugin.__index = Plugin
 
@@ -22,8 +23,6 @@ Plugin.__index = Plugin
 --- @return Plugin
 function Plugin.new(v)
   local self = type(v) == 'table' and v or { v }
-  -- TODO: add init
-  -- if vim.is_callable(v.init) then v.init() end
   vim.validate('[1]', self[1], 'string')
   vim.validate('keys', self.keys, vim.islist, true)
   vim.validate('opts', self.opts, { 'table', 'function' }, true)
@@ -44,6 +43,7 @@ function Plugin:to_spec()
     name = self.name or self[1]:match('[^/]+$'),
     data = self.data or {
       build = self.build,
+      init = self.init,
       setup = function() return self:setup() end,
     },
   }

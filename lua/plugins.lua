@@ -368,14 +368,16 @@ local M = {
   },
   {
     'monaqa/dial.nvim',
-    config = function() require('nvim.keys.dial') end,
-    -- event = 'UIEnter',
-    -- keys = {
-    --   { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
-    --   { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
-    --   { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
-    --   { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
-    -- },
+    init = function()
+      package.preload['dial.config'] = function() return require('nvim.keys.dial.config') end
+    end,
+    -- stylua: ignore
+    keys = {
+      { { 'n', 'x' },  '<C-a>', '<Plug>(dial-increment)'   },
+      { { 'n', 'x' },  '<C-x>', '<Plug>(dial-decrement)'   },
+      { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
+      { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
+    },
   },
 }
 
@@ -394,4 +396,4 @@ M = vim.tbl_filter(function(t) return t.enabled ~= false end, M)
 -- M = vim.tbl_filter(function(t) return t.enabled == true end, M)
 
 return M
--- vim: fdl=1 fdm=expr foldminlines=1
+-- vim: fdm=expr foldminlines=1

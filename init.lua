@@ -35,8 +35,15 @@ local specs = vim.iter(plugins):map(nv.plug):totable()
 --- 5. custom loader to `packadd` and run setup function
 ---@param plug_data {spec: vim.pack.Spec, path: string}
 local function _load(plug_data)
+  -- helper to maybe call a function in plugin's data table
+  local function maybe(fn)
+    if vim.tbl_get(plug_data.spec, 'data', fn) and vim.is_callable(plug_data.spec.data[fn]) then
+      plug_data.spec.data[fn]()
+    end
+  end
+  maybe('init')
   vim.cmd.packadd({ plug_data.spec.name, bang = true })
-  return vim.tbl_get(plug_data.spec, 'data', 'setup')()
+  maybe('setup')
 end
 
 --- 6. `packadd` plugins with custom loader for setup
@@ -45,5 +52,7 @@ if vim.v.vim_did_enter == 0 then
 end
 
 -- require('jit.p').stop()
-
+vim.schedule(function()
+  vim.env.PACKDIR = vim.g.PACKDIR
+end)
 -- vim: fdl=0 fdm=expr
