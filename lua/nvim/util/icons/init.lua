@@ -18,6 +18,24 @@ local icons = {
     Normal = { ' ', 'Special' },
   },
   diff = { add = '▎', change = '▎', delete = '' },
+  mason = {
+    emojis = {
+      package_installed = '✅',
+      package_pending = '➡️',
+      package_uninstalled = '❌',
+    },
+    nerd = {
+      package_installed = '✓',
+      package_pending = '➜',
+      package_uninstalled = '✗',
+    },
+    round = {
+      package_installed = ' ',
+      package_pending = ' ',
+      package_uninstalled = ' ',
+    },
+  },
+
   sep = {
     -- component and section separators appear as they
     -- would in lualine, where left/right refer to the
