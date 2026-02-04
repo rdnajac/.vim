@@ -24,14 +24,12 @@ providers.lazydev = {
 }
 -- end
 
-local specs = {}
+local extras = require('nvim.blink.extras')
 
-sources.providers = vim
-  .iter(require('nvim.blink.specs'))
-  :fold(providers, function(acc, repo, config)
-    specs[#specs + 1] = repo
-    return vim.tbl_extend('force', acc, config)
-  end)
+sources.providers = vim.iter(extras):fold(
+  providers,
+  function(acc, _, config) return vim.tbl_extend('force', acc, config) end
+)
 
 local get_providers = function(mode)
   mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
@@ -39,13 +37,60 @@ local get_providers = function(mode)
   return vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
 end
 
+local blink_spec = {
+  'Saghen/blink.cmp',
+  -- TODO: build on initial install
+  build = 'BlinkCmp build',
+  event = 'UIEnter',
+  ---@module "blink.cmp"
+  ---@type blink.cmp.Config
+  opts = {
+    cmdline = { enabled = false },
+    completion = {
+      accept = { auto_brackets = { enabled = true } },
+      documentation = { auto_show = false },
+      ghost_text = { enabled = false },
+      -- keyword = {},
+      list = { selection = { preselect = true, auto_insert = true } },
+      trigger = {
+        show_on_keyword = true,
+        show_on_accept_on_trigger_character = true,
+        show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+      },
+      menu = require('nvim.blink.completion').menu,
+    },
+    -- fuzzy = { implementation = 'lua' },
+    keymap = {
+      ['<Tab>'] = {
+        function(cmp)
+          if cmp.snippet_active() then
+            return cmp.accept()
+          else
+            return cmp.select_and_accept()
+          end
+        end,
+        'snippet_forward',
+        function()
+          if not package.loaded['sidekick'] then
+            return false
+          end
+          return require('sidekick').nes_jump_or_apply()
+        end,
+        function() return vim.lsp.inline_completion.get() end,
+        'fallback',
+      },
+    },
+    signature = {
+      -- enabled = false, -- default = is `true`
+      -- window = { show_documentation = false },
+      -- TODO: check this
+    },
+    sources = sources, -- configured above
+  },
+}
+
 return {
-  -- only the completion menu is configured here
-  completion = require('nvim.blink.completion'),
-  -- completion sources and providers just defined
-  sources = sources,
-  -- additional plugins to install
-  specs = specs,
+  specs = vim.list_extend({ blink_spec }, vim.tbl_keys(extras)),
   -- statusline component showing active completion sources
   status = {
     function()

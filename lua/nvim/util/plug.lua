@@ -21,7 +21,7 @@ Plugin.__index = Plugin
 --- @param v table Plugin specification with required `[1]` field.
 --- @return Plugin
 function Plugin.new(v)
-  local self = v
+  local self = type(v) == 'table' and v or { v }
   -- TODO: add init
   -- if vim.is_callable(v.init) then v.init() end
   vim.validate('[1]', self[1], 'string')

@@ -20,6 +20,62 @@ end
 
 local M = {}
 
+M.specs = {
+  {
+    'folke/which-key.nvim',
+    -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
+    config = function()
+      local wk = require('which-key')
+      wk.setup({
+        keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
+        preset = 'helix',
+        replace = {
+          desc = {
+            -- { '<Plug>%(?(.*)%)?', '%1' },
+            { '^%+', '' },
+            { '<[cC]md>', ':' },
+            { '<[cC][rR]>', '󰌑 ' },
+            { '<[sS]ilent>', '' },
+            { '^lua%s+', '' },
+            { '^lua%s+', '' },
+            { '^call%s+', '' },
+            -- { '^:%s*', '' },
+          },
+        },
+        show_help = false,
+        sort = { 'order', 'alphanum', 'case', 'mod' },
+        spec = {
+          '<leader>?',
+          function() wk.show({ global = false }) end,
+          desc = 'Buffer Keymaps (which-key)',
+        },
+        {
+          '<C-w><Space>',
+          function() wk.show({ keys = '<C-w>', loop = true }) end,
+          desc = 'Window Hydra Mode (which-key)',
+        },
+      })
+    end,
+  },
+  {
+    'NStefan002/screenkey.nvim',
+    enabled = false,
+    opts = function() return require('nvim.keys.opts').screenkey() end,
+    toggles = {
+      ['<leader>uk'] = {
+        name = 'Screenkey floating window',
+        get = function() return require('screenkey').is_active() end,
+        set = function() return require('screenkey').toggle() end,
+      },
+      ['<leader>uK'] = {
+        name = 'Screenkey statusline component',
+        get = function() return require('screenkey').statusline_component_is_active() end,
+        set = function() return require('screenkey').toggle_statusline_component() end,
+      },
+    },
+  },
+}
+
 M.map = function(t) vim.iter(t):map(_parse):each(vim.keymap.set) end
 M.map_snacks_toggle = function(key, v)
   if type(v) == 'table' then

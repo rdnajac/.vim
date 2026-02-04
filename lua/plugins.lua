@@ -294,42 +294,6 @@ local M = {
     },
   },
   {
-    'folke/which-key.nvim',
-    -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
-    config = function()
-      local wk = require('which-key')
-      wk.setup({
-        keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },
-        preset = 'helix',
-        replace = {
-          desc = {
-            -- { '<Plug>%(?(.*)%)?', '%1' },
-            { '^%+', '' },
-            { '<[cC]md>', ':' },
-            { '<[cC][rR]>', '󰌑 ' },
-            { '<[sS]ilent>', '' },
-            { '^lua%s+', '' },
-            { '^lua%s+', '' },
-            { '^call%s+', '' },
-            -- { '^:%s*', '' },
-          },
-        },
-        show_help = false,
-        sort = { 'order', 'alphanum', 'case', 'mod' },
-        spec = {
-          '<leader>?',
-          function() wk.show({ global = false }) end,
-          desc = 'Buffer Keymaps (which-key)',
-        },
-        {
-          '<C-w><Space>',
-          function() wk.show({ keys = '<C-w>', loop = true }) end,
-          desc = 'Window Hydra Mode (which-key)',
-        },
-      })
-    end,
-  },
-  {
     'mason-org/mason.nvim',
     opts = {
       package_installed = '✓',
@@ -429,82 +393,12 @@ local M = {
     --   { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
     -- },
   },
-  {
-    'NStefan002/screenkey.nvim',
-    enabled = false,
-    opts = function() return require('nvim.keys.opts').screenkey() end,
-    toggles = {
-      ['<leader>uk'] = {
-        name = 'Screenkey floating window',
-        get = function() return require('screenkey').is_active() end,
-        set = function() return require('screenkey').toggle() end,
-      },
-      ['<leader>uK'] = {
-        name = 'Screenkey statusline component',
-        get = function() return require('screenkey').statusline_component_is_active() end,
-        set = function() return require('screenkey').toggle_statusline_component() end,
-      },
-    },
-  },
-  {
-    'Saghen/blink.cmp',
-    ---@module "blink.cmp"
-    ---@type blink.cmp.Config
-    opts = {
-      cmdline = { enabled = false },
-      completion = {
-        accept = { auto_brackets = { enabled = true } },
-        documentation = { auto_show = false },
-        ghost_text = { enabled = false },
-        -- keyword = {},
-        list = { selection = { preselect = true, auto_insert = true } },
-        trigger = {
-          show_on_keyword = true,
-          show_on_accept_on_trigger_character = true,
-          show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
-        },
-        menu = nv.blink.completion.menu,
-      },
-      -- fuzzy = { implementation = 'lua' },
-      keymap = {
-        ['<Tab>'] = {
-          function(cmp)
-            if cmp.snippet_active() then
-              return cmp.accept()
-            else
-              return cmp.select_and_accept()
-            end
-          end,
-          'snippet_forward',
-          function()
-            if not package.loaded['sidekick'] then
-              return false
-            end
-            return require('sidekick').nes_jump_or_apply()
-          end,
-          function() return vim.lsp.inline_completion.get() end,
-          'fallback',
-        },
-      },
-      signature = {
-        -- enabled = false, -- default = is `true`
-        -- window = { show_documentation = false },
-        -- TODO: check this
-      },
-      sources = nv.blink.sources,
-    },
-    build = 'BlinkCmp build',
-    event = 'UIEnter',
-  },
 }
-
--- extend blink community sources
-for _, v in ipairs(nv.blink.specs) do
-  M[#M + 1] = { v }
-end
 
 -- add folke ui plugins
 vim.list_extend(M, require('folke.specs'))
+vim.list_extend(M, nv.blink.specs)
+vim.list_extend(M, nv.keys.specs)
 
 -- filter plugins early
 M = vim.tbl_filter(function(t) return t.enabled ~= false end, M)
