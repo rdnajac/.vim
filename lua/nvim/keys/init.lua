@@ -24,7 +24,7 @@ local M = {}
 M.specs = {
   {
     'folke/which-key.nvim',
-    -- see icon rules at ~/.local/share/nvim/site/pack/core/opt/which-key.nvim/lua/which-key/icons.lua
+    -- see icon rules at `$PACKDIR/opt/which-key.nvim/lua/which-key/icons.lua`
     config = function()
       local wk = require('which-key')
       wk.setup({

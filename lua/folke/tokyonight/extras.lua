@@ -1,5 +1,5 @@
--- see ~/.local/share/nvim/site/pack/core/opt/tokyonight/lua/tokyonight/extra/
----
+-- see `$PACKDIR/tokyonight.nvim/lua/tokyonight/extra/`
+
 ---@type table<string, {ext:string, url:string, label:string, subdir?: string, sep?:string}>
 local extras = {
   eza = { ext = 'yml', url = 'https://eza.rocks', label = 'eza' },
