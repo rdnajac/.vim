@@ -1,16 +1,2 @@
-local M = {
-  {
-    ']]',
-    function() Snacks.words.jump(vim.v.count1) end,
-    mode = { 'n', 't' },
-    desc = 'Next Reference',
-  },
-  {
-    '[[',
-    function() Snacks.words.jump(-vim.v.count1) end,
-    mode = { 'n', 't' },
-    desc = 'Prev Reference',
-  },
-}
-
-return M
+-- vim.keymap.set({ 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end)
+-- vim.keymap.set({ 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end)

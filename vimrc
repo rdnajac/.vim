@@ -75,7 +75,7 @@ augroup END
 " set sessionoptions+=folds
 " set sessionoptions-=options   " already default in nvim
 set sessionoptions-=blank     " like vim-obsession
-set sessionoptions-=tabpages  " per project, not global
+" set sessionoptions-=tabpages  " per project, not global
 set sessionoptions-=terminal  " don't save terminals
 set sessionoptions-=folds
 set viewoptions-=options      " keep mkview minimal
@@ -131,8 +131,8 @@ else
 endif
 
 function! s:stdpath(name) abort
-  return exists('*stdpath') 
-	\ ? stdpath(a:name) 
+  return exists('*stdpath')
+	\ ? stdpath(a:name)
 	\ : expand('$XDG_'..toupper(a:name)..'_HOME')..'/vim'
 endfunction
 
@@ -183,7 +183,7 @@ augroup vimrc
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
   " automatically resize splits when the window is resized
-  au VimResized * let t=tabpagenr() | tabdo wincmd = | execute 'tabnext' t | unlet! t
+  au VimResized * let g:tabpagenr = tabpagenr() | tabdo wincmd = | execute 'tabnext' g:tabpagenr
 
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
 
@@ -277,6 +277,13 @@ nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
+
+" buffers
+" see plugin/snacks.vim
+
+" tabs
+nnoremap <leader>tn <Cmd>tabnew<CR>
+nnoremap <leader>tf :<C-U>tabfind<Space>
 
 " navigate buffers, windows, and tabs {{{2
 nnoremap <BS> :bprevious<CR>
@@ -454,7 +461,7 @@ call s:cabbrev('vv', 'verbose')
 call s:cabbrev('scp', '!scp %')
 call s:cabbrev('r', 'lua require')
 call s:cabbrev('m', 'Man')
-call s:cabbrev('s', 'lua Snacks')
+call s:cabbrev('S', 'lua Snacks')
 call s:cabbrev('f', 'find')
 call s:cabbrev('l', 'lua')
 " }}}1

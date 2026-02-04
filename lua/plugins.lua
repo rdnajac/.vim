@@ -50,6 +50,11 @@ local M = {
       },
       words = { enabled = true },
     },
+    keys = {
+      { 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
+      { ']]', function() Snacks.words.jump(vim.v.count1) end, mode = { 'n', 't' } },
+      { '[[', function() Snacks.words.jump(-vim.v.count1) end, mode = { 'n', 't' } },
+    },
     toggles = {
       ['<leader>ac'] = 'autochdir',
       ['<leader>dpp'] = 'profiler',
@@ -72,10 +77,11 @@ local M = {
   {
     'rdnajac/vim-lol',
     enabled = true,
-    keys = vim
-      .iter({ 'extra', 'brackets' })
-      :map(function(mod) return require('nvim.keys.' .. mod) end)
-      :fold({}, function(acc, src) return vim.list_extend(acc, src) end),
+    keys = {
+      { '<leader>ui', '<Cmd>Inspect<CR>' },
+      { '<leader>uI', '<Cmd>Inspect!<CR>' },
+      { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
+    },
     ---@type table<string, table|string|fun():snacks.toggle.Class|snacks.toggle.Opts>
     toggles = {
       ['<leader>uv'] = {
@@ -119,6 +125,89 @@ local M = {
           vim.opt_local.colorcolumn = state and col or ''
         end,
       },
+    },
+  },
+  {
+    'folke/lazydev.nvim',
+    opts = {
+      -- integrations = { cmp = false },
+      library = {
+        { path = 'snacks.nvim', words = { 'Snacks' } },
+        { path = 'mini.nvim', words = { 'Mini.*' } },
+        { path = 'nvim/util', words = { 'nv' } },
+      },
+    },
+  },
+  {
+    'folke/sidekick.nvim',
+    ---@type sidekick.Config
+    opts = {
+      cli = { win = { layout = 'float' } },
+    },
+    -- stylua: ignore
+    keys = {
+      { mode = 'n', expr = true, '<Tab>',
+        function() return
+	  require('sidekick').nes_jump_or_apply() and '' or '<Tab>'
+	end
+      },
+      -- { '<leader>a', group = 'ai', mode = { 'n', 'v' } },
+      { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI', },
+      { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI', },
+      { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session', },
+      { '<leader>ap', function() require('sidekick.cli').prompt() end, desc = 'Sidekick Select Prompt', mode = { 'n', 'x' }, },
+      { '<leader>at', function()
+          local msg = vim.fn.mode():sub(1, 1) == 'n' and '{file}' or '{this}'
+          require('sidekick.cli').send({ name = 'copilot', msg = msg })
+        end, mode = { 'n', 'x' }, desc = 'Send This (file/selection)',
+      },
+      { '<C-.>', mode = { 'n', 't', 'i', 'x' }, function() require('sidekick.cli').toggle('copilot') end, },
+    },
+    toggles = {
+      ['<leader>uN'] = {
+        name = 'Sidekick NES',
+        get = function() return require('sidekick.nes').enabled end,
+        set = function(state) require('sidekick.nes').enable(state) end,
+      },
+    },
+  },
+  {
+    'mason-org/mason.nvim',
+    opts = { ui = { icons = nv.icons.mason.emojis } },
+    build = vim.cmd.MasonUpdate,
+  },
+  {
+    'nvim-lualine/lualine.nvim',
+    enabled = false,
+    -- `https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets`
+    opts = {
+      options = {
+        component_separators = { left = '', right = '' },
+        -- section_separators = nv.icons.sep.section.rounded,
+        section_separators = { left = '', right = '' },
+        disabled_filetypes = {
+          statusline = { pattern = 'snacks_dashboard' },
+          -- winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_list', 'snacks_picker_input' },
+          tabline = { 'snacks_dashboard' },
+        },
+        ignore_focus = {
+          -- 'man',
+          -- 'help',
+        },
+        -- theme = {
+        --   normal = { a = 'Chromatophore_a', b = 'Chromatophore_b', c = 'Chromatophore_c' },
+        -- },
+        -- use_mode_colors = false,
+      },
+      extensions = { 'man' },
+      sections = {},
+      inactive_sections = {},
+      tabline = {},
+      winbar = {
+        -- lualine_a = { require('nvim.util.status').buffer },
+        lualine_a = { nv.blink.status },
+      },
+      inactive_winbar = {},
     },
   },
   {
@@ -250,89 +339,6 @@ local M = {
     },
   },
   {
-    'folke/lazydev.nvim',
-    opts = {
-      -- integrations = { cmp = false },
-      library = {
-        { path = 'snacks.nvim', words = { 'Snacks' } },
-        { path = 'mini.nvim', words = { 'Mini.*' } },
-        { path = 'nvim/util', words = { 'nv' } },
-      },
-    },
-  },
-  {
-    'folke/sidekick.nvim',
-    ---@type sidekick.Config
-    opts = {
-      cli = { win = { layout = 'float' } },
-    },
-    -- stylua: ignore
-    keys = {
-      { mode = 'n', expr = true, '<Tab>',
-        function() return
-	  require('sidekick').nes_jump_or_apply() and '' or '<Tab>'
-	end
-      },
-      -- { '<leader>a', group = 'ai', mode = { 'n', 'v' } },
-      { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI', },
-      { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI', },
-      { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session', },
-      { '<leader>ap', function() require('sidekick.cli').prompt() end, desc = 'Sidekick Select Prompt', mode = { 'n', 'x' }, },
-      { '<leader>at', function()
-          local msg = vim.fn.mode():sub(1, 1) == 'n' and '{file}' or '{this}'
-          require('sidekick.cli').send({ name = 'copilot', msg = msg })
-        end, mode = { 'n', 'x' }, desc = 'Send This (file/selection)',
-      },
-      { '<C-.>', mode = { 'n', 't', 'i', 'x' }, function() require('sidekick.cli').toggle('copilot') end, },
-    },
-    toggles = {
-      ['<leader>uN'] = {
-        name = 'Sidekick NES',
-        get = function() return require('sidekick.nes').enabled end,
-        set = function(state) require('sidekick.nes').enable(state) end,
-      },
-    },
-  },
-  {
-    'mason-org/mason.nvim',
-    opts = { ui = { icons = nv.icons.mason.emojis } },
-    build = vim.cmd.MasonUpdate,
-  },
-  {
-    'nvim-lualine/lualine.nvim',
-    enabled = false,
-    -- `https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets`
-    opts = {
-      options = {
-        component_separators = { left = '', right = '' },
-        -- section_separators = nv.icons.sep.section.rounded,
-        section_separators = { left = '', right = '' },
-        disabled_filetypes = {
-          statusline = { pattern = 'snacks_dashboard' },
-          -- winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_list', 'snacks_picker_input' },
-          tabline = { 'snacks_dashboard' },
-        },
-        ignore_focus = {
-          -- 'man',
-          -- 'help',
-        },
-        -- theme = {
-        --   normal = { a = 'Chromatophore_a', b = 'Chromatophore_b', c = 'Chromatophore_c' },
-        -- },
-        -- use_mode_colors = false,
-      },
-      extensions = { 'man' },
-      sections = {},
-      inactive_sections = {},
-      tabline = {},
-      winbar = {
-        -- lualine_a = { require('nvim.util.status').buffer },
-        lualine_a = { nv.blink.status },
-      },
-      inactive_winbar = {},
-    },
-  },
-  {
     'MeanderingProgrammer/render-markdown.nvim',
     enabled = true,
     -- TODO: this should be init
@@ -388,4 +394,4 @@ M = vim.tbl_filter(function(t) return t.enabled ~= false end, M)
 -- M = vim.tbl_filter(function(t) return t.enabled == true end, M)
 
 return M
--- vim: fdl=1 fdm=expr
+-- vim: fdl=1 fdm=expr foldminlines=1
