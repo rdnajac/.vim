@@ -39,7 +39,7 @@ function M.relative_parts(buf)
 
   if nv.fn.is_nonempty_string(root) then
     if cwd == root or vim.startswith(cwd, root .. '/') then
-      local name = vim.fn.fnamemodify(root, ':t')
+      local name = vim.fs.basename(root)
       local rel = relative(cwd, root)
       return { name .. (rel == '.' and '' or '/' .. rel), relative(file, cwd) }
     end

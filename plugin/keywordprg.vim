@@ -8,8 +8,8 @@ command! -nargs=* MyMan call s:mykeywordprg(<f-args>)
 function! s:mykeywordprg(...) abort
   if !empty(b:manpage)
     let keyword = a:0 ? a:1 : expand('<cword>')
-    Info keyword
-    execute 'Man '..b:manpage
+    " Info keyword
+    execute 'Man' b:manpage
     call search(keyword)
   endif
 endfunction

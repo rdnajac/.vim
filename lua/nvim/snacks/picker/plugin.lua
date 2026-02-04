@@ -1,11 +1,11 @@
-local m = MiniIcons
+-- local m = MiniIcons
 
 local items = vim.fn.globpath(vim.g.plug_home, '*', true, true)
 
 local entries = {}
 for _, path in ipairs(items) do
   table.insert(entries, {
-    text = vim.fn.fnamemodify(path, ':t'),
+    text = vim.fs.basename(path),
     value = path,
   })
 end

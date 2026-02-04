@@ -49,7 +49,7 @@ methods['textDocument/documentSymbol'] = function(params, callback)
     :map(function(i, line) return vim.trim(line), i end)
     :filter(function(line, _) return line ~= '' end)
     :map(function(line, i)
-      local name = vim.fn.fnamemodify(line, ':t')
+      local name = vim.fs.basename(line)
       local kind = vim.endswith(name, '/') and vim.lsp.protocol.SymbolKind.Namespace
         or vim.lsp.protocol.SymbolKind.File
       local range = {
@@ -78,7 +78,7 @@ methods['textDocument/codeAction'] = function(params, callback)
 
   local function new_action(title, command)
     return {
-      title = ('%s `%s`'):format(title, vim.fn.fnamemodify(abspath, ':t')),
+      title = ('%s `%s`'):format(title, vim.fs.basename(abspath)),
       command = { title = title, command = command, arguments = { abspath } },
     }
   end
