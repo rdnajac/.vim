@@ -224,7 +224,7 @@ local M = {
     end,
     keys = {
       { '<leader>fm', function() MiniFiles.open() end },
-      { '-', function() MiniFiles.open() end },
+      -- { '-', function() MiniFiles.open() end },
     },
     toggles = {
       ['<leader>uG'] = {
@@ -295,11 +295,7 @@ local M = {
   },
   {
     'mason-org/mason.nvim',
-    opts = {
-      package_installed = '✓',
-      package_pending = '➜',
-      package_uninstalled = '✗',
-    },
+    opts = { ui = { icons = nv.icons.mason.emojis } },
     build = vim.cmd.MasonUpdate,
   },
   {
@@ -334,24 +330,6 @@ local M = {
         lualine_a = { nv.blink.status },
       },
       inactive_winbar = {},
-    },
-  },
-  {
-    'nvim-treesitter/nvim-treesitter',
-    build = function()
-      vim.cmd(
-        ([[TSUpdate | TSInstall! %s]]):format(table.concat(nv.treesitter.parsers.to_install, ' '))
-      )
-    end,
-  },
-  {
-    'nvim-treesitter/nvim-treesitter-context',
-    toggles = {
-      ['<leader>ux'] = {
-        name = 'Treesitter Context',
-        get = function() return require('treesitter-context').enabled() end,
-        set = function() require('treesitter-context').toggle() end,
-      },
     },
   },
   {
@@ -395,10 +373,15 @@ local M = {
   },
 }
 
--- add folke ui plugins
-vim.list_extend(M, require('folke.specs'))
-vim.list_extend(M, nv.blink.specs)
-vim.list_extend(M, nv.keys.specs)
+-- collect all plugin specs from nv submodules
+vim
+  .iter({
+    require('folke.specs'),
+    nv.blink.specs,
+    nv.keys.specs,
+    nv.treesitter.specs,
+  })
+  :each(function(specs) vim.list_extend(M, specs) end)
 
 -- filter plugins early
 M = vim.tbl_filter(function(t) return t.enabled ~= false end, M)

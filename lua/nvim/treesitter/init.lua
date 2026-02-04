@@ -1,4 +1,22 @@
 local M = {}
+M.parsers = require('nvim.treesitter.parsers')
+M.specs = {
+  {
+    'nvim-treesitter/nvim-treesitter',
+    build = function() vim.cmd('TSUpdate | TSInstall! ' .. table.concat(M.parsers.to_install, ' ')) end,
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    toggles = {
+      ['<leader>ux'] = {
+        name = 'Treesitter Context',
+        get = function() return require('treesitter-context').enabled() end,
+        set = function() require('treesitter-context').toggle() end,
+      },
+    },
+  },
+  -- require('nvim.treesitter.textobjects'),
+}
 
 ---@type table<string,string>?
 M._installed = nil

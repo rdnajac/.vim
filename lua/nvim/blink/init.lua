@@ -1,4 +1,5 @@
 -- TODO: no snippets in middle of word
+---@module "blink.cmp"
 -- `https://cmp.saghen.dev/`
 local providers = require('nvim.blink.providers')
 local sources = {
@@ -10,19 +11,20 @@ local sources = {
     )
   end,
   per_filetype = {
-    lua = { inherit_defaults = true, 'lazydev' },
-    -- sql = { 'dadbod' },
+    -- sql = { 'dadbod' }, -- TODO:
   },
 }
 
--- -- add LazyDev provider if available
+-- add LazyDev provider if available
 -- if pcall(require, 'lazydev.integrations.blink') then
-providers.lazydev = {
-  name = 'LazyDev',
-  module = 'lazydev.integrations.blink',
-  score_offset = 100,
-}
--- end
+if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
+  providers.lazydev = {
+    name = 'LazyDev',
+    module = 'lazydev.integrations.blink',
+    score_offset = 100,
+  }
+  sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
+end
 
 local extras = require('nvim.blink.extras')
 
@@ -42,7 +44,6 @@ local blink_spec = {
   -- TODO: build on initial install
   build = 'BlinkCmp build',
   event = 'UIEnter',
-  ---@module "blink.cmp"
   ---@type blink.cmp.Config
   opts = {
     cmdline = { enabled = false },
