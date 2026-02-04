@@ -1,4 +1,4 @@
--- overrides:
+-- overrides: $PACKDIR/dial.nvim/lua/dial/config.lua
 -- local config = require('dial.config')
 -- config.augends:register_group(defaults)
 -- config.augends:on_filetype(fts)
@@ -16,29 +16,38 @@ local new = function(elements, word, cyclic)
   })
 end
 
-local default = {
-  augend.integer.alias.decimal_int,
-  augend.integer.alias.decimal,
-  augend.integer.alias.hex,
-  augend.date.new({ pattern = '%Y/%m/%d', default_kind = 'day' }),
-  augend.date.new({ pattern = '%Y-%m-%d', default_kind = 'day' }),
-  augend.date.new({ pattern = '%m/%d', default_kind = 'day', only_valid = true }),
-  augend.date.new({ pattern = '%H:%M', default_kind = 'day', only_valid = true }),
-  augend.constant.alias.en_weekday,
-  augend.constant.alias.en_weekday_full,
-  augend.constant.alias.bool,
-  augend.constant.alias.Bool,
-  -- new({ 'and', 'or' }, true),
-  new({ '&&', '||' }),
-  new({ 'top', 'middle', 'bottom' }, true),
-  new({ 'left', 'center', 'right' }, true),
-  new({ 'start', 'end' }, true),
-  new({ 'row', 'col' }),
-  new({ 'human', 'mouse' }),
-  -- stylua: ignore start
-  new({ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' }, true),
-  new({ 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh', 'eighth', 'ninth', 'tenth' }),
-  -- stylua: ignore end
+local M = {
+  augends = {
+    group = {
+      default = {
+        augend.integer.alias.decimal_int,
+        augend.integer.alias.decimal,
+        augend.integer.alias.hex,
+        augend.date.new({ pattern = '%Y/%m/%d', default_kind = 'day' }),
+        augend.date.new({ pattern = '%Y-%m-%d', default_kind = 'day' }),
+        augend.date.new({ pattern = '%m/%d', default_kind = 'day', only_valid = true }),
+        augend.date.new({ pattern = '%H:%M', default_kind = 'day', only_valid = true }),
+        augend.constant.alias.en_weekday,
+        augend.constant.alias.en_weekday_full,
+        augend.constant.alias.bool,
+        augend.constant.alias.Bool,
+        -- new({ 'and', 'or' }, true),
+        new({ '&&', '||' }),
+        new({ 'top', 'middle', 'bottom' }, true),
+        new({ 'left', 'center', 'right' }, true),
+        new({ 'start', 'end' }, true),
+        new({ 'row', 'col' }),
+        new({ 'human', 'mouse' }),
+        -- stylua: ignore start
+        new({ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' }, true),
+        new({ 'January', 'February', 'March', 'April', 'May', 'June', 'July',
+	      'August', 'September', 'October', 'November', 'December' }, true),
+        new({ 'first', 'second', 'third', 'fourth', 'fifth', 'sixth', 'seventh',
+	      'eighth', 'ninth', 'tenth', 'eleventh', 'twelfth', 'thirteenth' }),
+        -- stylua: ignore end
+      },
+    },
+  },
 }
 
 local filetype = {
@@ -60,37 +69,35 @@ local filetype = {
   vim = {
     new({ 'echom', 'execute' }),
   },
-}
-
-filetype.rmd = vim.tbl_extend('force', {}, filetype.markdown, filetype.r)
--- filetype.quarto = vim.deepcopy(filetype.rmd)
--- filetype.zsh = vim.deepcopy(filetype.sh)
-
--- HACK: extend each group with default switches
-for _, group in pairs(filetype) do
-  vim.list_extend(group, default)
-end
-
-local ft_map = {
+  -- filetype mappings
   quarto = 'rmd',
+  sass = 'css',
+  scss = 'css',
   zsh = 'sh',
 }
 
--- TODO:
-setmetatable(filetype, {
-  __index = function(_, ft)
-    if ft_map[ft] then
-      return filetype[ft_map[ft]]
+-- combine filetypes
+filetype.rmd = vim.tbl_extend('force', {}, filetype.markdown, filetype.r)
+
+M.augends.filetype = setmetatable({}, {
+  __index = function(t, ft)
+    local v = rawget(filetype, ft)
+    local res
+
+    if type(v) == 'string' then
+      -- only follow one level of redirection
+      if type(rawget(filetype, v)) == 'string' then
+        error(('too many levels of redirection: %s = %s'):format(ft, v))
+      end
+      res = t[v] -- redirect and re-trigger __index
+    elseif type(v) == 'table' then
+      -- create a copy and extend with defaults on first access
+      res = vim.list_extend(vim.deepcopy(v), M.augends.group.default)
     end
-    return filetype[ft]
+
+    rawset(t, ft, res)
+    return res
   end,
 })
 
-return {
-  augends = {
-    group = {
-      default = default,
-    },
-    filetype = filetype,
-  },
-}
+return M
