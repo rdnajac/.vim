@@ -8,7 +8,7 @@ vim.api.nvim_create_user_command(
   {}
 )
 
-vim.api.nvim_create_user_command('PlugUpdate', function(opts)
+vim.api.nvim_create_user_command('Update', function(opts)
   local plugs = #opts.fargs > 0 and opts.fargs or nil
   vim.pack.update(plugs, { force = opts.bang })
 end, {

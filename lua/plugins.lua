@@ -1,14 +1,25 @@
 local nv = _G.nv or require('nvim')
 
--- substitue with capture group
--- :%s/\['\([^']\+\)'\] = {/{ '\1',/
 local M = {
   {
     'folke/snacks.nvim',
     ---@type snacks.Config
     opts = {
       bigfile = require('nvim.snacks.bigfile'),
-      dashboard = require('nvim.snacks.dashboard'),
+      dashboard = {
+        preset = { keys = require('nvim.snacks.dashboard.menu') },
+        sections = {
+          function() return { header = require('nvim.snacks.dashboard.header')(vim.o.columns) } end,
+          { section = 'keys' },
+          {
+            section = 'terminal',
+            cmd = require('nvim.snacks.dashboard.welcome')(),
+            indent = 10,
+            padding = 1,
+            height = 12,
+          },
+        },
+      },
       explorer = { replace_netrw = true },
       image = { enabled = true },
       indent = { indent = { only_current = false, only_scope = true } },
@@ -455,6 +466,7 @@ local M = {
         },
         menu = nv.blink.completion.menu,
       },
+      -- fuzzy = { implementation = 'lua' },
       keymap = {
         ['<Tab>'] = {
           function(cmp)

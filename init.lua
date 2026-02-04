@@ -27,9 +27,8 @@ end
 _G.nv = require('nvim')
 
 --- 4. import plug module convert plugins table to specs
-local Plug = require('plug')
 local plugins = require('plugins')
-local specs = vim.iter(plugins):map(Plug.new):map(function(p) return p:to_spec() end):totable()
+local specs = vim.iter(plugins):map(nv.plug.new):map(function(p) return p:to_spec() end):totable()
 
 --- 5. custom loader to `packadd` and run setup function
 ---@param plug_data {spec: vim.pack.Spec, path: string}

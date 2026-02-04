@@ -2,7 +2,9 @@ if !has('nvim')
   finish
 endif
 
+command! Health :packloadall | checkhealth
 command! LazyGit :lua Snacks.lazygit()
+
 " nnoremap <C-Bslash> <Cmd>
   " { { 'n', 't' }, '<c-\\>', Snacks.terminal.toggle },
   " { 'v', '<leader>/', Snacks.picker.grep_word },
@@ -55,7 +57,8 @@ nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
 nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
 
 " neovim news
-nnoremap <leader>N <Cmd>lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })<CR>
+command! News :lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
+nnoremap <leader>N <Cmd>News<CR>
 
 " notifications
 nnoremap <leader>n <Cmd>lua Snacks.notifier.show_history()<CR>
