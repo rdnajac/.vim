@@ -108,40 +108,11 @@ augroup END
 
 " }}}1
 " Section: neovim {{{1
-if exists('*stdpath')
-  " let g:stdpath = map([ 'cache', 'config', 'data', 'state'], {_, d -> d: stdpath(d)})
-  let g:stdpath = {
-	\  'cache' : stdpath('cache'),
-	\ 'config' : stdpath('config'),
-	\   'data' : stdpath('data'),
-	\  'state' : stdpath('state'),
-	\ }
-endif
-
-if !exists('g:plug_home')
-  " let g:plug_home = join([ stdpath('data'), 'site', 'pack', 'core', 'opt' ], '/')
-  let g:plug_home = expand('~/.local/share/nvim/site/pack/core/opt')
-endif
-
-if exists(':restart') == 2
-  let s:sesh = g:stdpath['state'] . '/Session.vim'
-  function s:restart() abort
-    execute printf('mksession! %s | confirm restart silent source %s', s:sesh, s:sesh)
-  endfunction
-  command! Restart call s:restart()
-endif
-
 if !has('nvim')
   call vim#defaults#()
   call vim#sensible#()
   call vimrc#toggles()
 else
-  set backup backupext=.bak
-  let &backupdir = g:stdpath['state'] . '/backup//'
-  let &backupskip .= ',' . expand('$HOME/.cache/*')
-  let &backupskip .= ',' . expand('$HOME/.local/*')
-  set undofile
-
   " more navigation
   set smoothscroll
   set jumpoptions+=view
@@ -157,10 +128,37 @@ else
 
   " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
-
-  " TODO: treesitter highlight group module
-  hi link vimMap @keyword
 endif
+
+function! s:stdpath(name) abort
+  return exists('*stdpath') 
+	\ ? stdpath(a:name) 
+	\ : expand('$XDG_'..toupper(a:name)..'_HOME')..'/vim'
+endfunction
+
+let g:stdpath = {
+      \  'cache': s:stdpath('cache'),
+      \ 'config': s:stdpath('config'),
+      \   'data': s:stdpath('data'),
+      \  'state': s:stdpath('state')
+      \ }
+
+if exists(':restart') == 2
+  let s:sesh = g:stdpath['state']..'/Session.vim'
+  function s:restart() abort
+    execute printf('mksession! %s | confirm restart silent source %s', s:sesh, s:sesh)
+  endfunction
+  command! Restart call s:restart()
+endif
+
+" set backup/undo if on nvim, or if on a machine not running nvim
+let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+let &backup   = (has('nvim') || !executable('nvim')) ? 1 : &backup
+let &backupext = '.bak'
+let &backupdir = g:stdpath['state']..'/backup//'
+let &backupskip .= ','..expand('$HOME')..'/.cache/*'
+let &backupskip .= ','..expand('$HOME')..'/.local/*'
+
 " }}}1
 " Section: autocmds {{{1
 augroup vimrc
@@ -443,7 +441,7 @@ cnoreabbrev !! !./%
 cnoreabbrev <expr> %% expand('%:p:h')
 
 function! s:singlequote(str)
-  return "'" . substitute(copy(a:str), "'", "''", 'g') . "'"
+  return "'"..substitute(copy(a:str), "'", "''", 'g').."'"
 endfunction
 
 function! s:cabbrev(lhs, rhs)
@@ -516,4 +514,3 @@ else
 endif
 call plug#end()
 " }}}
-" vim: fdl=0 fdm=marker

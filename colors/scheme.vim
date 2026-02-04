@@ -6,6 +6,7 @@ if has('nvim')
   " colorscheme tokyonight_generated
   let s:colors_dir = expand('<script>:p:h')
   execute 'source' s:colors_dir..'/tokyonight_generated.lua'
+  hi link vimMap @keyword
   finish
 endif
 

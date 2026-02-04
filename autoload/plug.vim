@@ -6,6 +6,10 @@ if !has('nvim')
 	  \ s:jetpath)
     packadd vim-jetpack
   endif
+  let g:plug#home = expand('~/.vim/pack/jetpack')
+else
+  " let g:plug#home = join([ stdpath('data'), 'site', 'pack', 'core', 'opt' ], '/')
+  let g:plug#home = expand('~/.local/share/nvim/site/pack/core/opt')
 endif
 
 function! plug#begin(...)

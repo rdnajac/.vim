@@ -1,5 +1,7 @@
 --- init.lua
--- require('jit.p').start('ri1', '/tmp/profile')
+
+-- require('jit.p').start('ri1', '/tmp/prof') -- start luajit profiling
+
 --- 1. source vimrc
 ---  - relies on autoload/plug.vim to override vim-plug calls
 ---  - enables `vim.loader` and `vim.pack.add`s base plugins
@@ -8,7 +10,7 @@ vim.cmd([[ runtime vimrc ]])
 --- 2. snack attack!
 --- - exposes global debug functions
 -- FIXME: this will fail if snacks.nvim is not installed)
-vim.opt.rtp:prepend(vim.g.plug_home .. '/snacks.nvim')
+vim.opt.rtp:prepend(vim.g['plug#home'] .. '/snacks.nvim')
 require('snacks') -- XXX: _G.Snacks
 _G.dd = Snacks.debug.inspect
 _G.bt = Snacks.debug.backtrace

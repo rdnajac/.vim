@@ -1,25 +1,21 @@
-" FIXME: !!!
 nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
-nnoremap cd- <Cmd>cd -<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
 " TODO: make line continuations in vim act like a bulleted list
 let s:dirs = {
       \ '~': $HOME,
       \ 'G': $HOME.'/GitHub/',
-      \ 'p': g:plug_home,
-      \ 'v': g:vimrc#dir,
       \ 'V': $VIMRUNTIME,
+      \ 'v': g:vimrc#dir,
+      \ 'p': g:plug#home,
+      \ 'B': &backupdir,
+      \ 'c': g:stdpath['config'],
+      \ 'C': g:stdpath['cache'],
+      \ 'd': g:stdpath['data'],
+      \ 's': g:stdpath['state'],
       \ '.': '~/.local/share/chezmoi/',
       \ }
 " g:chezmoi#source_dir_path
-
-if exists('g:stdpath')
-  let s:dirs.c = stdpath('config')
-  let s:dirs.C = stdpath('cache')
-  let s:dirs.d = stdpath('data')
-  let s:dirs.s = stdpath('state')
-endif
 
 for [key, value] in items(s:dirs)
   execute printf('nnoremap cd%s <Cmd>edit %s<CR>', key, fnamemodify(value, ":~"))

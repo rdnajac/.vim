@@ -22,6 +22,8 @@ Plugin.__index = Plugin
 --- @return Plugin
 function Plugin.new(v)
   local self = v
+  -- TODO: add init
+  -- if vim.is_callable(v.init) then v.init() end
   vim.validate('[1]', self[1], 'string')
   vim.validate('keys', self.keys, vim.islist, true)
   vim.validate('opts', self.opts, { 'table', 'function' }, true)

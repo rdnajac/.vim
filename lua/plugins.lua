@@ -1,5 +1,4 @@
 local nv = _G.nv or require('nvim')
-
 local M = {
   {
     'folke/snacks.nvim',
@@ -422,7 +421,7 @@ local M = {
   {
     'monaqa/dial.nvim',
     config = function() require('nvim.keys.dial') end,
-    event = 'UIEnter',
+    -- event = 'UIEnter',
     -- keys = {
     --   { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
     --   { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
