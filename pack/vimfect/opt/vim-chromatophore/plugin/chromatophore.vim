@@ -1,4 +1,6 @@
-let g:chromatophore_groups = [
+" if !exists('g:chromatophores')
+" let g:chromatophores = [ 'String' ]
+let g:chromatophores = [
       \ 'String',
       \ 'FloatBorder',
       \ 'FloatFooter',
@@ -13,12 +15,13 @@ let g:chromatophore_groups = [
       \ 'helpSectionDelim',
       \ '@markup.raw.markdown_inline',
       \ ]
+" endif
+
+" call add(g:chromatophores, 'SnacksDashboardHeader')
 
 augroup chromatophore
   autocmd!
-  if has('nvim')
-    autocmd UIEnter * call chromatophore#setup()
-  endif
-  autocmd ColorScheme * call chromatophore#setup()
-  autocmd ModeChanged * call chromatophore#metachrosis()
+  " if has('nvim') | autocmd UIEnter * call chromatophore#setup() | endif
+autocmd ColorScheme * call chromatophore#setup()
+autocmd ModeChanged * call chromatophore#metachrosis()
 augroup END

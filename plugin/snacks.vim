@@ -125,9 +125,11 @@ let s:commands = [
       \ 'Autocmds',
       \ 'Colorschemes',
       \ 'Commands',
+      \ 'Diagnostics',
       \ 'Files',
       \ 'Grep',
       \ 'Help',
+      \ 'Highlights',
       \ 'Icons',
       \ 'Keymaps',
       \ 'Registers',
@@ -140,14 +142,12 @@ let s:commands = [
 for [_, cmd] in items(s:commands)
   execute printf('command %s :lua Snacks.picker.%s()<CR>', cmd, tolower(cmd))
 endfor
-
 finish
 let s:commands = [
       \ 'Actions',
       \ 'Buffers',
       \ 'Cliphist',
       \ 'CommandHistory',
-      \ 'Diagnostics',
       \ 'DiagnosticsBuffer',
       \ 'Explorer',
       \ 'GhActions',
@@ -167,7 +167,6 @@ let s:commands = [
       \ 'GitStatus',
       \ 'GrepBuffers',
       \ 'GrepWord',
-      \ 'Highlights',
       \ 'Jumps',
       \ 'Lines',
       \ 'Loclist',

@@ -1,12 +1,9 @@
-if !exists('g:chromatophore_groups')
-  let g:chromatophore_groups = [ 'String' ]
-endif
-
 let s:mode_color_map = {
       \ 'normal':   '#39FF14',
       \ 'visual':   '#F7768E',
       \ 'select':   '#FF9E64',
       \ 'replace':  '#FF007C',
+      \ 'command': '#e0af68',
       \ 'terminal': '#BB9AF7',
       \ 'shell':    '#14AEFF',
       \ 'pending':  '#E0AF68',
@@ -39,6 +36,21 @@ function! s:color(...) abort
   return get(s:mode_map, l:mode[0], 'normal')
 endfunction
 
+function! s:hl_set(name, fg, bg, ...) abort
+  let l:attr = a:0 ? a:1 : ''
+  let l:cmd = 'highlight ' . a:name . ' guifg=' . a:fg . ' guibg=' . a:bg
+  if !empty(l:attr)
+    let l:cmd .= ' gui=' . l:attr
+  endif
+  execute l:cmd
+endfunction
+
+function! s:hl_link(target, groups) abort
+  for l:group in a:groups
+    execute 'highlight! link ' . l:group . ' ' . a:target
+  endfor
+endfunction
+
 function! chromatophore#color() abort
   return get(s:mode_color_map, s:color(), s:mode_color_map.normal)
 endfunction
@@ -51,23 +63,23 @@ function! chromatophore#setup() abort
 
   highlight! Black guifg=black
   " highlight! Chromatophore_a guifg=
-  call vim#hl#set('Chromatophore',    mode_color, 'NONE')
-  call vim#hl#set('ChromatophoreB',   mode_color, 'NONE', 'bold')
-  " call vim#hl#set('Chromatophore_a',  mode_color, eigengrau,'bold,reverse')
-  call vim#hl#set('Chromatophore_a',  black,  mode_color, 'bold')
-  call vim#hl#set('Chromatophore_b',  mode_color, grey,       'bold')
-  call vim#hl#set('Chromatophore_c',  mode_color, eigengrau)
-  call vim#hl#set('Chromatophore_z',  mode_color, eigengrau, 'bold')
-  " call vim#hl#set('Chromatophore_ab', mode_color, grey)
-  " call vim#hl#set('Chromatophore_bc', grey,       eigengrau)
-  " call vim#hl#set('Chromatophore_ac', mode_color, eigengrau)
+  call s:hl_set('Chromatophore',    mode_color, 'NONE')
+  call s:hl_set('ChromatophoreB',   mode_color, 'NONE', 'bold')
+  " call s:hl_set('Chromatophore_a',  mode_color, eigengrau,'bold,reverse')
+  call s:hl_set('Chromatophore_a',  black,  mode_color, 'bold')
+  call s:hl_set('Chromatophore_b',  mode_color, grey,       'bold')
+  call s:hl_set('Chromatophore_c',  mode_color, eigengrau)
+  call s:hl_set('Chromatophore_z',  mode_color, eigengrau, 'bold')
+  " call s:hl_set('Chromatophore_ab', mode_color, grey)
+  " call s:hl_set('Chromatophore_bc', grey,       eigengrau)
+  " call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
 
-  call vim#hl#link('Chromatophore', g:chromatophore_groups)
+  call s:hl_link('Chromatophore', g:chromatophores)
 
 endfunction
 
 function! chromatophore#metachrosis() abort
-  let l:color = chromatophore#color() 
+  let l:color = chromatophore#color()
   " for l:suffix in ['', '_a', '_b', '_c', '_z']
   for l:suffix in ['', '_b', '_c', '_z']
     execute printf('highlight Chromatophore%s guifg=%s', l:suffix, l:color)

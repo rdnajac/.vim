@@ -37,9 +37,9 @@ function! ooze#send(text) abort
   if get(g:, 'ooze_auto_advance', 1)
     call s:linefeed()
   endif
-  if get(g:, 'ooze_auto_scroll', 1)
-    call s:scroll()
-  endif
+  " if get(g:, 'ooze_auto_scroll', 1)
+  "   call s:scroll()
+  " endif
   return l:bytes
 endfunction
 
@@ -56,7 +56,7 @@ function! ooze#line() abort
     return 0
   endif
 
-  if l:ft ==# 'vim' || l:ft ==# 'lua'
+  if l:ft ==# 'vim' " || l:ft ==# 'lua'
     " check if the line contains the word `function`
     " if it does, call ooze#fn that calls the function
     " see yankmkd for capturing and converting modnames

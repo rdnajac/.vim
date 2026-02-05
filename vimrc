@@ -466,6 +466,11 @@ call s:cabbrev('f', 'find')
 call s:cabbrev('l', 'lua')
 " }}}1
 " Section: pack {{{1
+" my plugins
+packadd vim-chromatophore
+call chromatophore#setup()
+packadd! vim-nv
+
 " shipped plugins {{{2
 if has('nvim')
   packadd! nvim.difftool
@@ -480,9 +485,7 @@ endif
 
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
-Plug 'bullets-vim/bullets.vim'
 Plug 'dense-analysis/ale'
-Plug 'dstein64/vim-startuptime'
 " Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
@@ -498,7 +501,10 @@ Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/vim-dispatch'
 " Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-tbone'
-Plug 'vuciv/golf'
+" qol improvements and fun stuff
+" Plug 'bullets-vim/bullets.vim'
+" Plug 'dstein64/vim-startuptime'
+" Plug 'vuciv/golf'
 if !has('nvim')
   Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
@@ -516,8 +522,6 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
 else
   Plug 'folke/tokyonight.nvim'
-  Plug 'neovim/nvim-lspconfig'
-  " Plug 'b0o/SchemaStore.nvim'
   " Plug 'saxon1964/neovim-tips'
 endif
 call plug#end()
