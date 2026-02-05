@@ -8,7 +8,3 @@
 
 ((identifier) @module
   (#lua-match? @module "Mini.*"))
-
-; ((string
-;   content: (string_content) @test
-;   (#lua-match? @test "^<Cmd>lua%s")))
