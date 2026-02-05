@@ -59,6 +59,8 @@ local filetype = {
   markdown = { augend.misc.alias.markdown_header },
   lua = {
     new({ '_a', '_a', '_c', '_x', '_y', '_z' }, true),
+    -- TODO: require('module.submodule.key') to require('module.submodule').key
+    -- incerment and decrement like  and  and reach require('module').submodule.key
   },
   r = {
     new({ 'TRUE', 'FALSE' }),

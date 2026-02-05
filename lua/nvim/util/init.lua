@@ -15,7 +15,15 @@ M.is_curwin = function() return vim.api.nvim_get_current_win() ~= vim.g.statusli
 -- shared
 M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 
--- snacks
+-- fn
+---@param path string
+---@return string
+M.modname = function(path)
+  local name = vim.fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/', '.')
+  return name:sub(-4) == 'init' and name:sub(1, -6) or name
+end
+
+-- copied from `Snacks.util`
 M.defer_redraw_win = function(t)
   -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
   vim.defer_fn(
@@ -24,6 +32,17 @@ M.defer_redraw_win = function(t)
     end,
     t or 200
   )
+end
+
+local luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
+
+--- Get list of submodules in a given subdirectory of `nvim/`
+---@param subdir string subdirectory of `nvim/` to search
+---@return string[] list of module names ready for `require()`
+M.submodules = function(subdir)
+  local path = vim.fs.joinpath(luaroot, 'nvim', subdir)
+  local files = vim.fn.globpath(path, '*.lua', false, true)
+  return vim.tbl_map(function(f) return f:sub(#luaroot + 2, -5) end, files)
 end
 
 --- foldtext for lua files with treesitter folds
@@ -73,6 +92,11 @@ M.is_comment = function(opts)
     return nv.treesitter.node_is_comment(node)
   end
   return vim.fn['is#comment']()
+end
+
+function M.yank(text)
+  vim.fn.setreg('*', text)
+  print('yanked: ' .. text)
 end
 
 return M
