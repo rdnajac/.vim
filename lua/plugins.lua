@@ -5,20 +5,7 @@ local M = {
     ---@type snacks.Config
     opts = {
       bigfile = require('nvim.snacks.bigfile'),
-      dashboard = {
-        preset = { keys = require('nvim.snacks.dashboard.menu') },
-        sections = {
-          function() return { header = require('nvim.snacks.dashboard.header')(vim.o.columns) } end,
-          { section = 'keys' },
-          {
-            section = 'terminal',
-            cmd = require('nvim.snacks.dashboard.welcome')(),
-            indent = 10,
-            padding = 1,
-            height = 12,
-          },
-        },
-      },
+      dashboard = require('nvim.snacks.dashboard'),
       explorer = { replace_netrw = true },
       image = { enabled = true },
       indent = { indent = { only_current = false, only_scope = true } },
@@ -214,95 +201,7 @@ local M = {
     'nvim-mini/mini.nvim',
     config = function()
       -- require('mini.misc').setup_termbg_sync()
-      for modname, opts in pairs({
-        ai = function()
-          local ai = require('mini.ai')
-          local ex = require('mini.extra')
-          return {
-            n_lines = 500,
-            custom_textobjects = {
-              -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
-              -- d = { '%f[%d]%d+' }, -- digits
-              d = ex.gen_ai_spec.number,
-              e = { -- Word with case
-                {
-                  '%u[%l%d]+%f[^%l%d]',
-                  '%f[%S][%l%d]+%f[^%l%d]',
-                  '%f[%P][%l%d]+%f[^%l%d]',
-                  '^[%l%d]+%f[^%l%d]',
-                },
-                '^().*()$',
-              },
-              -- f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
-              g = ex.gen_ai_spec.buffer(), -- buffer
-              o = ai.gen_spec.treesitter({ -- code block
-                a = { '@block.outer', '@conditional.outer', '@loop.outer' },
-                i = { '@block.inner', '@conditional.inner', '@loop.inner' },
-              }),
-              t = { '<([%p%w]-)%f[^<%w][^<>]->.-</%1>', '^<.->().*()</[^/]->$' }, -- tags
-              u = ai.gen_spec.function_call(), -- u for "Usage"
-              U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
-            },
-          }
-        end,
-        align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
-        -- comment removed since native commenting added to neovim
-        diff = { view = { style = 'number' } },
-        extra = {},
-        files = { options = { use_as_default_explorer = false } },
-        hipatterns = function() -- `works`
-          local hi = require('mini.hipatterns')
-          return {
-	    -- TODO: move to nvim.util.todo
-            highlighters = {
-              hex_color = hi.gen_highlighter.hex_color(),
-              fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
-              warning = { pattern = 'WARNING', group = 'MiniHipatternsFixme' },
-              hack = { pattern = 'HACK', group = 'MiniHipatternsHack' },
-              section = { pattern = 'Section', group = 'MiniHipatternsHack' },
-              todo = { pattern = 'TODO', group = 'MiniHipatternsTodo' },
-              note = { pattern = 'NOTE', group = 'MiniHipatternsNote' },
-              perf = { pattern = 'PERF', group = 'MiniHipatternsNote' },
-              source_code = { -- highlights strings in comments wrapped in `backticks`
-                pattern = '`[^`\n]+`',
-                group = function(buf_id, match, data)
-                  -- convert from 1- to 0-indexed
-                  local line = data.line - 1
-                  local col = data.from_col - 1
-                  return nv.is_comment(buf_id, line, col) and 'String' or nil
-                end,
-                extmark_opts = {
-                  priority = 10000,
-                  hl_mode = 'combine',
-                  spell = false,
-                },
-              },
-            },
-          }
-        end,
-        icons = require('nvim.util.icons.mini'),
-        -- TODO: keymao for jk escape...
-        splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' } }, -- TODO: respect shiftwidth
-        surround = {
-          mappings = {
-            add = 'ys',
-            delete = 'ds',
-            find = '',
-            find_left = '',
-            highlight = '',
-            replace = 'cs',
-            -- Add this only if you don't want to use extended mappings
-            suffix_last = '',
-            suffix_next = '',
-          },
-          search_method = 'cover_or_next',
-          custom_surroundings = {
-            B = { output = { left = '{', right = '}' } },
-          },
-        },
-      }) do
-        require('mini.' .. modname).setup(vim.is_callable(opts) and opts() or opts)
-      end
+      require('mini')
     end,
     keys = {
       { '<leader>fm', function() MiniFiles.open() end },
@@ -333,9 +232,50 @@ local M = {
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
-    enabled = true,
-    -- TODO: this should be init
-    config = function() vim.g.render_markdown_config = nv.md end,
+    init = function()
+      ---@module "render-markdown"
+      ---@type render.md.UserConfig
+      vim.g.render_markdown_config = {
+        file_types = { 'markdown', 'rmd', 'quarto' },
+        latex = { enabled = false },
+        bullet = { right_pad = 1 },
+        -- checkbox = { enabled = false },
+        completions = { blink = { enabled = false } },
+        code = {
+          -- TODO: fix the highlights and show ` or spaces for inline code markers
+          -- inline_left = ' ',
+          -- inline_right = ' ',
+          -- inline_padding= 1,
+          enabled = true,
+          highlight = '',
+          highlight_border = false,
+          -- highlight_inline = 'Chromatophore',
+          -- render_modes = { 'n', 'c', 't', 'i' },
+          sign = false,
+          conceal_delimiters = false,
+          language = true,
+          position = 'left',
+          language_icon = true,
+          language_name = false,
+          language_info = false,
+          width = 'block',
+          min_width = 0,
+          border = 'thin',
+          style = 'normal',
+        },
+        heading = {
+          sign = false,
+          width = 'full',
+          position = 'overlay',
+          -- left_pad = { 0, 1, 2, 3, 4, 5 },
+          -- icons = '',
+        },
+        html = {
+          comment = { conceal = false },
+          enabled = false,
+        },
+      }
+    end,
     toggles = {
       ['<leader>um'] = {
         name = 'Render Markdown',
@@ -372,6 +312,10 @@ local M = {
       { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
     },
   },
+  {
+    'chrisgrieser/nvim-scissors',
+    -- opts = {},
+  },
 }
 
 -- collect all plugin specs from nv submodules
@@ -380,6 +324,8 @@ vim
     require('folke.specs'),
     nv.blink.specs,
     nv.keys.specs,
+    nv.lsp.specs,
+    nv.fs.specs,
     nv.treesitter.specs,
   })
   :each(function(specs) vim.list_extend(M, specs) end)

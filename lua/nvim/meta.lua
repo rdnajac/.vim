@@ -4,6 +4,7 @@ error('this file should not be required directly')
 nv.blink = require('nvim.blink')
 nv.keys = require('nvim.keys')
 nv.lsp = require('nvim.lsp')
+nv.fs = require('nvim.fs')
 nv.snacks = require('nvim.snacks')
 nv.treesitter = require('nvim.treesitter')
 

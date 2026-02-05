@@ -1,7 +1,3 @@
--- local me = debug.getinfo(1, 'S').source:sub(2)
--- local dir = vim.fn.fnamemodify(me, ':p:h')
--- local files = vim.fn.globpath(dir, '*', false, true)
-
 -- override defaults
 -- vim.notify = nv.notify
 -- vim.print = dd
@@ -19,6 +15,7 @@ local _submodules = {
   blink = true,
   keys = true,
   lsp = true,
+  fs = true,
   snacks = true,
   treesitter = true,
 }

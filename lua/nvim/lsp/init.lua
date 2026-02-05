@@ -2,6 +2,11 @@
 --- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
 local M = {}
 
+M.specs = {
+  'neovim/nvim-lspconfig',
+  -- 'b0o/SchemaStore.nvim',
+}
+
 ---@return string[]
 M.servers = function()
   -- local lsp_config_dir = vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp')
