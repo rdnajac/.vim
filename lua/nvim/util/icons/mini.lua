@@ -2,7 +2,8 @@
 local opts = {
   directory = {
     ghostty = { '󰊠', 'Green' },
-    ['LazyVim'] = { '󰒲', 'Blue' },
+    LazyVim = { '󰒲', 'Blue' },
+    ['R.nvim'] = { '󰟔', 'Cyan' },
   },
   extension = {
     fastq = { '󰚄', 'Purple' },
@@ -55,7 +56,7 @@ local test = function()
     directory = { 'ghostty', 'src', 'mini.nvim' },
     file = {
       '.chezmoiignore',
-      'devcontainer.json',
+      'dBlueevcontainer.json',
       'somefile.fastq.gz',
       'dot_Rprofile',
       'test.lua',
@@ -69,5 +70,26 @@ local test = function()
     end
   end
 end
+
+local directories_override = {
+  ['vim%-.*'] = { '', 'Green' },
+  ['lazy.*%.nvim'] = { '󰒲', 'Blue' },
+}
+-- HACK: Override to use wildcard matching for directories
+vim.schedule(function()
+  local original_get = MiniIcons.get
+  MiniIcons.get = function(category, name)
+    if category == 'directory' then
+      local dir = vim.fs.basename(name)
+      for pattern, pair in pairs(directories_override) do
+	-- add anchors to pattern for exact match
+        if dir:match('^'..pattern..'$') then
+          return pair[1], 'MiniIcons' .. pair[2]
+        end
+      end
+    end
+    return original_get(category, name)
+  end
+end)
 
 return opts
