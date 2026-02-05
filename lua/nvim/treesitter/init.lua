@@ -1,9 +1,16 @@
+local nv = _G.nv or require('nvim')
 local M = {}
 M.parsers = require('nvim.treesitter.parsers')
+M.selection = require('nvim.treesitter.selection')
 M.specs = {
   {
     'nvim-treesitter/nvim-treesitter',
     build = function() vim.cmd('TSUpdate | TSInstall! ' .. table.concat(M.parsers.to_install, ' ')) end,
+    keys = {
+      { 'n', '<C-Space>', M.selection.start, { desc = 'Start ts selection' } },
+      { 'x', '<C-Space>', M.selection.increment, { desc = 'Increment ts selection' } },
+      { 'x', '<BS>', M.selection.decrement, { desc = 'Decrement ts selection' } },
+    },
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
@@ -32,25 +39,6 @@ function M.get_installed(update)
   return M._installed or {}
 end
 
---- Check if the current node is a comment node
----@param ... any no args: use cursor
----@return boolean
-M.is_comment = function(...)
-  local pos = require('nvim.util.pos')(...)
-  -- HACK: subtract 1 from col to avoid edge cases
-  -- pos = vim.pos(pos.row, math.max(0, pos.col - 1))
-  local ok, node = pcall(vim.treesitter.get_node, { bufnr = 0, pos = pos:to_extmark() })
-  return ok
-      and node
-      and vim.tbl_contains({
-        'comment',
-        'line_comment',
-        'block_comment',
-        'comment_content',
-      }, node:type())
-    or false
-end
-
 M.status = {
   function()
     local ret = {}
@@ -76,6 +64,15 @@ M.install_cli = function()
   end
   -- TODO: use mason install utility
 end
+
+local _is_comment = {
+  comment = true,
+  line_comment = true,
+  block_comment = true,
+  comment_content = true,
+}
+
+M.node_is_comment = function(node) return _is_comment[node:type()] == true end
 
 return setmetatable(M, {
   __index = function(t, k)

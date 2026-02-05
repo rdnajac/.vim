@@ -473,6 +473,7 @@ if has('nvim')
 else
   packadd! editorconfig
   packadd! hlyank
+  finish " don't load plugins in vim
 endif
 " packadd! cfilter
 " }}}

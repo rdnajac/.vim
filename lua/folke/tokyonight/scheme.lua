@@ -1,3 +1,4 @@
+-- TODO: write makefile command to generate scheme
 local M = {}
 
 --- Generate Vim colorscheme highlight commands from highlight groups
@@ -28,7 +29,7 @@ function M.gen(groups)
     local props = vim
       .iter(vim.spairs(hl))
       :filter(function(k)
-        print(k)
+        -- print(k)
         return mapping[k]
       end)
       :map(function(k, v) return ('%s=%s'):format(mapping[k], v) end)

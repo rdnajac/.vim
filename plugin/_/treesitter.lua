@@ -14,5 +14,3 @@ vim.api.nvim_create_autocmd('FileType', {
   command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
   desc = 'Use treesitter folding for select filetypes',
 })
-
-nv.treesitter.selection.create_mappings()

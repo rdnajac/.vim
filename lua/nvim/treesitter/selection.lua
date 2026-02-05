@@ -32,7 +32,7 @@ M.start = function()
     return vim.cmd('normal! viW')
   end
 
-  if require('nvim.treesitter').is_comment() then
+  if require('nvim.treesitter').node_is_comment(node) then
     skip = true
     return vim.cmd('normal! viW')
   end
@@ -57,12 +57,6 @@ M.decrement = function()
   if prev then
     select_node(prev)
   end
-end
-
-M.create_mappings = function()
-  vim.keymap.set('n', '<C-Space>', M.start, { desc = 'Start ts selection' })
-  vim.keymap.set('x', '<C-Space>', M.increment, { desc = 'Increment ts selection' })
-  vim.keymap.set('x', '<BS>', M.decrement, { desc = 'Decrement ts selection' })
 end
 
 return M

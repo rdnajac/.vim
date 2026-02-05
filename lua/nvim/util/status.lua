@@ -31,9 +31,10 @@ M.buffer = function(opts)
   return table.concat({
     '%h%w%q ', -- help/preview/quickfix
     path or '',
-    [[%{% &readonly ? ' ' : '%M' %}]],
+    --- XXX: why no opening `%`
+    [[{% &readonly ? ' ' : '%M' %}]],
     [[%{% &busy     ? '◐ ' : ''   %}]],
-    [[%{% &ff !=# 'unix'  ? ' ff=' . &ff : ''  %}]],
+    [[%{% &ff !=# 'unix'  ? ' ff=' . &ff : ''  %}]], -- TODO: add icon
     [[%{% &fenc !=# 'utf-8' && &fenc !=# ''  ? ' fenc=' . &fenc : ''  %}]],
   })
 end

@@ -5,11 +5,11 @@ endif
 command! Health :packloadall | checkhealth
 command! LazyGit :lua Snacks.lazygit()
 
-" nnoremap <C-Bslash> <Cmd>
-  " { { 'n', 't' }, '<c-\\>', Snacks.terminal.toggle },
-  " { 'v', '<leader>/', Snacks.picker.grep_word },
-  " { ',,', Snacks.picker.buffers },
-  " { '\\\\', Snacks.dashboard.open },
+nnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
+tnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
+xnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word<CR>
+nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
+nnoremap <bslash><bslash> <Cmd>lua Snacks.dashboard.open()<CR>
 
 nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>

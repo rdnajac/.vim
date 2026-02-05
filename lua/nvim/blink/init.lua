@@ -1,20 +1,61 @@
+local nv = _G.nv or require('nvim')
 -- TODO: no snippets in middle of word
 ---@module "blink.cmp"
 -- `https://cmp.saghen.dev/`
-local providers = require('nvim.blink.providers')
-local sources = {
-  ---@return blink.cmp.SourceList[]
-  default = function()
-    return vim.tbl_filter(
-      function(src) return require('nvim.treesitter').is_comment() and src ~= 'snippets' or true end,
-      vim.tbl_keys(providers) -- capture default providers
-    )
-  end,
-  per_filetype = {
-    -- sql = { 'dadbod' }, -- TODO:
+---@type table<string, blink.cmp.SourceProviderConfig>
+local providers = {
+  buffer = {
+    -- opts = {
+    --   get_bufnrs = function()
+    --     return vim.tbl_filter(function(bufnr)
+    --       return vim.bo[bufnr].buftype == ''
+    --     end, vim.api.nvim_list_bufs())
+    --   end,
+    -- },
+  },
+  lsp = {
+    score_offset = -1,
+    transform_items = function(_, items)
+      local kind = require('blink.cmp.types').CompletionItemKind
+      local exclude = vim.tbl_map(function(k) return kind[k] end, {
+        'Snippet',
+        -- 'Keyword'
+      })
+      return vim.tbl_filter(
+        function(item) return not vim.tbl_contains(exclude, item.kind) end,
+        items
+      )
+    end,
+  },
+  path = {
+    score_offset = 100,
+    opts = {
+      get_cwd = function(_) return vim.fn.getcwd() end,
+      show_hidden_files_by_default = true,
+    },
+  },
+  snippets = {
+    score_offset = 99,
+    opts = { friendly_snippets = false },
+    -- https://cmp.saghen.dev/recipes.html#hide-snippets-after-trigger-character
+    should_show_items = function(ctx)
+      if nv.is_comment() then
+        return false
+      else
+        return ctx.trigger.initial_kind ~= 'trigger_character'
+      end
+    end,
   },
 }
 
+---@type blink.cmp.SourceConfigPartial
+local sources = {
+  ---@return blink.cmp.SourceList[]
+  default = vim.tbl_keys(providers),
+  per_filetype = {
+    -- sql = i{ 'dadbod' }, -- TODO: ,
+  },
+}
 -- add LazyDev provider if available
 -- if pcall(require, 'lazydev.integrations.blink') then
 if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
@@ -27,17 +68,10 @@ if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
 end
 
 local extras = require('nvim.blink.extras')
-
 sources.providers = vim.iter(extras):fold(
   providers,
   function(acc, _, config) return vim.tbl_extend('force', acc, config) end
 )
-
-local get_providers = function(mode)
-  mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
-  local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode] or 'default'
-  return vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
-end
 
 local blink_spec = {
   'Saghen/blink.cmp',
@@ -71,12 +105,7 @@ local blink_spec = {
           end
         end,
         'snippet_forward',
-        function()
-          if not package.loaded['sidekick'] then
-            return false
-          end
-          return require('sidekick').nes_jump_or_apply()
-        end,
+        function() return package.loaded['sidekick'] and require('sidekick').nes_jump_or_apply() end,
         function() return vim.lsp.inline_completion.get() end,
         'fallback',
       },
@@ -90,16 +119,26 @@ local blink_spec = {
   },
 }
 
+local get_providers = function(mode)
+  mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
+  local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode] or 'default'
+  local providers = vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
+  table.sort(providers)
+  return providers
+end
+
+local status = function()
+  local providers = get_providers()
+  return vim
+    .iter(ipairs(providers))
+    :map(function(_, provider) return nv.icons.blink[provider] end)
+    :join(' / ')
+end
+
+-- cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end, },
+
 return {
   specs = vim.list_extend({ blink_spec }, vim.tbl_keys(extras)),
   -- statusline component showing active completion sources
-  status = {
-    function()
-      return vim
-        .iter(get_providers())
-        :map(function(provider) return nv.icons.blink[provider] or ' ' end)
-        :join(' ')
-    end,
-    cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end,
-  },
+  status = status,
 }

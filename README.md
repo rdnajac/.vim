@@ -5,6 +5,9 @@ My (n)vim configuration.
 ## TODO
 
 - [ ] Who is VIMDIR? VIMHOME? PACKDIR???
+  - they're all g: variables
+  - they're present even with `-u NONE`
+  - neovim only
 - [x] vim-nvim notification library
 - [ ] <M-.> does what?
 - [ ] `edit = '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})'`
@@ -18,13 +21,14 @@ My (n)vim configuration.
 Taken from an infographic attributed to
 [Barry Arthur](http://of-vim-and-vigor.blogspot.com)
 
-| cmd                  | dot-repeatable? | undoable? | example                                               |
-| -------------------- | --------------- | --------- | ----------------------------------------------------- |
-| read (`:help :r!`)   | no              | yes       | `:0r !cmd` puts cmd output into top of buffer         |
-| write (`:help :w_c`) | no              | no        | `:w !cmd` is not the same as `:w!cmd`, note the space |
-| filter (`:help :!`)  | yes\*           | yes\*     | `!!cmd` is not the same as `:.                        |
+| cmd                  | repeatable? | undoable? | example                                               |
+| -------------------- | ----------- | --------- | ----------------------------------------------------- |
+| read (`:help :r!`)   | no          | yes       | `:0r !cmd` puts cmd output into top of buffer         |
+| write (`:help :w_c`) | no          | no        | `:w !cmd` is not the same as `:w!cmd`, note the space |
+| filter (`:help :!`)  | yes\*       | yes\*     | `!!cmd` is not the same as `:.                        |
 
-> \* `!!` form is repeatable; motion forms are repeatable and undoable
+> \* `!!` form is dot-repeatable;
+> motion forms are repeatable and undoable
 
 Notes:
 

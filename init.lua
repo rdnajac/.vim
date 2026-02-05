@@ -53,6 +53,19 @@ end
 
 -- require('jit.p').stop()
 vim.schedule(function()
+  -- TODO: who sets this var?
   vim.env.PACKDIR = vim.g.PACKDIR
+  vim.cmd([[
+    function! MyWinbar() abort
+      " return v:lua.nv.status.buffer()
+      if is#curwin() 
+      return v:lua.nv.blink.status()
+    else 
+      return '%t'
+      endif
+    endfunction
+    set winbar=%!MyWinbar()
+    ]])
+  -- vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#000000', fg = '#39FF14', reverse = true })
 end)
 -- vim: fdl=0 fdm=expr

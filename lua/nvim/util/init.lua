@@ -54,13 +54,25 @@ end
 M.key_counts = function()
   local ret = {}
   for _, v in pairs(M) do
-    if type(v) == 'table' --[[and v ~= M.key_counts]] then
+    if
+      type(v) == 'table' --[[and v ~= M.key_counts]]
+    then
       for key in pairs(v) do
         ret[key] = (ret[key] or 0) + 1
       end
     end
   end
   return ret
+end
+
+--- Check if the current position is inside a comment
+---@return boolean
+M.is_comment = function(opts)
+  local ok, node = pcall(vim.treesitter.get_node, opts)
+  if ok and node then
+    return nv.treesitter.node_is_comment(node)
+  end
+  return vim.fn['is#comment']()
 end
 
 return M
