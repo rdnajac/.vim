@@ -7,6 +7,7 @@ if has('nvim')
   let s:colors_dir = expand('<script>:p:h')
   execute 'source' s:colors_dir..'/tokyonight_generated.lua'
   hi link vimMap @keyword
+  doautocmd <nomodeline> ColorScheme
   finish
 endif
 

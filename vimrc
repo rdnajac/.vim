@@ -52,7 +52,7 @@ set listchars+=nbsp:+
 " fold {{{ 2
 set foldlevel=99
 " set foldlevelstart=99
-set foldminlines=6
+set foldminlines=3
 set foldopen+=insert,jump
 set foldmethod=marker
 
@@ -232,19 +232,28 @@ nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
 
-nmap  ciw
-vmap  :sort<CR>
+nnoremap  ciw
+xnoremap  :sort<CR>
+
+" requires `tpope/vim-unimpaired`
+" FIXME: use the plug map instead
+" n  ]e            <Plug>(unimpaired-move-down)
+nmap zJ ]ekJ
 
 " TODO: diff?
 " nnoremap dp     dp]c
 " nnoremap do     do]c
+
+" select last changed text (ie pasted text)
+" TODO: doesn't gv already do this?
+" see: *gv* *v_gv* *reselect-Visual*
+nnoremap gV `[V`]
 
 " `<leader>` {{{2
 nnoremap <leader>- <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 nnoremap <leader>K <Cmd>normal! K<CR>
 nnoremap <leader>S <Cmd>Scriptnames<CR>
-
 nnoremap <leader>Q :wqa!<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 nnoremap <leader>q <Cmd>quit!<CR>
@@ -255,7 +264,7 @@ if has('nvim')
   nnoremap <leader>r <Cmd>Restart<CR>
   nnoremap <leader>R <Cmd>restart!<CR>
 else
-  nnoremap <leader>h :help<Space>
+  nnoremap <leader>h :<C-U>help<Space>
 endif
 
 " debug
@@ -278,91 +287,48 @@ nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
-" buffers
-" see plugin/snacks.vim
-
-" tabs
-nnoremap <leader>tn <Cmd>tabnew<CR>
-nnoremap <leader>tf :<C-U>tabfind<Space>
-
-" navigate buffers, windows, and tabs {{{2
+" navigation {{{2
 nnoremap <BS> :bprevious<CR>
 nnoremap <C-BS> g;
+nnoremap <C-q> <Cmd>wincmd c<CR>
 
-" wincmds {{{3
 " `<C-e>` scrolls the window downwards by [count] lines
 " `<C-^>` (`<C-6>`) which edits the alternate buffer `:e #`
 nnoremap      <C-e>      <C-^>
 nnoremap <C-w><C-e> <C-w><C-^>
-" see `:h sbp`
 
 for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
   execute $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
   execute $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
 endfor
 
-" TODO: S-Tab not detected?
-" nnoremap <S-Tab>   <Cmd>wincmd w<CR>
-nnoremap <C-q>      <Cmd>wincmd c<CR>
+" see `:h sbp`
 nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
 nnoremap <C-w><C-v> <Cmd>vertical +sbprevious<CR>
-
-tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-
-" just like tmux!
-" nnoremap <C-w>-     <C-w>s
-" nnoremap <C-w><Bar> <C-w>v
+" TODO: S-Tab not detected?
+" nnoremap <S-Tab>   <Cmd>wincmd w<CR>
 
 " searching and centering {{{3
 " make `n` and `N` behave the same way for `?` and `/` searches
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
 " 'Nn'[v:searchforward] is the same as (v:searchforward ? 'n' : 'N')
 " `zz` to center and since foldopen doesn work in mappings, add `zv`
-nnoremap <expr> n (v:searchforward ? "n" : "N")."zvzz"
-nnoremap <expr> N (v:searchforward ? "N" : "n")."zvzz"
+nnoremap <expr> n (v:searchforward ? 'n' : 'N')..'zvzz'
+nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zvzz'
 
 " bookmarks {{{3
-nnoremap <Bslash>0  <Cmd>call edit#readme()<CR>
-nnoremap <Bslash>i  <Cmd>call edit#('~/.vim/init.lua')<CR>
-nnoremap <Bslash>v  <Cmd>call edit#vimrc()<CR>
-
-" jump to specific modules under lua/
-for [k, v] in items({
-      \ 'n' : 'nvim',
-      \ 'k' : 'nvim/keys',
-      \ 'p' : 'plugins',
-      \ 'u' : 'nvim/util',
-      \ })
-  execute $'nnoremap <Bslash>{k}  <Cmd>call edit#luamod("{v}")<CR>'
-endfor
-
-" resize splits {{{3
-nnoremap <C-W><Up>    :     resize +10<CR>
-nnoremap <C-W><Down>  :     resize -10<CR>
-nnoremap <C-W><Left>  :vert resize +10<CR>
-nnoremap <C-W><Right> :vert resize -10<CR>
+nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
+nnoremap <Bslash>i <Cmd>call edit#('~/.vim/init.lua')<CR>
+nnoremap <Bslash>v <Cmd>call edit#vimrc()<CR>
 
 " tabpages {{{3
-nnoremap <leader><Tab>l <Cmd>tablast<CR>
-nnoremap <leader><Tab>o <Cmd>tabonly<CR>
-nnoremap <leader><Tab>f <Cmd>tabfirst<CR>
+nnoremap ]<Tab> <Cmd>tabnext<CR>
+nnoremap [<Tab> <Cmd>tabprevious<CR>
 nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
 nnoremap <leader><Tab>d <Cmd>tabclose<CR>
-nnoremap <leader><Tab>] <Cmd>tabnext<CR>
-nnoremap <leader><Tab>[ <Cmd>tabprevious<CR>
+nnoremap <leader><Tab>D <Cmd>tabonly<CR>
+nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
-" key pairs in normal mode {{{2
-" see `doc/keys.md`
-
-" select last changed text (ie pasted text)
-" TODO: doesn't gv already do this? see: *gv* *v_gv* *reselect-Visual*
-nnoremap gV `[V`]
-
-" resursive keymaps
-
-" TODO: move to 'brackets'
-" requires `vim-unimpaired` exchange
-nmap zJ ]ekJ
 
 " change/delete current word {{{2
 nnoremap c*   *``cgn
@@ -425,11 +391,8 @@ inoremap <silent> ,o <C-x><C-o>
 inoremap <silent> ,i <Cmd>Icons<CR>
 
 " cmdline {{{2
-" completion {{{3
-" see `:h |cmdline-completion|.`
-set completeopt=menu,preview,longest
+set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
 " set completeopt+=preinsert
-
 " More info here: |cmdline-completion|; default: `wildmode=full`
 " set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
 set wildmode=longest:full,full " Same as above, but cycle through the first patch ('preinsert'?)
@@ -441,7 +404,6 @@ set wildmode=longest:full,full " Same as above, but cycle through the first patc
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up>   wildmenumode() ? "\<C-p>" : "\<Up>"
 
-" abbreviations {{{3
 nnoremap ?? :verbose set ?<Left>
 cnoreabbrev ?? verbose set ?<Left>
 cnoreabbrev !! !./%
@@ -464,6 +426,14 @@ call s:cabbrev('m', 'Man')
 call s:cabbrev('S', 'lua Snacks')
 call s:cabbrev('f', 'find')
 call s:cabbrev('l', 'lua')
+
+" terminal {{{2
+tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
+" just like tmux!
+" nnoremap <C-w>-     <C-w>s
+" nnoremap <C-w><Bar> <C-w>v
+
 " }}}1
 " Section: pack {{{1
 " my plugins

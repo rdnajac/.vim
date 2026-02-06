@@ -1,4 +1,6 @@
 local nv = _G.nv or require('nvim')
+
+---@type Plugin[]
 local M = {
   {
     'folke/snacks.nvim',
@@ -69,7 +71,7 @@ local M = {
       { '<leader>uI', '<Cmd>Inspect!<CR>' },
       { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
     },
-    ---@type table<string, table|string|fun():snacks.toggle.Class|snacks.toggle.Opts>
+    ---@type table<string, snacks.toggle.Opts>
     toggles = {
       ['<leader>uv'] = {
         name = 'Virtual Text',
@@ -300,19 +302,6 @@ local M = {
     end,
   },
   {
-    'monaqa/dial.nvim',
-    init = function()
-      package.preload['dial.config'] = function() return require('nvim.keys.dial.config') end
-    end,
-    -- stylua: ignore
-    keys = {
-      { { 'n', 'x' },  '<C-a>', '<Plug>(dial-increment)'   },
-      { { 'n', 'x' },  '<C-x>', '<Plug>(dial-decrement)'   },
-      { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
-      { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
-    },
-  },
-  {
     'chrisgrieser/nvim-scissors',
     -- opts = {},
   },
@@ -320,19 +309,12 @@ local M = {
 
 -- collect all plugin specs from nv submodules
 vim
-  .iter({
-    require('folke.specs'),
-    nv.blink.specs,
-    nv.keys.specs,
-    nv.lsp.specs,
-    nv.fs.specs,
-    nv.treesitter.specs,
-  })
-  :each(function(specs) vim.list_extend(M, specs) end)
+  .iter({ 'blink', 'keys', 'lsp', 'fs', 'treesitter' })
+  :each(function(submod) vim.list_extend(M, nv[submod].specs) end)
 
--- filter plugins early
+-- PERF: filter plugins before converting to `vim.pack.Spec`
 M = vim.tbl_filter(function(t) return t.enabled ~= false end, M)
 -- M = vim.tbl_filter(function(t) return t.enabled == true end, M)
 
 return M
--- vim: fdm=expr foldminlines=1
+-- vim: fdm=expr

@@ -1,4 +1,6 @@
 -- require('nvim.lsp.myserver')
+-- local id = nv.lsp.myserver.client_id
+
 if vim.g.loaded_endwise == 1 then
   vim.bo.syntax = 'ON' -- keep using legacy syntax
 end

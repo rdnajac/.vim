@@ -1,14 +1,13 @@
 ---@meta
 error('this file should not be required directly')
+-- TODO: write an appropriate gen script for this
 
 nv.blink = require('nvim.blink')
 nv.keys = require('nvim.keys')
 nv.lsp = require('nvim.lsp')
 nv.fs = require('nvim.fs')
-nv.snacks = require('nvim.snacks')
 nv.treesitter = require('nvim.treesitter')
 
--- TODO: write an appropriate gen script for this
 nv.debug = require('nvim.util.debug')
 nv.echoserver = require('nvim.util.echoserver')
 nv.exec = require('nvim.util.exec')

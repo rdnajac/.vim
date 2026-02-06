@@ -1,29 +1,36 @@
 --- init.lua
 
--- require('jit.p').start('ri1', '/tmp/prof') -- start luajit profiling
+-- https://luajit.org/ext_profiler.html
+-- require('jit.p').start('ri1', '/tmp/prof')
+
+-- https://github.com/neovim/neovim/discussions/36905
+vim.loader.enable()
 
 --- 1. source vimrc
----  - relies on autoload/plug.vim to override vim-plug calls
----  - enables `vim.loader` and `vim.pack.add`s base plugins
+---  - autoload/plug.vim overrides vim-plug calls
+---  - enables `vim.loader`
+---  `vim.pack.add`s vim plugins
 vim.cmd([[ runtime vimrc ]])
 
 --- 2. snack attack!
---- - exposes global debug functions
--- FIXME: this will fail if snacks.nvim is not installed)
-vim.opt.rtp:prepend(vim.g['plug#home'] .. '/snacks.nvim')
-require('snacks') -- XXX: _G.Snacks
-_G.dd = Snacks.debug.inspect
-_G.bt = Snacks.debug.backtrace
-_G.p = Snacks.debug.profile
-
--- 2.5 optional profiling
-if vim.env.PROF then
-  Snacks.profiler.startup({
-    startup = { event = 'UIEnter' },
-  })
+--- global `Snacks` and debug functions
+local snackspath = vim.g['plug#home'] .. '/snacks.nvim'
+if vim.uv.fs_stat(snackspath) then
+  vim.opt.rtp:prepend(snackspath)
+  require('snacks') -- XXX: exposes _G.Snacks
+  -- assert(Snacks)
+  _G.dd = Snacks.debug.inspect
+  _G.bt = Snacks.debug.backtrace
+  _G.p = Snacks.debug.profile
+  -- 2.5 optional profiling
+  if vim.env.PROF then
+    Snacks.profiler.startup({
+      startup = { event = 'UIEnter' },
+    })
+  end
 end
 
---- 3. expose global config table
+--- 3. the rs
 --- - sets up ui2 (`_extui`)
 --- - lazily loads utility modules
 _G.nv = require('nvim')
@@ -51,21 +58,7 @@ if vim.v.vim_did_enter == 0 then
   vim.pack.add(specs, { load = _load })
 end
 
+-- TODO: figure out who sets this var
+vim.schedule(function() vim.env.PACKDIR = vim.g.PACKDIR end)
+
 -- require('jit.p').stop()
-vim.schedule(function()
-  -- TODO: who sets this var?
-  vim.env.PACKDIR = vim.g.PACKDIR
-  vim.cmd([[
-    function! MyWinbar() abort
-      " return v:lua.nv.status.buffer()
-      if is#curwin() 
-      return v:lua.nv.blink.status()
-    else 
-      return '%t'
-      endif
-    endfunction
-    set winbar=%!MyWinbar()
-    ]])
-  -- vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#000000', fg = '#39FF14', reverse = true })
-end)
--- vim: fdl=0 fdm=expr
