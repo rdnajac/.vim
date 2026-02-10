@@ -1,19 +1,25 @@
 --- init.lua
 
--- https://luajit.org/ext_profiler.html
--- require('jit.p').start('ri1', '/tmp/prof')
-
--- https://github.com/neovim/neovim/discussions/36905
+--- 0. enable `vim.loader` to override `require`
+--- https://github.com/neovim/neovim/discussions/36905
 vim.loader.enable()
 
---- 1. source vimrc
+--- optional LuaJIT profiling
+--- https://luajit.org/ext_profiler.html
+-- require('jit.p').start('ri1', '/tmp/prof')
+
+--- 1. source vimrc and set settings
 ---  - autoload/plug.vim overrides vim-plug calls
 ---  - enables `vim.loader`
 ---  `vim.pack.add`s vim plugins
 vim.cmd([[ runtime vimrc ]])
 
+-- XXX: experimental!
+vim.o.cmdheight = 0
+-- BUG: ui2 error on declining to install after vim.pack.add
+require('vim._core.ui2').enable({})
+
 --- 2. snack attack!
---- global `Snacks` and debug functions
 local snackspath = vim.g['plug#home'] .. '/snacks.nvim'
 if vim.uv.fs_stat(snackspath) then
   vim.opt.rtp:prepend(snackspath)
@@ -22,7 +28,7 @@ if vim.uv.fs_stat(snackspath) then
   _G.dd = Snacks.debug.inspect
   _G.bt = Snacks.debug.backtrace
   _G.p = Snacks.debug.profile
-  -- 2.5 optional profiling
+  -- 2.5 optional profiling with Snacks
   if vim.env.PROF then
     Snacks.profiler.startup({
       startup = { event = 'UIEnter' },
@@ -30,14 +36,11 @@ if vim.uv.fs_stat(snackspath) then
   end
 end
 
---- 3. the rs
---- - sets up ui2 (`_extui`)
---- - lazily loads utility modules
+--- 3. the rest of the owl
 _G.nv = require('nvim')
 
 --- 4. import plug module convert plugins table to specs
-local plugins = require('plugins')
-local specs = vim.iter(plugins):map(nv.plug):totable()
+local specs = vim.iter(_G.Plugins):map(nv.plug):totable()
 
 --- 5. custom loader to `packadd` and run setup function
 ---@param plug_data {spec: vim.pack.Spec, path: string}

@@ -1,9 +1,8 @@
--- TODO: this has been fixed in a recent update. revise:
--- also sometimes breaks on initial install
+-- TODO: build command to force rebuild of a plugin
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
   callback = function(event)
     local kind = event.data.kind ---@type "install"|"update"|"delete"
-    if kind ~= 'update' then
+    if kind == 'delete' then
       return
     end
     local spec = event.data.spec ---@type vim.pack.Spec

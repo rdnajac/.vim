@@ -1,4 +1,4 @@
-local nv = _G.nv or require('nvim')
+local nv = _G.nv or require('nvim.util')
 
 ---@type Plugin[]
 local M = {
@@ -194,7 +194,7 @@ local M = {
       tabline = {},
       winbar = {
         -- lualine_a = { require('nvim.util.status').buffer },
-        lualine_a = { nv.blink.status },
+        -- lualine_a = { nv.blink.status },
       },
       inactive_winbar = {},
     },
@@ -307,14 +307,5 @@ local M = {
   },
 }
 
--- collect all plugin specs from nv submodules
-vim
-  .iter({ 'blink', 'keys', 'lsp', 'fs', 'treesitter' })
-  :each(function(submod) vim.list_extend(M, nv[submod].specs) end)
-
--- PERF: filter plugins before converting to `vim.pack.Spec`
-M = vim.tbl_filter(function(t) return t.enabled ~= false end, M)
--- M = vim.tbl_filter(function(t) return t.enabled == true end, M)
-
 return M
--- vim: fdm=expr
+-- vim: fdm=expr fdl=2

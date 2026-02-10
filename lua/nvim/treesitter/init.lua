@@ -1,4 +1,4 @@
-local nv = _G.nv or require('nvim')
+local nv = _G.nv or require('nvim.util')
 local M = {}
 M.parsers = require('nvim.treesitter.parsers')
 M.selection = require('nvim.treesitter.selection')

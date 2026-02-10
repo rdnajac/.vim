@@ -52,10 +52,6 @@
       "rev": "64dd4cf3f6fd0ab17622c5ce15c91fc539c3f24a",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
-    "oil.nvim": {
-      "rev": "f55b25e493a7df76371cfadd0ded5004cb9cd48a",
-      "src": "https://github.com/stevearc/oil.nvim.git"
-    },
     "render-markdown.nvim": {
       "rev": "48b4175dbca8439d30c1f52231cbe5a712c8f9d9",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
@@ -67,10 +63,6 @@
     "snacks.nvim": {
       "rev": "fe7cfe9800a182274d0f868a74b7263b8c0c020b",
       "src": "https://github.com/folke/snacks.nvim.git"
-    },
-    "todo-comments.nvim": {
-      "rev": "31e3c38ce9b29781e4422fc0322eb0a21f4e8668",
-      "src": "https://github.com/folke/todo-comments.nvim.git"
     },
     "tokyonight.nvim": {
       "rev": "5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd",
