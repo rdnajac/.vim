@@ -12,16 +12,19 @@ let g:chromatophores = [
       \ 'StatusLineNC',
       \ 'StatusLineTermNC',
       \ 'WinBar',
+      \ 'WinSeperator',
       \ 'helpSectionDelim',
-      \ '@markup.raw.markdown_inline',
       \ ]
 " endif
 
-" call add(g:chromatophores, 'SnacksDashboardHeader')
+if has('nvim')
+  call add(chromatophores, '@markup.raw.markdown_inline')
+  " call add(g:chromatophores, 'SnacksDashboardHeader')
+endif
 
 augroup chromatophore
   autocmd!
   " if has('nvim') | autocmd UIEnter * call chromatophore#setup() | endif
-autocmd ColorScheme * call chromatophore#setup()
-autocmd ModeChanged * call chromatophore#metachrosis()
+  autocmd ColorScheme * call chromatophore#setup()
+  autocmd ModeChanged * call chromatophore#metachrosis()
 augroup END

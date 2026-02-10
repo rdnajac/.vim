@@ -1,5 +1,4 @@
 local nv = _G.nv or require('nvim')
--- TODO: no snippets in middle of word
 ---@module "blink.cmp"
 -- `https://cmp.saghen.dev/`
 ---@type table<string, blink.cmp.SourceProviderConfig>
@@ -38,6 +37,8 @@ local providers = {
     score_offset = 99,
     opts = { friendly_snippets = false },
     -- https://cmp.saghen.dev/recipes.html#hide-snippets-after-trigger-character
+    -- FIXME: last line of a comment isn't a ts comment
+    -- TODO: no snippets in middle of word
     should_show_items = function(ctx)
       if nv.is_comment() then
         return false
