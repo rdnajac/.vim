@@ -1,7 +1,7 @@
 local nv = _G.nv or require('nvim.util')
 
 ---@type Plugin[]
-local M = {
+return {
   {
     'folke/snacks.nvim',
     ---@type snacks.Config
@@ -307,5 +307,4 @@ local M = {
   },
 }
 
-return M
--- vim: fdm=expr fdl=2
+-- vim: fdm=expr fdl=1

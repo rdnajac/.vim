@@ -35,7 +35,6 @@ local icons = {
       package_uninstalled = ' ',
     },
   },
-
   sep = {
     -- component and section separators appear as they
     -- would in lualine, where left/right refer to the
@@ -145,6 +144,7 @@ local snacks_icons = {
     Variable = '󰀫 ',
   },
 }
+
 local M = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
 
 -- add an inverted lookup table for kinds

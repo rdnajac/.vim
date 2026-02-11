@@ -33,7 +33,7 @@ let s:cases = [
       \ '~/my-prototype-plugin',
       \ ]
 
-function! vim#plug#test#() abort
+function! vim#plug#parse#test() abort
   for case in s:cases
     if type(case) == type('')
       let spec = s:parse(case)

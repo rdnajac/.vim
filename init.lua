@@ -1,5 +1,5 @@
 --- init.lua
-
+---
 --- 0. enable `vim.loader` to override `require`
 --- https://github.com/neovim/neovim/discussions/36905
 vim.loader.enable()
@@ -17,6 +17,7 @@ vim.cmd([[ runtime vimrc ]])
 -- XXX: experimental!
 vim.o.cmdheight = 0
 -- BUG: ui2 error on declining to install after vim.pack.add
+-- require('vim._core.ui2').enable({})
 require('vim._core.ui2').enable({})
 
 --- 2. snack attack!

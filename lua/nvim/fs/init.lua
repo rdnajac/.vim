@@ -3,7 +3,8 @@ local M = {}
 M.specs = {
   {
     'stevearc/oil.nvim',
-    enabled = false,
+    enabled = true,
+    keys = { { '-', '<Cmd>Oil<CR>' } },
     opts = {
       default_file_explorer = false,
     },
