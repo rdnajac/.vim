@@ -15,19 +15,24 @@ let s:dirs = {
       \ 's': g:stdpath['state'],
       \ '.': '~/.local/share/chezmoi/',
       \ }
-" g:chezmoi#source_dir_path
-
-for [key, value] in items(s:dirs)
-  execute printf('nnoremap cd%s <Cmd>edit %s<CR>', key, fnamemodify(value, ":~"))
-  " PERF : if explorer is already open this should behave differently
-endfor
 
 if !has('nvim')
+  for [key, value] in items(s:dirs)
+    " execute printf('nnoremap cd%s <Cmd>edit %s<CR>', key, fnamemodify(value, ":~"))
+    execute $'nnoremap cd{key} <Cmd>edit {value}<CR>'
+  endfor
   finish
+else
+  for [key, value] in items(s:dirs)
+    execute printf('nnoremap cd%s <Cmd>lua Snacks.picker.explorer({cwd = [[%s]]})<CR>',
+	  \ key,
+	  \ fnamemodify(value, ":~")
+	  \ )
+  endfor
 endif
+
 set nocdhome " default on neovim on unix, off on Windows or vim
 
-" handle OSC 7 dir change requests
 augroup cd_osc7
   autocmd!
   " autocmd TermRequest * call term#print_request()

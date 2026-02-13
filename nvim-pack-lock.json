@@ -5,7 +5,7 @@
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
-      "rev": "b5f8cb296ae2679f5acb2c927e116763efccaab3",
+      "rev": "cb8c4662aaa5c4ce91357932dab71992763ae8be",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink-cmp-env": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "7c80e36023c5499a97e097cb5f229e9b635725a0",
+      "rev": "85666c58d8ed49539794e913fd15f508af2ca8fb",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -33,11 +33,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "e5a9a3830f9c37211df4c82cac45bf728b95739d",
+      "rev": "8ccd03b844a990cd740638715eb3a474001e51d7",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "f4e9d367d4e067d7a5fabc9fd3f1349b291eb718",
+      "rev": "44acfe887d4056f704ccc4f17513ed41c9e2b2e6",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -109,7 +109,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "f707368022cdb851716be0d2970b90599c84a6a6",
+      "rev": "95b93a24740f7b89dd8331326b41bdd1337d79f6",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

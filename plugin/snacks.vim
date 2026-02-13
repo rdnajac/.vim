@@ -34,8 +34,9 @@ nnoremap <leader>dpf <Cmd>lua Snacks.profiler.pick({ filter = { def_plugin = vim
 nnoremap <leader>dps <Cmd>lua Snacks.profiler.scratch()<CR>
 
 " explorer
-nnoremap <leader>e <Cmd>lua Snacks.explorer.reveal()<CR>
-nnoremap <leader>E <Cmd>lua Snacks.explorer.open()<CR>
+
+nnoremap <leader>e <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
+nnoremap <leader>E <Cmd>lua Snacks.explorer.reveal()<CR>
 
 " Find mappings
 nnoremap <leader>F <Cmd>lua Snacks.picker.smart()<CR>
@@ -73,7 +74,7 @@ nnoremap <leader>pp <Cmd>lua Snacks.picker.pickers()<CR>
 nnoremap <leader>pr <Cmd>lua Snacks.picker.resume()<CR>
 
 " search
-nnoremap <leader>sa <Cmd>lua Snacks.picker.autocmds()<CR>
+nnoremap <leader>sa <Cmd>lua Snack; vim.schedule(vim.cmd.startinsert)s.picker.autocmds()<CR>
 nnoremap <leader>sb <Cmd>lua Snacks.picker.lines()<CR>
 nnoremap <leader>sB <Cmd>lua Snacks.picker.grep_buffers()<CR>
 nnoremap <leader>sC <Cmd>lua Snacks.picker.commands()<CR>

@@ -316,11 +316,6 @@ nnoremap <C-w><C-v> <Cmd>vertical +sbprevious<CR>
 nnoremap <expr> n (v:searchforward ? 'n' : 'N')..'zvzz'
 nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zvzz'
 
-" bookmarks {{{3
-nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-nnoremap <Bslash>i <Cmd>call edit#('~/.vim/init.lua')<CR>
-nnoremap <Bslash>v <Cmd>call edit#vimrc()<CR>
-
 " tabpages {{{3
 nnoremap ]<Tab> <Cmd>tabnext<CR>
 nnoremap [<Tab> <Cmd>tabprevious<CR>
@@ -328,6 +323,7 @@ nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
 nnoremap <leader><Tab>d <Cmd>tabclose<CR>
 nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
+nnoremap <leader><Bslash> <Cmd>call edit#readme()<CR>
 
 
 " change/delete current word {{{2
