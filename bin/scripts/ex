@@ -1,4 +1,5 @@
 #!/bin/sh
+## example `headless` vim script
 
 # -e Ex mode
 # -s Silent mode
