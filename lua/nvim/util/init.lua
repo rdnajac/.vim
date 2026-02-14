@@ -2,6 +2,7 @@ local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
 -- native
 M.gh = function(s) return string.format('https://github.com/%s.git', s) end
+M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
 
 -- api
@@ -10,10 +11,6 @@ M.get_buf_lines = function(bufnr)
   local nlines = vim.api.nvim_buf_line_count(bufnr)
   return vim.api.nvim_buf_get_lines(bufnr, 0, nlines, false)
 end
-M.is_curwin = function() return vim.api.nvim_get_current_win() ~= vim.g.statusline_winid end
-
--- shared
-M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 
 -- fn
 ---@param path string
@@ -91,7 +88,7 @@ M.is_comment = function(opts)
   if ok and node then
     return nv.treesitter.node_is_comment(node)
   end
-  return vim.fn['is#comment']()
+  return vim.fn['comment#syntax_match']()
 end
 
 function M.yank(text)

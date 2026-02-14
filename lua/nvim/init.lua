@@ -4,6 +4,7 @@ end
 
 bookmark('n', 'nvim/init')
 bookmark('p', 'nvim/plugins')
+bookmark('u', 'nvim/util/init')
 bookmark('P', 'nvim/util/plug')
 
 local plugins = require('nvim.plugins')

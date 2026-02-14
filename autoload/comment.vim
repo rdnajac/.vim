@@ -1,4 +1,11 @@
 " autoload/comment.vim
+function comment#syntax_match(...) abort
+  let pos = a:0 ? a:1 : getpos('.')
+  let synid = synID(pos[1], pos[2], 1)
+  let name  = synIDattr(synid, 'name')
+  return !empty(name) && name =~# 'Comment'
+endfunction
+
 " NOTE:  is <ESC>
 " TODO: check if in cmment before gcc
 function! s:insert_comment(tag, above) abort
