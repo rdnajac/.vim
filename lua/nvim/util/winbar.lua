@@ -14,4 +14,15 @@ local M = {
   end,
 }
 
+setmetatable(M, {
+  __call = function(_, ...)
+    local args = { ... }
+    local active = vim.fn['vimline#active#winbar']() == 1
+    if active then
+      return M.active(...)
+    else
+      return M.inactive(...)
+    end
+  end,
+})
 return M

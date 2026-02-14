@@ -5,7 +5,3 @@ function is#comment() abort
   let name  = synIDattr(synid, 'name')
   return !empty(name) && name =~# 'Comment'
 endfunction
-
-function is#curwin() abort
-  return win_getid() == g:statusline_winid
-endfunction

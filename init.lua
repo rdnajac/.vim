@@ -62,7 +62,11 @@ if vim.v.vim_did_enter == 0 then
   vim.pack.add(specs, { load = _load })
 end
 
--- TODO: figure out who sets this var
-vim.schedule(function() vim.env.PACKDIR = vim.g.PACKDIR end)
+vim.schedule(function()
+  -- TODO: figure out who sets this var
+  vim.env.PACKDIR = vim.g.PACKDIR
+
+  vim.o.winbar = [[%{% v:lua.nv.winbar() %}]]
+end)
 
 -- require('jit.p').stop()
