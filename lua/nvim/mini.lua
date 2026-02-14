@@ -166,6 +166,7 @@ for modname, opts in pairs({
     return {}
   end,
   splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' } }, -- TODO: respect shiftwidth
+  -- statusline = { },
   surround = {
     mappings = {
       add = 'ys',

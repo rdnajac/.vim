@@ -1,3 +1,4 @@
+local nv = _G.nv or require('nvim.util')
 local M = {}
 
 M.specs = {

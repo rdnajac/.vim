@@ -1,11 +1,14 @@
---- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
---- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
+local nv = _G.nv or require('nvim.util')
 local M = {}
 
 M.specs = {
   'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
 }
+
+--- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
+--- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
+M.capabilities = nil
 
 ---@return string[]
 M.servers = function()

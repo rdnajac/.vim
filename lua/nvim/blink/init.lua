@@ -1,6 +1,8 @@
-local nv = _G.nv or require('nvim.util')
+--- `https://cmp.saghen.dev/`
 ---@module "blink.cmp"
--- `https://cmp.saghen.dev/`
+
+local nv = _G.nv or require('nvim.util')
+
 ---@type table<string, blink.cmp.SourceProviderConfig>
 local providers = {
   buffer = {

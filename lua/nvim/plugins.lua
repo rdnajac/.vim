@@ -30,7 +30,7 @@ return {
         },
       },
       scroll = { enabled = true },
-      statuscolumn = require('nvim.snacks.statuscolumn'),
+      -- statuscolumn = require('nvim.snacks.statuscolumn'),
       picker = require('nvim.snacks.picker'),
       styles = {
         lazygit = { height = 0, width = 0 },
@@ -203,7 +203,7 @@ return {
     'nvim-mini/mini.nvim',
     config = function()
       -- require('mini.misc').setup_termbg_sync()
-      require('mini')
+      require('nvim.mini')
     end,
     keys = {
       { '<leader>fm', function() MiniFiles.open() end },
