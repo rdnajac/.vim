@@ -74,9 +74,4 @@ local _is_comment = {
 
 M.node_is_comment = function(node) return _is_comment[node:type()] == true end
 
-return setmetatable(M, {
-  __index = function(t, k)
-    t[k] = require('nvim.treesitter.' .. k)
-    return t[k]
-  end,
-})
+return M

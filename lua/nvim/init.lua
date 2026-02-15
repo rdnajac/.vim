@@ -10,12 +10,23 @@ bookmark('P', 'nvim/util/plug')
 local plugins = require('nvim.plugins')
 
 local M = setmetatable({}, {
-  __newindex = function(self, k, v)
-    rawset(self, k, v)
+  __newindex = function(self, k, v) -- assignment: `self[k] = v`
+    -- pin to a keymap for quick access
     bookmark(k:sub(1, 1), 'nvim/' .. k)
+    -- lazy load submodules one more level deeper
+    setmetatable(v, {
+      __index = function(t, subk)
+        local mod = require('nvim.' .. k .. '.' .. subk)
+        rawset(t, subk, mod)
+        return mod
+      end,
+    })
+    -- set the module to the table
+    rawset(self, k, v)
+    -- add plugins to the list
     vim.list_extend(plugins, v.specs)
   end,
-  __index = function(t, k)
+  __index = function(t, k) -- access: `table[key]`
     local mod = require('nvim.util')[k]
     rawset(t, k, mod)
     return mod

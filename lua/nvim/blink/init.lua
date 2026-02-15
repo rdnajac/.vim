@@ -125,17 +125,17 @@ local blink_spec = {
 local get_providers = function(mode)
   mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
   local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode] or 'default'
-  local providers = vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
-  table.sort(providers)
-  return providers
+  local enabled = vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
+  table.sort(enabled)
+  return enabled
 end
 
 local status = function()
-  local providers = get_providers()
-  return vim
-    .iter(ipairs(providers))
-    :map(function(_, provider) return nv.icons.blink[provider] end)
-    :join(' / ')
+  return ' '
+    .. vim
+      .iter(ipairs(get_providers()))
+      :map(function(_, provider) return nv.icons.blink[provider] end)
+      :join(' / ')
 end
 
 -- cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end, },
