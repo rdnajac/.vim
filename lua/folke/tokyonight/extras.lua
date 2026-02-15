@@ -42,6 +42,6 @@ iter:each(function(name)
       info.ext
     )
     :gsub('%.$', '') -- remove trailing dot
-  nv.util.file.write(fname, content)
+  nv.file.write(fname, content)
   print('Wrote ' .. fname)
 end)

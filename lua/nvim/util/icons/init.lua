@@ -52,105 +52,16 @@ local icons = {
   },
 }
 
-local snacks_icons = {
-  files = {
-    enabled = true, -- show file icons
-    dir = '󰉋 ',
-    dir_open = '󰝰 ',
-    file = '󰈔 ',
-  },
-  keymaps = {
-    nowait = '󰓅 ',
-  },
-  tree = {
-    vertical = '│ ',
-    middle = '├╴',
-    last = '└╴',
-  },
-  undo = {
-    saved = ' ',
-  },
-  ui = {
-    live = '󰐰 ',
-    hidden = 'h',
-    ignored = 'i',
-    follow = 'f',
-    selected = '● ',
-    unselected = '○ ',
-    -- selected = " ",
-  },
-  git = {
-    enabled = true, -- show git icons
-    commit = '󰜘 ', -- used by git log
-    staged = '●', -- staged changes. always overrides the type icons
-    added = '',
-    deleted = '',
-    ignored = ' ',
-    modified = '○',
-    renamed = '',
-    unmerged = ' ',
-    untracked = '?',
-  },
-  diagnostics = {
-    Error = ' ',
-    Warn = ' ',
-    Hint = ' ',
-    Info = ' ',
-  },
-  lsp = {
-    unavailable = '',
-    enabled = ' ',
-    disabled = ' ',
-    attached = '󰖩 ',
-  },
-  kinds = {
-    Array = ' ',
-    Boolean = '󰨙 ',
-    Class = ' ',
-    Color = ' ',
-    Control = ' ',
-    Collapsed = ' ',
-    Constant = '󰏿 ',
-    Constructor = ' ',
-    Copilot = ' ',
-    Enum = ' ',
-    EnumMember = ' ',
-    Event = ' ',
-    Field = ' ',
-    File = ' ',
-    Folder = ' ',
-    Function = '󰊕 ',
-    Interface = ' ',
-    Key = ' ',
-    Keyword = ' ',
-    Method = '󰊕 ',
-    Module = ' ',
-    Namespace = '󰦮 ',
-    Null = ' ',
-    Number = '󰎠 ',
-    Object = ' ',
-    Operator = ' ',
-    Package = ' ',
-    Property = ' ',
-    Reference = ' ',
-    Snippet = '󱄽 ',
-    String = ' ',
-    Struct = '󰆼 ',
-    Text = ' ',
-    TypeParameter = ' ',
-    Unit = ' ',
-    Unknown = ' ',
-    Value = ' ',
-    Variable = '󰀫 ',
-  },
-}
+local snacks_icons = require('snacks.picker.config.defaults').defaults.icons
+local M = vim.tbl_deep_extend('force', {}, icons, snacks_icons or {})
 
-local M = vim.tbl_deep_extend('force', {}, icons, snacks_icons)
+-- from `LazyVim`: add an inverse lookup table for lsp kinds
+-- TODO:
+-- nv.tbl_add_inverse_lookup
 
--- add an inverted lookup table for kinds
-for i, name in ipairs(vim.lsp.protocol.SymbolKind) do
-  M.kinds[i] = M.kinds[name]
-end
+-- for i, name in ipairs(vim.lsp.protocol.SymbolKind) do
+--   M.kinds[i] = M.kinds[name]
+-- end
 
 local mini_icon_keys = {
   'directory',

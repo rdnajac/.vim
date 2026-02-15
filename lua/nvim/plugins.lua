@@ -306,5 +306,3 @@ return {
     -- opts = {},
   },
 }
-
--- vim: fdm=expr fdl=1

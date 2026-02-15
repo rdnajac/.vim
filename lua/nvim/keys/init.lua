@@ -2,12 +2,12 @@ local nv = _G.nv or require('nvim.util')
 local M = {}
 
 -- apply these keys later
-vim.schedule(function()
+M.after = function()
   Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
   Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
   M.map(M.togglelist)
-end)
+end
 
 M.specs = {
   {

@@ -13,7 +13,7 @@
       "src": "https://github.com/bydlw98/blink-cmp-env.git"
     },
     "blink.cmp": {
-      "rev": "85666c58d8ed49539794e913fd15f508af2ca8fb",
+      "rev": "cd79f572971c58784ca72551af29af3a63da9168",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -33,7 +33,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "8ccd03b844a990cd740638715eb3a474001e51d7",
+      "rev": "4ca988557786c9a4e41d5e5b6e31b4c9d7379f53",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/chrisgrieser/nvim-scissors.git"
     },
     "nvim-treesitter": {
-      "rev": "9f2dad22ef8bb14fd1e0a3aa8859cdc88170668b",
+      "rev": "4d9466677a5ceadef104eaa0fe08d60d91c4e9a7",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {

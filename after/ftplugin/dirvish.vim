@@ -17,8 +17,9 @@ nnoremap <buffer> C <Cmd>lua vim.lsp.buf.code_action({filter=function(action) re
 lua << EOF
 -- XXX: `dirvish#add_icon_fn()` doesn't support highlighting
 require('nvim.util.icons.fs').render()
+-- FIXME: file moved
 -- require('nvim.util.git.extmarks').setup()
-vim.lsp.buf_attach_client(0, nv.lsp.dirvish.client_id)
+-- vim.lsp.buf_attach_client(0, require('nvim.lsp.dirvish').client_id)
 -- BUG: https://github.com/justinmk/vim-dirvish/issues/257
 vim.opt_local.listchars = vim.opt.listchars:get()
 vim.opt_local.listchars:remove('precedes')

@@ -1,11 +1,12 @@
--- require('nvim.lsp.myserver')
 -- local id = nv.lsp.myserver.client_id
+-- vim.lsp.buf_attach_client(0, id)
+
+vim.wo.foldmethod = 'expr'
+vim.wo.foldtext = [[v:lua.nv.foldtext()]]
 
 if vim.g.loaded_endwise == 1 then
-  vim.bo.syntax = 'ON' -- keep using legacy syntax
+  vim.bo.syntax = 'ON' -- use legacy syntax
 end
-vim.wo.foldmethod = 'expr'
-vim.wo.foldtext = [[v:lua.require'nvim.util'.foldtext()]]
 
 vim.b.minisurround_config = {
   custom_surroundings = {
@@ -28,7 +29,6 @@ if MiniSplitjoin then
     split = { hooks_post = { add_comma_curly } },
     join = { hooks_post = { del_comma_curly, pad_curly } },
   }
-
 end
 
 local aug = vim.api.nvim_create_augroup('lua', {})

@@ -39,24 +39,40 @@ function M.get_installed(update)
   return M._installed or {}
 end
 
-M.status = {
-  function()
-    local ret = {}
-    local highlighter = require('vim.treesitter.highlighter')
-    local hl = highlighter.active[vim.api.nvim_get_current_buf()]
-    ---@diagnostic disable-next-line: invisible
-    local queries = hl and hl._queries
-    if type(queries) == 'table' then
-      ret = vim.tbl_map(function(query)
-        if query == vim.bo.filetype then
-          return ' '
-        end
-        return nv.icons.filetype[query]
-      end, vim.tbl_keys(queries))
-    end
-    return table.concat(ret, ' ')
-  end,
-}
+M.after = function()
+  local aug = vim.api.nvim_create_augroup('treesitter', {})
+
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = M.parsers.to_autostart,
+    group = aug,
+    callback = function(ev) vim.treesitter.start(ev.buf) end,
+    desc = 'Automatically start tree-sitter',
+  })
+
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'markdown', 'r', 'rmd', 'quarto' },
+    group = aug,
+    command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
+    desc = 'Use treesitter folding for select filetypes',
+  })
+end
+
+M.status = function()
+  local ret = {}
+  local highlighter = require('vim.treesitter.highlighter')
+  local hl = highlighter.active[vim.api.nvim_get_current_buf()]
+  ---@diagnostic disable-next-line: invisible
+  local queries = hl and hl._queries
+  if type(queries) == 'table' then
+    ret = vim.tbl_map(function(query)
+      if query == vim.bo.filetype then
+        return ' '
+      end
+      return nv.icons.filetype[query]
+    end, vim.tbl_keys(queries))
+  end
+  return table.concat(ret, ' ')
+end
 
 M.install_cli = function()
   if vim.fn.executable('tree-sitter') == 1 then

@@ -4,9 +4,9 @@ local signs = (function()
   local icon, hl = {}, {}
   ---@type number, string
   for k, v in ipairs(vim.diagnostic.severity) do
-    local diagnostic = v:sub(1, 1) .. v:sub(2):lower()
-    icon[k] = nv.icons.diagnostics[diagnostic]
-    hl[k] = 'Diagnostic' .. diagnostic
+    local name = nv.capitalize(v --[[@as string]])
+    icon[k] = nv.icons.diagnostics[name] or name:sub(1, 1)
+    hl[k] = 'Diagnostic' .. name
   end
   return { text = icon, numhl = hl }
 end)()

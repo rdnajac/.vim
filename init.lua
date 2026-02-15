@@ -40,21 +40,39 @@ end
 --- 3. the rest of the owl
 _G.nv = require('nvim')
 
+local _plugins = require('nvim.plugins')
+
+vim.iter(nv):each(function(k, v)
+  print('loading', k)
+  if vim.is_callable(v.after) then
+    vim.schedule(v.after) -- run afeter startup
+  end
+  vim.list_extend(_plugins, v.specs or {})
+end)
+
+-- PERF: filter plugins before converting to `vim.pack.Spec`
+local plugins = vim.tbl_filter(function(t)
+  return t.enabled ~= false
+  -- return t.enabled == true end,
+end, _plugins)
+
 --- 4. import plug module convert plugins table to specs
-local specs = vim.iter(_G.Plugins):map(nv.plug):totable()
+local specs = vim.iter(plugins):map(nv.plug):totable()
 
 --- 5. custom loader to `packadd` and run setup function
 ---@param plug_data {spec: vim.pack.Spec, path: string}
 local function _load(plug_data)
-  -- helper to maybe call a function in plugin's data table
-  local function maybe(fn)
-    if vim.tbl_get(plug_data.spec, 'data', fn) and vim.is_callable(plug_data.spec.data[fn]) then
-      plug_data.spec.data[fn]()
+  --- call a function in plugin's data table if callable
+  local function maybe(key)
+    local fn = vim.tbl_get(plug_data.spec, 'data', key)
+    if vim.is_callable(fn) then
+      fn()
     end
   end
-  maybe('init')
+
+  maybe('init') -- run init for vim plugins or `package` hijinks
   vim.cmd.packadd({ plug_data.spec.name, bang = true })
-  maybe('setup')
+  maybe('setup') -- run setup for neovim plugins with `opts` tables
 end
 
 --- 6. `packadd` plugins with custom loader for setup
@@ -65,8 +83,7 @@ end
 vim.schedule(function()
   -- TODO: figure out who sets this var
   vim.env.PACKDIR = vim.g.PACKDIR
-
-  vim.o.winbar = [[%{% v:lua.nv.winbar() %}]]
+  vim.o.winbar = [[%{%v:lua.nv.winbar()%}]]
 end)
 
 -- require('jit.p').stop()

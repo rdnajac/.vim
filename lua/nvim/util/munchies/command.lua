@@ -1,18 +1,24 @@
--- assumes input is [a-z],_
-local function to_camel_case(str)
-  return str:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)
-end
-
 local cmds = vim
   .iter(vim.tbl_keys(Snacks.picker))
-  :filter(function(name) return vim.is_callable(Snacks.picker[name]) end)
+  -- remove non-callable keys and internal methods
+  :filter(
+    function(name) return vim.is_callable(Snacks.picker[name]) end
+  )
   :filter(
     function(name)
       return not vim.list_contains({ 'get', 'health', 'keymap', 'lazy', 'select', 'setup' }, name)
     end
   )
-  :map(function(name) return name, to_camel_case(name) end)
-  :filter(function(name, cmd) return vim.fn.exists(':' .. cmd) ~= 2 end)
+  -- assumes input is [a-z],_
+  :map(function(name) return name, nv.camelCase(name) end)
+  -- skips `Man`
+  :filter(function(name, cmd)
+    local exists = vim.fn.exists(':' .. cmd) == 2
+    if exists then
+      print(name .. ' command (:' .. cmd .. ') already exists')
+    end
+    return not exists
+  end)
   :map(function(name, cmd)
     vim.api.nvim_create_user_command(cmd, function(args)
       local opts = {}

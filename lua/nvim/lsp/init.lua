@@ -60,4 +60,6 @@ M.status = {
   end,
 }
 
+M.after = function() vim.lsp.enable(M.servers()) end
+
 return M

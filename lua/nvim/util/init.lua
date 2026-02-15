@@ -1,9 +1,22 @@
 local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
--- native
+-- string manipulation
 M.gh = function(s) return string.format('https://github.com/%s.git', s) end
+M.capitalize = function(s) return s:sub(1, 1) .. s:sub(2):lower() end
+M.camelCase = function(s)
+  return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)
+end
+
+-- boolean checks
 M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
+M.is_comment = function(opts)
+  local ok, node = pcall(vim.treesitter.get_node, opts)
+  if ok and node then
+    return nv.treesitter.node_is_comment(node)
+  end
+  return vim.fn['comment#syntax_match']()
+end
 
 -- api
 M.get_buf_lines = function(bufnr)
@@ -81,19 +94,25 @@ M.key_counts = function()
   return ret
 end
 
---- Check if the current position is inside a comment
----@return boolean
-M.is_comment = function(opts)
-  local ok, node = pcall(vim.treesitter.get_node, opts)
-  if ok and node then
-    return nv.treesitter.node_is_comment(node)
-  end
-  return vim.fn['comment#syntax_match']()
-end
-
 function M.yank(text)
   vim.fn.setreg('*', text)
   print('yanked: ' .. text)
 end
+
+-- nv.tbl_add_inverse_lookup
+-- vim.tbl_add_reverse_lookup(M.kinds)
+-- shared method is deprecated because it is not type safe
+-- https://github.com/neovim/neovim/pull/24564
+
+-- vim.print(vim.iter({ a='x1', b='x2', c='x3', d='x4' }):fold({}, function(t, k, v)
+--   t[v] = k
+--   return t
+-- end))
+
+-- local inv = {}
+-- for k, v in pairs(t) do
+--   inv[v] = k
+-- end
+
 
 return M

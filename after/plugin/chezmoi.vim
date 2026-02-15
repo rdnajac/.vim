@@ -16,5 +16,5 @@ augroup chezmoi
   autocmd!
   au BufWritePost ~/.bash_aliases call s:chezmoi_add()
   au BufWritePost ~/bin/* call s:chezmoi_add()
-  exe printf('au BufWritePost %s/* call s:chezmoi_apply()', g:chezmoi#source_dir_path)
+  " exe printf('au BufWritePost %s/* call s:chezmoi_apply()', g:chezmoi#source_dir_path)
 augroup END
