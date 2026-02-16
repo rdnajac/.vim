@@ -40,14 +40,12 @@ end
 --- 3. the rest of the owl
 _G.nv = require('nvim')
 
-local _plugins = require('nvim.plugins')
-
-vim.iter(nv):each(function(k, v)
-  print('loading', k)
+local _plugins = vim.iter(nv):fold(require('nvim.plugins'), function(acc, k, v)
+  print('folding plugins from', k)
   if vim.is_callable(v.after) then
-    vim.schedule(v.after) -- run afeter startup
+    vim.schedule(v.after) -- run after startup
   end
-  vim.list_extend(_plugins, v.specs or {})
+  return vim.list_extend(acc, v.specs or {})
 end)
 
 -- PERF: filter plugins before converting to `vim.pack.Spec`

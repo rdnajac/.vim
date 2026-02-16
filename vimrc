@@ -50,8 +50,8 @@ set listchars+=precedes:…,
 set listchars+=nbsp:+
 
 " fold {{{ 2
-set foldlevel=99
-" set foldlevelstart=99
+" set foldlevel=99
+set foldlevelstart=1
 set foldminlines=3
 set foldopen+=insert,jump
 set foldmethod=marker
@@ -488,8 +488,10 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
+  " Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   " Plug 'saxon1964/neovim-tips'
 endif
 call plug#end()
 " }}}
+" vim: set fdm=marker
