@@ -15,13 +15,15 @@ local M = {
 }
 
 setmetatable(M, {
-  __call = function(_, ...)
-    local args = { ... }
+  __call = function()
+    if vim.bo.filetype == 'snacks_dashboard' then
+      return ''
+    end
     local active = vim.fn['vimline#active#winbar']() == 1
     if active then
-      return M.active(...)
+      return M.active()
     else
-      return M.inactive(...)
+      return M.inactive()
     end
   end,
 })

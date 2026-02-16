@@ -99,7 +99,7 @@ M.map = function(t) vim.iter(t):map(_parse):each(vim.keymap.set) end
 ---@param key string normal mode keys mapped by snacks.toggle.Class method
 ---@param v string|table the preset toggle name or the table of opts
 M.map_snacks_toggle = function(key, v)
-  local Toggle = Snacks.Toggle
+  local Toggle = Snacks.toggle
   if type(v) == 'table' then
     return Toggle.new(v):map(key)
   end -- XXX: bad strings like `meta|option` break this

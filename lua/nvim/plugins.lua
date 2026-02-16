@@ -14,29 +14,12 @@ return {
       input = { enabled = true },
       -- notifier = require('nvim.snacks.notifier'),
       quickfile = { enabled = true },
-      scratch = { template = 'local x = \n\nprint(x)' },
       terminal = { enabled = true },
-      scope = {
-        keys = {
-          textobject = {
-            ii = { min_size = 2, edge = false, cursor = false, desc = 'inner scope' },
-            ai = { min_size = 2, cursor = false, desc = 'full scope' },
-            -- ag = { min_size = 1, edge = false, cursor = false, treesitter = { enabled = false }, desc = "buffer" },
-          },
-          jump = {
-            ['[i'] = { min_size = 1, bottom = false, cursor = false, edge = true },
-            [']i'] = { min_size = 1, bottom = true, cursor = false, edge = true },
-          },
-        },
-      },
+      scope = { enabled = true },
       scroll = { enabled = true },
       -- statuscolumn = require('nvim.snacks.statuscolumn'),
       picker = require('nvim.snacks.picker'),
-      styles = {
-        lazygit = { height = 0, width = 0 },
-        terminal = { wo = { winhighlight = 'Normal:Character' } },
-        notification_history = { height = 0.9, width = 0.9, wo = { wrap = false } },
-      },
+      styles = require('nvim.snacks.styles'),
       words = { enabled = true },
     },
     keys = {
@@ -304,5 +287,13 @@ return {
   {
     'chrisgrieser/nvim-scissors',
     -- opts = {},
+  },
+  {
+    'stevearc/oil.nvim',
+    enabled = true,
+    keys = { { '-', '<Cmd>Oil<CR>' } },
+    opts = {
+      default_file_explorer = false,
+    },
   },
 }
