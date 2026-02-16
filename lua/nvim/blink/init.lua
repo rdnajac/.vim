@@ -125,7 +125,11 @@ local blink_spec = {
 local get_providers = function(mode)
   mode = (mode or vim.api.nvim_get_mode().mode):sub(1, 1)
   local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode] or 'default'
-  local enabled = vim.tbl_keys(require('blink.cmp.sources.lib').get_enabled_providers(cmp_mode))
+  local ok, lib = pcall(require, 'blink.cmp.sources.lib')
+  if not ok or not lib then
+    return {}
+  end
+  local enabled = vim.tbl_keys(lib.get_enabled_providers(cmp_mode))
   table.sort(enabled)
   return enabled
 end
@@ -140,8 +144,44 @@ end
 
 -- cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end, },
 
+local after = function()
+  ---  vim.keymap.set('i', '<Tab>', function()
+  ---   if not vim.lsp.inline_completion.get() then
+  ---     return '<Tab>'
+  ---   end
+  --- end, { expr = true, desc = 'Accept the current inline completion' })
+  -- vim.schedule(autocmds)
+  -- vim.lsp.enable('copilot')
+  vim.lsp.inline_completion.enable()
+
+  -- NOTE: In GUI and supporting terminals, `<C-i>` can be mapped separately from `<Tab>`
+  -- ...except in tmux: `https://github.com/tmux/tmux/issues/2705`
+  -- vim.keymap.set('n', '<C-i>', '<Tab>', { desc = 'restore <C-i>' })
+
+  local toggle_inline_completion = Snacks.toggle.new({
+    name = 'Inline Completion',
+    get = function() return vim.lsp.inline_completion.is_enabled() end,
+    set = function(state) vim.lsp.inline_completion.enable(state) end,
+  })
+  toggle_inline_completion:map('<leader>ai')
+
+  -- FIXME:
+  -- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
+  -- vim.api.nvim_create_autocmd('User', {
+  --   group = aug,
+  --   pattern = 'BlinkCmpMenuOpen',
+  --   callback = function() toggle_inline_completion:toggle() end,
+  -- })
+  -- vim.api.nvim_create_autocmd('User', {
+  --   group = aug,
+  --   pattern = 'BlinkCmpMenuClose',
+  --   callback = function() toggle_inline_completion:toggle() end,
+  -- })
+end
+
 return {
   specs = vim.list_extend({ blink_spec }, vim.tbl_keys(extras)),
   -- statusline component showing active completion sources
   status = status,
+  after = after,
 }
