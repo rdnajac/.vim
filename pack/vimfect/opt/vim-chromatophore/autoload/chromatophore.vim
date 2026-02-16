@@ -1,9 +1,13 @@
+if !exists('g:chromatophores')
+  let g:chromatophores = [ 'String' ]
+endif
+
 let s:mode_color_map = {
       \ 'normal':   '#39FF14',
       \ 'visual':   '#F7768E',
       \ 'select':   '#FF9E64',
       \ 'replace':  '#FF007C',
-      \ 'command': '#e0af68',
+      \ 'command':  '#E0AF68',
       \ 'terminal': '#BB9AF7',
       \ 'shell':    '#14AEFF',
       \ 'pending':  '#E0AF68',
@@ -73,7 +77,6 @@ function! chromatophore#setup() abort
   " call s:hl_set('Chromatophore_ab', mode_color, grey)
   " call s:hl_set('Chromatophore_bc', grey,       eigengrau)
   " call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
-
   call s:hl_link('Chromatophore', g:chromatophores)
 
 endfunction
@@ -85,6 +88,6 @@ function! chromatophore#metachrosis() abort
     execute printf('highlight Chromatophore%s guifg=%s', l:suffix, l:color)
   endfor
   execute 'highlight Chromatophore_a guibg=' . l:color
-  execute 'highlight lualine_transitional_lualine_a_normal_to_lualine_b_normal guifg=' . l:color
-  lua if  package.loaded['lualine'] then require('lualine').refresh() end
+  " execute 'highlight lualine_transitional_lualine_a_normal_to_lualine_b_normal guifg=' . l:color
+  " lua if  package.loaded['lualine'] then require('lualine').refresh() end
 endfunction
