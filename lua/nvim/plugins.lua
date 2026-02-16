@@ -77,6 +77,11 @@ return {
     },
   },
   {
+    'mason-org/mason.nvim',
+    opts = { ui = { icons = nv.icons.mason.emojis } },
+    build = vim.cmd.MasonUpdate,
+  },
+  {
     'folke/lazydev.nvim',
     opts = {
       -- integrations = { cmp = false },
@@ -118,45 +123,6 @@ return {
         get = function() return require('sidekick.nes').enabled end,
         set = function(state) require('sidekick.nes').enable(state) end,
       },
-    },
-  },
-  {
-    'mason-org/mason.nvim',
-    opts = { ui = { icons = nv.icons.mason.emojis } },
-    build = vim.cmd.MasonUpdate,
-  },
-  {
-    'nvim-lualine/lualine.nvim',
-    enabled = false,
-    -- `https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets`
-    opts = {
-      options = {
-        component_separators = { left = '', right = '' },
-        -- section_separators = nv.icons.sep.section.rounded,
-        section_separators = { left = '', right = '' },
-        disabled_filetypes = {
-          statusline = { pattern = 'snacks_dashboard' },
-          -- winbar = { 'netrw', 'snacks_dashboard', 'snacks_picker_list', 'snacks_picker_input' },
-          tabline = { 'snacks_dashboard' },
-        },
-        ignore_focus = {
-          -- 'man',
-          -- 'help',
-        },
-        -- theme = {
-        --   normal = { a = 'Chromatophore_a', b = 'Chromatophore_b', c = 'Chromatophore_c' },
-        -- },
-        -- use_mode_colors = false,
-      },
-      extensions = { 'man' },
-      sections = {},
-      inactive_sections = {},
-      tabline = {},
-      winbar = {
-        -- lualine_a = { require('nvim.util.status').buffer },
-        -- lualine_a = { nv.blink.status },
-      },
-      inactive_winbar = {},
     },
   },
   {
