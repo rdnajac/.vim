@@ -3,30 +3,19 @@ local nv = _G.nv or require('nvim.util')
 ---@type Plugin[]
 return {
   {
-    'folke/snacks.nvim',
-    ---@type snacks.Config
-    opts = {
-      bigfile = require('nvim.snacks.bigfile'),
-      dashboard = require('nvim.snacks.dashboard'),
-      explorer = { replace_netrw = true },
-      image = { enabled = true },
-      indent = { indent = { only_current = false, only_scope = true } },
-      input = { enabled = true },
-      -- notifier = require('nvim.snacks.notifier'),
-      quickfile = { enabled = true },
-      terminal = { enabled = true },
-      scope = { enabled = true },
-      scroll = { enabled = true },
-      -- statuscolumn = require('nvim.snacks.statuscolumn'),
-      picker = require('nvim.snacks.picker'),
-      styles = require('nvim.snacks.styles'),
-      words = { enabled = true },
-    },
+    'rdnajac/vim-lol',
+    enabled = true,
     keys = {
+      -- native
+      { '<leader>ui', '<Cmd>Inspect<CR>' },
+      { '<leader>uI', '<Cmd>Inspect!<CR>' },
+      { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
+      -- snacks
       { 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
       { ']]', function() Snacks.words.jump(vim.v.count1) end, mode = { 'n', 't' } },
       { '[[', function() Snacks.words.jump(-vim.v.count1) end, mode = { 'n', 't' } },
     },
+    ---@type table<string, string|snacks.toggle.Opts>
     toggles = {
       ['<leader>ac'] = 'autochdir',
       ['<leader>dpp'] = 'profiler',
@@ -44,18 +33,6 @@ return {
       ['<leader>us'] = 'spell',
       ['<leader>uL'] = 'relativenumber',
       ['<leader>uw'] = 'wrap',
-    },
-  },
-  {
-    'rdnajac/vim-lol',
-    enabled = true,
-    keys = {
-      { '<leader>ui', '<Cmd>Inspect<CR>' },
-      { '<leader>uI', '<Cmd>Inspect!<CR>' },
-      { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
-    },
-    ---@type table<string, snacks.toggle.Opts>
-    toggles = {
       ['<leader>uv'] = {
         name = 'Virtual Text',
         get = function() return vim.diagnostic.config().virtual_text ~= false end,

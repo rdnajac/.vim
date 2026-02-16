@@ -7,7 +7,7 @@ M.camelCase = function(s)
   return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)
 end
 
--- boolean checks
+-- shared
 M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
 M.is_comment = function(opts)
@@ -113,6 +113,5 @@ end
 -- for k, v in pairs(t) do
 --   inv[v] = k
 -- end
-
 
 return M

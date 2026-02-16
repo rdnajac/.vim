@@ -488,7 +488,7 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
-  " Plug 'folke/snacks.nvim'
+  Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   " Plug 'saxon1964/neovim-tips'
 endif
