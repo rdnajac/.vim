@@ -1,4 +1,4 @@
----@class Plugin
+---@class plug.Spec
 ---@field [1] string Plugin identifier (GitHub owner/repo or name).
 ---@field name? string The plugin name as evaluated by `vim.pack`. Defaults to repo name.
 ---@field data? any Custom data to pass to `vim.pack.add()`.
@@ -12,31 +12,32 @@
 ---@field branch? string Git branch to use.
 ---@field toggles? table<string, string|fun()|table> Snacks.nvim toggles to register.
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
+---@field dependencies? string|string[] Dependencies to load before this plugin.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
 ---@field init? fun():nil Called just before `packadd`ing the plugin.
-local Plugin = {}
-Plugin.__index = Plugin
+local M = {}
+M.__index = M
 
 --- Create a new Plugin instance from a specification table.
 ---
 --- @param v table Plugin specification with required `[1]` field.
---- @return Plugin
-function Plugin.new(v)
+--- @return plug.Spec
+function M.new(v)
   local self = type(v) == 'table' and v or { v }
   vim.validate('[1]', self[1], 'string')
   vim.validate('keys', self.keys, vim.islist, true)
   vim.validate('opts', self.opts, { 'table', 'function' }, true)
   vim.validate('toggles', self.toggles, 'table', true)
-  return setmetatable(self, Plugin)
+  return setmetatable(self, M)
 end
 
----@class plugin.Data passed as `spec.data` to `vim.pack.add()`
+---@class plug.Data passed as `spec.data` to `vim.pack.add()`
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field setup? fun():nil Setup function to call after loading the plugin.
 
---- Convert the `Plugin` to a `vim.pack.Spec` for use with `vim.pack`.
+--- Convert the `M` to a `vim.pack.Spec` for use with `vim.pack`.
 ---@return vim.pack.Spec
-function Plugin:to_spec()
+function M:pack()
   return {
     src = self.src or nv.gh(self[1]),
     version = self.version or self.branch or nil,
@@ -62,12 +63,12 @@ local on_event = function(event, cb)
   })
 end
 
-function Plugin:modname()
+function M:modname()
   local name = self.name or self[1]:match('[^/]+$')
   return name:gsub('%.nvim$', '')
 end
 
-function Plugin:register_keys()
+function M:register_keys()
   local _keys = require('nvim.keys')
   if self.keys then
     _keys.map(self.keys)
@@ -89,7 +90,7 @@ end
 ---
 --- If `event` is specified, defers setup until the event fires.
 --- Ensures setup runs only once via `did_setup` flag.
-function Plugin:setup()
+function M:setup()
   self.did_setup = false
 
   local function _setup()
@@ -113,7 +114,7 @@ function Plugin:setup()
   end
 end
 
-setmetatable(Plugin, {
-  __call = function(_, t) return Plugin.new(t):to_spec() end,
+setmetatable(M, {
+  __call = function(_, t) return M.new(t) end,
 })
-return Plugin
+return M

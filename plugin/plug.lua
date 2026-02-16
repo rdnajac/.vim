@@ -1,3 +1,8 @@
+-- TODO: build command to force rebuild of a plugin
+vim.api.nvim_create_autocmd({ 'PackChanged' }, {
+  callback = function(ev) require('nvim.plug.build')(ev) end,
+})
+
 local spec_names = function()
   return vim.tbl_map(function(p) return p.spec.name end, vim.pack.get())
 end
@@ -8,7 +13,7 @@ vim.api.nvim_create_user_command(
   {}
 )
 
-vim.api.nvim_create_user_command('Update', function(opts)
+vim.api.nvim_create_user_command('PlugUpdate', function(opts)
   local plugs = #opts.fargs > 0 and opts.fargs or nil
   vim.pack.update(plugs, { force = opts.bang })
 end, {

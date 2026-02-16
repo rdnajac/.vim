@@ -17,6 +17,7 @@ local M = {
   blink = require('nvim.blink'),
   keys = require('nvim.keys'),
   lsp = require('nvim.lsp'),
+  plug = require('nvim.plug'),
   treesitter = require('nvim.treesitter'),
 }
 
@@ -28,5 +29,4 @@ setmetatable(M, {
     return mod
   end,
 })
-
 return M

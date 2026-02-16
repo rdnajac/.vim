@@ -1,6 +1,6 @@
 local nv = _G.nv or require('nvim.util')
 
----@type Plugin[]
+---@type plug.Spec[]
 return {
   {
     'rdnajac/vim-lol',

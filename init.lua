@@ -4,14 +4,13 @@
 --- https://luajit.org/ext_profiler.html
 -- require('jit.p').start('ri1', '/tmp/prof')
 
---- enable `vim.loader` to override `require`
+--- overrides `loadfile()` and default nvim package loader
 --- https://github.com/neovim/neovim/discussions/36905
 vim.loader.enable()
 
 -- XXX: experimental!
 vim.o.cmdheight = 0
 -- BUG: ui2 error on declining to install after vim.pack.add
--- require('vim._core.ui2').enable({})
 require('vim._core.ui2').enable({})
 
 --- 1. source vimrc
@@ -52,26 +51,28 @@ Snacks.setup({
 
 _G.nv = require('nvim')
 
-local _plugins = vim.iter(nv):fold(require('nvim.plugins'), function(acc, k, v)
-  print('folding plugins from', k)
+local plugins = vim.iter(nv):fold(require('nvim.plugins'), function(acc, k, v)
+  -- print('folding plugins from', k)
   if vim.is_callable(v.after) then
+    -- print('scheduling after function for', k)
     vim.schedule(v.after) -- run after startup
   end
   return vim.list_extend(acc, v.specs or {})
 end)
 
--- PERF: filter plugins before converting to `vim.pack.Spec`
-local plugins = vim.tbl_filter(function(t)
-  return t.enabled ~= false
-  -- return t.enabled == true end,
-end, _plugins)
-
 --- 4. import plug module convert plugins table to specs
-local specs = vim.iter(plugins):map(nv.plug):totable()
+local specs = vim
+  .iter(plugins)
+  :filter(function(t)
+    return t.enabled ~= false
+    -- return t.enabled == true end,
+  end)
+  :map(nv.plug)
+  :totable()
 
 --- 5. `packadd` plugins with custom loader for setup
 if vim.v.vim_did_enter == 0 then
-  vim.pack.add(specs, { load = require('nvim.plug.load') })
+  vim.pack.add(specs, { load = nv.plug.load })
 end
 
 vim.schedule(function()

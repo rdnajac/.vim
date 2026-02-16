@@ -12,7 +12,7 @@ local NEOVIM = {
 local keys = {
   { icon = ' ', key = 'n', desc = 'New File', action = ':ene | star' },
   { icon = ' ', key = '-', desc = 'Browse Directory', action = ':Explorer' },
-  { icon = ' ', key = 'U', desc = 'Update', action = ':Update' },
+  { icon = ' ', key = 'U', desc = 'Update Plugins', action = ':PlugUpdate' },
   { icon = ' ', key = 'M', desc = 'Mason', action = ':Mason' },
   { icon = '󰒲 ', key = 'G', desc = 'LazyGit', action = ':LazyGit' },
   { icon = ' ', key = 'N', desc = 'News', action = ':News' },
