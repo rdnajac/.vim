@@ -54,6 +54,7 @@ local sources = {
   default = vim.tbl_keys(providers),
   per_filetype = {
     -- sql = i{ 'dadbod' }, -- TODO: ,
+    vim = { inherit_defaults = true, 'env' },
   },
 }
 -- add LazyDev provider if available
@@ -67,7 +68,22 @@ if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
   sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
 end
 
-local extras = require('nvim.blink.extras')
+---@type table<string, blink.cmp.SourceProviderConfigPartial>
+local extras = {
+  ['bydlw98/blink-cmp-env'] = {
+    env = {
+      name = 'env',
+      module = 'blink-cmp-env',
+      score_offset = -5,
+      opts = {
+        item_kind = function() return require('blink.cmp.types').CompletionItemKind.Variable end,
+        show_braces = false,
+        show_documentation_window = true,
+      },
+    },
+  },
+}
+
 sources.providers = vim.iter(extras):fold(
   providers,
   function(acc, _, config) return vim.tbl_extend('force', acc, config) end

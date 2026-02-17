@@ -1,5 +1,3 @@
-local icons = _G.nv and _G.nv.icons or require('nvim.util.icons')
-
 local M = {}
 
 -- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
@@ -49,13 +47,13 @@ M.menu = {
         ellipsis = false,
         text = function(ctx)
           local provider = ctx.source_name
-          local icon = icons.blink[provider] or ' '
+          local icon = nv.icons.blink[provider] or ' '
           return icon .. ctx.icon_gap
         end,
         highlight = component_highlight,
       },
       kind_icon = {
-        text = function(ctx) return icons.kinds[ctx.kind] or '' end,
+        text = function(ctx) return nv.icons.kinds[ctx.kind] or '' end,
         highlight = component_highlight,
       },
     },
