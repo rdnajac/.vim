@@ -13,7 +13,14 @@ local _submodules = {
   ui = require('nvim.ui'),
 }
 
-local M = setmetatable(_submodules, {
+local M = _submodules
+
+M.plugins = vim.iter(_submodules):fold({}, function(acc, k, v)
+  vim.schedule(v.after) -- run after startup
+  return vim.list_extend(acc, v.specs or {})
+end)
+
+setmetatable(M, {
   __index = function(t, k) -- access: `table[key]`
     -- fall back to util for all other keys
     local mod = require('nvim.util')[k]

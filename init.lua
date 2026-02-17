@@ -52,16 +52,10 @@ Snacks.setup({
 --- 3. the rest of the owl
 _G.nv = require('nvim')
 
---- 4. combine spec lists
-local plugspecs = vim.iter(nv):fold({}, function(acc, k, v)
-  vim.schedule(v.after) -- run after startup
-  return vim.list_extend(acc, v.specs or {})
-end)
-
 --- 4. convert enabled plugins to `vim.pack` specs
 ---@type vim.pack.Spec[]
 local specs = vim
-  .iter(plugspecs)
+  .iter(nv.plugins)
   :filter(function(t)
     return t.enabled ~= false
     -- return t.enabled == true end,
@@ -69,7 +63,7 @@ local specs = vim
   :map(nv.plug --[[@as fun(table):vim.pack.Spec]])
   :totable()
 
---- 6. `packadd` plugins with custom loader for setup
+--- 5. `packadd` plugins with custom loader for setup
 if vim.v.vim_did_enter == 0 then
   vim.pack.add(specs, { load = nv.plug.load })
 end
