@@ -39,6 +39,7 @@ function M.get_installed(update)
   return M._installed or {}
 end
 
+-- PERF: does it matter that these are scheduled?
 M.after = function()
   local aug = vim.api.nvim_create_augroup('treesitter', {})
 

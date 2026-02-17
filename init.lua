@@ -33,8 +33,8 @@ end
 
 Snacks.setup({
   bigfile = require('nvim.snacks.bigfile'),
-  -- dashboard = require('nvim.snacks.dashboard'),
-  -- explorer = { replace_netrw = true },
+  dashboard = require('nvim.snacks.dashboard'),
+  explorer = { replace_netrw = true },
   image = { enabled = true },
   indent = { indent = { only_current = false, only_scope = true } },
   input = { enabled = true },
@@ -52,9 +52,16 @@ Snacks.setup({
 --- 3. the rest of the owl
 _G.nv = require('nvim')
 
---- 4. import plug module convert plugins table to specs
+--- 4. combine spec lists
+local plugspecs = vim.iter(nv):fold({}, function(acc, k, v)
+  vim.schedule(v.after) -- run after startup
+  return vim.list_extend(acc, v.specs or {})
+end)
+
+--- 4. convert enabled plugins to `vim.pack` specs
+---@type vim.pack.Spec[]
 local specs = vim
-  .iter(nv.plugins)
+  .iter(plugspecs)
   :filter(function(t)
     return t.enabled ~= false
     -- return t.enabled == true end,
@@ -62,15 +69,9 @@ local specs = vim
   :map(nv.plug --[[@as fun(table):vim.pack.Spec]])
   :totable()
 
---- 5. `packadd` plugins with custom loader for setup
+--- 6. `packadd` plugins with custom loader for setup
 if vim.v.vim_did_enter == 0 then
   vim.pack.add(specs, { load = nv.plug.load })
 end
-
-vim.schedule(function()
-  -- TODO: figure out who sets this var
-  vim.env.PACKDIR = vim.g.PACKDIR
-  vim.o.winbar = [[%{%v:lua.nv.winbar()%}]]
-end)
 
 -- require('jit.p').stop()

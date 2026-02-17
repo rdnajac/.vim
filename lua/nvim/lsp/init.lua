@@ -1,5 +1,7 @@
 local M = {}
 
+M.after = function() vim.lsp.enable(M.servers()) end
+
 M.specs = {
   'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
@@ -58,7 +60,5 @@ M.status = {
       :join(' ')
   end,
 }
-
-M.after = function() vim.lsp.enable(M.servers()) end
 
 return M

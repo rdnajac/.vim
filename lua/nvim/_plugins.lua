@@ -78,8 +78,8 @@ return {
   },
   {
     'mason-org/mason.nvim',
-    opts = { ui = { icons = nv.icons.mason.emojis } },
     build = vim.cmd.MasonUpdate,
+    opts = { ui = { icons = require('nvim.util.icons').mason.emojis } },
   },
   {
     'folke/lazydev.nvim',
@@ -88,7 +88,7 @@ return {
       library = {
         { path = 'snacks.nvim', words = { 'Snacks' } },
         { path = 'mini.nvim', words = { 'Mini.*' } },
-        { path = 'nvim/util', words = { 'nv' } },
+        { path = 'nvim', words = { 'nv' } },
       },
     },
   },
@@ -155,60 +155,6 @@ return {
           MiniDiff.toggle_overlay(0)
           nv.defer_redraw_win()
         end,
-      },
-    },
-  },
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    init = function()
-      ---@module "render-markdown"
-      ---@type render.md.UserConfig
-      vim.g.render_markdown_config = {
-        file_types = { 'markdown', 'rmd', 'quarto' },
-        latex = { enabled = false },
-        bullet = { right_pad = 1 },
-        -- checkbox = { enabled = false },
-        completions = { blink = { enabled = false } },
-        code = {
-          -- TODO: fix the highlights and show ` or spaces for inline code markers
-          -- inline_left = ' ',
-          -- inline_right = ' ',
-          -- inline_padding= 1,
-          enabled = true,
-          highlight = '',
-          highlight_border = false,
-          -- highlight_inline = 'Chromatophore',
-          -- render_modes = { 'n', 'c', 't', 'i' },
-          sign = false,
-          conceal_delimiters = false,
-          language = true,
-          position = 'left',
-          language_icon = true,
-          language_name = false,
-          language_info = false,
-          width = 'block',
-          min_width = 0,
-          border = 'thin',
-          style = 'normal',
-        },
-        heading = {
-          sign = false,
-          width = 'full',
-          position = 'overlay',
-          -- left_pad = { 0, 1, 2, 3, 4, 5 },
-          -- icons = '',
-        },
-        html = {
-          comment = { conceal = false },
-          enabled = false,
-        },
-      }
-    end,
-    toggles = {
-      ['<leader>um'] = {
-        name = 'Render Markdown',
-        get = function() return require('render-markdown.state').enabled end,
-        set = function(state) require('render-markdown').set(state) end,
       },
     },
   },

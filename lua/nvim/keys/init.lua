@@ -2,14 +2,15 @@ local M = {}
 
 M.after = function()
   local bookmarks = {
-    n = 'init',
     b = 'blink',
+    g = 'plug',
     k = 'keys',
     l = 'lsp',
+    n = 'init', -- FIXME: no init.lua
+    p = '_plugins', -- FIXME: no init.lua
     t = 'treesitter',
-    p = '_plugins',
-    u = 'util',
-    g = 'plug',
+    u = 'ui',
+    v = 'util',
   }
   for k, v in pairs(bookmarks) do
     vim.cmd(([[nnoremap <Bslash>%s <Cmd>call edit#luamod('nvim/%s')<CR>]]):format(k, v))
