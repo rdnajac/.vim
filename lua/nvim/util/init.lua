@@ -114,4 +114,21 @@ end
 --   inv[v] = k
 -- end
 
+--- write lines to file in cache sirectory
+--- if lines is nil, read lines from file
+---@param fname string filename relative to cache directory
+---@param lines string[]|nil lines to write, or nil to read
+---@return string[] lines read from file or written to file
+M.cache = function(fname, lines)
+  local cache_path = vim.fs.joinpath(vim.g.stdpath.cache, fname)
+  -- if lines, write lines to file
+  if lines == nil and vim.fn.filereadable(cache_path) then
+    lines = vim.fn.readfile(cache_path)
+  else
+    vim.fn.mkdir(vim.fs.dirname(cache_path), 'p')
+    vim.fn.writefile(lines, cache_path)
+  end
+  return lines
+end
+
 return M

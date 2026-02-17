@@ -1,9 +1,5 @@
-local M = setmetatable({}, {
-  __call = function(M, ...) return M.load(...) end,
-})
-
 ---@param plug_data {spec: vim.pack.Spec, path: string}
-function M.load(plug_data)
+local function _load(plug_data)
   --- Check if `plug_data.spec.data[key]` is a function and
   --- calls it if so, discarding hte return value
   ---@param key string
@@ -23,4 +19,4 @@ function M.load(plug_data)
   maybe('setup')
 end
 
-return M
+return _load

@@ -1,4 +1,4 @@
---- init.lua
+-- init.lua
 
 --- optional LuaJIT profiling
 --- https://luajit.org/ext_profiler.html
@@ -8,15 +8,15 @@
 --- https://github.com/neovim/neovim/discussions/36905
 vim.loader.enable()
 
--- XXX: experimental!
-vim.o.cmdheight = 0
--- BUG: ui2 error on declining to install after vim.pack.add
-require('vim._core.ui2').enable({})
-
 --- 1. source vimrc
 ---   - `autoload/plug.vim` overrides vim-plug
 ---   - `plug#end()` will `vim.pack.add` vim plugins
 vim.cmd([[ runtime vimrc ]])
+
+-- XXX: experimental!
+vim.o.cmdheight = 0
+-- BUG: ui2 error on declining to install after vim.pack.add
+require('vim._core.ui2').enable({})
 
 --- 2. snack attack!
 require('snacks')
@@ -33,8 +33,8 @@ end
 
 Snacks.setup({
   bigfile = require('nvim.snacks.bigfile'),
-  dashboard = require('nvim.snacks.dashboard'),
-  explorer = { replace_netrw = true },
+  -- dashboard = require('nvim.snacks.dashboard'),
+  -- explorer = { replace_netrw = true },
   image = { enabled = true },
   indent = { indent = { only_current = false, only_scope = true } },
   input = { enabled = true },
@@ -49,25 +49,17 @@ Snacks.setup({
   words = { enabled = true },
 })
 
+--- 3. the rest of the owl
 _G.nv = require('nvim')
-
-local plugins = vim.iter(nv):fold(require('nvim.plugins'), function(acc, k, v)
-  -- print('folding plugins from', k)
-  if vim.is_callable(v.after) then
-    -- print('scheduling after function for', k)
-    vim.schedule(v.after) -- run after startup
-  end
-  return vim.list_extend(acc, v.specs or {})
-end)
 
 --- 4. import plug module convert plugins table to specs
 local specs = vim
-  .iter(plugins)
+  .iter(nv.plugins)
   :filter(function(t)
     return t.enabled ~= false
     -- return t.enabled == true end,
   end)
-  :map(nv.plug)
+  :map(nv.plug --[[@as fun(table):vim.pack.Spec]])
   :totable()
 
 --- 5. `packadd` plugins with custom loader for setup

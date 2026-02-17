@@ -50,11 +50,11 @@ set listchars+=precedes:…,
 set listchars+=nbsp:+
 
 " fold {{{ 2
-" set foldlevel=99
-set foldlevelstart=1
-set foldminlines=3
+set foldlevel=99
+" set foldlevelstart=1
+" set foldminlines=3
 set foldopen+=insert,jump
-set foldmethod=marker
+" set foldmethod=marker
 
 " indent {{{2
 " set nowrap TODO: set this in a ftplugin?

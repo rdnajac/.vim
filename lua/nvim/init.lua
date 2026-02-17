@@ -1,27 +1,24 @@
-local bookmarks = {
-  n = 'init',
-  b = 'blink',
-  k = 'keys',
-  l = 'lsp',
-  t = 'treesitter',
-  p = 'plugins',
-  u = 'util',
-  P = 'plug',
-}
-
-for k, v in pairs(bookmarks) do
-  vim.cmd(([[nnoremap <Bslash>%s <Cmd>call edit#luamod('nvim/%s')<CR>]]):format(k, v))
-end
-
 local M = {
   blink = require('nvim.blink'),
   keys = require('nvim.keys'),
   lsp = require('nvim.lsp'),
-  plug = require('nvim.plug'),
   treesitter = require('nvim.treesitter'),
 }
 
-setmetatable(M, {
+local core = require('nvim._plugins')
+local iter = vim.iter(M)
+M.plugins = iter:fold(core, function(acc, k, v)
+  -- print('folding plugins from', k)
+  if vim.is_callable(v.after) then
+    -- print('scheduling after function for', k)
+    vim.schedule(v.after) -- run after startup
+  end
+  return vim.list_extend(acc, v.specs or {})
+end)
+
+M.plug = require('nvim.plug')
+
+return setmetatable(M, {
   __index = function(t, k) -- access: `table[key]`
     -- fall back to util for all other keys
     local mod = require('nvim.util')[k]
@@ -29,4 +26,3 @@ setmetatable(M, {
     return mod
   end,
 })
-return M

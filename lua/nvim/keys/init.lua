@@ -1,8 +1,22 @@
-local nv = _G.nv or require('nvim.util')
 local M = {}
 
--- apply these keys later
 M.after = function()
+  local bookmarks = {
+    n = 'init',
+    b = 'blink',
+    k = 'keys',
+    l = 'lsp',
+    t = 'treesitter',
+    p = '_plugins',
+    u = 'util',
+    g = 'plug',
+  }
+  for k, v in pairs(bookmarks) do
+    vim.cmd(([[nnoremap <Bslash>%s <Cmd>call edit#luamod('nvim/%s')<CR>]]):format(k, v))
+    vim.cmd(
+      ([[nnoremap <Bslash>%s <Cmd>edit ~/.config/nvim/lua/nvim/%s/init.lua<CR>]]):format(k:upper(), v)
+    )
+  end
   Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
   Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
