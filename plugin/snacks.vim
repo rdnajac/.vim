@@ -35,8 +35,8 @@ nnoremap <leader>dps <Cmd>lua Snacks.profiler.scratch()<CR>
 
 " explorer
 
-nnoremap <leader>e <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
-nnoremap <leader>E <Cmd>lua Snacks.explorer.reveal()<CR>
+nnoremap <leader>e <Cmd>lua Snacks.explorer.reveal()<CR>
+nnoremap <leader>E <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
 
 " Find mappings
 nnoremap <leader>F <Cmd>lua Snacks.picker.smart()<CR>
