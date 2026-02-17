@@ -92,6 +92,7 @@ sources.providers = vim.iter(extras):fold(
 local blink_spec = {
   'Saghen/blink.cmp',
   -- TODO: build on initial install
+  -- TODO: show completion menu on <C-R> in insert mode
   build = 'BlinkCmp build',
   event = 'UIEnter',
   ---@type blink.cmp.Config

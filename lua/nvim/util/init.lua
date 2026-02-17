@@ -26,6 +26,7 @@ M.get_buf_lines = function(bufnr)
 end
 
 -- fn
+--- Convert a file path to a module name by trimming the lua root
 ---@param path string
 ---@return string
 M.modname = function(path)
@@ -130,5 +131,12 @@ M.cache = function(fname, lines)
   end
   return lines
 end
+
+-- TODO: use pos wrapper
+---@param line number
+---@param col number
+---@return string
+M.synname = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
+
 
 return M

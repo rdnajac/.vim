@@ -2,6 +2,7 @@
 ---@class nvim.Submodule
 ---@field specs plug.Spec[]
 ---@field after fun():nil
+---@field status? fun():string
 
 ---@type table<string, nvim.Submodule>
 local _submodules = {

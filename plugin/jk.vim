@@ -1,7 +1,7 @@
 " https://www.reddit.com/r/vim/comments/ufgrl8/journey_to_the_ultimate_imap_jk_esc/
 " Map key chord `jk` to <Esc>.
 " if has('nvim') && luaeval('_G.MinyKeymap ~= nil')
-  " finish
+" finish
 " endif
 let g:esc_j_lasttime = 0
 let g:esc_k_lasttime = 0
@@ -27,8 +27,7 @@ function! s:escape(key)
   return a:key
 endfunction
 
-" for mode in ['i', 'v', 'c', 't']
-for mode in ['i', 'v', 'c']
+for mode in ['i', 'v', 'c', 't']
   for key in ['j', 'k']
     execute mode . 'noremap <expr> ' . key . ' <SID>escape(''' . key . ''')'
   endfor

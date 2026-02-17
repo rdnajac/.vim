@@ -1,4 +1,4 @@
-for modname, opts in pairs({
+return {
   ai = function()
     local ai = require('mini.ai')
     local ex = require('mini.extra')
@@ -148,8 +148,8 @@ for modname, opts in pairs({
     -- keymap.map_combo(modes, 'kj', '<BS><BS><Esc>')
 
     -- Escape into Normal mode from Terminal mode
-    keymap.map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
-    keymap.map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
+    -- keymap.map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
+    -- keymap.map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
 
     local notify_many_keys = function(key)
       local lhs = string.rep(key, 5)
@@ -184,7 +184,5 @@ for modname, opts in pairs({
       B = { output = { left = '{', right = '}' } },
     },
   },
-}) do
-  require('mini.' .. modname).setup(vim.is_callable(opts) and opts() or opts)
-end
--- vim: fdl=2 fdm=expr
+}
+-- vim: fdl=1 fdm=expr

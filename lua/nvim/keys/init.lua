@@ -1,23 +1,26 @@
 local M = {}
 
 M.after = function()
-  local bookmarks = {
+  local _bookmarks = {
     b = 'blink',
     g = 'plug',
     k = 'keys',
     l = 'lsp',
+    m = 'mini',
     n = 'init', -- FIXME: no init.lua
     p = '_plugins', -- FIXME: no init.lua
     t = 'treesitter',
     u = 'ui',
     v = 'util',
   }
-  for k, v in pairs(bookmarks) do
-    vim.cmd(([[nnoremap <Bslash>%s <Cmd>call edit#luamod('nvim/%s')<CR>]]):format(k, v))
-    vim.cmd(
-      ([[nnoremap <Bslash>%s <Cmd>edit ~/.config/nvim/lua/nvim/%s/init.lua<CR>]]):format(k:upper(), v)
-    )
+  local bookmarks = {}
+  for k, v in pairs(_bookmarks) do
+    bookmarks[#bookmarks + 1] =
+      { '<Bslash>' .. k, function() vim.fn['edit#luamod']('nvim/' .. v) end, desc = k }
+    bookmarks[#bookmarks + 1] =
+      { '<Bslash>' .. k:upper(), '<Cmd>edit ~/.config/nvim/lua/nvim/' .. v .. '/init.lua<CR>' }
   end
+  M.map(bookmarks)
   Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
   Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
@@ -82,6 +85,8 @@ M.specs = {
   },
   {
     'monaqa/dial.nvim',
+    -- TODO: lazy load this
+    event = 'UIEnter',
     init = function()
       package.preload['dial.config'] = function() return require('nvim.keys.dial') end
     end,

@@ -1,8 +1,8 @@
 local M = {}
 
 M.after = function()
-  -- requires nvim 0.12
-  vim.o.winbar = [[%{%v:lua.nv.winbar()%}]]
+  M.winbar = require('nvim.ui.winbar')
+  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
 end
 
 M.spec = {

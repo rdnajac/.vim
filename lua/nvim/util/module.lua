@@ -1,18 +1,21 @@
 local M = {}
+local util = require('nvim.util')
 
-function M.info(module)
-  module = module:gsub('%.', '/')
-  local root = vim.fs.root(vim.api.nvim_buf_get_name(0), 'lua') or vim.fn.getcwd()
-  for _, fname in ipairs({ module, vim.fs.joinpath(root, 'lua', module) }) do
-    for _, suf in ipairs({ '.lua', '/init.lua' }) do
-      local path = fname .. suf
-      if vim.uv.fs_stat(path) then
-        return path
-      end
+--- Collect non-init Lua modules from a directory
+---@param dir string
+---@param pattern? string  -- glob pattern (default: '*.lua')
+---@return table<string, true>
+local function collect_modules(dir, pattern)
+  pattern = pattern or '*.lua'
+  local modules = {}
+  for _, f in ipairs(vim.fn.globpath(dir, pattern, false, true)) do
+    local mod = util.modname(f)
+    local name = mod:match('([^.]+)$') -- get last component
+    if name then
+      modules[name] = true
     end
   end
-  local modInfo = vim.loader.find(module)[1]
-  return modInfo and modInfo.modpath or module
+  return modules
 end
 
 M.automod = function()
@@ -39,42 +42,25 @@ M.for_each_module = function(fn, subpath, recursive)
   local pattern = vim.fs.joinpath(subpath, (recursive and '**' or '*'))
   local files = vim.fn.globpath(base, pattern, false, true)
   for _, f in ipairs(files) do
-    local mod = M.modname(f)
+    local mod = util.modname(f)
     if not vim.endswith(mod, '/init') then
       fn(mod)
     end
   end
 end
 
--- TODO: rewrite using the functions in this module
 local root = 'nvim'
 local dir = vim.g.stdpath.config .. '/lua/' .. root
-local mods = {}
 
--- top-level .lua files
-for _, f in ipairs(vim.fn.globpath(dir, '*.lua', false, true)) do
-  local name = f:match('([^/]+)%.lua$')
-  if name and name ~= 'init' then
-    mods[name] = true
-  end
-end
+-- top-level modules
+local mods = collect_modules(dir)
 
 -- one level of subdirs
 for _, d in ipairs(vim.fn.globpath(dir, '*/', false, true)) do
   local subname = d:match('([^/]+)/$')
   if subname then
-    local submods = {}
-    for _, f in ipairs(vim.fn.globpath(d, '*.lua', false, true)) do
-      local child = f:match('([^/]+)%.lua$')
-      if child and child ~= 'init' then
-        submods[child] = true
-      end
-    end
-    if next(submods) then
-      mods[subname] = submods
-    else
-      mods[subname] = true
-    end
+    local submods = collect_modules(d)
+    mods[subname] = next(submods) and submods or true
   end
 end
 
