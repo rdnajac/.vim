@@ -1,17 +1,17 @@
 ---@module "snacks"
 
 local M = {
----@type snacks.picker.debug
-debug = {
-  -- scores = true,
-  -- leaks = true,
-  -- explorer = true,
-  -- files = true,
-  -- grep = true,
-  -- proc = true,
-  -- extmarks = true,
-},
-layouts = require('nvim.snacks.picker.layouts')
+  ---@type snacks.picker.debug
+  debug = {
+    -- scores = true,
+    -- leaks = true,
+    -- explorer = true,
+    -- files = true,
+    -- grep = true,
+    -- proc = true,
+    -- extmarks = true,
+  },
+  layouts = require('nvim.snacks.picker.layouts'),
 }
 
 -- TODO: add cd function using vim.input
@@ -25,9 +25,10 @@ local function title(opts)
   if opts.dirs then
     searchpath = #opts.dirs == 1 and opts.dirs[1] or 'Multiple Paths'
   end
-
   local parts = { icon, name, '[' .. searchpath .. ']' }
+
   if nv.is_nonempty_list(opts.ft) then
+    ---@diagnostic disable-next-line: param-type-mismatch
     vim.list_extend(parts, vim.tbl_map(nv.icons.filetype, opts.ft))
   end
 

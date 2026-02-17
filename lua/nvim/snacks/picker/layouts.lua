@@ -1,34 +1,8 @@
-local borders = {
-  left = { '', '', '', '', '', '', '', '│' },
-  leftpad = { '', '', '', '', '', '', '', '▏' }, -- TODO: modifier for left/right pad
-  right = { '', '', '', '│', '', '', '', '' },
-  top = { '', '─', '', '', '', '', '', '' },
-  toppad = { '', ' ', '', '', '', '', '', '' },
-  bottom = { '', '', '', '', '', '─', '', '' },
-  -- hpad = { '', '', '', '    ', '', '', '', '   ' },
-  -- vpad = { '', '   ', '', '', '', '   ', '', '' },
-  single = { '┌', '─', '┐', '│', '┘', '─', '└', '│' },
-  double = { '╔', '═', '╗', '║', '╝', '═', '╚', '║' },
-  rounded = { '╭', '─', '╮', '│', '╯', '─', '╰', '│' },
-}
-
----@param b1 string[]
----@param b2 string[]
----@return string[]
-local function combine(b1, b2)
-  assert(#b1 == 8 and #b2 == 8, 'borders must be length 8')
-  local res = {}
-  for i = 1, 8 do
-    local v2 = b2[i]
-    res[i] = (v2 ~= '' and v2) or b1[i]
-  end
-  return res
-end
+---@module 'snacks'
 
 ---@type table<string, snacks.picker.layout.Config>
 local M = {}
 
----@module 'snacks'
 M.mylayout = {
   preset = 'ivy',
   reverse = true,
@@ -44,13 +18,13 @@ M.mylayout = {
         win = 'list',
         title = ' {title} {live} {flags}',
         title_pos = 'left',
-        border = borders.toppad,
+        -- border = borders.toppad,
       },
       {
         win = 'preview',
         title = '{preview:Preview}',
         title_pos = 'left',
-        border = borders.toppad,
+        -- border = borders.toppad,
         width = 0.6,
         wo = { number = false },
         -- todo: hide preview window if less than 120 cols
@@ -59,7 +33,7 @@ M.mylayout = {
     {
       win = 'input',
       height = 1,
-      border = combine(borders.left, borders.right),
+      -- border = nv.ui.border(left, borders.right),
     },
   },
 }
