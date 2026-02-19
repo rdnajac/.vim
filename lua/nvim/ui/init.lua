@@ -1,11 +1,12 @@
 local M = {}
 
 M.after = function()
+  -- requires nvim 0.12
   M.winbar = require('nvim.ui.winbar')
   vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
 end
 
-M.spec = {
+M.specs = {
   {
     'MeanderingProgrammer/render-markdown.nvim',
     enabled = false,

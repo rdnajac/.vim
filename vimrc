@@ -97,6 +97,7 @@ augroup vimrc_ui
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
+  " TODO: keep l: vars?
   au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
@@ -285,6 +286,7 @@ nnoremap <leader>fn <Cmd>call file#title()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
+nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " navigation {{{2

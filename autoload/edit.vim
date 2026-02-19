@@ -1,40 +1,30 @@
-function! s:nvim_close_float() abort
-  if luaeval('Snacks and Snacks.util.is_float()')
-    quit
-  endif
-endfunction
+" TODO: add bool param to set how we open the file
+" ie edit/split/vsplit like in picker confirms
 
 function! edit#(...) abort
   call call('s:edit', a:000)
 endfunction
 
 function! s:edit(file, ...) abort
-  let l:file = fnamemodify(a:file, ':p')
-  let l:extra = a:0 >= 1 ? a:1 : ''
+  let file = fnamemodify(a:file, ':p')
+  let extra = a:0 >= 1 ? a:1 : ''
 
   " Check if the file exists, if not prompt to create it
-  if !filereadable(l:file)
-    let l:maybe_dir = fnamemodify(a:file, ':r')
+  if !filereadable(file)
+    let maybe_dir = fnamemodify(a:file, ':r')
 
     " try file as directory
-    if isdirectory(l:maybe_dir)
-      let l:file = l:maybe_dir . '/'
-    else
-
-      " prompt to create the file, exit if the user declines
-      let l:resp = input('File not found: ' .  fnamemodify(a:file, ':~') . '. Create new file? [y/N]: ')
-      if l:resp !~? '^y'
-	return
-      endif
+    if isdirectory(maybe_dir)
+      let file = maybe_dir . '/'
     endif
   endif
 
   " Jump to buffer if already open in current tab
   for w in range(1, winnr('$'))
-    if bufexists(winbufnr(w)) && fnamemodify(bufname(winbufnr(w)), ':p') ==# l:file
+    if bufexists(winbufnr(w)) && fnamemodify(bufname(winbufnr(w)), ':p') ==# file
       execute w . 'wincmd w'
-      if l:extra =~# '\v(^|\s)\+\S'
-	execute matchstr(l:extra, '\v\+\S+')
+      if extra =~# '\v(^|\s)\+\S'
+	execute matchstr(extra, '\v\+\S+')
 	normal! zvzz
       endif
       return
@@ -43,27 +33,27 @@ function! s:edit(file, ...) abort
 
   " If the file is not open, open it in a window
   " If there is only one window, determine the layout based on window size
-  let l:layout = ''
+  let layout = ''
   if winnr('$') > 1
     execute (winnr() % winnr('$') + 1) . 'wincmd w'
   else
     if bufname('%') !=# ''
-      let l:layout = &columns > 80 ? 'vsplit' : &columns > 20 ? 'split' : ''
+      let layout = &columns > 80 ? 'vsplit' : &columns > 20 ? 'split' : ''
     endif
   endif
 
   " prepend the command with the layout if it is not empty
-  let l:cmd = (!empty(l:layout) ? l:layout . ' | ' : '') . 'drop '
+  let cmd = (!empty(layout) ? layout . ' | ' : '') . 'drop '
 
   " insert the extra command if it is not empty
-  let l:cmd .= (!empty(l:extra) ? l:extra . ' ' : '') . l:file
+  let cmd .= (!empty(extra) ? extra . ' ' : '') . file
 
   " If we're focused on a floating window, close it
-  if has ('nvim')
-    call s:nvim_close_float()
+  if has ('nvim') && luaeval('Snacks.util.is_float() == true')
+    quit
   endif
 
-  execute l:cmd
+  execute cmd
   normal! zvzz
 endfunction
 
@@ -77,11 +67,11 @@ function! edit#luamod(name) abort
     vim#notify#error('This function is only available in Neovim.')
     return
   endif
-  let l:file = printf('%s/lua/%s.lua', g:stdpath['config'], a:name)
-  if !filereadable(l:file)
-    let l:file = printf('%s/lua/%s/init.lua', g:stdpath['config'], a:name)|
+  let file = printf('%s/lua/%s.lua', g:stdpath['config'], a:name)
+  if !filereadable(file)
+    let file = printf('%s/lua/%s/init.lua', g:stdpath['config'], a:name)|
   endif
-  call s:edit(l:file)
+  call s:edit(file)
 endfunction
 
 function! edit#filetype(...) abort
@@ -90,22 +80,10 @@ function! edit#filetype(...) abort
     return
   endif
 
-  let l:dir = 'after/ftplugin'
-  let l:ext = '.vim'
+  let dir = join([g:VIMDIR, 'after', 'ftplugin'], '/')
+  let ext =  a:0 == 0 ? '.vim' : a:1
 
-  if a:0 >= 1 && a:1 =~# '^\.'      " first arg is extension
-    let l:ext = a:1
-  elseif a:0 >= 1
-    let l:dir = a:1
-  endif
-
-  if a:0 >= 2 && a:2 =~# '^\.'      " second arg is extension
-    let l:ext = a:2
-  elseif a:0 >= 2
-    let l:dir = a:2
-  endif
-
-  call s:edit(join([g:VIMDIR, l:dir, &filetype . l:ext], '/'))
+  call s:edit(join([g:VIMDIR, dir, &filetype .. ext], '/'))
 endfunction
 
 function! edit#snippet() abort
@@ -131,22 +109,22 @@ function! edit#ch() abort
 endfunction
 
 function! s:find_nearest_readme() abort
-  let l:dir = fnamemodify(expand('%:p'), ':p:h')
-  let l:home = fnamemodify('~', ':p')
-  while l:dir !=# '/' && l:dir !=# l:home
-    let l:readme = l:dir . '/README.md'
-    if filereadable(l:readme)
-      return l:readme
+  let dir = fnamemodify(expand('%:p'), ':p:h')
+  let home = fnamemodify('~', ':p')
+  while dir !=# '/' && dir !=# home
+    let readme = dir . '/README.md'
+    if filereadable(readme)
+      return readme
     endif
-    let l:dir = fnamemodify(l:dir, ':h')
+    let dir = fnamemodify(dir, ':h')
   endwhile
   return ''
 endfunction
 
 function! edit#readme() abort
-  let l:readme = s:find_nearest_readme()
-  if empty(l:readme)
-    let l:readme = fnamemodify(expand('%:p'), ':h') . '/README.md'
+  let readme = s:find_nearest_readme()
+  if empty(readme)
+    let readme = fnamemodify(expand('%:p'), ':h') . '/README.md'
   endif
-  call s:edit(l:readme)
+  call s:edit(readme)
 endfunction
