@@ -53,6 +53,17 @@ local luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
 M.submodules = function(subdir)
   local path = vim.fs.joinpath(luaroot, 'nvim', subdir)
   local files = vim.fn.globpath(path, '*.lua', false, true)
+  -- return vim
+  --   .iter(files)
+  --   :filter(function(f)
+  --     if vim.fn.isdirectory(f) == 1 then
+  --       return vim.uv.fs_stat(f .. '/init.lua') ~= nil
+  --     else
+  --       return vim.endswith(f, '.lua') and not vim.endswith(f, 'init.lua')
+  --     end
+  --   end)
+  --   :map(function(f) return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??') end)
+  --  :totable()
   return vim.tbl_map(function(f) return f:sub(#luaroot + 2, -5) end, files)
 end
 
@@ -137,6 +148,5 @@ end
 ---@param col number
 ---@return string
 M.synname = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
-
 
 return M

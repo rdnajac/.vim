@@ -1,19 +1,14 @@
 local M = {}
 local util = require('nvim.util')
 
---- Collect non-init Lua modules from a directory
----@param dir string
----@param pattern? string  -- glob pattern (default: '*.lua')
+--- Collect non-init Lua modules from a subdirectory of nvim/
+---@param subdir string  subdir relative to nvim/ (empty string for root)
 ---@return table<string, true>
-local function collect_modules(dir, pattern)
-  pattern = pattern or '*.lua'
+local function collect_modules(subdir)
   local modules = {}
-  for _, f in ipairs(vim.fn.globpath(dir, pattern, false, true)) do
-    local mod = util.modname(f)
-    local name = mod:match('([^.]+)$') -- get last component
-    if name then
-      modules[name] = true
-    end
+  for _, modpath in ipairs(util.submodules(subdir)) do
+    local name = modpath:match('([^/]+)$')
+    if name then modules[name] = true end
   end
   return modules
 end
@@ -50,16 +45,16 @@ M.for_each_module = function(fn, subpath, recursive)
 end
 
 local root = 'nvim'
-local dir = vim.g.stdpath.config .. '/lua/' .. root
+local dir = vim.fs.joinpath(vim.g.stdpath.config, 'lua', root)
 
 -- top-level modules
-local mods = collect_modules(dir)
+local mods = collect_modules('')
 
 -- one level of subdirs
 for _, d in ipairs(vim.fn.globpath(dir, '*/', false, true)) do
   local subname = d:match('([^/]+)/$')
   if subname then
-    local submods = collect_modules(d)
+    local submods = collect_modules(subname)
     mods[subname] = next(submods) and submods or true
   end
 end
