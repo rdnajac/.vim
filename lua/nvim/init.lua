@@ -16,10 +16,21 @@ local _submodules = {
 
 local M = _submodules
 
-M.plugins = vim.iter(_submodules):fold({}, function(acc, k, v)
+-- works
+M.plugins = vim.iter(_submodules):fold({}, function(acc, _, v)
   vim.schedule(v.after) -- run after startup
   return vim.list_extend(acc, v.specs or {})
 end)
+
+-- -- does not
+-- M.plugins = vim
+--   .iter(_submodules)
+--   :map(function(_, v)
+--     vim.schedule(v.after) -- run after startup
+--     return v.specs or {}
+--   end)
+--   :flatten()
+--   :totable()
 
 setmetatable(M, {
   __index = function(t, k) -- access: `table[key]`

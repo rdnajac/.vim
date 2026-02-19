@@ -1,0 +1,2 @@
+-- snacks picker for nvim config files
+-- TODO: custom sort that loosely follows the order of vim initialization

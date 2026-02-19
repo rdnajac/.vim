@@ -21,10 +21,13 @@ M.after = function()
       { '<Bslash>' .. k:upper(), '<Cmd>edit ~/.config/nvim/lua/nvim/' .. v .. '/init.lua<CR>' }
   end
   M.map(bookmarks)
+  M.map(M.togglelist)
+  if not Snacks then
+    return
+  end
   Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
   Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
-  M.map(M.togglelist)
 end
 
 M.specs = {

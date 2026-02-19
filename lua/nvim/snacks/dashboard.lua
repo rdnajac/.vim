@@ -1,4 +1,3 @@
-local me = debug.getinfo(1, 'S').source:sub(2)
 local NEOVIM = {
   '███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗',
   '████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║',
@@ -8,23 +7,24 @@ local NEOVIM = {
   '╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝',
   --1234567890123456789012345678901234567890
 }
-
+local me = debug.getinfo(1, 'S').source:sub(2)
+-- stylua: ignore
 local keys = {
-  { icon = ' ', key = 'n', desc = 'New File', action = ':ene | star' },
-  { icon = ' ', key = '-', desc = 'Browse Directory', action = ':Explorer' },
+  { icon = ' ', key = '-', desc = 'Open Directory', action = Snacks.explorer },
+  { icon = ' ', key = 'n', desc = 'New File',       action = ':ene | star' },
   { icon = ' ', key = 'U', desc = 'Update Plugins', action = ':PlugUpdate' },
-  { icon = ' ', key = 'M', desc = 'Mason', action = ':Mason' },
-  { icon = '󰒲 ', key = 'G', desc = 'LazyGit', action = ':LazyGit' },
-  { icon = ' ', key = 'N', desc = 'News', action = ':News' },
-  { icon = ' ', key = 'H', desc = 'Health', action = ':Health' },
+  { icon = ' ', key = 'M', desc = 'Mason',          action = ':Mason' },
+  { icon = '󰒲 ', key = 'G', desc = 'LazyGit',        action = ':LazyGit' },
+  { icon = ' ', key = 'N', desc = 'News',           action = ':News' },
+  { icon = ' ', key = 'H', desc = 'Health',         action = ':Health' },
   { icon = '󱥰 ', key = 'D', desc = 'Edit Dashboard', action = ':e ' .. me },
-  { icon = ' ', key = 'R', desc = 'Restart', action = ':Restart' },
+  { icon = ' ', key = 'R', desc = 'Restart',        action = ':Restart' },
 }
 
 -- use vim list splice to remove the e and o
 -- e starts at 11 and ends at +17
 local header = function(cols)
-  if cols > 56 then
+  if not cols or cols > 56 then
     return table.concat(NEOVIM, '\n')
   end
   return vim
@@ -54,4 +54,3 @@ return {
     },
   },
 }
--- local me = debug.getinfo(1, 'S').source:sub(2)
