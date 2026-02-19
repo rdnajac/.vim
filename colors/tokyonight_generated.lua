@@ -206,7 +206,7 @@ local groups = {
   ['Whitespace'] = { fg = '#3b4261' },
   ['WildMenu'] = { bg = '#283457' },
   ['WinSeparator'] = { bold = true, fg = '#15161e' },
-  -- nvim 
+  -- nvim
   ['WinBar'] = { link = 'StatusLine' },
   ['WinBarNC'] = { link = 'StatusLineNC' },
   ['debugBreakpoint'] = { bg = '#192b38', fg = '#0db9d7' },
@@ -231,6 +231,9 @@ local groups = {
   ['qfFileName'] = { fg = '#14afff' },
   ['qfLineNr'] = { fg = '#737aa2' },
 }
+
+local ts = require('nvim.treesitter.groups')
+groups = vim.tbl_deep_extend('keep', groups, ts)
 
 for group, opts in pairs(groups) do
   vim.api.nvim_set_hl(0, group, opts)
