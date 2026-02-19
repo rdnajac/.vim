@@ -1,24 +1,26 @@
 ---@module "blink.cmp"
 --- `https://cmp.saghen.dev/`
+
+---@type plug.Spec
 local blink = {
   'Saghen/blink.cmp',
-  -- TODO: build on initial install
   -- TODO: show completion menu on <C-R> in insert mode
-  build = 'BlinkCmp build',
+  build = 'BlinkCmp build', -- FIXME: doesn't build on initial install
   event = 'UIEnter',
   ---@type blink.cmp.Config
+  -- NOTE: non-default options are commented out
   opts = {
     cmdline = { enabled = false },
     completion = {
-      accept = { auto_brackets = { enabled = true } },
+      -- accept = { auto_brackets = { enabled = false } },
       documentation = { auto_show = false },
       ghost_text = { enabled = false },
       -- keyword = {},
-      -- list = { selection = { preselect = true, auto_insert = true } },
+      -- list = { selection = { preselect = false, auto_insert = true } },
       trigger = {
-        show_on_keyword = true,
+        -- show_on_keyword = true,
         show_on_accept_on_trigger_character = true,
-        show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
+        -- show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
       },
       menu = require('nvim.blink.appearance').menu,
     },
@@ -38,10 +40,10 @@ local blink = {
         'fallback',
       },
     },
+    -- TODO: check this
     signature = {
       -- enabled = false, -- default = is `true`
       -- window = { show_documentation = false },
-      -- TODO: check this
     },
   },
 }

@@ -1,4 +1,4 @@
-function! substitute#all(find, replace) abort
+function! fn#substitute#all(find, replace) abort
   " escape any slash or backslash in the arguments
   let l:find    = escape(a:find,    '/\')
   let l:replace = escape(a:replace, '/\')

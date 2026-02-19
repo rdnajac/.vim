@@ -4,7 +4,7 @@
 "   "string"
 
 function! s:toggle(q) abort
-	  return 'cs' . a:q . (a:q ==# '"' ? "'" : '"')
+  return 'cs' . a:q . (a:q ==# '"' ? "'" : '"')
 endfunction
 
 " 'change quote'

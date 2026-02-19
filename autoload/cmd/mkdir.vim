@@ -8,23 +8,23 @@ function! s:is_url(fname) abort
 endfunction
 
 " Create parent directories if they do not exist when saving a file
-" but skip if the file path looks like a URI (e.g. scp://, oil://)
+" but skip if the file path looks like a URI (e.g. scp://, oi//)
 function! cmd#mkdir#(file) abort
   if empty(&buftype) && !s:is_url(a:file)
     " need to expand again to handle `~` and `..`
-    let l:dir = fnamemodify(expand(a:file), ':p:h')
-    if !isdirectory(l:dir)
+    let dir = fnamemodify(expand(a:file), ':p:h')
+    if !isdirectory(dir)
       if exists(':Mkdir') == 2
-	execute 'Mkdir' l:dir
+	execute 'Mkdir' dir
       else
-	call mkdir(l:dir, 'p')
+	call mkdir(dir, 'p')
       endif
     endif
   endif
 endfunction
 
 function! vim#mkdir#test_regex() abort
-  let l:tests = [
+  let tests = [
 	\ '~/notes/todo.md',
 	\ './relative/path',
 	\ '/usr/local/bin',
@@ -35,9 +35,9 @@ function! vim#mkdir#test_regex() abort
 	\ 'https://secure-site.com',
 	\ 'mailto://user@example.com',
 	\ 'oil-ssh://host/path',
-	\ 'oil://host/path',
+	\ 'oi//host/path',
 	\ ]
-  for t in l:tests
+  for t in tests
     echom printf('%s%s',t =~# s:url_scheme_regex ? '✅ ' : '❌ ', t)
   endfor
 endfunction

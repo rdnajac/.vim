@@ -1,16 +1,36 @@
+-- FIXME: 
 local M = {}
+
+local nv = _G.nv or require('nvim')
+local transform = nv.transform
+
+local function yankmod(format) nv.yank(transform.formats[format](nv.modname(vim.fn.expand('%:p')))) end
+
+---@param line string
+---@param rule { regex: string, transform: string }
+
+local function transform(line, rule) return line:gsub(rule.regex, rule.transform) end
+
+---@param rules table[]
+local function apply(rules)
+  local line = vim.api.nvim_get_current_line()
+  for _, rule in ipairs(rules) do
+    local new_line = transform_line(line, rule)
+    if new_line and new_line ~= line then
+      return new_line
+    end
+  end
+end
 
 local capabilities = {
   codeActionProvider = true,
 }
 
-local methods = {
-  initialize = function(_, callback)
-    -- TODO:
-    return callback(nil, { capabilities = capabilities })
-  end,
-  shutdown = function(_, callback) return callback(nil, nil) end,
-}
+local methods = {}
+
+function methods.initialize(_, callback) return callback(nil, { capabilities = capabilities }) end
+
+function methods.shutdown(_, callback) return callback(nil, nil) end
 
 --- @param params { textDocument: { uri: string }, range: lsp.Range, context: lsp.CodeActionContext }
 --- @param callback function
@@ -125,6 +145,7 @@ M.client_id = assert(vim.lsp.start({
   cmd = create_client,
   name = 'nv',
   root_dir = vim.env.HOME or vim.uv.cwd(),
+
 }, { attach = false }))
 
 return M

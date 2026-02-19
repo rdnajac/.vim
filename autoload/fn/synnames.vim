@@ -7,6 +7,6 @@ function! s:synnames(...) abort
   return reverse(map(synstack(line, col), 'synIDattr(v:val,"name")'))
 endfunction
 
-function! synnames#(...) abort
+function! fn#synnames#(...) abort
   Info s:synnames(...)
 endfunction

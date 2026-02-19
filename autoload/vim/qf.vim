@@ -1,5 +1,5 @@
 function! ui#qf#signs() abort
-  call sign_define('QFError',{'text':'💩'})
+  call sign_define('QFError', { 'text' : '💩'} )
   call sign_unplace('*')
   let s:qfl = getqflist()
     for item in s:qfl
