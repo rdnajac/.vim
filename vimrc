@@ -202,12 +202,17 @@ augroup END
 
 " }}}1
 " Section: commands/config {{{1
+for level in keys(g:vim#notify#levels)
+  execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
+	\ toupper(strpart(level, 0, 1)) . strpart(level, 1), level)
+endfor
 command! -nargs=* Diff call cmd#diff#(<f-args>)
 
 command! -nargs=0 Format call cmd#format#()
 nnoremap zq <Cmd>Format<CR>
 
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
+
 
 let g:eunuch_interprepers = {
       \ '.':      '/bin/sh',
@@ -288,6 +293,10 @@ nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
 nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
+
+" open file in a new window when or jump to line number when appropriate
+" nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
+" \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
 
 " navigation {{{2
 nnoremap <BS> :bprevious<CR>
