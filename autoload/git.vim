@@ -12,7 +12,7 @@ function! git#root(...) abort
   endif
 
   if exists('*FugitiveGitDir')
-    let l:gitdir = FugitiveGitDir(a:000), ':p:h:h'
+    let l:gitdir = FugitiveGitDir(a:000)
   else
     let l:buf = a:0 ? a:1 : bufnr('%')
     let l:bufnr = type(l:buf) == v:t_string ? bufnr(l:buf) : l:buf

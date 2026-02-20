@@ -9,6 +9,7 @@ set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
 
 " general {{{2
 set splitbelow splitright
+" minimax wants `usetab`
 set switchbuf+=vsplit
 set splitkeep=screen
 set timeoutlen=420
@@ -59,6 +60,8 @@ set foldopen+=insert,jump
 " indent {{{2
 " set nowrap TODO: set this in a ftplugin?
 set breakindent
+" TODO: from minimax; keep?
+set breakindentopt=list:1
 set linebreak
 set shiftround
 " don't change tabstop!
@@ -86,6 +89,12 @@ set cursorline
 set number
 set signcolumn=number
 set termguicolors
+" TODO: from minimax; keep?
+" set cursorlineopt = 'screenline,number'
+" -- Pattern for a start of numbered list (used in `gw`). This reads as
+" -- "Start of list item is: at least one special character (digit, -, +, *)
+" -- possibly followed by punctuation (. or `)`) followed by at least one space".
+" vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 
 augroup vimrc_ui
   " no cursorline in insert mode
@@ -289,9 +298,9 @@ endif
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fn <Cmd>call comment#title()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
-nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
-nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
-nnoremap <leader>fT <Cmd>call edit#filetype('.lua')<CR>
+nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
+nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
+nnoremap <leader>fT <Cmd>call edit#ftplugin('.lua')<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " open file in a new window when or jump to line number when appropriate
