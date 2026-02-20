@@ -94,6 +94,7 @@ return {
   },
   {
     'folke/sidekick.nvim',
+    enabled = false,
     ---@type sidekick.Config
     opts = {
       cli = { win = { layout = 'float' } },

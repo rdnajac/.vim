@@ -40,62 +40,46 @@ local blink = {
         'fallback',
       },
     },
-    -- TODO: check this
-    signature = {
-      -- enabled = false, -- default = is `true`
-      -- window = { show_documentation = false },
-    },
   },
 }
 
--- local providers
---
+-- TODO: check this
+-- blink.opts.signature = {
+-- enabled = false, -- default = is `true`
+-- window = { show_documentation = false },
+-- }
+
+-- local providers = require('nvim.blink.providers')
+-- -- print(providers)
+-- local defaults = vim.tbl_keys(providers)
 --
 -- ---@type blink.cmp.SourceConfigPartial
--- blink_specs.opts.sources = {
+-- blink.opts.sources = {
 --   ---@return blink.cmp.SourceList[]
---   default = vim.tbl_keys(providers),
+--   default = defaults,
 --   per_filetype = {
 --     -- sql = i{ 'dadbod' }, -- TODO: ,
---     vim = { inherit_defaults = true, 'env' },
+--     -- vim = { inherit_defaults = true, 'env' },
 --   },
+--   providers = providers,
 -- }
 -- -- add LazyDev provider if available
 -- -- if pcall(require, 'lazydev.integrations.blink') then
 -- if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
---   providers.lazydev = {
+--   blink.opts.sources.providers.lazydev = {
 --     name = 'LazyDev',
 --     module = 'lazydev.integrations.blink',
 --     score_offset = 100,
 --   }
---   sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
+--   blink.opts.sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
 -- end
---
--- ---@type table<string, blink.cmp.SourceProviderConfigPartial>
--- local extras = {
---   ['bydlw98/blink-cmp-env'] = {
---     env = {
---       name = 'env',
---       module = 'blink-cmp-env',
---       score_offset = -5,
---       opts = {
---         item_kind = function() return require('blink.cmp.types').CompletionItemKind.Variable end,
---         show_braces = false,
---         show_documentation_window = true,
---       },
---     },
---   },
--- }
---
+
 -- local specs = { blink_spec }
 -- for name, config in pairs(extras) do
 --   providers = vim.tbl_extend('force', roviders, config)
 --   table.insert(specs, { name })
 -- end
--- -- blink_specs.opts.
---
--- -- cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end, },
---
+
 return {
   after = function() require('nvim.blink.cmp') end,
   -- specs = specs,

@@ -45,3 +45,5 @@ local providers = {
     end,
   },
 }
+
+return providers

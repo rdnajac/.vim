@@ -16,7 +16,9 @@ vim.cmd([[ runtime vimrc ]])
 -- XXX: experimental!
 vim.o.cmdheight = 0
 -- BUG: ui2 error on declining to install after vim.pack.add
-require('vim._core.ui2').enable({})
+require('vim._core.ui2').enable({
+  msg = { target = 'msg' },
+})
 
 --- 2. snack attack!
 require('snacks')

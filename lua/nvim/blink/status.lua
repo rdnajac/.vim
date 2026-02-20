@@ -17,3 +17,4 @@ return function()
       :map(function(_, provider) return nv.icons.blink[provider] end)
       :join(' / ')
 end
+-- cond = function() return package.loaded['blink.cmp'] and vim.fn.mode():sub(1, 1) == 'i' end, },

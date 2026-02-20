@@ -3,8 +3,9 @@ The computing scientist's main challenge is not to
 get confused by the complexities of his own making.
 ]]
 
+local M = {}
 -- PERF: wrap in a function to defer requiring vim.version
-local cmd = function()
+M.cmd = function()
   local version = 'NVIM ' .. tostring(vim.version())
   local fmt
 
@@ -22,4 +23,12 @@ local cmd = function()
   return out
 end
 
-return cmd
+M.section = {
+  section = 'terminal',
+  cmd = require('nvim.snacks.dashboard.welcome')(),
+  indent = 10,
+  padding = 1,
+  height = 12,
+}
+
+return M

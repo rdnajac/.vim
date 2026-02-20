@@ -1,6 +1,3 @@
----@module "snacks"
--- TODO: integrate with cd keymaps from cd.vim
----@type snacks.picker.explorer.Config
 return {
   ignored = true,
   win = {
