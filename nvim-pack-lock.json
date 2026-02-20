@@ -8,10 +8,6 @@
       "rev": "69c945d5daecadf8e4c4c499d0a7babda748d603",
       "src": "https://github.com/dense-analysis/ale.git"
     },
-    "blink-cmp-env": {
-      "rev": "99af62c1f9aa46005e8f50ad4ccee581946546ca",
-      "src": "https://github.com/bydlw98/blink-cmp-env.git"
-    },
     "blink.cmp": {
       "rev": "cd79f572971c58784ca72551af29af3a63da9168",
       "src": "https://github.com/Saghen/blink.cmp.git"
@@ -33,7 +29,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "ca9adcfc4e796b292cc9072f4952318ef5a7f6c0",
+      "rev": "dbb073bd2ed4a7bb35daafc7989567f0ff1426ee",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -45,24 +41,12 @@
       "src": "https://github.com/chrisgrieser/nvim-scissors.git"
     },
     "nvim-treesitter": {
-      "rev": "2bd9b9b4f12eed175fba35ca2db8e8584546a4ec",
+      "rev": "fcd51bbe9245aa9b79a3930ed9ac42e16e1cf33f",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
-    },
-    "nvim-treesitter-context": {
-      "rev": "64dd4cf3f6fd0ab17622c5ce15c91fc539c3f24a",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "oil.nvim": {
       "rev": "f55b25e493a7df76371cfadd0ded5004cb9cd48a",
       "src": "https://github.com/stevearc/oil.nvim.git"
-    },
-    "render-markdown.nvim": {
-      "rev": "48b4175dbca8439d30c1f52231cbe5a712c8f9d9",
-      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
-    },
-    "sidekick.nvim": {
-      "rev": "c2bdf8cfcd87a6be5f8b84322c1b5052e78e302e",
-      "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
       "rev": "fe7cfe9800a182274d0f868a74b7263b8c0c020b",

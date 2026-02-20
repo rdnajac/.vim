@@ -1,11 +1,44 @@
 local nv = _G.nv or require('nvim.util')
 local M = {}
-M.parsers = require('nvim.treesitter.parsers')
+
+-- PERF: does it matter that these are scheduled?
+M.after = function()
+  -- delay loading this table until after init
+  M.parsers = require('nvim.treesitter.parsers')
+
+  local aug = vim.api.nvim_create_augroup('treesitter', {})
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = M.parsers.to_autostart,
+    group = aug,
+    callback = function(ev) vim.treesitter.start(ev.buf) end,
+    desc = 'Automatically start tree-sitter',
+  })
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'markdown', 'r', 'rmd', 'quarto' },
+    group = aug,
+    command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
+    desc = 'Use treesitter folding for select filetypes',
+  })
+end
+
+-- TODO: wait for native ts selection to merge
 M.selection = require('nvim.treesitter.selection')
+
 M.specs = {
   {
     'nvim-treesitter/nvim-treesitter',
-    build = function() vim.cmd('TSUpdate | TSInstall! ' .. table.concat(M.parsers.to_install, ' ')) end,
+    -- TODO: Don't re-install up-to-date parsers
+    -- build = function() vim.cmd('TSUpdate | TSInstall! ' .. table.concat(M.parsers.to_install, ' ')) end,
+    build = function() vim.cmd('TSUpdate') end,
+    toggles = {
+      ['<leader>ut'] = {
+        name = 'Treesitter',
+        get = function()
+          return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil
+        end,
+        set = function() vim.treesitter.toggle() end,
+      },
+    },
     keys = {
       { 'n', '<C-Space>', M.selection.start, { desc = 'Start ts selection' } },
       { 'x', '<C-Space>', M.selection.increment, { desc = 'Increment ts selection' } },
@@ -14,6 +47,7 @@ M.specs = {
   },
   {
     'nvim-treesitter/nvim-treesitter-context',
+    enabled = false,
     toggles = {
       ['<leader>ux'] = {
         name = 'Treesitter Context',
@@ -39,25 +73,6 @@ function M.get_installed(update)
   return M._installed or {}
 end
 
--- PERF: does it matter that these are scheduled?
-M.after = function()
-  local aug = vim.api.nvim_create_augroup('treesitter', {})
-
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = M.parsers.to_autostart,
-    group = aug,
-    callback = function(ev) vim.treesitter.start(ev.buf) end,
-    desc = 'Automatically start tree-sitter',
-  })
-
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'markdown', 'r', 'rmd', 'quarto' },
-    group = aug,
-    command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
-    desc = 'Use treesitter folding for select filetypes',
-  })
-end
-
 M.status = function()
   local ret = {}
   local highlighter = require('vim.treesitter.highlighter')
@@ -69,7 +84,7 @@ M.status = function()
       if query == vim.bo.filetype then
         return ' '
       end
-      return nv.icons.filetype[query]
+      return require('nvim.util.icons').filetype[query]
     end, vim.tbl_keys(queries))
   end
   return table.concat(ret, ' ')
