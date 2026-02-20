@@ -1,4 +1,8 @@
---- completion code
+--- completion
+
+-- vim.o.complete        = '.,w,b,kspell'                  -- Use less sources
+-- vim.o.completeopt     = 'menuone,noselect,fuzzy,nosort' -- Use custom behavior
+-- vim.o.completetimeout = 100                             -- Limit sources delay
 
 -- not needed with automatic loading
 -- vim.lsp.enable('copilot')

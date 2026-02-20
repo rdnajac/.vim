@@ -1,2 +1,3 @@
+-- see `:h unimpaired-next`
 -- vim.keymap.set({ 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end)
 -- vim.keymap.set({ 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end)

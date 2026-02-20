@@ -16,21 +16,28 @@ local _submodules = {
 
 local M = _submodules
 
--- works
 M.plugins = vim.iter(_submodules):fold({}, function(acc, _, v)
   vim.schedule(v.after) -- run after startup
   return vim.list_extend(acc, v.specs or {})
 end)
 
--- -- does not
--- M.plugins = vim
---   .iter(_submodules)
 --   :map(function(_, v)
 --     vim.schedule(v.after) -- run after startup
 --     return v.specs or {}
 --   end)
 --   :flatten()
 --   :totable()
+
+---@param t plug.Spec
+---@return vim.pack.Spec
+local Plug = function(t) return require('nvim.plug').spec(t):pack() end
+
+---@type vim.pack.Spec[]
+M.specs = vim
+  .iter(M.plugins)
+  :filter(function(t) return t.enabled ~= false end)
+  :map(Plug) -- FIXME:
+  :totable()
 
 setmetatable(M, {
   __index = function(t, k) -- access: `table[key]`

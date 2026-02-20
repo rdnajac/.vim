@@ -10,7 +10,7 @@
 ---@field opts? table|fun():table Options to pass to the plugin's `setup()`.
 ---@field version? string|vim.VersionRange Version constraint for the plugin.
 ---@field branch? string Git branch to use.
----@field toggles? table<string, string|fun()|table> Snacks.nvim toggles to register.
+---@field toggles? table<string, string|table> Snacks.nvim toggles to register.
 ---@field event? string|string[] Autocommand event(s) to lazy-load on.
 ---@field dependencies? string|string[] Dependencies to load before this plugin.
 ---@field lazy? boolean Defaults to `false`. Load on `VimEnter` if `true`.
@@ -39,7 +39,7 @@ end
 ---@return vim.pack.Spec
 function M:pack()
   return {
-    src = self.src or nv.gh(self[1]),
+    src = self.src or ('https://github.com/%s.git'):format(self[1]),
     version = self.version or self.branch or nil,
     name = self.name or self[1]:match('[^/]+$'),
     data = self.data or {

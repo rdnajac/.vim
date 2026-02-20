@@ -1,7 +1,7 @@
 local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
 -- string manipulation
-M.gh = function(s) return string.format('https://github.com/%s.git', s) end
+-- M.gh = function(s) return string.format('https://github.com/%s.git', s) end
 M.capitalize = function(s) return s:sub(1, 1) .. s:sub(2):lower() end
 M.camelCase = function(s)
   return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)

@@ -1,5 +1,7 @@
 -- init.lua
 
+-- vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
+
 --- optional LuaJIT profiling
 --- https://luajit.org/ext_profiler.html
 -- require('jit.p').start('ri1', '/tmp/prof')
@@ -8,9 +10,9 @@
 --- https://github.com/neovim/neovim/discussions/36905
 vim.loader.enable()
 
---- 1. source vimrc
----   - `autoload/plug.vim` overrides vim-plug
----   - `plug#end()` will `vim.pack.add` vim plugins
+--- source vimrc
+--- - `autoload/plug.vim` overrides vim-plug
+--- - `plug#end()` will `vim.pack.add` vim plugins
 vim.cmd([[ runtime vimrc ]])
 
 -- XXX: experimental!
@@ -20,7 +22,7 @@ require('vim._core.ui2').enable({
   msg = { target = 'msg' },
 })
 
---- 2. snack attack!
+--- snack attack!
 require('snacks')
 -- assert(Snacks)
 _G.dd = Snacks.debug.inspect
@@ -51,23 +53,10 @@ Snacks.setup({
   words = { enabled = true },
 })
 
---- 3. the rest of the owl
+--- the rest of the owl
 _G.nv = require('nvim')
-
---- 4. convert enabled plugins to `vim.pack` specs
----@type vim.pack.Spec[]
-local specs = vim
-  .iter(nv.plugins)
-  :filter(function(t)
-    return t.enabled ~= false
-    -- return t.enabled == true end,
-  end)
-  :map(nv.plug --[[@as fun(table):vim.pack.Spec]])
-  :totable()
-
---- 5. `packadd` plugins with custom loader for setup
 if vim.v.vim_did_enter == 0 then
-  vim.pack.add(specs, { load = nv.plug.load })
+  vim.pack.add(nv.specs, { load = nv.plug.load })
 end
 
 -- require('jit.p').stop()
