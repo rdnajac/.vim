@@ -59,11 +59,11 @@ let s:yellow = '#e0af68'
 ""
 " Set and link highlight group colors
 function! s:hi(group, fg, bg, ...) abort
-  let l:attr = (a:0 > 0 && !empty(a:1)) ? a:1 : 'NONE'
+  let attr = (a:0 > 0 && !empty(a:1)) ? a:1 : 'NONE'
   " Use highlight! to override existing settings
   execute printf(
 	\ 'highlight! %s guifg=%s guibg=%s gui=%s cterm=%s',
-	\ a:group, a:fg, a:bg, l:attr, l:attr
+	\ a:group, a:fg, a:bg, attr, attr
 	\)
 endfunction
 
@@ -71,12 +71,12 @@ endfunction
 " Link multiple highlight groups to a base group
 " Accepts either a list or multiple arguments
 function! s:link(base, ...) abort
-  let l:groups = a:0 == 1 && type(a:1) == v:t_list ? a:1 : a:000
-  for l:group in l:groups
-    if !empty(l:group)
+  let groups = a:0 == 1 && type(a:1) == v:t_list ? a:1 : a:000
+  for group in groups
+    if !empty(group)
       " TODO: do I need to clear the group first?
-      " execute 'highlight! clear' l:group
-      execute 'highlight! link' l:group a:base
+      " execute 'highlight! clear' group
+      execute 'highlight! link' group a:base
     endif
   endfor
 endfunction

@@ -1,5 +1,5 @@
 " plugin/surround.vim
-if has('nvim') && luaeval('package.loaded["which-key"] ~= nil')
+if has('nvim') && luaeval('_G.MiniSurround ~= nil')
   xmap <silent> S :<C-U>lua MiniSurround.add('visual')<CR>
   nmap yss ys_
 endif

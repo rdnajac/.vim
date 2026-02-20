@@ -9,10 +9,10 @@ function! s:on_enter(fn) abort
 endfunction
 
 function! vimrc#setmarks() abort
-  for l:num in range(1, line('$'))
-    if getline(l:num) =~? '^"\s*Section:\s*\zs.'
-      let l:char = matchstr(getline(l:num), '^"\s*Section:\s*\zs.')
-      call setpos("'" . toupper(l:char), [0, l:num, 1, 0])
+  for num in range(1, line('$'))
+    if getline(num) =~? '^"\s*Section:\s*\zs.'
+      let char = matchstr(getline(num), '^"\s*Section:\s*\zs.')
+      call setpos("'" . toupper(char), [0, num, 1, 0])
     endif
   endfor
 endfunction

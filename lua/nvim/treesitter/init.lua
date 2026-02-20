@@ -1,4 +1,3 @@
-local nv = _G.nv or require('nvim.util')
 local M = {}
 
 -- PERF: does it matter that these are scheduled?
@@ -27,9 +26,9 @@ M.selection = require('nvim.treesitter.selection')
 M.specs = {
   {
     'nvim-treesitter/nvim-treesitter',
+    build = function() vim.cmd('TSUpdate') end,
     -- TODO: Don't re-install up-to-date parsers
     -- build = function() vim.cmd('TSUpdate | TSInstall! ' .. table.concat(M.parsers.to_install, ' ')) end,
-    build = function() vim.cmd('TSUpdate') end,
     toggles = {
       ['<leader>ut'] = {
         name = 'Treesitter',

@@ -1,7 +1,3 @@
-function! s:resolve(path) abort
-  return substitute(matchstr(fnamemodify(a:path, ':r'), 'ftplugin/\zs.*'), '/.*', '', '')
-endfunction
-
 function! s:reload_ft_for_buffer(buf, filetype) abort
   if bufexists(a:buf) && buflisted(a:buf) && getbufvar(a:buf, '&filetype') ==# a:filetype
     execute a:buf . 'bufdo doautocmd FileType ' . a:filetype
@@ -12,6 +8,10 @@ function! vim#reload#loop(filetype) abort
   for b in range(1, bufnr('$'))
     call s:reload_ft_for_buffer(b, a:filetype)
   endfor
+endfunction
+
+function! s:resolve(path) abort
+  return substitute(matchstr(fnamemodify(a:path, ':r'), 'ftplugin/\zs.*'), '/.*', '', '')
 endfunction
 
 function! vim#reload#ftplugin(path) abort

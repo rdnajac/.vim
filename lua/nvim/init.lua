@@ -16,17 +16,11 @@ local _submodules = {
 
 local M = _submodules
 
+---@type plug.Spec[]
 M.plugins = vim.iter(_submodules):fold({}, function(acc, _, v)
   vim.schedule(v.after) -- run after startup
   return vim.list_extend(acc, v.specs or {})
 end)
-
---   :map(function(_, v)
---     vim.schedule(v.after) -- run after startup
---     return v.specs or {}
---   end)
---   :flatten()
---   :totable()
 
 ---@param t plug.Spec
 ---@return vim.pack.Spec

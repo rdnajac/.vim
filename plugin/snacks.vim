@@ -74,7 +74,7 @@ nnoremap <leader>pp <Cmd>lua Snacks.picker.pickers()<CR>
 nnoremap <leader>pr <Cmd>lua Snacks.picker.resume()<CR>
 
 " search
-nnoremap <leader>sa <Cmd>lua Snack; vim.schedule(vim.cmd.startinsert)s.picker.autocmds()<CR>
+nnoremap <leader>sa <Cmd>lua Snacks.picker.autocmds()<CR>
 nnoremap <leader>sb <Cmd>lua Snacks.picker.lines()<CR>
 nnoremap <leader>sB <Cmd>lua Snacks.picker.grep_buffers()<CR>
 nnoremap <leader>sC <Cmd>lua Snacks.picker.commands()<CR>

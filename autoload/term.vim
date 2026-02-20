@@ -17,10 +17,10 @@ function! term#handleOSC7() abort
   if !s:is_osc7(v:termrequest)
     return
   endif
-  let l:dir = substitute(v:termrequest, '\e]7;file://[^/]*', '', '')
-  " let l:dir = substitute(l:dir, '\e\\', '', '')
-  if isdirectory(l:dir) && getcwd() !=# l:dir
-    " Info 'OSC 7 dir change to ' . l:dir
-    execute 'lcd' fnameescape(l:dir)
+  let dir = substitute(v:termrequest, '\e]7;file://[^/]*', '', '')
+  " let dir = substitute(dir, '\e\\', '', '')
+  if isdirectory(dir) && getcwd() !=# dir
+    " Info 'OSC 7 dir change to ' . dir
+    execute 'lcd' fnameescape(dir)
   endif
 endfunction

@@ -31,8 +31,8 @@ function! ooze#send(text) abort
   if get(g:, 'ooze_auto_exec', 1)
     let l:text .= s:newline
   endif
-  let l:chan = str2nr(g:ooze_channel)
-  let l:bytes = chansend(l:chan, l:text)
+  let ch = str2nr(g:ooze_channel)
+  let bytes = chansend(ch, l:text)
 
   if get(g:, 'ooze_auto_advance', 1)
     call s:linefeed()
@@ -40,18 +40,18 @@ function! ooze#send(text) abort
   " if get(g:, 'ooze_auto_scroll', 1)
   "   call s:scroll()
   " endif
-  return l:bytes
+  return bytes
 endfunction
 
 function! ooze#line() abort
   let l:ft = &filetype
-  let l:line = getline('.')
+  let line = getline('.')
 
   if l:ft ==# 'qf\|pager'
     return 0
   endif
 
-  if l:line[0] ==# '#' && l:line[1] ==# '!'
+  if line[0] ==# '#' && line[1] ==# '!'
     Info bang
     return 0
   endif
@@ -60,12 +60,12 @@ function! ooze#line() abort
     " check if the line contains the word `function`
     " if it does, call ooze#fn that calls the function
     " see yankmkd for capturing and converting modnames
-    execute (l:ft ==# 'lua' ? 'lua ' : '') . l:line
-    Info (l:ft ==# 'lua' ? ' ' : ' ') . '[[' . l:line . ']]'
+    execute (l:ft ==# 'lua' ? 'lua ' : '') . line
+    Info (l:ft ==# 'lua' ? ' ' : ' ') . '[[' . line . ']]'
     return 1
   endif
 
-  return ooze#send(l:line)
+  return ooze#send(line)
 endfunction
 
 function! ooze#file() abort

@@ -16,10 +16,10 @@
 " augroup END
 
 function! s:set_repo_path() abort
-  let l:root = git#root()
-  if !empty(l:root)
-    " let &path = escape(l:root, ' ,')
-    execute 'set path^=' . l:root . '/**'
+  let root = git#root()
+  if !empty(root)
+    " let &path = escape(root, ' ,')
+    execute 'set path^=' . root . '/**'
   endif
 endfunction
 

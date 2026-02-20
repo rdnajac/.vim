@@ -1,7 +1,5 @@
 -- init.lua
 
--- vim.o.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit ShaDa file (for startup)
-
 --- optional LuaJIT profiling
 --- https://luajit.org/ext_profiler.html
 -- require('jit.p').start('ri1', '/tmp/prof')

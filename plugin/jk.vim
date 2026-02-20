@@ -10,16 +10,16 @@ let s:escape = "\<BS>\<Esc>"
 let s:term_escape = "\<BS>\<C-\>\<C-N>"
 
 function! s:escape(key)
-  let l:now = reltimefloat(reltime())
+  let now = reltimefloat(reltime())
   if a:key ==# 'j'
-    let l:other = g:esc_k_lasttime
-    let g:esc_j_lasttime = l:now
+    let other = g:esc_k_lasttime
+    let g:esc_j_lasttime = now
   elseif a:key ==# 'k'
-    let l:other = g:esc_j_lasttime
-    let g:esc_k_lasttime = l:now
+    let other = g:esc_j_lasttime
+    let g:esc_k_lasttime = now
   endif
-  let l:timediff = abs(l:now - l:other)
-  if l:timediff <= 0.069 && l:timediff >= 0.001
+  let timediff = abs(now - other)
+  if timediff <= 0.069 && timediff >= 0.001
     let g:esc_j_lasttime = 0
     let g:esc_k_lasttime = 0
     return mode() ==# 't' ? s:term_escape : s:escape

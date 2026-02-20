@@ -146,11 +146,8 @@ return {
     -- local modes = { 'i', 'c', 'x', 's' }
     -- keymap.map_combo(modes, 'jk', '<BS><BS><Esc>')
     -- keymap.map_combo(modes, 'kj', '<BS><BS><Esc>')
-
-    -- Escape into Normal mode from Terminal mode
     -- keymap.map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
     -- keymap.map_combo('t', 'kj', '<BS><BS><C-\\><C-n>')
-
     local notify_many_keys = function(key)
       local lhs = string.rep(key, 5)
       local action = function() vim.notify('Too many ' .. key) end

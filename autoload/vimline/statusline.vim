@@ -12,37 +12,37 @@ let s:left_sep = '🭛'
 " au User Screenkey* redrawstatus
 
 function! vimline#statusline#() abort
-  let l:ret = ''
-  let l:state = state()
-  let l:mode = mode()
-  let [l:cwd, l:file] = vimline#path#relative_parts()
+  let ret = ''
+  let state = state()
+  let mode = mode()
+  let [cwd, file] = vimline#path#relative_parts()
 
-  let l:ret .= '%#Chromatophore_a# '
-  let l:ret .= mode ==# 'n' ? ' ' : l:mode
-  let l:ret .= state !=# '' ? '|'. state : ''
-  let l:ret .= vimline#indicator#searchcount()
-  let l:ret .= '%S '
+  let ret .= '%#Chromatophore_a# '
+  let ret .= mode ==# 'n' ? ' ' : mode
+  let ret .= state !=# '' ? '|'. state : ''
+  let ret .= vimline#indicator#searchcount()
+  let ret .= '%S '
 
-  let l:ret .= '%#Chromatophore_ab#'
-  let l:ret .= s:left_sep
+  let ret .= '%#Chromatophore_ab#'
+  let ret .= s:left_sep
 
-  let l:ret .= '%#Chromatophore_b#'
-  "let l:ret .= FugitiveStatusline()
-  let l:ret .= ' 󱉭  '
-  let l:ret .= l:cwd . '/'
+  let ret .= '%#Chromatophore_b#'
+  "let ret .= FugitiveStatusline()
+  let ret .= ' 󱉭  '
+  let ret .= cwd . '/'
 
-  let l:ret .= '%#Chromatophore_bc#'
-  let l:ret .= s:left_sep
+  let ret .= '%#Chromatophore_bc#'
+  let ret .= s:left_sep
 
-  let l:ret .= '%#Chromatophore_c#'
-  let l:ret .= l:file
-  " let l:ret .= fnamemodify(expand('%'), ':.')
+  let ret .= '%#Chromatophore_c#'
+  let ret .= file
+  " let ret .= fnamemodify(expand('%'), ':.')
 
   " right-aligned
-  let l:ret .= '%='
-  let l:ret .= '%#Chromatophore_z#'
-  let l:ret .= vimline#recording#()
-  " let l:ret .= "%{v:lua.require'screenkey'.get_keys()}"
+  let ret .= '%='
+  let ret .= '%#Chromatophore_z#'
+  let ret .= vimline#recording#()
+  " let ret .= "%{v:lua.require'screenkey'.get_keys()}"
 
-  return l:ret
+  return ret
 endfunction

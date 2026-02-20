@@ -4,7 +4,7 @@ function! s:err_undo() abort
   if v:shell_error > 0
     silent undo
     redraw
-    let l:msg = 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
+    let msg = 'formatprg "' . &formatprg . '" exited with status ' . v:shell_error
     call vim#notify#error(msg)
   endif
 endfunction
@@ -21,10 +21,10 @@ endfunction
 
 function! s:substitute(pattern, replacement, ...) abort
   " see `:h :s_flags`
-  let l:flags = 'ge' . (a:0 ? a:1 : '')
-  let l:cmd = printf('%%s/%s/%s/%s', a:pattern, a:replacement, l:flags)
-  echom 'Running: ' . l:cmd
-  execute 'keeppatterns' l:cmd
+  let flags = 'ge' . (a:0 ? a:1 : '')
+  let cmd = printf('%%s/%s/%s/%s', a:pattern, a:replacement, flags)
+  echom 'Running: ' . cmd
+  execute 'keeppatterns' cmd
 endfunction
 
 function format#plus_to_backticks() abort
@@ -46,13 +46,13 @@ function! s:strip_trailing_newlines() abort
 endfunction
 
 function! format#clean_whitespace() abort
-  let l:size = line2byte(line('$') + 1) - 1
+  let size = line2byte(line('$') + 1) - 1
   call s:strip_trailing_whitespace()
   call s:strip_trailing_newlines()
-  let l:final_size = line2byte(line('$') + 1) - 1
+  let final_size = line2byte(line('$') + 1) - 1
 
-  if l:final_size != l:size
-    echomsg 'Stripped ' . (l:size - l:final_size) . ' bytes of trailing whitespace'
+  if final_size != size
+    echomsg 'Stripped ' . (size - final_size) . ' bytes of trailing whitespace'
   endif
 endfunction
 

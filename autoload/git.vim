@@ -12,13 +12,13 @@ function! git#root(...) abort
   endif
 
   if exists('*FugitiveGitDir')
-    let l:gitdir = FugitiveGitDir(a:000)
+    let gitdir = FugitiveGitDir(a:000)
   else
-    let l:buf = a:0 ? a:1 : bufnr('%')
-    let l:bufnr = type(l:buf) == v:t_string ? bufnr(l:buf) : l:buf
-    let l:gitdir = finddir('.git', fnamemodify(bufname(l:bufnr), ':p') . ';')
+    let buf = a:0 ? a:1 : bufnr('%')
+    let bufnr = type(buf) == v:t_string ? bufnr(buf) : buf
+    let gitdir = finddir('.git', fnamemodify(bufname(bufnr), ':p') . ';')
   endif
-  return empty(l:gitdir) ? '' : fnamemodify(l:gitdir, ':p:h:h')
+  return empty(gitdir) ? '' : fnamemodify(gitdir, ':p:h:h')
 endfunction
 
 ""

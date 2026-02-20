@@ -18,11 +18,10 @@ endfunction
 function! fold#text() abort
   " TODO: use the fillchar?
   let s:foldchar = '.'
-  let l:line = s:foldtext(getline(v:foldstart))
-  let l:info = printf('|%4s lines|', s:numlines())
-  let l:fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(l:line..' '..l:info)]))
-
-  return printf('%s %s%s', l:line, l:fill, l:info)
+  let line = s:foldtext(getline(v:foldstart))
+  let info = printf('|%4s lines|', s:numlines())
+  let fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(line..' '..info)]))
+  return printf('%s %s%s', line, fill, info)
 endfunction
 
 

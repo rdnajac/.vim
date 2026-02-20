@@ -41,17 +41,17 @@ function! s:color(...) abort
 endfunction
 
 function! s:hl_set(name, fg, bg, ...) abort
-  let l:attr = a:0 ? a:1 : ''
-  let l:cmd = 'highlight ' . a:name . ' guifg=' . a:fg . ' guibg=' . a:bg
-  if !empty(l:attr)
-    let l:cmd .= ' gui=' . l:attr
+  let attr = a:0 ? a:1 : ''
+  let cmd = 'highlight ' . a:name . ' guifg=' . a:fg . ' guibg=' . a:bg
+  if !empty(attr)
+    let cmd .= ' gui=' . attr
   endif
-  execute l:cmd
+  execute cmd
 endfunction
 
 function! s:hl_link(target, groups) abort
-  for l:group in a:groups
-    execute 'highlight! link ' . l:group . ' ' . a:target
+  for group in a:groups
+    execute 'highlight! link ' . group . ' ' . a:target
   endfor
 endfunction
 
@@ -82,12 +82,9 @@ function! chromatophore#setup() abort
 endfunction
 
 function! chromatophore#metachrosis() abort
-  let l:color = chromatophore#color()
-  " for l:suffix in ['', '_a', '_b', '_c', '_z']
-  for l:suffix in ['', '_b', '_c', '_z']
-    execute printf('highlight Chromatophore%s guifg=%s', l:suffix, l:color)
+  let color = chromatophore#color()
+  for suffix in ['', '_b', '_c', '_z']
+    execute printf('highlight Chromatophore%s guifg=%s', suffix, color)
   endfor
   execute 'highlight Chromatophore_a guibg=' . l:color
-  " execute 'highlight lualine_transitional_lualine_a_normal_to_lualine_b_normal guifg=' . l:color
-  " lua if  package.loaded['lualine'] then require('lualine').refresh() end
 endfunction
