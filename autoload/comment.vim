@@ -1,4 +1,26 @@
 " autoload/comment.vim
+function! comment#toggle() abort
+  " vint: -ProhibitCommandRelyOnUser
+  normal gcc
+  " vint: +ProhibitCommandRelyOnUser
+endfunction
+
+function! s:title() abort
+  let fname = fnamemodify(expand('%'), ':p')
+  let fname = substitute(fname, git#root(), '', '')
+" TODO: if .lua trim `**/lua/` instead
+  let fname = substitute(fname, '^\/*', '', '')
+  let fname = substitute(fname, '^\s\+', '', '')
+  return fname
+endfunction
+
+function! comment#title() abort
+  execute append(0, s:title())
+  " if !comment#syntax_match([0, 1, 1, 0])
+  call comment#toggle()
+  " endif
+endfunction
+
 function comment#syntax_match(...) abort
   let pos = a:0 ? a:1 : getpos('.')
   let synid = synID(pos[1], pos[2], 1)

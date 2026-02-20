@@ -287,7 +287,7 @@ endif
 
 " file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
-nnoremap <leader>fn <Cmd>call file#title()<CR>
+nnoremap <leader>fn <Cmd>call comment#title()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippet()<CR>
 nnoremap <leader>ft <Cmd>call edit#filetype()<CR>
