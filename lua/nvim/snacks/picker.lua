@@ -29,7 +29,7 @@ local function title(opts)
 
   if nv.is_nonempty_list(opts.ft) then
     ---@diagnostic disable-next-line: param-type-mismatch
-    vim.list_extend(parts, vim.tbl_map(nv.icons.filetype, opts.ft))
+    vim.list_extend(parts, vim.tbl_map(nv.ui.icons.filetype, opts.ft))
   end
 
   return table.concat(parts, ' ')

@@ -195,10 +195,4 @@ M.client_id = assert(
   )
 )
 
-M.status = function()
-  local client = vim.lsp.get_client_by_id(M.client_id)
-  local status = (client and not client:is_stopped()) and 'attached' or 'unavailable'
-  return nv.icons.lsp[status]
-end
-
 return M

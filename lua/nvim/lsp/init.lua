@@ -29,11 +29,19 @@ M.attached = function(buf)
     :join(', ')
 end
 
+M.server_status = function(id)
+  local client = vim.lsp.get_client_by_id(id)
+  local status = (client and not client:is_stopped()) and 'attached' or 'unavailable'
+  return nv.ui.icons.lsp[status]
+end
+
+
+
 M.status = {
   function()
     local clients = vim.lsp.get_clients({ bufnr = 0 })
     if #clients == 0 then
-      return nv.icons.lsp.unavailable .. ' '
+      return nv.ui.icons.lsp.unavailable .. ' '
     end
 
     return vim
@@ -44,11 +52,11 @@ M.status = {
           if ok and statusmod then
             local status = statusmod.get()
             local kind = status and status.kind or 'Inactive'
-            return (nv.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
+            return (nv.ui.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
           end
-          return nv.icons.copilot.Inactive[1]
+          return nv.ui.icons.copilot.Inactive[1]
         else
-          local icon = nv.icons.lsp.attached
+          local icon = nv.ui.icons.lsp.attached
           local msgs = nv.lsp.progress(c.id)
           if #msgs > 0 then
             icon = icon .. ' ' .. table.concat(msgs, ' ')

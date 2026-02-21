@@ -111,8 +111,6 @@ local function add_status_extmarks(buffer, status)
 
   local function get_icon(code)
     local k = git.short_codes[code]
-    local k = git.short_codes[code]
-    -- local icon = nv.icons.git[vim.fn.tolower(k or '')] or code
     local icon = code
     return icon, 'SnacksPickerGitStatus' .. (k or '')
   end

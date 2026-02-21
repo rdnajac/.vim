@@ -77,7 +77,7 @@ return {
   {
     'mason-org/mason.nvim',
     build = vim.cmd.MasonUpdate,
-    opts = { ui = { icons = require('nvim.util.icons').mason.emojis } },
+    opts = { ui = { icons = require('nvim.ui.icons').mason.emojis } },
   },
   {
     'folke/lazydev.nvim',

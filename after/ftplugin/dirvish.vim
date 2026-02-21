@@ -14,26 +14,20 @@ nnoremap <buffer> o <Cmd>lua vim.ui.input( { prompt = 'new file: ' }, function(i
 nnoremap <buffer> D <Cmd>lua vim.lsp.buf.code_action({filter=function(action) return action.command and action.command.command == 'delete' end, apply=true})<CR>
 nnoremap <buffer> C <Cmd>lua vim.lsp.buf.code_action({filter=function(action) return action.command and action.command.command == 'rename' end, apply=true})<CR>
 
-lua << EOF
--- XXX: `dirvish#add_icon_fn()` doesn't support highlighting
-require('nvim.util.icons.fs').render()
--- FIXME: file moved
--- require('nvim.util.git.extmarks').setup()
--- vim.lsp.buf_attach_client(0, require('nvim.lsp.dirvish').client_id)
--- BUG: https://github.com/justinmk/vim-dirvish/issues/257
-vim.opt_local.listchars = vim.opt.listchars:get()
-vim.opt_local.listchars:remove('precedes')
-
--- local dirvish_line = {
-  -- a = [[%{%v:lua.nv.icons.directory(b:dirvish._dir)..' '..fnamemodify(b:dirvish._dir, ':~')%}]],
-  -- b = [[%{%v:lua.nv.lsp.dirvish.status()%}]],
-  -- c = [[ %{join(map if opts.ft == '(argv(), "fnamemodify(v:val, ':t')"), ', ')} ]],
--- }
-EOF
-
 " let g:dirvish_mode = ':sort ,^.*[\/],'
 " lua vim.g.dirvish_mode = [[:sort ,^.*[\/],]]
 " if dirvish:
 " command! -nargs=? -complete=dir Explore Dirvish <args>
 " command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args>
 " command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args>
+
+lua << EOF
+-- BUG: https://github.com/justinmk/vim-dirvish/issues/257
+vim.opt_local.listchars = vim.opt.listchars:get()
+vim.opt_local.listchars:remove('precedes')
+
+-- XXX: `dirvish#add_icon_fn()` doesn't support highlighting
+-- require('nvim.ui.thumbnails').render()
+-- require('nvim.util.git.extmarks').setup()
+-- vim.lsp.buf_attach_client(0, require('nvim.lsp.fs').client_id)
+EOF

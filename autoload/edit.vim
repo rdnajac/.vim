@@ -66,7 +66,7 @@ endfunction
 function! s:filetype(dir, ext) abort
   let ext = a:0 == 0 ? '.vim' : a:1
   " call s:edit(join([g:VIMDIR, 'after', a:dir, &filetype .. ext], '/'))
-  call s:edit(join([g:VIMDIR, a:dir, &filetype .. a:ext], '/'))
+  call s:edit(join([g:stdpath.config, a:dir, &filetype .. a:ext], '/'))
 endfunction
 
 function! edit#ftplugin(...) abort

@@ -12,7 +12,6 @@ M.menu = {
     end
     return 420
   end,
-
   -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
   ---@diagnostic disable-next-line: assign-type-mismatch
   -- direction_priority = function()
@@ -32,7 +31,6 @@ M.menu = {
   --   end
   --   return { 's', 'n' }
   -- end,
-
   ---@type blink.cmp.Draw
   draw = {
     treesitter = { 'lsp' },
@@ -47,13 +45,13 @@ M.menu = {
         ellipsis = false,
         text = function(ctx)
           local provider = ctx.source_name
-          local icon = nv.icons.blink[provider] or ' '
+          local icon = require('nvim.ui.icons').blink[provider] or ' '
           return icon .. ctx.icon_gap
         end,
         highlight = component_highlight,
       },
       kind_icon = {
-        text = function(ctx) return nv.icons.kinds[ctx.kind] or '' end,
+        text = function(ctx) return require('nvim.ui.icons').kinds[ctx.kind] or '' end,
         highlight = component_highlight,
       },
     },

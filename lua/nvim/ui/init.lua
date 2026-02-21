@@ -1,6 +1,7 @@
 local M = {}
 
 M.after = function()
+  M.icons = require('nvim.ui.icons')
   -- requires nvim 0.12
   M.winbar = require('nvim.ui.winbar')
   vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
@@ -10,7 +11,7 @@ M.after = function()
     ---@type number, string
     for k, v in ipairs(vim.diagnostic.severity) do
       local name = nv.capitalize(v --[[@as string]])
-      icon[k] = nv.icons.diagnostics[name] or name:sub(1, 1)
+      icon[k] = M.icons.diagnostics[name] or name:sub(1, 1)
       hl[k] = 'Diagnostic' .. name
     end
     return { text = icon, numhl = hl }

@@ -83,7 +83,7 @@ M.status = function()
       if query == vim.bo.filetype then
         return ' '
       end
-      return require('nvim.util.icons').filetype[query]
+      return require('nvim.ui.icons').filetype[query]
     end, vim.tbl_keys(queries))
   end
   return table.concat(ret, ' ')

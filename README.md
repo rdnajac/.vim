@@ -8,6 +8,9 @@ My (n)vim configuration.
   - they're all g: variables
   - they're present even with `-u NONE`
   - neovim only
+
+> where did they go?
+
 - [x] vim-nvim notification library
 - [ ] <M-.> does what?
 - [ ] `edit = '[ -z "$NVIM" ] && (nvim -- {{filename}}) || (nvim --server "$NVIM" --remote-send "q" && nvim --server "$NVIM" --remote {{filename}})'`
