@@ -22,35 +22,38 @@ return {
         :totable()
     end
 
-    vim.api.nvim_create_user_command('PlugStatus', function()
-      vim.pack.update(nil, { _offline = true })
-      -- TODO: print the number of loaded plugins / total plugins
-    end, {})
-
-    vim.api.nvim_create_user_command('PlugUpdate', function(opts)
-      local plugs = #opts.fargs > 0 and opts.fargs or nil
-      vim.pack.update(plugs, { force = opts.bang })
-    end, {
-      nargs = '*',
-      bang = true,
-      complete = spec_names,
-    })
-
-    vim.api.nvim_create_user_command('PlugSpecs', function(opts)
-      local plugins = #opts.fargs > 0 and opts.fargs or nil
-      dd(true, vim.pack.get(plugins, { info = opts.bang }))
-    end, {
-      bang = true,
-      nargs = '*',
-      complete = spec_names,
-    })
-
-    vim.api.nvim_create_user_command('PlugClean', function(opts)
-      local plugs = #opts.fargs > 0 and opts.fargs or unloaded()
-      vim.pack.del(plugs)
-    end, {
-      nargs = '*',
-      complete = function(_, _, _) return unloaded() end,
-    })
+    vim.api.nvim_create_user_command(
+      'PlugStatus',
+      function() vim.pack.update(nil, { offline = true }) end,
+      {}
+    )
+    vim.api.nvim_create_user_command(
+      'PlugUpdate',
+      function(opts) vim.pack.update(#opts.fargs > 0 and opts.fargs or nil, { force = opts.bang }) end,
+      {
+        nargs = '*',
+        bang = true,
+        complete = spec_names,
+      }
+    )
+    vim.api.nvim_create_user_command(
+      'PlugSpecs',
+      function(opts)
+        dd(true, vim.pack.get(#opts.fargs > 0 and opts.fargs or nil, { info = opts.bang }))
+      end,
+      {
+        bang = true,
+        nargs = '*',
+        complete = spec_names,
+      }
+    )
+    vim.api.nvim_create_user_command(
+      'PlugClean',
+      function(opts) vim.pack.del(#opts.fargs > 0 and opts.fargs or unloaded()) end,
+      {
+        nargs = '*',
+        complete = function(_, _, _) return unloaded() end,
+      }
+    )
   end,
 }

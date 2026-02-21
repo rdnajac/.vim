@@ -34,17 +34,6 @@ M.modname = function(path)
   return name:sub(-4) == 'init' and name:sub(1, -6) or name
 end
 
--- copied from `Snacks.util`
-M.defer_redraw_win = function(t)
-  -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
-  vim.defer_fn(
-    function()
-      vim.api.nvim__redraw({ win = vim.api.nvim_get_current_win(), valid = false, flush = false })
-    end,
-    t or 200
-  )
-end
-
 local luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
 
 --- Get list of submodules in a given subdirectory of `nvim/`

@@ -1,5 +1,3 @@
-local nv = _G.nv or require('nvim.util')
-
 ---@type plug.Spec[]
 return {
   {
@@ -146,7 +144,7 @@ return {
         set = function(state)
           vim.g.minidiff_disable = not state
           MiniDiff.toggle(0)
-          nv.defer_redraw_win()
+          require('nvim.ui').redraw()
         end,
       },
       ['<leader>go'] = {
@@ -157,7 +155,7 @@ return {
         end,
         set = function(_)
           MiniDiff.toggle_overlay(0)
-          nv.defer_redraw_win()
+          require('nvim.ui').redraw()
         end,
       },
     },

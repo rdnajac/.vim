@@ -7,6 +7,9 @@ nv.lsp = require('nvim.lsp')
 nv.plug = require('nvim.plug')
 nv.treesitter = require('nvim.treesitter')
 
+nv.plugins = require('nvim').plugins
+nv.specs = require('nvim').specs
+
 nv.bridge = require('nvim.util.bridge')
 nv.debug = require('nvim.util.debug')
 nv.echoserver = require('nvim.util.echoserver')

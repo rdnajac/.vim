@@ -53,6 +53,7 @@ Snacks.setup({
 
 --- the rest of the owl
 _G.nv = require('nvim')
+
 if vim.v.vim_did_enter == 0 then
   vim.pack.add(nv.specs, { load = nv.plug.load })
 end

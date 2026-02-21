@@ -40,49 +40,33 @@ local blink = {
         'fallback',
       },
     },
+    signature = {
+      enabled = true,
+      window = { show_documentation = false },
+    },
+    sources = {
+      providers = require('nvim.blink.providers'),
+      per_filetype = {
+        -- sql = { 'dadbod' }, -- TODO: ,
+        -- vim = { inherit_defaults = true, 'env' },
+      },
+    },
   },
 }
 
--- TODO: check this
--- blink.opts.signature = {
--- enabled = false, -- default = is `true`
--- window = { show_documentation = false },
--- }
+if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
+  blink.opts.sources.providers.lazydev = {
+    name = 'LazyDev',
+    module = 'lazydev.integrations.blink',
+    score_offset = 100,
+  }
+  blink.opts.sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
+end
 
--- local providers = require('nvim.blink.providers')
--- -- print(providers)
--- local defaults = vim.tbl_keys(providers)
---
--- ---@type blink.cmp.SourceConfigPartial
--- blink.opts.sources = {
---   ---@return blink.cmp.SourceList[]
---   default = defaults,
---   per_filetype = {
---     -- sql = i{ 'dadbod' }, -- TODO: ,
---     -- vim = { inherit_defaults = true, 'env' },
---   },
---   providers = providers,
--- }
--- -- add LazyDev provider if available
--- -- if pcall(require, 'lazydev.integrations.blink') then
--- if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
---   blink.opts.sources.providers.lazydev = {
---     name = 'LazyDev',
---     module = 'lazydev.integrations.blink',
---     score_offset = 100,
---   }
---   blink.opts.sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
--- end
-
--- local specs = { blink_spec }
--- for name, config in pairs(extras) do
---   providers = vim.tbl_extend('force', roviders, config)
---   table.insert(specs, { name })
--- end
+local extras = nil -- TODO:
 
 return {
   after = function() require('nvim.blink.cmp') end,
-  -- specs = specs,
-  specs = { blink },
+  specs = vim.list_extend({ blink }, extras or {}),
   status = require('nvim.blink.status'),
 }

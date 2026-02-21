@@ -89,4 +89,15 @@ M.specs = {
   },
 }
 
+-- copied from `Snacks.util`
+M.redraw = function(t)
+  -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
+  vim.defer_fn(
+    function()
+      vim.api.nvim__redraw({ win = vim.api.nvim_get_current_win(), valid = false, flush = false })
+    end,
+    t or 200
+  )
+end
+
 return M

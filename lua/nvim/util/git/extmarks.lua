@@ -1,4 +1,4 @@
-local nv = _G.nv or require('nvim.util')
+local git = require('nvim.util.git')
 local ns = vim.api.nvim_create_namespace('git-status')
 
 ---@class GitStatusCodes
@@ -92,8 +92,8 @@ local function load_git_status(buffer, callback)
   end
 
   vim.schedule(function()
-    local git_status = nv.git(nv.git.cmd('status', false), buffer)
-    local git_tracked = nv.git(nv.git.cmd('tracked_cwd', false), buffer)
+    local git_status = git(git.cmd('status', false), buffer)
+    local git_tracked = git(git.cmd('tracked_cwd', false), buffer)
     if vim.tbl_isempty(git_status) and vim.tbl_isempty(git_tracked) then
       return callback()
     end
@@ -110,8 +110,8 @@ local function add_status_extmarks(buffer, status)
   end
 
   local function get_icon(code)
-    local k = nv.git.short_codes[code]
-    local k = nv.git.short_codes[code]
+    local k = git.short_codes[code]
+    local k = git.short_codes[code]
     -- local icon = nv.icons.git[vim.fn.tolower(k or '')] or code
     local icon = code
     return icon, 'SnacksPickerGitStatus' .. (k or '')
