@@ -20,7 +20,7 @@ M.after = function()
   })
 end
 
--- TODO: wait for native ts selection to merge
+-- TODO: remove when native ts selection is merged
 M.selection = require('nvim.treesitter.selection')
 
 M.specs = {
@@ -29,15 +29,6 @@ M.specs = {
     build = function() vim.cmd('TSUpdate') end,
     -- TODO: Don't re-install up-to-date parsers
     -- build = function() vim.cmd('TSUpdate | TSInstall! ' .. table.concat(M.parsers.to_install, ' ')) end,
-    toggles = {
-      ['<leader>ut'] = {
-        name = 'Treesitter',
-        get = function()
-          return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] ~= nil
-        end,
-        set = function() vim.treesitter.toggle() end,
-      },
-    },
     keys = {
       { 'n', '<C-Space>', M.selection.start, { desc = 'Start ts selection' } },
       { 'x', '<C-Space>', M.selection.increment, { desc = 'Increment ts selection' } },

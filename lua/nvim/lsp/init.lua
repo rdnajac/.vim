@@ -35,8 +35,6 @@ M.server_status = function(id)
   return nv.ui.icons.lsp[status]
 end
 
-
-
 M.status = {
   function()
     local clients = vim.lsp.get_clients({ bufnr = 0 })
@@ -48,16 +46,16 @@ M.status = {
       .iter(clients)
       :map(function(c)
         if c.name == 'copilot' and package.loaded['sidekick'] then
+          local status
           local ok, statusmod = pcall(require, 'sidekick.status')
           if ok and statusmod then
-            local status = statusmod.get()
-            local kind = status and status.kind or 'Inactive'
-            return (nv.ui.icons.copilot[kind] or nv.icons.copilot.Inactive)[1]
+            status = statusmod.get()
           end
-          return nv.ui.icons.copilot.Inactive[1]
+          local kind = status and status.kind or 'Inactive'
+          return (nv.ui.icons.copilot[kind])[1]
         else
           local icon = nv.ui.icons.lsp.attached
-          local msgs = nv.lsp.progress(c.id)
+          local msgs = require('nvim.lsp.progress')(c.id)
           if #msgs > 0 then
             icon = icon .. ' ' .. table.concat(msgs, ' ')
           end

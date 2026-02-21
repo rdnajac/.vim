@@ -42,12 +42,4 @@ M.inactive_sections = {}
 --   { require('nvim.plugins.r').status },
 -- }
 
--- local diagnostic = function() return vim.diagnostic.status() end
-
--- M.opts.inactive_winbar = {
---   lualine_a = { [[%{%v:lua.nv.icons.filetype()%}]] },
---   lualine_b = { '%' },
---   lualine_c = { M.winbar.b },
--- }
-
 return M
