@@ -47,7 +47,8 @@ Snacks.setup({
   scroll = { enabled = true },
   -- statuscolumn = require('nvim.snacks.statuscolumn'),
   picker = require('nvim.snacks.picker'),
-  styles = require('nvim.snacks.styles'),
+  -- styles = { notification_history = { height = 0.9, width = 0.9, wo = { wrap = false } } },
+  toggle = { which_key = false },
   words = { enabled = true },
 })
 

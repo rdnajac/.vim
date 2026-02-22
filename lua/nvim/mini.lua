@@ -30,6 +30,51 @@ return {
     }
   end,
   align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
+  clue = function()
+    local gen = require('mini.clue').gen_clues
+    local clues, triggers = {}, {}
+    for clue, trigger_list in pairs({
+      builtin_completion = {
+        { mode = 'i', keys = '<C-x>' },
+      },
+      g = {
+        { mode = { 'n', 'x' }, keys = 'g' },
+      },
+      marks = {
+        { mode = { 'n', 'x' }, keys = "'" },
+        { mode = { 'n', 'x' }, keys = '`' },
+      },
+      registers = {
+        { mode = { 'n', 'x' }, keys = '"' },
+        { mode = { 'i', 'c' }, keys = '<C-r>' },
+      },
+      square_brackets = {
+        { mode = 'n', keys = '[' },
+        { mode = 'n', keys = ']' },
+      },
+      windows = {
+        { mode = 'n', keys = '<C-w>' },
+      },
+      z = {
+        { mode = { 'n', 'x' }, keys = 'z' },
+      },
+    }) do
+      table.insert(clues, gen[clue]())
+      vim.list_extend(triggers, trigger_list)
+    end
+
+    return {
+      clues = clues,
+      triggers = triggers,
+      -- { mode = { 'n', 'x' }, keys = '<Leader>' },
+      window = {
+        -- config = {},
+        -- delay = 1000,
+        scroll_down = '<C-j>',
+        scroll_up = '<C-k>',
+      },
+    }
+  end,
   -- comment removed since native commenting added to neovim
   diff = { view = { style = 'number' } },
   extra = {},
