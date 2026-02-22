@@ -1,6 +1,9 @@
+-- from `: hluv-intro`
+-- also see:
+-- https://github.com/neovim/neovim/blob/master/test/functional/plugin/lsp/testutil.lua
 local uv = vim.uv
 
-local server = uv.new_tcp()
+local server = assert(uv.new_tcp())
 server:bind('127.0.0.1', 1337)
 server:listen(128, function(err)
   assert(not err, err)

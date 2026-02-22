@@ -8,6 +8,11 @@ vnoremap p "_dP
 vnoremap <leader>c "_c
 vnoremap <leader>d "_d
 
+" `clipboard=autoselect` is not implemented yet
+" https://github.com/neovim/neovim/issues/2325.
+" vnoremap <LeftRelease>   "*ygv
+" vnoremap <2-LeftRelease> "*ygv
+
 " yank path current file path, with and without line number
 nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
 nnoremap yP <Cmd>let @*=printf('%s:%d', expand('%:p:~'), line('.'))<CR>

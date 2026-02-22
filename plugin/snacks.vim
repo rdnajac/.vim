@@ -91,7 +91,7 @@ nnoremap <leader>sM <Cmd>lua Snacks.picker.man()<CR>
 nnoremap <leader>sn <Cmd>lua Snacks.picker.notifications()<CR>
 nnoremap <leader>sq <Cmd>lua Snacks.picker.qflist()<CR>
 nnoremap <leader>sw <Cmd>lua Snacks.picker.grep_word()<CR>
-vnoremap <leader>sW viW<Cmd>lua Snacks.picker.grep_word()<CR>
+xnoremap <leader>sW <Cmd>lua Snacks.picker.grep_word()<CR>
 nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
 nnoremap <leader>s" <Cmd>lua Snacks.picker.registers()<CR>
 nnoremap <leader>s: <Cmd>lua Snacks.picker.command_history()<CR>

@@ -54,14 +54,14 @@ local blink = {
   },
 }
 
-if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
-  blink.opts.sources.providers.lazydev = {
-    name = 'LazyDev',
-    module = 'lazydev.integrations.blink',
-    score_offset = 100,
-  }
-  blink.opts.sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
-end
+-- if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
+blink.opts.sources.providers.lazydev = {
+  name = 'LazyDev',
+  module = 'lazydev.integrations.blink',
+  score_offset = 100,
+}
+blink.opts.sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
+-- end
 
 local extras = nil -- TODO:
 

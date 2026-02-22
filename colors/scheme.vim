@@ -2,6 +2,12 @@
 " Description:  vim colorscheme inspired by tokyonight
 " Author:       rdnajac
 
+" https://github.com/neovim/neovim/discussions/37599#discussioncomment-15659444
+hi link qfError             DiagnosticError
+hi link qfWarning           DiagnosticWarn
+hi link qfNote              DiagnosticHint
+hi link qfInfo              DiagnosticInfo
+
 if has('nvim')
   " colorscheme tokyonight_generated
   let s:colors_dir = expand('<script>:p:h')

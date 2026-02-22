@@ -2,6 +2,28 @@ if !exists('g:chromatophores')
   let g:chromatophores = [ 'String' ]
 endif
 
+function! chromatophore#setup() abort
+  let black      = '#000000'
+  let eigengrau  = '#16161d'
+  let grey       = '#3b4261'
+  let mode_color = chromatophore#color()
+
+  highlight! Black guifg=black
+  " highlight! Chromatophore_a guifg=
+  call s:hl_set('Chromatophore',    mode_color, 'NONE')
+  call s:hl_set('ChromatophoreB',   mode_color, 'NONE', 'bold')
+  " call s:hl_set('Chromatophore_a',  mode_color, eigengrau,'bold,reverse')
+  call s:hl_set('Chromatophore_a',  black,  mode_color, 'bold')
+  call s:hl_set('Chromatophore_b',  mode_color, grey,       'bold')
+  call s:hl_set('Chromatophore_c',  mode_color, eigengrau)
+  call s:hl_set('Chromatophore_z',  mode_color, eigengrau, 'bold')
+  call s:hl_set('Chromatophore_ab', mode_color, grey)
+  call s:hl_set('Chromatophore_bc', grey,       eigengrau)
+  call s:hl_set('Chromatophore_cN', eigengrau, 'NONE')
+  call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
+  call s:hl_link('Chromatophore', g:chromatophores)
+endfunction
+
 let s:mode_color_map = {
       \ 'normal':   '#39FF14',
       \ 'visual':   '#F7768E',
@@ -57,28 +79,6 @@ endfunction
 
 function! chromatophore#color() abort
   return get(s:mode_color_map, s:color(), s:mode_color_map.normal)
-endfunction
-
-function! chromatophore#setup() abort
-  let black      = '#000000'
-  let eigengrau  = '#16161d'
-  let grey       = '#3b4261'
-  let mode_color = chromatophore#color()
-
-  highlight! Black guifg=black
-  " highlight! Chromatophore_a guifg=
-  call s:hl_set('Chromatophore',    mode_color, 'NONE')
-  call s:hl_set('ChromatophoreB',   mode_color, 'NONE', 'bold')
-  " call s:hl_set('Chromatophore_a',  mode_color, eigengrau,'bold,reverse')
-  call s:hl_set('Chromatophore_a',  black,  mode_color, 'bold')
-  call s:hl_set('Chromatophore_b',  mode_color, grey,       'bold')
-  call s:hl_set('Chromatophore_c',  mode_color, eigengrau)
-  call s:hl_set('Chromatophore_z',  mode_color, eigengrau, 'bold')
-  call s:hl_set('Chromatophore_ab', mode_color, grey)
-  call s:hl_set('Chromatophore_bc', grey,       eigengrau)
-  call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
-  call s:hl_link('Chromatophore', g:chromatophores)
-
 endfunction
 
 function! chromatophore#metachrosis() abort

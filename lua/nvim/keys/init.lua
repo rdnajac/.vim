@@ -81,6 +81,7 @@ local function ptogglelist(cmd)
   end
 end
 
+-- TODO: map `vim.diagnostic.setqflist`
 M.togglelist = {
   {
     '<leader>xl',

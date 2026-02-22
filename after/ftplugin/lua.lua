@@ -19,7 +19,7 @@ vim.b.minisurround_config = {
   },
 }
 
-if MiniSplitjoin then
+if _G.MiniSplitjoin then
   local gen_hook = MiniSplitjoin.gen_hook
   local curly = { brackets = { '%b{}' } }
   local add_comma_curly = gen_hook.add_trailing_separator(curly)

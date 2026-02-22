@@ -53,7 +53,7 @@ M.submodules = function(subdir)
   --       return vim.endswith(f, '.lua') and not vim.endswith(f, 'init.lua')
   --     end
   --   end)
-  --   :map(function(f) return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??') end)
+  --  :map(function(f) return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??') end)
   --  :totable()
   return vim.tbl_map(function(f) return f:sub(#luaroot + 2, -5) end, files)
 end
@@ -87,26 +87,11 @@ function M.yank(text)
   print('yanked: ' .. text)
 end
 
--- nv.tbl_add_inverse_lookup
--- vim.tbl_add_reverse_lookup(M.kinds)
--- shared method is deprecated because it is not type safe
--- https://github.com/neovim/neovim/pull/24564
-
--- vim.print(vim.iter({ a='x1', b='x2', c='x3', d='x4' }):fold({}, function(t, k, v)
---   t[v] = k
---   return t
--- end))
-
--- local inv = {}
--- for k, v in pairs(t) do
---   inv[v] = k
--- end
-
 --- cache/read lines file in the cache directory,
 --- or read lines from a file in the cache directory
 ---@param fname string filename relative to cache directory
 ---@param lines string[]|nil lines to write, or nil to read
----@return string[] lines read from file or written to file
+---@return string[]? lines read from file or written to file
 M.cache = function(fname, lines)
   local cache_path = vim.fs.joinpath(vim.g.stdpath.cache, fname)
   if lines == nil and vim.fn.filereadable(cache_path) then

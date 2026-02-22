@@ -5,28 +5,19 @@
 
 local M = {}
 
-local hl = function(str, group) return string.format('%%#%s#%s', group, str) end
-local _chroma = function(str, sec) return hl(str, 'Chromatophore_' .. sec) end
-local chromatophore = {
-  a = function(s) return _chroma(s, 'a') end,
-  ab = function(s) return _chroma(s, 'ab') end,
-  b = function(s) return _chroma(s, 'b') end,
-  bc = function(s) return _chroma(s, 'bc') end,
-  c = function(s) return _chroma(s, 'c') end,
-  ac = function(s) return _chroma(s, 'ac') end,
-}
+local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', sec, str) end
 
 --- Combines three sections of a statusline/winbar/tabline with appropriate highlighting and separators.
 ---@param a string?
 ---@param b string?
 ---@param c string?
 function M.render(a, b, c)
-  local function sec(s, str) return string.format('%%#Chromatophore_%s#%s', s, str) end
   local sep = nv.ui.icons.sep.component.rounded.left
-  local sec_a = a and sec('a', a) or nil
-  local sec_b = b and sec('ab', sep .. ' ') .. sec('b', b) .. sec('bc', sep) or sec('c', sep)
-  local sec_c = c and sec('c', c) or ''
-  return table.concat({ sec_a, sec_b, sec_c }) .. '%#Normal#'
+  return table.concat({
+    a and chroma(a, 'a') or '',
+    b and chroma(sep .. ' ', 'ab') .. chroma(b, 'b') .. chroma(sep, 'bc') or chroma(sep, 'c'),
+    c and chroma(c, 'c') .. chroma(sep, 'cN') or '',
+  })
 end
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end
