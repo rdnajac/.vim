@@ -1,6 +1,9 @@
+" if using nvim, see `function vim._with(context, f)`
+" `~/.local/neovim/share/nvim/runtime/lua/vim/_core/shared.lua:1515`
+
 ""
 " Execute a command, leaving the cursor on the current line
-function! execute#inPlace(command)
+function! vim#with#savedView(command)
   try
     let view = winsaveview()
     execute a:command
@@ -13,9 +16,9 @@ endfunction
 " Execute a command, leaving the cursor on the current line and avoiding
 " clobbering the search register.
 " see `:h keepjumps`
-function! execute#withSavedState(command)
+function! vim#with#savedState(command)
   let current_histnr = histnr('/')
-  call execute#inPlace(a:command)
+  call vim#with#savedView(a:command)
   if current_histnr != histnr('/')
     call histdel('/', -1)
     let @/ = histget('/', -1)
@@ -25,7 +28,7 @@ endfunction
 ""
 " Execute a command with keeppatterns and optional default flags
 " see `:h keeppatterns`
-function! execute#s(command) abort
+function! vim#with#patterns(command) abort
   " Optional second arg: default flags for :substitute
   execute 'keeppatterns' a:command . a:0 ? a:1 : ''
 endfunction

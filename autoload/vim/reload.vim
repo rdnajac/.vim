@@ -17,7 +17,7 @@ endfunction
 function! vim#reload#ftplugin(path) abort
   let l:filetype = s:resolve(a:path)
   " call vim#notify#info('Reloading ftplugin for ' . l:filetype)
-  call execute#withSavedState('call vim#reload#loop("' . l:filetype . '")')
+  call vim#with#savedState('call vim#reload#loop("' . l:filetype . '")')
 endfunction
 
 function! vim#reload#vimscript(file) abort
@@ -30,7 +30,7 @@ endfunction
 function! vim#reload#() abort
   if exists(':Runtime')
     let files = globpath(&rtp, '**/*.vim', 0, 1)
-    call execute#inPlace('Runtime! ' . join(files))
+    call vim#with#savedView('Runtime! ' . join(files))
     call vim#notify#info('Reloaded all scripts!')
   else
     call vim#notify#warn('Runtime command not available. Install vim-scriptease.')
