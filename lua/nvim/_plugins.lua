@@ -92,11 +92,8 @@ return {
   },
   {
     'folke/sidekick.nvim',
-    enabled = false,
-    ---@type sidekick.Config
-    opts = {
-      cli = { win = { layout = 'float' } },
-    },
+    -- enabled = false,
+    opts = {},
     -- stylua: ignore
     keys = {
       { mode = 'n', expr = true, '<Tab>',

@@ -30,41 +30,39 @@ M.attached = function(buf)
 end
 
 M.server_status = function(id)
+  if not id then return 'no_id' end
   local client = vim.lsp.get_client_by_id(id)
   local status = (client and not client:is_stopped()) and 'attached' or 'unavailable'
   return nv.ui.icons.lsp[status]
 end
 
-M.status = {
-  function()
-    local clients = vim.lsp.get_clients({ bufnr = 0 })
-    if #clients == 0 then
-      return nv.ui.icons.lsp.unavailable .. ' '
-    end
-
-    return vim
-      .iter(clients)
-      :map(function(c)
-        if c.name == 'copilot' and package.loaded['sidekick'] then
-          local status
-          local ok, statusmod = pcall(require, 'sidekick.status')
-          if ok and statusmod then
-            status = statusmod.get()
-          end
-          local kind = status and status.kind or 'Inactive'
-          return (nv.ui.icons.copilot[kind])[1]
-        else
-          local icon = nv.ui.icons.lsp.attached
-          local msgs = require('nvim.lsp.progress')(c.id)
-          if #msgs > 0 then
-            icon = icon .. ' ' .. table.concat(msgs, ' ')
-          end
-          return icon
+M.status = function()
+  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  if #clients == 0 then
+    return nv.ui.icons.lsp.unavailable .. ' '
+  end
+  return vim
+    .iter(clients)
+    :map(function(c)
+      if c.name == 'copilot' and package.loaded['sidekick'] then
+        local status
+        local ok, statusmod = pcall(require, 'sidekick.status')
+        if ok and statusmod then
+          status = statusmod.get()
         end
-      end)
-      -- :totable()
-      :join(' ')
-  end,
-}
+        local kind = status and status.kind or 'Inactive'
+        return (nv.ui.icons.copilot[kind])[1]
+      else
+        local icon = nv.ui.icons.lsp.attached
+        local msgs = require('nvim.lsp.progress')(c.id)
+        if #msgs > 0 then
+          icon = icon .. ' ' .. table.concat(msgs, ' ')
+        end
+        return icon
+      end
+    end)
+    -- :totable()
+    :join(' ')
+end
 
 return M

@@ -7,7 +7,7 @@ local capabilities = {
   executeCommandProvider = { commands = { 'delete', 'rename' } },
   hoverProvider = true,
 }
---- @type table<string,function>
+--- @type table<string, function>
 local methods = {}
 
 --- @param callback function

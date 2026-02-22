@@ -1,12 +1,16 @@
+local winbar_a = ' %t'
+
 local M = {
   active = function()
     local render = require('nvim.ui.status').render
-    return render(' %t')
+    local winbar_b = require('nvim.lsp').status
+    local winbar_c = ' ' .. require('nvim.lsp').server_status(vim.g.myserver_id)
+    return render(' %t', winbar_b(), winbar_c)
   end,
 
   inactive = function()
     -- return '%t'
-    return '%t'
+    return winbar_a
   end,
 }
 

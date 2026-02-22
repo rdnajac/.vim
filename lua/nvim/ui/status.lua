@@ -5,6 +5,17 @@
 
 local M = {}
 
+local hl = function(str, group) return string.format('%%#%s#%s', group, str) end
+local _chroma = function(str, sec) return hl(str, 'Chromatophore_' .. sec) end
+local chromatophore = {
+  a = function(s) return _chroma(s, 'a') end,
+  ab = function(s) return _chroma(s, 'ab') end,
+  b = function(s) return _chroma(s, 'b') end,
+  bc = function(s) return _chroma(s, 'bc') end,
+  c = function(s) return _chroma(s, 'c') end,
+  ac = function(s) return _chroma(s, 'ac') end,
+}
+
 --- Combines three sections of a statusline/winbar/tabline with appropriate highlighting and separators.
 ---@param a string?
 ---@param b string?
@@ -15,8 +26,7 @@ function M.render(a, b, c)
   local sec_a = a and sec('a', a) or nil
   local sec_b = b and sec('ab', sep .. ' ') .. sec('b', b) .. sec('bc', sep) or sec('c', sep)
   local sec_c = c and sec('c', c) or ''
-  -- return string.format('%s%s%s', sec_a, sec_b, sec_c)
-  return table.concat({ sec_a, sec_b, sec_c })
+  return table.concat({ sec_a, sec_b, sec_c }) .. '%#Normal#'
 end
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end

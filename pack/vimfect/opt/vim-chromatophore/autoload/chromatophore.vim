@@ -74,9 +74,9 @@ function! chromatophore#setup() abort
   call s:hl_set('Chromatophore_b',  mode_color, grey,       'bold')
   call s:hl_set('Chromatophore_c',  mode_color, eigengrau)
   call s:hl_set('Chromatophore_z',  mode_color, eigengrau, 'bold')
-  " call s:hl_set('Chromatophore_ab', mode_color, grey)
-  " call s:hl_set('Chromatophore_bc', grey,       eigengrau)
-  " call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
+  call s:hl_set('Chromatophore_ab', mode_color, grey)
+  call s:hl_set('Chromatophore_bc', grey,       eigengrau)
+  call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
   call s:hl_link('Chromatophore', g:chromatophores)
 
 endfunction
