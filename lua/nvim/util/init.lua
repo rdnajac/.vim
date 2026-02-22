@@ -8,8 +8,8 @@ M.camelCase = function(s)
 end
 
 -- shared
-M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
+M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 M.is_comment = function(opts)
   local ok, node = pcall(vim.treesitter.get_node, opts)
   if ok and node then
@@ -18,14 +18,16 @@ M.is_comment = function(opts)
   return vim.fn['comment#syntax_match']()
 end
 
--- api
+-- fn wrappers
+M.synname = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
+
+-- api wrappers
 M.get_buf_lines = function(bufnr)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local nlines = vim.api.nvim_buf_line_count(bufnr)
   return vim.api.nvim_buf_get_lines(bufnr, 0, nlines, false)
 end
 
--- fn
 --- Convert a file path to a module name by trimming the lua root
 ---@param path string
 ---@return string
@@ -57,7 +59,7 @@ M.submodules = function(subdir)
 end
 
 --- foldtext for lua files with treesitter folds
----@returns string
+---@return string
 M.foldtext = function()
   local indicator = '...'
   local start = vim.fn.getline(vim.v.foldstart)
@@ -80,21 +82,6 @@ M.foldtext = function()
   return table.concat(parts, ' ')
 end
 
--- count keys used in all subtables of M
-M.key_counts = function()
-  local ret = {}
-  for _, v in pairs(M) do
-    if
-      type(v) == 'table' --[[and v ~= M.key_counts]]
-    then
-      for key in pairs(v) do
-        ret[key] = (ret[key] or 0) + 1
-      end
-    end
-  end
-  return ret
-end
-
 function M.yank(text)
   vim.fn.setreg('*', text)
   print('yanked: ' .. text)
@@ -115,14 +102,13 @@ end
 --   inv[v] = k
 -- end
 
---- write lines to file in cache sirectory
---- if lines is nil, read lines from file
+--- cache/read lines file in the cache directory,
+--- or read lines from a file in the cache directory
 ---@param fname string filename relative to cache directory
 ---@param lines string[]|nil lines to write, or nil to read
 ---@return string[] lines read from file or written to file
 M.cache = function(fname, lines)
   local cache_path = vim.fs.joinpath(vim.g.stdpath.cache, fname)
-  -- if lines, write lines to file
   if lines == nil and vim.fn.filereadable(cache_path) then
     lines = vim.fn.readfile(cache_path)
   else
@@ -132,10 +118,13 @@ M.cache = function(fname, lines)
   return lines
 end
 
--- TODO: use pos wrapper
----@param line number
----@param col number
----@return string
-M.synname = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
+-- local ns = vim.api.nvim_create_namespace('hl_on_paste')
+-- vim.paste = (function(overridden)
+--   return function(lines, phase)
+--     local ret = overridden(lines, phase)
+--     vim.hl.range(0, ns, 'Visual', "'[", "']", { timeout = 300 })
+--     return ret
+--   end
+-- end)(vim.paste)
 
 return M

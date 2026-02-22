@@ -75,4 +75,17 @@ M.audebug = function(event, pattern, cb)
   })
 end
 
+-- count keys used in all subtables
+M.key_counts = function(t)
+  local ret = {}
+  for _, v in pairs(t) do
+    if type(v) == 'table' then
+      for key in pairs(v) do
+        ret[key] = (ret[key] or 0) + 1
+      end
+    end
+  end
+  return ret
+end
+
 return M
