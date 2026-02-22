@@ -1,5 +1,6 @@
--- local id = nv.lsp.myserver.client_id
--- vim.lsp.buf_attach_client(0, id)
+local id = require('nvim.lsp.myserver').client_id
+vim.g.myserver_id = id
+vim.lsp.buf_attach_client(0, id)
 
 vim.wo.foldmethod = 'expr'
 vim.wo.foldtext = [[v:lua.nv.foldtext()]]
