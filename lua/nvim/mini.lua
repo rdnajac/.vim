@@ -32,7 +32,10 @@ return {
   align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
   clue = function()
     local gen = require('mini.clue').gen_clues
-    local clues, triggers = {}, {}
+    local clues = {}
+    local triggers = {
+      { mode = 'n', keys = 'cd' },
+    }
     for clue, trigger_list in pairs({
       builtin_completion = {
         { mode = 'i', keys = '<C-x>' },
@@ -210,18 +213,18 @@ return {
   splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' } }, -- TODO: respect shiftwidth
   -- statusline = { },
   surround = {
-    mappings = {
-      add = 'ys',
-      delete = 'ds',
-      find = '',
-      find_left = '',
-      highlight = '',
-      replace = 'cs',
-      -- Add this only if you don't want to use extended mappings
-      suffix_last = '',
-      suffix_next = '',
-    },
-    search_method = 'cover_or_next',
+    -- mappings = {
+    --   add = 'ys',
+    --   delete = 'ds',
+    --   find = '',
+    --   find_left = '',
+    --   highlight = '',
+    --   replace = 'cs',
+    --   -- Add this only if you don't want to use extended mappings
+    --   suffix_last = '',
+    --   suffix_next = '',
+    -- },
+    -- search_method = 'cover_or_next',
     custom_surroundings = {
       B = { output = { left = '{', right = '}' } },
     },

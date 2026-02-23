@@ -106,14 +106,9 @@ augroup vimrc_ui
   au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
-  " TODO: keep l: vars?
-  au ModeChanged [vV\x16]*:* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au ModeChanged *:[vV\x16]* if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au WinEnter,WinLeave *     if &l:nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-
-  " au InsertEnter * let w:hlKeep = v:lua.Snacks.util.color('LspReferenceText', 'bg') | execute "lua Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })"
-  " au InsertLeave * lua vim.w.hlKeep and Snacks.util.set_hl({ LspReferenceText = { bg = vim.w.hlKeep } })
-
+  au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 augroup END
 
 " }}}1
@@ -296,7 +291,6 @@ endif
 
 " file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
-nnoremap <leader>fn <Cmd>call comment#title()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
 nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
@@ -453,10 +447,8 @@ tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " }}}1
 " Section: pack {{{1
-" my plugins
-packadd vim-chromatophore
-call chromatophore#setup()
-packadd! vim-nv
+packadd! vim-chromatophore
+" packadd! vim-nv
 
 " shipped plugins {{{2
 if has('nvim')
@@ -481,7 +473,6 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/vim-capslock'
 " Plug 'tpope/vim-dadbod'
@@ -496,12 +487,13 @@ if !has('nvim')
   Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
+  Plug 'justinmk/vim-dirvish'
   Plug 'romainl/vim-redir'
-  Plug 'tpope/vim-repeat'
   " Plug 'tpope/vim-commentary' " use vim9 commentary
   " Plug 'tpope/vim-sensible'   " use vim#sensible#
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-repeat'
   " Plug 'tpope/vim-vinegar'    " use vim-dirvish
-  Plug 'justinmk/vim-dirvish'
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
@@ -514,4 +506,5 @@ else
 endif
 call plug#end()
 " }}}
+
 " vim: set fdm=marker

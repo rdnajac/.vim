@@ -24,10 +24,10 @@ if !has('nvim')
   finish
 else
   for [key, value] in items(s:dirs)
-    execute printf('nnoremap cd%s <Cmd>lua Snacks.picker.explorer({cwd = [[%s]]})<CR>',
-	  \ key,
-	  \ fnamemodify(value, ":~")
-	  \ )
+    call v:lua.nv.keys.map([ [
+	  \ 'cd' .. key,
+	  \ '<Cmd>lua Snacks.picker.explorer({cwd = "' .. value .. '"})<CR>'
+  \ ] ])
   endfor
 endif
 

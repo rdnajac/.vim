@@ -1,3 +1,6 @@
+" plugin/comment.vim
+nnoremap cy <Cmd>call comment#title()<CR>
+
 " delete/yank comment
 nmap dc dgc
 nmap yc ygc

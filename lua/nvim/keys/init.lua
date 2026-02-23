@@ -1,6 +1,8 @@
 local M = {}
 
 M.after = function()
+  -- TODO: harpoon??
+  -- TODO: bookmarks to vim help pages
   local _bookmarks = {
     b = 'blink',
     g = 'plug',

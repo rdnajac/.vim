@@ -1,6 +1,10 @@
 " plugin/surround.vim
 if has('nvim') && luaeval('_G.MiniSurround ~= nil')
-  xmap <silent> S :<C-U>lua MiniSurround.add('visual')<CR>
+  nmap ys sa
+  nmap ds sd
+  nmap cs sr
+  " from the docs
+  xmap <silent> S :<C-u>lua MiniSurround.add('visual')<CR>
   nmap yss ys_
 endif
 

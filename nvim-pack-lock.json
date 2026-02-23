@@ -88,10 +88,6 @@
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
       "src": "https://github.com/tpope/vim-scriptease.git"
     },
-    "vim-surround": {
-      "rev": "3d188ed2113431cf8dac77be61b842acb64433d9",
-      "src": "https://github.com/tpope/vim-surround.git"
-    },
     "vim-unimpaired": {
       "rev": "db65482581a28e4ccf355be297f1864a4e66985c",
       "src": "https://github.com/tpope/vim-unimpaired.git"
