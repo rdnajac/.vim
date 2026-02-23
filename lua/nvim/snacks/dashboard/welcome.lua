@@ -3,9 +3,7 @@ The computing scientist's main challenge is not to
 get confused by the complexities of his own making.
 ]]
 
-local M = {}
--- PERF: wrap in a function to defer requiring vim.version
-M.cmd = function()
+return function()
   local version = 'NVIM ' .. tostring(vim.version())
   local fmt
 
@@ -16,19 +14,8 @@ M.cmd = function()
   end
 
   local out = fmt:format(dijkstra, version)
-  if vim.fn.executable('lolcat') == 1 then
-    out = ('{ %s; } | lolcat'):format(out)
-  end
-
+  -- if vim.fn.executable('lolcat') == 1 then
+  --   out = ('{ %s; } | lolcat'):format(out)
+  -- end
   return out
 end
-
-M.section = {
-  section = 'terminal',
-  cmd = require('nvim.snacks.dashboard.welcome')(),
-  indent = 10,
-  padding = 1,
-  height = 12,
-}
-
-return M

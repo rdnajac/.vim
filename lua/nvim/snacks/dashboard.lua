@@ -18,6 +18,12 @@ return {
   sections = {
     { section = 'header' },
     { section = 'keys' },
-    -- require('nvim.snacks.dashboard.welcome').section,
+    {
+      section = 'terminal',
+      cmd = require('nvim.snacks.dashboard.welcome')(),
+      indent = 10,
+      padding = 1,
+      height = 12,
+    },
   },
 }

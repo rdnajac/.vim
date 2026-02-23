@@ -14,11 +14,11 @@ let g:chromatophores = [
       \ ]
 
 if has('nvim')
+  lua require('chromatophore')
   " TODO: use lua render function to handle winbar highlighting
-  call add(chromatophores, 'winbar')
+  call add(chromatophores, 'WinBar')
   call add(chromatophores, 'helpSectionDelim')
   call add(chromatophores, '@markup.raw.markdown_inline')
-  " call add(g:chromatophores, 'SnacksDashboardHeader')
 endif
 
 augroup chromatophore

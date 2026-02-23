@@ -83,7 +83,7 @@ endfunction
 
 function! chromatophore#metachrosis() abort
   let color = chromatophore#color()
-  for suffix in ['', '_b', '_c', '_z']
+  for suffix in ['', '_ab', '_b', '_c', '_z']
     execute printf('highlight Chromatophore%s guifg=%s', suffix, color)
   endfor
   execute 'highlight Chromatophore_a guibg=' . l:color
