@@ -4,14 +4,11 @@ local M = {
   active = function()
     local render = require('nvim.ui.status').render
     local winbar_b = require('nvim.lsp').status
-    local winbar_c = ' ' .. require('nvim.lsp').server_status(vim.g.myserver_id)
-    return render(' %t', winbar_b(), winbar_c)
+    local winbar_c = require('nvim.treesitter').status
+    return render(' %t', winbar_b(), ' ' .. winbar_c())
   end,
 
-  inactive = function()
-    -- return '%t'
-    return winbar_a
-  end,
+  inactive = function() return winbar_a end,
 }
 
 setmetatable(M, {

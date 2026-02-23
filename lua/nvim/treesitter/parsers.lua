@@ -1,6 +1,9 @@
--- TODO: get these automatically by checking the runtime dir
--- default tree-sitter parsers bundled with neovim: `~/.local/share/nvim/lib/nvim/parser/`
+-- default tree-sitter parsers bundled with neovim:
+-- local default_parser_dir = '~/.local/neovim/lib/nvim/parser/'
+-- TODO:
+-- local defaults = vim.globpath...
 local defaults = { 'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+
 -- `~/.local/share/nvim/site/`
 -- - `parser/`: contains the parsers (`.so` files)
 -- - `parser-info/`: contains the download information
@@ -56,7 +59,7 @@ local M = {}
 
 M.to_install = vim
   .iter(parsers)
-  :filter(function(k, v) return not vim.tbl_contains(defaults, k) end)
+  :filter(function(k, _) return not vim.tbl_contains(defaults, k) end)
   :map(function(k, _) return k end)
   :totable()
 
@@ -65,5 +68,19 @@ M.to_autostart = vim
   :filter(function(k, v) return v ~= false end)
   :map(function(k, _) return k end)
   :totable()
+
+---@type table<string,string>?
+M._installed = nil
+
+---@param update boolean?
+function M.get_installed(update)
+  if update then
+    M._installed = {}
+    for _, lang in ipairs(require('nvim-treesitter').get_installed('parsers')) do
+      M._installed[lang] = lang
+    end
+  end
+  return M._installed or {}
+end
 
 return M

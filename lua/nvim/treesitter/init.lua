@@ -46,22 +46,41 @@ M.specs = {
       },
     },
   },
-  -- require('nvim.treesitter.textobjects'),
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    enabled = false,
+    opts = {
+      move = { set_jumps = true },
+      select = {
+        lookahead = true,
+        selection_modes = {
+          ['@parameter.outer'] = 'v', -- charwise
+          ['@function.outer'] = 'V', -- linewise
+          ['@class.outer'] = '<c-v>', -- blockwise
+        },
+        include_surrounding_whitespace = false,
+      },
+    },
+    keys = function()
+      -- You can also use captures from other query groups like `locals.scm`
+      -- vim.keymap.set({ 'x', 'o' }, 'as', function()
+      -- require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals')
+      -- end)
+      local function select_textobject(textobject)
+        return require('nvim-treesitter-textobjects.select').select_textobject(
+          textobject,
+          'textobjects'
+        )
+      end
+      return {
+        { { 'x', 'o' }, 'af', function() select_textobject('@function.outer') end },
+        { { 'x', 'o' }, 'if', function() select_textobject('@function.inner') end },
+        { { 'x', 'o' }, 'ac', function() select_textobject('@class.outer') end },
+        { { 'x', 'o' }, 'ic', function() select_textobject('@class.inner') end },
+      }
+    end,
+  },
 }
-
----@type table<string,string>?
-M._installed = nil
-
----@param update boolean?
-function M.get_installed(update)
-  if update then
-    M._installed = {}
-    for _, lang in ipairs(require('nvim-treesitter').get_installed('parsers')) do
-      M._installed[lang] = lang
-    end
-  end
-  return M._installed or {}
-end
 
 M.status = function()
   local ret = {}
