@@ -7,6 +7,7 @@ let g:chromatophores = [
       \ 'Pmenu',
       \ 'PmenuBorder',
       \ 'PmenuSbar',
+      \ 'Title',
       \ 'StatusLineNC',
       \ 'StatusLineTermNC',
       \ 'WinSeparator',
@@ -17,9 +18,6 @@ if has('nvim')
   call add(chromatophores, 'winbar')
   call add(chromatophores, 'helpSectionDelim')
   call add(chromatophores, '@markup.raw.markdown_inline')
-  " call add(chromatophores, 'SnacksPickerBoxTitle')
-  " call add(chromatophores, 'SnacksPickerInputBorder')
-  " hi clear SnacksPickerInputBorder
   " call add(g:chromatophores, 'SnacksDashboardHeader')
 endif
 
