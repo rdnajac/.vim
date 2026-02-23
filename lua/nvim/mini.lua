@@ -134,17 +134,15 @@ return {
         ['.chezmoiversion'] = { '', 'Grey' },
         ['.keep'] = { '󰊢 ', 'Grey' },
         ['devcontainer.json'] = { '', 'Azure' },
-        dot_Rprofile = { '󰟔 ', 'Blue' },
-        dot_bash_aliases = { ' ', 'Blue' },
-        dot_zprofile = { ' ', 'Green' },
-        dot_zshenv = { ' ', 'Green' },
-        dot_zshprofile = { ' ', 'Green' },
-        dot_zshrc = { ' ', 'Green' },
-        -- ['ghostty/config'] = { '👻', 'Green' },
+        -- dot_Rprofile = { '󰟔 ', 'Blue' },
+        -- dot_bash_aliases = { ' ', 'Blue' },
+        -- dot_zprofile = { ' ', 'Green' },
+        -- dot_zshenv = { ' ', 'Green' },
+        -- dot_zshprofile = { ' ', 'Green' },
+        -- dot_zshrc = { ' ', 'Green' },
       },
 
       filetype = {
-        dotenv = { ' ', 'Yellow' },
         ghostty = { '👻', 'Green' },
         ['nvim-pack'] = { '', 'Green' },
         printf = { '', 'Orange' },
@@ -181,8 +179,11 @@ return {
               return pair[1], 'MiniIcons' .. pair[2]
             end
           end
+          -- elseif category == 'file' then
+          -- name = name:gsub('dot_', '.')
+        else
+          return original_get(category, name:gsub('dot_', '.'))
         end
-        return original_get(category, name)
       end
     end)
 
