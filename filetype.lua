@@ -11,7 +11,6 @@ vim.filetype.add({
     ['bed'] = 'csv',
   },
   pattern = {
-    ['.*%.env%..*'] = 'sh',
     ['.*/tmux/.*%.conf'] = 'tmux',
     ['.*%.lua'] = {
       function(_, bufnr)
