@@ -1,4 +1,5 @@
 ---@module "snacks"
+-- TODO: resolve with mini hipatterns config
 
 local keywords = {
   FIX = { icon = ' ', color = 'error', alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' } },
@@ -9,7 +10,7 @@ local keywords = {
   NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
   TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
 }
-keywords.Section = { icon = '󰚟', color = 'title' }
+-- keywords.Section = { icon = '󰚟', color = 'title' }
 
 local colors = {
   title = { '#7DCFFF' },
@@ -21,38 +22,22 @@ local colors = {
   test = { 'Identifier', '#FF00FF' },
 }
 
-local Config = {
-  -- TODO: generate dynamically
-  hl_regex = {
-    '.*<(PERFORMANCE|OPTIMIZE|TESTING|Section|WARNING|FAILED|PASSED|OPTIM|ISSUE|FIXIT|FIXME|TODO|TEST|WARN|PERF|NOTE|INFO|HACK|BUG|XXX|FIX)\\s*:',
-  },
-}
+-- TODO: generate dynamically
+local regex = '.*<(WARN|FIXME|TODO||WARN|PERF|NOTE||HACK|BUG|XXX)\\s*:'
 
-local Highlight = {
-  match = function(str, patterns)
-    -- local max_line_len = Config.options.highlight.max_line_len
-    -- if max_line_len and #str > max_line_len then return end
+local match = function(str)
+  -- same as `vim.fn.match`, but returns a list
+  local m = vim.fn.matchlist(str, [[\v\C]] .. regex)
+  -- if nv.is_nonempty_list(m) then
+  if #m > 1 and m[2] then
+    local match = m[2]
+    local kw = m[3] ~= '' and m[3] or m[2]
+    local start = str:find(match, 1, true)
+    return start, start + #match, kw
+  end
+end
 
-    patterns = patterns or Config.hl_regex
-    if not type(patterns) == 'table' then
-      patterns = { patterns }
-    end
-
-    for _, pattern in pairs(patterns) do
-      -- same as `vim.fn.match`, but returns a list
-      local m = vim.fn.matchlist(str, [[\v\C]] .. pattern)
-      -- if nv.is_nonempty_list(m) then
-      if #m > 1 and m[2] then
-        local match = m[2]
-        local kw = m[3] ~= '' and m[3] or m[2]
-        local start = str:find(match, 1, true)
-        return start, start + #match, kw
-      end
-    end
-  end,
-}
-
-Snacks.picker.sources.todo = {
+return {
   finder = 'grep',
   live = false,
   supports_live = true,
@@ -69,18 +54,19 @@ Snacks.picker.sources.todo = {
   format = function(item, picker)
     local align = Snacks.picker.util.align
     local ret = {}
-    local _, _, kw = Highlight.match(item.text)
+    local _, _, kw = match(item.text)
     if kw then
       local kw_data = keywords[kw]
       local icon = kw_data and kw_data.icon or ''
+      -- TODO: don't hardcode hl groups; use `mini.hl`
       ret = {
-        { align(icon, 2), 'TodoFg' .. kw },
-        { align(kw, 6, { align = 'center' }), 'TodoBg' .. kw },
+        -- { align(icon, 2), 'TodoFg' .. kw },
+        { align(icon, 2) },
+        -- { align(kw, 6, { align = 'center' }), 'TodoBg' .. kw },
+        { align(kw, 6, { align = 'center' }) },
         { ' ' },
       }
     end
     return vim.list_extend(ret, Snacks.picker.format.file(item, picker))
   end,
 }
-
-return Snacks.picker.pick('todo')

@@ -14,7 +14,6 @@ local function collect_modules(subdir)
 end
 
 M.automod = function()
-  -- TODO: make sure it should be `2`
   local me = debug.getinfo(2, 'S').source:sub(2)
   local dir = vim.fn.fnamemodify(me, ':p:h')
   local files = vim.fn.globpath(dir, '*', false, true)

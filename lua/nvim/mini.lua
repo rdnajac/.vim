@@ -88,13 +88,15 @@ return {
       -- TODO: move to nvim.util.todo
       highlighters = {
         hex_color = hi.gen_highlighter.hex_color(),
+        bug = { pattern = 'BUG', group = 'MiniHipatternsFixme' },
         fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
-        warning = { pattern = 'WARNING', group = 'MiniHipatternsFixme' },
+        warning = { pattern = 'WARN', group = 'MiniHipatternsHack' },
+        xxx = { pattern = 'XXX', group = 'MiniHipatternsHack' },
         hack = { pattern = 'HACK', group = 'MiniHipatternsHack' },
         section = { pattern = 'Section', group = 'MiniHipatternsHack' },
         todo = { pattern = 'TODO', group = 'MiniHipatternsTodo' },
         note = { pattern = 'NOTE', group = 'MiniHipatternsNote' },
-        perf = { pattern = 'PERF', group = 'MiniHipatternsNote' },
+        perf = { pattern = 'PERF', group = 'Identifier' },
         source_code = { -- highlights strings in comments wrapped in `backticks`
           pattern = '`[^`\n]+`',
           group = function(buf_id, match, data)
@@ -206,7 +208,7 @@ return {
       notify_many_keys(key)
     end
 
-    -- fix typos in insert mode
+    -- fix typos in insert mode with `kk`
     local action = '<BS><BS><Esc>[s1z=gi<Right>'
     keymap.map_combo('i', 'kk', action)
     return {}

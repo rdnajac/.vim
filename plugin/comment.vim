@@ -20,6 +20,7 @@ let s:comments = {
       \ 'b': 'BUG: ',
       \ 'f': 'FIXME: ',
       \ 'h': 'HACK: ',
+      \ 'w': 'WARN: ',
       \ 'n': 'NOTE: ',
       \ 'p': 'PERF: ',
       \ 't': 'TODO: ',

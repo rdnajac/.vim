@@ -4,7 +4,6 @@ let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 setlocal nowrap           " don't wrap lines
 setlocal formatoptions-=o " don't continue comments with `o`
 
-" TODO: write the snippets
 iabbrev <buffer> fu function()
 inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> \ig --<SPACE>stylua:<SPACE>ignore

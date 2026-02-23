@@ -1,3 +1,0 @@
--- TODO:
--- finds likely debug print statements in lua files
--- looks for <print|dd|*notify> then open paren

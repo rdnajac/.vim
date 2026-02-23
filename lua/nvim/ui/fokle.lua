@@ -83,41 +83,5 @@ return {
       },
     },
   },
-  {
-    'folke/todo-comments.nvim',
-    enabled = true,
-    opts = function()
-      vim.schedule(function()
-        local cmds = { 'TodoFzfLua', 'TodoLocList', 'TodoQuickFix', 'TodoTelescope' }
-        for _, cmd in ipairs(cmds) do
-          -- vim.cmd.delcommand(cmd)
-          vim.api.nvim_del_user_command(cmd)
-        end
-      end)
-      -- Section: rv
-      return {
-        keywords = { Section = { icon = '󰚟', color = 'title' } },
-        -- highlight = { keyword = 'bg', },
-        colors = {
-          title = { '#7DCFFF' },
-          error = { '#DC2626' },
-          warning = { 'DiagnosticWarn', 'WarningMsg', '#FBBF24' },
-          info = { 'DiagnosticInfo', '#2563EB' },
-          hint = { 'DiagnosticHint', '#10B981' },
-          default = { 'Identifier', '#7C3AED' },
-          test = { 'Identifier', '#FF00FF' },
-        },
-      }
-    end,
-    keys = {
-      -- TODO: rewrite without this plugin
-      { '<leader>st', function() Snacks.picker.todo_comments() end, desc = 'Todo' },
-    },
-  },
-  {
-    'folke/trouble.nvim',
-    enabled = false,
-    opts = {},
-  },
 }
 -- vim: fdl=1 fdm=expr

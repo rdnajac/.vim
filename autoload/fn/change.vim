@@ -1,4 +1,3 @@
-" TODO: requires surround... maybe move to surround dedicated plugin
 " change the closest quote to the other type (single to double or vice versa)
 "   'string'
 "   "string"

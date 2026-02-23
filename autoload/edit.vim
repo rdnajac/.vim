@@ -1,4 +1,4 @@
-" TODO: add bool param to set how we open the file
+" TODO: add param to set how we open the file
 " ie edit/split/vsplit like in picker confirms
 function! edit#(...) abort
   call call('s:edit', a:000)

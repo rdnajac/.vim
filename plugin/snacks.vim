@@ -96,6 +96,10 @@ nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
 nnoremap <leader>s" <Cmd>lua Snacks.picker.registers()<CR>
 nnoremap <leader>s: <Cmd>lua Snacks.picker.command_history()<CR>
 nnoremap <leader>s/ <Cmd>lua Snacks.picker.search_history()<CR>
+
+nnoremap <leader>st <Cmd>lua Snacks.picker.pick('todo')<CR>
+
+
 " lsp
 nnoremap <leader>slc <Cmd>lua Snacks.picker.lsp_config()<CR>
 nnoremap <leader>sls <Cmd>lua Snacks.picker.lsp_symbols()<CR>
@@ -123,34 +127,17 @@ nnoremap <leader>fc <Cmd>lua Snacks.picker.files({ cwd = vim.g.VIMDIR })<CR>
 nnoremap <leader>sc <Cmd>lua Snacks.picker.grep({  cwd = vim.g.VIMDIR })<CR>
 
 let s:commands = [
-      \ 'Autocmds',
-      \ 'Colorschemes',
-      \ 'Commands',
-      \ 'Diagnostics',
-      \ 'Files',
-      \ 'Grep',
-      \ 'Help',
-      \ 'Highlights',
-      \ 'Icons',
-      \ 'Keymaps',
-      \ 'Registers',
-      \ 'Spelling',
-      \ 'Undo',
-      \ 'Zoxide'
-      \ ]
-
-  " TODO: use map?
-for [_, cmd] in items(s:commands)
-  execute printf('command %s :lua Snacks.picker.%s()<CR>', cmd, tolower(cmd))
-endfor
-finish
-let s:commands = [
       \ 'Actions',
+      \ 'Autocmds',
       \ 'Buffers',
       \ 'Cliphist',
+      \ 'Colorschemes',
       \ 'CommandHistory',
+      \ 'Commands',
+      \ 'Diagnostics',
       \ 'DiagnosticsBuffer',
       \ 'Explorer',
+      \ 'Files',
       \ 'GhActions',
       \ 'GhDiff',
       \ 'GhIssue',
@@ -166,9 +153,14 @@ let s:commands = [
       \ 'GitLogLine',
       \ 'GitStash',
       \ 'GitStatus',
+      \ 'Grep',
       \ 'GrepBuffers',
       \ 'GrepWord',
+      \ 'Help',
+      \ 'Highlights',
+      \ 'Icons',
       \ 'Jumps',
+      \ 'Keymaps',
       \ 'Lines',
       \ 'Loclist',
       \ 'LspConfig',
@@ -193,10 +185,18 @@ let s:commands = [
       \ 'Projects',
       \ 'Qflist',
       \ 'Recent',
+      \ 'Registers',
       \ 'Resume',
       \ 'Scratch',
       \ 'SearchHistory',
       \ 'Smart',
+      \ 'Spelling',
       \ 'Tags',
       \ 'Treesitter',
+      \ 'Undo',
+      \ 'Zoxide'
       \]
+
+for [_, cmd] in items(s:commands)
+  execute printf('command %s :lua Snacks.picker.%s()<CR>', cmd, tolower(cmd))
+endfor

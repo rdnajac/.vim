@@ -61,6 +61,45 @@ M.sep = {
   item = { left = ' ', right = ' ' },
 }
 
+M.mini = {
+  directory = {
+    ghostty = { '󰊠', 'Green' },
+    LazyVim = { '󰒲', 'Blue' },
+    ['R.nvim'] = { '󰟔', 'Cyan' },
+  },
+  extension = {
+    fastq = { '󰚄', 'Purple' },
+    ['fastq.gz'] = { '󰚄', 'Red' },
+    ['json.tmpl'] = { ' ', 'Grey' },
+    ['sh.tmpl'] = { ' ', 'Grey' },
+    ['toml.tmpl'] = { ' ', 'Grey' },
+    ['zsh.tmpl'] = { ' ', 'Grey' },
+  },
+  file = {
+    ['.chezmoiignore'] = { '', 'Grey' },
+    ['.chezmoiremove'] = { '', 'Grey' },
+    ['.chezmoiroot'] = { '', 'Grey' },
+    ['.chezmoiversion'] = { '', 'Grey' },
+    ['.keep'] = { '󰊢 ', 'Grey' },
+    ['devcontainer.json'] = { '', 'Azure' },
+    -- dot_Rprofile = { '󰟔 ', 'Blue' },
+    -- dot_bash_aliases = { ' ', 'Blue' },
+    -- dot_zprofile = { ' ', 'Green' },
+    -- dot_zshenv = { ' ', 'Green' },
+    -- dot_zshprofile = { ' ', 'Green' },
+    -- dot_zshrc = { ' ', 'Green' },
+  },
+  filetype = {
+    ghostty = { '👻', 'Green' },
+    ['nvim-pack'] = { '', 'Green' },
+    printf = { '', 'Orange' },
+    regex = { '', 'Orange' },
+    sidekick_terminal = { ' ', '' },
+    snacks_dashboard = { '󰨇 ', '' },
+    snacks_terminal = { '🍬', '' },
+  },
+}
+
 -- from `LazyVim`: add an inverse lookup table for lsp kinds
 -- for i, name in ipairs(vim.lsp.protocol.SymbolKind) do
 --   M.kinds[i] = M.kinds[name]

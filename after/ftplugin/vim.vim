@@ -1,4 +1,10 @@
 setlocal formatoptions-=ro
+
+" Continue `\ ` list lines on <CR> (like bullet continuation)
+inoremap <buffer><expr> <CR> getline('.') =~# '^\s*\\\ ' ? '<CR>\ ' : '<CR>'
+nnoremap <buffer><expr> o getline('.') =~# '^\s*\\\ ' ? 'o\ ' : 'o'
+nnoremap <buffer><expr> O getline('.') =~# '^\s*\\\ ' ? 'O\ ' : 'O'
+
 " makes autoloaded functions easier to `ciw`
 setlocal iskeyword-=#
 setlocal commentstring=\"\ %s

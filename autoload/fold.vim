@@ -13,11 +13,9 @@ function! s:foldtext(line) abort
   return substitute(a:line, '\s*' . s:markers()[0] . '.*$', '', '')
 endfunction
 
-" TODO: trim trailing dots after closing bar
-" TODO: indent folds
+" TODO: trim trailing dots after closing bar and indent folds
 function! fold#text() abort
-  " TODO: use the fillchar?
-  let s:foldchar = '.'
+  let s:foldchar = '.' " TODO: use the fillchar?
   let line = s:foldtext(getline(v:foldstart))
   let info = printf('|%4s lines|', s:numlines())
   let fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(line..' '..info)]))
