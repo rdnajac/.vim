@@ -8,7 +8,9 @@ local function collect_modules(subdir)
   local modules = {}
   for _, modpath in ipairs(util.submodules(subdir)) do
     local name = modpath:match('([^/]+)$')
-    if name then modules[name] = true end
+    if name then
+      modules[name] = true
+    end
   end
   return modules
 end

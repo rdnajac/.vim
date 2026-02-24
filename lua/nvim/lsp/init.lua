@@ -57,7 +57,7 @@ M.status = function()
     .iter(clients)
     :map(function(c)
       if c.name == 'copilot' and package.loaded['sidekick'] then
-	return sidekick_copilot_status()
+        return sidekick_copilot_status()
       else
         local icon = nv.ui.icons.lsp.attached
         local msgs = require('nvim.lsp.progress')(c.id)

@@ -7,8 +7,8 @@ local keywords = {
   HACK = { icon = ' ', color = 'warning' },
   WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
   PERF = { icon = ' ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
-  NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
-  TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
+  -- NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
+  -- TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
 }
 -- keywords.Section = { icon = '󰚟', color = 'title' }
 
@@ -23,7 +23,7 @@ local colors = {
 }
 
 -- TODO: generate dynamically
-local regex = '.*<(WARN|FIXME|TODO||WARN|PERF|NOTE||HACK|BUG|XXX)\\s*:'
+local regex = '.*<(WARN|FIXME|TODO||WARN|PERF|HACK|BUG|XXX)\\s*:'
 
 local match = function(str)
   -- same as `vim.fn.match`, but returns a list

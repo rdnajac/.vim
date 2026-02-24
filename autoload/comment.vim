@@ -29,7 +29,7 @@ function comment#syntax_match(...) abort
 endfunction
 
 " NOTE:  is <ESC>
-" TODO: check if in cmment before gcc
+" TODO: check if in comment before gcc
 " TODO: this is ugly!
 function! s:insert_comment(tag, above) abort
   execute 'normal ' . (a:above ? 'O' : 'o') . a:tag . 'gcc'

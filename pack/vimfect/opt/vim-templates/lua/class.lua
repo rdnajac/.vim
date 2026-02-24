@@ -20,23 +20,15 @@ M.__index = M
 ---@param name string
 ---@param value number
 ---@return M
-function M.new(name, value)
-  return setmetatable({ name = name, value = value }, M)
-end
+function M.new(name, value) return setmetatable({ name = name, value = value }, M) end
 
-function M:__tostring()
-  return ("M(%s, %d)"):format(self.name, self.value)
-end
+function M:__tostring() return ('M(%s, %d)'):format(self.name, self.value) end
 
 ---@return string
-function M:greet()
-  return ("Hello from %s!"):format(self.name)
-end
+function M:greet() return ('Hello from %s!'):format(self.name) end
 
 ---@param other M
 ---@return M
-function M:merge(other)
-  return M.new(self.name .. "+" .. other.name, self.value + other.value)
-end
+function M:merge(other) return M.new(self.name .. '+' .. other.name, self.value + other.value) end
 
 return M

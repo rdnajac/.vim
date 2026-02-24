@@ -1,17 +1,9 @@
--- FIXME: 
-local M = {}
-
-local nv = _G.nv or require('nvim')
-local transform = nv.transform
-
 local function yankmod(format) nv.yank(transform.formats[format](nv.modname(vim.fn.expand('%:p')))) end
 
 ---@param line string
 ---@param rule { regex: string, transform: string }
 
 local function transform(line, rule) return line:gsub(rule.regex, rule.transform) end
-
----@param rules table[]
 local function apply(rules)
   local line = vim.api.nvim_get_current_line()
   for _, rule in ipairs(rules) do
@@ -22,15 +14,7 @@ local function apply(rules)
   end
 end
 
-local capabilities = {
-  codeActionProvider = true,
-}
-
 local methods = {}
-
-function methods.initialize(_, callback) return callback(nil, { capabilities = capabilities }) end
-
-function methods.shutdown(_, callback) return callback(nil, nil) end
 
 --- @param params { textDocument: { uri: string }, range: lsp.Range, context: lsp.CodeActionContext }
 --- @param callback function
@@ -93,9 +77,6 @@ methods['textDocument/codeAction'] = function(params, callback)
   callback(nil, actions)
 end
 
--- TODO: code action to insert ---@param for each param and a ---@return
-
--- Execute command handler
 methods['workspace/executeCommand'] = function(params, callback)
   local cmd = params.command
   local args = params.arguments or {}
@@ -117,35 +98,3 @@ methods['workspace/executeCommand'] = function(params, callback)
 
   callback(nil, nil)
 end
-
-local function create_client(disp)
-  local closing, request_id = false, 0
-
-  return {
-    request = function(_, method, params, callback)
-      local method_impl = methods[method]
-      if method_impl then
-        method_impl(params, callback)
-      end
-      request_id = request_id + 1
-      return true, request_id
-    end,
-    notify = function(_, method, _)
-      if method == 'exit' then
-        disp.on_exit(0, 15)
-      end
-      return false
-    end,
-    is_closing = function() return closing end,
-    terminate = function() closing = true end,
-  }
-end
-
-M.client_id = assert(vim.lsp.start({
-  cmd = create_client,
-  name = 'nv',
-  root_dir = vim.env.HOME or vim.uv.cwd(),
-
-}, { attach = false }))
-
-return M
