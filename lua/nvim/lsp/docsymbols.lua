@@ -22,15 +22,10 @@ end
 --- @param bufnr? number defaults to current buffer
 function M.get(bufnr)
   local data = M.get_data(bufnr)
-  local iter = vim.iter(data)
-  return iter
-    -- WARN: unsafe?
-    :map(function(v)
-      local icon = nv.icons.kinds[v.kind]
-      local name = v.name:gsub('%%', '%%%%')
-      return icon .. name
-    end)
-    :totable()
+  return vim.tbl_map(function(v)
+    local icon = require('nvim.ui.icons').kinds[v.kind]
+    return icon .. v.name:gsub('%%', '%%%%')
+  end, data)
 end
 
 local aug = vim.api.nvim_create_augroup('navic', { clear = false })

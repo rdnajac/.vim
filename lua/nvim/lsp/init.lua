@@ -1,6 +1,15 @@
 local M = {}
 
-M.after = function() vim.lsp.enable(M.servers()) end
+M.after = function()
+  vim.lsp.enable(M.servers())
+  vim.api.nvim_create_autocmd('LspProgress', {
+    callback = function(ev)
+      -- require('nvim.lsp.progress').echo(ev)
+      local msgs = require('nvim.lsp.progress').handle(ev)
+      vim.cmd.redrawstatus()
+    end,
+  })
+end
 
 M.specs = {
   'neovim/nvim-lspconfig',
@@ -36,7 +45,7 @@ M.server_status = function(id)
   local client = vim.lsp.get_client_by_id(id)
   local status = (client and not client:is_stopped()) and 'attached' or 'unavailable'
   return nv.ui.icons.lsp[status]
-end
+end--[[@as {percentage?: number, title?: string, message?: string, kind: "begin"|"report"|"end"}]]
 
 local sidekick_copilot_status = function()
   local status
@@ -55,16 +64,17 @@ M.status = function()
   end
   return vim
     .iter(clients)
+    ---@param c vim.lsp.Client
     :map(function(c)
       if c.name == 'copilot' and package.loaded['sidekick'] then
         return sidekick_copilot_status()
       else
         local icon = nv.ui.icons.lsp.attached
-        local msgs = require('nvim.lsp.progress')(c.id)
-        if #msgs > 0 then
-          icon = icon .. ' ' .. table.concat(msgs, ' ')
+        local msgs = require('nvim.lsp.progress').get_msgs_by_client_id(c.id)
+        if #msgs == 0 then
+          return icon
         end
-        return icon
+        return icon .. ' ' .. table.concat(msgs, ' ')
       end
     end)
     -- :totable()
