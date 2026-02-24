@@ -22,7 +22,7 @@ M.copilot = {
   Error = { ' ', 'DiagnosticError' },
   Inactive = { ' ', 'MsgArea' },
   Warning = { ' ', 'DiagnosticWarn' },
-  Normal = { ' ', 'Special' },
+  Normal = { ' ', 'DiagnosticHint' },
 }
 
 M.diff = { add = '▎', change = '▎', delete = '' }

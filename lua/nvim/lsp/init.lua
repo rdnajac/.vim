@@ -1,33 +1,24 @@
+--- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
+--- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
 local M = {}
-
-M.after = function()
-  vim.lsp.enable(M.servers())
-  vim.api.nvim_create_autocmd('LspProgress', {
-    callback = function(ev)
-      -- require('nvim.lsp.progress').echo(ev)
-      local msgs = require('nvim.lsp.progress').handle(ev)
-      vim.cmd.redrawstatus()
-    end,
-  })
-end
 
 M.specs = {
   'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
 }
 
---- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
---- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
-M.capabilities = nil
-
----@return string[]
-M.servers = function()
-  -- local lsp_config_dir = vim.fs.joinpath(vim.g.stdpath.config, 'after', 'lsp')
+M.after = function()
   local lsp_config_dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'after', 'lsp')
-  return vim.tbl_map(
+  M.servers = vim.tbl_map(
     function(path) return path:match('^.+/(.+)$'):sub(1, -5) end,
     vim.fn.globpath(lsp_config_dir, '*', false, true)
   )
+  vim.lsp.enable(M.servers)
+
+  M.progress = require('nvim.lsp.progress')
+  vim.api.nvim_create_autocmd('LspProgress', {
+    callback = M.progress.callback,
+  })
 end
 
 ---@param buf? number
@@ -45,7 +36,7 @@ M.server_status = function(id)
   local client = vim.lsp.get_client_by_id(id)
   local status = (client and not client:is_stopped()) and 'attached' or 'unavailable'
   return nv.ui.icons.lsp[status]
-end--[[@as {percentage?: number, title?: string, message?: string, kind: "begin"|"report"|"end"}]]
+end
 
 local sidekick_copilot_status = function()
   local status
@@ -54,7 +45,12 @@ local sidekick_copilot_status = function()
     status = statusmod.get()
   end
   local kind = status and status.kind or 'Inactive'
-  return (nv.ui.icons.copilot[kind])[1]
+  local icon = nv.ui.icons.copilot[kind]
+  -- return icon[1]
+  -- local ret = '%$' .. icon[2] .. '$' .. icon[1] .. '%*'
+  -- FIXME:
+  local ret = '%$' .. icon[2] .. '$' .. icon[1] .. '%$Chromatophore_b$'
+  return ret
 end
 
 M.status = function()
@@ -69,12 +65,8 @@ M.status = function()
       if c.name == 'copilot' and package.loaded['sidekick'] then
         return sidekick_copilot_status()
       else
-        local icon = nv.ui.icons.lsp.attached
         local msgs = require('nvim.lsp.progress').get_msgs_by_client_id(c.id)
-        if #msgs == 0 then
-          return icon
-        end
-        return icon .. ' ' .. table.concat(msgs, ' ')
+        return msgs == '' and nv.ui.icons.lsp.attached or Snacks.util.spinner() .. ' ' .. msgs
       end
     end)
     -- :totable()
