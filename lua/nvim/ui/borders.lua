@@ -1,6 +1,6 @@
 local borders = {
   left = { '', '', '', '', '', '', '', '│' },
-  leftpad = { '', '', '', '', '', '', '', '▏' }, -- TODO: modifier for left/right pad
+  leftpad = { '', '', '', '', '', '', '', '▏' },
   right = { '', '', '', '│', '', '', '', '' },
   top = { '', '─', '', '', '', '', '', '' },
   toppad = { '', ' ', '', '', '', '', '', '' },
@@ -24,3 +24,5 @@ local function combine(b1, b2)
   end
   return res
 end
+
+-- TODO: box-drawing util

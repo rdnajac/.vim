@@ -8,7 +8,6 @@ endfunction
 function! s:title() abort
   let fname = fnamemodify(expand('%'), ':p')
   let fname = substitute(fname, git#root(), '', '')
-" TODO: if .lua trim `**/lua/` instead
   let fname = substitute(fname, '^\/*', '', '')
   let fname = substitute(fname, '^\s\+', '', '')
   return fname
@@ -16,9 +15,7 @@ endfunction
 
 function! comment#title() abort
   execute append(0, s:title())
-  " if !comment#syntax_match([0, 1, 1, 0])
   call comment#toggle()
-  " endif
 endfunction
 
 function comment#syntax_match(...) abort
@@ -28,11 +25,8 @@ function comment#syntax_match(...) abort
   return !empty(name) && name =~# 'Comment'
 endfunction
 
-" NOTE:  is <ESC>
-" TODO: check if in comment before gcc
-" TODO: this is ugly!
 function! s:insert_comment(tag, above) abort
-  execute 'normal ' . (a:above ? 'O' : 'o') . a:tag . 'gcc'
+  execute 'normal ' .. (a:above ? 'O' : 'o') .. a:tag ..'' .. (comment#syntax_match() ? '' : 'gcc')
   call feedkeys('A')
 endfunction
 

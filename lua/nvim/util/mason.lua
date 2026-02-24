@@ -1,4 +1,3 @@
--- TODO: this.
 local tools = {
   'actionlint', -- code action linter
   'mmdc', -- mermaid diagrams

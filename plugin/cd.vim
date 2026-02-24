@@ -1,7 +1,6 @@
 nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
-" TODO: make line continuations in vim act like a bulleted list
 let s:dirs = {
       \ '~': $HOME,
       \ 'G': $HOME.'/GitHub/',
