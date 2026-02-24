@@ -1,119 +1,12 @@
 return {
-  ai = function()
-    local ai = require('mini.ai')
-    local ex = require('mini.extra')
-    return {
-      n_lines = 500,
-      custom_textobjects = {
-        -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
-        -- d = { '%f[%d]%d+' }, -- digits
-        d = ex.gen_ai_spec.number,
-        e = { -- Word with case
-          {
-            '%u[%l%d]+%f[^%l%d]',
-            '%f[%S][%l%d]+%f[^%l%d]',
-            '%f[%P][%l%d]+%f[^%l%d]',
-            '^[%l%d]+%f[^%l%d]',
-          },
-          '^().*()$',
-        },
-        -- f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
-        g = ex.gen_ai_spec.buffer(), -- buffer
-        o = ai.gen_spec.treesitter({ -- code block
-          a = { '@block.outer', '@conditional.outer', '@loop.outer' },
-          i = { '@block.inner', '@conditional.inner', '@loop.inner' },
-        }),
-        t = { '<([%p%w]-)%f[^<%w][^<>]->.-</%1>', '^<.->().*()</[^/]->$' }, -- tags
-        u = ai.gen_spec.function_call(), -- u for "Usage"
-        U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
-      },
-    }
-  end,
+  ai = require('mini.ai'),
   align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
-  clue = function()
-    local gen = require('mini.clue').gen_clues
-    local clues = {}
-    local triggers = {
-      { mode = 'n', keys = 'cd' },
-    }
-    for clue, trigger_list in pairs({
-      builtin_completion = {
-        { mode = 'i', keys = '<C-x>' },
-      },
-      g = {
-        { mode = { 'n', 'x' }, keys = 'g' },
-      },
-      marks = {
-        { mode = { 'n', 'x' }, keys = "'" },
-        { mode = { 'n', 'x' }, keys = '`' },
-      },
-      registers = {
-        { mode = { 'n', 'x' }, keys = '"' },
-        { mode = { 'i', 'c' }, keys = '<C-r>' },
-      },
-      square_brackets = {
-        { mode = 'n', keys = '[' },
-        { mode = 'n', keys = ']' },
-      },
-      windows = {
-        { mode = 'n', keys = '<C-w>' },
-      },
-      z = {
-        { mode = { 'n', 'x' }, keys = 'z' },
-      },
-    }) do
-      table.insert(clues, gen[clue]())
-      vim.list_extend(triggers, trigger_list)
-    end
-
-    return {
-      clues = clues,
-      triggers = triggers,
-      -- { mode = { 'n', 'x' }, keys = '<Leader>' },
-      window = {
-        -- config = {},
-        -- delay = 1000,
-        scroll_down = '<C-j>',
-        scroll_up = '<C-k>',
-      },
-    }
-  end,
+  clue = require('mini.clue'),
   -- comment removed since native commenting added to neovim
   diff = { view = { style = 'number' } },
   extra = {},
   files = { options = { use_as_default_explorer = false } },
-  hipatterns = function() -- `works`
-    local hi = require('mini.hipatterns')
-    return {
-      -- TODO: move to nvim.util.todo
-      highlighters = {
-        hex_color = hi.gen_highlighter.hex_color(),
-        bug = { pattern = 'BUG', group = 'MiniHipatternsFixme' },
-        fixme = { pattern = 'FIXME', group = 'MiniHipatternsFixme' },
-        warning = { pattern = 'WARN', group = 'MiniHipatternsHack' },
-        xxx = { pattern = 'XXX', group = 'MiniHipatternsHack' },
-        hack = { pattern = 'HACK', group = 'MiniHipatternsHack' },
-        section = { pattern = 'Section', group = 'MiniHipatternsHack' },
-        todo = { pattern = 'TODO', group = 'MiniHipatternsTodo' },
-        note = { pattern = 'NOTE', group = 'MiniHipatternsNote' },
-        perf = { pattern = 'PERF', group = 'Identifier' },
-        source_code = { -- highlights strings in comments wrapped in `backticks`
-          pattern = '`[^`\n]+`',
-          group = function(buf_id, match, data)
-            -- convert from 1- to 0-indexed
-            local line = data.line - 1
-            local col = data.from_col - 1
-            return nv.is_comment(buf_id, line, col) and 'String' or nil
-          end,
-          extmark_opts = {
-            priority = 10000,
-            hl_mode = 'combine',
-            spell = false,
-          },
-        },
-      },
-    }
-  end,
+  hipatterns = require('mini.hipatterns'),
   icons = function()
     local opts = {
       directory = {
@@ -143,7 +36,6 @@ return {
         -- dot_zshprofile = { ' ', 'Green' },
         -- dot_zshrc = { ' ', 'Green' },
       },
-
       filetype = {
         ghostty = { '👻', 'Green' },
         ['nvim-pack'] = { '', 'Green' },
