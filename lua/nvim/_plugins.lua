@@ -124,11 +124,15 @@ return {
   {
     'nvim-mini/mini.nvim',
     config = function()
-      -- require('mini.misc').setup_termbg_sync()
+      local log = require('mini.misc').log_add
+      log('Loading mini')
       local mini_opts = require('nvim.mini')
+      log('Loaded mini')
       for modname, opts in pairs(mini_opts) do
         require('mini.' .. modname).setup(vim.is_callable(opts) and opts() or opts)
       end
+      log('Setup mini')
+      -- dd(MiniMisc.log_get())
     end,
     keys = {
       { '<leader>fm', function() MiniFiles.open() end },

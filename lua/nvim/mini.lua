@@ -1,3 +1,4 @@
+
 return {
   ai = require('mini.ai'),
   align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
@@ -105,6 +106,7 @@ return {
     keymap.map_combo('i', 'kk', action)
     return {}
   end,
+  misc = {},
   splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' } }, -- TODO: respect shiftwidth
   -- statusline = { },
   surround = {
