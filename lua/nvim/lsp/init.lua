@@ -21,23 +21,6 @@ M.after = function()
   })
 end
 
----@param buf? number
-M.attached = function(buf)
-  vim
-    .iter(vim.lsp.get_clients({ bufnr = buf or vim.api.nvim_get_current_buf() }))
-    :map(function(c) return c.name ~= 'copilot' and c.name or nil end)
-    :join(', ')
-end
-
-M.server_status = function(id)
-  if not id then
-    return 'no_id'
-  end
-  local client = vim.lsp.get_client_by_id(id)
-  local status = (client and not client:is_stopped()) and 'attached' or 'unavailable'
-  return nv.ui.icons.lsp[status]
-end
-
 local sidekick_copilot_status = function()
   local status
   local ok, statusmod = pcall(require, 'sidekick.status')
@@ -46,31 +29,38 @@ local sidekick_copilot_status = function()
   end
   local kind = status and status.kind or 'Inactive'
   local icon = nv.ui.icons.copilot[kind]
-  -- return icon[1]
-  -- local ret = '%$' .. icon[2] .. '$' .. icon[1] .. '%*'
+  return icon[1]
   -- FIXME:
-  local ret = '%$' .. icon[2] .. '$' .. icon[1] .. '%$Chromatophore_b$'
-  return ret
+  -- local ret = '%$' .. icon[2] .. '$' .. icon[1] .. '%$Chromatophore_b$'
+  -- return ret
+end
+
+---@param c vim.lsp.Client
+M.server_status = function(c)
+  if not c or c:is_stopped() then
+    return nv.ui.icons.lsp.unavailable
+  end
+  if c.name == 'copilot' and package.loaded['sidekick'] then
+    return sidekick_copilot_status()
+  end
+  local msg = require('nvim.lsp.progress').get_msgs_by_client_id(c.id)
+  if msg then
+    return Snacks.util.spinner() .. ' ' -- .. msg
+  end
+  return nv.ui.icons.lsp.attached
+end
+
+---@param buf? number
+M.attached = function(buf)
+  return vim.lsp.get_clients({ bufnr = buf or vim.api.nvim_get_current_buf() })
 end
 
 M.status = function()
-  local clients = vim.lsp.get_clients({ bufnr = 0 })
+  local clients = M.attached()
   if #clients == 0 then
-    return nv.ui.icons.lsp.unavailable .. ' '
+    return nv.ui.icons.lsp.unavailable
   end
-  return vim
-    .iter(clients)
-    ---@param c vim.lsp.Client
-    :map(function(c)
-      if c.name == 'copilot' and package.loaded['sidekick'] then
-        return sidekick_copilot_status()
-      else
-        local msgs = require('nvim.lsp.progress').get_msgs_by_client_id(c.id)
-        return msgs == '' and nv.ui.icons.lsp.attached or Snacks.util.spinner() .. ' ' .. msgs
-      end
-    end)
-    -- :totable()
-    :join(' ')
+  return vim.iter(clients):map(M.server_status):join(' ')
 end
 
 return M

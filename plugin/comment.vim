@@ -49,5 +49,7 @@ packadd comment
 " issue: https://github.com/vim/vim/issues/14171
 " commit: https://github.com/vim/vim/commit/fa6300872732f80b770a768e785ae2b189d3e684
 " suspect: import autoload 'comment.vim'
+
 " HACK: manually sourcing this resolves E1041 `Toggle`
 source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
+" TODO: check on vim--9.2.0050.arm64_sequoia.bottle.tar.gz
