@@ -1,13 +1,14 @@
 -- takes a vimscript statusline and applies the colorscheme so its compatible with tmux
 
--- %#Chromatophore_a# 󱉭 chezmoi/%#Chromatophore_ab#🭛%#Chromatophore_b#dot_config/tmux/bin/executable_nvim-tmux.sh
+-- `%#Chromatophore_a# 󱉭 chezmoi/%#Chromatophore_ab#🭛%#Chromatophore_b#dot_config/tmux/bin/executable_nvim-tmux.sh`
+-- `#[bg=#39ff14,fg=#000000,bold] 󱉭 chezmoi/#[bg=#3b4261,fg=#39ff14]🭛#[bold]dot_config/tmux/bin/executable_nvim-tmux.sh`
 -- becomes:
 
 -- Force a tmux refresh whenever we expect the statusline to change
 -- to keep the statusline in sync
 -- This autocmd should only be loaded on the first call to this module
 vim.api.nvim_create_autocmd({ 'ModeChanged', 'DirChanged', 'BufEnter' }, {
-  aug = vim.api.nvim_create_augroup('Tmuxline', {}),
+  group = vim.api.nvim_create_augroup('Tmuxline', {}),
   callback = function() vim.system({ 'tmux', 'refresh-client', '-S' }) end,
 })
 
@@ -54,5 +55,7 @@ local M = function(line)
 
   return table.concat(out)
 end
+
+dd(M('%#Chromatophore_a# 󱉭 chezmoi/%#Chromatophore_ab#🭛%#Chromatophore_b#dot_config/tmux/bin/executable_nvim-tmux.sh'))
 
 return M

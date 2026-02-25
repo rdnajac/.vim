@@ -10,52 +10,54 @@ end
 
 -- shared
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
-M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
+M.is_noneMpty_list = function(v) return vim.islist(v) and #v > 0 end
 
---- Parse position arguments into a vim.pos object
+-- fn wrappers
+M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
+
+
+--- Normalize position arguments into a vim.Pos, falling back to cursor.
 ---@param ... any
----  - no args: use cursor
----  - (int,int): row,col
----  - {int,int}: row,col
+---  - no args:       cursor position
+---  - (row, col):    0-based integers → vim.pos(row, col)
+---  - {row, col}:    extmark tuple (0-based) → vim.pos.extmark(arg)
+---  - vim.Pos:       returned as-is
 ---@return vim.Pos
 function M.pos(...)
   local nargs = select('#', ...)
-  local pos
-
   if nargs == 0 then
-    pos = vim.pos.cursor(vim.api.nvim_win_get_cursor(0))
+    return vim.pos.cursor(api.nvim_win_get_cursor(0))
+  elseif nargs == 2 then
+    return vim.pos(...)
   elseif nargs == 1 then
     local arg = select(1, ...)
     if type(arg) == 'table' then
-      pos = vim.pos.extmark(arg)
-    else
-      error('get_pos: single integer is ambiguous, expected {row,col}')
+      if arg.row then
+        return arg
+      end -- already a vim.Pos
+      return vim.pos.extmark(arg) -- {row, col} extmark tuple
     end
-  elseif nargs == 2 then
-    pos = vim.pos(...)
-  else
-    error('get_pos: invalid arguments')
   end
-
-  return pos
+  error('pos: invalid arguments')
 end
-
-M.is_comment = function(opts)
-  local ok, node = pcall(vim.treesitter.get_node, opts)
-  if ok and node then
-    return nv.treesitter.node_is_comment(node)
-  end
-  return fn['comment#syntax_match']()
-end
-
--- fn wrappers
-M.synname = function(line, col) return fn.synIDattr(fn.synID(line, col, 1), 'name') end
-
 -- api wrappers
 M.get_buf_lines = function(bufnr)
   bufnr = bufnr or api.nvim_get_current_buf()
   local nlines = api.nvim_buf_line_count(bufnr)
   return api.nvim_buf_get_lines(bufnr, 0, nlines, false)
+end
+
+M.is_comment = function(opts)
+  opts = opts or {}
+  -- opts.bufnr = opts.bufnr or api.nvim_get_current_buf()
+  local pos = api.nvim_win_get_cursor(0)
+  -- subtract one to account for 0-based row indexing in get_node
+  local ok, node = pcall(vim.treesitter.get_node, { pos = { pos[1] - 1, pos[2] } })
+  if ok and node then
+    return nv.treesitter.node_is_comment(node)
+  end
+  -- add one to account for 1-based column indexing in synID
+  return vim.startswith(M.synname({ pos[1], pos[2] + 1 }), 'Comment')
 end
 
 --- Convert a file path to a module name by trimming the lua root
@@ -83,7 +85,7 @@ M.submodules = function(subdir)
   --       return vim.endswith(f, '.lua') and not vim.endswith(f, 'init.lua')
   --     end
   --   end)
-  --  :map(function(f) return vim.fn.fnamemodify(f, ':r:s?^.*/lua/??') end)
+  --  :map(M.modname)
   --  :totable()
   return vim.tbl_map(function(f) return f:sub(#luaroot + 2, -5) end, files)
 end
@@ -131,6 +133,11 @@ M.cache = function(fname, lines)
     fn.writefile(lines, cache_path)
   end
   return lines
+end
+
+M.exec = function(cmd)
+  local res = vim.api.nvim_exec2(cmd, { output = true })
+  return vim.split(res.output, '\n', { trimempty = true })
 end
 
 -- local ns = vim.api.nvim_create_namespace('hl_on_paste')
