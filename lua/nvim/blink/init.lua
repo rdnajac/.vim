@@ -42,29 +42,16 @@ local blink = {
         function() return vim.lsp.inline_completion.get() end,
         'fallback',
       },
+      ['<C-r>'] = { function(cmp) cmp.show({ providers = { 'registers' } }) end },
+
     },
     signature = {
       enabled = true,
       window = { show_documentation = false },
     },
-    sources = {
-      providers = require('nvim.blink.providers'),
-      per_filetype = {
-        -- sql = { 'dadbod' }, -- TODO: ,
-        -- vim = { inherit_defaults = true, 'env' },
-      },
-    },
+    sources = require('nvim.blink.sources'),
   },
 }
-
--- if vim.uv.fs_stat(vim.g['plug#home'] .. '/lazydev.nvim') then
-blink.opts.sources.providers.lazydev = {
-  name = 'LazyDev',
-  module = 'lazydev.integrations.blink',
-  score_offset = 100,
-}
-blink.opts.sources.per_filetype.lua = { inherit_defaults = true, 'lazydev' }
--- end
 
 local extras = nil -- TODO:
 

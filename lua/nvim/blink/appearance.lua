@@ -8,9 +8,9 @@ M.menu = {
   -- auto_show = true,
   auto_show_delay_ms = function(ctx, _)
     if vim.tbl_contains({ '.', '/', "'", '@' }, ctx.trigger.initial_character) then
-      return 0
+      return 1
     end
-    return 420
+    return 1000
   end,
   -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
   ---@diagnostic disable-next-line: assign-type-mismatch
