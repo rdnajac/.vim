@@ -1,3 +1,4 @@
+local api, fn, fs = vim.api, vim.fn, vim.fs
 local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
 -- string manipulation
@@ -10,40 +11,69 @@ end
 -- shared
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
 M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
+
+--- Parse position arguments into a vim.pos object
+---@param ... any
+---  - no args: use cursor
+---  - (int,int): row,col
+---  - {int,int}: row,col
+---@return vim.Pos
+function M.pos(...)
+  local nargs = select('#', ...)
+  local pos
+
+  if nargs == 0 then
+    pos = vim.pos.cursor(vim.api.nvim_win_get_cursor(0))
+  elseif nargs == 1 then
+    local arg = select(1, ...)
+    if type(arg) == 'table' then
+      pos = vim.pos.extmark(arg)
+    else
+      error('get_pos: single integer is ambiguous, expected {row,col}')
+    end
+  elseif nargs == 2 then
+    pos = vim.pos(...)
+  else
+    error('get_pos: invalid arguments')
+  end
+
+  return pos
+end
+
 M.is_comment = function(opts)
   local ok, node = pcall(vim.treesitter.get_node, opts)
   if ok and node then
     return nv.treesitter.node_is_comment(node)
   end
-  return vim.fn['comment#syntax_match']()
+  return fn['comment#syntax_match']()
 end
 
 -- fn wrappers
-M.synname = function(line, col) return vim.fn.synIDattr(vim.fn.synID(line, col, 1), 'name') end
+M.synname = function(line, col) return fn.synIDattr(fn.synID(line, col, 1), 'name') end
 
 -- api wrappers
 M.get_buf_lines = function(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local nlines = vim.api.nvim_buf_line_count(bufnr)
-  return vim.api.nvim_buf_get_lines(bufnr, 0, nlines, false)
+  bufnr = bufnr or api.nvim_get_current_buf()
+  local nlines = api.nvim_buf_line_count(bufnr)
+  return api.nvim_buf_get_lines(bufnr, 0, nlines, false)
 end
 
 --- Convert a file path to a module name by trimming the lua root
 ---@param path string
 ---@return string
 M.modname = function(path)
-  local name = vim.fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/', '.')
+  local name = fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/', '.')
   return name:sub(-4) == 'init' and name:sub(1, -6) or name
 end
 
-local luaroot = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
+local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
 
 --- Get list of submodules in a given subdirectory of `nvim/`
 ---@param subdir string subdirectory of `nvim/` to search
 ---@return string[] list of module names ready for `require()`
 M.submodules = function(subdir)
-  local path = vim.fs.joinpath(luaroot, 'nvim', subdir)
-  local files = vim.fn.globpath(path, '*.lua', false, true)
+  local path = fs.joinpath(luaroot, 'nvim', subdir)
+  local files = fn.globpath(path, '*.lua', false, true)
   -- return vim
   --   .iter(files)
   --   :filter(function(f)
@@ -62,8 +92,8 @@ end
 ---@return string
 M.foldtext = function()
   local indicator = '...'
-  local start = vim.fn.getline(vim.v.foldstart)
-  local end_ = vim.fn.getline(vim.v.foldend)
+  local start = fn.getline(vim.v.foldstart)
+  local end_ = fn.getline(vim.v.foldend)
   local parts = { start }
 
   if vim.endswith(start, '{') then
@@ -83,7 +113,7 @@ M.foldtext = function()
 end
 
 function M.yank(text)
-  vim.fn.setreg('*', text)
+  fn.setreg('*', text)
   print('yanked: ' .. text)
 end
 
@@ -93,12 +123,12 @@ end
 ---@param lines string[]|nil lines to write, or nil to read
 ---@return string[]? lines read from file or written to file
 M.cache = function(fname, lines)
-  local cache_path = vim.fs.joinpath(vim.g.stdpath.cache, fname)
-  if lines == nil and vim.fn.filereadable(cache_path) then
-    lines = vim.fn.readfile(cache_path)
+  local cache_path = fs.joinpath(vim.g.stdpath.cache, fname)
+  if lines == nil and fn.filereadable(cache_path) then
+    lines = fn.readfile(cache_path)
   else
-    vim.fn.mkdir(vim.fs.dirname(cache_path), 'p')
-    vim.fn.writefile(lines, cache_path)
+    fn.mkdir(fs.dirname(cache_path), 'p')
+    fn.writefile(lines, cache_path)
   end
   return lines
 end
