@@ -27,8 +27,11 @@ local blink = {
     -- fuzzy = { implementation = 'lua' },
     keymap = {
       ['<Tab>'] = {
+        ---@return boolean true on success, nil otherwise
         function(cmp)
+          cmp = cmp or require('blink.cmp')
           if cmp.snippet_active() then
+            -- if vim.snippet.active() then
             return cmp.accept()
           else
             return cmp.select_and_accept()

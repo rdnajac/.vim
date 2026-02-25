@@ -31,8 +31,7 @@ local sidekick_copilot_status = function()
   local icon = nv.ui.icons.copilot[kind]
   return icon[1]
   -- FIXME:
-  -- local ret = '%$' .. icon[2] .. '$' .. icon[1] .. '%$Chromatophore_b$'
-  -- return ret
+  -- return '%$' .. icon[2] .. '$' .. icon[1] .. '%$Chromatophore_b$'
 end
 
 ---@param c vim.lsp.Client

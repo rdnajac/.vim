@@ -246,9 +246,8 @@ nnoremap  ciw
 xnoremap  :sort<CR>
 
 " requires `tpope/vim-unimpaired`
-" FIXME: use the plug map instead
-" n  ]e            <Plug>(unimpaired-move-down)
-nmap zJ ]ekJ
+" nmap zJ ]ekJ
+nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 " TODO: diff?
 " nnoremap dp     dp]c

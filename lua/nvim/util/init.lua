@@ -10,7 +10,7 @@ end
 
 -- shared
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
-M.is_noneMpty_list = function(v) return vim.islist(v) and #v > 0 end
+M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 
 -- fn wrappers
 M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end

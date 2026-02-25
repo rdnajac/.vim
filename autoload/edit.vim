@@ -29,6 +29,7 @@ function! s:edit(file, ...) abort
 
   " if the file is not open, open it in a window
   " if there is only one window, determine the layout based on window size
+  " TODO: let layout be an optional arguent that we solve for if it doesn exist
   let layout = ''
   if winnr('$') > 1
     execute (winnr() % winnr('$') + 1) . 'wincmd w'
