@@ -1,6 +1,5 @@
 local M = {}
 
--- PERF: does it matter that these are scheduled?
 M.after = function()
   -- delay loading this table until after init
   M.parsers = require('nvim.treesitter.parsers')
@@ -106,13 +105,20 @@ M.install_cli = function()
   -- TODO: use mason install utility
 end
 
-local _is_comment = {
-  comment = true,
-  line_comment = true,
-  block_comment = true,
-  comment_content = true,
-}
+---@param node TSNode
+---@return boolean
+M.node_is_comment = function(node)
+  return ({
+    comment = true,
+    line_comment = true,
+    block_comment = true,
+    comment_content = true,
+  })[node:type()] == true
+end
 
-M.node_is_comment = function(node) return _is_comment[node:type()] == true end
+M.is_comment = function(opts)
+  local ok, node = pcall(vim.treesitter.get_node, opts)
+  return ok and node and M.node_is_comment(node) or false
+end
 
 return M

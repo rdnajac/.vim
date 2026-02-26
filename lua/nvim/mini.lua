@@ -1,13 +1,13 @@
 
 return {
-  ai = require('mini.ai'),
+  ai = require('nvim.mini.ai'),
   align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
-  clue = require('mini.clue'),
+  clue = require('nvim.mini.clue'),
   -- comment removed since native commenting added to neovim
   diff = { view = { style = 'number' } },
   extra = {},
   files = { options = { use_as_default_explorer = false } },
-  hipatterns = require('mini.hipatterns'),
+  hipatterns = require('nvim.mini.hipatterns'),
   icons = function()
     local opts = {
       directory = {

@@ -1,4 +1,5 @@
 ---@module "blink.cmp"
+--- `https://cmp.saghen.dev/configuration/sources.html#community-sources`
 
 local sources = {
   ---@type table<string, blink.cmp.SourceListPerFiletype>
@@ -52,8 +53,8 @@ local sources = {
 }
 
 sources.default = vim.list_extend(vim.tbl_keys(sources.providers), {
-  'registers',
-  -- add defults here
+  -- add custom sources here
+  -- 'registers',
 })
 
 -- TODO:
@@ -67,9 +68,9 @@ sources.providers['lazydev'] = {
   score_offset = 100,
 }
 
-sources.providers['registers'] = {
-  name = 'Registers',
-  module = 'nvim.blink.sources.registers',
-}
+-- sources.providers['registers'] = {
+--   name = 'Registers',
+--   module = 'nvim.blink.sources.registers',
+-- }
 
 return sources

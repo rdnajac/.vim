@@ -97,8 +97,8 @@ nnoremap <leader>s" <Cmd>lua Snacks.picker.registers()<CR>
 nnoremap <leader>s: <Cmd>lua Snacks.picker.command_history()<CR>
 nnoremap <leader>s/ <Cmd>lua Snacks.picker.search_history()<CR>
 
-nnoremap <leader>st <Cmd>lua Snacks.picker.pick('todo')<CR>
-
+nnoremap <leader>st <Cmd>lua Snacks.picker.todo({keywords = { 'TODO' }})<CR>
+nnoremap <leader>sT <Cmd>lua Snacks.picker.pick('todo')<CR>
 
 " lsp
 nnoremap <leader>slc <Cmd>lua Snacks.picker.lsp_config()<CR>

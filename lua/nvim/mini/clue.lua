@@ -13,7 +13,7 @@ for clue, trigger_list in pairs({
   },
   marks = {
     { mode = { 'n', 'x' }, keys = "'" },
-    { mode = { 'n', 'x' }, keys = '`' },
+    { mode = { 'n', 'x' }, keys = '~' },
   },
   registers = {
     { mode = { 'n', 'x' }, keys = '"' },

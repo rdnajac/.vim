@@ -10,6 +10,7 @@ M.after = function()
     l = 'lsp',
     m = 'mini',
     n = 'init', -- FIXME: no init.lua
+    s = 'snacks.picker',
     p = '_plugins', -- FIXME: no init.lua
     t = 'treesitter',
     u = 'ui',
@@ -97,6 +98,11 @@ M.togglelist = {
     function()
       ptogglelist(vim.cmd[vim.fn.getqflist({ winid = 0 }).winid ~= 0 and 'cclose' or 'copen'])
     end,
+    desc = 'Quickfix List',
+  },
+  {
+    '<leader>xd',
+    vim.diagnostic.setqflist,
     desc = 'Quickfix List',
   },
 }

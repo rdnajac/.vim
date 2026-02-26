@@ -35,14 +35,27 @@ local M = {
     },
     git_status = { layout = 'left' },
     help = { layout = 'ivy_split' },
-    icons = { layout = { preset = 'insert' } },
-    recent = {
-      config = function(p) p.filter = {} end,
-    },
+    icons = { layout = 'insert' },
+    recent = { config = function(p) p.filter = {} end },
     zoxide = { confirm = 'edit' },
     -- mine!
     todo = require('nvim.snacks.picker.todo'),
+    -- yankring = require('nvim.snacks.picker.yankring')
+    -- TODO: only show registers 0-1
+    yankring = {
+      -- finder = 'vim_registers',
+      -- items = function() return vim.fn.getreginfo() end,
+      -- format = 'register',
+      -- layout = 'insert',
+      -- main = { current = true },
+      -- preview = 'preview',
+      -- confirm = { 'copy', 'close' },
+    },
   },
 }
+vim.cmd([[
+  inoremap <C-R> <Cmd>lua Snacks.picker.yankring()<CR>
+  
+]])
 
 return M

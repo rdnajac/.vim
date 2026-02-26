@@ -42,7 +42,7 @@ local blink = {
         function() return vim.lsp.inline_completion.get() end,
         'fallback',
       },
-      ['<C-r>'] = { function(cmp) cmp.show({ providers = { 'registers' } }) end },
+      -- ['<C-r>'] = { function(cmp) cmp.show({ providers = { 'registers' } }) end },
 
     },
     signature = {

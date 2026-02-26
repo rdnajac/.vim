@@ -55,7 +55,8 @@ M.render = function(bufnr)
       })
     end
   end
-  nv.defer_redraw_win() -- PERF: force redraw to avoid flicker
+  -- force redraw to avoid flicker
+  nv.defer_redraw_win()
 end
 
 return M

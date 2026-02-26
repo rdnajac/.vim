@@ -15,7 +15,6 @@ M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 -- fn wrappers
 M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
 
-
 --- Normalize position arguments into a vim.Pos, falling back to cursor.
 ---@param ... any
 ---  - no args:       cursor position
@@ -40,6 +39,7 @@ function M.pos(...)
   end
   error('pos: invalid arguments')
 end
+
 -- api wrappers
 M.get_buf_lines = function(bufnr)
   bufnr = bufnr or api.nvim_get_current_buf()
@@ -47,17 +47,20 @@ M.get_buf_lines = function(bufnr)
   return api.nvim_buf_get_lines(bufnr, 0, nlines, false)
 end
 
+---@param opts vim.treesitter.get_node.Opts
 M.is_comment = function(opts)
   opts = opts or {}
-  -- opts.bufnr = opts.bufnr or api.nvim_get_current_buf()
-  local pos = api.nvim_win_get_cursor(0)
+  opts.bufnr = opts.bufnr or api.nvim_get_current_buf()
+  local cursor = vim.api.nvim_win_get_cursor(0)
   -- subtract one to account for 0-based row indexing in get_node
-  local ok, node = pcall(vim.treesitter.get_node, { pos = { pos[1] - 1, pos[2] } })
+  opts.pos = opts.pos or { cursor[1] - 1, cursor[2] }
+
+  local ok, node = pcall(vim.treesitter.get_node, opts)
   if ok and node then
     return nv.treesitter.node_is_comment(node)
   end
-  -- add one to account for 1-based column indexing in synID
-  return vim.startswith(M.synname({ pos[1], pos[2] + 1 }), 'Comment')
+  -- opts.pos is 0-indexed; synID expects 1-based row and col
+  return vim.startswith(M.synname(cursor[1], cursor[2] + 1), 'Comment')
 end
 
 --- Convert a file path to a module name by trimming the lua root

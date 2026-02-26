@@ -22,7 +22,6 @@ let s:comments = {
       \ 'h': 'HACK: ',
       \ 'w': 'WARN: ',
       \ 'n': 'NOTE: ',
-      \ 'p': 'PERF: ',
       \ 't': 'TODO: ',
       \ 'x': 'XXX: ',
       \ 'i': 'stylua: ignore',

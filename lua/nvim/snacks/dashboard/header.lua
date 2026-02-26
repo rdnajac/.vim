@@ -17,7 +17,6 @@ local header = function(cols)
   return vim
     .iter(NEOVIM)
     :map(function(line)
-      -- PERF: use lua?
       local n = vim.fn.strcharpart(line, 0, 10)
       -- if cols < 20 then
       return n .. vim.fn.strcharpart(line, 27) -- nvim
