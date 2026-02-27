@@ -1,8 +1,7 @@
 ---@module "blink.cmp"
---- `https://cmp.saghen.dev/`
 
 ---@type plug.Spec
-local blink = {
+local blink = { --- `https://cmp.saghen.dev/`
   'Saghen/blink.cmp',
   -- TODO: show completion menu on <C-R> in insert mode
   build = 'BlinkCmp build', -- FIXME: doesn't build on initial install
@@ -43,7 +42,6 @@ local blink = {
         'fallback',
       },
       -- ['<C-r>'] = { function(cmp) cmp.show({ providers = { 'registers' } }) end },
-
     },
     signature = {
       enabled = true,
@@ -53,10 +51,24 @@ local blink = {
   },
 }
 
+local providers = function(mode)
+  local ok, lib = pcall(require, 'blink.cmp.sources.lib')
+  if not ok or not lib then
+    return {}
+  end
+  mode = mode or vim.api.nvim_get_mode().mode
+  local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode:sub(1, 1)] or 'default'
+  return lib.get_enabled_providers(cmp_mode)
+end
+
+local status = function()
+  return vim.iter(providers()):map(function(k, _) return nv.ui.icons.blink[k] .. ' ' end):join(' ')
+end
+
 local extras = nil -- TODO:
 
 return {
   after = function() require('nvim.blink.cmp') end,
   specs = vim.list_extend({ blink }, extras or {}),
-  status = require('nvim.blink.status'),
+  status = status,
 }
