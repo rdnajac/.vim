@@ -507,7 +507,7 @@ endif
 call plug#end()
 " }}}
 if has('nvim')
-  lua require('nvim')
-  lua vim.pack.add(nv.specs, { load = nv.plug.load })
+  " lua require('nvim')
+  " lua vim.pack.add(nv.specs, { load = nv.plug.load })
 endif
 " vim: set fdm=marker
