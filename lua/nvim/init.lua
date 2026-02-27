@@ -8,6 +8,7 @@
 local _submodules = {
   blink = require('nvim.blink'),
   keys = require('nvim.keys'),
+  fs = require('nvim.fs'),
   lsp = require('nvim.lsp'),
   plug = require('nvim.plug'),
   treesitter = require('nvim.treesitter'),
@@ -16,21 +17,21 @@ local _submodules = {
 
 local M = _submodules
 
----@type plug.Spec[]
-M.plugins = vim.iter(_submodules):fold({}, function(acc, _, v)
-  vim.schedule(v.after) -- run after startup
-  return vim.list_extend(acc, v.specs or {})
-end)
+_G.nv = M
 
----@param t plug.Spec
----@return vim.pack.Spec
-local Plug = function(t) return require('nvim.plug').spec(t):pack() end
+---@type plug.Spec[]
+local plugins = vim.iter(M):fold(require('nvim._plugins'), function(acc, k, v)
+  vim.validate('after', v.specs, 'table')
+  vim.validate('specs', v.after, vim.is_callable)
+  vim.schedule(v.after) -- run after startup
+  return vim.list_extend(acc, v.specs)
+end)
 
 ---@type vim.pack.Spec[]
 M.specs = vim
-  .iter(M.plugins)
+  .iter(plugins)
   :filter(function(t) return t.enabled ~= false end)
-  :map(Plug) -- FIXME:
+  :map(function(t) return M.plug.spec(t):pack() end)
   :totable()
 
 setmetatable(M, {

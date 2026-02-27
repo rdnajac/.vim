@@ -450,15 +450,14 @@ packadd! vim-chromatophore
 " packadd! vim-nv
 
 " shipped plugins {{{2
+packadd! cfilter
 if has('nvim')
   packadd! nvim.difftool
   packadd! nvim.undotree
 else
   packadd! editorconfig
   packadd! hlyank
-  finish " don't load plugins in vim
 endif
-" packadd! cfilter
 " }}}
 
 call plug#begin()
@@ -499,11 +498,16 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
-  Plug 'folke/snacks.nvim'
+  " Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   " Plug 'saxon1964/neovim-tips'
+  " Plug 'chrisgrieser/nvim-scissors'
+  " runtime _init.lua
 endif
 call plug#end()
 " }}}
-
+if has('nvim')
+  lua require('nvim')
+  lua vim.pack.add(nv.specs, { load = nv.plug.load })
+endif
 " vim: set fdm=marker

@@ -65,12 +65,12 @@ nnoremap <leader>N <Cmd>News<CR>
 nnoremap <leader>n <Cmd>lua Snacks.notifier.show_history()<CR>
 
 " picker
-nnoremap <leader>P <Cmd>lua Snacks.picker.resume({ exclude = { 'pickers' } })<CR>
+nnoremap <leader>P <Cmd>lua Snacks.picker.pickers()<CR>
+nnoremap <leader>pp <Cmd>lua Snacks.picker.resume({ exclude = { 'pickers' } })<CR>
 nnoremap <leader>pP <Cmd>lua Snacks.picker.picker_preview()<CR>
 nnoremap <leader>pa <Cmd>lua Snacks.picker.picker_actions()<CR>
 nnoremap <leader>pf <Cmd>lua Snacks.picker.picker_format()<CR>
 nnoremap <leader>pl <Cmd>lua Snacks.picker.picker_layouts()<CR>
-nnoremap <leader>pp <Cmd>lua Snacks.picker.pickers()<CR>
 nnoremap <leader>pr <Cmd>lua Snacks.picker.resume()<CR>
 
 " search
@@ -138,58 +138,18 @@ let s:commands = [
       \ 'DiagnosticsBuffer',
       \ 'Explorer',
       \ 'Files',
-      \ 'GhActions',
-      \ 'GhDiff',
-      \ 'GhIssue',
-      \ 'GhLabels',
-      \ 'GhPr',
-      \ 'GhReactions',
-      \ 'GitBranches',
-      \ 'GitDiff',
-      \ 'GitFiles',
-      \ 'GitGrep',
-      \ 'GitLog',
-      \ 'GitLogFile',
-      \ 'GitLogLine',
-      \ 'GitStash',
-      \ 'GitStatus',
-      \ 'Grep',
-      \ 'GrepBuffers',
-      \ 'GrepWord',
       \ 'Help',
       \ 'Highlights',
       \ 'Icons',
       \ 'Jumps',
       \ 'Keymaps',
       \ 'Lines',
-      \ 'Loclist',
-      \ 'LspConfig',
-      \ 'LspDeclarations',
-      \ 'LspDefinitions',
-      \ 'LspImplementations',
-      \ 'LspIncomingCalls',
-      \ 'LspOutgoingCalls',
-      \ 'LspReferences',
-      \ 'LspSymbols',
-      \ 'LspTypeDefinitions',
-      \ 'LspWorkspaceSymbols',
       \ 'Marks',
       \ 'Notifications',
-      \ 'Pick',
-      \ 'PickerActions',
-      \ 'PickerFormat',
-      \ 'PickerLayouts',
-      \ 'PickerPreview',
       \ 'Pickers',
-      \ 'Preview',
       \ 'Projects',
-      \ 'Qflist',
       \ 'Recent',
       \ 'Registers',
-      \ 'Resume',
-      \ 'Scratch',
-      \ 'SearchHistory',
-      \ 'Smart',
       \ 'Spelling',
       \ 'Tags',
       \ 'Treesitter',

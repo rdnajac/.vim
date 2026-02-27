@@ -56,6 +56,4 @@ local M = function(line)
   return table.concat(out)
 end
 
-dd(M('%#Chromatophore_a# 󱉭 chezmoi/%#Chromatophore_ab#🭛%#Chromatophore_b#dot_config/tmux/bin/executable_nvim-tmux.sh'))
-
 return M

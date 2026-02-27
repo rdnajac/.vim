@@ -23,7 +23,7 @@ if !has('nvim')
   finish
 else
   for [key, value] in items(s:dirs)
-    call v:lua.nv.keys.map([ [
+    call v:lua.require'nvim.keys'.map([ [
 	  \ 'cd' .. key,
 	  \ '<Cmd>lua Snacks.picker.explorer({cwd = "' .. value .. '"})<CR>'
   \ ] ])

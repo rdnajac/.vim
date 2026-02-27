@@ -29,19 +29,15 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "577d2dcb558efce1518c45a76345e01bf346c8e8",
+      "rev": "a95dc67ecff78de138543a20c20f29f47111b122",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
       "rev": "f386df19b145607a33885b6110ef5c04faae42cb",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
-    "nvim-scissors": {
-      "rev": "59902c749117640bd5d434642b2df67fb038d4f2",
-      "src": "https://github.com/chrisgrieser/nvim-scissors.git"
-    },
     "nvim-treesitter": {
-      "rev": "957f86ae3f049ab6681ed64c05b05768fcaed0d2",
+      "rev": "b9171ede5de41b3f2dfa33fe33ebd585d795f928",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "oil.nvim": {

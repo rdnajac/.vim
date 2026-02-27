@@ -1,6 +1,11 @@
 local M = {}
 
 M.after = function()
+  vim.o.cmdheight = 0 -- XXX: experimental!
+  -- BUG: ui2 error on declining to install after vim.pack.add
+  require('vim._core.ui2').enable({
+    msg = { target = 'msg' },
+  })
   M.icons = require('nvim.ui.icons')
   -- requires nvim 0.12
   M.winbar = require('nvim.ui.winbar')

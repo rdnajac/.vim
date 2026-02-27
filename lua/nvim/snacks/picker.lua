@@ -13,6 +13,15 @@ local M = {
   },
   layouts = require('nvim.snacks.picker.layouts'),
   sources = {
+    -- autocmds = { confirm =  },
+    buffers = {
+      layout = 'mylayout',
+      input = { keys = { ['<C-x>'] = { 'bufdelete', mode = { 'n', 'i' } } } },
+    },
+    explorer = require('nvim.snacks.picker.explorer'),
+    files = require('nvim.snacks.picker._defaults'),
+    grep = require('nvim.snacks.picker._defaults'),
+    -- git_status = { layout = 'left' },
     keymaps = {
       ---@param p snacks.Picker
       ---@param item snacks.picker.Item
@@ -25,37 +34,12 @@ local M = {
         p:action({ 'jump' })
       end,
     },
-    -- autocmds = { confirm =  },
-    explorer = require('nvim.snacks.picker.explorer'),
-    files = require('nvim.snacks.picker._defaults'),
-    grep = require('nvim.snacks.picker._defaults'),
-    buffers = {
-      layout = 'mylayout',
-      input = { keys = { ['<C-x>'] = { 'bufdelete', mode = { 'n', 'i' } } } },
-    },
-    git_status = { layout = 'left' },
     help = { layout = 'ivy_split' },
     icons = { layout = 'insert' },
     recent = { config = function(p) p.filter = {} end },
+    todo = require('nvim.snacks.picker.todo'), -- mine!
     zoxide = { confirm = 'edit' },
-    -- mine!
-    todo = require('nvim.snacks.picker.todo'),
-    -- yankring = require('nvim.snacks.picker.yankring')
-    -- TODO: only show registers 0-1
-    yankring = {
-      -- finder = 'vim_registers',
-      -- items = function() return vim.fn.getreginfo() end,
-      -- format = 'register',
-      -- layout = 'insert',
-      -- main = { current = true },
-      -- preview = 'preview',
-      -- confirm = { 'copy', 'close' },
-    },
   },
 }
-vim.cmd([[
-  inoremap <C-R> <Cmd>lua Snacks.picker.yankring()<CR>
-  
-]])
 
 return M

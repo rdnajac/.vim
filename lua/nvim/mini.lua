@@ -1,4 +1,3 @@
-
 return {
   ai = require('nvim.mini.ai'),
   align = { mappings = { start = 'gA', start_with_preview = 'g|' } },

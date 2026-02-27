@@ -1,6 +1,27 @@
 ---@type plug.Spec[]
 return {
   {
+    'folke/snacks.nvim',
+    opts = {
+      bigfile = require('nvim.snacks.bigfile'),
+      dashboard = require('nvim.snacks.dashboard'),
+      explorer = { replace_netrw = true },
+      image = { enabled = true },
+      indent = { indent = { only_current = false, only_scope = true } },
+      input = { enabled = true },
+      -- notifier = require('nvim.snacks.notifier'),
+      quickfile = { enabled = true },
+      picker = require('nvim.snacks.picker'),
+      -- terminal = { enabled = true },
+      scope = { enabled = true },
+      scroll = { enabled = true },
+      -- statuscolumn = require('nvim.snacks.statuscolumn'),
+      -- styles = { notification_history = { height = 0.9, width = 0.9, wo = { wrap = false } } },
+      toggle = { which_key = false },
+      words = { enabled = true },
+    },
+  },
+  {
     'rdnajac/vim-lol',
     enabled = true,
     keys = {
@@ -71,22 +92,6 @@ return {
           local col = tostring(tw ~= 0 and tw or 81)
           vim.opt_local.colorcolumn = state and col or ''
         end,
-      },
-    },
-  },
-  {
-    'mason-org/mason.nvim',
-    build = vim.cmd.MasonUpdate,
-    opts = { ui = { icons = require('nvim.ui.icons').mason.emojis } },
-  },
-  {
-    'folke/lazydev.nvim',
-    opts = {
-      -- integrations = { cmp = false },
-      library = {
-        { path = 'snacks.nvim', words = { 'Snacks' } },
-        { path = 'mini.nvim', words = { 'Mini.*' } },
-        { path = 'nvim', words = { 'nv' } },
       },
     },
   },
@@ -175,17 +180,5 @@ return {
         },
       })
     end,
-  },
-  {
-    'chrisgrieser/nvim-scissors',
-    -- opts = {},
-  },
-  {
-    'stevearc/oil.nvim',
-    enabled = true,
-    keys = { { '-', '<Cmd>Oil<CR>' } },
-    opts = {
-      default_file_explorer = false,
-    },
   },
 }

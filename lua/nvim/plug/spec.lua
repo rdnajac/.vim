@@ -103,7 +103,7 @@ function M:setup()
     elseif vim.is_callable(self.config) then
       self.config()
     end
-    self:register_keys()
+    vim.schedule(function() self:register_keys() end)
     self.did_setup = true
   end
 
