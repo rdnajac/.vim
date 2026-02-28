@@ -11,7 +11,7 @@ highlighters.source_code = {
     -- convert from 1- to 0-indexed
     local pos = { data.line - 1, data.from_col - 1 }
     local opts = { bufnr = buf_id, pos = pos }
-    return nv.is_comment(opts) and 'String' or nil
+    return require('nvim.util').is_comment(opts) and 'String' or nil
   end,
   extmark_opts = {
     priority = 10000,

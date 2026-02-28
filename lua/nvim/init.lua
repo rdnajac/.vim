@@ -4,8 +4,7 @@
 ---@field after fun():nil
 ---@field status? fun():string
 
----@type table<string, nvim.Submodule>
-local _submodules = {
+local M = {
   blink = require('nvim.blink'),
   keys = require('nvim.keys'),
   fs = require('nvim.fs'),
@@ -14,10 +13,6 @@ local _submodules = {
   treesitter = require('nvim.treesitter'),
   ui = require('nvim.ui'),
 }
-
-local M = _submodules
-
-_G.nv = M
 
 ---@type plug.Spec[]
 local plugins = vim.iter(M):fold(require('nvim._plugins'), function(acc, k, v)
@@ -28,22 +23,12 @@ local plugins = vim.iter(M):fold(require('nvim._plugins'), function(acc, k, v)
 end)
 
 ---@type vim.pack.Spec[]
-M.specs = vim
+local specs = vim
   .iter(plugins)
   :filter(function(t) return t.enabled ~= false end)
   :map(function(t) return M.plug.spec(t):pack() end)
   :totable()
 
-vim.pack.add(M.specs, { load = M.plug.load })
-
-setmetatable(M, {
-  __index = function(t, k) -- access: `table[key]`
-    -- fall back to util for all other keys
-    print('nvim: no submodule for key', k, '- falling back to util')
-    local mod = require('nvim.util')[k]
-    rawset(t, k, mod)
-    return mod
-  end,
-})
+vim.pack.add(specs, { load = M.plug.load })
 
 return M

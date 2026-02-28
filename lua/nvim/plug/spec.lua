@@ -117,4 +117,5 @@ end
 setmetatable(M, {
   __call = function(_, t) return M.new(t) end,
 })
+
 return M

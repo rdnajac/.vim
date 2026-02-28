@@ -11,7 +11,7 @@ local function title(opts)
   end
   local parts = { icon, name, '[' .. searchpath .. ']' }
 
-  if nv.is_nonempty_list(opts.ft) then
+  if require('nvim.util').is_nonempty_list(opts.ft) then
     ---@diagnostic disable-next-line: param-type-mismatch
     vim.list_extend(parts, vim.tbl_map(nv.ui.icons.filetype, opts.ft))
   end
@@ -33,7 +33,7 @@ return {
       self:refresh()
     end,
 
-    debugp = function(self) Snacks.debug.inspect(self.opts) end,
+    inspect_opts = function(self) Snacks.debug.inspect(self.opts) end,
 
     gitroot = function(self)
       self:set_cwd(Snacks.git.get_root())
@@ -104,7 +104,7 @@ return {
         ['~'] = { 'zoxide', mode = { 'i', 'n' } },
         ['<M-a>'] = { 'sidekick_send', mode = { 'n', 'i' } },
         ['<M-c>'] = { 'clear', mode = { 'i', 'n' } },
-        ['<M-d>'] = { 'debug', mode = { 'i', 'n' } },
+        ['<M-d>'] = { 'inspect_opts', mode = { 'i', 'n' } },
       },
     },
   },

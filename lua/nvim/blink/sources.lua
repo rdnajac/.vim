@@ -42,7 +42,7 @@ local sources = {
       -- FIXME: last line of a comment isn't a ts comment
       -- TODO: no snippets in middle of word
       should_show_items = function(ctx)
-        if nv.is_comment() then
+        if require('nvim.util').is_comment() then
           return false
         else
           return ctx.trigger.initial_kind ~= 'trigger_character'

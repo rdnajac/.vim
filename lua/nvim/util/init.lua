@@ -47,7 +47,7 @@ M.get_buf_lines = function(bufnr)
   return api.nvim_buf_get_lines(bufnr, 0, nlines, false)
 end
 
----@param opts vim.treesitter.get_node.Opts
+---@param opts? vim.treesitter.get_node.Opts
 M.is_comment = function(opts)
   opts = opts or {}
   opts.bufnr = opts.bufnr or api.nvim_get_current_buf()

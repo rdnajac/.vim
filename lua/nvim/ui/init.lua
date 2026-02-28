@@ -3,7 +3,7 @@ local M = {}
 M.icons = require('nvim.ui.icons')
 
 M.after = function()
-  vim.o.winbar = [[%{%v:lua.require'nvim.ui.winbar'.ui.winbar()%}]]
+  vim.o.winbar = [[%{%v:lua.require'nvim.ui.winbar'()%}]]
   vim.o.cmdheight = 0 -- XXX: experimental!
   -- BUG: ui2 error on declining to install after vim.pack.add
   require('vim._core.ui2').enable({
