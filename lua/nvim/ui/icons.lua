@@ -41,10 +41,10 @@ local M = {
     untracked = '?',
   },
   diagnostics = {
-    Error = ' ',
-    Warn = ' ',
-    Hint = ' ',
-    Info = ' ',
+    Error = '',
+    Warn = '',
+    Info = '',
+    Hint = '',
   },
   lsp = {
     unavailable = '',

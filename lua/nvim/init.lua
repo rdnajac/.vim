@@ -34,9 +34,12 @@ M.specs = vim
   :map(function(t) return M.plug.spec(t):pack() end)
   :totable()
 
+vim.pack.add(M.specs, { load = M.plug.load })
+
 setmetatable(M, {
   __index = function(t, k) -- access: `table[key]`
     -- fall back to util for all other keys
+    print('nvim: no submodule for key', k, '- falling back to util')
     local mod = require('nvim.util')[k]
     rawset(t, k, mod)
     return mod

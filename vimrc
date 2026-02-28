@@ -502,12 +502,7 @@ else
   Plug 'folke/tokyonight.nvim'
   " Plug 'saxon1964/neovim-tips'
   " Plug 'chrisgrieser/nvim-scissors'
-  " runtime _init.lua
 endif
 call plug#end()
 " }}}
-if has('nvim')
-  " lua require('nvim')
-  " lua vim.pack.add(nv.specs, { load = nv.plug.load })
-endif
 " vim: set fdm=marker

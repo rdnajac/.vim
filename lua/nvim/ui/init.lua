@@ -1,27 +1,16 @@
 local M = {}
 
+M.icons = require('nvim.ui.icons')
+
 M.after = function()
+  vim.o.winbar = [[%{%v:lua.require'nvim.ui.winbar'.ui.winbar()%}]]
   vim.o.cmdheight = 0 -- XXX: experimental!
   -- BUG: ui2 error on declining to install after vim.pack.add
   require('vim._core.ui2').enable({
     msg = { target = 'msg' },
   })
-  M.icons = require('nvim.ui.icons')
-  -- requires nvim 0.12
-  M.winbar = require('nvim.ui.winbar')
-  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
 
-  local signs = (function()
-    local icon, hl = {}, {}
-    ---@type number, string
-    for k, v in ipairs(vim.diagnostic.severity) do
-      local name = nv.capitalize(v --[[@as string]])
-      icon[k] = M.icons.diagnostics[name] or name:sub(1, 1)
-      hl[k] = 'Diagnostic' .. name
-    end
-    return { text = icon, numhl = hl }
-  end)()
-
+  local signs = { text = { ' ', ' ', ' ', '' } }
   ---@type vim.diagnostic.Opts
   local opts = {
     float = { source = true },
@@ -31,10 +20,8 @@ M.after = function()
     signs = signs,
     status = signs,
   }
-
-  local unused = 'smoke test'
-
   vim.diagnostic.config(opts)
+  local unused = 'smoke test'
 end
 
 M.specs = {
