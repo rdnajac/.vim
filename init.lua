@@ -29,35 +29,67 @@ if vim.env.PROF then
 end
 
 _G.nv = require('nvim')
-
-local Plug = nv.plug
-
 vim
   .iter(nv)
   :map(function(_, v)
-    vim.schedule(v.after)
-    return v.specs
+    if vim.is_callable(v.after) then
+      vim.schedule(v.after)
+    end
+    return type(v.specs) == 'table' and v.specs or nil
   end)
   :map(function(specs)
     return vim
       .iter(vim.islist(specs) and specs or { specs })
+      :map(function(spec) return type(spec) == 'table' and spec or { spec } end)
       :filter(function(spec) return spec.enabled ~= false end)
-      :map(function(spec) return Plug.spec(spec) end)
       :map(function(self)
+        local name = self[1]:match('[^/]+$')
         return {
           src = self.src or ('https://github.com/%s.git'):format(self[1]),
           -- version = self.version or self.branch or nil,
-          name = self.name or self[1]:match('[^/]+$'),
+          name = name,
           data = self.data or {
             build = self.build,
             init = self.init,
-            setup = function() return self:setup() end,
+            -- TODO: move setup params to data and register keys/toggles in load
+            setup = function()
+              local opts = vim.is_callable(self.opts) and self.opts() or self.opts
+              if type(opts) == 'table' then
+                local modname = name:gsub('%.nvim$', '')
+                require(modname).setup(opts)
+              elseif vim.is_callable(self.config) then
+                self.config()
+              end
+              vim.schedule(function()
+                local _keys = require('nvim.keys')
+                if self.keys then
+                  _keys.map(self.keys)
+                end
+                if self.toggles then
+                  for key, v in pairs(self.toggles) do
+                    _keys.map_snacks_toggle(key, v)
+                  end
+                end
+              end)
+            end,
           },
         }
       end)
       :totable()
   end)
-  :each(function(speclist) vim.pack.add(speclist, { load = Plug.load }) end)
+  :each(function(speclist)
+    vim.pack.add(speclist, {
+      load = function(plug_data) ---@param plug_data { spec: vim.pack.Spec, path: string }
+        local maybe = function(key) ---@param key string
+          local fn = vim.tbl_get(plug_data.spec, 'data', key)
+          return vim.is_callable(fn) and fn() or nil
+        end
+        maybe('init') -- run init for vim plugins or `package.preload` hijinks
+        vim.cmd.packadd({ plug_data.spec.name, bang = vim.v.vim_did_enter == 0 })
+        maybe('setup') -- run setup for neovim plugins with `opts` tables
+      end,
+    })
+  end)
 
 local elapsed = (vim.uv.hrtime() - t_1) / 1e6
 vim.schedule(function() print('init.lua in ' .. elapsed .. 'ms') end)
