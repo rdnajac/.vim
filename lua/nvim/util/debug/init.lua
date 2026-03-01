@@ -1,6 +1,24 @@
 local M = {}
 
-local MAX_INSPECT_LINES = 2 ^ 10
+-- local me = debug.getinfo(1, 'S').source:gsub('^@', '')
+
+M.bt = function()
+  local trace = {} ---@type string[]
+  for level = 2, 20 do -- arbitrary max depth
+    local info = debug.getinfo(level, 'Sln')
+    if not info then
+      break
+    elseif info.what ~= 'C' and info.source ~= '@' .. os.getenv('MYVIMRC') then
+      local line = ('\n--- `%s:%s`%s'):format(
+        vim.fn.fnamemodify(info.source, ':s/^@//:~:.'),
+        info.currentline,
+        info.name and ' _in_ **' .. info.name .. '**' or ''
+      )
+      table.insert(trace, line)
+    end
+  end
+  return table.concat(trace, '\n')
+end
 
 local notify = vim.print
 -- local notify = function(...) Snacks and Snacks.notify.warn(...) or vim.print(...) end

@@ -1,6 +1,30 @@
 local M = {}
 
-M.build = require('nvim.plug.build')
+-- TODO: build command to force rebuild of a plugin
+vim.api.nvim_create_autocmd({ 'PackChanged' }, {
+  callback = function(ev) require('nvim.plug.build')(ev) end,
+})
+
+M.spec = require('nvim.plug.spec')
+M.after = function() require('nvim.plug.api') end
+M.specs = {
+  {
+    'mason-org/mason.nvim',
+    build = ':MasonUpdate',
+    opts = { ui = { icons = require('nvim.ui.icons').mason.emojis } },
+  },
+  {
+    'folke/lazydev.nvim',
+    opts = {
+      -- integrations = { cmp = false },
+      library = {
+        { path = 'snacks.nvim', words = { 'Snacks' } },
+        { path = 'mini.nvim', words = { 'Mini.*' } },
+        { path = 'nvim', words = { 'nv' } },
+      },
+    },
+  },
+}
 
 ---@param plug_data { spec: vim.pack.Spec, path: string }
 M.load = function(plug_data)
@@ -14,20 +38,10 @@ M.load = function(plug_data)
   -- run init for vim plugins or `package.preload` hijinks
   maybe('init')
 
-  -- always `packadd`! since we guard against `vim_did_enter`
-  vim.cmd.packadd({ plug_data.spec.name, bang = true })
+  vim.cmd.packadd({ plug_data.spec.name, bang = vim.v.vim_did_enter == 0 })
 
   -- run setup for neovim plugins with `opts` tables
   maybe('setup')
 end
-
-M.spec = require('nvim.plug.spec')
-M.specs = require('nvim.plug.core')
-M.after = function() require('nvim.plug.api') end
-
--- TODO: build command to force rebuild of a plugin
-vim.api.nvim_create_autocmd({ 'PackChanged' }, {
-  callback = function(ev) M.build(ev) end,
-})
 
 return M

@@ -1,4 +1,5 @@
 --- init.lua
+local t_1 = vim.uv.hrtime()
 
 --- optional LuaJIT profiling
 --- `https://luajit.org/ext_profiler.html`
@@ -12,33 +13,14 @@ vim.loader.enable()
 --- `plug#end()` will `vim.pack.add` vim plugins
 vim.cmd.source('vimrc')
 
--- ~/.local/share/nvim/site/pack/core/opt/snacks.nvim/lua/snacks/debug.lua:197
--- function M.backtrace(msg, opts)
-function _G.bt()
-  ---@type string[]
-  local trace = {}
-  for level = 1, 20 do
-    local info = debug.getinfo(level, 'Sln')
-    if not info then
-      break
-    elseif info.what ~= 'C' then
-      local line = ('--- `%s:%s`%s'):format(
-        vim.fn.fnamemodify(info.source:gsub('^@', ''), ':~:.'),
-        info.currentline,
-        info.name and ' _in_ **' .. info.name .. '**' or ''
-      )
-      table.insert(trace, line)
-    end
-  end
-  return table.concat(trace, '\n')
-end
-
--- ~/.local/share/nvim/site/pack/core/opt/snacks.nvim/lua/snacks/debug.lua:38
 _G.dd = function(...)
-  local len = select('#', ...) ---@type number
+  -- local len = select('#', ...) ---@type number
   local obj = { ... } ---@type unknown[]
-  local trace = bt()
-  vim.schedule(function() vim.print(trace, len == 1 and obj[1] or obj or nil) end)
+  local trace = require('nvim.util.debug').bt()
+  if not vim.in_fast_event() then
+    return vim.print(trace, obj)
+  end
+  vim.schedule(function() vim.print(trace, obj) end)
 end
 
 if vim.env.PROF then
@@ -47,4 +29,36 @@ if vim.env.PROF then
 end
 
 _G.nv = require('nvim')
+
+local Plug = nv.plug
+
+vim
+  .iter(nv)
+  :map(function(_, v)
+    vim.schedule(v.after)
+    return v.specs
+  end)
+  :map(function(specs)
+    return vim
+      .iter(vim.islist(specs) and specs or { specs })
+      :filter(function(spec) return spec.enabled ~= false end)
+      :map(function(spec) return Plug.spec(spec) end)
+      :map(function(self)
+        return {
+          src = self.src or ('https://github.com/%s.git'):format(self[1]),
+          -- version = self.version or self.branch or nil,
+          name = self.name or self[1]:match('[^/]+$'),
+          data = self.data or {
+            build = self.build,
+            init = self.init,
+            setup = function() return self:setup() end,
+          },
+        }
+      end)
+      :totable()
+  end)
+  :each(function(speclist) vim.pack.add(speclist, { load = Plug.load }) end)
+
+local elapsed = (vim.uv.hrtime() - t_1) / 1e6
+vim.schedule(function() print('init.lua in ' .. elapsed .. 'ms') end)
 -- require('jit.p').stop()

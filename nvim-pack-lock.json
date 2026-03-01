@@ -33,11 +33,15 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "f386df19b145607a33885b6110ef5c04faae42cb",
+      "rev": "ead0f5f342d8d323441e7d4b88f0fc436a81ad5f",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
+    "nvim-scissors": {
+      "rev": "59902c749117640bd5d434642b2df67fb038d4f2",
+      "src": "https://github.com/chrisgrieser/nvim-scissors.git"
+    },
     "nvim-treesitter": {
-      "rev": "b9171ede5de41b3f2dfa33fe33ebd585d795f928",
+      "rev": "ae2081cfcd3719d74b600f8377e4a99d1ec19c4a",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "oil.nvim": {
