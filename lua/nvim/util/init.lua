@@ -1,6 +1,9 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
+M.specs = require('nvim._plugins')
+M.after = function() end
+
 -- string manipulation
 -- M.gh = function(s) return string.format('https://github.com/%s.git', s) end
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
@@ -15,29 +18,13 @@ M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 -- fn wrappers
 M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
 
---- Normalize position arguments into a vim.Pos, falling back to cursor.
----@param ... any
----  - no args:       cursor position
----  - (row, col):    0-based integers → vim.pos(row, col)
----  - {row, col}:    extmark tuple (0-based) → vim.pos.extmark(arg)
----  - vim.Pos:       returned as-is
----@return vim.Pos
-function M.pos(...)
-  local nargs = select('#', ...)
-  if nargs == 0 then
-    return vim.pos.cursor(api.nvim_win_get_cursor(0))
-  elseif nargs == 2 then
-    return vim.pos(...)
-  elseif nargs == 1 then
-    local arg = select(1, ...)
-    if type(arg) == 'table' then
-      if arg.row then
-        return arg
-      end -- already a vim.Pos
-      return vim.pos.extmark(arg) -- {row, col} extmark tuple
-    end
-  end
-  error('pos: invalid arguments')
+-- local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
+--- Convert a file path to a module name by trimming the lua root
+---@param path string
+---@return string
+M.modname = function(path)
+  local name = fn.fnamemodify(path, ':r:s?^.*/lua/??') -- :gsub('/', '.')
+  return name:sub(-4) == 'init' and name:sub(1, -6) or name
 end
 
 -- api wrappers
@@ -61,36 +48,6 @@ M.is_comment = function(opts)
   end
   -- opts.pos is 0-indexed; synID expects 1-based row and col
   return vim.startswith(M.synname(cursor[1], cursor[2] + 1), 'Comment')
-end
-
---- Convert a file path to a module name by trimming the lua root
----@param path string
----@return string
-M.modname = function(path)
-  local name = fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/', '.')
-  return name:sub(-4) == 'init' and name:sub(1, -6) or name
-end
-
-local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
-
---- Get list of submodules in a given subdirectory of `nvim/`
----@param subdir string subdirectory of `nvim/` to search
----@return string[] list of module names ready for `require()`
-M.submodules = function(subdir)
-  local path = fs.joinpath(luaroot, 'nvim', subdir)
-  local files = fn.globpath(path, '*.lua', false, true)
-  -- return vim
-  --   .iter(files)
-  --   :filter(function(f)
-  --     if vim.fn.isdirectory(f) == 1 then
-  --       return vim.uv.fs_stat(f .. '/init.lua') ~= nil
-  --     else
-  --       return vim.endswith(f, '.lua') and not vim.endswith(f, 'init.lua')
-  --     end
-  --   end)
-  --  :map(M.modname)
-  --  :totable()
-  return vim.tbl_map(function(f) return f:sub(#luaroot + 2, -5) end, files)
 end
 
 --- foldtext for lua files with treesitter folds
