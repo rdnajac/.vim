@@ -1,6 +1,11 @@
 local M = {}
 
 M.after = function()
+  M.map({
+    { '<leader>ui', '<Cmd>Inspect<CR>' },
+    { '<leader>uI', '<Cmd>Inspect!<CR>' },
+    { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
+  })
   M.map(require('nvim.keys.bookmarks'))
   M.map(M.togglelist)
   if not Snacks then
@@ -49,7 +54,7 @@ M.map = function(t) vim.iter(t):map(_parse):each(vim.keymap.set) end
 
 ---@param key string normal mode keys mapped by snacks.toggle.Class method
 ---@param v string|table the preset toggle name or the table of opts
-M.map_snacks_toggle = function(key, v)
+M.new_snacks_toggle = function(key, v)
   local Toggle = Snacks.toggle
   if type(v) == 'table' then
     return Toggle.new(v):map(key)
@@ -61,6 +66,17 @@ local function ptogglelist(cmd)
   local success, err = pcall(cmd)
   if not success and err then
     vim.notify(err, vim.log.levels.ERROR)
+  end
+end
+
+M.register = function(spec)
+  if spec.keys then
+    M.map(spec.keys)
+  end
+  if spec.toggles then
+    for key, v in pairs(spec.toggles) do
+      M.new_snacks_toggle(key, v)
+    end
   end
 end
 

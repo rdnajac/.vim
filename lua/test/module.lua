@@ -1,6 +1,17 @@
 local M = {}
 local util = require('nvim.util')
 
+local fn, fs, uv = vim.fn, vim.fs, vim.uv
+-- local dir = fs.dirname(debug.getinfo(1).source:gsub('^@', ''))
+-- local files = fn.globpath(dir, '*/init.lua', false, true)
+-- vim.iter(files):map(function(file) return file:gsub('^.*(nvim/.+)$', '%1') end)
+--   :map(fs.dirname):map(function(modname)
+--     local submod = require(modname)
+--     local key = fs.basename(modname)
+--     M[key] = submod
+--     return submod
+--   end)
+
 local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
 
 --- Returns true for .lua files (non-init) and dirs that have an init.lua

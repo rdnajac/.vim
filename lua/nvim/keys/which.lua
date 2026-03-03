@@ -1,7 +1,7 @@
 return {
   'folke/which-key.nvim',
   -- see icon rules at `$PACKDIR/opt/which-key.nvim/lua/which-key/icons.lua`
-  config = function()
+  init = function()
     local wk = require('which-key')
     wk.setup({
       keys = { scroll_down = '<C-j>', scroll_up = '<C-k>' },

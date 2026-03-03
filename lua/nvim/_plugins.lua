@@ -1,12 +1,9 @@
 ---@type plug.Spec[]
 return {
   {
-    'rdnajac/vim-lol',
-    keys = {
-      { '<leader>ui', '<Cmd>Inspect<CR>' },
-      { '<leader>uI', '<Cmd>Inspect!<CR>' },
-      { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
-    },
+    'mason-org/mason.nvim',
+    build = ':MasonUpdate',
+    opts = { ui = { icons = require('nvim.ui.icons').mason.emojis } },
   },
   {
     'folke/sidekick.nvim',
@@ -41,7 +38,7 @@ return {
   },
   {
     'R-nvim/R.nvim',
-    config = function()
+    init = function()
       require('r').setup({
         R_args = { '--quiet', '--no-save' },
         -- user_maps_only = true,

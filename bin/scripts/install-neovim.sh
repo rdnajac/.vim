@@ -38,10 +38,10 @@ curl -L "$TAR_BASE/$ASSET" -o "$TARPATH" || die "Download failed"
 printf "→ Installing Neovim...\n"
 tar -xzf "$TARPATH" -C "$INSTALL_DIR" --strip-components=1 || die "Extraction failed"
 
-ln -sf "$INSTALL_DIR/bin/nvim" "$LOCALBIN/nvim" || die "Failed to link nvim to $LOCALBIN"
+# ln -sf "$INSTALL_DIR/bin/nvim" "$LOCALBIN/nvim" || die "Failed to link nvim to $LOCALBIN"
 
 rm -f "$TARPATH"
 
-"$LOCALBIN/nvim" --version || die "Neovim failed to run"
+# "$LOCALBIN/nvim" --version || die "Neovim failed to run"
 
 printf "neovim nightly installed!\n"

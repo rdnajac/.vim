@@ -2,14 +2,21 @@ local M = {}
 
 -- local me = debug.getinfo(1, 'S').source:gsub('^@', '')
 
-M.bt = function()
+M.trace = function()
   local trace = {} ---@type string[]
   for level = 2, 20 do -- arbitrary max depth
     local info = debug.getinfo(level, 'Sln')
     if not info then
       break
-    elseif info.what ~= 'C' and info.source ~= '@' .. os.getenv('MYVIMRC') then
-      local line = ('\n--- `%s:%s`%s'):format(
+    elseif
+      info.what ~= 'C'
+      -- don't record calls from functions defined in init.lua
+      and info.source ~= '@' .. os.getenv('MYVIMRC')
+      -- don't record profiler calls if its overriding `require()`
+      and not (vim.env.PROF and info.source:find('snacks[/\\]profiler'))
+    then
+      local line = ('--- %d. `%s:%s`%s'):format(
+        #trace,
         vim.fn.fnamemodify(info.source, ':s/^@//:~:.'),
         info.currentline,
         info.name and ' _in_ **' .. info.name .. '**' or ''
@@ -20,8 +27,8 @@ M.bt = function()
   return table.concat(trace, '\n')
 end
 
-local notify = vim.print
--- local notify = function(...) Snacks and Snacks.notify.warn(...) or vim.print(...) end
+-- local notify = vim.print
+local notify = Snacks and Snacks.notify.warn or vim.print
 
 -- Very simple function to profile a lua function.
 -- * **flush**: set to `true` to use `jit.flush` in every iteration.

@@ -135,7 +135,7 @@ return {
   specs = {
     {
       'nvim-mini/mini.nvim',
-      config = function()
+      init = function()
         local log = require('mini.misc').log_add
         log('Loading mini')
         for modname, opt in pairs(opts()) do

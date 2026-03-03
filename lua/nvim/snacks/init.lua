@@ -22,6 +22,7 @@ return {
       },
       keys = {
         { 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
+        { 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
         { ']]', function() Snacks.words.jump(vim.v.count1) end, mode = { 'n', 't' } },
         { '[[', function() Snacks.words.jump(-vim.v.count1) end, mode = { 'n', 't' } },
       },
@@ -87,5 +88,10 @@ return {
       },
     },
   },
-  after = function() end,
+  after = function()
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+      pattern = 'snacks_picker_preview',
+      callback = function(ev) MiniHipatterns.enable(ev.buf) end,
+    })
+  end,
 }

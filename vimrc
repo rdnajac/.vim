@@ -277,9 +277,9 @@ else
 endif
 
 " debug
-nnoremap <leader>db <Cmd>call vim#debug#buffer()<CR>
-nnoremap <leader>df <Cmd>call vim#debug#fold()<CR>
-nnoremap <leader>ds <Cmd>call vim#debug#shell()<CR>
+nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
+nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
+nnoremap <leader>ds <Cmd>verb shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
 if has('nvim')
   nnoremap <leader>dB <Cmd>Blink<CR>
   nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>

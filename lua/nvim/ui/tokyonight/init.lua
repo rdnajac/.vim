@@ -87,7 +87,7 @@ end
 --- are then merged with the default opts and stored on
 --- `require('tokyonight.config').options` This is referred to
 --- as config since it fits the common pattern `plugin.setup(opts)`.
-M.config = function() require('tokyonight').setup(_opts()) end
+M.init = function() require('tokyonight').setup(_opts()) end
 
 --- require('tokyonight').setup actually points to this function (unused here)
 M._setup = function() require('tokyonight.config').setup() end
