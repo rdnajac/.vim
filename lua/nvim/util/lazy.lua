@@ -1,43 +1,41 @@
-local M = {}
+local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
 
-M.bootstrap = function(spec)
-  local plugdir = vim.g.plughome
-  local lazypath = vim.fs.joinpath(plugdir, 'lazy.nvim')
-  vim.opt.rtp:prepend(lazypath)
-  require('lazy').setup(spec, {
-    dev = {
-      -- path = ...,
-      -- fallback = true,
-    },
-    performance = {
-      reset_packpath = false,
-      rtp = { reset = false },
-    },
-    profiling = {
-      loader = false,
-      require = false,
-    },
-    pkg = { enabled = false },
-    rocks = { enabled = false },
-    -- install = { colorscheme = { 'tokyonight' } },
-    change_detection = { enabled = false, notify = false },
+--- execute a callback once at an event
+---@param event string|string[]
+---@param cb fun() the module's setup function with opts
+local on_event = function(event, cb)
+  vim.api.nvim_create_autocmd(event, {
+    callback = cb,
+    group = aug,
+    -- nested = true,
+    once = true,
   })
 end
 
-M.file = function()
-  local triggered = false
-  local events = { 'BufReadPost', 'BufNewFile', 'BufWritePre' }
+--- If `event` is specified, defers setup until the event fires.
+--- Ensures setup runs only once via `did_init` flag.
+function M.init(self)
+  self.did_init = false
 
-  vim.api.nvim_create_autocmd(events, {
-    group = vim.api.nvim_create_augroup('LazyFile', { clear = true }),
-    callback = function()
-      if not triggered then
-        triggered = true
-        vim.api.nvim_exec_autocmds('User', { pattern = 'LazyFile' })
-      end
-    end,
-    desc = 'User LazyFile event from LazyVim',
-  })
+  local function _init()
+    if self.did_init then
+      return
+    end
+    local opts = vim.is_callable(self.opts) and self.opts() or self.opts
+    if type(opts) == 'table' then
+      require(self:modname()).setup(opts)
+    elseif vim.is_callable(self.config) then
+      self.config()
+    end
+    vim.schedule(function() self:register_keys() end)
+    self.did_init = true
+  end
+
+  if self.event then
+    on_event(self.event, _init)
+  else
+    _init()
+  end
 end
 
 return M
