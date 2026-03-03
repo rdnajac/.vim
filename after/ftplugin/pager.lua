@@ -1,3 +1,5 @@
+vim.treesitter.start(0, 'markdown')
+
 local goto_file = function()
   local line = vim.api.nvim_get_current_line()
   local lineno = line:match(':(%d+)') or 0
@@ -6,5 +8,4 @@ local goto_file = function()
   vim.cmd('normal! ' .. lineno .. 'G')
 end
 
--- vim.treesitter.start(0, 'lua')
 vim.keymap.set('n', '<CR>', goto_file, { buffer = true, desc = 'Go to file under cursor' })

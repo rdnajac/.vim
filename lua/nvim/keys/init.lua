@@ -50,7 +50,12 @@ local function _parse(t)
   return t.mode or 'n', lhs, rhs, opts
 end
 
-M.map = function(t) vim.iter(t):map(_parse):each(vim.keymap.set) end
+M.map = function(t)
+  if not t or not vim.islist(t) then
+    return
+  end
+  vim.iter(t):map(_parse):each(vim.keymap.set)
+end
 
 ---@param key string normal mode keys mapped by snacks.toggle.Class method
 ---@param v string|table the preset toggle name or the table of opts

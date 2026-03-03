@@ -1,5 +1,6 @@
 if not Snacks then
   print('Snacks is not available')
+  return
 end
 Snacks.util.set_hl({
   Desc = 'Chromatophore',
