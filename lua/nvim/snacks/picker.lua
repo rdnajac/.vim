@@ -34,7 +34,7 @@ local M = {
         p:action({ 'jump' })
       end,
     },
-    help = { layout = 'ivy_split' },
+    help = { layout = 'mylayout' },
     icons = { layout = 'insert' },
     recent = { config = function(p) p.filter = {} end },
     todo = require('nvim.snacks.picker.todo'), -- mine!

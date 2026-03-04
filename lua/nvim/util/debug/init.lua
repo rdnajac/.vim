@@ -29,6 +29,17 @@ end
 
 -- local notify = vim.print
 local notify = Snacks and Snacks.notify.warn or vim.print
+-- local notify = function() return Snacks and Snacks.notify.warn or vim.print end
+
+M.dd = function(...)
+  local len = select('#', ...) ---@type number
+  local obj = { ... } ---@type unknown[]
+  local trace = require('nvim.util.debug').trace()
+  local content = len == 1 and obj[1] or len > 0 and obj or ''
+  -- local function p() notify(trace .. content) end
+  local function p() vim.print(trace, content) end
+  return vim.in_fast_event() and vim.schedule(p) or p()
+end
 
 -- Very simple function to profile a lua function.
 -- * **flush**: set to `true` to use `jit.flush` in every iteration.

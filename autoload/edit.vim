@@ -44,10 +44,9 @@ function! s:edit(file, ...) abort
   " insert the extra command if it is not empty
   let cmd .= (!empty(extra) ? extra . ' ' : '') . file
   " If we're focused on a floating window, close it first
-  if has ('nvim') && luaeval('Snacks.util.is_float() == true')
-    quit
-  endif
-
+  " if has ('nvim') && luaeval('Snacks.util.is_float() == true')
+    " quit
+  " endif
   execute cmd
   normal! zvzz
 endfunction

@@ -336,8 +336,10 @@ nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
 nnoremap <leader><Tab>d <Cmd>tabclose<CR>
 nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
-nnoremap <leader><Bslash> <Cmd>call edit#readme()<CR>
+
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
+nnoremap <leader><Bslash> <Cmd>call edit#readme()<CR>
+nnoremap <Bslash><leader> <Cmd>call edit#readme()<CR>
 
 
 " change/delete current word {{{2
