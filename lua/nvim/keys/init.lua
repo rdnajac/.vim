@@ -22,6 +22,7 @@ M.specs = {
   {
     'monaqa/dial.nvim',
     -- TODO: lazy load this
+    lazy = true,
     event = 'UIEnter',
     init = function()
       package.preload['dial.config'] = function() return require('nvim.keys.dial') end

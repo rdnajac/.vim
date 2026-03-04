@@ -8,12 +8,15 @@ let s:dirs = {
       \ 'v': g:vimrc#dir,
       \ 'p': g:plug#home,
       \ 'B': &backupdir,
-      \ 'c': g:stdpath['config'],
-      \ 'C': g:stdpath['cache'],
-      \ 'd': g:stdpath['data'],
-      \ 's': g:stdpath['state'],
       \ '.': '~/.local/share/chezmoi/',
       \ }
+
+if exists('g:stdpath')
+  let s:dirs.c = g:stdpath['config']
+  let s:dirs.C = g:stdpath['cache']
+  let s:dirs.d = g:stdpath['data']
+  let s:dirs.s = g:stdpath['state']
+endif
 
 if !has('nvim')
   for [key, value] in items(s:dirs)
@@ -26,7 +29,7 @@ else
     call v:lua.require'nvim.keys'.map([ [
 	  \ 'cd' .. key,
 	  \ '<Cmd>lua Snacks.picker.explorer({cwd = "' .. value .. '"})<CR>'
-  \ ] ])
+	  \ ] ])
   endfor
 endif
 

@@ -1,5 +1,3 @@
---- OOP
-
 ---@class plug.Spec
 ---@field [1] string `owner/repo`
 ---@field build? string|fun(ev: table):nil Callback after plugin is installed/updated.
@@ -29,6 +27,8 @@ function M.new(v)
   vim.validate('opts', self.opts, { 'table', 'function' }, true)
   vim.validate('src', self.src, 'string', true)
   vim.validate('toggles', self.toggles, 'table', true)
+  vim.validate('event', self.event, { 'string', 'table' }, true)
+  vim.validate('lazy', self.lazy, 'boolean', true)
   -- add required fields and defaults
   self.src = self.src or ('https://github.com/%s.git'):format(self[1])
   self.name = self.name or self[1]:match('[^/]*$')
@@ -50,6 +50,18 @@ end
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field init? fun():nil called inside of the `load()` function, after `packadd()`.
 
+local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
+---@param event string|string[]
+---@param cb fun() the module's setup function with opts
+local on_event = function(event, cb)
+  vim.api.nvim_create_autocmd(event, {
+    callback = cb,
+    group = aug,
+    -- nested = true,
+    once = true,
+  })
+end
+
 --- Convert the plugin specification to a format compatible with `vim.pack.add()`.
 ---@return vim.pack.Spec
 function M:to_pack_spec()
@@ -59,7 +71,9 @@ function M:to_pack_spec()
     build = self.build,
     init = function()
       vim.schedule(function() return nv.keys.register(self) end)
-      return self.init and self.init() or self:infer_setup()
+      -- return self.init and self.init() or self:infer_setup()
+      local setup = self.init or function() self:infer_setup() end
+      return self.event and on_event(self.event, setup) or setup()
     end,
   }
   return spec
@@ -67,7 +81,8 @@ end
 
 --- @param plug_data { spec: vim.pack.Spec, path: string }
 M.load = function(plug_data)
-  vim.cmd.packadd({ plug_data.spec.name, bang = vim.v.vim_did_enter == 0 })
+  local spec = plug_data.spec
+  vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })
   -- local init = vim.tbl_get(plug_data, 'spec', 'data', 'init')
   -- if vim.is_callable(init) then
   --   init()
@@ -76,14 +91,17 @@ M.load = function(plug_data)
 end
 
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
-  callback = function(event)
-    local kind = event.data.kind ---@type "install"|"update"|"delete"
-    local name = vim.tbl_get(event, 'data', 'spec', 'name')
-    local build = vim.tbl_get(event, 'data', 'spec', 'data', 'build')
+  callback = function(ev)
+    local kind = ev.data.kind ---@type "install"|"update"|"delete"
+    local spec = ev.data.spec ---@type vim.pack.Spec
+    local name = spec.name
+    local build = vim.tbl_get(spec, 'data', 'build')
     if kind == 'delete' or not build then
       return
     end
-    vim.cmd.packadd(spec.name)
+    if not ev.data.active then
+      vim.cmd.packadd(name)
+    end
     if type(build) == 'function' then
       build()
       print('Build function called for ' .. name)

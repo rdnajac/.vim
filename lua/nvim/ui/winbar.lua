@@ -5,7 +5,8 @@ local M = {
     local render = require('nvim.ui.status').render
     local winbar_b = require('nvim.lsp').status
     local winbar_c = require('nvim.treesitter').status
-    return render(' %t', winbar_b(), ' ' .. winbar_c()) .. '%#WinBar# ' .. nv.blink.status()
+    return render(' %t', winbar_b(), ' ' .. winbar_c()) .. '%#WinBar# '
+    -- .. nv.blink.status()
   end,
 
   inactive = function() return winbar_a end,

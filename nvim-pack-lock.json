@@ -9,7 +9,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "b650e976a927be6b46487a0a610b75af111376c5",
+      "rev": "1912be2ca1f7fc98ae5b2b12fad49525f3b366ec",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -79,10 +79,6 @@
     "vim-fugitive": {
       "rev": "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4",
       "src": "https://github.com/tpope/vim-fugitive.git"
-    },
-    "vim-lol": {
-      "rev": "8b8ea9b252a2c25294b981e97bc007a212e850ca",
-      "src": "https://github.com/rdnajac/vim-lol.git"
     },
     "vim-scriptease": {
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",

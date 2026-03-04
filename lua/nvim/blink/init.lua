@@ -3,8 +3,9 @@
 ---@type plug.Spec
 local blink = { --- `https://cmp.saghen.dev/`
   'Saghen/blink.cmp',
+  -- enabled = false,
   -- TODO: show completion menu on <C-R> in insert mode
-  build = 'BlinkCmp build', -- FIXME: doesn't build on initial install
+  build = function() vim.cmd([['BlinkCmp build]]) end,
   event = 'UIEnter',
   ---@type blink.cmp.Config
   -- NOTE: non-default options are commented out

@@ -91,7 +91,11 @@ return {
   after = function()
     vim.api.nvim_create_autocmd({ 'FileType' }, {
       pattern = 'snacks_picker_preview',
-      callback = function(ev) MiniHipatterns.enable(ev.buf) end,
+      callback = function(ev)
+        if MiniHipatterns then
+          MiniHipatterns.enable(ev.buf)
+        end
+      end,
     })
   end,
 }

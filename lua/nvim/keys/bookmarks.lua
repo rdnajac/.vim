@@ -9,6 +9,9 @@ local bookmarks = {
   u = 'ui',
   v = 'util',
 }
+vim.cmd([[
+  nnoremap <Bslash>p <Cmd>call edit#luamod('plug')<CR>
+]])
 
 return vim
   .iter(bookmarks)
