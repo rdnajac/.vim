@@ -1,24 +1,25 @@
 --- init.lua
 local t_1 = vim.uv.hrtime()
 
---- optional LuaJIT profiling
---- `https://luajit.org/ext_profiler.html`
--- require('jit.p').start('ri1', '/tmp/prof')
-
---- overrides `loadfile()` and default nvim package loader
---- `https://github.com/neovim/neovim/discussions/36905`
-vim.loader.enable()
+vim.loader.enable() -- `https://github.com/neovim/neovim/discussions/36905`
 
 --- `autoload/plug.vim` overrides vim-plug
 --- `plug#end()` will `vim.pack.add` vim plugins
--- vim.cmd([[source vimrc]])
+vim.cmd([[source vimrc]])
 -- vim.cmd.source(vim.fn.stdpath('config') .. '/vimrc')
-vim.cmd.source(vim.api.nvim_get_runtime_file('vimrc', false))
+-- vim.cmd.source(vim.api.nvim_get_runtime_file('vimrc', false))
 
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fn.stdpath('data') .. '/site/pack/core/opt/snacks.nvim')
   require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
 end
+
+vim.o.cmdheight = 0 -- XXX: experimental!
+-- vim.cmd([[ set cmdheight=0 ]])
+-- BUG: ui2 error on declining to install after vim.pack.add
+require('vim._core.ui2').enable({
+  msg = { target = 'msg' },
+})
 
 _G.nv = require('nvim')
 
@@ -45,8 +46,13 @@ local speclist = vim
   :map(function(plugin) return plugin:to_pack_spec() end)
   :totable()
 
-vim.pack.add(speclist, { load = plug.load, confirm = false })
+-- :each(function(spec)
+-- vim.pack.add(speclist, { load = plug.load, confirm = false })
+vim.pack.add(vim.list_extend(vim.g.plugs or {}, speclist), {
+  load = plug.load,
+  confirm = false,
+})
 
-local elapsed = (vim.uv.hrtime() - t_1) / 1e6
-vim.schedule(function() print('init.lua in ' .. elapsed .. 'ms') end)
--- require('jit.p').stop()
+-- local msg = ('init.lua in %sms'):format((vim.uv.hrtime() - t_1) / 1e6)
+local msg = ('_init.lua_: Loaded in **%s** ms'):format((vim.uv.hrtime() - t_1) / 1e6)
+vim.schedule(function() print(msg) end)

@@ -7,9 +7,9 @@ local keys = {
   { icon = ' ', key = 'M', desc = 'Mason',          action = ':Mason' },
   { icon = '󰒲 ', key = 'G', desc = 'LazyGit',        action = ':LazyGit' },
   { icon = ' ', key = 'N', desc = 'News',           action = ':News' },
-  { icon = ' ', key = 'H', desc = 'Health',         action = ':Health' },
+  { icon = ' ', key = 'H', desc = 'Health',         action = ':packloadall | checkhealth' },
   { icon = '󱥰 ', key = 'D', desc = 'Edit Dashboard', action = ':e ' .. me },
-  { icon = ' ', key = 'R', desc = 'Restart',        action = ':Restart' },
+  { icon = ' ', key = 'R', desc = 'Restart',        action = ':restart' },
 }
 
 ---@type snacks.dashboard.Config

@@ -2,12 +2,30 @@
 
 My (n)vim configuration.
 
+## Startup
+
+Goal: be as compatible with vim as possible. 
+
+~/.config/nvim symlinked to ~/.vim
+
+1. Source `vimrc`
+
+
+## Profiling
+
+Profiling with [LuaJIT](https://luajit.org/ext_profiler.html)
+
+```lua
+require('jit.p').start('ri1', '/tmp/prof')
+-- do stuff
+-- ...
+require('jit.p').stop()
+```
 
 ## Spell Checking
 
 Download [cspell](http://streetsidesoftware.github.io/cspell/)
 dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-dicts/tree/main/dictionaries)
-
 
 ```sh
 # lists all dictionaries
@@ -24,7 +42,19 @@ $$
 
 ## Bugs
 
+### luals doesn't work on first buffer loaded
+
 `https://github.com/folke/lazydev.nvim/issues/136#issuecomment-3773651709`
+
+MasonInstall lua-kanguage-server@3.16.4
+
+### SIGSEGV on startup
+
+Crash when `packadd` is called during `:runtime` or `:source` execution
+
+https://github.com/neovim/neovim/issues/38119
+
+roll back to `cf874cee330db7996e879891b7be0ffa3bd6a535`
 
 ## Resources and references
 

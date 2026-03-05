@@ -5,7 +5,6 @@ M.specs = require('nvim._plugins')
 M.after = function() end
 
 -- string manipulation
--- M.gh = function(s) return string.format('https://github.com/%s.git', s) end
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
 M.camelCase = function(s)
   return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)

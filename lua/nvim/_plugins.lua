@@ -6,6 +6,13 @@ return {
     opts = { ui = { icons = require('nvim.ui.icons').mason.emojis } },
   },
   {
+    'stevearc/oil.nvim',
+    keys = { { '-', '<Cmd>Oil<CR>' } },
+    opts = {
+      default_file_explorer = false,
+    },
+  },
+  {
     'folke/sidekick.nvim',
     -- enabled = false,
     opts = {},

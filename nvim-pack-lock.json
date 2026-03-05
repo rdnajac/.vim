@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "b5e2b36450c89a670f30b4a1f2c9eed1deac9c8a",
+      "rev": "6004610f205809d5471278d9806552abd261fd47",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
@@ -29,7 +29,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "a95dc67ecff78de138543a20c20f29f47111b122",
+      "rev": "cad365c212fb1e332cb93fa8f72697125799d00a",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -41,7 +41,7 @@
       "src": "https://github.com/chrisgrieser/nvim-scissors.git"
     },
     "nvim-treesitter": {
-      "rev": "ae2081cfcd3719d74b600f8377e4a99d1ec19c4a",
+      "rev": "544320a9cf5d6bf539ec1cc54d393064015670c4",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "oil.nvim": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "fe7cfe9800a182274d0f868a74b7263b8c0c020b",
+      "rev": "9912042fc8bca2209105526ac7534e9a0c2071b2",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "tokyonight.nvim": {
@@ -89,7 +89,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "95b93a24740f7b89dd8331326b41bdd1337d79f6",
+      "rev": "82d2305ff71dfb3bd91602534cc9bb9a195bcb38",
       "src": "https://github.com/lervag/vimtex.git"
     }
   }

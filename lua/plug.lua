@@ -83,11 +83,8 @@ end
 M.load = function(plug_data)
   local spec = plug_data.spec
   vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })
-  -- local init = vim.tbl_get(plug_data, 'spec', 'data', 'init')
-  -- if vim.is_callable(init) then
-  --   init()
-  -- end
-  plug_data.spec.data.init() -- assume `init` is always defined...
+  local init = vim.tbl_get(spec, 'data', 'init')
+  return vim.is_callable(init) and init()
 end
 
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {

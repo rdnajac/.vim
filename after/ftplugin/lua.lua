@@ -1,6 +1,7 @@
-local id = require('nvim.lsp.myserver').client_id
-vim.g.myserver_id = id
-vim.lsp.buf_attach_client(0, id)
+-- FIXME: finish this...
+-- local id = require('nvim.lsp.myserver').client_id
+-- vim.g.myserver_id = id
+-- vim.lsp.buf_attach_client(0, id)
 
 vim.wo.foldmethod = 'expr'
 _G.Foldtext = require('nvim.util').foldtext
