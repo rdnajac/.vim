@@ -1,4 +1,4 @@
-vim.treesitter.start(0, 'markdown')
+vim.cmd([[ runtime! after/ftplugin/msg.lua ]])
 
 local goto_file = function()
   local line = vim.api.nvim_get_current_line()

@@ -1,28 +1,21 @@
-local winbar_a = ' %t'
+local winbar_a = ' %t %m'
+-- local winbar_a = require('nvim.ui.status').buffer
 
-local M = {
-  active = function()
-    local render = require('nvim.ui.status').render
-    local winbar_b = require('nvim.lsp').status
-    local winbar_c = require('nvim.treesitter').status
-    return render(' %t', winbar_b(), ' ' .. winbar_c()) .. '%#WinBar# '
-    -- .. nv.blink.status()
-  end,
+local active = function()
+  local render = require('nvim.ui.status').render
+  local winbar_b = require('nvim.lsp').status
+  local winbar_c = require('nvim.treesitter').status
+  return render(winbar_a, winbar_b(), ' ' .. winbar_c()) .. '%#WinBar# '
+  -- .. nv.blink.status()
+end
 
-  inactive = function() return winbar_a end,
-}
+local inactive = function() return winbar_a end
 
-setmetatable(M, {
-  __call = function()
-    if vim.bo.filetype == 'snacks_dashboard' then
-      return ''
-    end
-    local active = vim.fn['vimline#active#winbar']() == 1
-    if active then
-      return M.active()
-    else
-      return M.inactive()
-    end
-  end,
-})
-return M
+local winbar = function()
+  if vim.bo.filetype == 'snacks_dashboard' then
+    return ''
+  end
+  return vim.fn['vimline#active#winbar']() == 1 and active() or inactive()
+end
+
+return winbar

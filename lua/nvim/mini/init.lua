@@ -130,7 +130,11 @@ local opts = function()
 end
 
 return {
-  after = function() require('mini.misc').log_add('Mini.after()') end,
+  after = function()
+    if MiniMisc then
+      MiniMisc.log_add('Mini.after()')
+    end
+  end,
   -- TODO: make specs work for a single table
   specs = {
     {

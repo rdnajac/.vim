@@ -15,8 +15,8 @@ local M = {}
 M.__index = M
 
 --- Create a new Plugin instance from a specification table.
---- @param v table Plugin specification with required `[1]` field.
---- @return plug.Spec
+---@param v string|table table with required `[1]` field (or just `user/repo`
+---@return plug.Spec
 function M.new(v)
   local self = type(v) == 'table' and v or { v }
   vim.validate('[1]', self[1], 'string')
@@ -62,7 +62,7 @@ local on_event = function(event, cb)
   })
 end
 
---- Convert the plugin specification to a format compatible with `vim.pack.add()`.
+--- Convert the plugin to a format compatible with `vim.pack.add()`.
 ---@return vim.pack.Spec
 function M:to_pack_spec()
   local spec = { src = self.src, name = self.name, version = self.version }
@@ -79,7 +79,22 @@ function M:to_pack_spec()
   return spec
 end
 
---- @param plug_data { spec: vim.pack.Spec, path: string }
+--- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
+---@param v table
+---@return vim.pack.Spec|nil
+function M.add(v)
+  if v.enabled == false then
+    return nil
+  end
+  return M.new(v):to_pack_spec()
+end
+
+_G.Plug = function(plugs)
+  local speclist = vim.tbl_map(M.add, plugs)
+  vim.pack.add(speclist, { load = M.load })
+end
+
+---@param plug_data { spec: vim.pack.Spec, path: string }
 M.load = function(plug_data)
   local spec = plug_data.spec
   vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })

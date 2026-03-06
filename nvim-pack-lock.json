@@ -48,6 +48,10 @@
       "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",
       "src": "https://github.com/stevearc/oil.nvim.git"
     },
+    "render-markdown.nvim": {
+      "rev": "bd482f9a4827c9422231a7db1439c5cff1e69ae0",
+      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
+    },
     "sidekick.nvim": {
       "rev": "c2bdf8cfcd87a6be5f8b84322c1b5052e78e302e",
       "src": "https://github.com/folke/sidekick.nvim.git"

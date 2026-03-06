@@ -6,9 +6,10 @@ My (n)vim configuration.
 
 Goal: be as compatible with vim as possible. 
 
-~/.config/nvim symlinked to ~/.vim
+`~/.config/nvim` symlinked to `~/.vim`
 
 1. Source `vimrc`
+2. ???
 
 
 ## Profiling
@@ -34,7 +35,9 @@ npx cspell dictionaries
 
 ## Snacks
 
-Snacks.image can render math, like the formula for null hypothesis testing:
+> TODO:pos/neg infifintiy 
+
+Snacks.image can render math inline, $z=a+bi$, or in a `$$` block:
 
 $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
@@ -67,9 +70,6 @@ roll back to `cf874cee330db7996e879891b7be0ffa3bd6a535`
 - [No Plugins](https://github.com/changemewtf/no_plugins)
 
 - [Neovim](https://neovim.io/)
-- [`lazy.nvim` plugin manager](https://lazy.folke.io/)
-- [LazyVim](https://www.lazyvim.org)
-- [`lsp-zero`](https://lsp-zero.netlify.app/docs/)
 
 ---
 
