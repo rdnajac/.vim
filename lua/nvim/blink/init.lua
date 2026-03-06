@@ -5,7 +5,7 @@ local blink = { --- `https://cmp.saghen.dev/`
   'Saghen/blink.cmp',
   -- enabled = false,
   -- TODO: show completion menu on <C-R> in insert mode
-  build = function() vim.cmd([['BlinkCmp build]]) end,
+  build = function() vim.cmd([[BlinkCmp build]]) end,
   event = 'UIEnter',
   ---@type blink.cmp.Config
   -- NOTE: non-default options are commented out

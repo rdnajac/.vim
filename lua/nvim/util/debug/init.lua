@@ -1,6 +1,6 @@
 local M = {}
 
--- local me = debug.getinfo(1, 'S').source:gsub('^@', '')
+local me = debug.getinfo(1, 'S').source
 
 M.trace = function()
   local trace = {} ---@type string[]
@@ -11,7 +11,9 @@ M.trace = function()
     elseif
       info.what ~= 'C'
       -- don't record calls from functions defined in init.lua
-      and info.source ~= '@' .. os.getenv('MYVIMRC')
+      -- and info.source ~= '@' .. os.getenv('MYVIMRC')
+      and info.source ~= me
+      and info.name ~= 'dd'
       -- don't record profiler calls if its overriding `require()`
       and not (vim.env.PROF and info.source:find('snacks[/\\]profiler'))
     then

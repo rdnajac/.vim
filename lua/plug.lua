@@ -80,17 +80,15 @@ function M:to_pack_spec()
 end
 
 --- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
----@param v table
+---@param plugs table[] list of
 ---@return vim.pack.Spec|nil
-function M.add(v)
-  if v.enabled == false then
-    return nil
-  end
-  return M.new(v):to_pack_spec()
-end
-
 _G.Plug = function(plugs)
-  local speclist = vim.tbl_map(M.add, plugs)
+  -- vim.validate('plugs', plugs, vim.islist)
+  local speclist = vim
+    .iter(plugs)
+    :filter(function(v) return v.enabled ~= false end)
+    :map(function(v) return M.new(v):to_pack_spec() end)
+    :totable()
   vim.pack.add(speclist, { load = M.load })
 end
 

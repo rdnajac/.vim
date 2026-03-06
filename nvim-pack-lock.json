@@ -9,7 +9,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "1912be2ca1f7fc98ae5b2b12fad49525f3b366ec",
+      "rev": "e9556f9b981f395e22a6bfd69fd5f3008a2a6cd9",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {

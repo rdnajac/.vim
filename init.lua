@@ -8,6 +8,12 @@ if vim.env.PROF then
   require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
 end
 
+_G.dd = require('nvim.util.debug').dd
+
+ -- exposes global `Plug` lua function
+ -- registers autocmd for build on install/update
+require('plug')
+
 -- the command `Plug` adds plugins to `g:plugs` (see `autoload/plug.vim`)
 vim.cmd([[ source ~/.vim/vimrc | lua vim.pack.add(vim.g.plugs) ]])
 
@@ -18,22 +24,17 @@ require('vim._core.ui2').enable({
   msg = { target = 'msg' },
 })
 
-require('plug') -- exposes global `Plug` lua function
-
 vim
   .iter(require('nvim'))
   :map(function(_, v)
-    vim.validate('submodule', v, 'table')
-    vim.validate('specs', v.specs, vim.islist)
-    vim.validate('after', v.after, 'function', true)
-    return v
-  end)
-  :map(function(submodule)
-    if submodule.after then
-      vim.schedule(submodule.after)
+    -- vim.validate('submodule', v, 'table')
+    if vim.is_callable(v.after) then
+      vim.schedule(v.after)
     end
-    return submodule.specs
+    dd()
+    return v.specs
   end)
+  -- :map(function(submodule) return submodule.specs end)
   :each(Plug) -- `vim.pack.add`s transformed plugins
 
 local elapsed = (vim.uv.hrtime() - t_1) / 1e6
