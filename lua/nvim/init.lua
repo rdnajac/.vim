@@ -18,4 +18,6 @@ local M = {
   util = require('nvim.util'),
 }
 
+_G.nv = M
+
 return M
