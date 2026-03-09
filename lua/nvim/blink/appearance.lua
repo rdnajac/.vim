@@ -44,7 +44,7 @@ M.menu = {
       source_id = {
         ellipsis = false,
         text = function(ctx)
-          local provider = ctx.source_name
+          local provider = ctx.source_name:lower()
           local icon = require('nvim.ui.icons').blink[provider] or ' '
           return icon .. ctx.icon_gap
         end,

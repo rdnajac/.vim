@@ -60,13 +60,12 @@ sources.default = vim.list_extend(vim.tbl_keys(sources.providers), {
 -- TODO:
 -- sources.per_filetype['vim'] = { inherit_defaults = true, 'env' }
 -- sources.per_filetype['sql'] = { inherit_defaults = true, 'dadbod' }
-sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }
-
-sources.providers['lazydev'] = {
-  name = 'LazyDev',
-  module = 'lazydev.integrations.blink',
-  score_offset = 100,
-}
+-- sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }
+-- sources.providers['lazydev'] = {
+--   name = 'LazyDev',
+--   module = 'lazydev.integrations.blink',
+--   score_offset = 100,
+-- }
 
 -- sources.providers['registers'] = {
 --   name = 'Registers',
