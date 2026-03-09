@@ -1,5 +1,14 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
-local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
+
+local M = {
+  specs = {
+    { 'mason-org/mason.nvim', opts = {} },
+    { 'stevearc/oil.nvim', opts = {} },
+  },
+  after = function() end,
+}
+
+vim.list_extend(M.specs, require('nvim._plugins'))
 
 -- string manipulation
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end

@@ -1,21 +1,20 @@
 local ai = require('mini.ai')
 local ex = require('mini.extra')
-
-ai.setup({
+local opts = {
   n_lines = 500,
   custom_textobjects = {
     -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
     -- d = { '%f[%d]%d+' }, -- digits
-    d = ex.gen_ai_spec.number,
-    e = { -- Word with case
-      {
-        '%u[%l%d]+%f[^%l%d]',
-        '%f[%S][%l%d]+%f[^%l%d]',
-        '%f[%P][%l%d]+%f[^%l%d]',
-        '^[%l%d]+%f[^%l%d]',
-      },
-      '^().*()$',
-    },
+    -- d = ex.gen_ai_spec.number,
+    -- e = { -- Word with case
+    --   {
+    --     '%u[%l%d]+%f[^%l%d]',
+    --     '%f[%S][%l%d]+%f[^%l%d]',
+    --     '%f[%P][%l%d]+%f[^%l%d]',
+    --     '^[%l%d]+%f[^%l%d]',
+    --   },
+    --   '^().*()$',
+    -- },
     -- f = ai.gen_spec.treesitter({ a = '@function.outer', i = '@function.inner' }), -- function
     g = ex.gen_ai_spec.buffer(), -- buffer
     o = ai.gen_spec.treesitter({ -- code block
@@ -26,4 +25,6 @@ ai.setup({
     u = ai.gen_spec.function_call(), -- u for "Usage"
     U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
   },
-})
+}
+
+ai.setup(opts)

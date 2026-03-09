@@ -40,7 +40,7 @@ end
 --- The module name is just the plugin name without a `.nvim` suffix, if present.
 function M:setup()
   if self.init then
-    return self.init
+    return self.init()
   end
   local opts = vim.is_callable(self.opts) and self.opts() or self.opts
   if type(opts) == 'table' then
@@ -78,13 +78,13 @@ function M:to_pack_spec()
   spec.data = {
     build = self.build,
     init = function()
-      vim.schedule(function() return require('nvim.keys').register(self) end)
       -- return self.init and self.init() or self:infer_setup()
       local setup = function() self:setup() end
       if not self.event then
         return setup()
       end
       on_event(self.event, setup)
+      vim.schedule(function() return require('nvim.keys').register(self) end)
     end,
   }
   return spec
@@ -96,7 +96,7 @@ local _load = function(plug_data)
   local spec = plug_data.spec
   vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })
   local init = vim.tbl_get(spec, 'data', 'init')
-  return vim.is_callable(init) and init()
+  return vim.is_callable(init) and init() or nil
 end
 
 --- Wraps instantiation, initialization, and conversion, skipping disabled plugins.

@@ -28,7 +28,7 @@ Snacks.setup({
   image = { enabled = true },
   indent = { indent = { only_current = false, only_scope = true } },
   input = { enabled = true },
-  notifier = require('nvim.snacks.notifier'),
+  -- notifier = require('nvim.snacks.notifier'),
   quickfile = { enabled = true },
   picker = require('nvim.snacks.picker'),
   -- terminal = { enabled = true },
@@ -54,7 +54,7 @@ _G.nv = {
   lsp = require('nvim.lsp'),
   treesitter = require('nvim.treesitter'),
   ui = require('nvim.ui'),
-  -- util = require('nvim.util'),
+  util = require('nvim.util'),
 }
 
 vim.iter(nv):each(function(_, v)
@@ -64,9 +64,6 @@ vim.iter(nv):each(function(_, v)
   end
   Plug(v.specs) -- `vim.pack.add`s transformed plugins
 end)
-
-require('mason').setup({})
-require('oil').setup({})
 
 local elapsed = (vim.uv.hrtime() - t_1) / 1e6
 local msg = ('_init.lua_: Loaded in **%s** ms'):format(elapsed)

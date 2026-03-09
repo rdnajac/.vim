@@ -500,11 +500,9 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
-  " Plug 'folke/snacks.nvim'
+  Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
-  Plug 'mason-org/mason.nvim'
   Plug 'nvim-mini/mini.nvim'
-  Plug 'stevearc/oil.nvim'
   " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
   Plug 'nvim-treesitter/nvim-treesitter'

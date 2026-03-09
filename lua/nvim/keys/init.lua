@@ -6,6 +6,7 @@ M.after = function()
     { '<leader>ui', '<Cmd>Inspect<CR>' },
     { '<leader>uI', '<Cmd>Inspect!<CR>' },
     { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
+    { '<C-Space>', 'vin', { desc = 'Select Treesitter Node', remap = true } },
     { 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
     { 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
     { ']]', function() Snacks.words.jump(vim.v.count1) end, mode = { 'n', 't' } },
@@ -19,7 +20,7 @@ M.after = function()
   Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
   Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
-  for key, v in pairs(require('nvim.snacks.toggles')) do
+  for key, v in pairs(require('nvim.keys.toggles')) do
     M.new_snacks_toggle(key, v)
   end
 end
@@ -27,11 +28,10 @@ end
 M.specs = {
   -- require('nvim.keys.which'),
   -- require('nvim.keys.screen'),
+  require('nvim.blink'),
   {
     'monaqa/dial.nvim',
-    -- TODO: lazy load this
-    lazy = true,
-    -- event = 'UIEnter',
+    lazy = true, -- TODO: lazy load this plugin
     init = function()
       package.preload['dial.config'] = function() return require('nvim.keys.dial') end
     end,
