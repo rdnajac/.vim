@@ -1,41 +1,72 @@
 --- init.lua
 local t_1 = vim.uv.hrtime()
 
-vim.loader.enable() -- `https://github.com/neovim/neovim/discussions/36905`
+vim.loader.enable()
 
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fn.stdpath('data') .. '/site/pack/core/opt/snacks.nvim')
   require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
 end
 
-_G.dd = require('nvim.util.debug').dd
+require('nvim.ui.2')
 
- -- exposes global `Plug` lua function
- -- registers autocmd for build on install/update
+-- exposes global `Plug` lua function
+-- registers autocmd for build on install/update
 require('plug')
 
--- the command `Plug` adds plugins to `g:plugs` (see `autoload/plug.vim`)
-vim.cmd([[ source ~/.vim/vimrc | lua vim.pack.add(vim.g.plugs) ]])
+-- vim.cmd([[ source ~/.vim/vimrc | lua vim.pack.add(vim.g.plugs) ]])
+vim.cmd([[ source ~/.vim/vimrc ]])
 
-vim.o.cmdheight = 0 -- XXX: unstable features!
--- BUG: ui2 freaks out if startup is interrupted
--- BUG: `msg` should inferred from cmdheight=0
-require('vim._core.ui2').enable({
-  msg = { target = 'msg' },
+require('snacks')
+_G.dd = Snacks.debug.inspect
+_G.bt = Snacks.debug.backtrace
+_G.p = Snacks.debug.profile
+Snacks.setup({
+  bigfile = require('nvim.snacks.bigfile'),
+  dashboard = require('nvim.snacks.dashboard'),
+  explorer = { replace_netrw = false },
+  image = { enabled = true },
+  indent = { indent = { only_current = false, only_scope = true } },
+  input = { enabled = true },
+  notifier = require('nvim.snacks.notifier'),
+  quickfile = { enabled = true },
+  picker = require('nvim.snacks.picker'),
+  -- terminal = { enabled = true },
+  scope = { enabled = true },
+  scroll = { enabled = true },
+  -- statuscolumn = require('nvim.snacks.statuscolumn'),
+  -- styles = { notification_history = { height = 0.9, width = 0.9, wo = { wrap = false } } },
+  toggle = { which_key = false },
+  words = { enabled = true },
 })
 
-vim
-  .iter(require('nvim'))
-  :map(function(_, v)
-    -- vim.validate('submodule', v, 'table')
-    if vim.is_callable(v.after) then
-      vim.schedule(v.after)
-    end
-    dd()
-    return v.specs
-  end)
-  -- :map(function(submodule) return submodule.specs end)
-  :each(Plug) -- `vim.pack.add`s transformed plugins
+Plug(require('nvim.blink'))
+
+--- Defines the structure of modules under the `nvim/` directory
+---@class nv.Submodule
+---@field specs plug.Spec[]
+---@field after? fun():nil
+---@field status? fun():string
+
+---@type table<string, nv.Submodule>
+_G.nv = {
+  keys = require('nvim.keys'),
+  lsp = require('nvim.lsp'),
+  treesitter = require('nvim.treesitter'),
+  ui = require('nvim.ui'),
+  -- util = require('nvim.util'),
+}
+
+vim.iter(nv):each(function(_, v)
+  -- vim.validate('submodule', v, 'table')
+  if vim.is_callable(v.after) then
+    vim.schedule(v.after)
+  end
+  Plug(v.specs) -- `vim.pack.add`s transformed plugins
+end)
+
+require('mason').setup({})
+require('oil').setup({})
 
 local elapsed = (vim.uv.hrtime() - t_1) / 1e6
 local msg = ('_init.lua_: Loaded in **%s** ms'):format(elapsed)

@@ -1,7 +1,7 @@
 local ai = require('mini.ai')
 local ex = require('mini.extra')
 
-return {
+ai.setup({
   n_lines = 500,
   custom_textobjects = {
     -- c = ai.gen_spec.treesitter({ a = '@class.outer', i = '@class.inner' }), -- class
@@ -26,4 +26,4 @@ return {
     u = ai.gen_spec.function_call(), -- u for "Usage"
     U = ai.gen_spec.function_call({ name_pattern = '[%w_]' }), -- without dot in function name
   },
-}
+})

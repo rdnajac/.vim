@@ -40,4 +40,4 @@ highlighters.source_code = {
   },
 }
 
-return { highlighters = highlighters }
+hi.setup({ highlighters = highlighters })

@@ -1,5 +1,6 @@
-local gen = require('mini.clue').gen_clues
+local miniclue = require('mini.clue')
 local clues = {}
+
 -- TODO:
 local triggers = {
   { mode = 'n', keys = 'cd' },
@@ -30,11 +31,11 @@ for clue, trigger_list in pairs({
     { mode = { 'n', 'x' }, keys = 'z' },
   },
 }) do
-  table.insert(clues, gen[clue]())
+  table.insert(clues, miniclue.gen_clues[clue]())
   vim.list_extend(triggers, trigger_list)
 end
 
-return {
+miniclue.setup({
   clues = clues,
   triggers = triggers,
   -- TODO:
@@ -45,4 +46,4 @@ return {
     scroll_down = '<C-j>',
     scroll_up = '<C-k>',
   },
-}
+})

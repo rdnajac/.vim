@@ -1,37 +1,12 @@
----@class nv.icons:snacks.picker.icons
----@field [string] any
+local enabled = ' '
+local disabled = ' '
+local unavailable = ''
+local copilot = ''
 
 local M = {
-  files = {
-    enabled = true, -- show file icons
-    dir = '󰉋 ',
-    dir_open = '󰝰 ',
-    file = '󰈔 ',
-  },
-  keymaps = {
-    nowait = '󰓅 ',
-  },
-  tree = {
-    vertical = '│ ',
-    middle = '├╴',
-    last = '└╴',
-  },
-  undo = {
-    saved = ' ',
-  },
-  ui = {
-    live = '󰐰 ',
-    hidden = 'h',
-    ignored = 'i',
-    follow = 'f',
-    selected = '● ',
-    unselected = '○ ',
-    -- selected = " ",
-  },
   git = {
-    enabled = true, -- show git icons
-    commit = '󰜘 ', -- used by git log
-    staged = '●', -- staged changes. always overrides the type icons
+    commit = '󰜘 ',
+    staged = '●',
     added = '',
     deleted = '',
     ignored = ' ',
@@ -46,12 +21,6 @@ local M = {
     Info = '',
     Hint = '',
   },
-  lsp = {
-    unavailable = '',
-    enabled = ' ',
-    disabled = ' ',
-    attached = '󰖩 ',
-  },
   kinds = {
     Array = ' ',
     Boolean = '󰨙 ',
@@ -61,7 +30,7 @@ local M = {
     Collapsed = ' ',
     Constant = '󰏿 ',
     Constructor = ' ',
-    Copilot = ' ',
+    Copilot = copilot,
     Enum = ' ',
     EnumMember = ' ',
     Event = ' ',
@@ -92,12 +61,19 @@ local M = {
     Value = ' ',
     Variable = '󰀫 ',
   },
+  lsp = {
+    attached = '󰖩 ',
+    disabled = disabled,
+    enabled = enabled,
+    unavailable = unavailable,
+  },
 }
+
 
 M.blink = {
   buffer = '',
   cmdline = '',
-  copilot = '',
+  copilot = copilot,
   env = '',
   lazydev = '󰒲',
   lsp = '',
@@ -111,34 +87,22 @@ M.copilot = {
   Error = { ' ', 'DiagnosticError' },
   Inactive = { ' ', 'MsgArea' },
   Warning = { ' ', 'DiagnosticWarn' },
-  Normal = { ' ', 'DiagnosticHint' },
+  Normal = { copilot, 'DiagnosticHint' },
 }
 
 M.diff = { add = '▎', change = '▎', delete = '' }
 
 M.mason = {
-  emojis = {
-    package_installed = '✅',
-    package_pending = '➡️',
-    package_uninstalled = '❌',
-  },
-  nerd = {
-    package_installed = '✓',
-    package_pending = '➜',
-    package_uninstalled = '✗',
-  },
-  round = {
-    package_installed = ' ',
-    package_pending = ' ',
-    package_uninstalled = ' ',
-  },
+  emojis = { package_installed = '✅', package_pending = '➡️', package_uninstalled = '❌' },
+  nerd = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
+  round = { package_installed = ' ', package_pending = ' ', package_uninstalled = ' ' },
 }
 
+-- component and section separators appear as they
+-- would in lualine, where left/right refer to the
+-- side of the statusline they appear on, not the
+-- direction they point to (unlike the item separators)
 M.sep = {
-  -- component and section separators appear as they
-  -- would in lualine, where left/right refer to the
-  -- side of the statusline they appear on, not the
-  -- direction they point to (unlike the item separators)
   component = {
     angle = { left = '', right = '' },
     rounded = { left = '', right = '' },

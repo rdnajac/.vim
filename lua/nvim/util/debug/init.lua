@@ -2,6 +2,10 @@ local M = {}
 
 local me = debug.getinfo(1, 'S').source
 
+local now = function()
+  return string.format('%s.%03d', os.date('%T'), math.floor((vim.uv.hrtime() / 1e6) % 1000))
+end
+
 M.trace = function()
   local trace = {} ---@type string[]
   for level = 2, 20 do -- arbitrary max depth
@@ -34,12 +38,13 @@ local notify = Snacks and Snacks.notify.warn or vim.print
 -- local notify = function() return Snacks and Snacks.notify.warn or vim.print end
 
 M.dd = function(...)
+  local t = now()
   local len = select('#', ...) ---@type number
   local obj = { ... } ---@type unknown[]
   local trace = require('nvim.util.debug').trace()
   local content = len == 1 and obj[1] or len > 0 and obj or ''
   -- local function p() notify(trace .. content) end
-  local function p() vim.print(trace, content) end
+  local function p() vim.print(t, trace, content) end
   return vim.in_fast_event() and vim.schedule(p) or p()
 end
 

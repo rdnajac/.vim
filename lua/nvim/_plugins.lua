@@ -1,21 +1,12 @@
----@type plug.Spec[]
 return {
-  {
-    'mason-org/mason.nvim',
-    build = ':MasonUpdate',
-    opts = { ui = { icons = require('nvim.ui.icons').mason.emojis } },
-  },
-  {
-    'stevearc/oil.nvim',
-    keys = { { '-', '<Cmd>Oil<CR>' } },
-    opts = {
-      default_file_explorer = false,
-    },
-  },
   {
     'folke/sidekick.nvim',
     -- enabled = false,
     opts = {},
+    after = function()
+      vim.lsp.enable('copilot')
+      vim.lsp.inline_completion.enable()
+    end,
     -- stylua: ignore
     keys = {
       { mode = 'n', expr = true, '<Tab>',
@@ -58,6 +49,4 @@ return {
       })
     end,
   },
-  -- { 'saxon1964/neovim-tips' },
-  { 'chrisgrieser/nvim-scissors' },
 }

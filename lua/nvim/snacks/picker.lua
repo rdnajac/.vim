@@ -42,4 +42,13 @@ local M = {
   },
 }
 
+vim.api.nvim_create_autocmd({ 'FileType' }, {
+  pattern = 'snacks_picker_preview',
+  callback = function(ev)
+    if MiniHipatterns then
+      MiniHipatterns.enable(ev.buf)
+    end
+  end,
+})
+
 return M

@@ -1,7 +1,6 @@
 local me = debug.getinfo(1, 'S').source:sub(2)
 -- stylua: ignore
 local keys = {
-  { icon = ' ', key = '-', desc = 'Open Directory', action = function() Snacks.explorer() end },
   { icon = ' ', key = 'n', desc = 'New File',       action = ':ene | star' },
   { icon = ' ', key = 'U', desc = 'Update Plugins', action = ':PlugUpdate' },
   { icon = ' ', key = 'M', desc = 'Mason',          action = ':Mason' },

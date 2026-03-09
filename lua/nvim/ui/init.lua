@@ -3,8 +3,10 @@ local M = {}
 M.icons = require('nvim.ui.icons')
 
 M.after = function()
-  M.winbar = require('nvim.ui.winbar')
-  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+  -- M.winbar = require('nvim.ui.winbar')
+  -- vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+  _G.MyWinbar = require('nvim.ui.winbar')
+  vim.o.winbar = [[%{%v:lua.MyWinbar()%}]]
 
   local signs = { text = { ' ', ' ', ' ', '' } }
   ---@type vim.diagnostic.Opts
