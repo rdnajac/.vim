@@ -1,9 +1,6 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 local M = vim.defaulttable(function(k) return require('nvim.util.' .. k) end)
 
-M.specs = require('nvim._plugins')
-M.after = function() end
-
 -- string manipulation
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
 M.camelCase = function(s)
@@ -43,7 +40,7 @@ M.is_comment = function(opts)
 
   local ok, node = pcall(vim.treesitter.get_node, opts)
   if ok and node then
-    return nv.treesitter.node_is_comment(node)
+    return require('nvim.treesitter').node_is_comment(node)
   end
   -- opts.pos is 0-indexed; synID expects 1-based row and col
   return vim.startswith(M.synname(cursor[1], cursor[2] + 1), 'Comment')

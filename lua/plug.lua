@@ -38,7 +38,10 @@ end
 
 --- Assumes the plugin has a `setup()` function and calls it with `opts` if provided.
 --- The module name is just the plugin name without a `.nvim` suffix, if present.
-function M:infer_setup()
+function M:setup()
+  if self.init then
+    return self.init
+  end
   local opts = vim.is_callable(self.opts) and self.opts() or self.opts
   if type(opts) == 'table' then
     local modname = (self.name or vim.fs.basename(self[1])):gsub('%.nvim$', '')
@@ -55,7 +58,12 @@ local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
 ---@param cb fun() the module's setup function with opts
 local on_event = function(event, cb)
   vim.api.nvim_create_autocmd(event, {
-    callback = cb,
+    -- callback = cb,
+    callback = function(ev)
+      if vim.is_callable(cb) then
+        cb()
+      end
+    end,
     group = aug,
     -- nested = true,
     once = true,
@@ -70,13 +78,25 @@ function M:to_pack_spec()
   spec.data = {
     build = self.build,
     init = function()
-      vim.schedule(function() return nv.keys.register(self) end)
+      vim.schedule(function() return require('nvim.keys').register(self) end)
       -- return self.init and self.init() or self:infer_setup()
-      local setup = self.init or function() self:infer_setup() end
-      return self.event and on_event(self.event, setup) or setup()
+      local setup = function() self:setup() end
+      if not self.event then
+        return setup()
+      end
+      on_event(self.event, setup)
     end,
   }
   return spec
+end
+
+--- Overrides `packadd`ing in `vim.pack.add`, then calls the plugin's `init()`
+---@param plug_data { spec: vim.pack.Spec, path: string }
+local _load = function(plug_data)
+  local spec = plug_data.spec
+  vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })
+  local init = vim.tbl_get(spec, 'data', 'init')
+  return vim.is_callable(init) and init()
 end
 
 --- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
@@ -84,20 +104,13 @@ end
 ---@return vim.pack.Spec|nil
 _G.Plug = function(plugs)
   -- vim.validate('plugs', plugs, vim.islist)
+  plugs = vim.islist(plugs) and plugs or { plugs }
   local speclist = vim
     .iter(plugs)
     :filter(function(v) return v.enabled ~= false end)
     :map(function(v) return M.new(v):to_pack_spec() end)
     :totable()
-  vim.pack.add(speclist, { load = M.load })
-end
-
----@param plug_data { spec: vim.pack.Spec, path: string }
-M.load = function(plug_data)
-  local spec = plug_data.spec
-  vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })
-  local init = vim.tbl_get(spec, 'data', 'init')
-  return vim.is_callable(init) and init()
+  vim.pack.add(speclist, { load = _load })
 end
 
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
