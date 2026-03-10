@@ -88,7 +88,7 @@ local _load = function(plug_data)
 end
 
 --- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
----@param plugs table[] list of
+---@param plugs table|table[]  list of plugin specs or single spec table
 ---@return vim.pack.Spec|nil
 _G.Plug = function(plugs)
   local speclist = vim
