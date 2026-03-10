@@ -54,28 +54,25 @@ local sources = {
 
 sources.default = vim.list_extend(vim.tbl_keys(sources.providers), {
   -- add custom sources here
-  -- 'registers',
   'env',
 })
 
-sources.per_filetype['vim'] = { inherit_defaults = true, 'env' }
 sources.providers['env'] = {
   name = 'env',
   module = 'nvim.blink.sources.env',
-  -- score_offset = 50,
 }
 
--- sources.per_filetype['sql'] = { inherit_defaults = true, 'dadbod' }
--- sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }
--- sources.providers['lazydev'] = {
---   name = 'LazyDev',
---   module = 'lazydev.integrations.blink',
---   score_offset = 100,
--- }
+sources.per_filetype['sql'] = { inherit_defaults = false, 'dadbod' }
+sources.providers['dadbod'] = {
+  name = 'dadbod',
+  module = 'nvim.blink.sources.dadbod',
+}
 
--- sources.providers['registers'] = {
---   name = 'Registers',
---   module = 'nvim.blink.sources.registers',
--- }
+sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }
+sources.providers['lazydev'] = {
+  name = 'LazyDev',
+  module = 'nvim.blink.sources.lazy',
+  score_offset = 100,
+}
 
 return sources

@@ -36,7 +36,7 @@ M.menu = {
     treesitter = { 'lsp' },
     ---@type blink.cmp.DrawColumnDefinition[]
     columns = {
-      { 'source_id', 'kind_icon' },
+      { 'source_id', 'kind_icon', gap = 1 },
       { 'label', 'label_description', gap = 1 },
     },
     ---@type table<string, blink.cmp.DrawComponent>

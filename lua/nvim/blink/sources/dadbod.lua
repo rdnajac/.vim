@@ -1,5 +1,4 @@
 -- https://raw.githubusercontent.com/kristijanhusak/vim-dadbod-completion/refs/heads/master/lua/vim_dadbod_completion/blink.lua
-
 ---@type blink.cmp.Source
 local M = {}
 

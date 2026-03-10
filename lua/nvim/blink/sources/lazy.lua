@@ -13,6 +13,8 @@ function M:get_trigger_characters() return { '"', "'", '.', '/' } end
 
 function M:enabled() return Buf.attached[vim.api.nvim_get_current_buf()] and true or false end
 
+---@param ctx blink.cmp.Context
+---@param callback fun(...: any)
 function M:get_completions(ctx, callback)
   local before = string.sub(ctx.line, 1, ctx.cursor[2])
 
@@ -47,14 +49,8 @@ function M:get_completions(ctx, callback)
         textEdit = {
           newText = last,
           range = {
-            start = {
-              line = ctx.cursor[1] - 1,
-              character = ctx.bounds.start_col - 1,
-            },
-            ['end'] = {
-              line = ctx.cursor[1] - 1,
-              character = ctx.cursor[2],
-            },
+            start = { line = ctx.cursor[1] - 1, character = ctx.bounds.start_col - 1 },
+            ['end'] = { line = ctx.cursor[1] - 1, character = ctx.cursor[2] },
           },
         },
       }

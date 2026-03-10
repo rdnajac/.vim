@@ -33,7 +33,7 @@ return {
         show_on_accept_on_trigger_character = true,
         -- show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
       },
-      -- menu = require('nvim.blink.appearance').menu,
+      menu = require('nvim.blink.appearance').menu,
     },
     -- fuzzy = { implementation = 'lua' },
     keymap = {
@@ -53,8 +53,6 @@ return {
         function() return vim.lsp.inline_completion.get() end,
         'fallback',
       },
-      -- TODO: show completion menu on <C-R> in insert mode
-      -- ['<C-r>'] = { function(cmp) cmp.show({ providers = { 'registers' } }) end },
     },
     signature = {
       enabled = true,

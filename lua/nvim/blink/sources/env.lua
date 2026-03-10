@@ -17,6 +17,8 @@ function M.new()
   return self
 end
 
+function M:get_trigger_characters() return { '$' } end
+
 --- Include the trigger character when accepting a completion.
 --- @param items blink.cmp.CompletionItem[]
 --- @param ctx blink.cmp.Context
@@ -33,9 +35,6 @@ local function transform(items, ctx)
       })
   end, items)
 end
-
---- @return string[]
-function M:get_trigger_characters() return { '$' } end
 
 --- @param ctx blink.cmp.Context
 --- @param callback fun(...: any)
