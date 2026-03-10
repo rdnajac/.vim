@@ -1,76 +1,36 @@
+-- https://github.com/bydlw98/blink-cmp-env
 --- @module 'blink.cmp'
 
 local async = require('blink.cmp.lib.async')
-
---- @class blink-cmp-env.Options
---- @field item_kind? uinteger
---- @field show_documentation_window? boolean
+local types = require('blink.cmp.types')
 
 --- @class EnvSource : blink.cmp.Source
---- @field opts blink-cmp-env.Options
 --- @field cached_results boolean
 --- @field completion_items blink.cmp.CompletionItem[]
 local M = {}
 
---- @param opts? blink-cmp-env.Options
 --- @return EnvSource
-function M.new(opts)
-  vim.validate('opts', opts, 'table', true, 'blink-cmp-env.Options')
-
-  opts = opts or {}
-
-  --- @type blink-cmp-env.Options
-  local default_opts = {
-    item_kind = require('blink.cmp.types').CompletionItemKind.Variable,
-    show_documentation_window = true,
-  }
-
-  --- @type EnvSource
+function M.new()
   local self = setmetatable({}, { __index = M })
-
-  self.opts = vim.tbl_deep_extend('keep', opts, default_opts)
   self.cached_results = false
   self.completion_items = {}
-
   return self
-end
-
---- @param key string
---- @param value string
---- @return { kind: lsp.MarkupKind, value: string }
-local function setup_item_docs(key, value)
-  return {
-    kind = 'markdown',
-    value = string.format('# `%s`\n\n```sh\n%s\n```', key, value),
-  }
 end
 
 --- Include the trigger character when accepting a completion.
 --- @param items blink.cmp.CompletionItem[]
 --- @param ctx blink.cmp.Context
 local function transform(items, ctx)
-  local snippet_kind = require('blink.cmp.types').CompletionItemKind.Snippet
-
-  --- @param entry blink.cmp.CompletionItem
-  return vim.tbl_map(function(entry)
-    if entry.kind and entry.kind == snippet_kind then
-      return entry
-    end
-
-    return vim.tbl_deep_extend('force', entry, {
-      textEdit = {
-        range = {
-          start = {
-            line = ctx.cursor[1] - 1,
-            character = ctx.bounds.start_col - 2,
-          },
-          ['end'] = {
-            line = ctx.cursor[1] - 1,
-            character = ctx.cursor[2],
+  return vim.tbl_map(function(entry) ---@param entry blink.cmp.CompletionItem
+    return entry.kind == types.CompletionItemKind.Snippet and entry
+      or vim.tbl_deep_extend('force', entry, {
+        textEdit = {
+          range = {
+            start = { line = ctx.cursor[1] - 1, character = ctx.bounds.start_col - 2 },
+            ['end'] = { line = ctx.cursor[1] - 1, character = ctx.cursor[2] },
           },
         },
-      },
-    })
+      })
   end, items)
 end
 
@@ -111,36 +71,27 @@ end
 
 --- Get a dictionary with environment variables and their respective values
 function M:setup_completion_items()
-  --- @type table<string, string>
-  local env_vars = vim.fn.environ()
-
-  for key, value in pairs(env_vars) do
+  for key, value in pairs(vim.fn.environ()) do
     key = '$' .. key
-
-    --- Show documentation if `show_documentation_window` is true
-    local documentation = self.opts.show_documentation_window and setup_item_docs(key, value) or nil
+    local doc = { kind = 'markdown', value = ('## `%s`\n```sh\n%s```'):format(key, value) }
 
     table.insert(self.completion_items, {
       label = key,
       insertText = key,
       insertTextFormat = vim.lsp.protocol.InsertTextFormat.PlainText,
-      textEdit = {
-        newText = key,
-      },
-      kind = self.opts.item_kind,
-      documentation = documentation,
+      kind = require('blink.cmp.types').CompletionItemKind.Variable,
+      documentation = doc,
+      textEdit = { newText = key },
     })
 
     table.insert(self.completion_items, {
       label = key,
-      insertTextFormat = vim.lsp.protocol.InsertTextFormat.PlainText,
       insertText = value,
+      insertTextFormat = vim.lsp.protocol.InsertTextFormat.PlainText,
       kind = require('blink.cmp.types').CompletionItemKind.Snippet,
-      documentation = documentation,
+      documentation = doc,
     })
   end
 end
 
 return M
-
---- vim:ts=4:sts=4:sw=0:noet:
