@@ -49,30 +49,27 @@ local sources = {
         end
       end,
     },
+    -- define custom default providers here
+    env = {
+      name = 'env',
+      module = 'nvim.blink.sources.env',
+    },
   },
 }
 
-sources.default = vim.list_extend(vim.tbl_keys(sources.providers), {
-  -- add custom sources here
-  'env',
-})
+sources.default = vim.tbl_keys(sources.providers)
 
-sources.providers['env'] = {
-  name = 'env',
-  module = 'nvim.blink.sources.env',
-}
-
-sources.per_filetype['sql'] = { inherit_defaults = false, 'dadbod' }
-sources.providers['dadbod'] = {
-  name = 'dadbod',
-  module = 'nvim.blink.sources.dadbod',
-}
-
-sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }
 sources.providers['lazydev'] = {
   name = 'LazyDev',
   module = 'nvim.blink.sources.lazy',
   score_offset = 100,
 }
+sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }
+
+sources.providers['dadbod'] = {
+  name = 'dadbod',
+  module = 'vim_dadbod_completion.blink',
+}
+sources.per_filetype['sql'] = { inherit_defaults = false, 'dadbod' }
 
 return sources

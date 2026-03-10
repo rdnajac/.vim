@@ -1,9 +1,8 @@
 setlocal formatoptions-=ro
 
-" Continue `\ ` list lines on <CR> (like bullet continuation)
-inoremap <buffer><expr> <CR> getline('.') =~# '^\s*\\\ ' ? '<CR>\ ' : '<CR>'
-nnoremap <buffer><expr> o getline('.') =~# '^\s*\\\ ' ? 'o\ ' : 'o'
-nnoremap <buffer><expr> O getline('.') =~# '^\s*\\\ ' ? 'O\ ' : 'O'
+inoremap <buffer><expr> <CR> getline('.') =~# "^\\s*Plug '" ? "<CR>Plug ''\<Left>" : '<CR>'
+nnoremap <buffer><expr> o    getline('.') =~# "^\\s*Plug '" ? "oPlug ''\<Left>" : 'o'
+nnoremap <buffer><expr> O    getline('.') =~# "^\\s*Plug '" ? "OPlug ''\<Left>" : 'O'
 
 " makes autoloaded functions easier to `ciw`
 setlocal iskeyword-=#

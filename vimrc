@@ -470,7 +470,6 @@ Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
@@ -506,6 +505,9 @@ else
   " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
 endif
+Plug 'tpope/vim-dadbod'
+Plug 'kristijanhusak/vim-dadbod-ui'
+Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}
 " vim: set fdm=marker

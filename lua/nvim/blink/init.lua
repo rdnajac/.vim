@@ -1,25 +1,12 @@
 ---@module "blink.cmp"
 --- `https://cmp.saghen.dev/`
 
--- FIXME:
--- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
--- vim.api.nvim_create_autocmd('User', {
---   group = aug,
---   pattern = 'BlinkCmpMenuOpen',
---   callback = function() toggle_inline_completion:toggle() end,
--- })
--- vim.api.nvim_create_autocmd('User', {
---   group = aug,
---   pattern = 'BlinkCmpMenuClose',
---   callback = function() toggle_inline_completion:toggle() end,
-
 ---@type plug.Spec
-return {
+local M = {
   'Saghen/blink.cmp',
   build = function() vim.cmd([[BlinkCmp build]]) end,
   event = 'UIEnter',
   ---@type blink.cmp.Config
-  -- NOTE: non-default options are commented out
   opts = {
     cmdline = { enabled = false },
     completion = {
@@ -33,9 +20,16 @@ return {
         show_on_accept_on_trigger_character = true,
         -- show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
       },
-      menu = require('nvim.blink.appearance').menu,
+      menu = {
+        auto_show_delay_ms = function(ctx, _)
+          return vim.tbl_contains(
+            { '.', '/', "'", '@', '$', ':', '"', '`', '[', ']' },
+            ctx.trigger.initial_character
+          ) and 1 or 1000
+        end,
+        draw = require('nvim.blink.appearance'),
+      },
     },
-    -- fuzzy = { implementation = 'lua' },
     keymap = {
       ['<Tab>'] = {
         ---@return boolean? true on success, nil otherwise
@@ -61,3 +55,17 @@ return {
     sources = require('nvim.blink.sources'),
   },
 }
+
+-- FIXME:
+-- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
+-- vim.api.nvim_create_autocmd('User', {
+--   group = aug,
+--   pattern = 'BlinkCmpMenuOpen',
+--   callback = function() toggle_inline_completion:toggle() end,
+-- })
+-- vim.api.nvim_create_autocmd('User', {
+--   group = aug,
+--   pattern = 'BlinkCmpMenuClose',
+--   callback = function() toggle_inline_completion:toggle() end,
+
+return M
