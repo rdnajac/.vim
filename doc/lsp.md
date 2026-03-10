@@ -1,3 +1,31 @@
+# lsp
+
+## unused configs
+
+clangd
+
+```lua
+return {
+  cmd = {
+    'clangd',
+    '--background-index',
+    '--clang-tidy',
+    -- '--header-insertion=iwyu',
+    -- '--completion-style=detailed',
+    -- '--function-arg-placeholders',
+    -- '--fallback-style=llvm',
+  },
+  -- init_options = {
+  --   usePlaceholders = true,
+  --   completeUnimported = true,
+  --   clangdFileStatus = true,
+  -- },
+}
+```
+
+rlanguageserver
+
+```lua
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities.textDocument.completion.completionItem = nil -- disables LSP completion
 
@@ -10,3 +38,4 @@ return {
   root_markers = { '.Rprofile', '.git' },
   -- capabilities = capabilities,
 }
+```

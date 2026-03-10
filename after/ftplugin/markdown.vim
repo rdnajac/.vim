@@ -20,9 +20,10 @@ inoremap <buffer> <localleader>h <C-o>i#<Space>
 inoremap <buffer> ``c ```cpp<CR><CR>```<Up>
 inoremap <buffer> ``p ```python<CR><CR>```<Up>
 inoremap <buffer> ``v ```vim<CR><CR>```<Up>
+inoremap <buffer> ``l ```lua<CR><CR>```<Up>
 inoremap <buffer> `!  ```sh<CR><CR>```<Up>
 inoremap <buffer> `$  ```console<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
-vnoremap <leader>k :call fn#hyperlink#()<CR>
+xnoremap <leader>k :call fn#hyperlink#()<CR>

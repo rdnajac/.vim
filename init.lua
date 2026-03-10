@@ -1,6 +1,4 @@
 --- init.lua
-local t_1 = vim.uv.hrtime()
-
 vim.loader.enable()
 
 if vim.env.PROF then
@@ -58,7 +56,3 @@ vim.iter(nv):each(function(_, v)
   end
   Plug(v.specs) -- `vim.pack.add`s transformed plugins
 end)
-
-local elapsed = (vim.uv.hrtime() - t_1) / 1e6
-local msg = ('_init.lua_: Loaded in **%s** ms'):format(elapsed)
-vim.schedule(function() print(msg) end)
