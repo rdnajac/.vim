@@ -1,13 +1,16 @@
 return {
   {
     'folke/sidekick.nvim',
+    -- BUG: `https://github.com/folke/sidekick.nvim/issues/264`
     -- enabled = false,
     opts = function()
-      vim.schedule(function()
-        vim.lsp.enable('copilot')
-        vim.lsp.inline_completion.enable()
-      end)
-      return {}
+      vim.schedule(vim.lsp.inline_completion.enable)
+      return {
+        tools = {
+          -- BUG: https://github.com/folke/sidekick.nvim/issues/258
+          copilot = { cmd = { 'copilot', '--banner', '--alt-screen off' } },
+        },
+      }
     end,
     -- stylua: ignore
     keys = {
