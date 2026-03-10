@@ -61,7 +61,7 @@ M.after = function()
   vim.api.nvim_create_autocmd('FileType', {
     pattern = { 'markdown', 'r', 'rmd', 'quarto' },
     group = aug,
-    command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
+    command = [[ setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr() ]],
     desc = 'Use treesitter folding for select filetypes',
   })
 end

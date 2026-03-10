@@ -217,8 +217,7 @@ nnoremap zq <Cmd>Format<CR>
 
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
-
-let g:eunuch_interprepers = {
+let g:eunuch_interpreters = {
       \ '.':      '/bin/sh',
       \ 'sh':     'bash',
       \ 'bash':   'bash',
@@ -510,4 +509,4 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}
-" vim: set fdm=marker
+" vim: fdm=marker fdl=1
