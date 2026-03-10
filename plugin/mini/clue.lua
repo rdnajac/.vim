@@ -1,10 +1,15 @@
 local miniclue = require('mini.clue')
-local clues = {}
 
--- TODO:
+local clues = {
+  { mode = 'n', keys = '<Bslash><Bslash>', desc = '+Bookmarks' },
+}
+
 local triggers = {
   { mode = 'n', keys = 'cd' },
+  -- { mode = 'n', keys = '\\', },
+  { mode = 'n', keys = '<Bslash>' },
 }
+
 for clue, trigger_list in pairs({
   builtin_completion = {
     { mode = 'i', keys = '<C-x>' },
@@ -38,11 +43,9 @@ end
 miniclue.setup({
   clues = clues,
   triggers = triggers,
-  -- TODO:
-  -- { mode = { 'n', 'x' }, keys = '<Leader>' },
   window = {
     -- config = {},
-    -- delay = 1000,
+    delay = 420,
     scroll_down = '<C-j>',
     scroll_up = '<C-k>',
   },

@@ -27,23 +27,6 @@ for modname, opt in pairs({
   misc = {},
   splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' } }, -- TODO: respect shiftwidth
   -- statusline = { },
-  surround = {
-    -- mappings = {
-    --   add = 'ys',
-    --   delete = 'ds',
-    --   find = '',
-    --   find_left = '',
-    --   highlight = '',
-    --   replace = 'cs',
-    --   -- Add this only if you don't want to use extended mappings
-    --   suffix_last = '',
-    --   suffix_next = '',
-    -- },
-    -- search_method = 'cover_or_next',
-    custom_surroundings = {
-      B = { output = { left = '{', right = '}' } },
-    },
-  },
 }) do
   require('mini.' .. modname).setup(vim.is_callable(opt) and opt() or opt)
 end

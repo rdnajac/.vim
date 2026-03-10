@@ -27,4 +27,4 @@ local opts = {
   },
 }
 
-ai.setup(opts)
+-- ai.setup(opts)
