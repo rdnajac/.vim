@@ -24,7 +24,7 @@ return {
     cmdline = { enabled = false },
     completion = {
       -- accept = { auto_brackets = { enabled = false } },
-      documentation = { auto_show = false },
+      documentation = { auto_show = true },
       ghost_text = { enabled = false },
       -- keyword = {},
       -- list = { selection = { preselect = false, auto_insert = true } },

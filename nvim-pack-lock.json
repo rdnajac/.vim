@@ -68,9 +68,17 @@
       "rev": "dcbfe065297d31823561ba787f51056c147aa682",
       "src": "https://github.com/tpope/vim-abolish.git"
     },
+    "vim-capslock": {
+      "rev": "2bd1d47d35ac489b150d284141b6dce743a307f5",
+      "src": "https://github.com/tpope/vim-capslock.git"
+    },
     "vim-characterize": {
       "rev": "a8bffac6cead6b2869d939ecad06312b187a4c79",
       "src": "https://github.com/tpope/vim-characterize.git"
+    },
+    "vim-dadbod": {
+      "rev": "6d1d41da4873a445c5605f2005ad2c68c99d8770",
+      "src": "https://github.com/tpope/vim-dadbod.git"
     },
     "vim-endwise": {
       "rev": "4994afb0cdf956d9a665a14b9c834869e602c396",
