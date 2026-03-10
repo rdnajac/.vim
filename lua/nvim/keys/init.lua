@@ -61,10 +61,9 @@ local function _parse(t)
 end
 
 M.map = function(t)
-  if not t or not vim.islist(t) then
-    return
+  if t then
+    vim.iter(vim.islist(t) and t or { t }):map(_parse):each(vim.keymap.set)
   end
-  vim.iter(t):map(_parse):each(vim.keymap.set)
 end
 
 ---@param key string normal mode keys mapped by snacks.toggle.Class method
@@ -85,8 +84,9 @@ local function ptogglelist(cmd)
 end
 
 M.register = function(spec)
-  if spec.keys then
-    M.map(spec.keys)
+  local keys, toggles = spec.keys, spec.toggles
+  if keys then
+    M.map(vim.is_callable(keys) and keys() or keys)
   end
   if spec.toggles then
     for key, v in pairs(spec.toggles) do

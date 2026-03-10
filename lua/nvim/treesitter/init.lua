@@ -4,7 +4,7 @@ local M = {
     { 'nvim-treesitter/nvim-treesitter' },
     {
       'nvim-treesitter/nvim-treesitter-context',
-      enabled = false,
+      -- enabled = false,
       toggles = {
         ['<leader>ux'] = {
           name = 'Treesitter Context',
@@ -15,7 +15,7 @@ local M = {
     },
     {
       'nvim-treesitter/nvim-treesitter-textobjects',
-      enabled = false,
+      -- enabled = false,
       opts = {
         move = { set_jumps = true },
         select = {
@@ -33,17 +33,14 @@ local M = {
         -- vim.keymap.set({ 'x', 'o' }, 'as', function()
         -- require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals')
         -- end)
-        local function select_textobject(textobject)
-          return require('nvim-treesitter-textobjects.select').select_textobject(
-            textobject,
-            'textobjects'
-          )
+        local function select(obj)
+          return require('nvim-treesitter-textobjects.select').select(obj, 'textobjects')
         end
         return {
-          { { 'x', 'o' }, 'af', function() select_textobject('@function.outer') end },
-          { { 'x', 'o' }, 'if', function() select_textobject('@function.inner') end },
-          { { 'x', 'o' }, 'ac', function() select_textobject('@class.outer') end },
-          { { 'x', 'o' }, 'ic', function() select_textobject('@class.inner') end },
+          { { 'x', 'o' }, 'af', function() select('@function.outer') end },
+          { { 'x', 'o' }, 'if', function() select('@function.inner') end },
+          { { 'x', 'o' }, 'ac', function() select('@class.outer') end },
+          { { 'x', 'o' }, 'ic', function() select('@class.inner') end },
         }
       end,
     },

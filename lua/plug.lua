@@ -1,15 +1,14 @@
 ---@class plug.Spec
 ---@field [1] string `owner/repo`
----@field build? string|fun(ev: table):nil Callback after plugin is installed/updated.
----@field data? any accessible from `vim.pack.add()`
----@field init? fun():nil
----@field keys? table flexible keymap definitions
----@field name? string derived from [1] if missing
----@field opts? table|fun():table passed to the plugin's `setup()`
 ---@field src? string derived from [1] if missing
----@field toggles? table<string, string|table> Snacks.nvim toggles to register.
+---@field name? string derived from [1] if missing
 ---@field version? string|vim.VersionRange alias `branch`
----@field event? string|string[] event to call `init()` on -- TODO:
+---@field build? string|fun(ev: table):nil Callback after plugin is installed/updated.
+---@field init? fun():nil
+---@field opts? table|fun():table passed to the plugin's `setup()`
+---@field keys? table|fun():table flexible keymap definitions
+---@field toggles? table<string, string|table> Snacks.nvim toggles to register.
+---@field event? string|string[] event on which to call `init()`
 ---@field lazy? boolean whether to defer `packadd()` on startup -- TODO:
 local M = {}
 M.__index = M
@@ -25,9 +24,9 @@ function M.new(v)
   validate('build', self.build, { 'string', 'function' }, true)
   validate('event', self.event, { 'string', 'table' }, true)
   validate('init', self.init, 'function', true)
-  validate('keys', self.keys, vim.islist, true)
   validate('lazy', self.lazy, 'boolean', true)
   validate('opts', self.opts, { 'table', 'function' }, true)
+  validate('keys', self.keys, { 'table', 'function' }, true)
   validate('toggles', self.toggles, 'table', true)
   -- add required fields and defaults
   self.src = self.src or ('https://github.com/%s.git'):format(self[1])
