@@ -11,7 +11,7 @@ function M.new() return setmetatable({}, { __index = M }) end
 
 function M:get_trigger_characters() return { '"', "'", '.', '/' } end
 
-function M:enabled() return Buf.attached[vim.api.nvim_get_current_buf()] and true or false end
+function M:enabled() return Buf.attached[vim.api.nvim_get_current_buf()] ~= nil end
 
 ---@param ctx blink.cmp.Context
 ---@param callback fun(...: any)

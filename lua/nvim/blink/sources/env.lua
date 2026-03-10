@@ -1,21 +1,14 @@
 -- https://github.com/bydlw98/blink-cmp-env
---- @module 'blink.cmp'
-
 local async = require('blink.cmp.lib.async')
 local types = require('blink.cmp.types')
 
---- @class EnvSource : blink.cmp.Source
---- @field cached_results boolean
---- @field completion_items blink.cmp.CompletionItem[]
+---@type blink.cmp.CompletionItem[]
+local environ_cache
+
+---@type blink.cmp.Source
 local M = {}
 
---- @return EnvSource
-function M.new()
-  local self = setmetatable({}, { __index = M })
-  self.cached_results = false
-  self.completion_items = {}
-  return self
-end
+function M.new() return setmetatable({}, { __index = M }) end
 
 function M:get_trigger_characters() return { '$' } end
 
@@ -36,27 +29,50 @@ local function transform(items, ctx)
   end, items)
 end
 
+local function cache_completion_items()
+  -- `iter:fold()` with an empty accumulator to refresh the cache
+  bt()
+  environ_cache = vim.iter(vim.fn.environ()):fold({}, function(acc, key, v)
+    key = '$' .. key
+    local lines = table.concat({ '## ' .. key, '```sh', v, '```' }, '\n')
+    local documentation = { kind = 'markdown', value = lines }
+    return vim.list_extend(acc, {
+      {
+        label = key,
+        insertText = key,
+        insertTextFormat = vim.lsp.protocol.InsertTextFormat.PlainText,
+        kind = types.CompletionItemKind.Variable,
+        documentation = documentation,
+        textEdit = { newText = key },
+      },
+      {
+        label = key,
+        insertText = v,
+        insertTextFormat = vim.lsp.protocol.InsertTextFormat.PlainText,
+        kind = types.CompletionItemKind.Snippet,
+        documentation = documentation,
+      },
+    })
+  end)
+end
+
+-- reset cache regularly to reflect changes in the environment
+local refresh_cache = Snacks.util.throttle(cache_completion_items, { ms = 1e5 })
+
 --- @param ctx blink.cmp.Context
 --- @param callback fun(...: any)
 --- @return fun()
 function M:get_completions(ctx, callback)
   local task = async.task.empty():map(function()
-    local trigger_chars = self:get_trigger_characters()
     local start_col = ctx.bounds.start_col
 
-    --- @cast start_col integer
-    local cursor_first_char = ctx.line:sub(start_col - 1, start_col - 1)
+    refresh_cache()
 
-    if vim.list_contains(trigger_chars, cursor_first_char) then
-      if not self.cached_results then
-        self:setup_completion_items()
-        self.cached_results = true
-      end
-
+    if ctx.line:sub(start_col - 1, start_col - 1) == '$' then
       callback({
         is_incomplete_forward = false,
         is_incomplete_backward = false,
-        items = transform(self.completion_items, ctx),
+        items = transform(environ_cache, ctx),
       })
     else
       callback()
@@ -66,31 +82,6 @@ function M:get_completions(ctx, callback)
   end)
 
   return function() task:cancel() end
-end
-
---- Get a dictionary with environment variables and their respective values
-function M:setup_completion_items()
-  for key, value in pairs(vim.fn.environ()) do
-    key = '$' .. key
-    local doc = { kind = 'markdown', value = ('## `%s`\n```sh\n%s```'):format(key, value) }
-
-    table.insert(self.completion_items, {
-      label = key,
-      insertText = key,
-      insertTextFormat = vim.lsp.protocol.InsertTextFormat.PlainText,
-      kind = require('blink.cmp.types').CompletionItemKind.Variable,
-      documentation = doc,
-      textEdit = { newText = key },
-    })
-
-    table.insert(self.completion_items, {
-      label = key,
-      insertText = value,
-      insertTextFormat = vim.lsp.protocol.InsertTextFormat.PlainText,
-      kind = require('blink.cmp.types').CompletionItemKind.Snippet,
-      documentation = doc,
-    })
-  end
 end
 
 return M
