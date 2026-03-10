@@ -2,10 +2,12 @@ return {
   {
     'folke/sidekick.nvim',
     -- enabled = false,
-    opts = {},
-    after = function()
-      vim.lsp.enable('copilot')
-      vim.lsp.inline_completion.enable()
+    opts = function()
+      vim.schedule(function()
+        vim.lsp.enable('copilot')
+        vim.lsp.inline_completion.enable()
+      end)
+      return {}
     end,
     -- stylua: ignore
     keys = {

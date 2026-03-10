@@ -23,25 +23,28 @@ M.after = function()
   for key, v in pairs(require('nvim.keys.toggles')) do
     M.new_snacks_toggle(key, v)
   end
+  -- load after startup
+  Plug({
+    {
+      'monaqa/dial.nvim',
+      -- override the default config loading to improve performance
+      init = function()
+        package.preload['dial.config'] = function() return require('nvim.keys.dial') end
+      end,
+      keys = {
+        { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
+        { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
+        { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
+        { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
+      },
+    },
+  })
 end
 
 M.specs = {
   -- require('nvim.keys.which'),
   -- require('nvim.keys.screen'),
   require('nvim.blink'),
-  {
-    'monaqa/dial.nvim',
-    lazy = true, -- TODO: lazy load this plugin
-    init = function()
-      package.preload['dial.config'] = function() return require('nvim.keys.dial') end
-    end,
-    keys = {
-      { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
-      { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
-      { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
-      { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
-    },
-  },
 }
 
 local modes = { 'n', 'v', 'x', 'i', 't', 'o', 'c', 's' }

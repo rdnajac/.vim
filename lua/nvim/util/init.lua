@@ -5,10 +5,8 @@ local M = {
     { 'mason-org/mason.nvim', opts = {} },
     { 'stevearc/oil.nvim', opts = {} },
   },
-  after = function() end,
+  after = function() Plug(require('nvim._plugins')) end,
 }
-
-vim.list_extend(M.specs, require('nvim._plugins'))
 
 -- string manipulation
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
