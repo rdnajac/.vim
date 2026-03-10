@@ -4,15 +4,20 @@ My (n)vim configuration.
 
 ## Startup
 
-Goal: be as compatible with vim as possible. 
+Goal: be as compatible with vim as possible.
 
 `~/.config/nvim` symlinked to `~/.vim`
 
 1. Source `vimrc`
 2. ???
 
+### vim.loader
 
-## Profiling
+`https://github.com/neovim/neovim/discussions/36905`
+
+## nvim
+
+### Profiling
 
 Profiling with [LuaJIT](https://luajit.org/ext_profiler.html)
 
@@ -34,8 +39,6 @@ npx cspell dictionaries
 ```
 
 ## Snacks
-
-> TODO:pos/neg infifintiy 
 
 Snacks.image can render math inline, $z=a+bi$, or in a `$$` block:
 

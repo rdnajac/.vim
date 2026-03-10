@@ -8,15 +8,12 @@ if vim.env.PROF then
   require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
 end
 
+-- XXX: unstable features!
 require('nvim.ui.2')
 
 vim.cmd([[ source ~/.vim/vimrc ]])
 
-require('snacks')
-_G.dd = Snacks.debug.inspect
-_G.bt = Snacks.debug.backtrace
-_G.p = Snacks.debug.profile
-Snacks.setup({
+require('snacks').setup({
   bigfile = require('nvim.snacks.bigfile'),
   dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = false },
@@ -35,8 +32,11 @@ Snacks.setup({
   words = { enabled = true },
 })
 
---- Defines the structure of modules under the `nvim/` directory
+_G.dd = Snacks.debug.inspect
+_G.bt = Snacks.debug.backtrace
+_G.p = Snacks.debug.profile
 
+--- Defines the structure of modules under the `nvim/` directory
 ---@class nv.Submodule
 ---@field specs plug.Spec[]
 ---@field after? fun():nil
