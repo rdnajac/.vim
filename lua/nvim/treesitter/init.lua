@@ -1,7 +1,6 @@
 local M = {
-  parsers = require('nvim.treesitter.parsers'),
   specs = {
-    { 'nvim-treesitter/nvim-treesitter' },
+    { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
     {
       'nvim-treesitter/nvim-treesitter-context',
       -- enabled = false,
@@ -47,19 +46,27 @@ local M = {
   },
 }
 
-local aug = vim.api.nvim_create_augroup('treesitter', {})
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = M.parsers.to_autostart,
-  group = aug,
-  callback = function(ev) vim.treesitter.start(ev.buf) end,
-  desc = 'Automatically start tree-sitter',
-})
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'markdown', 'r', 'rmd', 'quarto' },
-  group = aug,
-  command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
-  desc = 'Use treesitter folding for select filetypes',
-})
+M.after = function()
+  M.parsers = require('nvim.treesitter.parsers')
+
+  local aug = vim.api.nvim_create_augroup('treesitter', {})
+
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = M.parsers.to_autostart,
+    group = aug,
+    callback = function(ev) vim.treesitter.start(ev.buf) end,
+    desc = 'Automatically start tree-sitter',
+  })
+
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'markdown', 'r', 'rmd', 'quarto' },
+    group = aug,
+    command = 'setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()',
+    desc = 'Use treesitter folding for select filetypes',
+  })
+end
+
+M.install_parsers = function() vim.cmd.TSInstall(M.parsers.to_install) end
 
 M.status = function()
   local ret = {}
@@ -76,22 +83,6 @@ M.status = function()
     end, vim.tbl_keys(queries))
   end
   return table.concat(ret, ' ')
-end
-
----@param node TSNode
----@return boolean
-M.node_is_comment = function(node)
-  return ({
-    comment = true,
-    line_comment = true,
-    block_comment = true,
-    comment_content = true,
-  })[node:type()] == true
-end
-
-M.is_comment = function(opts)
-  local ok, node = pcall(vim.treesitter.get_node, opts)
-  return ok and node and M.node_is_comment(node) or false
 end
 
 return M

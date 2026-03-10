@@ -46,11 +46,9 @@ M.is_comment = function(opts)
   opts.pos = opts.pos or { cursor[1] - 1, cursor[2] }
 
   local ok, node = pcall(vim.treesitter.get_node, opts)
-  if ok and node then
-    return require('nvim.treesitter').node_is_comment(node)
-  end
   -- opts.pos is 0-indexed; synID expects 1-based row and col
-  return vim.startswith(M.synname(cursor[1], cursor[2] + 1), 'Comment')
+  local type = (ok and node and node:type()) or M.synname(cursor[1], cursor[2] + 1)
+  return not not type:match('comment')
 end
 
 --- foldtext for lua files with treesitter folds
