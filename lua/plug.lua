@@ -14,21 +14,21 @@
 local M = {}
 M.__index = M
 
+local validate = vim.validate
+
 --- Create a new Plugin instance from a specification table.
 ---@param v string|table table with required `[1]` field (or just `user/repo`
 ---@return plug.Spec
 function M.new(v)
   local self = type(v) == 'table' and v or { v }
-  vim.validate('[1]', self[1], 'string')
-  vim.validate('init', self.init, 'function', true)
-  vim.validate('build', self.build, { 'string', 'function' }, true)
-  vim.validate('keys', self.keys, vim.islist, true)
-  vim.validate('name', self.name, 'string', true)
-  vim.validate('opts', self.opts, { 'table', 'function' }, true)
-  vim.validate('src', self.src, 'string', true)
-  vim.validate('toggles', self.toggles, 'table', true)
-  vim.validate('event', self.event, { 'string', 'table' }, true)
-  vim.validate('lazy', self.lazy, 'boolean', true)
+  validate('[1]', self[1], 'string')
+  validate('build', self.build, { 'string', 'function' }, true)
+  validate('event', self.event, { 'string', 'table' }, true)
+  validate('init', self.init, 'function', true)
+  validate('keys', self.keys, vim.islist, true)
+  validate('lazy', self.lazy, 'boolean', true)
+  validate('opts', self.opts, { 'table', 'function' }, true)
+  validate('toggles', self.toggles, 'table', true)
   -- add required fields and defaults
   self.src = self.src or ('https://github.com/%s.git'):format(self[1])
   self.name = self.name or self[1]:match('[^/]*$')
@@ -39,6 +39,7 @@ end
 --- Assumes the plugin has a `setup()` function and calls it with `opts` if provided.
 --- The module name is just the plugin name without a `.nvim` suffix, if present.
 function M:setup()
+  vim.schedule(function() return require('nvim.keys').register(self) end)
   if self.init then
     return self.init()
   end
@@ -54,37 +55,24 @@ end
 ---@field init? fun():nil called inside of the `load()` function, after `packadd()`.
 
 local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
----@param event string|string[]
----@param cb fun() the module's setup function with opts
-local on_event = function(event, cb)
-  vim.api.nvim_create_autocmd(event, {
-    -- callback = cb,
-    callback = function(ev)
-      if vim.is_callable(cb) then
-        cb()
-      end
-    end,
-    group = aug,
-    -- nested = true,
-    once = true,
-  })
-end
 
 --- Convert the plugin to a format compatible with `vim.pack.add()`.
 ---@return vim.pack.Spec
-function M:to_pack_spec()
+function M:package()
   local spec = { src = self.src, name = self.name, version = self.version }
   ---@type plug.Data
   spec.data = {
     build = self.build,
     init = function()
-      -- return self.init and self.init() or self:infer_setup()
-      local setup = function() self:setup() end
       if not self.event then
-        return setup()
+        return self:setup()
       end
-      on_event(self.event, setup)
-      vim.schedule(function() return require('nvim.keys').register(self) end)
+      vim.api.nvim_create_autocmd(self.event, {
+        callback = function() self:setup() end,
+        group = aug,
+        -- nested = true,
+        once = true,
+      })
     end,
   }
   return spec
@@ -103,12 +91,10 @@ end
 ---@param plugs table[] list of
 ---@return vim.pack.Spec|nil
 _G.Plug = function(plugs)
-  -- vim.validate('plugs', plugs, vim.islist)
-  plugs = vim.islist(plugs) and plugs or { plugs }
   local speclist = vim
-    .iter(plugs)
+    .iter(vim.islist(plugs) and plugs or { plugs })
     :filter(function(v) return v.enabled ~= false end)
-    :map(function(v) return M.new(v):to_pack_spec() end)
+    :map(function(v) return M.new(v):package() end)
     :totable()
   vim.pack.add(speclist, { load = _load })
 end

@@ -1,6 +1,7 @@
 local M = {
   parsers = require('nvim.treesitter.parsers'),
   specs = {
+    { 'nvim-treesitter/nvim-treesitter' },
     {
       'nvim-treesitter/nvim-treesitter-context',
       enabled = false,

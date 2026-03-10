@@ -505,7 +505,6 @@ else
   Plug 'nvim-mini/mini.nvim'
   " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
-  Plug 'nvim-treesitter/nvim-treesitter'
 endif
 call plug#end()
 " }}}

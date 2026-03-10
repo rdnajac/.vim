@@ -10,11 +10,6 @@ end
 
 require('nvim.ui.2')
 
--- exposes global `Plug` lua function
--- registers autocmd for build on install/update
-require('plug')
-
--- vim.cmd([[ source ~/.vim/vimrc | lua vim.pack.add(vim.g.plugs) ]])
 vim.cmd([[ source ~/.vim/vimrc ]])
 
 require('snacks')
@@ -40,9 +35,8 @@ Snacks.setup({
   words = { enabled = true },
 })
 
-Plug(require('nvim.blink'))
-
 --- Defines the structure of modules under the `nvim/` directory
+
 ---@class nv.Submodule
 ---@field specs plug.Spec[]
 ---@field after? fun():nil

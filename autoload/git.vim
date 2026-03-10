@@ -21,11 +21,7 @@ function! git#root(...) abort
   return empty(gitdir) ? '' : fnamemodify(gitdir, ':p:h:h')
 endfunction
 
-""
-" @public
-" Generate a GitHub repository URL from {user_repo}.
-" {user_repo} should be in the format "username/repository".
-" Returns the full git URL for cloning.
+" the URL scheme used by `vim-plug`
 function! git#url(user_repo) abort
   return 'https://git::@github.com/' .. a:user_repo .. '.git'
 endfunction

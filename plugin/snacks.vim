@@ -9,7 +9,7 @@ nnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
 tnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
 xnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word<CR>
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap <bslash><bslash> <Cmd>lua Snacks.dashboard.open()<CR>
+nnoremap \\ <Cmd>lua Snacks.dashboard.open()<CR>
 
 nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
@@ -123,8 +123,8 @@ nnoremap <leader>Z <Cmd>lua Snacks.zen.zoom()<CR>
 nnoremap <leader>fe <Cmd>lua Snacks.picker.files({ dirs = vim.api.nvim_list_runtime_paths() })<CR>
 nnoremap <leader>se <Cmd>lua Snacks.picker.grep({ dirs = vim.api.nvim_list_runtime_paths() })<CR>
 
-nnoremap <leader>fc <Cmd>lua Snacks.picker.files({ cwd = vim.g.VIMDIR })<CR>
-nnoremap <leader>sc <Cmd>lua Snacks.picker.grep({  cwd = vim.g.VIMDIR })<CR>
+nnoremap <leader>fc <Cmd>lua Snacks.picker.files({ cwd = vim.g.stdpath.config })<CR>
+nnoremap <leader>sc <Cmd>lua Snacks.picker.grep({  cwd = vim.g.stdpath.config })<CR>
 
 let s:commands = [
       \ 'Actions',
