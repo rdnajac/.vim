@@ -4,8 +4,36 @@ local async = require('blink.cmp.lib.async')
 
 --- @class blink-cmp-env.Options
 --- @field item_kind? uinteger
---- @field show_braces? boolean
 --- @field show_documentation_window? boolean
+
+--- @class EnvSource : blink.cmp.Source
+--- @field opts blink-cmp-env.Options
+--- @field cached_results boolean
+--- @field completion_items blink.cmp.CompletionItem[]
+local M = {}
+
+--- @param opts? blink-cmp-env.Options
+--- @return EnvSource
+function M.new(opts)
+  vim.validate('opts', opts, 'table', true, 'blink-cmp-env.Options')
+
+  opts = opts or {}
+
+  --- @type blink-cmp-env.Options
+  local default_opts = {
+    item_kind = require('blink.cmp.types').CompletionItemKind.Variable,
+    show_documentation_window = true,
+  }
+
+  --- @type EnvSource
+  local self = setmetatable({}, { __index = M })
+
+  self.opts = vim.tbl_deep_extend('keep', opts, default_opts)
+  self.cached_results = false
+  self.completion_items = {}
+
+  return self
+end
 
 --- @param key string
 --- @param value string
@@ -44,40 +72,6 @@ local function transform(items, ctx)
       },
     })
   end, items)
-end
-
---- @class EnvSource : blink.cmp.Source
---- @field opts blink-cmp-env.Options
---- @field cached_results boolean
---- @field completion_items blink.cmp.CompletionItem[]
-local M = {}
-
---- @param opts? blink-cmp-env.Options
---- @return EnvSource
-function M.new(opts)
-  if vim.fn.has('nvim-0.11') == 1 then
-    vim.validate('opts', opts, 'table', true, 'blink-cmp-env.Options')
-  else
-    vim.validate({ opts = { opts, { 'table', 'nil' } } })
-  end
-
-  opts = opts or {}
-
-  --- @type blink-cmp-env.Options
-  local default_opts = {
-    item_kind = require('blink.cmp.types').CompletionItemKind.Variable,
-    show_braces = false,
-    show_documentation_window = true,
-  }
-
-  --- @type EnvSource
-  local self = setmetatable({}, { __index = M })
-
-  self.opts = vim.tbl_deep_extend('keep', opts, default_opts)
-  self.cached_results = false
-  self.completion_items = {}
-
-  return self
 end
 
 --- @return string[]
@@ -121,9 +115,7 @@ function M:setup_completion_items()
   local env_vars = vim.fn.environ()
 
   for key, value in pairs(env_vars) do
-    --- Prepend `$` to key, also surround in braces if `show_braces` is `true`
-    --- e.g. `PATH` -> `$PATH` -> `${PATH}`
-    key = '$' .. (self.opts.show_braces and '{' .. key .. '}' or key)
+    key = '$' .. key
 
     --- Show documentation if `show_documentation_window` is true
     local documentation = self.opts.show_documentation_window and setup_item_docs(key, value) or nil

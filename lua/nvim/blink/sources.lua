@@ -55,10 +55,16 @@ local sources = {
 sources.default = vim.list_extend(vim.tbl_keys(sources.providers), {
   -- add custom sources here
   -- 'registers',
+  'env',
 })
 
--- TODO:
--- sources.per_filetype['vim'] = { inherit_defaults = true, 'env' }
+sources.per_filetype['vim'] = { inherit_defaults = true, 'env' }
+sources.providers['env'] = {
+  name = 'env',
+  module = 'nvim.blink.sources.env',
+  -- score_offset = 50,
+}
+
 -- sources.per_filetype['sql'] = { inherit_defaults = true, 'dadbod' }
 -- sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }
 -- sources.providers['lazydev'] = {
