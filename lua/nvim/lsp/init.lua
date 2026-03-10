@@ -48,16 +48,16 @@ end
 ---@param c vim.lsp.Client
 M.server_status = function(c)
   if not c or c:is_stopped() then
-    return nv.ui.icons.lsp.unavailable
+    return ''
   end
   if c.name == 'copilot' and package.loaded['sidekick'] then
     return sidekick_copilot_status()
   end
   local msg = require('nvim.lsp.progress').get_msgs_by_client_id(c.id)
   if msg then
-    return Snacks.util.spinner() .. ' ' -- .. msg
+    return ' ' ..Snacks.util.spinner() .. ' ' -- .. msg
   end
-  return nv.ui.icons.lsp.attached
+  return ' 󰖩 '
 end
 
 ---@param buf? number
@@ -68,7 +68,7 @@ end
 M.status = function()
   local clients = M.attached()
   if #clients == 0 then
-    return nv.ui.icons.lsp.unavailable
+    return ''
   end
   return vim.iter(clients):map(M.server_status):join(' ')
 end

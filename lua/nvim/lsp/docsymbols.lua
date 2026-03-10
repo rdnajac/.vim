@@ -23,7 +23,7 @@ end
 function M.get(bufnr)
   local data = M.get_data(bufnr)
   return vim.tbl_map(function(v)
-    local icon = require('nvim.ui.icons').kinds[v.kind]
+    local icon = MiniIcons.get('lsp', v.kind)
     return icon .. v.name:gsub('%%', '%%%%')
   end, data)
 end

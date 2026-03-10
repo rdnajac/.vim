@@ -17,6 +17,7 @@ if has('nvim')
   call add(chromatophores, 'WinBar')
   call add(chromatophores, 'helpSectionDelim')
   call add(chromatophores, '@markup.raw.markdown_inline')
+  call add(chromatophores, 'MiniIconsGreen')
 endif
 
 augroup chromatophore
@@ -27,3 +28,4 @@ augroup chromatophore
   autocmd ColorScheme * call chromatophore#setup()
   autocmd ModeChanged * call chromatophore#metachrosis()
 augroup END
+

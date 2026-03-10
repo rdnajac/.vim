@@ -1,61 +1,44 @@
-local M = {}
+---@module "blink-cmp"
+---@type blink.cmp.Draw
+return {
+  treesitter = { 'lsp' },
 
--- Set the highlight priority to 20000 to beat the cursorline's default priority of 10000
----@param ctx blink.cmp.DrawItemContext
-local component_highlight = function(ctx) return { { group = ctx.kind_hl, priority = 20000 } } end
+  ---@type blink.cmp.DrawColumnDefinition[]
+  columns = {
+    { 'source_id', 'kind_icon' },
+    { 'label', 'label_description' },
+  },
 
-M.menu = {
-  -- auto_show = true,
-  auto_show_delay_ms = function(ctx, _)
-    if vim.tbl_contains({ '.', '/', "'", '@' }, ctx.trigger.initial_character) then
-      return 1
-    end
-    return 1000
-  end,
-  -- https://cmp.saghen.dev/recipes.html#avoid-multi-line-completion-ghost-text- border = border,
-  ---@diagnostic disable-next-line: assign-type-mismatch
-  -- direction_priority = function()
-  --   local cmp = require('blink.cmp')
-  --   local ctx = cmp.get_context()
-  --   local item = cmp.get_selected_item()
-  --   if ctx and item then
-  --     local item_text = (item.textEdit and item.textEdit.newText) or item.insertText or item.label
-  --     -- local is_multi_line = item_text:find('\n') ~= nil
-  --     -- after showing the menu upwards, we want to maintain that direction
-  --     -- until we re-open the menu, so store the context id in a global variable
-  --     -- if is_multi_line or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
-  --     if item_text:find('\n') or vim.g.blink_cmp_upwards_ctx_id == ctx.id then
-  --       vim.g.blink_cmp_upwards_ctx_id = ctx.id
-  --       return { 'n', 's' }
-  --     end
-  --   end
-  --   return { 's', 'n' }
-  -- end,
-  ---@type blink.cmp.Draw
-  draw = {
-    treesitter = { 'lsp' },
-    ---@type blink.cmp.DrawColumnDefinition[]
-    columns = {
-      { 'source_id', 'kind_icon', gap = 1 },
-      { 'label', 'label_description', gap = 1 },
+  ---@type table<string, blink.cmp.DrawComponent>
+  components = {
+    source_id = {
+      ellipsis = false,
+      text = function(ctx)
+        local provider = ctx.source_name:lower()
+        local icon = require('nvim.ui.icons').blink[provider] or ' '
+        return icon .. ctx.icon_gap
+      end,
+      ---@param ctx blink.cmp.DrawItemContext
+      highlight = function(ctx)
+        -- high priority to beat the cursorline
+        return { { group = ctx.kind_hl, priority = 10001 } }
+      end,
     },
-    ---@type table<string, blink.cmp.DrawComponent>
-    components = {
-      source_id = {
-        ellipsis = false,
-        text = function(ctx)
-          local provider = ctx.source_name:lower()
-          local icon = require('nvim.ui.icons').blink[provider] or ' '
-          return icon .. ctx.icon_gap
-        end,
-        highlight = component_highlight,
-      },
-      kind_icon = {
-        text = function(ctx) return require('nvim.ui.icons').kinds[ctx.kind] or '' end,
-        highlight = component_highlight,
-      },
+    kind_icon = {
+      text = function(ctx)
+        local kind_icon, _, _ = MiniIcons.get('lsp', ctx.kind)
+        return kind_icon
+      end,
+      -- highlight = function(ctx)
+      --   local _, hl, _ = MiniIcons.get('lsp', ctx.kind)
+      --   return hl
+      -- end,
     },
+    -- kind = {
+    --   highlight = function(ctx)
+    --     local _, hl, _ = MiniIcons.get('lsp', ctx.kind)
+    --     return hl
+    --   end,
+    -- },
   },
 }
-
-return M

@@ -1,9 +1,34 @@
-local enabled = ' '
-local disabled = ' '
-local unavailable = ''
+-- ~/.local/share/nvim/site/pack/core/opt/mini.nvim/lua/mini/icons.lua:682
 local copilot = ''
 
 local M = {
+  blink = {
+    buffer = '',
+    cmdline = '',
+    copilot = copilot,
+    lsp = '',
+    omni = '',
+    path = '',
+    snippets = '',
+    -- nonstandard providers
+    dadbod = '',
+    env = '',
+    lazydev = '󰒲',
+  },
+  -- TODO: add support for highlight groups
+  copilot = {
+    Error = { '', 'DiagnosticError' },
+    Inactive = { '', 'MsgArea' },
+    Warning = { '', 'DiagnosticWarn' },
+    Normal = { copilot, 'DiagnosticHint' },
+  },
+  diagnostics = {
+    Error = '',
+    Warn = '',
+    Info = '',
+    Hint = '',
+  },
+  diff = { add = '▎', change = '▎', delete = '' },
   git = {
     commit = '󰜘 ',
     staged = '●',
@@ -15,82 +40,7 @@ local M = {
     unmerged = ' ',
     untracked = '?',
   },
-  diagnostics = {
-    Error = '',
-    Warn = '',
-    Info = '',
-    Hint = '',
-  },
-  kinds = {
-    Array = ' ',
-    Boolean = '󰨙 ',
-    Class = ' ',
-    Color = ' ',
-    Control = ' ',
-    Collapsed = ' ',
-    Constant = '󰏿 ',
-    Constructor = ' ',
-    Copilot = copilot,
-    Enum = ' ',
-    EnumMember = ' ',
-    Event = ' ',
-    Field = ' ',
-    File = ' ',
-    Folder = ' ',
-    Function = '󰊕 ',
-    Interface = ' ',
-    Key = ' ',
-    Keyword = ' ',
-    Method = '󰊕 ',
-    Module = ' ',
-    Namespace = '󰦮 ',
-    Null = ' ',
-    Number = '󰎠 ',
-    Object = ' ',
-    Operator = ' ',
-    Package = ' ',
-    Property = ' ',
-    Reference = ' ',
-    Snippet = '󱄽 ',
-    String = ' ',
-    Struct = '󰆼 ',
-    Text = ' ',
-    TypeParameter = ' ',
-    Unit = ' ',
-    Unknown = ' ',
-    Value = ' ',
-    Variable = '󰀫 ',
-  },
-  lsp = {
-    attached = '󰖩 ',
-    disabled = disabled,
-    enabled = enabled,
-    unavailable = unavailable,
-  },
 }
-
-
-M.blink = {
-  buffer = '',
-  cmdline = '',
-  copilot = copilot,
-  env = '',
-  lazydev = '󰒲',
-  lsp = '',
-  omni = '',
-  path = '',
-  snippets = '',
-}
-
--- TODO: add support for highlight groups
-M.copilot = {
-  Error = { ' ', 'DiagnosticError' },
-  Inactive = { ' ', 'MsgArea' },
-  Warning = { ' ', 'DiagnosticWarn' },
-  Normal = { copilot, 'DiagnosticHint' },
-}
-
-M.diff = { add = '▎', change = '▎', delete = '' }
 
 M.mason = {
   emojis = { package_installed = '✅', package_pending = '➡️', package_uninstalled = '❌' },
@@ -123,24 +73,10 @@ M.mini = {
   extension = {
     fastq = { '󰚄', 'Purple' },
     ['fastq.gz'] = { '󰚄', 'Red' },
-    ['json.tmpl'] = { ' ', 'Grey' },
-    ['sh.tmpl'] = { ' ', 'Grey' },
-    ['toml.tmpl'] = { ' ', 'Grey' },
-    ['zsh.tmpl'] = { ' ', 'Grey' },
   },
   file = {
-    ['.chezmoiignore'] = { '', 'Grey' },
-    ['.chezmoiremove'] = { '', 'Grey' },
-    ['.chezmoiroot'] = { '', 'Grey' },
-    ['.chezmoiversion'] = { '', 'Grey' },
     ['.keep'] = { '󰊢 ', 'Grey' },
     ['devcontainer.json'] = { '', 'Azure' },
-    -- dot_Rprofile = { '󰟔 ', 'Blue' },
-    -- dot_bash_aliases = { ' ', 'Blue' },
-    -- dot_zprofile = { ' ', 'Green' },
-    -- dot_zshenv = { ' ', 'Green' },
-    -- dot_zshprofile = { ' ', 'Green' },
-    -- dot_zshrc = { ' ', 'Green' },
   },
   filetype = {
     ghostty = { '👻', 'Green' },
@@ -151,40 +87,103 @@ M.mini = {
     snacks_dashboard = { '󰨇 ', '' },
     snacks_terminal = { '🍬', '' },
   },
+  lsp = {
+    -- array = ' ',
+    -- boolean = '󰨙 ',
+    -- class = ' ',
+    -- color = ' ',
+    control = ' ',
+    collapsed = ' ',
+    constant = '󰏿 ',
+    -- constructor = ' ',
+    copilot = copilot,
+    enum = ' ',
+    enummember = ' ',
+    -- event = ' ',
+    field = ' ',
+    -- file = ' ',
+    -- folder = ' ',
+    ['function'] = '󰊕 ',
+    interface = ' ',
+    -- key = ' ',
+    -- keyword = ' ',
+    method = '󰊕 ',
+    module = ' ',
+    -- namespace = '󰦮 ',
+    null = ' ',
+    number = '󰎠 ',
+    object = ' ',
+    operator = ' ',
+    -- package = ' ',
+    -- property = ' ',
+    -- reference = ' ',
+    snippet = '󱄽 ',
+    string = ' ',
+    struct = '󰆼 ',
+    -- text = ' ',
+    -- typeparameter = ' ',
+    -- unit = ' ',
+    unknown = ' ',
+    value = ' ',
+    variable = '󰀫 ',
+  },
 }
 
--- from `LazyVim`: add an inverse lookup table for lsp kinds
--- for i, name in ipairs(vim.lsp.protocol.SymbolKind) do
---   M.kinds[i] = M.kinds[name]
--- end
+local function minify(v)
+  local glyph = type(v) == 'table' and v[1] or v
+  local color = type(v) == 'table' and v[2] or 'Green'
+  return { glyph = glyph, hl = 'MiniIcons' .. color }
+end
+
+local opts = vim.iter(M.mini):fold({
+  use_file_extension = function(ext, _) return ext:sub(-3) ~= 'scm' end,
+}, function(acc, k, v) return rawset(acc, k, vim.tbl_map(minify, v)) end)
+
+require('mini.icons').setup(opts)
+
+-- HACK: Override to use wildcard matching for directories
+local override = {
+  directory = {
+    ['vim%-.*'] = { '', 'Green' },
+    ['lazy.*%.nvim'] = { '󰒲', 'Blue' },
+    ['%.chezmoi.*'] = { '', 'Red' },
+  },
+  file = {
+    ['%.chezmoi.*[^.]'] = { '', 'Yellow' },
+  },
+}
+
+local original_get = _G.MiniIcons.get
+
+-- TODO: if vim.endswith(name, '.tmpl') then only change the color
+---@diagnostic disable-next-line: duplicate-set-field
+MiniIcons.get = function(category, name)
+  name = name:gsub('dot_', '.'):gsub('%.tmpl$', '')
+  local patterns = override[category]
+  if patterns then
+    local entry = vim.fs.basename(name)
+    for pattern, rv in pairs(override[category]) do
+      -- add anchors to pattern for exact match
+      if entry:match('^' .. pattern .. '$') then
+        return rv[1], 'MiniIcons' .. rv[2]
+      end
+    end
+  else
+  end
+  return original_get(category, name)
+end
 
 ---@param key "directory"|"extension"|"file"|"filetype"|"os"
 ---@param lookup string?
 ---@return string icon, string? hl always return a string, hl group on success
-local function get_mini_icon(_, key, lookup)
-  if not _G.MiniIcons then
-    return '󰟢', nil
-  end
-  if not lookup then
-    lookup = key == 'filetype' and vim.bo.filetype or vim.api.nvim_buf_get_name(0)
-  end
-  local icon, hl = _G.MiniIcons.get(key, lookup)
-  return icon .. ' ', hl
+local function _get_icon(_, key, lookup)
+  lookup = lookup or (key == 'filetype' and vim.bo.filetype or vim.api.nvim_buf_get_name(0))
+  return _G.MiniIcons.get(key, lookup)
 end
 
-for _, key in ipairs({
-  'directory',
-  'extension',
-  'file',
-  'filetype',
-  'os',
-}) do
-  local function _get_mini_icon(_, lookup) return get_mini_icon(_, key, lookup) end
-
-  M[key] = setmetatable({}, {
-    __index = _get_mini_icon,
-    __call = _get_mini_icon,
-  })
+for _, key in ipairs({ 'directory', 'extension', 'file', 'filetype', 'os' }) do
+  local function get_icon(_, lookup) return _get_icon(_, key, lookup) end
+  M[key] = setmetatable({}, { __index = get_icon, __call = get_icon })
 end
 
 return M

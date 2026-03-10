@@ -25,7 +25,7 @@ require('snacks').setup({
   scope = { enabled = true },
   scroll = { enabled = true },
   -- statuscolumn = require('nvim.snacks.statuscolumn'),
-  -- styles = { notification_history = { height = 0.9, width = 0.9, wo = { wrap = false } } },
+  styles = { lazygit = { height = 0, width = 0 } },
   toggle = { which_key = false },
   words = { enabled = true },
 })
