@@ -55,7 +55,7 @@ M.server_status = function(c)
   end
   local msg = require('nvim.lsp.progress').get_msgs_by_client_id(c.id)
   if msg then
-    return ' ' ..Snacks.util.spinner() .. ' ' -- .. msg
+    return ' ' .. Snacks.util.spinner() .. ' ' -- .. msg
   end
   return ' 󰖩 '
 end

@@ -31,7 +31,6 @@ end
 
 local function cache_completion_items()
   -- `iter:fold()` with an empty accumulator to refresh the cache
-  bt()
   environ_cache = vim.iter(vim.fn.environ()):fold({}, function(acc, key, v)
     key = '$' .. key
     local lines = table.concat({ '## ' .. key, '```sh', v, '```' }, '\n')

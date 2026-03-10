@@ -25,7 +25,7 @@ end
 M.specs = {
   {
     'MeanderingProgrammer/render-markdown.nvim',
-   -- enabled = false,
+    -- enabled = false,
     init = function()
       ---@module "render-markdown"
       ---@type render.md.UserConfig

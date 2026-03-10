@@ -27,24 +27,23 @@ M.after = function()
   package.preload['dial.config'] = function() return require('nvim.keys.dial') end
   -- load after startup
   Plug({
-    'monaqa/dial.nvim',
-    enabled = true,
-    -- init = function()
-    -- end,
-    keys = {
-      { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
-      { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
-      { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
-      { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
+    {
+      'monaqa/dial.nvim',
+      enabled = true,
+      keys = {
+        { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
+        { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
+        { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
+        { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
+      },
     },
   })
 end
 
-M.specs = {
-  -- require('nvim.keys.which'),
-  -- require('nvim.keys.screen'),
-  require('nvim.blink'),
-}
+-- M.specs = {
+-- require('nvim.keys.which'),
+-- require('nvim.keys.screen'),
+-- }
 
 local modes = { 'n', 'v', 'x', 'i', 't', 'o', 'c', 's' }
 local function has_mode(t) return type(t[1]) == 'table' or vim.tbl_contains(modes, t[1]) end

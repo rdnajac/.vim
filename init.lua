@@ -42,6 +42,7 @@ _G.p = Snacks.debug.profile
 
 ---@type table<string, nv.Submodule>
 _G.nv = {
+  blink = require('nvim.blink'),
   keys = require('nvim.keys'),
   lsp = require('nvim.lsp'),
   treesitter = require('nvim.treesitter'),
@@ -50,9 +51,10 @@ _G.nv = {
 }
 
 vim.iter(nv):each(function(_, v)
-  -- vim.validate('submodule', v, 'table')
+  if v.specs then
+    Plug(v.specs)
+  end
   if vim.is_callable(v.after) then
     vim.schedule(v.after)
   end
-  Plug(v.specs) -- `vim.pack.add`s transformed plugins
 end)
