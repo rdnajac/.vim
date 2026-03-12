@@ -12,6 +12,7 @@ M.after = function()
     { 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
     { ']]', function() Snacks.words.jump(vim.v.count1) end, mode = { 'n', 't' } },
     { '[[', function() Snacks.words.jump(-vim.v.count1) end, mode = { 'n', 't' } },
+    { '<leader>U', function() require('undotree').open({ cmd = [[20vnew]] }) end, desc = 'Undotree' },
   })
   M.map(require('nvim.keys.bookmarks'))
   M.map(M.togglelist)

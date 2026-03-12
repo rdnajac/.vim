@@ -9,7 +9,7 @@ end
 vim.cmd([[ source ~/.vim/vimrc ]])
 
 require('snacks').setup({
-  bigfile = require('nvim.snacks.bigfile'),
+  -- bigfile = { enabled = true },
   dashboard = require('nvim.snacks.dashboard'),
   explorer = { replace_netrw = false },
   image = { enabled = true },
