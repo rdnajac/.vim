@@ -5,7 +5,23 @@ local M = {
     { 'mason-org/mason.nvim', opts = {} },
     { 'stevearc/oil.nvim', opts = {} },
   },
-  after = function() Plug(require('nvim._plugins')) end,
+  after = function()
+    Plug(require('nvim._plugins'))
+    -- M.winbar = require('nvim.ui.winbar')
+    -- vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+    _G.MyWinbar = require('nvim.ui.winbar')
+    vim.o.winbar = [[%{%v:lua.MyWinbar()%}]]
+
+    local signs = { text = { ' ', ' ', ' ', '' } }
+    vim.diagnostic.config({
+      float = { source = true },
+      underline = false,
+      virtual_text = false,
+      severity_sort = true,
+      signs = signs,
+      status = signs,
+    })
+  end,
 }
 
 -- string manipulation
@@ -20,15 +36,6 @@ M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 
 -- fn wrappers
 M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
-
--- local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
---- Convert a file path to a module name by trimming the lua root
----@param path string
----@return string
-M.modname = function(path)
-  local name = fn.fnamemodify(path, ':r:s?^.*/lua/??') -- :gsub('/', '.')
-  return name:sub(-4) == 'init' and name:sub(1, -6) or name
-end
 
 -- api wrappers
 M.get_buf_lines = function(bufnr)
@@ -75,11 +82,6 @@ M.foldtext = function()
   return table.concat(parts, ' ')
 end
 
-function M.yank(text)
-  fn.setreg('*', text)
-  print('yanked: ' .. text)
-end
-
 --- cache/read lines file in the cache directory,
 --- or read lines from a file in the cache directory
 ---@param fname string filename relative to cache directory
@@ -109,5 +111,79 @@ end
 --     return ret
 --   end
 -- end)(vim.paste)
+
+-- local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
+--- Convert a file path to a module name by trimming the lua root
+---@param path string
+---@return string
+M.modname = function(path)
+  -- return fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/init$', '')
+  local modname = path:gsub('^.*/lua/', ''):gsub('/init.lua$', '')
+  -- return fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/init$', '')
+  return modname
+end
+
+function M.yank(text)
+  fn.setreg('*', text)
+  print('[yanked] ' .. text)
+end
+
+M.yankmod = function()
+  local file = api.nvim_buf_get_name(0)
+  local modname = M.modname(file)
+  local line = string.format([[require('%s')]], modname)
+  M.yank(line)
+end
+
+M.redraw = function(t)
+  -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
+  vim.defer_fn(
+    function()
+      vim.api.nvim__redraw({ win = vim.api.nvim_get_current_win(), valid = false, flush = false })
+    end,
+    t or 200
+  )
+end
+
+-- TODO: fidget.nvim
+function M.spinner()
+  local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
+  return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+end
+
+function M.spinner()
+  local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
+  return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+end
+
+---Same as require but handles errors gracefully
+---@param module string
+---@param errexit? boolean
+---@return any?
+M.xprequire = function(module, errexit)
+  local ok, mod = xpcall(require, debug.traceback, module)
+  if not ok then
+    if errexit ~= false then
+      local msg = ('Error loading module %s:\n%s'):format(module, mod)
+      vim.schedule(function()
+        if errexit == true then
+          error(msg)
+        else
+          vim.notify(msg, vim.log.levels.ERROR)
+        end
+      end)
+    end
+    return nil
+  end
+  return mod
+end
+
+-- local original_require = require
+-- local verbose_require = function(modname)
+--   print(([[require('%s')]]):format(modname))
+--   return original_require(modname)
+-- end
+-- require = verbose_require
+
 
 return M

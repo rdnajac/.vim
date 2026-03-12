@@ -92,4 +92,24 @@ M.key_counts = function(t)
   return ret
 end
 
+M.upvalue = function(func, name, newvalue)
+  local i = 1
+  while true do
+    local n = debug.getupvalue(func, i)
+    if not n then
+      break
+    end
+    if n == name then
+      vim.notify('upvalue found: ' .. name .. ' = ' .. tostring(debug.getupvalue(func, i)))
+      if newvalue then
+        debug.setupvalue(func, i, newvalue)
+        vim.notify('upvalue set: ' .. name)
+      end
+      return
+    end
+    i = i + 1
+  end
+  error('upvalue not found: ' .. name)
+end
+
 return M

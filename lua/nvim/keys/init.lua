@@ -2,6 +2,7 @@ local M = {}
 
 M.after = function()
   M.map({
+    { 'yu', function() require('nvim.util.debug').printval() end, desc = 'Print Value' },
     { '-', '<Cmd>Oil<CR>' },
     { '<leader>ui', '<Cmd>Inspect<CR>' },
     { '<leader>uI', '<Cmd>Inspect!<CR>' },

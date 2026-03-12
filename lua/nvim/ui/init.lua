@@ -1,94 +1,33 @@
-local M = {}
+-- BUG: `msg` should inferred from cmdheight=0
+vim.o.cmdheight = 0
+-- BUG: ui2 freaks out if startup is interrupted
+require('vim._core.ui2').enable({
+  msg = { target = 'msg' },
+})
 
-M.icons = require('nvim.ui.icons')
+--- Window types each have respective filetype
+--- • `cmd`: cmdline window; 'showcmd', 'showmode', 'ruler', and messages if 'cmdheight' > 0.
+--- • `msg`: messages when 'cmdheight' == 0.
+--- • `pager`: used for |:messages| and certain messages that should be shown in full
+--- • `dialog`: used for prompt messages that expect user input
 
-M.after = function()
-  -- M.winbar = require('nvim.ui.winbar')
-  -- vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-  _G.MyWinbar = require('nvim.ui.winbar')
-  vim.o.winbar = [[%{%v:lua.MyWinbar()%}]]
-
-  local signs = { text = { ' ', ' ', ' ', '' } }
-  ---@type vim.diagnostic.Opts
-  local opts = {
-    float = { source = true },
-    underline = false,
-    virtual_text = false,
-    severity_sort = true,
-    signs = signs,
-    status = signs,
-  }
-  vim.diagnostic.config(opts)
-  local unused = 'smoke test'
+local goto_file = function()
+  local line = vim.api.nvim_get_current_line()
+  local lineno = line:match(':(%d+)') or 0
+  local cfile = vim.fn.expand('<cfile>')
+  vim.fn['edit#'](cfile)
+  vim.cmd('normal! ' .. lineno .. 'G')
 end
 
-M.specs = {
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    -- enabled = false,
-    init = function()
-      ---@module "render-markdown"
-      ---@type render.md.UserConfig
-      vim.g.render_markdown_config = {
-        file_types = { 'markdown', 'rmd', 'quarto' },
-        latex = { enabled = false },
-        bullet = { right_pad = 1 },
-        -- checkbox = { enabled = false },
-        completions = { blink = { enabled = false } },
-        code = {
-          -- TODO: fix the highlights and show ` or spaces for inline code markers
-          -- inline_left = ' ',
-          -- inline_right = ' ',
-          -- inline_padding= 1,
-          enabled = true,
-          highlight = '',
-          highlight_border = false,
-          -- highlight_inline = 'Chromatophore',
-          -- render_modes = { 'n', 'c', 't', 'i' },
-          sign = false,
-          conceal_delimiters = false,
-          language = true,
-          position = 'left',
-          language_icon = true,
-          language_name = false,
-          language_info = false,
-          width = 'block',
-          min_width = 0,
-          border = 'thin',
-          style = 'normal',
-        },
-        heading = {
-          sign = false,
-          width = 'full',
-          position = 'overlay',
-          -- left_pad = { 0, 1, 2, 3, 4, 5 },
-          -- icons = '',
-        },
-        html = {
-          comment = { conceal = false },
-          enabled = false,
-        },
-      }
-    end,
-    toggles = {
-      ['<leader>um'] = {
-        name = 'Render Markdown',
-        get = function() return require('render-markdown.state').enabled end,
-        set = function(state) require('render-markdown').set(state) end,
-      },
-    },
-  },
-}
+vim.api.nvim_create_autocmd({ 'FileType' }, {
+  pattern = { 'msg', 'pager' },
+  -- group = aug,
+  callback = function()
+    vim.treesitter.start(0, 'markdown')
+    vim.wo.conceallevel = 3
+    vim.keymap.set('n', '<CR>', goto_file, { buffer = true, desc = 'Go to file under cursor' })
+  end,
+  desc = '',
+})
 
--- copied from `Snacks.util`
-M.redraw = function(t)
-  -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
-  vim.defer_fn(
-    function()
-      vim.api.nvim__redraw({ win = vim.api.nvim_get_current_win(), valid = false, flush = false })
-    end,
-    t or 200
-  )
-end
-
-return M
+return { icons = require('nvim.ui.icons') }

@@ -35,4 +35,9 @@ return {
       },
     })
   end,
+  -- TODO: package.preload is probably better; use `setupval?`
+  after = function()
+    local registers = [[*+"-:.%/#=_0123456789]]
+    require('which-key.plugins.registers').registers = registers
+  end,
 }

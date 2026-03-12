@@ -22,6 +22,7 @@ local M = {
     Warning = { '', 'DiagnosticWarn' },
     Normal = { copilot, 'DiagnosticHint' },
   },
+  -- TODO: use vim.diagnosticseverity enum
   diagnostics = {
     Error = '',
     Warn = '',
@@ -40,6 +41,28 @@ local M = {
     unmerged = ' ',
     untracked = '?',
   },
+}
+
+-- TODO:
+-- ---@enum status
+-- local status = {
+--   ACTIVE = 1,
+--   BUSY = 2,
+--   INACTIVE = 3,
+-- }
+--
+-- ---@enum statusName
+-- local severity_invert = {
+--   [1] = 'ERROR',
+--   [2] = 'WARN',
+--   [3] = 'INFO',
+-- }
+
+M.status = {
+  active = '󰖩',
+  busy = '󱛇',
+  stopped = '󰖪',
+  inactive = '',
 }
 
 M.mason = {

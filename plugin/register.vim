@@ -62,10 +62,3 @@ augroup vimrc_yank
     autocmd UIEnter * call s:set_clipboard()
   endif
 augroup END
-
-if has('nvim')
-  nnoremap yu <Cmd>lua require('nvim.util.debug.printval')()<CR>
-  if luaeval('package.loaded["which-key"] ~= nil')
-    lua vim.schedule(function() require('which-key.plugins.registers').registers = [[*+"-:.%/#=_0123456789]] end)
-  endif
-endif

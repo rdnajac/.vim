@@ -40,15 +40,88 @@ return {
     },
   },
   {
+    'MeanderingProgrammer/render-markdown.nvim',
+    -- enabled = false,
+    init = function()
+      ---@module "render-markdown"
+      ---@type render.md.UserConfig
+      vim.g.render_markdown_config = {
+        file_types = { 'markdown', 'rmd', 'quarto' },
+        latex = { enabled = false },
+        bullet = { right_pad = 1 },
+        -- checkbox = { enabled = false },
+        completions = { blink = { enabled = false } },
+        code = {
+          -- TODO: fix the highlights and show ` or spaces for inline code markers
+          -- inline_left = ' ',
+          -- inline_right = ' ',
+          -- inline_padding= 1,
+          enabled = true,
+          highlight = '',
+          highlight_border = false,
+          -- highlight_inline = 'Chromatophore',
+          -- render_modes = { 'n', 'c', 't', 'i' },
+          sign = false,
+          conceal_delimiters = false,
+          language = true,
+          position = 'left',
+          language_icon = true,
+          language_name = false,
+          language_info = false,
+          width = 'block',
+          min_width = 0,
+          border = 'thin',
+          style = 'normal',
+        },
+        heading = {
+          sign = false,
+          width = 'full',
+          position = 'overlay',
+          -- left_pad = { 0, 1, 2, 3, 4, 5 },
+          -- icons = '',
+        },
+        html = {
+          comment = { conceal = false },
+          enabled = false,
+        },
+      }
+    end,
+    toggles = {
+      ['<leader>um'] = {
+        name = 'Render Markdown',
+        get = function() return require('render-markdown.state').enabled end,
+        set = function(state) require('render-markdown').set(state) end,
+      },
+    },
+  },
+  {
     'R-nvim/R.nvim',
     init = function()
+      local debug_r = function()
+        local word = vim.fn.expand('<cword>')
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        -- copy the <cword> to a new line below the current line
+        vim.api.nvim_buf_set_lines(0, row, row, true, { word })
+        -- move cursor to the new line
+        vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
+        -- execute <Plug>RInsertLineOutput from normal mode
+        vim.api.nvim_feedkeys(vim.keycode('<Plug>RInsertLineOutput'), 'n', false)
+        -- delete the line with the word
+        vim.api.nvim_buf_set_lines(0, row, row + 1, true, {})
+        -- move cursor back to original position
+        vim.api.nvim_win_set_cursor(0, { row, col })
+      end
+
       require('r').setup({
         R_args = { '--quiet', '--no-save' },
         -- user_maps_only = true,
         -- quarto_chunk_hl = { highlight = false },
         Rout_more_colors = true,
         hook = {
-          -- after_R_start = function() vim.notify('R was launched') end,
+          after_R_start = function()
+            vim.notify('R started!')
+            vim.keymap.set('n', '<leader>ur', debug_r, { desc = 'Debug R' })
+          end,
           -- after_ob_open = function() vim.notify('Object Browser') end,
         },
       })

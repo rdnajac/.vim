@@ -14,10 +14,6 @@ M.keywords = {
 --   Note = 'Chromatophore',
 -- }, { prefix = 'MiniHipatterns', default = true })
 
--- Mini sets the default highlight to inverted color of the Diagnostic group
--- local minimap = { Fixme = 'Error', Hack = 'Warn', Todo = 'Info', Note = 'Hint' }
-
--- Flat lookup: keyword string → group name (e.g. BUG → Fixme)
 M.lookup = vim.iter(M.keywords):fold({}, function(acc, k, v)
   for _, kw in ipairs(v) do
     acc[kw] = k
@@ -30,8 +26,9 @@ M.mini = vim.iter(M.keywords):fold({}, function(acc, k, v)
   return acc
 end)
 
--- Maps group name → diagnostic severity (for icons/highlights)
+-- `vim.diagnostic.severity` = { ERROR = 1, WARN = 2, INFO = 3, HINT = 4 }
 M.minimap = { Fixme = 'Error', Hack = 'Warn', Todo = 'Info', Note = 'Hint' }
+-- NOTE: mini.hipatterns sets the default to inverted diagnostic group
 
 M.icon = function(keyword)
   local v = M.minimap[M.lookup[keyword]]

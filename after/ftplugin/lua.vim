@@ -10,6 +10,8 @@ inoremap <buffer> \fu function() end,<Esc>gEa<Space>
 inoremap <buffer> \ig --<SPACE>stylua:<SPACE>ignore
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 
+nnoremap <buffer> ym <Cmd>lua require('nvim.util').yankmod()<CR>
+
 " `tpope/vim-surround`
 " use ascii value (e.g. i = 105)
 " NOTE: must use double quotes

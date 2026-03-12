@@ -5,8 +5,7 @@ local bookmarks = {
   p = 'plug',
   s = 'nvim/snacks/picker',
   t = 'nvim/treesitter',
-  u = 'nvim/ui',
-  v = 'nvim/util',
+  u = 'nvim/util',
 }
 
 return vim

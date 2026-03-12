@@ -1,6 +1,6 @@
 local M = {}
 
-M.leaks = function()
+M.extmark_leaks = function()
   local counts = vim
     .iter(vim.api.nvim_get_namespaces())
     :map(function(name, ns)
@@ -13,6 +13,7 @@ M.leaks = function()
     end)
     :flatten()
     :totable()
+    -- TODO: when `iter:sort()`
 
   table.sort(counts, function(a, b) return a.count > b.count end)
 

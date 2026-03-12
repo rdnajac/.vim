@@ -6,9 +6,6 @@ if vim.env.PROF then
   require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
 end
 
--- XXX: unstable features!
-require('nvim.ui.2')
-
 vim.cmd([[ source ~/.vim/vimrc ]])
 
 require('snacks').setup({
@@ -46,7 +43,6 @@ _G.nv = {
   keys = require('nvim.keys'),
   lsp = require('nvim.lsp'),
   treesitter = require('nvim.treesitter'),
-  ui = require('nvim.ui'),
   util = require('nvim.util'),
 }
 
@@ -58,3 +54,7 @@ vim.iter(nv):each(function(_, v)
     vim.schedule(v.after)
   end
 end)
+
+nv.ui = require('nvim.ui')
+
+-- TODO:  mini root
