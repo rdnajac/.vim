@@ -47,7 +47,6 @@ M.render = function(bufnr)
     local fname = to_file(line)
     if fname then
       local entry = M.get(fname)
-      -- dd(entry)
       vim.api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
         sign_text = entry.icon,
         sign_hl_group = entry.hl,
@@ -55,8 +54,27 @@ M.render = function(bufnr)
       })
     end
   end
-  -- force redraw to avoid flicker
-  nv.defer_redraw_win()
+  nv.util.redraw() -- avoids flicker
+end
+
+M.extmark_leaks = function()
+  local counts = vim
+    .iter(vim.api.nvim_get_namespaces())
+    :map(function(name, ns)
+      return vim.iter(vim.api.nvim_list_bufs()):map(function(buf)
+        local count = #vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
+        if count > 0 then
+          return { name = name, buf = buf, count = count, ft = vim.bo[buf].ft }
+        end
+      end)
+    end)
+    :flatten()
+    :totable()
+    -- TODO: when `iter:sort()`
+
+  table.sort(counts, function(a, b) return a.count > b.count end)
+
+  return counts
 end
 
 return M

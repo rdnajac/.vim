@@ -1,15 +1,11 @@
 {
   "plugins": {
-    "R.nvim": {
-      "rev": "992a514d88d85e1a262057f4775fb64b5d75e602",
-      "src": "https://github.com/R-nvim/R.nvim.git"
-    },
     "ale": {
       "rev": "69c945d5daecadf8e4c4c499d0a7babda748d603",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "8936aee785533553cb00b6a50f8c8a835ff46fdd",
+      "rev": "658d0ec1d93646ff999fe6044098af89d81428ed",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -29,19 +25,19 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "9d359222b3643f1fccbd8f3180445842e1cae00b",
+      "rev": "9990c41f10f54f29a888d13024c9f765037bde23",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "d8bf4c47385340ab2029402201d4d7c9f99f437a",
+      "rev": "0203a9608d63eda57679b01e69f33a7b4c34b0d1",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
-      "rev": "59902c749117640bd5d434642b2df67fb038d4f2",
+      "rev": "855ce6ba0c0bf3b03428d6352f61940cdcf332f3",
       "src": "https://github.com/chrisgrieser/nvim-scissors.git"
     },
     "nvim-treesitter": {
-      "rev": "5cb05e1b0fa3c469958a2b26f36b3fe930af221c",
+      "rev": "493890b87a81dfe6a7e577dbc364ae33fa482da9",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {

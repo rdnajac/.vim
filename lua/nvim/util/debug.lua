@@ -6,6 +6,23 @@ local now = function()
   return string.format('%s.%03d', os.date('%T'), math.floor((vim.uv.hrtime() / 1e6) % 1000))
 end
 
+M.print = function()
+  local ft = vim.bo.filetype
+  -- if ft == 'r' and package.loaded['r'] then return debug_r() end
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  local word = vim.fn.expand('<cWORD>'):gsub(',$', '') -- trim trailing comma
+  local templates = {
+    lua = 'print(' .. word .. ')',
+    c = string.format('printf("+++ %d %s: %%d\\n", %s);', row, word, word),
+    sh = string.format('echo "+++ %d %s: $%s"', row, word, word),
+    r = word,
+    vim = ([[echom %s]]):format(word),
+  }
+  if vim.tbl_contains(vim.tbl_keys(templates), ft) then
+    vim.api.nvim_buf_set_lines(0, row, row, true, { templates[ft] })
+  end
+end
+
 M.trace = function()
   local trace = {} ---@type string[]
   for level = 2, 20 do -- arbitrary max depth

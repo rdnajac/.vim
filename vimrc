@@ -464,9 +464,9 @@ else
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'nvim-mini/mini.nvim'
-  " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
-  Plug 'j-hui/fidget.nvim'
+  " Plug 'j-hui/fidget.nvim'
+  " Plug 'saxon1964/neovim-tips'
 endif
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'

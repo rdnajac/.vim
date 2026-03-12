@@ -1,3 +1,5 @@
+local api, fn = vim.api, vim.fn
+
 ---@class status.component
 ---@field [1] string|fun(table?):string
 ---@field color? string|table
@@ -22,83 +24,46 @@ end
 
 -- local stlescape = function(s) return s:gsub('%%', '%%%%'):gsub('\n', ' ') end
 
+---@param str string statusline to be evaluated
 ---@param opts? vim.api.keyset.eval_statusline
----             - winid: (number) |window-ID| of the window to use as context
----             - maxwidth: (number) Maximum width of statusline.
----             - fillchar: (string) Character to fill blank spaces in the statusline
----             - highlights: (boolean) Return highlight information.
----             - use_winbar: (boolean) Evaluate winbar instead of statusline.
----             - use_tabline: (boolean) Evaluate tabline instead of statusline.
----             - use_statuscol_lnum: nv.winbar(opts))(number) Evaluate statuscolumn for this line number
 M.debug = function(str, opts)
   opts = opts or {}
-  -- opts.use_winbar = true
-  return vim.api.nvim_eval_statusline(str, opts)
+  opts.winid = opts.winid or nil
+  opts.maxwidth = opts.maxwidth or nil
+  opts.fillchar = opts.fillchar or nil
+  opts.highlights = opts.highlights or nil
+  opts.use_winbar = opts.use_winbar or nil
+  opts.use_tabline = opts.use_tabline or nil
+  opts.use_statuscol_lnum = opts.use_statuscol_lnum or nil
+  return api.nvim_eval_statusline(str, opts)
 end
 
 ---@alias buftype ''|'acwrite'|'help'|'nofile'|'nowrite'|'quickfix'|'terminal'|'prompt'
 
----@param opts? {bufnr?:integer,win?:integer,bt?:string,ft?:string,active?:boolean}
 ---@return string
-M.buffer = function(opts)
-  opts = opts or {}
-  local bufnr = opts.bufnr or vim.api.nvim_get_current_buf()
-  local win = opts.win or vim.api.nvim_get_current_win()
-  local bt = opts.bt or vim.bo[bufnr].buftype
-  local ft = opts.ft or vim.bo[bufnr].filetype
+M.buffer = function()
+  local active = vim._tointeger(vim.g.actual_curwin) == api.nvim_get_current_win()
+  local bt = vim.bo.buftype ---@type buftype
   local path
-
   if bt == '' then
-    local active = opts.active or (win == tonumber(vim.g.actual_curwin))
-    -- path = active and '%t' or '%f'
-    -- path = active and nv.path.relative_parts(bufnr)[2] or '%t'
-    path = '%'
-  elseif bt == 'help' then
     path = '%t'
   elseif bt == 'terminal' then
-    path = vim.fn.fnamemodify(vim.b[bufnr].osc7_dir or vim.fn.getcwd(), ':~')
+    path = fn.fnamemodify(vim.b.osc7_dir or fn.getcwd(), ':~')
   end
-
+  -- TODO:
+  -- return "%{% &buftype == 'terminal' ? ' %{&channel}' : '' %}"
+  -- return "%{% &buflisted ? '%n' : '󱪟 ' %}" .. "%{% &bufhidden == '' ? '' : '󰘓 ' %}"
   return table.concat({
     '%h%w%q ', -- help/preview/quickfix
     path or '',
-    --- XXX: why no opening `%`
-    [[{% &readonly ? ' ' : '%M' %}]],
-    [[%{% &busy     ? '◐ ' : ''   %}]],
-    [[%{% &ff !=# 'unix'  ? ' ff=' . &ff : ''  %}]], -- TODO: add icon
-    [[%{% &fenc !=# 'utf-8' && &fenc !=# ''  ? ' fenc=' . &fenc : ''  %}]],
+    [[%{% &modified ? '  ' : '' %}]],
+    [[%{% &readonly ? '  ' : '' %}]],
+    -- [[%{% &busy ? '◐ ' : ''  %}]],
+    [[%{% &ff   !=# 'unix'           ? ',ff='..&ff     : '' %}]],
+    [[%{% &fenc !~# '^\%(utf-8\)\?$' ? ',fenc='..&fenc : '' %}]],
   })
 end
 
-M.r = function()
-  Snacks.util.set_hl({
-    Inactive = { fg = '#aaaaaa' },
-    Starting = { fg = '#757755' },
-    ServerReady = { fg = '#117711' },
-    TCPStart = { fg = '#ff8833' },
-    TCPReady = { fg = '#3388ff' },
-    RStarting = { fg = '#ff8833' },
-    Ready = { fg = '#3388ff' },
-  }, { prefix = 'RStatus', default = true })
-  local rstt = {
-    { '-', 'RStatusInactive' }, -- 1: ftplugin/* sourced, but nclientserver not started yet.
-    { 'S', 'RStatusStarting' }, -- 2: nclientserver started, but not ready yet.
-    { 'S', 'RStatusServerReady' }, -- 3: nclientserver is ready.
-    { 'S', 'RStatusTCPStart' }, -- 4: nclientserver started the TCP server
-    { 'S', 'RStatusTCPReady' }, -- 5: TCP server is ready
-    { 'R', 'RStatusRStarting' }, -- 6: R started, but nvimcom was not loaded yet.
-    { '󰟔 ', 'RStatusReady' }, -- 7: nvimcom is loaded.
-  }
-  return {
-    function() return rstt[vim.g.R_Nvim_status][1] end,
-    color = function() return rstt[vim.g.R_Nvim_status][2] end,
-    cond = function()
-      if not vim.tbl_contains({ 'r', 'rmd', 'quarto' }, vim.bo.filetype) then
-        return false
-      end
-      return vim.g.R_Nvim_status and vim.g.R_Nvim_status > 0
-    end,
-  }
-end
+-- TODO: Snacks and Snacks.profiler.status()
 
 return M

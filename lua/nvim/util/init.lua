@@ -145,12 +145,6 @@ M.redraw = function(t)
   )
 end
 
--- TODO: fidget.nvim
-function M.spinner()
-  local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
-  return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-end
-
 function M.spinner()
   local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
   return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
