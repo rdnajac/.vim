@@ -401,43 +401,6 @@ inoremap <silent> ,o <C-x><C-o>
 " inoremap <silent> ,u <C-x><C-u>
 inoremap <silent> ,i <Cmd>Icons<CR>
 
-" cmdline {{{2
-set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
-" set completeopt+=preinsert
-" More info here: |cmdline-completion|; default: `wildmode=full`
-" set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
-set wildmode=longest:full,full " Same as above, but cycle through the first patch ('preinsert'?)
-" set wildmode=longest,list    " First press: longest common substring, Second press: list all matches
-" set wildmode=noselect:full   " Show 'wildmenu' without selecting, then cycle full matches
-" set wildmode=noselect:lastused,full " Same as above, but buffer matches are sorted by time last used
-
-" navigate completion menu with arrow keys
-cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
-cnoremap <expr> <Up>   wildmenumode() ? "\<C-p>" : "\<Up>"
-
-nnoremap ?? :verbose set ?<Left>
-cnoreabbrev ?? verbose set ?<Left>
-cnoreabbrev !! !./%
-cnoreabbrev <expr> %% expand('%:p:h')
-
-function! s:singlequote(str)
-  return "'"..substitute(copy(a:str), "'", "''", 'g').."'"
-endfunction
-
-function! s:cabbrev(lhs, rhs)
-  " execute printf( 'cnoreabbrev <expr> %s (getcmdtype() ==# ":" && getcmdline() =~# "%s") ? "%s" : "%s"',
-  execute printf('cabbrev <expr> %s (getcmdtype() == ":" && getcmdpos() <= %d) ? %s : %s',
-	\ a:lhs, 1+len(a:lhs), s:singlequote(a:rhs), s:singlequote(a:lhs))
-endfunction
-
-call s:cabbrev('vv', 'verbose')
-call s:cabbrev('scp', '!scp %')
-call s:cabbrev('r', 'lua require')
-call s:cabbrev('m', 'Man')
-call s:cabbrev('S', 'lua Snacks')
-call s:cabbrev('f', 'find')
-call s:cabbrev('l', 'lua')
-
 " terminal {{{2
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
@@ -503,6 +466,7 @@ else
   Plug 'nvim-mini/mini.nvim'
   " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
+  Plug 'j-hui/fidget.nvim'
 endif
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
