@@ -8,7 +8,6 @@ M.specs = {
   {
     'folke/lazydev.nvim',
     opts = {
-      -- integrations = { cmp = false },
       library = {
         { path = 'snacks.nvim', words = { 'Snacks' } },
         { path = 'mini.nvim', words = { 'Mini.*' } },
