@@ -1,7 +1,5 @@
-local M = {}
-local util = require('nvim.util')
-
 local fn, fs, uv = vim.fn, vim.fs, vim.uv
+local M = {}
 -- local dir = fs.dirname(debug.getinfo(1).source:gsub('^@', ''))
 -- local files = fn.globpath(dir, '*/init.lua', false, true)
 -- vim.iter(files):map(function(file) return file:gsub('^.*(nvim/.+)$', '%1') end)
@@ -13,6 +11,7 @@ local fn, fs, uv = vim.fn, vim.fs, vim.uv
 --   end)
 
 local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
+local modname = function(path) return path:gsub('^.*/lua/', ''):gsub('/init.lua$', '') end
 
 --- Returns true for .lua files (non-init) and dirs that have an init.lua
 local function is_module(f)
@@ -29,7 +28,7 @@ end
 M.submodules = function(subdir)
   local path = fs.joinpath(luaroot, 'nvim', subdir)
   local files = fn.globpath(path, '*', false, true)
-  return vim.iter(files):filter(is_module):map(util.modname):totable()
+  return vim.iter(files):filter(is_module):map(modname):totable()
 end
 
 --- Collect non-init Lua modules from a subdirectory of nvim/
@@ -68,7 +67,7 @@ M.for_each_module = function(cb, subpath, recursive)
   local pattern = fs.joinpath(subpath, (recursive and '**' or '*'))
   local files = fn.globpath(luaroot, pattern, false, true)
   for _, f in ipairs(files) do
-    local mod = util.modname(f)
+    local mod = modname(f)
     if not vim.endswith(mod, '/init') then
       cb(mod)
     end

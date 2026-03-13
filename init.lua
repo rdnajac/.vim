@@ -17,7 +17,7 @@ require('snacks').setup({
   input = { enabled = true },
   -- notifier = require('munchies.notifier'),
   quickfile = { enabled = true },
-  picker = require('nvim.snacks.picker'),
+  picker = require('munchies.picker'),
   -- terminal = { enabled = true },
   scope = { enabled = true },
   scroll = { enabled = true },

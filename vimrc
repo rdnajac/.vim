@@ -337,6 +337,7 @@ nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
+nnoremap <Bslash>n <Cmd>call edit#luamod('nvim')<CR>
 nnoremap <leader><Bslash> <Cmd>call edit#readme()<CR>
 nnoremap <Bslash><leader> <Cmd>call edit#readme()<CR>
 

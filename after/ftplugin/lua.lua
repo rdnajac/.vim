@@ -4,8 +4,7 @@
 -- vim.lsp.buf_attach_client(0, id)
 
 vim.wo.foldmethod = 'expr'
-_G.Foldtext = require('nvim.util').foldtext
-vim.wo.foldtext = [[v:lua.Foldtext()]]
+vim.wo.foldtext = 'v:lua.nv.ui.foldtext()'
 
 if vim.g.loaded_endwise == 1 then
   vim.bo.syntax = 'ON' -- use legacy syntax
