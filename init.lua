@@ -32,4 +32,3 @@ _G.bt = Snacks.debug.backtrace
 _G.p = Snacks.debug.profile
 
 require('nvim')
--- TODO:  mini root

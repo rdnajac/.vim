@@ -30,3 +30,6 @@ for modname, opt in pairs({
 }) do
   require('mini.' .. modname).setup(vim.is_callable(opt) and opt() or opt)
 end
+
+MiniMisc.setup_auto_root()
+MiniMisc.setup_termbg_sync()
