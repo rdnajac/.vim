@@ -7,17 +7,7 @@ local M = {
 M.specs = {
   'neovim/nvim-lspconfig',
   -- 'b0o/SchemaStore.nvim',
-  {
-    'folke/lazydev.nvim',
-    opts = {
-      library = {
-        vim.env.VIMRUNTIME,
-        { path = 'snacks.nvim', words = { 'Snacks' } },
-        { path = 'mini.nvim', words = { 'Mini.*' } },
-        { path = 'nvim', words = { 'nv' } },
-      },
-    },
-  },
+  require('nvim.lsp.lazydev')
 }
 
 M.after = function()
