@@ -2,7 +2,7 @@ local M = {}
 
 M.after = function()
   M.map({
-    { 'yu', function() require('nvim.util.debug').printval() end, desc = 'Print Value' },
+    { 'yu', function() require('nvim.util.debug').print() end, desc = 'Print Value' },
     { '<leader>ui', '<Cmd>Inspect<CR>' },
     { '<leader>uI', '<Cmd>Inspect!<CR>' },
     { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },

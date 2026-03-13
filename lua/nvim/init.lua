@@ -31,4 +31,6 @@ vim.iter(nv):each(function(k, v)
   end
 end)
 
+nv.util = require('nvim.util')
+
 return nv

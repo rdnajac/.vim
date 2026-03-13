@@ -1,5 +1,6 @@
---- `capabilities = require('blink.cmp').get_lsp_capabilities()`,
 --- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
+-- NOTE: blink automatically adds some capabilities
+-- ~/.local/share/nvim/site/pack/core/opt/blink.cmp/lua/blink/cmp/sources/lib/init.lua
 local M = {
   status = require('nvim.lsp.status'),
 }
