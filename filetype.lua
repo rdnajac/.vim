@@ -24,7 +24,7 @@ vim.filetype.add({
       function(path, bufnr)
         MAXSIZE = 1.5 * 1024 * 1024 -- 1.5MB
         if
-          path ~= vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr))
+          path == vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr))
           and vim.bo[bufnr].filetype ~= 'bigfile'
         then
           local size = vim.fn.getfsize(path)
