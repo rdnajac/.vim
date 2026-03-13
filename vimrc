@@ -85,6 +85,7 @@ set viewoptions-=options      " keep mkview minimal
 
 " ui {{{2
 let &laststatus = has('nvim') ? 3 : 2
+set tabline=%!vimline#tabline#()
 set cursorline
 set number
 set signcolumn=number

@@ -1,34 +1,22 @@
-" setting-tabline
-" 	The tab pages line only appears as specified with the 'showtabline'
-" 	option and only when there is no GUI tab line.  When 'e' is in
-" 	'guioptions' and the GUI supports a tab line 'guitablabel' is used
-" 	instead.  Note that the two tab pages lines are very different.
-"
-" 	The value is evaluated like with 'statusline'.  You can use
-" 	|tabpagenr()|, |tabpagewinnr()| and |tabpagebuflist()| to figure out
-" 	the text to be displayed.  Use "%1T" for the first label, "%2T" for
-" 	the second one, etc.  Use "%X" items for closing labels.
-"
-" 	When changing something that is used in 'tabline' that does not
-" 	trigger it to be updated, use |:redrawtabline|.
-" 	This option cannot be set in a modeline when 'modelineexpr' is off.
-"
-" 	Keep in mind that only one of the tab pages is the current one, others
-" 	are invisible and you can't jump to their windows.
-
+" The value is evaluated like with 'statusline' and the following items are available:
+" `tabpagenr()`
+" `tabpagewinnr()`
+" `tabpagebuflist()`
+" Use "%1T" for the first label, "%2T" for the second one, etc.
+" Use "%X" items for closing labels.
+" Use `redrawtabline` to update the tabline when something changes.
 " Check the 'columns' option for the space available.
 
-""
-" Since the number of tab labels will vary,
-" you need to use an expression for the whole option.
-set tabline=%!MyTabLine()
+function vimline#tabline#label(n)
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  return fnamemodify(git#root(bufname(buflist[winnr - 1])), ':~')
+endfunction
 
 ""
-" Then define the MyTabLine() function to list all the tab pages labels.  A
-" convenient method is to split it in two parts:  First go over all the tab
-" pages and define labels for them.  Then get the label for each tab page. >
-
-function MyTabLine()
+" Lists all the tab pages labels. First go over all the tab pages and
+" define labels for them. Then get the label for each tab page.
+function vimline#tabline#() abort
   let s = ''
   for i in range(tabpagenr('$'))
     " select the highlighting
@@ -41,8 +29,8 @@ function MyTabLine()
     " set the tab page number (for mouse clicks)
     let s ..= '%' .. (i + 1) .. 'T'
 
-    " the label is made by MyTabLabel()
-    let s ..= ' %{MyTabLabel(' .. (i + 1) .. ')} '
+    " the label is made by vimline#tabline#label()
+    let s ..= ' %{vimline#tabline#label(' .. (i + 1) .. ')} '
   endfor
 
   " after the last tab page fill with TabLineFill and reset tab page nr
@@ -55,16 +43,3 @@ function MyTabLine()
 
   return s
 endfunction
-
-""
-" Now the MyTabLabel() function is called for each tab page to get its label.
-function MyTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  return git#root(bufname(buflist[winnr - 1]))
-endfunction
-
-function vimline#tabline#() abort
-  " dummy
-endfunction
-
