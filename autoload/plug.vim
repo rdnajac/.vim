@@ -26,7 +26,7 @@ function! plug#end()
   if !exists('g:loaded_jetpack')
     if has('nvim')
       lua vim.pack.add(vim.g.plugs)
-      lua require('plug')
+      lua require('nvim.plug')
     endif
   else
     call jetpack#end()

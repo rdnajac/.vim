@@ -7,7 +7,7 @@ Snacks.toggle
     set = function(state)
       vim.g.minidiff_disable = not state
       MiniDiff.toggle(0)
-      require('nvim.ui').redraw()
+      nv.ui.redraw()
     end,
   })
   :map('<leader>uG')
@@ -21,7 +21,7 @@ Snacks.toggle
     end,
     set = function(_)
       MiniDiff.toggle_overlay(0)
-      require('nvim.ui').redraw()
+      nv.ui.redraw()
     end,
   })
   :map('<leader>go')

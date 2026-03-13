@@ -3,7 +3,6 @@ local M = {}
 M.after = function()
   M.map({
     { 'yu', function() require('nvim.util.debug').printval() end, desc = 'Print Value' },
-    { '-', '<Cmd>Oil<CR>' },
     { '<leader>ui', '<Cmd>Inspect<CR>' },
     { '<leader>uI', '<Cmd>Inspect!<CR>' },
     { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
@@ -14,7 +13,6 @@ M.after = function()
     { '[[', function() Snacks.words.jump(-vim.v.count1) end, mode = { 'n', 't' } },
     { '<leader>U', function() require('undotree').open({ cmd = [[20vnew]] }) end, desc = 'Undotree' },
   })
-  M.map(require('nvim.keys.bookmarks'))
   M.map(M.togglelist)
   if not Snacks then
     return

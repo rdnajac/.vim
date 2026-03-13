@@ -1,28 +1,6 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 
-local M = {
-  specs = {
-    { 'mason-org/mason.nvim', opts = {} },
-    { 'stevearc/oil.nvim', opts = {} },
-  },
-  after = function()
-    Plug(require('nvim._plugins'))
-    -- M.winbar = require('nvim.ui.winbar')
-    -- vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-    _G.MyWinbar = require('nvim.ui.winbar')
-    vim.o.winbar = [[%{%v:lua.MyWinbar()%}]]
-
-    local signs = { text = { ' ', ' ', ' ', '' } }
-    vim.diagnostic.config({
-      float = { source = true },
-      underline = false,
-      virtual_text = false,
-      severity_sort = true,
-      signs = signs,
-      status = signs,
-    })
-  end,
-}
+local M = {}
 
 -- string manipulation
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
@@ -135,21 +113,6 @@ M.yankmod = function()
   M.yank(line)
 end
 
-M.redraw = function(t)
-  -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
-  vim.defer_fn(
-    function()
-      vim.api.nvim__redraw({ win = vim.api.nvim_get_current_win(), valid = false, flush = false })
-    end,
-    t or 200
-  )
-end
-
-function M.spinner()
-  local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
-  return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-end
-
 ---Same as require but handles errors gracefully
 ---@param module string
 ---@param errexit? boolean
@@ -178,6 +141,5 @@ end
 --   return original_require(modname)
 -- end
 -- require = verbose_require
-
 
 return M
