@@ -1,7 +1,6 @@
+---@type vim.lsp.Config
 return {
-  cmd = { 'yaml-language-server', '--stdio' },
-  filetypes = { 'yaml', 'yaml.docker-compose' },
-  root_markers = { '.git' },
+  ---@type lspconfig.settings.yamlls
   settings = {
     -- https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
     redhat = { telemetry = { enabled = false } },
@@ -13,7 +12,6 @@ return {
         -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
         url = '',
       },
-      --- XXX: temp
       -- schemas = require('schemastore').yaml.schemas(),
     },
   },
