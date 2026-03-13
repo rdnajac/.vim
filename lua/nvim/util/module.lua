@@ -1,7 +1,7 @@
 -- functions for lua modules
 local M = {}
 
--- local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
+local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
 
 --- Convert a file path to a module name by trimming the lua root
 ---@param path string

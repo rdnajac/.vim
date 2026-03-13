@@ -54,7 +54,7 @@ M.render = function(bufnr)
       })
     end
   end
-  nv.util.redraw() -- avoids flicker
+  nv.ui.redraw() -- avoids flicker
 end
 
 M.extmark_leaks = function()

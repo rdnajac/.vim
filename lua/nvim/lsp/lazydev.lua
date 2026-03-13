@@ -1,6 +1,6 @@
 package.preload['lazydev.config'] = function()
   local M = {
-    debug = true,
+    debug = false,
     lua_root = true,
     libs = {}, ---@type lazydev.Library[]
     words = {}, ---@type table<string, string[]>
