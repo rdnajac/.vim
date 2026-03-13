@@ -25,4 +25,11 @@ M.yank = function()
   setreg(line)
 end
 
+-- local original_require = require
+-- local verbose_require = function(modname)
+--   print(([[require('%s')]]):format(modname))
+--   return original_require(modname)
+-- end
+-- require = verbose_require
+
 return M
