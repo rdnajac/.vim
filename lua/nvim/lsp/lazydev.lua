@@ -1,6 +1,16 @@
 package.preload['lazydev.config'] = function()
+  --- Copied from `require('lazydev')`
+  ---@param buf? integer
+  ---@return string? the workspace root if found
+  local function find_workspace(buf)
+    local fname = vim.api.nvim_buf_get_name(buf or 0)
+    local Workspace = require('lazydev.workspace')
+    local ws = Workspace.find({ path = fname })
+    return ws and ws:root_dir() or nil
+  end
+
   local M = {
-    debug = false,
+    debug = true,
     lua_root = true,
     libs = {}, ---@type lazydev.Library[]
     words = {}, ---@type table<string, string[]>
@@ -11,9 +21,8 @@ package.preload['lazydev.config'] = function()
 
   ---@param opts? lazydev.Config
   function M.setup(opts)
-    if not opts then
-      return
-    end
+    opts = opts or {}
+
     for _, lib in pairs(opts.library) do
       lib = type(lib) == 'string' and { path = lib } or lib
       table.insert(M.libs, {
@@ -36,24 +45,18 @@ package.preload['lazydev.config'] = function()
 
   vim.schedule(function()
     require('lazydev.buf').setup()
+
     -- require('lazydev.integrations.lspconfig').setup()
-    local supported_clients = { 'lua_ls', 'emmylua_ls' }
-    for _, server in ipairs(supported_clients) do
-      if vim.lsp.is_enabled(server) then
-        vim.lsp.config(server, {
-          root_dir = function(bufnr, on_dir) on_dir(require('lazydev').find_workspace(bufnr)) end,
-        })
-      end
-    end
-    vim.api.nvim_create_user_command(
-      'LazyDev',
-      function(...) require('lazydev.cmd').execute(...) end,
-      {
-        nargs = '*',
-        complete = function(...) return require('lazydev.cmd').complete(...) end,
-        desc = 'lazydev.nvim',
-      }
-    )
+    vim.lsp.config('lua_ls', {
+      root_dir = function(bufnr, on_dir) on_dir(find_workspace(bufnr)) end,
+    })
+
+    local cmd = require('lazydev.cmd')
+    vim.api.nvim_create_user_command('LazyDev', cmd.execute, {
+      nargs = '*',
+      complete = cmd.complete,
+      desc = 'lazydev.nvim',
+    })
   end)
 
   return M
@@ -64,10 +67,9 @@ return {
   opts = {
     library = {
       vim.env.VIMRUNTIME,
-      { path = 'nvim', words = { 'nv' } },
-      { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
       { path = 'mini.nvim', words = { 'Mini.*' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },
+      { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
     },
   },
 }

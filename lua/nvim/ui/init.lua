@@ -98,11 +98,13 @@ local goto_file = function()
   vim.cmd('normal! ' .. lineno .. 'G')
 end
 
+vim.treesitter.language.register('markdown', { 'msg', 'pager' })
+
 vim.api.nvim_create_autocmd({ 'FileType' }, {
   pattern = { 'msg', 'pager' },
   -- group = aug,
   callback = function()
-    vim.treesitter.start(0, 'markdown')
+    vim.treesitter.start(0)
     vim.wo.conceallevel = 3
     vim.keymap.set('n', '<CR>', goto_file, { buffer = true, desc = 'Go to file under cursor' })
   end,
@@ -110,7 +112,6 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
 })
 
 M.redraw = function(t)
-  -- vim.defer_fn(function() Snacks.util.redraw(vim.api.nvim_get_current_win()) end, t or 200)
   vim.defer_fn(
     function()
       vim.api.nvim__redraw({ win = vim.api.nvim_get_current_win(), valid = false, flush = false })

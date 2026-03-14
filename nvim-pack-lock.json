@@ -5,7 +5,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "44d1488862c906a4feac4673f51b01d96697b059",
+      "rev": "cb8840b3a669e2af24e922ea58b44ccc0b8916ea",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
