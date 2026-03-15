@@ -12,6 +12,7 @@ require('vim._core.ui2').enable({
 
 local M = {
   icons = require('nvim.ui.icons'),
+  status = require('nvim.ui.status'),
   winbar = require('nvim.ui.winbar'),
 }
 

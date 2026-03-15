@@ -64,6 +64,19 @@ M.buffer = function()
   })
 end
 
+M.git = function()
+  local diff = vim.b.minidiff_summary
+  return vim
+    .iter(ipairs({ 'add', 'change', 'delete' }))
+    :map(function(i, key)
+      local count = diff and diff[key] or 0
+      if count > 0 then
+        return string.format('%s%d', ({ ' ', ' ', ' ' })[i], count)
+      end
+    end)
+    :join(' ')
+end
+
 -- TODO: Snacks and Snacks.profiler.status()
 
 return M

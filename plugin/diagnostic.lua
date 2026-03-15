@@ -22,7 +22,7 @@ local opts = {
         .iter(ipairs(vim.diagnostic.severity))
         :map(function(i, _) return i, counts[i] or 0 end)
         :filter(function(_, count) return count > 0 end)
-        :map(function(i, count) return ('%%#%s#%s %s'):format(hl_map[i], icons[i], count) end)
+        :map(function(i, count) return ('%%#%s#%s %d'):format(hl_map[i], icons[i], count) end)
         :join(' ')
     end,
   },
