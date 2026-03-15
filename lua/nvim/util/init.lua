@@ -1,6 +1,21 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 
+local tools = {
+  'actionlint', -- code action linter
+  'mmdc', -- mermaid diagrams
+  'tree-sitter-cli',
+}
+
+local  function other_tools()
+  local ret = {}
+  -- TODO: find other tools in lsp dir
+  ret[#ret + 1] = 'stylua'
+  return ret
+end
+
 local M = {}
+
+M.tools = function() return vim.list_extend(tools, other_tools()) end
 
 -- string manipulation
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
