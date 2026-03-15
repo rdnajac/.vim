@@ -22,13 +22,6 @@ local M = {
     Warning = { '', 'DiagnosticWarn' },
     Normal = { copilot, 'DiagnosticHint' },
   },
-  -- TODO: use vim.diagnosticseverity enum
-  diagnostics = {
-    Error = '',
-    Warn = '',
-    Info = '',
-    Hint = '',
-  },
   diff = { add = '▎', change = '▎', delete = '' },
   git = {
     commit = '󰜘 ',
@@ -41,6 +34,25 @@ local M = {
     unmerged = ' ',
     untracked = '?',
   },
+}
+
+local severity = vim.diagnostic.severity
+-- TODO: use table invert fn
+M.diagnostics = {
+  [severity.ERROR] = '',
+  [severity.WARN] = '',
+  [severity.INFO] = '',
+  [severity.HINT] = '',
+  Error = '',
+  Warn = '',
+  Info = '',
+  Hint = '',
+}
+local hl_map = {
+  [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+  [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+  [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+  [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
 }
 
 -- TODO:
