@@ -12,7 +12,7 @@ The computing scientist's main challenge is not to
 get confused by the complexities of his own making.
 ]]
 
-local hide_keys = false
+local hide_keys = true
 
 local keys = {
   { hidden = hide_keys, icon = ' ', key = 'n', desc = 'New File', action = ':ene | star' },
@@ -20,8 +20,20 @@ local keys = {
   { hidden = hide_keys, icon = ' ', key = 'M', desc = 'Mason', action = ':Mason' },
   { hidden = hide_keys, icon = '󰒲 ', key = 'G', desc = 'LazyGit', action = ':LazyGit' },
   { hidden = hide_keys, icon = ' ', key = 'N', desc = 'News', action = ':News' },
-  { hidden = hide_keys, icon = ' ', key = 'H', desc = 'Health', action = ':packloadall|checkhealth' },
-  { hidden = hide_keys, icon = '󱥰 ', key = 'D', desc = 'Edit Dashboard', action = edit_dashboard },
+  {
+    hidden = hide_keys,
+    icon = ' ',
+    key = 'H',
+    desc = 'Health',
+    action = ':packloadall|checkhealth',
+  },
+  {
+    hidden = hide_keys,
+    icon = '󱥰 ',
+    key = 'D',
+    desc = 'Edit Dashboard',
+    action = edit_dashboard,
+  },
   { hidden = hide_keys, icon = ' ', key = 'R', desc = 'Restart', action = ':restart' },
 }
 
@@ -51,14 +63,15 @@ end
 ---@type snacks.dashboard.Config
 return {
   sections = {
-    { section = 'header' },
-    { keys },
     {
       section = 'terminal',
-      cmd = welcome(),
-      indent = 10,
-      padding = 1,
-      height = 12,
+      -- cmd = welcome(),
+      cmd = 'cat ~/.vim/dash.txt | lolcat',
+      -- indent = 10,
+      -- padding = 1,
+      height = 42,
     },
+    { keys },
+    -- { section = 'header' },
   },
 }

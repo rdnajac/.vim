@@ -74,6 +74,7 @@ M.for_each_module = function(cb, subpath, recursive)
   end
 end
 
+M.mods = fucntion()
 local root = 'nvim'
 local dir = fs.joinpath(luaroot, root)
 
@@ -87,8 +88,7 @@ for _, d in ipairs(fn.globpath(dir, '*/', false, true)) do
     local submods = collect_modules(subname)
     mods[subname] = next(submods) and submods or true
   end
+  return mods
 end
-
-M.mods = mods
 
 return M

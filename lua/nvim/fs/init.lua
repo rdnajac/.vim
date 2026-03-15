@@ -1,7 +1,12 @@
 local M = {}
 
 M.specs = {
-  { 'mason-org/mason.nvim', opts = {} },
+  {
+    'mason-org/mason.nvim',
+    opts = {},
+    -- TODO: implement one-time install func to hook into packinstall event 
+    once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
+  },
   {
     'stevearc/oil.nvim',
     opts = {},
@@ -79,6 +84,14 @@ function M.filesize()
 
   local fmt = (i == 1 and '%d bytes' or '%.2f %sib')
   return string.format(fmt, size, prefixes[i])
+end
+
+M['goto'] = function()
+  local line = vim.api.nvim_get_current_line()
+  local lineno = line:match(':(%d+)') or 0
+  local cfile = vim.fn.expand('<cfile>')
+  vim.fn['edit#'](cfile)
+  vim.cmd('normal! ' .. lineno .. 'G')
 end
 
 return M

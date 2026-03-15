@@ -11,28 +11,15 @@ require('vim._core.ui2').enable({
 })
 
 local M = {
-  -- available on init
   icons = require('nvim.ui.icons'),
+  winbar = require('nvim.ui.winbar'),
 }
 
 M.after = function()
-  -- available after init
-  M.winbar = require('nvim.ui.winbar')
-  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-
-  -- TODO: get signs from icons
-  local signs = { text = { ' ', ' ', ' ', '' } }
-  vim.diagnostic.config({
-    float = { source = true },
-    underline = false,
-    virtual_text = false,
-    severity_sort = true,
-    signs = signs,
-    status = signs,
-  })
+  vim.schedule(function() vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]] end)
 end
 
-M.specs = {
+Plug({
   {
     'MeanderingProgrammer/render-markdown.nvim',
     -- enabled = false,
@@ -88,15 +75,7 @@ M.specs = {
       },
     },
   },
-}
-
-local goto_file = function()
-  local line = vim.api.nvim_get_current_line()
-  local lineno = line:match(':(%d+)') or 0
-  local cfile = vim.fn.expand('<cfile>')
-  vim.fn['edit#'](cfile)
-  vim.cmd('normal! ' .. lineno .. 'G')
-end
+})
 
 vim.treesitter.language.register('markdown', { 'msg', 'pager' })
 
@@ -106,7 +85,7 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
   callback = function()
     vim.treesitter.start(0)
     vim.wo.conceallevel = 3
-    vim.keymap.set('n', '<CR>', goto_file, { buffer = true, desc = 'Go to file under cursor' })
+    -- vim.keymap.set('n', '<CR>', nv.fs.goto, { buffer = true, desc = 'Go to file under cursor' })
   end,
   desc = '',
 })

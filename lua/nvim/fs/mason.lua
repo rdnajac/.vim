@@ -1,9 +1,3 @@
-local tools = {
-  'actionlint', -- code action linter
-  'mmdc', -- mermaid diagrams
-  'tree-sitter-cli',
-}
-
 local M = {}
 
 ---Install or update a Mason package.

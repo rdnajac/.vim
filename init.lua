@@ -32,3 +32,18 @@ _G.bt = Snacks.debug.backtrace
 _G.p = Snacks.debug.profile
 
 require('nvim')
+
+local signs = { text = { ' ', ' ', ' ', '' } }
+---@type vim.diagnostic.Opts
+local opts = {
+  float = { source = true },
+  underline = false,
+  virtual_text = false,
+  severity_sort = true,
+  signs = signs,
+  status = signs,
+}
+
+-- vim.schedule(function()
+  vim.diagnostic.config(opts)
+-- end)
