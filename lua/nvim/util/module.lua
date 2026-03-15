@@ -13,16 +13,11 @@ M.name = function(path)
   return modname
 end
 
-local setreg = function(text)
-  vim.fn.setreg('*', text)
-  print('[yanked] ' .. text)
-end
-
 M.yank = function()
   local file = vim.api.nvim_buf_get_name(0)
   local modname = M.name(file)
   local line = string.format([[require('%s')]], modname)
-  setreg(line)
+  nv.util.yank(line)
 end
 
 -- local original_require = require

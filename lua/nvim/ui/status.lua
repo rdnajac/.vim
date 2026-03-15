@@ -64,19 +64,57 @@ M.buffer = function()
   })
 end
 
-M.git = function()
-  local diff = vim.b.minidiff_summary
-  return vim
-    .iter(ipairs({ 'add', 'change', 'delete' }))
-    :map(function(i, key)
-      local count = diff and diff[key] or 0
-      if count > 0 then
-        return string.format('%s%d', ({ ' ', ' ', ' ' })[i], count)
-      end
-    end)
-    :join(' ')
+local git_hl_map = {
+  -- 'MiniDiffSignAdd',
+  -- 'MiniDiffSignChange',
+  -- 'MiniDiffSignDelete',
+  'DiagnosticSignHint',
+  'DiagnosticSignWarn',
+  'DiagnosticSignError',
+}
+
+---@param icons string[]
+---@param hl_map? string[]
+---@return fun(counts: table<number, integer>): string
+M.render_counts = function(icons, hl_map)
+  return function(counts)
+    return vim
+      .iter(ipairs(icons))
+      :map(function(i, _) return i, counts[i] or 0 end)
+      :filter(function(_, count) return count > 0 end)
+      :map(function(i, count)
+        local rv = ('%s %d'):format(icons[i], count)
+        return hl_map and hl_map[i] and ('%%#%s#%s'):format(hl_map[i], rv) or rv
+      end)
+      :join(' ')
+  end
 end
 
--- TODO: Snacks and Snacks.profiler.status()
+local render_git_counts = M.render_counts({ '', '', '' }, git_hl_map)
+
+M.git = function()
+  local diff = vim.b.minidiff_summary or {}
+  return render_git_counts({
+    diff.add or 0,
+    diff.change or 0,
+    diff.delete or 0,
+  })
+end
+
+local orig_statusline = vim.o.statusline
+
+local parts = {
+  [[%<%f %h%w%m%r ]],
+  [[%{% v:lua.require('vim._core.util').term_exitcode() %}]],
+  [[%=]], -- right align the rest
+  [[%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}]],
+  [[%{% exists('b:keymap_name') ? '<'..b:keymap_name..'> ' : '' %}]],
+  [[%{% &busy > 0 ? '◐ ' : '' %}]],
+  [[%{% luaeval('(package.loaded[''vim.diagnostic''] and next(vim.diagnostic.count()) and vim.diagnostic.status() .. '' '') or '''' ') %}]],
+  [[%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rulerformat ) : '' %}]],
+}
+
+assert(orig_statusline == table.concat(parts))
+vim.o.statusline = table.concat(parts)
 
 return M

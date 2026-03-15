@@ -6,7 +6,7 @@ local tools = {
   'tree-sitter-cli',
 }
 
-local  function other_tools()
+local function other_tools()
   local ret = {}
   -- TODO: find other tools in lsp dir
   ret[#ret + 1] = 'stylua'
@@ -63,5 +63,10 @@ end
 --     return ret
 --   end
 -- end)(vim.paste)
+
+M.yank = function(text)
+  vim.fn.setreg('*', text)
+  print('[yanked] ' .. text)
+end
 
 return M
