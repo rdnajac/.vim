@@ -1,4 +1,7 @@
 local fn, fs, uv = vim.fn, vim.fs, vim.uv
+
+local luaroot = fs.joinpath(fn.stdpath('config'), 'lua')
+
 local M = {}
 -- local dir = fs.dirname(debug.getinfo(1).source:gsub('^@', ''))
 -- local files = fn.globpath(dir, '*/init.lua', false, true)
@@ -10,7 +13,6 @@ local M = {}
 --     return submod
 --   end)
 
-local luaroot = fs.joinpath(vim.g.stdpath.config, 'lua')
 local modname = function(path) return path:gsub('^.*/lua/', ''):gsub('/init.lua$', '') end
 
 --- Returns true for .lua files (non-init) and dirs that have an init.lua
