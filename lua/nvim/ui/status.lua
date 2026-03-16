@@ -1,4 +1,4 @@
-local api, fn = vim.api, vim.fn
+local api, fn, fs = vim.api, vim.fn, vim.fs
 
 ---@class status.component
 ---@field [1] string|fun(table?):string
@@ -7,6 +7,7 @@ local api, fn = vim.api, vim.fn
 
 local M = {}
 
+local icons = require('nvim.ui.icons')
 local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', sec, str) end
 
 --- Combines three sections of a statusline/winbar/tabline with appropriate highlighting and separators.
@@ -14,7 +15,7 @@ local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', s
 ---@param b string?
 ---@param c string?
 function M.render(a, b, c)
-  local sep = nv.ui.icons.sep.component.rounded.left
+  local sep = icons.sep.component.rounded.left
   return table.concat({
     a and chroma(a, 'a') or '',
     b and chroma(sep .. ' ', 'ab') .. chroma(b, 'b') .. chroma(sep, 'bc') or chroma(sep, 'c'),
@@ -84,7 +85,7 @@ M.render_counts = function(icons, hl_map)
       :filter(function(_, count) return count > 0 end)
       :map(function(i, count)
         local rv = ('%s %d'):format(icons[i], count)
-        return hl_map and hl_map[i] and ('%%#%s#%s'):format(hl_map[i], rv) or rv
+        return hl_map and hl_map[i] and ('%%$%s$%s'):format(hl_map[i], rv) or rv
       end)
       :join(' ')
   end
@@ -101,9 +102,8 @@ M.git = function()
   })
 end
 
-local orig_statusline = vim.o.statusline
 local parts = {
-  [[%<%f %h%w%m%r ]],
+  [[%<%f %h%w%m%r ]], -- path, help, preview, modified, readonly
   [[%{% v:lua.require('vim._core.util').term_exitcode() %}]],
   [[%=]], -- right align the rest
   [[%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}]],
@@ -113,7 +113,17 @@ local parts = {
   [[%{% &ruler ? ( &rulerformat == '' ? '%-14.(%l,%c%V%) %P' : &rulerformat ) : '' %}]],
 }
 
-assert(orig_statusline == table.concat(parts))
-vim.o.statusline = table.concat(parts)
+-- local orig_statusline = vim.o.statusline
+-- assert(orig_statusline == table.concat(parts))
+
+M.line = function()
+  local cwd = fn.getcwd()
+  local file = vim.api.nvim_buf_get_name(0)
+  local a = ' ' .. fn.fnamemodify(cwd, ':~') .. '/'
+  local b = fs.relpath(cwd, file) .. ' %h%w%q%m%r'
+  local c = ' ' .. M.git()
+  parts[1] = M.render(a, b, c)
+  return table.concat(parts)
+end
 
 return M

@@ -10,6 +10,7 @@ tnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
 xnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word<CR>
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <Home> <Cmd>lua Snacks.dashboard.open()<CR>
+nnoremap <Bslash>D <Cmd>lua Snacks.dashboard.open()<CR>
 
 nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
