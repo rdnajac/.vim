@@ -102,7 +102,6 @@ M.git = function()
 end
 
 local orig_statusline = vim.o.statusline
-
 local parts = {
   [[%<%f %h%w%m%r ]],
   [[%{% v:lua.require('vim._core.util').term_exitcode() %}]],
