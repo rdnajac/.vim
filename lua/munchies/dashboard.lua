@@ -12,52 +12,43 @@ The computing scientist's main challenge is not to
 get confused by the complexities of his own making.
 ]]
 
-local hide_keys = true
-
-local keys = {
-  { hidden = hide_keys, icon = ' ', key = 'n', desc = 'New File', action = ':ene | star' },
-  { hidden = hide_keys, icon = ' ', key = 'U', desc = 'Update Plugins', action = ':PlugUpdate' },
-  { hidden = hide_keys, icon = ' ', key = 'M', desc = 'Mason', action = ':Mason' },
-  { hidden = hide_keys, icon = '󰒲 ', key = 'G', desc = 'LazyGit', action = ':LazyGit' },
-  { hidden = hide_keys, icon = ' ', key = 'N', desc = 'News', action = ':News' },
-  {
-    hidden = hide_keys,
-    icon = ' ',
-    key = 'H',
-    desc = 'Health',
-    action = ':packloadall|checkhealth',
-  },
-  {
-    hidden = hide_keys,
-    icon = '󱥰 ',
-    key = 'D',
-    desc = 'Edit Dashboard',
-    action = edit_dashboard,
-  },
-  { hidden = hide_keys, icon = ' ', key = 'R', desc = 'Restart', action = ':restart' },
+-- stylua: ignore
+local _keys = {
+  { ' ', 'New File',       'n', ':ene | star' },
+  { ' ', 'Update Plugins', 'U', ':PlugUpdate' },
+  { ' ', 'Mason',          'M', ':Mason' },
+  { '󰒲 ', 'LazyGit',        'G', ':LazyGit' },
+  { ' ', 'News',           'N', ':News' },
+  { ' ', 'Health',         'H', ':packloadall|checkhealth' },
+  { '󱥰 ', 'Edit Dashboard', 'D', edit_dashboard },
+  { ' ', 'Restart',        'R', ':restart' },
 }
+
+local render_key = function(t)
+  local icon, desc, key, action = unpack(t)
+  return { icon = icon, desc = desc, key = key, action = action, hidden = true }
+end
+
+local keys = vim.tbl_map(render_key, _keys)
 
 local function get_keys()
   local lines = {}
   for _, item in ipairs(keys) do
-    lines[#lines + 1] = ('%s[%s] %s'):format(item.icon, item.key, item.desc)
+    lines[#lines + 1] = string.format('%s  %-44s %s', item.icon, item.desc, item.key)
   end
   return table.concat(lines, '\n')
 end
 
 local welcome = function()
   local version = 'NVIM ' .. tostring(vim.version())
-  local out = string.format(
-    -- 'printf "%s"\n; cowsay "%s"; printf "\n\t%s\n"',
-    'cowsay "%s"; printf "\n\t%s\n"',
-    -- header .. '\n' .. get_keys(),
-    dijkstra,
-    version
+
+  return string.format(
+    "(printf '%%s\\n\\n' %s; printf '%%s\\n\\n' %s; cowsay %s; printf '\\n\\t%%s\\n' %s) | lolcat",
+    vim.fn.shellescape(header),
+    vim.fn.shellescape(get_keys()),
+    vim.fn.shellescape(dijkstra),
+    vim.fn.shellescape(version)
   )
-  -- if vim.fn.executable('lolcat') == 1 then
-  --   out = ('{ %s; } | lolcat'):format(out)
-  -- end
-  return out
 end
 
 ---@type snacks.dashboard.Config
@@ -65,10 +56,7 @@ return {
   sections = {
     {
       section = 'terminal',
-      -- cmd = welcome(),
-      cmd = 'cat ~/.vim/dash.txt | lolcat',
-      -- indent = 10,
-      -- padding = 1,
+      cmd = welcome(),
       height = 42,
     },
     { keys },

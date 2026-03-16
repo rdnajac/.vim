@@ -1,6 +1,12 @@
--- https://github.com/neovim/neovim/discussions/38231
 --- A simple implementation of vim.ui.select using a floating window.
---- Usage: vim.ui.select = require('simple-select')
+--- https://github.com/neovim/neovim/discussions/38231
+---@generic t
+---@param items t[] arbitrary items
+---@param opts {}
+---@param on_choice fun(item: t|nil, idx: integer|nil)
+---               called once the user made a choice.
+---               `idx` is the 1-based index of `item` within `items`.
+---               `nil` if the user aborted the dialog.
 return function(items, opts, on_choice)
   if #items == 0 then
     on_choice(nil)

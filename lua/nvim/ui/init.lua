@@ -17,22 +17,23 @@ local M = {
 }
 
 M.after = function()
-  vim.schedule(function() vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]] end)
+  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+  local orig_select = vim.ui.select
+  vim.ui.select = require('nvim.ui.select')
 end
 
-Plug({
+M.specs = {
   {
     'MeanderingProgrammer/render-markdown.nvim',
     -- enabled = false,
     init = function()
-      ---@module "render-markdown"
       ---@type render.md.UserConfig
       vim.g.render_markdown_config = {
         file_types = { 'markdown', 'rmd', 'quarto' },
         latex = { enabled = false },
         bullet = { right_pad = 1 },
         -- checkbox = { enabled = false },
-        completions = { blink = { enabled = false } },
+        completions = { lsp = { enabled = true } },
         code = {
           -- TODO: fix the highlights and show ` or spaces for inline code markers
           -- inline_left = ' ',
@@ -76,7 +77,7 @@ Plug({
       },
     },
   },
-})
+}
 
 vim.treesitter.language.register('markdown', { 'msg', 'pager' })
 
