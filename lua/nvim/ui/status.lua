@@ -7,15 +7,25 @@ local api, fn, fs = vim.api, vim.fn, vim.fs
 
 local M = {}
 
-local icons = require('nvim.ui.icons')
+-- FIXME:
+---@param str string
+---@param group string
+---@param inhereit boolean?
+local function highlight(str, group, inhereit)
+  -- if inhereit then use %#HLname# else use %$HLname$.
+  local hl = inhereit and '%#' .. group .. '#' or '%$' .. group .. '$'
+  return hl .. str
+end
+
 local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', sec, str) end
+-- local function chroma(str, sec) return highlight(str, 'Chromatophore_' .. sec) end
 
 --- Combines three sections of a statusline/winbar/tabline with appropriate highlighting and separators.
 ---@param a string?
 ---@param b string?
 ---@param c string?
 function M.render(a, b, c)
-  local sep = icons.sep.component.rounded.left
+  local sep = require('nvim.ui.icons').sep.component.rounded.left
   return table.concat({
     a and chroma(a, 'a') or '',
     b and chroma(sep .. ' ', 'ab') .. chroma(b, 'b') .. chroma(sep, 'bc') or chroma(sep, 'c'),
@@ -65,15 +75,6 @@ M.buffer = function()
   })
 end
 
-local git_hl_map = {
-  -- 'MiniDiffSignAdd',
-  -- 'MiniDiffSignChange',
-  -- 'MiniDiffSignDelete',
-  'DiagnosticSignHint',
-  'DiagnosticSignWarn',
-  'DiagnosticSignError',
-}
-
 ---@param icons string[]
 ---@param hl_map? string[]
 ---@return fun(counts: table<number, integer>): string
@@ -91,10 +92,17 @@ M.render_counts = function(icons, hl_map)
   end
 end
 
-local render_git_counts = M.render_counts({ '', '', '' }, git_hl_map)
-
 M.git = function()
   local diff = vim.b.minidiff_summary or {}
+  local git_hl_map = {
+    -- 'MiniDiffSignAdd',
+    -- 'MiniDiffSignChange',
+    -- 'MiniDiffSignDelete',
+    'DiagnosticSignHint',
+    'DiagnosticSignWarn',
+    'DiagnosticSignError',
+  }
+  local render_git_counts = M.render_counts({ '', '', '' }, git_hl_map)
   return render_git_counts({
     diff.add or 0,
     diff.change or 0,
@@ -120,7 +128,11 @@ M.line = function()
   local cwd = fn.getcwd()
   local file = vim.api.nvim_buf_get_name(0)
   local a = ' ' .. fn.fnamemodify(cwd, ':~') .. '/'
-  local b = fs.relpath(cwd, file) .. ' %h%w%q%m%r'
+  local b = '%h%w%q%m%r'
+  local relpath = fs.relpath(cwd, file)
+  if file and relpath and vim.bo.buftype == '' then
+    b = relpath .. ' ' .. b
+  end
   local c = ' ' .. M.git()
   parts[1] = M.render(a, b, c)
   return table.concat(parts)
