@@ -28,12 +28,12 @@ end
 
 ---@param filename string
 ---@return table
-M.read = function(filename) return vim.json.decode(nv.fs.read(filename)) end
+M.read = function(filename) return vim.json.decode(vim.fn.readblob(filename)) end
 
+---@param contents string
 ---@param filename string
----@param contents string|string[]
-M.write = function(filename, contents)
-  return nv.fs.write(filename, vim.json.encode(contents, { indent = '\t', sort_keys = false }))
+M.write = function(contents, filename)
+  return vim.fn.writefile(vim.json.encode(contents, { indent = '\t', sort_keys = false }), filename)
 end
 
 return M

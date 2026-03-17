@@ -48,11 +48,6 @@ M.write = function(file, contents)
   safe_io(fd.close, fd)
 end
 
--- TODO:  vim.fn.writefile?
----@param path string
----@param lines string[]
-M.write_lines = function(path, lines) M.write(path, table.concat(lines, '\n')) end
-
 --- cache/read lines file in the cache directory,
 --- or read lines from a file in the cache directory
 ---@param fname string filename relative to cache directory
