@@ -1,5 +1,5 @@
 package.preload['lazydev.config'] = function()
-  --- Copied from `require('lazydev')`
+  --- The main function exposed in lazydev topmod
   ---@param buf? integer
   ---@return string? the workspace root if found
   local function find_workspace(buf)
@@ -10,7 +10,7 @@ package.preload['lazydev.config'] = function()
   end
 
   local M = {
-    debug = true,
+    debug = false,
     lua_root = true,
     libs = {}, ---@type lazydev.Library[]
     words = {}, ---@type table<string, string[]>

@@ -1,5 +1,5 @@
 ---@module "blink.cmp"
---- `https://cmp.saghen.dev/`
+-- `https://main.cmp.saghen.dev`
 
 ---@type plug.Spec
 local spec = {
