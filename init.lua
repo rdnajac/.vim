@@ -20,7 +20,7 @@ vim.cmd([[ source ~/.vim/vimrc ]])
 
 require('snacks').setup({
   -- bigfile = { enabled = true },
-  dashboard = require('munchies.dashboard'),
+  -- dashboard = require('munchies.dashboard'),
   explorer = { replace_netrw = false },
   image = { enabled = true },
   indent = { indent = { only_current = false, only_scope = true } },

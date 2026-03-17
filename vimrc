@@ -378,7 +378,6 @@ tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " }}}1
 " Section: pack {{{1
-packadd! vim-chromatophore
 " packadd! vim-nv
 
 " shipped plugins {{{2
