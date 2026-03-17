@@ -67,6 +67,7 @@ return {
   opts = {
     library = {
       vim.env.VIMRUNTIME,
+      { path = 'nvim', words = { 'nv' } },
       { path = 'mini.nvim', words = { 'Mini.*' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },
       { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },

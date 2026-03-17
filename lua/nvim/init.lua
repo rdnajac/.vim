@@ -1,10 +1,3 @@
---- Defines the structure of modules under the `nvim/` directory
----@class nv.Submodule
----@field specs plug.Spec[]
----@field after? fun():nil
----@field status? fun():string
-
----@type table<string, nv.Submodule>
 _G.nv = setmetatable({}, {
   __newindex = function(t, k, v)
     rawset(t, k, v)
