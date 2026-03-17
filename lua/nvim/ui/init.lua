@@ -33,6 +33,11 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
     vim.treesitter.start(0)
     vim.wo.conceallevel = 3
     -- vim.keymap.set('n', '<CR>', nv.fs.goto, { buffer = true, desc = 'Go to file under cursor' })
+    -- vim.cmd([[
+    --   " open file in a new window when or jump to line number when appropriate
+    --   " nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
+    --   " \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
+    --   ]])
   end,
   desc = '',
 })

@@ -44,29 +44,28 @@ function! s:edit(file, ...) abort
   " insert the extra command if it is not empty
   let cmd .= (!empty(extra) ? extra . ' ' : '') . file
   " If we're focused on a floating window, close it first
-  " if has ('nvim') && luaeval('Snacks.util.is_float() == true')
-    " quit
-  " endif
+  " if has ('nvim') && luaeval('Snacks.util.is_float() == true') | quit | endif
   execute cmd
   normal! zvzz
 endfunction
+
+let s:vimdir = split(&runtimepath, ',')[0]
 
 function! edit#luamod(name) abort
   if !has('nvim')
     vim#notify#error('This function is only available in Neovim.')
     return
   endif
-  let file = printf('%s/lua/%s.lua', g:stdpath['config'], a:name)
+  let file = printf('%s/lua/%s.lua', s:vimdir, a:name)
   if !filereadable(file)
-    let file = printf('%s/lua/%s/init.lua', g:stdpath['config'], a:name)|
+    let file = printf('%s/lua/%s/init.lua', s:vimdir, a:name)
   endif
   call s:edit(file)
 endfunction
 
 function! s:filetype(dir, ext) abort
   let ext = a:0 == 0 ? '.vim' : a:1
-  " call s:edit(join([g:VIMDIR, 'after', a:dir, &filetype .. ext], '/'))
-  call s:edit(join([g:stdpath.config, a:dir, &filetype .. a:ext], '/'))
+  call s:edit(join([s:vimdir, a:dir, &filetype .. a:ext], '/'))
 endfunction
 
 function! edit#ftplugin(...) abort

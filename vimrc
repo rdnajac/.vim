@@ -130,40 +130,11 @@ else
   set winborder=rounded
 
   set startofline " default in vim
-  " try running `:options` for more...
+  " run `:options` for more...
 
   " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
 endif
-
-function! s:stdpath(name) abort
-  return exists('*stdpath')
-	\ ? stdpath(a:name)
-	\ : expand('$XDG_'..toupper(a:name)..'_HOME')..'/vim'
-endfunction
-
-let g:stdpath = {
-      \  'cache': s:stdpath('cache'),
-      \ 'config': s:stdpath('config'),
-      \   'data': s:stdpath('data'),
-      \  'state': s:stdpath('state')
-      \ }
-
-if exists(':restart') == 2
-  let s:sesh = g:stdpath['state']..'/Session.vim'
-  function s:restart() abort
-    execute printf('mksession! %s | confirm restart silent source %s', s:sesh, s:sesh)
-  endfunction
-  command! Restart call s:restart()
-endif
-
-" set backup/undo if on nvim, or if on a machine not running nvim
-let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
-let &backup   = (has('nvim') || !executable('nvim')) ? 1 : &backup
-let &backupext = '.bak'
-let &backupdir = g:stdpath['state']..'/backup//'
-let &backupskip .= ','..expand('$HOME')..'/.cache/*'
-let &backupskip .= ','..expand('$HOME')..'/.local/*'
 
 " }}}1
 " Section: autocmds {{{1
@@ -211,13 +182,17 @@ for level in keys(g:vim#notify#levels)
   execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
 	\ toupper(strpart(level, 0, 1)) . strpart(level, 1), level)
 endfor
-command! -nargs=* Diff call cmd#diff#(<f-args>)
 
+command! -nargs=* Diff call cmd#diff#(<f-args>)
 command! -nargs=0 Format call cmd#format#()
 nnoremap zq <Cmd>Format<CR>
 
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
+
+let g:vimtex_format_enabled = 1              " built-in formatexpr
+let g:vimtex_mappings_disable = {'n': ['K']} " disable normal `K`
+let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
 let g:eunuch_interpreters = {
       \ '.':      '/bin/sh',
       \ 'sh':     'bash',
@@ -228,11 +203,6 @@ let g:eunuch_interpreters = {
       \ 'rmd':    'Rscript',
       \ 'zsh':    'zsh',
       \ }
-
-let g:vimtex_format_enabled = 1              " built-in formatexpr
-let g:vimtex_mappings_disable = {'n': ['K']} " disable normal `K`
-let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
-
 " }}}1
 " Section: keymaps {{{1
 let g:mapleader = ' '
@@ -295,10 +265,6 @@ nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
 nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
 nnoremap <leader>fT <Cmd>call edit#ftplugin('.lua')<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
-
-" open file in a new window when or jump to line number when appropriate
-" nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
-" \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
 
 " navigation {{{2
 nnoremap <BS> :bprevious<CR>
@@ -437,10 +403,10 @@ Plug 'tpope/vim-characterize'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/vim-dispatch'
-" Plug 'tpope/vim-rsi'
 " Plug 'tpope/vim-tbone'
 " qol improvements and fun stuff
 " Plug 'bullets-vim/bullets.vim'
@@ -474,5 +440,5 @@ Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
-" }}}
+" }}}1
 " vim: fdm=marker fdl=1

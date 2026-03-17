@@ -124,8 +124,8 @@ nnoremap <leader>Z <Cmd>lua Snacks.zen.zoom()<CR>
 nnoremap <leader>fe <Cmd>lua Snacks.picker.files({ dirs = vim.api.nvim_list_runtime_paths() })<CR>
 nnoremap <leader>se <Cmd>lua Snacks.picker.grep({ dirs = vim.api.nvim_list_runtime_paths() })<CR>
 
-nnoremap <leader>fc <Cmd>lua Snacks.picker.files({ cwd = vim.g.stdpath.config })<CR>
-nnoremap <leader>sc <Cmd>lua Snacks.picker.grep({  cwd = vim.g.stdpath.config })<CR>
+nnoremap <leader>fc <Cmd>lua Snacks.picker.files({ cwd = vim.fn.stdpath('config') })<CR>
+nnoremap <leader>sc <Cmd>lua Snacks.picker.grep({  cwd = vim.fn.stdpath('config') })<CR>
 
 let s:commands = [
       \ 'Actions',

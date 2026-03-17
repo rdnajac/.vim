@@ -1,6 +1,5 @@
 -- eunuch.lua - Helpers for UNIX
--- a rewrite of tpope/vim-eunuch for neovim
--- powered by uv
+-- a rewrite of tpope/vim-eunuch for neovim in lua using uv
 
 if vim.g.loaded_eunuch then
   return

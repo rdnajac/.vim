@@ -6,7 +6,7 @@ fmt:
 
 update:
 	@echo "Updating neovim..."
-	(cd ~/GitHub/neovim/ && git pull origin master && make rebuild)
+	(cd ~/GitHub/neovim/ && make update)
 
 get-vimtips:
 	wget https://raw.githubusercontent.com/openuado/vimtips-fortune/refs/heads/master/fortunes/vimtips

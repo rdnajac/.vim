@@ -1,5 +1,15 @@
 --- init.lua
 vim.loader.enable()
+vim.o.undofile = true
+vim.o.backup = true
+vim.o.backupext = '.bak'
+vim.o.backupdir = vim.fn.stdpath('state') .. '/backup//'
+vim.opt.backupskip:append(vim.env.HOME .. '/.cache/*')
+
+vim.api.nvim_create_user_command('Restart', function()
+  local sesh = vim.fn.stdpath('state') .. '/Session.vim'
+  vim.cmd(([[mksession! %s | confirm restart source %s]]):format(sesh, sesh))
+end, { desc = 'Restart Neovim' })
 
 if vim.env.PROF then
   vim.opt.rtp:append(vim.fn.stdpath('data') .. '/site/pack/core/opt/snacks.nvim')

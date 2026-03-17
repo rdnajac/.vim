@@ -26,22 +26,14 @@ function M.format(opts)
   return 0
 end
 
-local file = require('nvim.util.file')
-
 ---@param filename string
 ---@return table
-M.read = function(filename) return vim.json.decode(file.read(filename)) end
+M.read = function(filename) return vim.json.decode(nv.fs.read(filename)) end
 
 ---@param filename string
 ---@param contents string|string[]
 M.write = function(filename, contents)
-  return file.write(
-    filename,
-    table.concat(
-      vim.split(vim.json.encode(contents, { indent = '\t', sort_keys = false }), '\n'),
-      '\n'
-    )
-  )
+  return nv.fs.write(filename, vim.json.encode(contents, { indent = '\t', sort_keys = false }))
 end
 
 return M

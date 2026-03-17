@@ -33,7 +33,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "1d13d2b0df9a0a02904c76d7ad6810f71d404406",
+      "rev": "dc2f86d2b66a6e01a98c37cdadd3be3e90f8ab9a",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -107,6 +107,10 @@
     "vim-fugitive": {
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://github.com/tpope/vim-fugitive.git"
+    },
+    "vim-rsi": {
+      "rev": "45540637ead22f011e8215f1c90142e49d946a54",
+      "src": "https://github.com/tpope/vim-rsi.git"
     },
     "vim-scriptease": {
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
