@@ -15,3 +15,8 @@ Snacks.util.set_hl({
   Special = 'Chromatophore',
   -- Title = 'Title',
 }, { prefix = 'SnacksDashboard', default = true })
+
+Snacks.util.set_hl({
+  IndentScope = 'Chromatophore',
+  -- Title = 'Title',
+}, { prefix = 'Snacks', default = true })

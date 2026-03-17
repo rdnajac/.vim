@@ -31,7 +31,7 @@ highlighters.source_code = {
       priority = 10001,
     })
 
-    return 'String'
+    return 'Chromatophore'
   end,
   extmark_opts = {
     priority = 10000,
