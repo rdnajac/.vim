@@ -26,6 +26,7 @@ end
 -- shared
 M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
 M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
+-- TODO: is_visual_mode
 
 -- api wrappers
 M.get_buf_lines = function(bufnr)
@@ -40,7 +41,7 @@ M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name'
 M.is_comment = function(opts)
   opts = opts or {}
   opts.bufnr = opts.bufnr or api.nvim_get_current_buf()
-  local cursor = vim.api.nvim_win_get_cursor(0)
+  local cursor = api.nvim_win_get_cursor(0)
   -- subtract one to account for 0-based row indexing in get_node
   opts.pos = opts.pos or { cursor[1] - 1, cursor[2] }
 
@@ -65,17 +66,32 @@ end
 -- end)(vim.paste)
 
 M.yank = function(text)
-  vim.fn.setreg('*', text)
+  fn.setreg('*', text)
   print('[yanked] ' .. text)
+end
+
+--- Convert a file path to a module name by trimming the lua root
+---@param path string
+---@return string
+M.modname = function(path)
+  -- return fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/init$', '')
+  local modname = (vim.endswith(path, '/init.lua') and path:sub(1, -10) or path):gsub('^.*/lua/', '')
+  return modname
+end
+
+M.yankmod = function()
+  local modname = M.name(api.nvim_buf_get_name(0))
+  local line = string.format([[require('%s')]], modname)
+  M.yank(line)
 end
 
 -- https://github.com/neovim/neovim/discussions/38271#discussion-9630986
 M.get_visual = function()
-  local vis_mode = vim.fn.mode():match("[Vv\22]")
+  local vis_mode = fn.mode():match('[Vv\22]')
   if not vis_mode then
     return
   end
-  local line_regs = vim.fn.getregionpos(vim.fn.getpos("v"), vim.fn.getpos("."), {
+  local line_regs = fn.getregionpos(fn.getpos('v'), fn.getpos('.'), {
     type = vis_mode,
     eol = true,
     exclusive = false,

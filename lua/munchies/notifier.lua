@@ -1,3 +1,5 @@
+---@module "snacks"
+
 ---@param buf number
 ---@param notif snacks.notifier.Notif
 ---@param ctx snacks.notifier.ctx
