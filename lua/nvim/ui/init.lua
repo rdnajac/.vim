@@ -19,9 +19,8 @@ local M = {
 M.after = function()
   vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
   vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-
-  local orig_select = vim.ui.select
-  vim.ui.select = require('nvim.ui.select')
+  -- local orig_select = vim.ui.select
+  -- vim.ui.select = require('nvim.ui.select')
 end
 
 vim.treesitter.language.register('markdown', { 'msg', 'pager' })

@@ -6,14 +6,14 @@ local sources = {
   per_filetype = {},
   ---@type table<string, blink.cmp.SourceProviderConfig>
   providers = {
-    buffer = {
+    -- buffer = {
       --   get_bufnrs = function()
       --     return vim.tbl_filter(function(bufnr)
       --       return vim.bo[bufnr].buftype == ''
       --     end, vim.api.nvim_list_bufs())
       --   end,
       -- },
-    },
+    -- },
     lsp = {
       score_offset = -1,
       transform_items = function(_, items)
@@ -28,13 +28,13 @@ local sources = {
         )
       end,
     },
-    path = {
-      score_offset = 100,
-      opts = {
-        get_cwd = function(_) return vim.fn.getcwd() end,
-        show_hidden_files_by_default = true,
-      },
-    },
+    -- path = {
+    --   score_offset = 100,
+    --   opts = {
+    --     get_cwd = function(_) return vim.fn.getcwd() end,
+    --     show_hidden_files_by_default = true,
+    --   },
+    -- },
     snippets = {
       score_offset = 99,
       opts = { friendly_snippets = false },
@@ -52,7 +52,7 @@ local sources = {
     -- define custom default providers here
     env = {
       name = 'env',
-      module = 'nvim.blink.sources.env',
+      module = 'blink.sources.env',
     },
   },
 }
@@ -61,7 +61,7 @@ sources.default = vim.tbl_keys(sources.providers)
 
 sources.providers['lazydev'] = {
   name = 'LazyDev',
-  module = 'nvim.blink.sources.lazy',
+  module = 'blink.sources.lazy',
   score_offset = 100,
 }
 sources.per_filetype['lua'] = { inherit_defaults = true, 'lazydev' }

@@ -12,22 +12,20 @@ _G.nv = setmetatable({}, {
   end,
 })
 
-local fn, fs, uv = vim.fn, vim.fs, vim.uv
-local luaroot = fs.joinpath(fn.stdpath('config'), 'lua')
-local submodules = fn.globpath(luaroot, 'nvim/*/init.lua', false, true)
+nv.fs = require('nvim.fs')
+nv.keys = require('nvim.keys')
+nv.lsp = require('nvim.lsp')
+nv.treesitter = require('nvim.treesitter')
+nv.ui = require('nvim.ui')
+nv.util = require('nvim.util')
 
-vim
-  .iter(submodules)
-  :map(function(fpath) return fpath:gsub('^.*(nvim/.+)$', '%1'):gsub('/init.lua$', '') end)
-  :each(function(modname)
-    local key = fs.basename(modname)
-    nv[key] = require(modname)
-    vim.keymap.set(
-      'n',
-      '\\\\' .. (key == 'util' and 'v' or key:sub(1, 1)),
-      function() vim.fn['edit#luamod'](modname) end,
-      { desc = 'Edit ' .. modname }
-    )
-  end)
+vim.iter(nv):each(function(k)
+  vim.keymap.set(
+    'n',
+    'gl' .. (k == 'util' and 'v' or k:sub(1, 1)),
+    function() vim.fn['edit#luamod']('nvim/' .. k) end,
+    { desc = 'Edit ' .. k }
+  )
+end)
 
 return nv

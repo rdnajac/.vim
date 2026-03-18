@@ -11,6 +11,7 @@ M.after = function()
     { 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
     { ']]', function() Snacks.words.jump(vim.v.count1) end, mode = { 'n', 't' } },
     { '[[', function() Snacks.words.jump(-vim.v.count1) end, mode = { 'n', 't' } },
+    -- stylua: ignore
     { '<leader>U', function() require('undotree').open({ cmd = [[20vnew]] }) end, desc = 'Undotree' },
   })
   M.map(M.togglelist)
@@ -19,6 +20,7 @@ M.after = function()
   end
   Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
   Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
+  Snacks.keymap.set({ 'n' }, 'ym', nv.util.yankmod, { ft = 'lua' })
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
   for key, v in pairs(require('nvim.keys.toggles')) do
     M.new_snacks_toggle(key, v)

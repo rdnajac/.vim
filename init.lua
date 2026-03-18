@@ -42,3 +42,5 @@ _G.bt = Snacks.debug.backtrace
 _G.p = Snacks.debug.profile
 
 require('nvim')
+
+Plug(require('plugins'))

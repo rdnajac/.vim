@@ -10,6 +10,8 @@ else
   let g:plug#home = stdpath('data') .. '/site/pack/core/opt'
 endif
 
+let $PACKDIR = g:plug#home
+
 function! plug#begin(...)
   if !exists('g:loaded_jetpack')
     let g:plugs = []
@@ -26,7 +28,7 @@ function! plug#end()
   if !exists('g:loaded_jetpack')
     if has('nvim')
       lua vim.pack.add(vim.g.plugs)
-      lua require('nvim.plug')
+      lua _G.Plug = require('plug')
     endif
   else
     call jetpack#end()

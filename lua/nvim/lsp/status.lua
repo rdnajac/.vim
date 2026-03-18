@@ -26,7 +26,7 @@ M.server_status = function(c)
   if c:is_stopped() then
     status = 'stopped'
   else
-    local msg = nv.lsp.progress.get_msgs_by_client_id(c.id)
+    local msg = require('nvim.lsp.progress').get_msgs_by_client_id(c.id)
     if msg then
       return nv.ui.spinner() .. ' '
       -- status = 'busy'

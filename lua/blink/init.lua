@@ -1,8 +1,7 @@
 ---@module "blink.cmp"
 -- `https://main.cmp.saghen.dev`
 
----@type plug.Spec
-local spec = {
+return {
   'Saghen/blink.cmp',
   build = function() vim.cmd([[BlinkCmp build]]) end,
   event = 'UIEnter',
@@ -27,7 +26,29 @@ local spec = {
             ctx.trigger.initial_character
           ) and 1 or 1000
         end,
-        draw = require('nvim.blink.appearance'),
+        draw = {
+          columns = {
+            { 'source_id' },
+            { 'label', 'label_description' },
+          },
+          components = {
+            source_id = {
+              ellipsis = false,
+              text = function(ctx)
+                local provider = ctx.source_name:lower()
+                local icon = provider == 'lsp' and MiniIcons.get('lsp', ctx.kind)
+                  or require('nvim.ui.icons').blink[provider]
+                return (icon or '') .. ctx.icon_gap
+              end,
+              ---@param ctx blink.cmp.DrawItemContext
+              highlight = function(ctx)
+                -- high priority to beat the cursorline
+                return { { group = ctx.kind_hl, priority = 10001 } }
+              end,
+            },
+          },
+          treesitter = { 'lsp' },
+        },
       },
     },
     keymap = {
@@ -48,41 +69,20 @@ local spec = {
         'fallback',
       },
     },
-    signature = {
-      enabled = true,
-      window = { show_documentation = false },
-    },
-    sources = require('nvim.blink.sources'),
+    signature = { enabled = true, window = { show_documentation = false } },
+    sources = require('blink.sources'),
   },
 }
 
-local providers = function(mode)
-  local ok, lib = pcall(require, 'blink.cmp.sources.lib')
-  if not ok or not lib then
-    return {}
-  end
-  mode = mode or vim.api.nvim_get_mode().mode
-  local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode:sub(1, 1)] or 'default'
-  return lib.get_enabled_providers(cmp_mode)
-end
+-- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
+-- vim.api.nvim_create_autocmd('User', {
+--   group = aug,
+--   pattern = 'BlinkCmpMenuOpen',
+--   callback = function() toggle_inline_completion:toggle() end,
+-- })
 
-local icons = require('nvim.ui.icons').blink
-
-return {
-  -- after = function()
-  -- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
-  -- vim.api.nvim_create_autocmd('User', {
-  --   group = aug,
-  --   pattern = 'BlinkCmpMenuOpen',
-  --   callback = function() toggle_inline_completion:toggle() end,
-  -- })
-  -- vim.api.nvim_create_autocmd('User', {
-  --   group = aug,
-  --   pattern = 'BlinkCmpMenuClose',
-  --   callback = function() toggle_inline_completion:toggle() end,
-  -- end,
-  specs = { spec },
-  status = function()
-    return vim.iter(providers()):map(function(k, _) return icons[k] .. ' ' end):join(' ')
-  end,
-}
+-- vim.api.nvim_create_autocmd('User', {
+--   group = aug,
+--   pattern = 'BlinkCmpMenuClose',
+--   callback = function() toggle_inline_completion:toggle() end,
+-- end,
