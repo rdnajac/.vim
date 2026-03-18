@@ -11,11 +11,6 @@ vim.api.nvim_create_user_command('Restart', function()
   vim.cmd(([[mksession! %s | confirm restart source %s]]):format(sesh, sesh))
 end, { desc = 'Restart Neovim' })
 
-if vim.env.PROF then
-  vim.opt.rtp:append(vim.fn.stdpath('data') .. '/site/pack/core/opt/snacks.nvim')
-  require('snacks.profiler').startup({ startup = { event = 'UIEnter' } })
-end
-
 vim.cmd([[ source ~/.vim/vimrc ]])
 
 require('snacks').setup({

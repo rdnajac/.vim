@@ -1,4 +1,4 @@
-.PHONY: fmt update get-vimtips compile-vimtips act install-neovim
+.PHONY: fmt update get-vimtips compile-vimtips act install-neovim profile
 
 fmt:
 	@echo "Formatting code..."
@@ -8,11 +8,8 @@ update:
 	@echo "Updating neovim..."
 	(cd ~/GitHub/neovim/ && make update)
 
-get-vimtips:
-	wget https://raw.githubusercontent.com/openuado/vimtips-fortune/refs/heads/master/fortunes/vimtips
-
-compile-vimtips:
-	strfile -c % ./vimtips vimtips.dat
+profile:
+	nvim -c 'set rtp+=/Users/rdn/.local/share/nvim/site/pack/core/opt/snacks.nvim' -c 'lua require("snacks.profiler").startup({ startup = { event = "UIEnter" } })'
 
 act:
 	./bin/scripts/act
