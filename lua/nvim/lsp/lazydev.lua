@@ -69,6 +69,7 @@ return {
       vim.env.VIMRUNTIME,
       { path = 'nvim', words = { 'nv' } },
       { path = 'mini.nvim', words = { 'Mini.*' } },
+      { path = 'plug', words = { 'Plug' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },
       { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
     },

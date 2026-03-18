@@ -119,6 +119,8 @@ if !has('nvim')
   call vim#sensible#()
   call vimrc#toggles()
 else
+  " set autocomplete
+ 
   " more navigation
   set smoothscroll
   set jumpoptions+=view
@@ -164,8 +166,7 @@ augroup vimrc
 
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
 
-  " fix JSON conceallevel and use lua formatter
-  au FileType json,jsonc,json5 setlocal cole=0 et fex=v:lua.nv.json.format()
+  au FileType json,jsonc,json5 setlocal conceallevel=0 et
   " close certain buffers with `q`
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
   " don't list certain buffer types (see ...?)
@@ -440,4 +441,6 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
+imap / /<C-x><C-f><C-n>
+imap <expr> <Tab> pumvisible() ? <C-y> : <Tab>
 " vim: fdm=marker fdl=1

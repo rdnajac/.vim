@@ -7,12 +7,6 @@ M.specs = {
     -- TODO: implement one-time install func to hook into packinstall event 
     once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
   },
-  {
-    'stevearc/oil.nvim',
-    enabled = false,
-    opts = {},
-    keys = { { '-', '<Cmd>Oil<CR>' } },
-  },
 }
 
 ---@param path string
@@ -48,21 +42,17 @@ M.write = function(file, contents)
   safe_io(fd.close, fd)
 end
 
---- cache/read lines file in the cache directory,
---- or read lines from a file in the cache directory
----@param fname string filename relative to cache directory
----@param lines string[]|nil lines to write, or nil to read
----@return string[]? lines read from file or written to file
-M.cache = function(fname, lines)
-  local cache_path = vim.fs.joinpath(vim.g.stdpath.cache, fname)
-  if lines == nil and vim.fn.filereadable(cache_path) then
-    lines = vim.fn.readfile(cache_path)
-  else
-    vim.fn.mkdir(vim.fs.dirname(cache_path), 'p')
-    vim.fn.writefile(lines, cache_path)
-  end
-  return lines
+---@param filename string
+---@return table
+M.fpath_to_json = function(filename) return vim.json.decode(vim.fn.readblob(filename)) end
+
+---@param contents string
+---@param filename string
+M.write_json = function(contents, filename)
+  return vim.fn.writefile(vim.json.encode(contents, { indent = '\t', sort_keys = false }), filename)
 end
+
+M.cache = require('nvim.fs.cache')
 
 function M.filesize()
   local size = vim.fn.getfsize(vim.fn.expand('%:p'))
