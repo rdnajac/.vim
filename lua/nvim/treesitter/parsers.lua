@@ -1,13 +1,9 @@
--- default tree-sitter parsers bundled with neovim:
--- local default_parser_dir = '~/.local/neovim/lib/nvim/parser/'
--- TODO:
--- local defaults = vim.globpath...
-local defaults = { 'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
-
--- `~/.local/share/nvim/site/`
+-- Parser directories
 -- - `parser/`: contains the parsers (`.so` files)
 -- - `parser-info/`: contains the download information
 -- - `query/`: installed queries for the syntax highlighting
+-- default tree-sitter parsers bundled with neovim:
+local defaults = { 'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
 
 ---@alias ParserConfig boolean|string|string[]
 --- - `false`: install, but do not autostart
@@ -55,32 +51,27 @@ local parsers = {
   zsh = true,
 }
 
-local M = {}
+local M = {
+  ---@return string[] parsers installed by nvim-treesitter
+  installed = function() return require('nvim-treesitter').get_installed('parsers') end,
 
-M.to_install = vim
-  .iter(parsers)
-  :filter(function(k, _) return not vim.tbl_contains(defaults, k) end)
-  :map(function(k, _) return k end)
-  :totable()
+  ---@return string[] parsers nvim-treesitter should install
+  to_install = function()
+    return vim
+      .iter(parsers)
+      :filter(function(k, _) return not vim.tbl_contains(defaults, k) end)
+      :map(function(k, _) return k end)
+      :totable()
+  end,
 
-M.to_autostart = vim
-  .iter(parsers)
-  :filter(function(k, v) return v ~= false end)
-  :map(function(k, _) return k end)
-  :totable()
-
----@type table<string,string>?
-M._installed = nil
-
----@param update boolean?
-function M.get_installed(update)
-  if update then
-    M._installed = {}
-    for _, lang in ipairs(require('nvim-treesitter').get_installed('parsers')) do
-      M._installed[lang] = lang
-    end
-  end
-  return M._installed or {}
-end
+  ---@return string[] parsers to start on FileType event
+  to_autostart = function()
+    return vim
+      .iter(parsers)
+      :filter(function(_, v) return v ~= false end)
+      :map(function(k, _) return k end)
+      :totable()
+  end,
+}
 
 return M

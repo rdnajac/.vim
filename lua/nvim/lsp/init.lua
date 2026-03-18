@@ -1,28 +1,30 @@
---- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
--- NOTE: blink automatically adds some capabilities
--- ~/.local/share/nvim/site/pack/core/opt/blink.cmp/lua/blink/cmp/sources/lib/init.lua
 local M = {
+  progress = require('nvim.lsp.progress'),
+  ---@return string[] servers found in the after directory
+  servers = function()
+    local fn = vim.fn
+    return vim.tbl_map(
+      function(path) return path:match('^.+/(.+)$'):sub(1, -5) end,
+      fn.globpath(vim.fs.joinpath(fn.stdpath('config'), 'after', 'lsp'), '*', false, true)
+    )
+  end,
   status = require('nvim.lsp.status'),
+  specs = {
+    'neovim/nvim-lspconfig',
+    -- 'b0o/SchemaStore.nvim',
+    require('nvim.lsp.lazydev'),
+  },
 }
 
-M.specs = {
-  'neovim/nvim-lspconfig',
-  -- 'b0o/SchemaStore.nvim',
-  require('nvim.lsp.lazydev')
-}
-
-M.after = function()
-  local lsp_config_dir = vim.fs.joinpath(vim.fn.stdpath('config'), 'after', 'lsp')
-  M.servers = vim.tbl_map(
-    function(path) return path:match('^.+/(.+)$'):sub(1, -5) end,
-    vim.fn.globpath(lsp_config_dir, '*', false, true)
-  )
-  vim.lsp.enable(M.servers)
-
-  M.progress = require('nvim.lsp.progress')
+vim.schedule(function()
+  vim.lsp.enable(M.servers())
   vim.api.nvim_create_autocmd('LspProgress', {
     callback = M.progress.callback,
   })
-end
+end)
+
+-- NOTE: blink automatically adds some capabilities
+-- `$PACKDIR/blink.cmp/lua/blink/cmp/sources/lib/init.lua`
+--- `:h vim.lsp.protocol.make_client_capabilities()` for defaults
 
 return M

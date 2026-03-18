@@ -1,6 +1,6 @@
 local M = {}
 
-M.after = function()
+vim.schedule(function()
   M.map({
     { 'yu', function() require('nvim.util.debug').print() end, desc = 'Print Value' },
     { '<leader>ui', '<Cmd>Inspect<CR>' },
@@ -40,7 +40,7 @@ M.after = function()
       },
     },
   })
-end
+end)
 
 -- M.specs = {
 -- require('nvim.keys.which'),

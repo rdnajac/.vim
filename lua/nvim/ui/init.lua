@@ -10,18 +10,24 @@ require('vim._core.ui2').enable({
   msg = { target = 'msg' },
 })
 
-local M = {
-  icons = require('nvim.ui.icons'),
-  status = require('nvim.ui.status'),
-  winbar = require('nvim.ui.winbar'),
-}
-
-M.after = function()
+vim.schedule(function()
   vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
   vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
   -- local orig_select = vim.ui.select
   -- vim.ui.select = require('nvim.ui.select')
-end
+end)
+
+local M = {
+  icons = require('nvim.ui.icons'),
+  status = require('nvim.ui.status'),
+  winbar = require('nvim.ui.winbar'),
+  specs = {
+    {
+      'MeanderingProgrammer/render-markdown.nvim',
+      init = function() require('nvim.ui.markdown') end,
+    },
+  },
+}
 
 vim.treesitter.language.register('markdown', { 'msg', 'pager' })
 
@@ -40,14 +46,6 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
   end,
   desc = '',
 })
-
-M.specs = {
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    -- enabled = false,
-    init = function() require('nvim.ui.markdown') end,
-  },
-}
 
 M.redraw = function(t)
   vim.defer_fn(
