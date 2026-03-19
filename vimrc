@@ -114,13 +114,22 @@ augroup END
 
 " }}}1
 " Section: neovim {{{1
+" set undo if on nvim, or if on a machine not running nvim
+let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+
 if !has('nvim')
   call vim#defaults#()
   call vim#sensible#()
   call vimrc#toggles()
 else
+  set backup
+  set backupext=.bak
+  set backupdir=~/.local/state/nvim/backup//
+  set backupskip=~/.cache/*
+  " let &backupskip .= ','..expand('$HOME')..'/.cache/*'
+
   " set autocomplete
- 
+
   " more navigation
   set smoothscroll
   set jumpoptions+=view
@@ -190,6 +199,13 @@ nnoremap zq <Cmd>Format<CR>
 
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
+if exists(':restart') == 2
+  function s:restart() abort
+    let s:sesh = stdpath('state')..'/Session.vim'
+    execute printf('mksession! %s | confirm restart silent source %s', s:sesh, s:sesh)
+  endfunction
+  command! Restart call s:restart()
+endif
 
 let g:vimtex_format_enabled = 1              " built-in formatexpr
 let g:vimtex_mappings_disable = {'n': ['K']} " disable normal `K`
