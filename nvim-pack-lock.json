@@ -5,7 +5,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "4fefa9ad0c706ade49eaa3b241df406adb7dce38",
+      "rev": "612f4bd2bc29d9e7dc7be1dde960908951bedad1",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -29,11 +29,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "9990c41f10f54f29a888d13024c9f765037bde23",
+      "rev": "59f09943573c5348ca6c88393fa09ce3b66a7818",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "dc2f86d2b66a6e01a98c37cdadd3be3e90f8ab9a",
+      "rev": "841c6d4139aedb8a3f2baf30cef5327371385b93",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -41,7 +41,7 @@
       "src": "https://github.com/chrisgrieser/nvim-scissors.git"
     },
     "nvim-treesitter": {
-      "rev": "c9fea86a5a3c2d7f52e5cd53448edfaf7953bc75",
+      "rev": "877f724846f2202a16e311bd19efb954bd1c430e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
@@ -49,7 +49,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "4e91b5d0394329a229725b021a8ea217099826ef",
+      "rev": "7359dfcefa38db632541e1f9b5b5f291626a1d47",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "render-markdown.nvim": {
@@ -57,11 +57,11 @@
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "f95ba541970c41a631d480062afedb0ebc455e19",
+      "rev": "8ad0ede3ff9065878a853e4b037ba6ac88231fb0",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "a049339328e2599ad6e85a69fa034ac501e921b2",
+      "rev": "e6fd58c82f2f3fcddd3fe81703d47d6d48fc7b9f",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "tokyonight.nvim": {

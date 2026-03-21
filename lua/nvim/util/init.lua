@@ -1,21 +1,24 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 
-local tools = {
-  'actionlint', -- code action linter
-  'mmdc', -- mermaid diagrams
-  'tree-sitter-cli',
+local M = {
+  specs = require('plugins'),
+  tools = function()
+    local tools = {
+      'actionlint', -- code action linter
+      'mmdc', -- mermaid diagrams
+      'tree-sitter-cli',
+    }
+
+    local function other_tools()
+      local ret = {}
+      -- TODO: find other tools in lsp dir
+      ret[#ret + 1] = 'stylua'
+      return ret
+    end
+
+    return vim.list_extend(tools, other_tools())
+  end,
 }
-
-local function other_tools()
-  local ret = {}
-  -- TODO: find other tools in lsp dir
-  ret[#ret + 1] = 'stylua'
-  return ret
-end
-
-local M = {}
-
-M.tools = function() return vim.list_extend(tools, other_tools()) end
 
 -- string manipulation
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
@@ -73,14 +76,10 @@ end
 --- Convert a file path to a module name by trimming the lua root
 ---@param path string
 ---@return string
-M.modname = function(path)
-  -- return fn.fnamemodify(path, ':r:s?^.*/lua/??'):gsub('/init$', '')
-  local modname = (vim.endswith(path, '/init.lua') and path:sub(1, -10) or path):gsub('^.*/lua/', '')
-  return modname
-end
+M.modname = function(path) return fn.fnamemodify(path, ':r:s?^.*/lua/??:s?/init$??') end
 
 M.yankmod = function()
-  local modname = M.name(api.nvim_buf_get_name(0))
+  local modname = M.modname(api.nvim_buf_get_name(0))
   local line = string.format([[require('%s')]], modname)
   M.yank(line)
 end
@@ -103,6 +102,29 @@ M.get_visual = function()
     vim.list_extend(sel_text, buf_text)
   end
   return sel_text, line_regs
+end
+
+--- run a system command and return stdout using `vim.system`
+---@param cmd string[] command and args
+---@param err_on_fail? boolean whether to error if command fails
+---@param errmsg string? error message to use if err_on_fail is true
+---@param stdin string? optional stdin to pass to command
+---@return string? stdout on success
+function M.run(cmd, err_on_fail, errmsg, stdin)
+  local rv = vim.system(cmd, { stdin = stdin, text = true }):wait()
+  if rv.code ~= 0 then
+    if rv.stdout and #rv.stdout > 0 then
+      print(rv.stdout)
+    end
+    if rv.stderr and #rv.stderr > 0 then
+      print(rv.stderr)
+    end
+    if err_on_fail then
+      error(errmsg or ('Command failed: %s'):format(table.concat(cmd, ' ')))
+    end
+    return nil
+  end
+  return rv.stdout
 end
 
 return M

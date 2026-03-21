@@ -10,8 +10,8 @@ if !exists('g:ooze_skip_comments') | let g:ooze_skip_comments = 1 | endif
 if !exists('g:ooze_cr') | let g:ooze_cr = 1 | endif
 
 " nnoremap <leader><CR> <Cmd>call ooze#init()<CR>
-nnoremap <M-CR> <Cmd>call ooze#file()<CR>
-nnoremap <expr> <CR> ooze#line() > 0 ? '' : "\<CR>"
+" nnoremap <M-CR> <Cmd>call ooze#file()<CR>
+" nnoremap <expr> <CR> ooze#line() > 0 ? '' : "\<CR>"
 
 augroup ooze
   autocmd!
@@ -23,19 +23,29 @@ augroup ooze
   " autocmd TermClose * unlet! g:ooze_channel
 augroup END
 
-" NOTE: (neovim) support for editing encrypted files has been removed
-command! -nargs=+ X call append('$', Append(<f-args>))
-" WARN: (vim only) E841: Reserved name, cannot be used for user defined command
-command! -nargs=+ Append call append('$', Append(<f-args>))
-
-function! XCmdline() abort
-  let cmdline = getcmdline()
-  if empty(cmdline) || getcmdtype()  != ':'
-    return '<M-CR>'
+function! Append(...) abort
+  if a:0 > 0
+    " Called with args: :Append echo "hello"
+    let cmd = join(a:000, ' ')
   else
-    call feedkeys("\<C-c>", 'n') " cancel cmdline
-    call timer_start(0, {-> execute('call redir#execute("' . escape(cmdline, '"') . '")')})
+    " Called from cmdline mapping
+    let cmd = getcmdline()
+    if empty(cmd) || getcmdtype() != ':'
+      return '<M-CR>'
+    endif
+    call feedkeys("\<C-c>", 'n')
+    call timer_start(0, {-> Append(cmd)})
+    return ''
+  endif
+  let output = execute(cmd)
+  let lines = split(output, "\n", 1)
+  while !empty(lines) && empty(lines[0])
+    call remove(lines, 0)
+  endwhile
+  if !empty(lines)
+    call append('$', lines)
   endif
 endfunction
 
-cnoremap <expr> <M-CR> XCmdline()
+command! -nargs=+ Append call Append(<q-args>)
+cnoremap <expr> <M-CR> Append()

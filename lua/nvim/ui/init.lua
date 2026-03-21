@@ -1,20 +1,6 @@
---- Window types each have respective filetype
---- • `cmd`: cmdline window; 'showcmd', 'showmode', 'ruler', and messages if 'cmdheight' > 0.
---- • `msg`: messages when 'cmdheight' == 0.
---- • `pager`: used for |:messages| and certain messages that should be shown in full
---- • `dialog`: used for prompt messages that expect user input
-
--- BUG: `msg.target` should inferred from cmdheight=0
-vim.o.cmdheight = 0
-require('vim._core.ui2').enable({
-  msg = { target = 'msg' },
-})
-
 vim.schedule(function()
   vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
   vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-  -- local orig_select = vim.ui.select
-  -- vim.ui.select = require('nvim.ui.select')
 end)
 
 local M = {
@@ -29,6 +15,10 @@ local M = {
   },
 }
 
+--- Window types each have respective filetype
+--- • `msg`: messages when 'cmdheight' == 0.
+--- • `pager`: used for |:messages| and certain messages that should be shown in full
+--- • `dialog`: used for prompt messages that expect user input
 vim.treesitter.language.register('markdown', { 'msg', 'pager' })
 
 vim.api.nvim_create_autocmd({ 'FileType' }, {

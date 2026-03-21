@@ -3,8 +3,7 @@ local winbar_a = status.buffer
 local active = function()
   local winbar_b = require('nvim.lsp').status
   local winbar_c = require('nvim.treesitter').status
-  return status.render(winbar_a(), winbar_b(), ' ' .. winbar_c())
-    .. '%#WinBar# '
+  return status.render(winbar_a(), winbar_b(), ' ' .. winbar_c()) .. '%#WinBar# '
 end
 
 local inactive = function() return winbar_a() end

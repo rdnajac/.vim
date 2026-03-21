@@ -16,6 +16,7 @@ let g:chromatophores = [
 if has('nvim')
   call add(chromatophores, 'WinBar')
   call add(chromatophores, 'helpSectionDelim')
+  call add(chromatophores, 'manOptionDesc')
   call add(chromatophores, '@markup.raw.markdown_inline')
   call add(chromatophores, 'MiniIconsGreen')
 endif

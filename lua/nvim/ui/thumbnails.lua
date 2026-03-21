@@ -70,7 +70,7 @@ M.extmark_leaks = function()
     end)
     :flatten()
     :totable()
-    -- TODO: when `iter:sort()`
+  -- TODO: when `iter:sort()`
 
   table.sort(counts, function(a, b) return a.count > b.count end)
 

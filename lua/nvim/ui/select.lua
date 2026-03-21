@@ -1,5 +1,9 @@
 --- A simple implementation of vim.ui.select using a floating window.
 --- https://github.com/neovim/neovim/discussions/38231
+---
+--- local orig_select = vim.ui.select
+--- vim.ui.select = require('nvim.ui.select')
+---
 ---@generic t
 ---@param items t[] arbitrary items
 ---@param opts {}

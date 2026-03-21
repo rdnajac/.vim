@@ -1,10 +1,11 @@
-let g:vimrc#dir = split(&runtimepath, ',')[0]
+" let g:vimrc#dir = split(&runtimepath, ',')[0]
+let g:vimrc#dir = fnamemodify($MYVIMRC, ':h')
 
 function! s:on_enter(fn) abort
   if v:vim_did_enter
     call call(a:fn, [])
   else
-    execute 'autocmd VimEnter * call ' . string(a:fn) . '()'
+    execute printf('%s()', string(a:fn))
   endif
 endfunction
 

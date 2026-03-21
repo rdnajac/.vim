@@ -10,5 +10,5 @@ local providers = function(mode)
 end
 
 local status = function()
-    return vim.iter(providers()):map(function(k, _) return icons[k] .. ' ' end):join(' ')
-  end
+  return vim.iter(providers()):map(function(k, _) return icons[k] .. ' ' end):join(' ')
+end

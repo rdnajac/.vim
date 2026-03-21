@@ -3,10 +3,16 @@ vim.loader.enable()
 
 vim.cmd([[ source ~/.vim/vimrc ]])
 
+-- vim.o.cmdheight = 0
+-- require('vim._core.ui2').enable({
+--   -- BUG: not inferred from cmdheight=0
+--   msg = { target = 'msg' },
+-- })
+
 require('snacks').setup({
   -- bigfile = { enabled = true },
   -- dashboard = require('munchies.dashboard'),
-  explorer = { replace_netrw = false, trash = true },
+  explorer = { replace_netrw = true, trash = true },
   image = { enabled = true },
   indent = { indent = { only_current = false, only_scope = true } },
   input = { enabled = true },
@@ -27,4 +33,8 @@ _G.p = Snacks.debug.profile
 
 require('nvim')
 
-Plug(require('plugins'))
+vim.iter(nv):each(function(k, v)
+  if v.specs then
+    Plug(v.specs)
+  end
+end)

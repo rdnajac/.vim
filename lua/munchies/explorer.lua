@@ -2,25 +2,17 @@ local M = {}
 
 -- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
 M.floating_preview_config = {
+  -- on picker show
   on_show = function(picker)
-    local show = false
-    local gap = 1
-    local clamp_width = function(value) return math.max(20, math.min(100, value)) end
-    local position = picker.resolved_layout.layout.position
     local rel = picker.layout.root
+    local clamp_width = function(value) return math.max(20, math.min(100, value)) end
 
     local update = function(win) ---@param win snacks.win
       local border = win:border_size().left + win:border_size().right
       win.opts.row = vim.api.nvim_win_get_position(rel.win)[1]
       win.opts.height = 0.8
-      if position == 'left' then
-        win.opts.col = vim.api.nvim_win_get_width(rel.win) + gap
-        win.opts.width = clamp_width(vim.o.columns - border - win.opts.col)
-      end
-      if position == 'right' then
-        win.opts.col = -vim.api.nvim_win_get_width(rel.win) - gap
-        win.opts.width = clamp_width(vim.o.columns - border + win.opts.col)
-      end
+      win.opts.col = vim.api.nvim_win_get_width(rel.win) + 1
+      win.opts.width = clamp_width(vim.o.columns - border - win.opts.col)
       win:update()
     end
 
@@ -30,7 +22,7 @@ M.floating_preview_config = {
       focusable = false,
       border = 'rounded',
       backdrop = false,
-      show = show,
+      show = false,
       bo = {
         filetype = 'snacks_float_preview',
         buftype = 'nofile',
@@ -55,12 +47,16 @@ M.floating_preview_config = {
 
     picker.preview.win = preview_win
     picker.main = preview_win.win
-    -- picker.preview.win:toggle()
+
+    -- auto-show preview when opening nvim on a directory
+    if vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1 then
+      preview_win:show()
+    end
   end,
   on_close = function(picker) picker.preview.win:close() end,
   layout = {
     preset = 'sidebar',
-    preview = false,
+    -- preview = false,
   },
   actions = {
     toggle_preview = function(picker) picker.preview.win:toggle() end,

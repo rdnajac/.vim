@@ -49,23 +49,21 @@ function! s:edit(file, ...) abort
   normal! zvzz
 endfunction
 
-let s:vimdir = split(&runtimepath, ',')[0]
-
 function! edit#luamod(name) abort
   if !has('nvim')
     vim#notify#error('This function is only available in Neovim.')
     return
   endif
-  let file = printf('%s/lua/%s.lua', s:vimdir, a:name)
+  let file = printf('%s/lua/%s.lua', g:vimrc#dir, a:name)
   if !filereadable(file)
-    let file = printf('%s/lua/%s/init.lua', s:vimdir, a:name)
+    let file = printf('%s/lua/%s/init.lua', g:vimrc#dir, a:name)
   endif
   call s:edit(file)
 endfunction
 
 function! s:filetype(dir, ext) abort
   let ext = a:0 == 0 ? '.vim' : a:1
-  call s:edit(join([s:vimdir, a:dir, &filetype .. a:ext], '/'))
+  call s:edit(join([g:vimrc#dir, a:dir, &filetype .. a:ext], '/'))
 endfunction
 
 function! edit#ftplugin(...) abort

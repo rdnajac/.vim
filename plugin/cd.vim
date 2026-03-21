@@ -11,11 +11,10 @@ let s:dirs = {
       \ '.': '~/.local/share/chezmoi/',
       \ }
 
-if exists('g:stdpath')
-  let s:dirs.c = g:stdpath['config']
-  let s:dirs.C = g:stdpath['cache']
-  let s:dirs.d = g:stdpath['data']
-  let s:dirs.s = g:stdpath['state']
+if exists('*stdpath')
+  let s:dirs.c = stdpath('cache')
+  let s:dirs.d = stdpath('data')
+  let s:dirs.s = stdpath('state')
 endif
 
 if !has('nvim')

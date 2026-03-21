@@ -2,6 +2,12 @@ local M = {}
 
 vim.schedule(function()
   M.map({
+    { 'glf', [[<Cmd>call edit#luamod('nvim/fs')<CR>]] },
+    { 'glk', [[<Cmd>call edit#luamod('nvim/keys')<CR>]] },
+    { 'gll', [[<Cmd>call edit#luamod('nvim/lsp')<CR>]] },
+    { 'glt', [[<Cmd>call edit#luamod('nvim/treesitter')<CR>]] },
+    { 'glu', [[<Cmd>call edit#luamod('nvim/ui')<CR>]] },
+    { 'glv', [[<Cmd>call edit#luamod('nvim/util')<CR>]] },
     { 'yu', function() require('nvim.util.debug').print() end, desc = 'Print Value' },
     { '<leader>ui', '<Cmd>Inspect<CR>' },
     { '<leader>uI', '<Cmd>Inspect!<CR>' },

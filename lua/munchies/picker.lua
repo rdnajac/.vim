@@ -64,7 +64,6 @@ local M = {
   },
 }
 
-
 -- TODO: add cd function using vim.input
 
 ---@param opts snacks.picker.files.Config
