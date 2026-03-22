@@ -1,16 +1,21 @@
+default:	
+  just --list
+
 fmt:
-    @echo "Formatting code..."
-    stylua -v .
+  stylua -v .
 
 update:
-    @echo "Updating neovim..."
-    cd ~/GitHub/neovim/ && make update
+  cd ~/GitHub/neovim/ && make update
+
+upgrade:
+  nvim -c 'lua vim.pack.update()'
 
 profile:
-    nvim -c 'set rtp+=/Users/rdn/.local/share/nvim/site/pack/core/opt/snacks.nvim' -c 'lua require("snacks.profiler").startup({ startup = { event = "UIEnter" } })'
+  nvim -c 'set rtp+=/Users/rdn/.local/share/nvim/site/pack/core/opt/snacks.nvim' \
+    -c 'lua require("snacks.profiler").startup({startup={event="UIEnter"}})'
 
 act:
-    ./bin/scripts/act
+  ./bin/scripts/act
 
 install-neovim:
-    ./bin/scripts/install-neovim.sh
+  ./bin/scripts/install-neovim.sh

@@ -5,7 +5,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "612f4bd2bc29d9e7dc7be1dde960908951bedad1",
+      "rev": "62c3d54f7d739ee46f850ea6832383e3b7ca2ee1",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -41,15 +41,15 @@
       "src": "https://github.com/chrisgrieser/nvim-scissors.git"
     },
     "nvim-treesitter": {
-      "rev": "877f724846f2202a16e311bd19efb954bd1c430e",
+      "rev": "875515255192864c33981c3ed66ad94e561b904a",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
-      "rev": "9a8e39993e3b895601bf8227124a48ea8268149e",
+      "rev": "adf4b6b0420b7be6c717ef0ac7993183d6c201b1",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "7359dfcefa38db632541e1f9b5b5f291626a1d47",
+      "rev": "93d60a475f0b08a8eceb99255863977d3a25f310",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "render-markdown.nvim": {
@@ -61,7 +61,7 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "e6fd58c82f2f3fcddd3fe81703d47d6d48fc7b9f",
+      "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "tokyonight.nvim": {

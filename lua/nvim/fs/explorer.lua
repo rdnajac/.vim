@@ -22,6 +22,7 @@ local explorer_opts = {
   },
 }
 
--- explorer_opts = vim.tbl_extend('force', explorer_opts, require('munchies.explorer').floating_preview_config)
+explorer_opts =
+  vim.tbl_extend('force', explorer_opts, require('munchies.explorer').floating_preview_config)
 
 return explorer_opts

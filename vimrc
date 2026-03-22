@@ -28,7 +28,7 @@ set smartcase
 
 " notifications {{{ 2
 set report=0
-set shortmess+=aAcCI
+set shortmess+=aA "c
 set shortmess-=o
 set showmatch
 

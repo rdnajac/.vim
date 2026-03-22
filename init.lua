@@ -3,11 +3,11 @@ vim.loader.enable()
 
 vim.cmd([[ source ~/.vim/vimrc ]])
 
--- vim.o.cmdheight = 0
--- require('vim._core.ui2').enable({
---   -- BUG: not inferred from cmdheight=0
---   msg = { target = 'msg' },
--- })
+vim.o.cmdheight = 0
+require('vim._core.ui2').enable({
+  -- BUG: not inferred from cmdheight=0
+  msg = { target = 'msg' },
+})
 
 require('snacks').setup({
   -- bigfile = { enabled = true },
