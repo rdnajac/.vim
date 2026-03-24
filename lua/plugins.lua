@@ -119,11 +119,11 @@ return {
       },
     },
     toggles = {
-    ['<leader>cv'] = {
-      name = 'csvView',
-      get = function()require('csvview').is_enabled() end,
-      set = function()require('csvview').toggle() end,
-    },
+      ['<leader>cv'] = {
+        name = 'csvView',
+        get = function() require('csvview').is_enabled(0) end,
+        set = function() require('csvview').toggle() end,
+      },
     },
   },
 }

@@ -1,7 +1,6 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 
 local M = {
-  specs = require('plugins'),
   tools = function()
     local tools = {
       'actionlint', -- code action linter

@@ -33,7 +33,6 @@ local M = {
     -- autocmds = { confirm =  },
     buffers = {
       layout = 'mylayout',
-      input = { keys = { ['<C-x>'] = { 'bufdelete', mode = { 'n', 'i' } } } },
     },
     explorer = require('nvim.fs.explorer'),
     -- files = require('nvim.picker.config'),

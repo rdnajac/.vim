@@ -178,7 +178,7 @@ augroup vimrc
   au FileType json,jsonc,json5 setlocal conceallevel=0 et
   " close certain buffers with `q`
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
-  " don't list certain buffer types (see ...?)
+  " don't list certain buffer types (skips C-^)
   au FileType man,netrw,snacks_explorer setlocal nobuflisted
   " terminal stuff
   autocmd BufEnter term://*:R\ * startinsert
