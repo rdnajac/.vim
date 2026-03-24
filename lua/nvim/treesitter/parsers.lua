@@ -23,6 +23,7 @@ local parsers = {
   -- diff = false,
   -- dockerfile = false,
   -- doxygen = false,
+  fish = true,
   -- git_config = false,
   -- gitcommit = false,
   -- git_rebase = false,
