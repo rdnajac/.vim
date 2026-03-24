@@ -1,4 +1,4 @@
-default:	
+default:
   just --list
 
 fmt:
@@ -10,9 +10,9 @@ update:
 upgrade:
   nvim -c 'lua vim.pack.update()'
 
-profile:
+profile *args:
   nvim -c 'set rtp+=/Users/rdn/.local/share/nvim/site/pack/core/opt/snacks.nvim' \
-    -c 'lua require("snacks.profiler").startup({startup={event="UIEnter"}})'
+    -c 'lua require("snacks.profiler").startup({startup={event="UIEnter"}})' {{args}}
 
 act:
   ./bin/scripts/act
