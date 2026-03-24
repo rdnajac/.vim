@@ -78,9 +78,12 @@ end
 ---@return string
 M.modname = function(path) return fn.fnamemodify(path, ':r:s?^.*/lua/??:s?/init$??') end
 
-M.yankmod = function()
+-- TODO: get member from viW
+---@param member? string
+M.yankmod = function(member)
   local modname = M.modname(api.nvim_buf_get_name(0))
-  local line = string.format([[require('%s')]], modname)
+  local require = string.format([[require('%s')]], modname)
+  local line = table.concat({ require, member }, '.')
   M.yank(line)
 end
 

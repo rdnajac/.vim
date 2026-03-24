@@ -106,8 +106,8 @@ return {
       parser = { comments = { '#', '//' } },
       keymaps = {
         -- FIXME: conflicts with treesitter function
-        textobject_field_inner = { 'if', mode = { 'o', 'x' } },
-        textobject_field_outer = { 'af', mode = { 'o', 'x' } },
+        textobject_field_inner = { 'iF', mode = { 'o', 'x' } },
+        textobject_field_outer = { 'aF', mode = { 'o', 'x' } },
         -- Excel-like navigation:
         -- Use <Tab> and <S-Tab> to move horizontally between fields.
         -- Use <Enter> and <S-Enter> to move vertically between rows and place the cursor at the end of the field.
@@ -118,12 +118,12 @@ return {
         jump_prev_row = { '<S-Enter>', mode = { 'n', 'v' } },
       },
     },
-    -- toggles = {
-    -- ['<leader>uv'] = {
-    --   name = 'csvView',
-    --   get = function() end,
-    --   set = function() end,
-    -- },
-    -- },
+    toggles = {
+    ['<leader>cv'] = {
+      name = 'csvView',
+      get = function()require('csvview').is_enabled() end,
+      set = function()require('csvview').toggle() end,
+    },
+    },
   },
 }

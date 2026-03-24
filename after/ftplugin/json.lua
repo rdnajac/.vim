@@ -11,4 +11,4 @@ function _G.fmt_json()
 end
 
 vim.o.formatexpr = 'v:lua.fmt_json()'
-vim.keymap.set('n', 'zq', 'gggqG', { buffer = true, remap = true })
+vim.keymap.set('n', 'zq', 'gggqG', { buf = 0, remap = true })

@@ -20,12 +20,13 @@ return {
         -- show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
       },
       menu = {
-        auto_show_delay_ms = function(ctx, _)
-          return vim.tbl_contains(
-            { '.', '/', "'", '@', '$', ':', '"', '`', '[', ']' },
-            ctx.trigger.initial_character
-          ) and 1 or 1000
-        end,
+	auto_show = false,
+        -- auto_show_delay_ms = function(ctx, _)
+        --   return vim.tbl_contains(
+        --     { '.', '/', "'", '@', '$', ':', '"', '`', '[', ']' },
+        --     ctx.trigger.initial_character
+        --   ) and 1 or 1000
+        -- end,
         draw = {
           columns = {
             { 'source_id' },

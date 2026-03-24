@@ -46,23 +46,25 @@ local M = {
   },
 }
 
-M.parsers = require('nvim.treesitter.parsers')
+vim.schedule(function()
+  M.parsers = require('nvim.treesitter.parsers')
 
-local aug = vim.api.nvim_create_augroup('treesitter', {})
+  local aug = vim.api.nvim_create_augroup('treesitter', {})
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = M.parsers.to_autostart(),
-  group = aug,
-  callback = function(ev) vim.treesitter.start(ev.buf) end,
-  desc = 'Automatically start tree-sitter',
-})
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = M.parsers.to_autostart(),
+    group = aug,
+    callback = function(ev) vim.treesitter.start(ev.buf) end,
+    desc = 'Automatically start tree-sitter',
+  })
 
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = { 'markdown', 'r', 'rmd', 'quarto' },
-  group = aug,
-  command = [[ setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr() ]],
-  desc = 'Use treesitter folding for select filetypes',
-})
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'markdown', 'r', 'rmd', 'quarto' },
+    group = aug,
+    command = [[ setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr() ]],
+    desc = 'Use treesitter folding for select filetypes',
+  })
+end)
 
 M.install_parsers = function() vim.cmd.TSInstall(M.parsers.to_install()) end
 

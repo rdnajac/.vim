@@ -16,6 +16,10 @@ set wildmode=longest:full,full " Same as above, but cycle through the first patc
 cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
 cnoremap <expr> <Up>   wildmenumode() ? "\<C-p>" : "\<Up>"
 
+" autocomplete
+" imap / /<C-x><C-f><C-n>
+" imap <expr> <Tab> pumvisible() ? <C-y> : <Tab>
+
 nnoremap ?? :verbose set ?<Left>
 cnoreabbrev ?? verbose set ?<Left>
 cnoreabbrev !! !./%

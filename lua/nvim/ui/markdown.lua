@@ -1,3 +1,4 @@
+---@type render.md.UserConfig
 vim.g.render_markdown_config = {
   file_types = { 'markdown', 'rmd', 'quarto' },
   latex = { enabled = false },
@@ -10,6 +11,7 @@ vim.g.render_markdown_config = {
     -- inline_right = ' ',
     -- inline_padding= 1,
     enabled = false,
+    ---@diagnostic disable-next-line: assign-type-mismatch
     highlight = false,
     highlight_border = false,
     -- highlight_inline = 'Chromatophore',

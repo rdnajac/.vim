@@ -19,24 +19,4 @@ else
   nmap yss ys_
   xmap <silent> S :<C-u>lua MiniSurround.add('visual')<CR>
   " lua vim.keymap.set('x', 'S', [[:<C-u>lua MiniSurround.add('visual')<CR>]], { silent = true })
-  lua << EOF
-  local opts = {
-    -- mappings = {
-      --   add = 'ys',
-      --   delete = 'ds',
-      --   find = '',
-      --   find_left = '',
-      --   highlight = '',
-      --   replace = 'cs',
-      --   -- Add this only if you don't want to use extended mappings
-      --   suffix_last = '',
-      --   suffix_next = '',
-      -- },
-      -- search_method = 'cover_or_next',
-      custom_surroundings = {
-	B = { output = { left = '{', right = '}' } },
-      },
-      }
-  vim.schedule(function() require('mini.surround').setup(opts) end)
-EOF
 endif

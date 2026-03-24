@@ -7,12 +7,12 @@ local sources = {
   ---@type table<string, blink.cmp.SourceProviderConfig>
   providers = {
     -- buffer = {
-      --   get_bufnrs = function()
-      --     return vim.tbl_filter(function(bufnr)
-      --       return vim.bo[bufnr].buftype == ''
-      --     end, vim.api.nvim_list_bufs())
-      --   end,
-      -- },
+    --   get_bufnrs = function()
+    --     return vim.tbl_filter(function(bufnr)
+    --       return vim.bo[bufnr].buftype == ''
+    --     end, vim.api.nvim_list_bufs())
+    --   end,
+    -- },
     -- },
     lsp = {
       score_offset = -1,
@@ -28,13 +28,13 @@ local sources = {
         )
       end,
     },
-    -- path = {
-    --   score_offset = 100,
-    --   opts = {
-    --     get_cwd = function(_) return vim.fn.getcwd() end,
-    --     show_hidden_files_by_default = true,
-    --   },
-    -- },
+    path = {
+      score_offset = 100,
+      opts = {
+        get_cwd = function(_) return vim.fn.getcwd() end,
+        show_hidden_files_by_default = true,
+      },
+    },
     snippets = {
       score_offset = 99,
       opts = { friendly_snippets = false },

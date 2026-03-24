@@ -3,11 +3,11 @@ vim.loader.enable()
 
 vim.cmd([[ source ~/.vim/vimrc ]])
 
-vim.o.cmdheight = 0
-require('vim._core.ui2').enable({
-  -- BUG: not inferred from cmdheight=0
-  msg = { target = 'msg' },
-})
+-- vim.o.cmdheight = 0
+-- require('vim._core.ui2').enable({
+--   -- BUG: not inferred from cmdheight=0
+--   msg = { target = 'msg' },
+-- })
 
 require('snacks').setup({
   -- bigfile = { enabled = true },
@@ -32,9 +32,3 @@ _G.bt = Snacks.debug.backtrace
 _G.p = Snacks.debug.profile
 
 require('nvim')
-
-vim.iter(nv):each(function(k, v)
-  if v.specs then
-    Plug(v.specs)
-  end
-end)

@@ -38,6 +38,7 @@ end
 --- Assumes the plugin has a `setup()` function and calls it with `opts` if provided.
 --- The module name is just the plugin name without a `.nvim` suffix, if present.
 function Plugin:setup()
+  -- map keys and toggles unconditionally, handling inputs in nv.keys
   vim.schedule(function() return require('nvim.keys').register(self) end)
   if self.init then
     return self.init()

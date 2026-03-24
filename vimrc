@@ -395,18 +395,15 @@ tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " }}}1
 " Section: pack {{{1
-" packadd! vim-nv
-
-" shipped plugins {{{2
 packadd! cfilter
 if has('nvim')
   packadd! nvim.difftool
+  packadd! nvim.tohtml
   packadd! nvim.undotree
 else
   packadd! editorconfig
   packadd! hlyank
 endif
-" }}}
 
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
@@ -457,6 +454,4 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
-imap / /<C-x><C-f><C-n>
-imap <expr> <Tab> pumvisible() ? <C-y> : <Tab>
 " vim: fdm=marker fdl=1

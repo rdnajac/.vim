@@ -10,6 +10,17 @@ if vim.g.loaded_endwise == 1 then
   vim.bo.syntax = 'ON' -- use legacy syntax
 end
 
+vim.keymap.set('n', 'yM', function()
+  local line = vim.fn.getline('.')
+  -- find M.member or M['member']
+  local member = line:match('M%.(%w+)') or line:match("M%['(%w+)'%]")
+  local is_func = line:match('function')
+  if member and is_func then
+    member = member .. '()'
+  end
+  nv.util.yankmod(member)
+end, { buf = 0, desc = 'yank module member' })
+
 vim.b.minisurround_config = {
   custom_surroundings = {
     U = { output = { left = 'function()\n', right = '\nend' } },
