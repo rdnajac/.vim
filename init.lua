@@ -9,8 +9,15 @@ vim.cmd([[ source ~/.vim/vimrc ]])
 --   msg = { target = 'msg' },
 -- })
 
+package.preload['lazy.stats'] = function()
+  local loaded = 0
+  local count = #vim.fn.readdir(vim.env.PACKDIR)
+  return { stats = function() return { count = count, loaded = loaded, startuptime = 0 } end }
+end
+
 require('snacks').setup({
   -- bigfile = { enabled = true },
+  dashboard = { enabled = true },
   -- dashboard = require('munchies.dashboard'),
   explorer = { replace_netrw = true, trash = true },
   image = { enabled = true },
