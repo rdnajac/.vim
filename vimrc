@@ -347,7 +347,7 @@ nnoremap < V`]<
 xnoremap s :s/\%V<C-R><C-W>/
 
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
-nnoremap g. :%s//<C-r>./g<ESC>
+nnoremap g. :%s//<C-R>./g<ESC>
 
 " for act in ['c', 'd', 'y'] " change, delete, yank
 "   for obj in ['w'] " paragraph, word

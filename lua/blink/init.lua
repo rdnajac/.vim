@@ -1,7 +1,7 @@
 ---@module "blink.cmp"
 -- `https://main.cmp.saghen.dev`
 
-return {
+local spec = {
   'Saghen/blink.cmp',
   build = function() vim.cmd([[BlinkCmp build]]) end,
   event = 'UIEnter',
@@ -20,7 +20,7 @@ return {
         -- show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
       },
       menu = {
-	auto_show = false,
+        -- auto_show = false,
         -- auto_show_delay_ms = function(ctx, _)
         --   return vim.tbl_contains(
         --     { '.', '/', "'", '@', '$', ':', '"', '`', '[', ']' },
@@ -54,36 +54,17 @@ return {
     },
     keymap = {
       ['<Tab>'] = {
-        ---@return boolean? true on success, nil otherwise
-        function(cmp)
-          cmp = cmp or require('blink.cmp')
-          if cmp.snippet_active() then
-            -- if vim.snippet.active() then
-            return cmp.accept()
-          else
-            return cmp.select_and_accept()
-          end
-        end,
+        function(cmp) return cmp.snippet_active() and cmp.accept() or cmp.select_and_accept() end,
         'snippet_forward',
         function() return package.loaded['sidekick'] and require('sidekick').nes_jump_or_apply() end,
         function() return vim.lsp.inline_completion.get() end,
         'fallback',
       },
+      ['<C-R>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
     },
     signature = { enabled = true, window = { show_documentation = false } },
     sources = require('blink.sources'),
   },
 }
 
--- local aug = vim.api.nvim_create_augroup('HideInlineCompletion', {})
--- vim.api.nvim_create_autocmd('User', {
---   group = aug,
---   pattern = 'BlinkCmpMenuOpen',
---   callback = function() toggle_inline_completion:toggle() end,
--- })
-
--- vim.api.nvim_create_autocmd('User', {
---   group = aug,
---   pattern = 'BlinkCmpMenuClose',
---   callback = function() toggle_inline_completion:toggle() end,
--- end,
+return spec

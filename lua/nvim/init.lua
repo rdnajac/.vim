@@ -19,6 +19,6 @@ vim.iter(ipairs(_submodules)):each(function(_, name)
   rawset(nv, name, mod)
 end)
 
-vim.schedule(function() Plug(require('plugins')) end)
+Plug(require('plugins'))
 
 return nv

@@ -72,4 +72,9 @@ sources.providers['dadbod'] = {
 }
 sources.per_filetype['sql'] = { inherit_defaults = false, 'dadbod' }
 
+sources.providers.registers = {
+  name = 'registers',
+  module = 'blink.sources.registers',
+}
+
 return sources
