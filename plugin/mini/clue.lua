@@ -1,3 +1,7 @@
+if package.loaded['which-key'] then
+  return
+end
+
 local miniclue = require('mini.clue')
 
 local clues = {
