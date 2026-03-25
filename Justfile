@@ -12,7 +12,7 @@ upgrade:
 
 profile *args:
   nvim -c 'set rtp+=/Users/rdn/.local/share/nvim/site/pack/core/opt/snacks.nvim' \
-    -c 'lua require("snacks.profiler").startup({startup={event="UIEnter"}})' {{args}}
+    -c 'lua require("snacks.profiler").startup({startup={event="UIEnter"}, presets={startup={min_time=0.5}}})' {{args}}
 
 act:
   ./bin/scripts/act

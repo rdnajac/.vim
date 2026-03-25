@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+indent="          "
+
+cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making" \
+	| sed "s/^/$indent/"

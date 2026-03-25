@@ -22,7 +22,7 @@ local M = {
   map = function(t) vim.iter(vim.islist(t) and t or { t }):map(normalize):each(vim.keymap.set) end,
   specs = {
     require('blink'),
-    require('nvim.keys.which'),
+    -- require('nvim.keys.which'),
     -- require('nvim.keys.screen'),
   },
 }
@@ -76,7 +76,7 @@ vim.schedule(function()
   if Snacks then
     Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
     Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
-    Snacks.keymap.set({ 'n' }, 'ym', nv.yankmod, { ft = 'lua' })
+    Snacks.keymap.set({ 'n' }, 'ym', function() nv.yankmod() end, { ft = 'lua' })
     Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
     for key, v in pairs(require('nvim.keys.toggles')) do
       M.new_snacks_toggle(key, v)

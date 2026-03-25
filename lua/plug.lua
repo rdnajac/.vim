@@ -1,3 +1,5 @@
+_G.setup_count = 0
+
 ---@class Plugin
 ---@field [1] string `owner/repo`
 ---@field src? string derived from [1] if missing
@@ -41,10 +43,12 @@ function Plugin:setup()
   -- map keys and toggles unconditionally, handling inputs in nv.keys
   vim.schedule(function() return require('nvim.keys').register(self) end)
   if self.init then
+    _G.setup_count = _G.setup_count + 1
     return self.init()
   end
   local opts = vim.is_callable(self.opts) and self.opts() or self.opts
   if type(opts) == 'table' then
+    _G.setup_count = _G.setup_count + 1
     local modname = (self.name or vim.fs.basename(self[1])):gsub('%.nvim$', '')
     return require(modname).setup(opts)
   end

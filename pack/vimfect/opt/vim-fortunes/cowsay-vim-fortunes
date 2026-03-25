@@ -2,10 +2,10 @@
 
 indent="          "
 
-fortune=~/.vim/etc/learn-something
-
+cd -P -- "$(dirname "$0")" || exit 1
+ 
 {
-	"$fortune" | cowsay | sed "s/^/$indent/"
+	fortune ./tips/vimtips | cowsay | sed "s/^/$indent/"
 	printf "\n"
 	cat << 'EOF'
   The computing scientist's main challenge is not to get
