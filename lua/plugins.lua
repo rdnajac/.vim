@@ -1,4 +1,5 @@
 return {
+  { 'stevearc/quicker.nvim', opts = {} },
   {
     'folke/sidekick.nvim',
     -- BUG: `https://github.com/folke/sidekick.nvim/issues/264`
