@@ -81,7 +81,6 @@ function Plugin:package()
   }
   return spec
 end
-local M = {}
 
 --- Overrides `packadd`ing in `vim.pack.add`, then calls the plugin's `init()`
 ---@param plug_data { spec: vim.pack.Spec, path: string }
@@ -90,6 +89,17 @@ local _load = function(plug_data)
   vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })
   local init = vim.tbl_get(spec, 'data', 'init')
   return vim.is_callable(init) and init() or nil
+end
+
+--- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
+---@param plugs table|table[]  list of plugin specs or single spec table
+_G.Plug = function(plugs)
+  local speclist = vim
+    .iter(vim.islist(plugs) and plugs or { plugs })
+    :filter(function(v) return v.enabled ~= false end)
+    :map(function(v) return Plugin.new(v):package() end)
+    :totable()
+  vim.pack.add(speclist, { load = _load })
 end
 
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
@@ -110,7 +120,7 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
       print('Build function called for ' .. name)
     elseif type(build) == 'string' then
       -- trim leading ':' or '<Cmd>' and trailing '<CR>'
-      build = build:gsub('^:', ''):gsub('^<[Cc][Mm][Dd]>', ''):gsub('<[Cc][Rr]>$', '')
+      build = vim.trim(build):gsub('^:', ''):gsub('^<[Cc][Mm][Dd]>', ''):gsub('<[Cc][Rr]>$', '')
       vim.cmd(build)
       print('Build string executed for ' .. name)
     end
@@ -153,14 +163,16 @@ vim.schedule(function()
   )
 end)
 
---- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
----@param plugs table|table[]  list of plugin specs or single spec table
----@return vim.pack.Spec|nil
-return function(plugs)
-  local speclist = vim
-    .iter(vim.islist(plugs) and plugs or { plugs })
-    :filter(function(v) return v.enabled ~= false end)
-    :map(function(v) return Plugin.new(v):package() end)
-    :totable()
-  vim.pack.add(speclist, { load = _load })
+package.preload['lazy.stats'] = function()
+  local startuptime = ((_G.T2 or vim.uv.hrtime()) - T1) / 1e6
+  return {
+    stats = function()
+      local count = #vim.fn.readdir(vim.env.PACKDIR)
+      -- local loaded = #vim.tbl_filter(function(p) return not p.active end, vim.pack.get())
+      local loaded = _G.setup_count or 0
+      return { count = count, loaded = loaded, startuptime = startuptime }
+    end,
+  }
 end
+
+Plug(require('plugins'))

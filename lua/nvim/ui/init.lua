@@ -1,7 +1,7 @@
-vim.schedule(function()
-  vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
-  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-end)
+vim.o.cmdheight = 0
+require('vim._core.ui2').enable({
+  msg = { target = 'msg' },
+})
 
 local M = {
   icons = require('nvim.ui.icons'),
@@ -15,27 +15,30 @@ local M = {
   },
 }
 
---- Window types each have respective filetype
---- • `msg`: messages when 'cmdheight' == 0.
---- • `pager`: used for |:messages| and certain messages that should be shown in full
---- • `dialog`: used for prompt messages that expect user input
-vim.treesitter.language.register('markdown', { 'msg', 'pager' })
-
-vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = { 'msg', 'pager' },
-  -- group = aug,
-  callback = function()
-    vim.treesitter.start(0)
-    vim.wo.conceallevel = 3
-    -- vim.keymap.set('n', '<CR>', nv.fs.goto, { buf = 0, desc = 'Go to file under cursor' })
-    -- vim.cmd([[
-    --   " open file in a new window when or jump to line number when appropriate
-    --   " nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
-    --   " \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
-    --   ]])
-  end,
-  desc = '',
-})
+vim.schedule(function()
+  vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
+  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+  --- Window types each have respective filetype
+  --- • `msg`: messages when 'cmdheight' == 0.
+  --- • `pager`: used for |:messages| and certain messages that should be shown in full
+  --- • `dialog`: used for prompt messages that expect user input
+  vim.treesitter.language.register('markdown', { 'msg', 'pager' })
+  vim.api.nvim_create_autocmd({ 'FileType' }, {
+    pattern = { 'msg', 'pager' },
+    group = 'nv.treesitter',
+    callback = function()
+      vim.treesitter.start(0)
+      vim.wo.conceallevel = 3
+      -- vim.keymap.set('n', '<CR>', nv.fs.goto, { buf = 0, desc = 'Go to file under cursor' })
+      -- vim.cmd([[
+      --   " open file in a new window when or jump to line number when appropriate
+      --   " nnoremap <expr> gf &ft =~# '\vmsg\|pager' ? ''
+      --   " \ : expand('<cWORD>') =~# ':\d\+$' ? 'gF' : 'gf'
+      --   ]])
+    end,
+    desc = 'Setup treesitter for msg and pager filetypes',
+  })
+end)
 
 M.redraw = function(t)
   vim.defer_fn(

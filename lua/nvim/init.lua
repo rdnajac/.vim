@@ -8,8 +8,6 @@ local _submodules = {
   'treesitter',
 }
 
-local Plug = require('plug')
-
 -- vim.iter(nv):each(function(_, v) Plug(v.specs) end)
 vim.iter(ipairs(_submodules)):each(function(_, name)
   local mod = require('nvim.' .. name)
@@ -18,7 +16,5 @@ vim.iter(ipairs(_submodules)):each(function(_, name)
   end
   rawset(nv, name, mod)
 end)
-
-Plug(require('plugins'))
 
 return nv
