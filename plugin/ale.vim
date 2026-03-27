@@ -6,7 +6,6 @@ let g:ale_echo_cursor = 'never'
 " move fixers to ftplugin if we use `vim.lsp` for formatting
 let g:ale_fixers = {
       \ '*'	  : ['remove_trailing_lines', 'trim_whitespace'],
-      \ 'lua'	  : ['stylua'],
       \ 'python'  : ['ruff'],
       \ }
       " \ 'sh'	  : ['shfmt','shellharden'],

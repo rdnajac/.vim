@@ -14,8 +14,8 @@ let $PACKDIR = g:plug#home
 
 function! plug#begin(...)
   if !exists('g:loaded_jetpack')
-    let g:plugs = []
-    command! -nargs=1 Plug call add(g:plugs, git#repo(<args>))
+    let s:plugs = []
+    command! -nargs=1 Plug call plug#(<args>)
   else
     call jetpack#begin()
     call jetpack#add('tani/vim-jetpack')
@@ -23,12 +23,20 @@ function! plug#begin(...)
   endif
 endfunction
 
+function! plug#(user_repo)
+  call add(s:plugs, 'https://github.com/'..a:user_repo..'.git')
+endfunction
+
 function! plug#end()
   delcommand Plug
   if !exists('g:loaded_jetpack')
     if has('nvim')
-      lua vim.pack.add(vim.g.plugs)
-      lua _G.Plug = require('plug')
+      " relies on the magic `vim.g` accessor
+      " lua vim.pack.add(vim.g.plugs)
+      " passes script-local variable to lua via `_A`
+      call luaeval('vim.pack.add(_A)', s:plugs)
+      " lua require('plug')
+      execute 'source' expand('<script>:p:h:h')..'/lua/plug.lua'
     endif
   else
     call jetpack#end()

@@ -2,9 +2,6 @@ if !has('nvim')
   finish
 endif
 
-command! Health :packloadall | checkhealth
-command! LazyGit :lua Snacks.lazygit()
-
 nnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
 tnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
 xnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word<CR>
@@ -35,7 +32,6 @@ nnoremap <leader>dpf <Cmd>lua Snacks.profiler.pick({ filter = { def_plugin = vim
 nnoremap <leader>dps <Cmd>lua Snacks.profiler.scratch()<CR>
 
 " explorer
-
 nnoremap <leader>e <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
 nnoremap <leader>E <Cmd>lua Snacks.explorer.reveal()<CR>
 
@@ -57,10 +53,6 @@ nnoremap <leader>gL <Cmd>lua Snacks.picker.git_log_line()<CR>
 nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
 nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
-
-" neovim news
-command! News :lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
-nnoremap <leader>N <Cmd>News<CR>
 
 " notifications
 nnoremap <leader>n <Cmd>lua Snacks.notifier.show_history()<CR>
