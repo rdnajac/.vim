@@ -30,13 +30,11 @@ local M = {
     },
   },
   sources = {
-    -- autocmds = { confirm =  },
-    buffers = {
-      layout = 'mylayout',
-    },
-    explorer = require('nvim.fs.explorer'),
-    -- files = require('nvim.picker.config'),
-    -- grep = require('nvim.picker.config'),
+    buffers = { layout = 'mylayout', },
+    help = { layout = 'mylayout' },
+    explorer = require('munchies.picker.explorer'),
+    files = require('munchies.picker.config'),
+    grep = require('munchies.picker.config'),
     -- git_status = { layout = 'left' },
     keymaps = {
       ---@param p snacks.Picker
@@ -50,7 +48,6 @@ local M = {
         p:action({ 'jump' })
       end,
     },
-    -- help = { layout = 'ivy' },
     icons = { layout = 'insert' },
     recent = { config = function(p) p.filter = {} end },
     zoxide = { confirm = 'edit' },

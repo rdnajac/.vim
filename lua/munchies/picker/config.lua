@@ -1,4 +1,3 @@
-
 -- TODO: add cd function using vim.input
 
 ---@param opts snacks.picker.files.Config
@@ -26,7 +25,7 @@ end
 --- 3. set input window keymap
 
 ---@type snacks.picker.Config
-local default_config = {
+return {
   actions = {
     clear = function(self)
       ---@diagnostic disable-next-line: inject-field
@@ -87,15 +86,17 @@ local default_config = {
       return require('sidekick.cli.picker.snacks').send(...)
     end,
   },
-
   ---@param opts snacks.picker.files.Config
   config = function(opts)
-    opts.cwd = opts.cwd or Snacks.git.get_root() or vim.fn.getcwd()
-    -- hide the preview window if the screen is too narrow
-    if vim.o.columns < 100 or opts.finder == 'grep' then
-      opts.layout.auto_hide = { 'preview' }
+    -- opts.layout = 'mylayout'
+    if opts.source == 'files' or opts.source == 'grep' then
+      opts.cwd = opts.cwd or Snacks.git.get_root() or vim.fn.getcwd()
+      -- hide the preview window if the screen is too narrow
+      -- if vim.o.columns < 100 or opts.finder == 'grep' then
+      -- opts.layout.auto_hide = { 'preview' }
+      -- end
+      opts.title = title(opts)
     end
-    opts.title = title(opts)
     return opts
   end,
   win = {
@@ -110,5 +111,3 @@ local default_config = {
     },
   },
 }
-
-return default_config
