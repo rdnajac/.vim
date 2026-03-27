@@ -15,8 +15,6 @@ nnoremap <leader>. <Cmd>lua Snacks.scratch()<CR>
 nnoremap <leader>> <Cmd>lua Snacks.scratch.select()<CR>
 
 " buffer
-nnoremap <leader>bb <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap <leader>bB <Cmd>lua Snacks.picker.buffers({ hidden = true, nofile = true })<CR>
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap <leader>bl <Cmd>lua Snacks.picker.lines()<CR>

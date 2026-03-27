@@ -2,8 +2,8 @@
 T1 = vim.uv.hrtime()
 vim.loader.enable()
 
-vim.cmd([[ 
-source ~/.vim/vimrc 
+vim.cmd([[
+source ~/.vim/vimrc
 
 command! News    :lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
 command! Health  :packloadall | checkhealth

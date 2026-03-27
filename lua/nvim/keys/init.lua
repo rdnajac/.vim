@@ -22,7 +22,7 @@ local M = {
   map = function(t) vim.iter(vim.islist(t) and t or { t }):map(normalize):each(vim.keymap.set) end,
   specs = {
     require('blink'),
-    -- require('nvim.keys.which'),
+    require('nvim.keys.which'),
     -- require('nvim.keys.screen'),
   },
 }

@@ -1,5 +1,5 @@
 return {
-  { 'stevearc/quicker.nvim', opts = {} },
+  -- { 'stevearc/quicker.nvim', opts = {} },
   {
     'folke/sidekick.nvim',
     -- BUG: `https://github.com/folke/sidekick.nvim/issues/264`
@@ -97,6 +97,9 @@ return {
         },
       })
     end,
+    keys = {
+      -- nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
+    },
   },
   {
     'hat0uma/csvview.nvim',

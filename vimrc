@@ -1,6 +1,6 @@
 " $MYVIMRC
 scriptencoding utf-8
-color scheme
+
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
@@ -90,8 +90,8 @@ set cursorline
 set number
 set signcolumn=number
 set termguicolors
-" TODO: from minimax; keep?
-" set cursorlineopt = 'screenline,number'
+" set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
+
 " -- Pattern for a start of numbered list (used in `gw`). This reads as
 " -- "Start of list item is: at least one special character (digit, -, +, *)
 " -- possibly followed by punctuation (. or `)`) followed by at least one space".
@@ -121,6 +121,7 @@ if !has('nvim')
   call vim#defaults#()
   call vim#sensible#()
   call vimrc#toggles()
+  color scheme
 else
   set backup
   set backupext=.bak
@@ -183,7 +184,6 @@ augroup vimrc
   " terminal stuff
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
-
 augroup END
 
 " }}}1
@@ -222,13 +222,16 @@ let g:eunuch_interpreters = {
       \ }
 " }}}1
 " Section: keymaps {{{1
-let g:mapleader = ' '
+nnoremap <Space> :
+nnoremap : ,
+let g:mapleader = ','
+" let g:mapleader = ' '
 let g:maplocalleader = '\'
 
-nnoremap ; :
 nnoremap ` ~
 nnoremap ~ `
 
+nnoremap  <Cmd>lua Snacks.picker()<CR>
 nnoremap  ciw
 xnoremap  :sort<CR>
 
@@ -246,33 +249,16 @@ nnoremap zJ <Plug>(unimpaired-move-down)kJ
 nnoremap gV `[V`]
 
 " `<leader>` {{{2
-nnoremap <leader>- <Cmd>sbp<CR>
+nnoremap <leader>-     <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 nnoremap <leader>K <Cmd>normal! K<CR>
-nnoremap <leader>S <Cmd>Scriptnames<CR>
-nnoremap <leader>Q :wqa!<CR>
-nnoremap <leader>m <Cmd>messages<CR>
-nnoremap <leader>q <Cmd>quit!<CR>
-nnoremap <leader>w <Cmd>write!<CR>
-
-if has('nvim')
-  nnoremap <leader>h <Cmd>Help<CR>
-  nnoremap <leader>r <Cmd>Restart<CR>
-  nnoremap <leader>R <Cmd>restart!<CR>
-else
-  nnoremap <leader>h :<C-U>help<Space>
-endif
 
 " debug
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
-nnoremap <leader>ds <Cmd>verb shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
+nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
 if has('nvim')
-  nnoremap <leader>dB <Cmd>Blink<CR>
-  nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
-  nnoremap <leader>dld <Cmd>LazyDev debug<CR>
-  nnoremap <leader>dll <Cmd>LazyDev lsp<CR>
-  nnoremap <leader>dlw <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
+  nnoremap <leader>dW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 endif
 
 " file
@@ -443,7 +429,7 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
 else
   Plug 'folke/snacks.nvim'
-  Plug 'folke/tokyonight.nvim'
+  " Plug 'folke/tokyonight.nvim'
   Plug 'nvim-mini/mini.nvim'
   Plug 'chrisgrieser/nvim-scissors'
   " Plug 'j-hui/fidget.nvim'
