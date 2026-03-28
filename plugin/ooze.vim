@@ -9,8 +9,6 @@ if !exists('g:ooze_auto_exec')     | let g:ooze_auto_exec     = 1 | endif
 if !exists('g:ooze_skip_comments') | let g:ooze_skip_comments = 1 | endif
 if !exists('g:ooze_cr') | let g:ooze_cr = 1 | endif
 
-" nnoremap <leader><CR> <Cmd>call ooze#init()<CR>
-" nnoremap <M-CR> <Cmd>call ooze#file()<CR>
 " nnoremap <expr> <CR> ooze#line() > 0 ? '' : "\<CR>"
 
 augroup ooze

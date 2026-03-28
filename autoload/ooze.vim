@@ -67,17 +67,6 @@ function! ooze#line() abort
   return ooze#send(line)
 endfunction
 
-function! ooze#file() abort
-  if &ft ==# 'vim'
-    execute 'source %'
-    Info 'Sourced ' . expand('%:p')
-  elseif &ft ==# 'lua'
-    lua Snacks.debug.run()
-  else
-    call ooze#send(expand('%:p'))
-  endif
-endfunction
-
 function! ooze#range(...) range abort
   call ooze#send(join(getline(a:firstline, a:lastline), "\n"))
 endfunction
