@@ -4,8 +4,8 @@ scriptencoding utf-8
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
-set wildignore+=.DS_Store
-set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
+" set wildignore+=.DS_Store
+" set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
 
 " general {{{2
 set splitbelow splitright
@@ -60,8 +60,7 @@ set foldopen+=insert,jump
 " indent {{{2
 " set nowrap TODO: set this in a ftplugin?
 set breakindent
-" TODO: from minimax; keep?
-set breakindentopt=list:1
+set breakindentopt=list:1 " TODO: from minimax; keep?
 set linebreak
 set shiftround
 " don't change tabstop!
@@ -172,9 +171,6 @@ augroup vimrc
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
   " don't list certain buffer types (skips C-^)
   au FileType man,netrw,snacks_explorer setlocal nobuflisted
-  " terminal stuff
-  autocmd BufEnter term://*:R\ * startinsert
-  autocmd BufEnter term://*/copilot startinsert
 augroup END
 
 " }}}1
@@ -214,15 +210,14 @@ nnoremap ~ `
 
 nnoremap <Space> :
 nnoremap : ,
-
-nnoremap  <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
 nnoremap  ciw
-nnoremap  <Cmd>lua Snacks.picker()<CR>
+nnoremap  <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
+nnoremap <C-S-F> <Cmd>lua Snacks.picker()<CR>
 xnoremap  :sort<CR>
+nnoremap <M-r> <Cmd>R<CR>
+
 xnoremap < <gv
 xnoremap > >gv
-
-tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " requires `tpope/vim-unimpaired`
 " nmap zJ ]ekJ
@@ -324,12 +319,14 @@ inoremap ; ;<C-g>u
 
 " }}}1
 " Section: pack {{{1
+
 packadd! cfilter
 if has('nvim')
   packadd! nvim.difftool
   packadd! nvim.tohtml
   packadd! nvim.undotree
 else
+  packadd comment
   packadd! editorconfig
   packadd! hlyank
 endif

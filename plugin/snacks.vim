@@ -2,11 +2,9 @@ if !has('nvim')
   finish
 endif
 
-inoremap <silent> ,i <Cmd>Icons<CR>
+inoremap <silent> <C-x><C-i> <Cmd>lua Snacks.picker.icons()<CR>
 
-nnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
-tnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
-xnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word<CR>
+xnoremap / <Cmd>lua Snacks.picker.grep_word()<CR>
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <Home> <Cmd>lua Snacks.dashboard.open()<CR>
 
@@ -83,7 +81,6 @@ let s:commands = [
       \ 'Files',
       \ 'Help',
       \ 'Highlights',
-      \ 'Icons',
       \ 'Jumps',
       \ 'Keymaps',
       \ 'Lines',
