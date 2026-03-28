@@ -7,13 +7,14 @@
 ### c/d/y
 
 - cd cm co cp cq cr cs cu cx cy cz
-- dc dm       dq dr ds du dx dy dz
+- dc    dm    dq dr ds du dx dy dz
 - yc yd ym yo yp yq yr ys yu yx yz
 
 |     | c      | d      | y   |
 | --- | ------ | ------ | --- |
 | c   | **cc** | ✅     | ✅  |
 | d   | ✅     | **dd** | ✅  |
+| m 
 
 ### g
 

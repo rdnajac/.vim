@@ -2,45 +2,35 @@ if !has('nvim')
   finish
 endif
 
+inoremap <silent> ,i <Cmd>Icons<CR>
+
 nnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
 tnoremap <C-Bslash> <Cmd>lua Snacks.terminal.toggle()<CR>
 xnoremap <leader>/ <Cmd>lua Snacks.picker.grep_word<CR>
 nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <Home> <Cmd>lua Snacks.dashboard.open()<CR>
-nnoremap <Bslash>D <Cmd>lua Snacks.dashboard.open()<CR>
 
-nnoremap <leader>, <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap <leader>/ <Cmd>lua Snacks.picker.grep()<CR>
-nnoremap <leader>. <Cmd>lua Snacks.scratch()<CR>
-nnoremap <leader>> <Cmd>lua Snacks.scratch.select()<CR>
+nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
+nnoremap ,. <Cmd>lua Snacks.scratch()<CR>
+nnoremap ,> <Cmd>lua Snacks.scratch.select()<CR>
 
 " buffer
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
 nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
-nnoremap <leader>bl <Cmd>lua Snacks.picker.lines()<CR>
-nnoremap <leader>bg <Cmd>lua Snacks.picker.grep_buffers()<CR>
 
 " coding
-nnoremap <leader>cd <Cmd>lua Snacks.picker.diagnostics()<CR>
-nnoremap <leader>cD <Cmd>lua Snacks.picker.diagnostics_buffer()<CR>
 nnoremap <leader>cR <Cmd>lua Snacks.rename.rename_file()<CR>
 
 " debug
 nnoremap <leader>dpf <Cmd>lua Snacks.profiler.pick({ filter = { def_plugin = vim.fn.input('Filter by plugin: ') } })<CR>
 nnoremap <leader>dps <Cmd>lua Snacks.profiler.scratch()<CR>
 
+" file
+nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
+
 " explorer
 nnoremap <leader>e <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
 nnoremap <leader>E <Cmd>lua Snacks.explorer.reveal()<CR>
-
-" Find mappings
-nnoremap <leader>F <Cmd>lua Snacks.picker.smart()<CR>
-nnoremap <leader>fb <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap <leader>ff <Cmd>lua Snacks.picker.files()<CR>
-nnoremap <leader>fg <Cmd>lua Snacks.picker.git_files()<CR>
-nnoremap <leader>fP <Cmd>lua Snacks.picker.projects()<CR>
-nnoremap <leader>fr <Cmd>lua Snacks.picker.recent()<CR>
-nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
 
 " git
 nnoremap <leader>gb <Cmd>lua Snacks.picker.git_branches()<CR>
@@ -52,56 +42,18 @@ nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
 nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
 
-" notifications
-nnoremap <leader>n <Cmd>lua Snacks.notifier.show_history()<CR>
-
-" picker
-nnoremap <leader>P <Cmd>lua Snacks.picker.pickers()<CR>
-nnoremap <leader>pp <Cmd>lua Snacks.picker.resume({ exclude = { 'pickers' } })<CR>
-nnoremap <leader>pP <Cmd>lua Snacks.picker.picker_preview()<CR>
-nnoremap <leader>pa <Cmd>lua Snacks.picker.picker_actions()<CR>
-nnoremap <leader>pf <Cmd>lua Snacks.picker.picker_format()<CR>
-nnoremap <leader>pl <Cmd>lua Snacks.picker.picker_layouts()<CR>
-nnoremap <leader>pr <Cmd>lua Snacks.picker.resume()<CR>
-
-" search
-nnoremap <leader>sa <Cmd>lua Snacks.picker.autocmds()<CR>
-nnoremap <leader>sb <Cmd>lua Snacks.picker.lines()<CR>
-nnoremap <leader>sB <Cmd>lua Snacks.picker.grep_buffers()<CR>
-nnoremap <leader>sC <Cmd>lua Snacks.picker.commands()<CR>
-nnoremap <leader>sg <Cmd>lua Snacks.picker.grep()<CR>
-nnoremap <leader>sG <Cmd>lua Snacks.picker.git_grep()<CR>
-nnoremap <leader>sh <Cmd>lua Snacks.picker.help()<CR>
-nnoremap <leader>sH <Cmd>lua Snacks.picker.highlights()<CR>
-nnoremap <leader>si <Cmd>lua Snacks.picker.icons()<CR>
-nnoremap <leader>sj <Cmd>lua Snacks.picker.jumps()<CR>
-nnoremap <leader>sk <Cmd>lua Snacks.picker.keymaps()<CR>
-nnoremap <leader>sL <Cmd>lua Snacks.picker.loclist()<CR>
-nnoremap <leader>sm <Cmd>lua Snacks.picker.marks()<CR>
-nnoremap <leader>sM <Cmd>lua Snacks.picker.man()<CR>
-nnoremap <leader>sn <Cmd>lua Snacks.picker.notifications()<CR>
-nnoremap <leader>sq <Cmd>lua Snacks.picker.qflist()<CR>
-nnoremap <leader>sw <Cmd>lua Snacks.picker.grep_word()<CR>
-xnoremap <leader>sW <Cmd>lua Snacks.picker.grep_word()<CR>
-nnoremap <leader>su <Cmd>lua Snacks.picker.undo()<CR>
-nnoremap <leader>s" <Cmd>lua Snacks.picker.registers()<CR>
-nnoremap <leader>s: <Cmd>lua Snacks.picker.command_history()<CR>
-nnoremap <leader>s/ <Cmd>lua Snacks.picker.search_history()<CR>
-
-nnoremap <leader>st <Cmd>lua Snacks.picker.todo({keywords = { 'TODO' }})<CR>
-nnoremap <leader>sT <Cmd>lua Snacks.picker.pick('todo')<CR>
-
 " lsp
-nnoremap <leader>slc <Cmd>lua Snacks.picker.lsp_config()<CR>
-nnoremap <leader>sls <Cmd>lua Snacks.picker.lsp_symbols()<CR>
-nnoremap <leader>slS <Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>
-nnoremap <leader>sli <Cmd>lua Snacks.picker.lsp_incoming_calls()<CR>
-nnoremap <leader>slo <Cmd>lua Snacks.picker.lsp_outgoing_calls()<CR>
-nnoremap <leader>sld <Cmd>lua Snacks.picker.lsp_definitions()<CR>
-nnoremap <leader>slD <Cmd>lua Snacks.picker.lsp_declarations()<CR>
-nnoremap <leader>slR <Cmd>lua Snacks.picker.lsp_references()<CR>
-nnoremap <leader>slI <Cmd>lua Snacks.picker.lsp_implementations()<CR>
-nnoremap <leader>slT <Cmd>lua Snacks.picker.lsp_type_definitions()<CR>
+nnoremap <leader>lc <Cmd>lua Snacks.picker.lsp_config()<CR>
+nnoremap <leader>ls <Cmd>lua Snacks.picker.lsp_symbols()<CR>
+nnoremap <leader>lS <Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>
+nnoremap <leader>li <Cmd>lua Snacks.picker.lsp_incoming_calls()<CR>
+nnoremap <leader>lo <Cmd>lua Snacks.picker.lsp_outgoing_calls()<CR>
+nnoremap <leader>ld <Cmd>lua Snacks.picker.lsp_definitions()<CR>
+nnoremap <leader>lD <Cmd>lua Snacks.picker.lsp_declarations()<CR>
+nnoremap <leader>lR <Cmd>lua Snacks.picker.lsp_references()<CR>
+nnoremap <leader>lI <Cmd>lua Snacks.picker.lsp_implementations()<CR>
+nnoremap <leader>lT <Cmd>lua Snacks.picker.lsp_type_definitions()<CR>
+nnoremap <leader>lW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 
 " ui/utility
 nnoremap <leader>uC <Cmd>lua Snacks.picker.colorschemes()<CR>

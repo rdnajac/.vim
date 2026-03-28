@@ -32,7 +32,7 @@ set shortmess+=aA "c
 set shortmess-=o
 set showmatch
 
-" appearance of chars {{{ 2
+" chars {{{ 2
 set fillchars= " reset
 " set fillchars+=diff:╱
 " set fillchars+=eob:,
@@ -73,15 +73,6 @@ augroup vimrc_indent
   autocmd FileType cpp,cuda,python setl sw=4 sts=4
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
 augroup END
-
-" sesh {{{2
-" set sessionoptions+=folds
-" set sessionoptions-=options   " already default in nvim
-set sessionoptions-=blank     " like vim-obsession
-" set sessionoptions-=tabpages  " per project, not global
-set sessionoptions-=terminal  " don't save terminals
-set sessionoptions-=folds
-set viewoptions-=options      " keep mkview minimal
 
 " ui {{{2
 let &laststatus = has('nvim') ? 3 : 2
@@ -199,17 +190,10 @@ nnoremap zq <Cmd>Format<CR>
 
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
-if exists(':restart') == 2
-  function s:restart() abort
-    let s:sesh = stdpath('state')..'/Session.vim'
-    execute printf('mksession! %s | confirm restart silent source %s', s:sesh, s:sesh)
-  endfunction
-  command! Restart call s:restart()
-endif
-
-let g:vimtex_format_enabled = 1              " built-in formatexpr
-let g:vimtex_mappings_disable = {'n': ['K']} " disable normal `K`
+let g:vimtex_format_enabled = 1
+let g:vimtex_mappings_disable = {'n': ['K']}
 let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
+
 let g:eunuch_interpreters = {
       \ '.':      '/bin/sh',
       \ 'sh':     'bash',
@@ -222,18 +206,23 @@ let g:eunuch_interpreters = {
       \ }
 " }}}1
 " Section: keymaps {{{1
-nnoremap <Space> :
-nnoremap : ,
-let g:mapleader = ','
-" let g:mapleader = ' '
-let g:maplocalleader = '\'
+let g:mapleader = '\'
+let g:maplocalleader = ','
 
 nnoremap ` ~
 nnoremap ~ `
 
-nnoremap  <Cmd>lua Snacks.picker()<CR>
+nnoremap <Space> :
+nnoremap : ,
+
+nnoremap  <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
 nnoremap  ciw
+nnoremap  <Cmd>lua Snacks.picker()<CR>
 xnoremap  :sort<CR>
+xnoremap < <gv
+xnoremap > >gv
+
+tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
 " requires `tpope/vim-unimpaired`
 " nmap zJ ]ekJ
@@ -242,11 +231,6 @@ nnoremap zJ <Plug>(unimpaired-move-down)kJ
 " TODO: diff?
 " nnoremap dp     dp]c
 " nnoremap do     do]c
-
-" select last changed text (ie pasted text)
-" TODO: doesn't gv already do this?
-" see: *gv* *v_gv* *reselect-Visual*
-nnoremap gV `[V`]
 
 " `<leader>` {{{2
 nnoremap <leader>-     <Cmd>sbp<CR>
@@ -257,9 +241,6 @@ nnoremap <leader>K <Cmd>normal! K<CR>
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
 nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
-if has('nvim')
-  nnoremap <leader>dW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
-endif
 
 " file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
@@ -273,22 +254,19 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 nnoremap <BS> :bprevious<CR>
 nnoremap <C-BS> g;
 nnoremap <C-q> <Cmd>wincmd c<CR>
+nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
+nnoremap <C-w><C-v> <Cmd>vertical +sbprevious<CR>
+" NOTE: S-Tab not detected in all terminals...
+" nnoremap <S-Tab>   <Cmd>wincmd w<CR>
+" just like tmux!
+" nnoremap <C-w>-     <C-w>s
+" nnoremap <C-w><Bar> <C-w>v
 
-" `<C-e>` scrolls the window downwards by [count] lines
-" `<C-^>` (`<C-6>`) which edits the alternate buffer `:e #`
-nnoremap      <C-e>      <C-^>
-nnoremap <C-w><C-e> <C-w><C-^>
-
+" window navigation with Shift + h/j/k/l
 for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
   execute $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
   execute $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
 endfor
-
-" see `:h sbp`
-nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
-nnoremap <C-w><C-v> <Cmd>vertical +sbprevious<CR>
-" TODO: S-Tab not detected?
-" nnoremap <S-Tab>   <Cmd>wincmd w<CR>
 
 " searching and centering {{{3
 " make `n` and `N` behave the same way for `?` and `/` searches
@@ -311,7 +289,6 @@ nnoremap <Bslash>n <Cmd>call edit#luamod('nvim')<CR>
 nnoremap <leader><Bslash> <Cmd>call edit#readme()<CR>
 nnoremap <Bslash><leader> <Cmd>call edit#readme()<CR>
 
-
 " change/delete current word {{{2
 nnoremap c*   *``cgn
 nnoremap c#   *``cgN
@@ -322,38 +299,21 @@ nnoremap d#   *``dgN
 nnoremap dg* g*``dgn
 nnoremap dg# g*``dgN
 
-" better indenting {{{2
-vnoremap < <gv
-vnoremap > >gv
-nnoremap > V`]>
-nnoremap < V`]<
-
 " substitutions {{{2
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#replace-only-within-selection
+" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file
+" #replace-only-within-selection
 xnoremap s :s/\%V<C-R><C-W>/
-
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file#repeat-last-change-in-all-of-file-global-repeat-similar-to-g
+" #repeat-last-change-in-all-of-file-global-repeat-similar-to-g
 nnoremap g. :%s//<C-R>./g<ESC>
 
-" for act in ['c', 'd', 'y'] " change, delete, yank
-"   for obj in ['w'] " paragraph, word
-"     execute $'nnoremap {act}{obj} {act}i{obj}'
-"     execute printf("nnoremap %s%s %si%s", act, toupper(obj), act, toupper(obj))
-"   endfor
-" endfor
-
-" command definitions are more robust than abbreviations
-command! W w!
-command! Wq wq!
-command! Wqa wqa!
 " insert {{{2
 " insert chars at EOL {{{3
-nnoremap <Bslash>, mzA,<Esc>;`z
-nnoremap <Bslash>; mzA;<Esc>;`z
-nnoremap <Bslash>. mzA.<Esc>;`z
+" nnoremap <Bslash>, mzA,<Esc>;`z
+" nnoremap <Bslash>; mzA;<Esc>;`z
+" nnoremap <Bslash>. mzA.<Esc>;`z
 
-" insert special chars {{{3
-" inoremap \sec Section:
+" insert special chars
+inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
@@ -361,23 +321,6 @@ iabbrev m- —
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
-
-" easier completion  {{{3
-inoremap <silent> ,o <C-x><C-o>
-" inoremap <silent> ,f <C-x><C-f>
-" inoremap <silent> ,i <C-x><C-i>
-" inoremap <silent> ,l <C-x><C-l>
-" inoremap <silent> ,n <C-x><C-n>
-" inoremap <silent> ,t <C-x><C-]>
-" inoremap <silent> ,u <C-x><C-u>
-inoremap <silent> ,i <Cmd>Icons<CR>
-
-" terminal {{{2
-tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-
-" just like tmux!
-" nnoremap <C-w>-     <C-w>s
-" nnoremap <C-w><Bar> <C-w>v
 
 " }}}1
 " Section: pack {{{1
@@ -394,7 +337,7 @@ endif
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
-" Plug 'justinmk/vim-ug'
+Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'

@@ -4,11 +4,12 @@ vim.loader.enable()
 
 vim.cmd([[
 source ~/.vim/vimrc
-
-command! News    :lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
-command! Health  :packloadall | checkhealth
-command! Update  :lua vim.pack.update()'
-command! LazyGit :lua Snacks.lazygit()
+color scheme
+command! News    lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
+command! Health  packloadall | checkhealth
+command! Update  lua vim.pack.update()'
+command! LazyGit lua Snacks.lazygit()
+command! R       exe 'mks!' stdpath('state')..'/Session.vim' | exe 'conf restart sil so' v:this_session
 ]])
 
 -- stylua: ignore
@@ -32,7 +33,7 @@ require('snacks').setup({
         title = 'Files',
         key = 'F',
         icon = '󰱼 ',
-        action = function() Snacks.picker.files() end,
+        action = function() Snacks.picker.smart() end,
         { section = 'recent_files', indent = 2 },
       },
       {

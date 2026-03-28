@@ -116,6 +116,10 @@
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
       "src": "https://github.com/tpope/vim-scriptease.git"
     },
+    "vim-ug": {
+      "rev": "b4fe138c1aec2c403b1f7b58c6362f26e74f2221",
+      "src": "https://github.com/justinmk/vim-ug.git"
+    },
     "vim-unimpaired": {
       "rev": "db65482581a28e4ccf355be297f1864a4e66985c",
       "src": "https://github.com/tpope/vim-unimpaired.git"
