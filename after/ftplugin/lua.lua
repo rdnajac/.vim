@@ -18,7 +18,7 @@ vim.keymap.set('n', 'yM', function()
   if member and is_func then
     member = member .. '()'
   end
-  nv.util.yankmod(member)
+  nv.yankmod(member)
 end, { buf = 0, desc = 'yank module member' })
 
 vim.b.minisurround_config = {

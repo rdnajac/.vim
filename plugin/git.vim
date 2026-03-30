@@ -6,5 +6,7 @@ nnoremap <leader>gZ <Cmd>execute '!open' git#repo('lazyvim/lazyvim')<CR>
 
 " nnoremap <leader>ga <Cmd>!git add %<CR>
 " TODO: if `fugitive`
-nnoremap <leader>ga <Cmd>Gwrite<CR>
-nnoremap gcd :Gcd<Bar>pwd<CR>
+if exists('g:loaded_fugitive')
+  nnoremap <leader>ga <Cmd>Gwrite<CR>
+  nnoremap gcd <Cmd>Gcd<Bar>pwd<CR>
+endif

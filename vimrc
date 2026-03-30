@@ -58,7 +58,6 @@ set foldopen+=insert,jump
 " set foldmethod=marker
 
 " indent {{{2
-" set nowrap TODO: set this in a ftplugin?
 set breakindent
 set breakindentopt=list:1 " TODO: from minimax; keep?
 set linebreak
@@ -103,6 +102,7 @@ augroup vimrc_ui
 augroup END
 
 " }}}1
+
 " Section: neovim {{{1
 " set undo if on nvim, or if on a machine not running nvim
 let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
@@ -139,6 +139,7 @@ else
 endif
 
 " }}}1
+
 " Section: autocmds {{{1
 augroup vimrc
   autocmd!
@@ -174,6 +175,7 @@ augroup vimrc
 augroup END
 
 " }}}1
+
 " Section: commands/config {{{1
 for level in keys(g:vim#notify#levels)
   execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
@@ -201,6 +203,7 @@ let g:eunuch_interpreters = {
       \ 'zsh':    'zsh',
       \ }
 " }}}1
+
 " Section: keymaps {{{1
 let g:mapleader = '\'
 let g:maplocalleader = ','
@@ -230,7 +233,8 @@ nnoremap zJ <Plug>(unimpaired-move-down)kJ
 " `<leader>` {{{2
 nnoremap <leader>-     <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
-nnoremap <leader>K <Cmd>normal! K<CR>
+nnoremap <leader>k <Cmd>normal! K<CR>
+nnoremap <leader>p :lua Snacks.picker.()<Left><Left>
 
 " debug
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
@@ -318,15 +322,15 @@ inoremap . .<C-g>u
 inoremap ; ;<C-g>u
 
 " }}}1
-" Section: pack {{{1
 
+" Section: pack {{{1
 packadd! cfilter
 if has('nvim')
   packadd! nvim.difftool
   packadd! nvim.tohtml
   packadd! nvim.undotree
 else
-  packadd comment
+  packadd! comment
   packadd! editorconfig
   packadd! hlyank
 endif

@@ -15,5 +15,6 @@ nnoremap <buffer> gch        <Cmd>call edit#ch()<CR>
 
 " TODO: Info
 nnoremap <buffer> <M-CR> <Cmd>so % \| echom 'Sourced ' .. expand('%:p')<CR>
+xnoremap <buffer> <CR> :\|echom getline('.')<CR>
 
 ia <buffer> enc scriptencoding utf-8
