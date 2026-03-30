@@ -1,16 +1,10 @@
-" delete/yank comment object
+nmap vv gcc
 nmap dc dgc
 nmap yc ygc
 
+" comment out coyt and paste 
 " TODO: make this an opfunc
-nmap gy "xyygcc"xp<Up>
-nmap gY "xyygcc"xP
-
-" toggle comment line
-nmap vv Vgc
-
-" don't capture whitespace in `gc`
-nmap gcap gcip
+nmap gy "xyygcc"xp
 
 function! s:toggle_comment() abort
   " vint: -ProhibitCommandRelyOnUser
@@ -22,13 +16,12 @@ function! s:title() abort
   let fname = fnamemodify(expand('%'), ':p')
   let fname = substitute(fname, git#root(), '', '')
   let fname = substitute(fname, '^\/*', '', '')
-  " let fname = substitute(fname, '^[\/\s]\+', '', '')
   " return fname
   execute append(0, fname)
   call s:toggle_comment()
 endfunction
 
-nnoremap cy <Cmd>call <SID>title()<CR>
+nnoremap <leader>fn <Cmd>call <SID>title()<CR>
 
 let s:comments = {
       \ 'o': '',

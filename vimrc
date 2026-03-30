@@ -14,6 +14,7 @@ set switchbuf+=vsplit
 set splitkeep=screen
 set timeoutlen=420
 set updatetime=69
+set sessionoptions-=terminal
 
 " navigation {{{ 2
 set jumpoptions+=stack
@@ -182,6 +183,8 @@ for level in keys(g:vim#notify#levels)
 	\ toupper(strpart(level, 0, 1)) . strpart(level, 1), level)
 endfor
 
+command! M messages
+
 command! -nargs=* Diff call cmd#diff#(<f-args>)
 command! -nargs=0 Format call cmd#format#()
 nnoremap zq <Cmd>Format<CR>
@@ -217,7 +220,6 @@ nnoremap  ciw
 nnoremap  <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
 nnoremap <C-S-F> <Cmd>lua Snacks.picker()<CR>
 xnoremap  :sort<CR>
-nnoremap <M-r> <Cmd>R<CR>
 
 xnoremap < <gv
 xnoremap > >gv
@@ -234,7 +236,6 @@ nnoremap zJ <Plug>(unimpaired-move-down)kJ
 nnoremap <leader>-     <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 nnoremap <leader>k <Cmd>normal! K<CR>
-nnoremap <leader>p :lua Snacks.picker.()<Left><Left>
 
 " debug
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
@@ -338,43 +339,41 @@ endif
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
-Plug 'justinmk/vim-ug'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
+" Plug 'tpope/vim-dispatch'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
+" Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
-" Plug 'tpope/vim-dispatch'
-" Plug 'tpope/vim-tbone'
-" qol improvements and fun stuff
+" Plug 'tpope/vim-vinegar'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'dstein64/vim-startuptime'
 " Plug 'vuciv/golf'
 if !has('nvim')
-  Plug 'andymass/vim-matchup'
+  " Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'justinmk/vim-dirvish'
-  Plug 'romainl/vim-redir'
-  " Plug 'tpope/vim-commentary' " use vim9 commentary
-  " Plug 'tpope/vim-sensible'   " use vim#sensible#
-  Plug 'tpope/vim-surround'
-  Plug 'tpope/vim-repeat'
-  " Plug 'tpope/vim-vinegar'    " use vim-dirvish
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
+  Plug 'nvim-mini/mini.nvim'
   Plug 'folke/snacks.nvim'
   " Plug 'folke/tokyonight.nvim'
-  Plug 'nvim-mini/mini.nvim'
+  Plug 'neovim/nvim-lspconfig'
+  " Plug 'b0o/SchemaStore.nvim'
   Plug 'chrisgrieser/nvim-scissors'
   " Plug 'j-hui/fidget.nvim'
   " Plug 'saxon1964/neovim-tips'
