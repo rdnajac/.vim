@@ -1,18 +1,7 @@
-vim.o.cmdheight = 0
-require('vim._core.ui2').enable({
-  msg = { target = 'msg' },
-})
-
 local M = {
   icons = require('nvim.ui.icons'),
   status = require('nvim.ui.status'),
   winbar = require('nvim.ui.winbar'),
-  specs = {
-    {
-      'MeanderingProgrammer/render-markdown.nvim',
-      init = function() require('nvim.ui.markdown') end,
-    },
-  },
 }
 
 vim.schedule(function()
@@ -26,7 +15,7 @@ vim.schedule(function()
   vim.treesitter.language.register('markdown', fts)
   vim.api.nvim_create_autocmd({ 'FileType' }, {
     pattern = fts,
-    group = 'nv.treesitter',
+    -- group = 'nv.treesitter',
     callback = function()
       vim.treesitter.start(0)
       vim.wo.conceallevel = 3

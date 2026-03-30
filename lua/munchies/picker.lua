@@ -32,7 +32,7 @@ local M = {
   sources = {
     buffers = { layout = 'mylayout', },
     help = { layout = 'mylayout' },
-    explorer = require('munchies.picker.explorer'),
+    explorer = require('munchies.explorer'),
     files = require('munchies.picker.config'),
     grep = require('munchies.picker.config'),
     -- git_status = { layout = 'left' },

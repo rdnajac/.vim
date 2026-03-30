@@ -1,5 +1,16 @@
 return {
+  -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
+  {
+    'mason-org/mason.nvim',
+    opts = {},
+    -- TODO: implement one-time install func to hook into packinstall event
+    once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
+  },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    init = function() require('nvim.ui.markdown') end,
+  },
   {
     'folke/sidekick.nvim',
     -- BUG: `https://github.com/folke/sidekick.nvim/issues/264`

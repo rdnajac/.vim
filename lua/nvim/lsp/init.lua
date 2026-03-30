@@ -1,5 +1,8 @@
+-- NOTE: blink automatically adds some capabilities
+-- `$PACKDIR/blink.cmp/lua/blink/cmp/sources/lib/init.lua`
+--- `:h vim.lsp.protocol.make_client_capabilities()` for defaults
+
 local M = {
-  progress = require('nvim.lsp.progress'),
   ---@return string[] servers found in the after directory
   servers = function()
     local fn = vim.fn
@@ -9,22 +12,14 @@ local M = {
     )
   end,
   status = require('nvim.lsp.status'),
-  specs = {
-    'neovim/nvim-lspconfig',
-    -- 'b0o/SchemaStore.nvim',
-    require('nvim.lsp.lazydev'),
-  },
 }
 
 vim.schedule(function()
+  Plug(require(('nvim.lsp.lazydev')))
   vim.lsp.enable(M.servers())
   vim.api.nvim_create_autocmd('LspProgress', {
-    callback = M.progress.callback,
+    callback = require('nvim.lsp.progress').callback,
   })
 end)
-
--- NOTE: blink automatically adds some capabilities
--- `$PACKDIR/blink.cmp/lua/blink/cmp/sources/lib/init.lua`
---- `:h vim.lsp.protocol.make_client_capabilities()` for defaults
 
 return M

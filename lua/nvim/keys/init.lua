@@ -18,14 +18,15 @@ local function normalize(t)
   return t.mode or 'n', lhs, rhs, opts
 end
 
-local M = {
-  map = function(t) vim.iter(vim.islist(t) and t or { t }):map(normalize):each(vim.keymap.set) end,
-  specs = {
-    require('blink'),
-    require('nvim.keys.which'),
-    -- require('nvim.keys.screen'),
-  },
-}
+local M = {}
+
+M.map = function(t) vim.iter(vim.islist(t) and t or { t }):map(normalize):each(vim.keymap.set) end
+
+Plug({
+  require('blink'),
+  require('nvim.keys.which'),
+  -- require('nvim.keys.screen'),
+})
 
 local keys = {
   { 'glf', [[<Cmd>call edit#luamod('nvim/fs')<CR>]] },

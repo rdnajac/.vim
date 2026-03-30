@@ -1,11 +1,11 @@
 {
   "plugins": {
     "ale": {
-      "rev": "90d8f8d2d2f32718d19b71578f63a68c026f6984",
+      "rev": "7940a46d5a15cf424ab7c3341742cb8467091b75",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "7c9777bae52009a198a2e6d56bc9185dbf3d151f",
+      "rev": "8a2060dff4e68ac17f1c92aed526c76fb0c1ac2f",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -29,7 +29,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "debd726e1b620e9934d554c2772de2e99cd3ccbe",
+      "rev": "af5f75c9ce572a4d1f0c77d6fb4ea764d16c1b3c",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -52,10 +52,6 @@
       "rev": "93d60a475f0b08a8eceb99255863977d3a25f310",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
-    "quicker.nvim": {
-      "rev": "063cc44da1eef8681bbd653b29d3bc961780886a",
-      "src": "https://github.com/stevearc/quicker.nvim.git"
-    },
     "render-markdown.nvim": {
       "rev": "e3c18ddd27a853f85a6f513a864cf4f2982b9f26",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
@@ -67,10 +63,6 @@
     "snacks.nvim": {
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim.git"
-    },
-    "tokyonight.nvim": {
-      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
-      "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-abolish": {
       "rev": "dcbfe065297d31823561ba787f51056c147aa682",
@@ -108,6 +100,10 @@
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://github.com/tpope/vim-fugitive.git"
     },
+    "vim-repeat": {
+      "rev": "65846025c15494983dafe5e3b46c8f88ab2e9635",
+      "src": "https://github.com/tpope/vim-repeat.git"
+    },
     "vim-rsi": {
       "rev": "45540637ead22f011e8215f1c90142e49d946a54",
       "src": "https://github.com/tpope/vim-rsi.git"
@@ -116,9 +112,13 @@
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
       "src": "https://github.com/tpope/vim-scriptease.git"
     },
-    "vim-ug": {
-      "rev": "b4fe138c1aec2c403b1f7b58c6362f26e74f2221",
-      "src": "https://github.com/justinmk/vim-ug.git"
+    "vim-surround": {
+      "rev": "3d188ed2113431cf8dac77be61b842acb64433d9",
+      "src": "https://github.com/tpope/vim-surround.git"
+    },
+    "vim-tbone": {
+      "rev": "79d28199d5edf70337957e13942b5d970755d943",
+      "src": "https://github.com/tpope/vim-tbone.git"
     },
     "vim-unimpaired": {
       "rev": "db65482581a28e4ccf355be297f1864a4e66985c",

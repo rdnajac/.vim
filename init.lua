@@ -2,15 +2,24 @@
 T1 = vim.uv.hrtime()
 vim.loader.enable()
 
+vim.o.cmdheight = 0
+require('vim._core.ui2').enable({
+  msg = { target = 'msg' },
+})
+
 vim.cmd([[
 source ~/.vim/vimrc
 color scheme
-command! News    lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
-command! Health  packloadall | checkhealth
-command! Update  lua vim.pack.update()
-command! LazyGit lua Snacks.lazygit()
-command! R       exe 'mks!' stdpath('state')..'/Session.vim' | exe 'conf restart sil so' v:this_session
+command! Health packloadall | checkhealth
+command! Update lua vim.pack.update()
+nnoremap <M-r> <Cmd>Restart<CR>
 ]])
+
+vim.api.nvim_create_user_command('Restart', function(args)
+  local sesh = vim.fn.stdpath('state') .. '/Session.vim'
+  vim.cmd.mksession({ bang = true, args = { sesh } })
+  vim.cmd([[confirm restart silent source ]] .. vim.v.this_session)
+end, { desc = 'Save and reload session' })
 
 -- stylua: ignore
 local dashkeys = {
@@ -22,15 +31,20 @@ local dashkeys = {
 }
 
 require('snacks').setup({
-  -- bigfile = { enabled = true },
   dashboard = {
-    enabled = true,
+    -- FIXME: should disable on restart
+    -- enabled = tonumber(vim.g.dashboard) ~= 0,
     preset = { keys = dashkeys },
     sections = {
       { section = 'header' },
       { section = 'keys' },
-      { title = 'Files', key = 'F', icon = '󰱼 ', action = function() Snacks.picker.smart() end,
-        { section = 'recent_files', indent = 2 }, },
+      {
+        title = 'Files',
+        key = 'F',
+        icon = '󰱼 ',
+        action = function() Snacks.picker.smart() end,
+        { section = 'recent_files', indent = 2 },
+      },
       {
         section = 'terminal',
         cmd = '$HOME/.vim/scripts/cowsay.sh',
@@ -57,16 +71,9 @@ require('snacks').setup({
 _G.dd = Snacks.debug.inspect
 _G.bt = Snacks.debug.backtrace
 _G.p = Snacks.debug.profile
-
-_G.nv = require('nvim.util')
-
-vim.iter(ipairs({ 'ui', 'fs', 'keys', 'lsp', 'treesitter' }))
-:each(function(_, name)
-  local mod = require('nvim.' .. name)
-  if type(mod) == 'table' and mod.specs then
-    Plug(mod.specs)
-  end
-  rawset(nv, name, mod)
-end)
+_G.nv = vim
+  .iter(ipairs({ 'ui', 'fs', 'keys', 'lsp', 'treesitter' }))
+  :map(function(_, mod) return mod, require('nvim.' .. mod) end)
+  :fold(require('nvim.util'), rawset)
 
 T2 = vim.uv.hrtime()

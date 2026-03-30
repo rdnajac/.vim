@@ -1,7 +1,28 @@
-local M = {}
+---@type snacks.picker.explorer.Config
+local M = {
+  ignored = true,
+  -- override default config function
+  config = function(opts)
+    local ret = require('snacks.picker.source.explorer').setup(opts)
+    if vim.startswith(ret.cwd, vim.g['chezmoi#source_dir_path']) then
+      ret.hidden = true
+    end
+    return ret
+  end,
+  win = {
+    list = {
+      keys = {
+        ['-'] = 'explorer_up',
+        ['<Left>'] = 'explorer_up',
+        ['<Right>'] = 'confirm',
+        -- ['<CR>'] = { 'jump', 'close' },
+      },
+    },
+  },
+}
 
 -- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
-M.floating_preview_config = {
+local floating_preview_config = {
   -- on picker show
   on_show = function(picker)
     local rel = picker.layout.root
@@ -62,5 +83,7 @@ M.floating_preview_config = {
     toggle_preview = function(picker) picker.preview.win:toggle() end,
   },
 }
+
+vim.tbl_extend('force', M, floating_preview_config)
 
 return M

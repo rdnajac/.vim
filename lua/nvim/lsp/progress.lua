@@ -2,12 +2,10 @@ local M = {}
 
 ---@alias nv.lsp.Progress {title?: string, message?: string, kind: "begin"|"report"|"end", percentage?: number}
 
----@type table<integer, string>
-local prog_msgs = {}
-
----@param msg string
----@param opts vim.api.keyset.echo_opts
-local function echom(msg, opts) vim.api.nvim_echo({ { msg } }, false, opts) end
+---@type table<string, string> -- Maps progress ID to message ID
+local progress = {}
+---@type table<string, string> -- Maps progress ID to status
+local prog_status = {}
 
 --- handler for the LSP progress notification
 --- see `:h LspProgress`
@@ -22,26 +20,43 @@ function M.callback(ev)
     is_end and '' or Snacks.util.spinner(),
     value.title, -- rest of the title
   }, ' ')
-  local msg = value.message
-
-  prog_msgs[id] = not is_end and msg or nil
-
-  echom(is_end and '100% done' or (msg or ''), {
-    -- id = ('%s:%s'):format(name, token),
-    id = 'lsp',
+  local msg = not is_end and value.message or '100% done'
+  local uri = ('%s:%s'):format(name, token)
+  local opts = {
     kind = 'progress',
+    source = vim.lsp.get_client_by_id(id).name,
     title = title,
     status = is_end and 'success' or 'running',
     percent = value.percentage,
-    -- verbose = true,
-  })
-
+    verbose = false,
+  }
+  if not progress[uri] then
+    progress[uri] = vim.api.nvim_echo({ { msg } }, false, opts)
+  else
+    opts.id = progress[uri]
+    vim.api.nvim_echo({ { msg } }, false, opts)
+  end
   vim.cmd.redrawstatus()
 end
 
---- exposes the last progress message for a given client id f] for use in statuslines, etc.
----@param id integer
----@return string
-M.get_msgs_by_client_id = function(id) return prog_msgs[id] end
+--- exposes the status for a given progress ID (format: "client_name:token") for use in statuslines, etc.
+---@param prog_id string
+---@return string?
+-- M.get_status = function(prog_id) return prog_status[prog_id] end
+
+--- Check if there are any progress messages for a given client ID
+---@param client_id integer
+---@return boolean
+M.get_msgs_by_client_id = function(client_id)
+  local client = vim.lsp.get_client_by_id(client_id)
+  if not client then return false end
+  local name = client.name
+  for uri, _ in pairs(progress) do
+    if uri:match('^' .. name .. ':') then
+      return true
+    end
+  end
+  return false
+end
 
 return M

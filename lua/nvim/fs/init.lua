@@ -1,14 +1,5 @@
 local M = {}
 
-M.specs = {
-  {
-    'mason-org/mason.nvim',
-    opts = {},
-    -- TODO: implement one-time install func to hook into packinstall event 
-    once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
-  },
-}
-
 ---@param path string
 ---@return string[]
 M.lines = function(path) return vim.iter(io.lines(path)):totable() or {} end

@@ -21,6 +21,10 @@ local spec = {
       },
       menu = {
         -- auto_show = false,
+        auto_show = function(ctx)
+          -- don't show in replace mode
+          return vim.fn.mode():sub(1, 1) ~= 'R'
+        end,
         -- auto_show_delay_ms = function(ctx, _)
         --   return vim.tbl_contains(
         --     { '.', '/', "'", '@', '$', ':', '"', '`', '[', ']' },

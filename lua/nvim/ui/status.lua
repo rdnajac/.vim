@@ -110,11 +110,12 @@ M.git = function()
   })
 end
 
+
 local parts = {
   [[%<%f %h%w%m%r ]], -- path, help, preview, modified, readonly
   [[%{% v:lua.require('vim._core.util').term_exitcode() %}]],
   [[%=]], -- right align the rest
-  [[%{% luaeval('(package.loaded[''vim.ui''] and vim.ui.progress_status()) or '''' ')%}]],
+  [[%{% luaeval('(package.loaded[''vim.ui''] and vim.api.nvim_get_current_win() == tonumber(vim.g.actual_curwin or -1) and vim.ui.progress_status()) or '''' ')%}]],
   [[%{% &showcmdloc == 'statusline' ? '%-10.S ' : '' %}]],
   [[%{% exists('b:keymap_name') ? '<'..b:keymap_name..'> ' : '' %}]],
   [[%{% &busy > 0 ? '◐ ' : '' %}]],

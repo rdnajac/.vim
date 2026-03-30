@@ -30,9 +30,8 @@ local M = {
       },
       keys = function()
         -- You can also use captures from other query groups like `locals.scm`
-        -- vim.keymap.set({ 'x', 'o' }, 'as', function()
-        -- require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals')
-        -- end)
+        -- vim.keymap.set({ 'x', 'o' }, 'as',
+        -- function() require('nvim-treesitter-textobjects.select').select_textobject('@local.scope', 'locals') end)
         local function select(obj)
           return require('nvim-treesitter-textobjects.select').select(obj, 'textobjects')
         end
@@ -46,6 +45,13 @@ local M = {
     },
   },
 }
+
+-- loaded lazily when not opening a file
+if vim.fn.argc(-1) == 0 then
+  Plug(M.specs)
+else
+  vim.schedule(function() Plug(M.specs) end)
+end
 
 local aug = vim.api.nvim_create_augroup('nv.treesitter', {})
 
