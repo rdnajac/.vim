@@ -26,7 +26,7 @@ nnoremap <M-`>  <Cmd>lua Snacks.dashboard.open()<CR>
 nnoremap <M-r> <Cmd>Restart<CR>
 ]])
 
-vim.api.nvim_create_user_command('Restart', function(args)
+vim.api.nvim_create_user_command('Restart', function()
   local sesh = vim.fn.stdpath('state') .. '/Session.vim'
   vim.cmd.mksession({ bang = true, args = { sesh } })
   vim.cmd([[confirm restart silent source ]] .. vim.v.this_session)
