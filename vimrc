@@ -191,6 +191,32 @@ nnoremap zq <Cmd>Format<CR>
 
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
+if has('nvim')
+  let s:commands = [
+	\ 'Autocmds',
+	\ 'Colorschemes',
+	\ 'CommandHistory',
+	\ 'Commands',
+	\ 'Diagnostics',
+	\ 'DiagnosticsBuffer',
+	\ 'Explorer',
+	\ 'Files',
+	\ 'Help',
+	\ 'Highlights',
+	\ 'Keymaps',
+	\ 'Lines',
+	\ 'Pickers',
+	\ 'Recent',
+	\ 'Tags',
+	\ 'Treesitter',
+	\ 'Zoxide'
+	\]
+
+  for [_, cmd] in items(s:commands)
+    execute printf('command %s :lua Snacks.picker.%s()<CR>', cmd, tolower(cmd))
+  endfor
+endif
+
 let g:vimtex_format_enabled = 1
 let g:vimtex_mappings_disable = {'n': ['K']}
 let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
@@ -244,6 +270,8 @@ nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? she
 
 " file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
+" TODO: use Rename if nvim or if snacks unavailable
+nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
 nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
 nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
@@ -261,6 +289,8 @@ nnoremap <C-w><C-v> <Cmd>vertical +sbprevious<CR>
 " just like tmux!
 " nnoremap <C-w>-     <C-w>s
 " nnoremap <C-w><Bar> <C-w>v
+nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
+nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 
 " window navigation with Shift + h/j/k/l
 for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
@@ -383,4 +413,5 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
+
 " vim: fdm=marker fdl=1

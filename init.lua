@@ -12,6 +12,17 @@ source ~/.vim/vimrc
 color scheme
 command! Health packloadall | checkhealth
 command! Update lua vim.pack.update()
+command! LazyGit lua Snacks.lazygit()
+command! News    lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
+command! -bang Scratch exe printf('lua Snacks%s.scratch()', <bang>0 ? '.profiler' : '')
+
+inoremap <silent> <C-x><C-i> <Cmd>lua Snacks.picker.icons()<CR>
+
+xnoremap /      <Cmd>lua Snacks.picker.grep_word()<CR>
+nnoremap ,,     <Cmd>lua Snacks.picker.buffers()<CR>
+nnoremap <Home> <Cmd>lua Snacks.dashboard.open()<CR>
+nnoremap <M-`>  <Cmd>lua Snacks.dashboard.open()<CR>
+
 nnoremap <M-r> <Cmd>Restart<CR>
 ]])
 
