@@ -2,15 +2,16 @@ if !has('nvim')
   finish
 endif
 
+command! News    lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
+command! LazyGit lua Snacks.lazygit()
+command! Scratch lua Snacks.scratch()
+
 inoremap <silent> <C-x><C-i> <Cmd>lua Snacks.picker.icons()<CR>
 
-xnoremap / <Cmd>lua Snacks.picker.grep_word()<CR>
-nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
+xnoremap /      <Cmd>lua Snacks.picker.grep_word()<CR>
+nnoremap ,,     <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <Home> <Cmd>lua Snacks.dashboard.open()<CR>
-
-nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap ,. <Cmd>lua Snacks.scratch()<CR>
-nnoremap ,> <Cmd>lua Snacks.scratch.select()<CR>
+nnoremap <M-`>  <Cmd>lua Snacks.dashboard.open()<CR>
 
 " buffer
 nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
@@ -68,9 +69,7 @@ nnoremap <leader>fc <Cmd>lua Snacks.picker.files({ cwd = vim.fn.stdpath('config'
 nnoremap <leader>sc <Cmd>lua Snacks.picker.grep({  cwd = vim.fn.stdpath('config') })<CR>
 
 let s:commands = [
-      \ 'Actions',
       \ 'Autocmds',
-      \ 'Buffers',
       \ 'Cliphist',
       \ 'Colorschemes',
       \ 'CommandHistory',

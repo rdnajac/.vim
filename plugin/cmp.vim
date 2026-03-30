@@ -1,4 +1,4 @@
-set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
+" set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
 " set completeopt+=preinsert
 " More info here: |cmdline-completion|; default: `wildmode=full`
 " set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
@@ -36,10 +36,16 @@ function! s:cabbrev(lhs, rhs)
 endfunction
 
 call s:cabbrev('vv', 'verbose')
+call s:cabbrev('vvn', 'verbose nmap')
+call s:cabbrev('vvx', 'verbose xmap')
+call s:cabbrev('vvc', 'verbose cmap')
+call s:cabbrev('vvi', 'verbose imap')
+call s:cabbrev('vvt', 'verbose tmap')
 call s:cabbrev('scp', '!scp %')
-call s:cabbrev('r', 'lua require("")<Left><Left>')
 call s:cabbrev('m', 'Man')
 call s:cabbrev('f', 'find')
+" call s:cabbrev('p', 'lua Snacks.picker.()<Left><Left>')
+nnoremap <leader>p :lua Snacks.picker.()<Left><Left>
 
 set findfunc=Find
 func Find(arg, _)
