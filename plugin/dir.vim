@@ -1,4 +1,3 @@
-" see `$VIMRUNTIME/xdg.vim` if vim92
 nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
 nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
@@ -12,6 +11,7 @@ let s:dirs = {
       \ '.': '~/.local/share/chezmoi/',
       \ }
 
+" TODO: reuse code from `autoload/vim/stdpath.vim`
 if exists('*stdpath')
   let s:dirs.C = stdpath('cache')
   let s:dirs.c = stdpath('config')

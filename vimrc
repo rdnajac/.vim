@@ -15,6 +15,7 @@ set splitkeep=screen
 set timeoutlen=420
 set updatetime=69
 set sessionoptions-=terminal
+set sessionoptions-=blank
 
 " navigation {{{ 2
 set jumpoptions+=stack
@@ -150,12 +151,8 @@ augroup vimrc
   " create parent directories when saving files
   au BufWritePre * silent! call cmd#mkdir#(expand('<afile>'))
 
-  " automatically reload certain config files when they are saved
-  " au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
-  " au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
-
   " restore cursor position upon reopening files
-  au BufWinEnter * exec "silent! normal! g`\"zv"
+  au BufWinEnter * exe "silent! normal! g`\"zv"
 
   " immediately quit the command line window if opened with `q`
   au CmdwinEnter * quit
@@ -163,24 +160,28 @@ augroup vimrc
   " automatically reload files that have been changed outside of Vim
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
-  " automatically resize splits when the window is resized
-  au VimResized * let g:tabpagenr = tabpagenr() | tabdo wincmd = | execute 'tabnext' g:tabpagenr
-
-  au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\n" | endif
-
-  au FileType json,jsonc,json5 setlocal conceallevel=0 et
   " close certain buffers with `q`
   au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
+
   " don't list certain buffer types (skips C-^)
   au FileType man,netrw,snacks_explorer setlocal nobuflisted
+
+  " set format options for certain file types
+  au FileType vim,lua setlocal nowrap fo-=o conceallevel=2
+
+  " automatically resize splits when the window is resized
+  au VimResized * let g:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' g:tabpagenr
+
+  " catch when vim doesn't terminate properly
+  au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
 augroup END
 
 " }}}1
 
 " Section: commands/config {{{1
 for level in keys(g:vim#notify#levels)
-  execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
-	\ toupper(strpart(level, 0, 1)) . strpart(level, 1), level)
+  exe printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
+	\ toupper(strpart(level, 0, 1))..strpart(level, 1), level)
 endfor
 
 command! M messages
@@ -190,32 +191,6 @@ command! -nargs=0 Format call cmd#format#()
 nnoremap zq <Cmd>Format<CR>
 
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
-
-if has('nvim')
-  let s:commands = [
-	\ 'Autocmds',
-	\ 'Colorschemes',
-	\ 'CommandHistory',
-	\ 'Commands',
-	\ 'Diagnostics',
-	\ 'DiagnosticsBuffer',
-	\ 'Explorer',
-	\ 'Files',
-	\ 'Help',
-	\ 'Highlights',
-	\ 'Keymaps',
-	\ 'Lines',
-	\ 'Pickers',
-	\ 'Recent',
-	\ 'Tags',
-	\ 'Treesitter',
-	\ 'Zoxide'
-	\]
-
-  for [_, cmd] in items(s:commands)
-    execute printf('command %s :lua Snacks.picker.%s()<CR>', cmd, tolower(cmd))
-  endfor
-endif
 
 let g:vimtex_format_enabled = 1
 let g:vimtex_mappings_disable = {'n': ['K']}
@@ -236,6 +211,8 @@ let g:eunuch_interpreters = {
 " Section: keymaps {{{1
 let g:mapleader = '\'
 let g:maplocalleader = ','
+
+xmap <Space> <leader>
 
 nnoremap ` ~
 nnoremap ~ `
@@ -294,8 +271,8 @@ nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 
 " window navigation with Shift + h/j/k/l
 for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
-  execute $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
-  execute $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
+  exe $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
+  exe $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
 endfor
 
 " searching and centering {{{3

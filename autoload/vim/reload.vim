@@ -1,3 +1,7 @@
+" automatically reload certain config files when they are saved
+" au BufWritePost vimrc call reload#vimscript(expand('<afile>:p'))
+" au BufWritePost */ftplugin/* call reload#ftplugin(expand('<afile>:p'))
+
 function! s:reload_ft_for_buffer(buf, filetype) abort
   if bufexists(a:buf) && buflisted(a:buf) && getbufvar(a:buf, '&filetype') ==# a:filetype
     execute a:buf . 'bufdo doautocmd FileType ' . a:filetype

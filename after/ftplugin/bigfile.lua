@@ -3,7 +3,8 @@ vim.b.minihipatterns_disable = true
 if vim.fn.exists(':NoMatchParen') == 2 then
   vim.cmd.NoMatchParen()
 end
-vim.cmd.setlocal('foldmethod=manual', 'statuscolumn=', 'conceallevel=0')
+-- vim.cmd.setlocal('foldmethod=manual', 'statuscolumn=', 'conceallevel=0')
+vim.cmd([[ setlocal foldmethod& statuscolum& conceallevel& ]])
 
 vim.schedule(function()
   vim.notify(('This is a beeeg file (%s)!'):format(nv.fs.filesize(), vim.log.levels.WARN))

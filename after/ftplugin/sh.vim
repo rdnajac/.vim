@@ -1,6 +1,7 @@
 setlocal define=\\<\\%(\\i\\+\\s*()\\)\\@=
 setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
-call vimrc#apathy('path', split($PATH, has('win32') ? ';' : ':'))
+" call vimrc#apathy('path', split($PATH, has('win32') ? ';' : ':'))
+call vimrc#apathy('path', split($PATH,':'))
 
 if executable('shfmt')
   if !exists('g:shellharden')
@@ -23,11 +24,9 @@ if executable('shfmt')
   let &l:formatprg = s:cmd
 endif
 
-finish
-let b:ale_sh_shfmt_options = '-bn -sr'
-
-function! ShellHarden(buffer) abort
-  let command = 'cat ' . a:buffer . " | shellharden --transform ''"
-  return { 'command': command }
-endfunction
-execute ale#fix#registry#Add('shellharden', 'ShellHarden', ['sh'], 'Double quote everything!')
+" let b:ale_sh_shfmt_options = '-bn -sr'
+" function! ShellHarden(buffer) abort
+"   let command = 'cat ' . a:buffer . " | shellharden --transform ''"
+"   return { 'command': command }
+" endfunction
+" execute ale#fix#registry#Add('shellharden', 'ShellHarden', ['sh'], 'Double quote everything!')

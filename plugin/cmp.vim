@@ -48,9 +48,9 @@ call s:cabbrev('f', 'find')
 nnoremap <leader>p :lua Snacks.picker.()<Left><Left>
 
 set findfunc=Find
-func Find(arg, _)
+function! Find(arg, _)
   if empty(s:filescache)
-    let s:filescache = globpath('.', '**', 1, 1)
+    let s:filescache = globpath(git#root(), '**', 1, 1)
     call filter(s:filescache, '!isdirectory(v:val)')
     call map(s:filescache, "fnamemodify(v:val, ':.')")
   endif
