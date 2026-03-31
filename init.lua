@@ -9,12 +9,31 @@ require('vim._core.ui2').enable({
 
 vim.cmd([[
 source ~/.vim/vimrc
-color scheme
+" color scheme
 command! Health packloadall | checkhealth
 command! Update lua vim.pack.update()
 command! LazyGit lua Snacks.lazygit()
 command! News    lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
 command! -bang Scratch exe printf('lua Snacks%s.scratch()', <bang>0 ? '.profiler' : '')
+command! R exe 'mks!' stdpath('state')..'/Session.vim' | exe 'conf restart sil so' v:this_session
+
+command! Autocmds lua Snacks.picker.Autocmds()
+command! Colorschemes lua Snacks.picker.Colorschemes()
+" command! CommandHistory lua Snacks.picker.CommandHistory()
+" command! Commands lua Snacks.picker.Commands()
+" command! Diagnostics lua Snacks.picker.Diagnostics()
+" command! DiagnosticsBuffer lua Snacks.picker.DiagnosticsBuffer()
+command! Explorer lua Snacks.picker.Explorer()
+command! Files lua Snacks.picker.Files()
+command! Help lua Snacks.picker.Help()
+command! Highlights lua Snacks.picker.Highlights()
+command! Keymaps lua Snacks.picker.Keymaps()
+command! Lines lua Snacks.picker.Lines()
+command! Pickers lua Snacks.picker.Pickers()
+command! Recent lua Snacks.picker.Recent()
+command! Tags lua Snacks.picker.Tags()
+command! Treesitter lua Snacks.picker.Treesitter()
+command! Zoxide lua Snacks.picker.Zoxide()
 
 inoremap <silent> <C-x><C-i> <Cmd>lua Snacks.picker.icons()<CR>
 
@@ -22,15 +41,8 @@ xnoremap /      <Cmd>lua Snacks.picker.grep_word()<CR>
 nnoremap ,,     <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap <Home> <Cmd>lua Snacks.dashboard.open()<CR>
 nnoremap <M-`>  <Cmd>lua Snacks.dashboard.open()<CR>
-
-nnoremap <M-r> <Cmd>Restart<CR>
+nnoremap <M-r>  <Cmd>R<CR>
 ]])
-
-vim.api.nvim_create_user_command('Restart', function()
-  local sesh = vim.fn.stdpath('state') .. '/Session.vim'
-  vim.cmd.mksession({ bang = true, args = { sesh } })
-  vim.cmd([[confirm restart silent source ]] .. vim.v.this_session)
-end, { desc = 'Save and reload session' })
 
 -- stylua: ignore
 local dashkeys = {
@@ -43,7 +55,6 @@ local dashkeys = {
 
 require('snacks').setup({
   dashboard = {
-    -- FIXME: should disable on restart
     -- enabled = tonumber(vim.g.dashboard) ~= 0,
     preset = { keys = dashkeys },
     sections = {
@@ -88,3 +99,5 @@ _G.nv = vim
   :fold(require('nvim.util'), rawset)
 
 T2 = vim.uv.hrtime()
+Plug(nv.ui.colorscheme)
+-- print('set colorscheme in ' .. (vim.uv.hrtime() - T2) / 1e6 .. 'ms')

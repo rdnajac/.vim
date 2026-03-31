@@ -49,4 +49,4 @@ for modname, opt in pairs({
 end
 
 -- MiniMisc.setup_auto_root()
-MiniMisc.setup_termbg_sync()
+-- MiniMisc.setup_termbg_sync()

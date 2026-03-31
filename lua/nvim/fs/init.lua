@@ -1,52 +1,43 @@
+local fn = vim.fn
+
 local M = {}
 
----@param path string
----@return string[]
-M.lines = function(path) return vim.iter(io.lines(path)):totable() or {} end
-
----@param op function
----@param ... any
----@return any
-local function safe_io(op, ...)
-  local ok, res, err = pcall(op, ...)
-  if not ok or not res then
-    error('File operation failed: ' .. tostring(err or res))
+---@param file string path appended to `stdpath('cache')`
+---@param content any string, table, or function returning string/table
+---@return string[] the contents as written, or nil on failure
+M.write = function(file, content)
+  fn.mkdir(fn.fnamemodify(file, ':h'), 'p')
+  content = vim.is_callable(content) and content() or content
+  if type(content) == 'table' and not vim.islist(content) then
+    content = vim.json.encode(content, { indent = '\t', sort_keys = false })
   end
-  return res
-end
-
----@param path string
----@return string
-M.read = function(path)
-  local f = safe_io(io.open, path, 'r')
-  local contents = safe_io(f.read, f, '*a')
-  safe_io(f.close, f)
-  return contents
-end
-
----@param file string
----@param contents string
-M.write = function(file, contents)
-  vim.fn.mkdir(vim.fn.fnamemodify(file, ':h'), 'p')
-  local fd = safe_io(io.open, file, 'w+')
-  safe_io(fd.write, fd, contents)
-  safe_io(fd.close, fd)
+  content = type(content) == 'string' and vim.split(content, '\n') or content
+  return fn.writefile(content, file) == 0 and content or nil
 end
 
 ---@param filename string
 ---@return table
-M.fpath_to_json = function(filename) return vim.json.decode(vim.fn.readblob(filename)) end
+M.readjson = function(filename) return vim.json.decode(fn.readblob(filename)) end
 
----@param contents string
----@param filename string
-M.write_json = function(contents, filename)
-  return vim.fn.writefile(vim.json.encode(contents, { indent = '\t', sort_keys = false }), filename)
+-- TODO: see `$PACKDIR/tokyonight.nvim/lua/tokyonight/util.lua`
+--- Run fn() and cache result, or load from cache if file exists.
+--- Tables are JSON-encoded; strings are split on newlines.
+---@param path string cache file path (relative to stdpath.cache)
+---@param func fun(): string|table function that returns data to cache
+---@return string|table
+M.cache = function(path, func)
+  local fpath = fn.resolve(cache_dir .. '/' .. path)
+
+  if fn.filereadable(fpath) == 1 then
+    local ok, decoded = pcall(M.readjson, fpath)
+    return ok and decoded or fn.readfile(fpath)
+  end
+
+  return M.write(fpath, func())
 end
 
-M.cache = require('nvim.fs.cache')
-
 function M.filesize()
-  local size = vim.fn.getfsize(vim.fn.expand('%:p'))
+  local size = fn.getfsize(fn.expand('%:p'))
   if size == -1 then
     error('file not found')
   elseif size == -2 then
@@ -66,8 +57,8 @@ end
 M['goto'] = function()
   local line = vim.api.nvim_get_current_line()
   local lineno = line:match(':(%d+)') or 0
-  local cfile = vim.fn.expand('<cfile>')
-  vim.fn['edit#'](cfile)
+  local cfile = fn.expand('<cfile>')
+  fn['edit#'](cfile)
   vim.cmd('normal! ' .. lineno .. 'G')
 end
 

@@ -12,23 +12,18 @@ M.attached = function(buf) return lsp.get_clients({ bufnr = buf or api.nvim_get_
 ---@return string status icons of all attached clients
 M.status = function() return vim.iter(M.attached()):map(require('nvim.lsp.status')):join(' ') end
 
----@return string[] servers found in the after directory
-M.servers = function()
-  return vim.tbl_map(
-    function(path) return path:match('^.+/(.+)$'):sub(1, -5) end,
-    fn.globpath(vim.fs.joinpath(fn.stdpath('config'), 'after', 'lsp'), '*', false, true)
-  )
-end
-
 vim.schedule(function()
-  -- enable servers found in the after directory
-  lsp.enable(M.servers())
+  local lsp_config_dir = fn.stdpath('config') .. '/after/lsp'
+  M.servers = vim
+    .iter(fn.globpath(lsp_config_dir, '*', false, true))
+    :map(function(path) return vim.fn.fnamemodify(path, ':t:r') end)
+    :totable()
 
   -- folke/lazydev.nvim
   Plug(require('nvim.lsp.lazydev'))
 
-  M.progress = require('nvim.lsp.progress')
-  api.nvim_create_autocmd('LspProgress', { callback = nv.lsp.progress.callback })
+  -- enable servers found in the after directory
+  lsp.enable(M.servers)
 
   vim.cmd([[
     nnoremap glc <Cmd>lua Snacks.picker.lsp_config()<CR>
@@ -44,5 +39,29 @@ vim.schedule(function()
     nnoremap glW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
   ]])
 end)
+
+api.nvim_create_autocmd('LspProgress', {
+  callback = function(ev)
+    local id, value = ev.data.client_id, ev.data.params.value
+    local is_end = value.kind == 'end'
+    local title = ([[[%s] %s %s]]):format(
+      vim.lsp.get_client_by_id(id).name or 'LSP',
+      is_end and '' or Snacks.util.spinner(),
+      value.title -- append the original title
+    )
+
+    api.nvim_echo({ { value.message or '100% done' } }, false, {
+      id = 'lsp:' .. id,
+      kind = 'progress',
+      source = 'nv.lsp',
+      title = title,
+      status = is_end and 'success' or 'running',
+      percent = value.percentage,
+      verbose = false,
+    })
+
+    vim.cmd.redrawstatus()
+  end,
+})
 
 return M

@@ -1,4 +1,5 @@
 local M = {
+  colorscheme = require('nvim.ui.tokyonight'),
   icons = require('nvim.ui.icons'),
   status = require('nvim.ui.status'),
   winbar = require('nvim.ui.winbar'),

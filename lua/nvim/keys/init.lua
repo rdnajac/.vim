@@ -1,7 +1,13 @@
+Plug({
+  require('blink'),
+  require('nvim.keys.which'),
+  -- require('nvim.keys.screen'),
+})
+
 local modes = { 'n', 'v', 'x', 'i', 't', 'o', 'c', 's' }
 local function has_mode(t) return type(t[1]) == 'table' or vim.tbl_contains(modes, t[1]) end
 
---- Converts a variety of table formats  into `vim.keymap.set` opts
+--- Converts a variety of table formats into `vim.keymap.set` opts
 ---@param t table
 ---@return string|table mode, string lhs,string|fun() rhs, table opts
 local function normalize(t)
@@ -22,13 +28,9 @@ local M = {}
 
 M.map = function(t) vim.iter(vim.islist(t) and t or { t }):map(normalize):each(vim.keymap.set) end
 
-Plug({
-  require('blink'),
-  require('nvim.keys.which'),
-  -- require('nvim.keys.screen'),
-})
-
 local keys = {
+  { 'glb', [[<Cmd>call edit#luamod('blink')<CR>]] },
+  { 'glm', [[<Cmd>call edit#luamod('munchies')<CR>]] },
   { 'glf', [[<Cmd>call edit#luamod('nvim/fs')<CR>]] },
   { 'glk', [[<Cmd>call edit#luamod('nvim/keys')<CR>]] },
   { 'gll', [[<Cmd>call edit#luamod('nvim/lsp')<CR>]] },
