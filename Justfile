@@ -15,7 +15,7 @@ profile *args:
     -c 'lua require("snacks.profiler").startup({startup={event="UIEnter"}, presets={startup={min_time=0.5}}})' {{args}}
 
 act:
-  ./bin/scripts/act
+  act -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest --container-architecture linux/amd64
 
 install-neovim:
   ./bin/scripts/install-neovim.sh

@@ -112,29 +112,23 @@ let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
 if !has('nvim')
   call vim#defaults#()
   call vim#sensible#()
-  call vimrc#toggles()
+  call vimrc#toggles() " TODO: merge toggles
   color scheme
 else
+  " set autocomplete
   set backup
   set backupext=.bak
   set backupdir=~/.local/state/nvim/backup//
-  set backupskip=~/.cache/*
-  " let &backupskip .= ','..expand('$HOME')..'/.cache/*'
-
-  " set autocomplete
-
-  " more navigation
-  set smoothscroll
+  set backupskip+=~/.cache/*
+  set cmdheight=0
   set jumpoptions+=view
   set mousescroll=hor:0
-
+  set startofline " default in vim
+  set smoothscroll
   set pumblend=0
   set pumborder=rounded
   set pumheight=10
   set winborder=rounded
-
-  set startofline " default in vim
-  " run `:options` for more...
 
   " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
@@ -274,10 +268,9 @@ endfor
 " searching and centering {{{3
 " make `n` and `N` behave the same way for `?` and `/` searches
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
-" 'Nn'[v:searchforward] is the same as (v:searchforward ? 'n' : 'N')
-" `zz` to center and since foldopen doesn work in mappings, add `zv`
-nnoremap <expr> n (v:searchforward ? 'n' : 'N')..'zvzz'
-nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zvzz'
+" NOTE: 'Nn'[v:searchforward] == (v:searchforward ? 'n' : 'N')
+nnoremap <expr> n (v:searchforward ? 'n' : 'N')..'zv'
+nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zv'
 
 " tabpages {{{3
 nnoremap ]<Tab> <Cmd>tabnext<CR>
@@ -324,6 +317,15 @@ iabbrev m- —
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
+
+" toggles {{{2
+" TODO: play nicely with Snacks.toggle and vim-uninpaired
+nnoremap yon :set number!<BAR>redraw!<BAR>set number?<CR>
+nnoremap yol :set list!<BAR>set list?<CR>
+nnoremap yos :set spell!<BAR>set spell?<CR>
+nnoremap yow :set wrap!<BAR>set wrap?<CR>
+nnoremap yo~ :set autochdir!<BAR>set autochdir?<CR>
+" }}}
 
 " }}}1
 

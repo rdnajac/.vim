@@ -2,8 +2,7 @@ nmap vv gcc
 nmap dc dgc
 nmap yc ygc
 
-" comment out coyt and paste 
-" TODO: make this an opfunc
+" comment out a line and paste it below
 nmap gy "xyygcc"xp
 
 function! s:toggle_comment() abort
@@ -68,15 +67,3 @@ for [key, val] in items(s:comments)
   execute printf('nnoremap cO%s <Cmd>call comment#above("%s")<CR>', key, val)
   execute printf('nnoremap co%s <Cmd>call comment#above("%s")<CR>', toupper(key), val)
 endfor
-
-if !has('nvim')
-  " see `:h package-comment`
-  " BUG: still does not work with the version of vim on homebrew
-  " issue: https://github.com/vim/vim/issues/14171
-  " commit: https://github.com/vim/vim/commit/fa6300872732f80b770a768e785ae2b189d3e684
-  " patch 9.1.0165: Vim9: Importing an autoload imported script fails
-  " still broken...
-  " HACK: manually sourcing this resolves E1041 `Toggle`
-  source $VIMRUNTIME/pack/dist/opt/comment/autoload/comment.vim
-endif
-"comment.vim" 85L, 2330B [w]

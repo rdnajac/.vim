@@ -42,7 +42,10 @@ for modname, opt in pairs({
       },
     }
   end,
-  align = { mappings = { start = 'gA', start_with_preview = 'g|' } },
+  align = function()
+    vim.cmd([[ xmap ga gA ]]) -- preserve normal ga
+    return { mappings = { start = 'gA', start_with_preview = 'g|' } }
+  end,
   clue = function()
     local miniclue = require('mini.clue')
     local clues = { miniclue.gen_clues.builtin_completion() }

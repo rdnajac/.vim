@@ -11,4 +11,5 @@ return vim
       vim.notify((fmt):format(modname, mod), vim.log.levels.ERROR)
     end)
   end)
-  :fold(require('nvim.util'), rawset)
+  :fold({}, rawset)
+  -- :fold(require('nvim.util'), rawset)

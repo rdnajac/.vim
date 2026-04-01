@@ -2,7 +2,6 @@
 T1 = vim.uv.hrtime()
 vim.loader.enable()
 
-vim.o.cmdheight = 0
 require('vim._core.ui2').enable({
   msg = { target = 'msg' },
 })
@@ -12,8 +11,8 @@ source ~/.vim/vimrc
 nnoremap <M-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
 xnoremap /     <Cmd>lua Snacks.picker.grep_word()<CR>
 nnoremap ,,    <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap ,.    <Cmd>lua Snacks.scratch<CR>
-inoremap <silent> <C-x><C-i> <Cmd>lua Snacks.picker.icons()<CR>
+nnoremap ,.    <Cmd>lua Snacks.scratch()<CR>
+inoremap <C-i> <Cmd>lua Snacks.picker.icons()<CR>
 ]])
 
 require('snacks').setup({
@@ -24,11 +23,11 @@ require('snacks').setup({
       keys = {
 	{ icon = '󰱼 ', desc = 'Files', key   = 'F', action = function() Snacks.picker.smart() end },
           { section = 'recent_files', indent = 2 },
-	{ icon = ' ', desc = 'Mason', key   = 'M', action = ':Mason' },
+	{ icon = ' ', desc = 'Health',  key = 'H', action = ':checkhealth' },
 	{ icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
-	{ icon = ' ', desc = 'Update', key  = 'U', action = vim.pack.update },
-	{ icon = ' ', desc = 'Health', key  = 'H', action = ':checkhealth' },
-	{ icon = ' ', desc = 'News', key    = 'N', action = function() Snacks.zen({win = {file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}}) end },
+	{ icon = ' ', desc = 'Mason',   key = 'M', action = ':Mason' },
+	{ icon = ' ', desc = 'Update',  key = 'U', action = vim.pack.update },
+	{ icon = ' ', desc = 'News',    key = 'N', action = function() Snacks.zen({win = {file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}}) end },
       },
     },
     sections = {
@@ -36,7 +35,7 @@ require('snacks').setup({
       { section = 'keys' },
       {
         section = 'terminal',
-        cmd = '$HOME/.vim/scripts/cowsay.sh',
+        cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]],
         padding = 1,
       },
       { section = 'startup' },

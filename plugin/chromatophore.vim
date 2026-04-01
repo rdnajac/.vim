@@ -10,7 +10,6 @@ let g:chromatophores = [
       \ 'Title',
       \ 'StatusLineNC',
       \ 'StatusLineTermNC',
-      \ 'WinSeparator',
       \ ]
 
 augroup chromatophore
