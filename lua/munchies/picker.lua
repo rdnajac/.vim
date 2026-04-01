@@ -1,16 +1,6 @@
 ---@module "snacks"
 
 local M = {
-  ---@type snacks.picker.debug
-  debug = {
-    -- scores = true,
-    -- leaks = true,
-    -- explorer = true,
-    -- files = true,
-    -- grep = true,
-    -- proc = true,
-    -- extmarks = true,
-  },
   layouts = {
     mylayout = require('munchies.picker.layout'),
     -- pop-up for selecting text in insert mode
@@ -30,17 +20,29 @@ local M = {
     },
   },
   sources = {
-    buffers = { layout = 'mylayout', },
+    buffers = { layout = 'mylayout' },
     help = { layout = 'mylayout' },
     explorer = require('munchies.explorer'),
     files = require('munchies.picker.config'),
     grep = require('munchies.picker.config'),
     -- git_status = { layout = 'left' },
+    highlights = {
+      --- enable mini.hipatterns in the preview buffer
+      ---@param picker snacks.Picker
+      on_show = function(picker)
+        if MiniHipatterns then
+          MiniHipatterns.enable(picker.preview.win.buf)
+          -- Snacks.util.redraw(picker.preview.win.win)
+        end
+      end,
+    },
+    icons = { layout = 'insert' },
     keymaps = {
+      --- make confirm work with keymaps defined in vimscripts
       ---@param p snacks.Picker
       ---@param item snacks.picker.Item
       confirm = function(p, item)
-        if item.file and item.file ~= '' then
+        if not item.file then
           local info = vim.fn.getscriptinfo({ sid = item.item.sid })
           item.file = info and info[1] and info[1].name
           item.pos = { item.item.lnum, 0 }
@@ -48,9 +50,7 @@ local M = {
         p:action({ 'jump' })
       end,
     },
-    icons = { layout = 'insert' },
     recent = { config = function(p) p.filter = {} end },
-    zoxide = { confirm = 'edit' },
     -- mine!
     cheatsheets = {
       finder = 'files',
@@ -65,14 +65,5 @@ local M = {
     -- todo = require('nvim.util.todo').snacks_picker_opts,
   },
 }
-
--- vim.api.nvim_create_autocmd({ 'FileType' }, {
---   pattern = 'snacks_picker_preview',
---   callback = function(ev)
---     if MiniHipatterns then
---       MiniHipatterns.enable(ev.buf)
---     end
---   end,
--- })
 
 return M

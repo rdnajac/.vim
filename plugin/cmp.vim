@@ -1,8 +1,8 @@
 " set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
 " set completeopt+=preinsert
 " More info here: |cmdline-completion|; default: `wildmode=full`
-set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
-" set wildmode=longest:full,full " Same as above, but cycle through the first patch ('preinsert'?)
+" set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
+set wildmode=longest:full,full " Same as above, but cycle through the first patch ('preinsert'?)
 " set wildmode=longest,list    " First press: longest common substring, Second press: list all matches
 " set wildmode=noselect:full   " Show 'wildmenu' without selecting, then cycle full matches
 " set wildmode=noselect:lastused,full " Same as above, but buffer matches are sorted by time last used

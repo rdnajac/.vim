@@ -4,35 +4,38 @@ scriptencoding utf-8
 " Section: settings {{{1
 setglobal isfname+=@-@ " from `vim-apathy`
 " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
-" set wildignore+=.DS_Store
-" set wildignore+=*.o,*.out,*.a,*.so,*.viminfo
 
 " general {{{2
-set splitbelow splitright
-" minimax wants `usetab`
-set switchbuf+=vsplit
-set splitkeep=screen
-set timeoutlen=420
-set updatetime=69
-set sessionoptions-=terminal
-set sessionoptions-=blank
-
-" navigation {{{ 2
+set ignorecase
 set jumpoptions+=stack
 set mouse=a
-set scrolloff=8
-set virtualedit=block
-set whichwrap+=<,>,[,],h,l
-
-" searching {{{ 2
-set ignorecase
-set smartcase
-
-" notifications {{{ 2
 set report=0
+set scrolloff=8
+set sessionoptions-=blank sessionoptions-=terminal
 set shortmess+=aA "c
 set shortmess-=o
 set showmatch
+set smartcase
+set splitbelow splitright splitkeep=screen
+set switchbuf+=vsplit " NOTE: minimax wants `usetab`
+set timeoutlen=420 updatetime=69
+set virtualedit=block
+set whichwrap+=<,>,[,],h,l
+set wildignore+=*.o,*.out,*.a,*.so
+
+" indent {{{2
+set breakindent
+set breakindentopt=list:1 " TODO: from minimax; keep?
+set linebreak
+set shiftround
+set shiftwidth=2 softtabstop=2 " WARN: don't change tabstop!
+
+augroup vimrc_indent
+  autocmd!
+  " autocmd FileType markdown,tex    setl sw=2 sts=2
+  autocmd FileType cpp,cuda,python setl sw=4 sts=4
+  autocmd FileType c,sh,zsh        setl sw=8 sts=8
+augroup END
 
 " chars {{{ 2
 set fillchars= " reset
@@ -59,19 +62,14 @@ set foldlevel=99
 set foldopen+=insert,jump
 " set foldmethod=marker
 
-" indent {{{2
-set breakindent
-set breakindentopt=list:1 " TODO: from minimax; keep?
-set linebreak
-set shiftround
-" don't change tabstop!
-set shiftwidth=2 softtabstop=2
+" format {{{2
+" one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
+" default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
+set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
 
-augroup vimrc_indent
+augroup vimrc_format
   autocmd!
-  " autocmd FileType markdown,tex    setl sw=2 sts=2
-  autocmd FileType cpp,cuda,python setl sw=4 sts=4
-  autocmd FileType c,sh,zsh        setl sw=8 sts=8
+  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
 augroup END
 
 " ui {{{2
@@ -83,12 +81,9 @@ set signcolumn=number
 set termguicolors
 " set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
 
-" -- Pattern for a start of numbered list (used in `gw`). This reads as
-" -- "Start of list item is: at least one special character (digit, -, +, *)
-" -- possibly followed by punctuation (. or `)`) followed by at least one space".
-" vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
-
 augroup vimrc_ui
+  set number
+
   " no cursorline in insert mode
   au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
   au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
@@ -102,7 +97,6 @@ augroup vimrc_ui
   au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 augroup END
-
 " }}}1
 
 " Section: neovim {{{1
@@ -112,7 +106,6 @@ let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
 if !has('nvim')
   call vim#defaults#()
   call vim#sensible#()
-  call vimrc#toggles() " TODO: merge toggles
   color scheme
 else
   " set autocomplete
@@ -132,13 +125,15 @@ else
 
   " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
-endif
 
+  " restart neovim and restore state with Session
+  nnoremap <M-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
+endif
 " }}}1
 
 " Section: autocmds {{{1
 augroup vimrc
-  autocmd!
+  au!
   au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
 
@@ -159,9 +154,6 @@ augroup vimrc
 
   " don't list certain buffer types (skips C-^)
   au FileType man,netrw,snacks_explorer setlocal nobuflisted
-
-  " set format options for certain file types
-  au FileType vim,lua setlocal nowrap fo-=o conceallevel=2
 
   " automatically resize splits when the window is resized
   au VimResized * let g:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' g:tabpagenr
@@ -376,7 +368,6 @@ if !has('nvim')
 else
   Plug 'nvim-mini/mini.nvim'
   Plug 'folke/snacks.nvim'
-  Plug 'folke/tokyonight.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
   Plug 'chrisgrieser/nvim-scissors'

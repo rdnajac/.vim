@@ -47,10 +47,11 @@ M.config_setup = function() require('tokyonight.config').setup(opts()) end
 ---@return ColorScheme, tokyonight.Highlights, tokyonight.Config
 M.theme_setup = function() return require('tokyonight.theme').setup(opts()) end
 
---- Generate a list of `vim.api.nvim_set_hl` calls for all groups in `M.groups`
-function M.colorscheme()
+--- Generate a list of `vim.api.nvim_set_hl` calls for all groups
+---@param groups tokyonight.Highlights
+function M.colorscheme(groups)
   return vim
-    .iter(M.groups)
+    .iter(groups)
     :map(function(group, hl)
       hl = type(hl) == 'string' and { link = hl } or hl
       vim.api.nvim_set_hl(0, group, hl)
@@ -79,9 +80,9 @@ M.init = function()
     M.colors = require('tokyonight.colors').setup(M.opts)
     M.groups = require('tokyonight.groups').setup(M.colors, M.opts)
     M.terminal(M.colors)
-    M.colorscheme()
+    M.colorscheme(M.groups)
   end)
-  vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+  -- vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 
 return M

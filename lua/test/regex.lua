@@ -17,4 +17,4 @@ local test = function()
     print('[' .. (ok == true and 'PASS' or 'FAIL') .. '] ' .. case)
   end
 end
--- test()
+test()

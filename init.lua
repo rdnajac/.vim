@@ -6,38 +6,26 @@ require('vim._core.ui2').enable({
   msg = { target = 'msg' },
 })
 
-vim.cmd([[
-source ~/.vim/vimrc
-nnoremap <M-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
-xnoremap /     <Cmd>lua Snacks.picker.grep_word()<CR>
-nnoremap ,,    <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap ,.    <Cmd>lua Snacks.scratch()<CR>
-inoremap <C-i> <Cmd>lua Snacks.picker.icons()<CR>
-]])
+vim.cmd([[ source ~/.vim/vimrc | colorscheme tokyonight ]])
 
 require('snacks').setup({
+  -- stylua: ignore
   dashboard = {
     enabled = vim.fn.argc(-1) == 0,
     preset = {
-      -- stylua: ignore
       keys = {
-	{ icon = '󰱼 ', desc = 'Files', key   = 'F', action = function() Snacks.picker.smart() end },
-          { section = 'recent_files', indent = 2 },
-	{ icon = ' ', desc = 'Health',  key = 'H', action = ':checkhealth' },
-	{ icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
-	{ icon = ' ', desc = 'Mason',   key = 'M', action = ':Mason' },
-	{ icon = ' ', desc = 'Update',  key = 'U', action = vim.pack.update },
-	{ icon = ' ', desc = 'News',    key = 'N', action = function() Snacks.zen({win = {file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}}) end },
+      { icon = '󰱼 ', desc = 'Files',   key = 'F', action = function() Snacks.picker.smart() end }, { section = 'recent_files', indent = 2 },
+      { icon = ' ', desc = 'Health',  key = 'H', action = ':checkhealth' },
+      { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
+      { icon = ' ', desc = 'Mason',   key = 'M', action = ':Mason' },
+      { icon = ' ', desc = 'Update',  key = 'U', action = vim.pack.update },
+      { icon = ' ', desc = 'News',    key = 'N', action = function() Snacks.zen({win = {file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}}) end },
       },
     },
     sections = {
       { section = 'header' },
       { section = 'keys' },
-      {
-        section = 'terminal',
-        cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]],
-        padding = 1,
-      },
+      { section = 'terminal', cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]] },
       { section = 'startup' },
     },
   },
@@ -62,6 +50,5 @@ _G.p = Snacks.debug.profile
 
 _G.nv = require('nvim')
 
--- FIXME:
--- nv.ui.colorscheme.init()
 T2 = vim.uv.hrtime()
+-- vim: fdl=2
