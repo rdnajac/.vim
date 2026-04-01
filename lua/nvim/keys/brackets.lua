@@ -1,3 +1,29 @@
 -- see `:h unimpaired-next` for extended mappings
 -- vim.keymap.set({ 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end)
 -- vim.keymap.set({ 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end)
+-- *[a*     |:previous|
+-- *]a*     |:next|
+-- *[A*     |:first|
+-- *]A*     |:last|
+-- *[b*     |:bprevious|
+-- *]b*     |:bnext|
+-- *[B*     |:bfirst|
+-- *]B*     |:blast|
+-- *[l*     |:lprevious|
+-- *]l*     |:lnext|
+-- *[L*     |:lfirst|
+-- *]L*     |:llast|
+-- *[<C-L>* |:lpfile|
+-- *]<C-L>* |:lnfile|
+-- *[q*     |:cprevious|
+-- *]q*     |:cnext|
+-- *[Q*     |:cfirst|
+-- *]Q*     |:clast|
+-- *[<C-Q>* |:cpfile| (Note that <C-Q> only works in a terminal if you disable flow control: stty -ixon)
+-- *]<C-Q>* |:cnfile|
+-- *[t*     |:tprevious|
+-- *]t*     |:tnext|
+-- *[T*     |:tfirst|
+-- *]T*     |:tlast|
+-- *[<C-T>* |:ptprevious|
+-- *]<C-T>* |:ptnext|
