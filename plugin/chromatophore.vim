@@ -15,8 +15,13 @@ let g:chromatophores = [
 
 augroup chromatophore
   autocmd!
+  if has('nvim')
+    autocmd UIEnter * call chromatophore#setup()
+  endif
   autocmd ColorScheme * call chromatophore#setup()
   autocmd ModeChanged * call chromatophore#metachrosis()
+  " HACK:
+  au FileType snacks_dashboard lua vim.schedule(function() vim.cmd('doautocmd ColorScheme') end)
 augroup END
 
 if has('nvim')

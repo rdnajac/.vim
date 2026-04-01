@@ -14,7 +14,6 @@ xnoremap /     <Cmd>lua Snacks.picker.grep_word()<CR>
 nnoremap ,,    <Cmd>lua Snacks.picker.buffers()<CR>
 nnoremap ,.    <Cmd>lua Snacks.scratch<CR>
 inoremap <silent> <C-x><C-i> <Cmd>lua Snacks.picker.icons()<CR>
-au FileType snacks_dashboard lua vim.schedule(function() vim.cmd('doautocmd ColorScheme') end)
 ]])
 
 require('snacks').setup({
@@ -64,5 +63,6 @@ _G.p = Snacks.debug.profile
 
 _G.nv = require('nvim')
 
-nv.ui.colorscheme.init()
+-- FIXME:
+-- nv.ui.colorscheme.init()
 T2 = vim.uv.hrtime()
