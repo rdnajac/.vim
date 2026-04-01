@@ -9,64 +9,32 @@ require('vim._core.ui2').enable({
 
 vim.cmd([[
 source ~/.vim/vimrc
-" color scheme
-command! Health packloadall | checkhealth
-command! Update lua vim.pack.update()
-command! LazyGit lua Snacks.lazygit()
-command! News    lua Snacks.zen({ win = { file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1] } })
-command! -bang Scratch exe printf('lua Snacks%s.scratch()', <bang>0 ? '.profiler' : '')
-command! R exe 'mks!' stdpath('state')..'/Session.vim' | exe 'conf restart sil so' v:this_session
-
-command! Autocmds lua Snacks.picker.Autocmds()
-command! Colorschemes lua Snacks.picker.Colorschemes()
-" command! CommandHistory lua Snacks.picker.CommandHistory()
-" command! Commands lua Snacks.picker.Commands()
-" command! Diagnostics lua Snacks.picker.Diagnostics()
-" command! DiagnosticsBuffer lua Snacks.picker.DiagnosticsBuffer()
-command! Explorer lua Snacks.picker.Explorer()
-command! Files lua Snacks.picker.Files()
-command! Help lua Snacks.picker.Help()
-command! Highlights lua Snacks.picker.Highlights()
-command! Keymaps lua Snacks.picker.Keymaps()
-command! Lines lua Snacks.picker.Lines()
-command! Pickers lua Snacks.picker.Pickers()
-command! Recent lua Snacks.picker.Recent()
-command! Tags lua Snacks.picker.Tags()
-command! Treesitter lua Snacks.picker.Treesitter()
-command! Zoxide lua Snacks.picker.Zoxide()
-
+nnoremap <M-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
+xnoremap /     <Cmd>lua Snacks.picker.grep_word()<CR>
+nnoremap ,,    <Cmd>lua Snacks.picker.buffers()<CR>
+nnoremap ,.    <Cmd>lua Snacks.scratch<CR>
 inoremap <silent> <C-x><C-i> <Cmd>lua Snacks.picker.icons()<CR>
-
-xnoremap /      <Cmd>lua Snacks.picker.grep_word()<CR>
-nnoremap ,,     <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap <Home> <Cmd>lua Snacks.dashboard.open()<CR>
-nnoremap <M-`>  <Cmd>lua Snacks.dashboard.open()<CR>
-nnoremap <M-r>  <Cmd>R<CR>
+au FileType snacks_dashboard lua vim.schedule(function() vim.cmd('doautocmd ColorScheme') end)
 ]])
-
--- stylua: ignore
-local dashkeys = {
-  { action = ':News',    desc = 'News',    icon = ' ', key = 'N' },
-  { action = ':Health',  desc = 'Health',  icon = ' ', key = 'H' },
-  { action = ':Update',  desc = 'Update',  icon = ' ', key = 'U' },
-  { action = ':Mason',   desc = 'Mason',   icon = ' ', key = 'M' },
-  { action = ':LazyGit', desc = 'LazyGit', icon = '󰒲 ', key = 'G' },
-}
 
 require('snacks').setup({
   dashboard = {
-    -- enabled = tonumber(vim.g.dashboard) ~= 0,
-    preset = { keys = dashkeys },
+    enabled = vim.fn.argc(-1) == 0,
+    preset = {
+      -- stylua: ignore
+      keys = {
+	{ icon = '󰱼 ', desc = 'Files', key   = 'F', action = function() Snacks.picker.smart() end },
+          { section = 'recent_files', indent = 2 },
+	{ icon = ' ', desc = 'Mason', key   = 'M', action = ':Mason' },
+	{ icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
+	{ icon = ' ', desc = 'Update', key  = 'U', action = vim.pack.update },
+	{ icon = ' ', desc = 'Health', key  = 'H', action = ':checkhealth' },
+	{ icon = ' ', desc = 'News', key    = 'N', action = function() Snacks.zen({win = {file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}}) end },
+      },
+    },
     sections = {
       { section = 'header' },
       { section = 'keys' },
-      {
-        title = 'Files',
-        key = 'F',
-        icon = '󰱼 ',
-        action = function() Snacks.picker.smart() end,
-        { section = 'recent_files', indent = 2 },
-      },
       {
         section = 'terminal',
         cmd = '$HOME/.vim/scripts/cowsay.sh',
@@ -93,11 +61,8 @@ require('snacks').setup({
 _G.dd = Snacks.debug.inspect
 _G.bt = Snacks.debug.backtrace
 _G.p = Snacks.debug.profile
-_G.nv = vim
-  .iter(ipairs({ 'ui', 'fs', 'keys', 'lsp', 'treesitter' }))
-  :map(function(_, mod) return mod, require('nvim.' .. mod) end)
-  :fold(require('nvim.util'), rawset)
 
+_G.nv = require('nvim')
+
+nv.ui.colorscheme.init()
 T2 = vim.uv.hrtime()
-Plug(nv.ui.colorscheme)
--- print('set colorscheme in ' .. (vim.uv.hrtime() - T2) / 1e6 .. 'ms')
