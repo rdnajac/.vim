@@ -4,5 +4,5 @@ function! cmd#format#() abort
     ALEFix
     return
   endif
-  call vim#with#savedView('call format#buffer()')
-endfunction
+  " format
+  call endfunction

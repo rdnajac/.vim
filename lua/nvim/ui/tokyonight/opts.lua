@@ -1,3 +1,5 @@
+---@module "tokyonight"
+
 local mycolors = {
   -- tokyonight = '#24283b',
   black = '#000000',

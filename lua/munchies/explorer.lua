@@ -16,6 +16,7 @@ local M = {
         ['<Left>'] = 'explorer_up',
         ['<Right>'] = 'confirm',
         -- ['<CR>'] = { 'jump', 'close' },
+        ['/'] = 'picker_grep',
       },
     },
   },

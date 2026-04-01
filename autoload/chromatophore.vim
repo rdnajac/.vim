@@ -2,6 +2,21 @@ if !exists('g:chromatophores')
   let g:chromatophores = [ 'String' ]
 endif
 
+function! s:hl_set(name, fg, bg, ...) abort
+  let attr = a:0 ? a:1 : ''
+  let cmd = 'highlight ' . a:name . ' guifg=' . a:fg . ' guibg=' . a:bg
+  if !empty(attr)
+    let cmd .= ' gui=' . attr
+  endif
+  execute cmd
+endfunction
+
+function! s:hl_link(target, groups) abort
+  for group in a:groups
+    execute printf('highlight! link %s %s', group, a:target)
+  endfor
+endfunction
+
 function! chromatophore#setup() abort
   let black      = '#000000'
   let eigengrau  = '#16161d'
@@ -60,21 +75,6 @@ function! s:color(...) abort
     return 'pending'
   endif
   return get(s:mode_map, l:mode[0], 'normal')
-endfunction
-
-function! s:hl_set(name, fg, bg, ...) abort
-  let attr = a:0 ? a:1 : ''
-  let cmd = 'highlight ' . a:name . ' guifg=' . a:fg . ' guibg=' . a:bg
-  if !empty(attr)
-    let cmd .= ' gui=' . attr
-  endif
-  execute cmd
-endfunction
-
-function! s:hl_link(target, groups) abort
-  for group in a:groups
-    execute 'highlight! link ' . group . ' ' . a:target
-  endfor
 endfunction
 
 function! chromatophore#color() abort

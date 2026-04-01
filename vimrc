@@ -185,11 +185,7 @@ for level in keys(g:vim#notify#levels)
 endfor
 
 command! M messages
-
 command! -nargs=* Diff call cmd#diff#(<f-args>)
-command! -nargs=0 Format call cmd#format#()
-nnoremap zq <Cmd>Format<CR>
-
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
 let g:vimtex_format_enabled = 1
@@ -221,14 +217,13 @@ nnoremap <Space> :
 nnoremap : ,
 nnoremap  ciw
 nnoremap  <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
-nnoremap <C-S-F> <Cmd>lua Snacks.picker()<CR>
+nnoremap  <Cmd>lua Snacks.picker()<CR>
 xnoremap  :sort<CR>
 
 xnoremap < <gv
 xnoremap > >gv
 
-" requires `tpope/vim-unimpaired`
-" nmap zJ ]ekJ
+nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
 nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 " TODO: diff?
@@ -241,6 +236,7 @@ nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 nnoremap <leader>k <Cmd>normal! K<CR>
 
 " debug
+nnoremap <leader>da <Cmd>ALEInfo<CR>
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
 nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
@@ -378,7 +374,7 @@ if !has('nvim')
 else
   Plug 'nvim-mini/mini.nvim'
   Plug 'folke/snacks.nvim'
-  " Plug 'folke/tokyonight.nvim'
+  Plug 'folke/tokyonight.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
   Plug 'chrisgrieser/nvim-scissors'
@@ -390,5 +386,4 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
-
 " vim: fdm=marker fdl=1

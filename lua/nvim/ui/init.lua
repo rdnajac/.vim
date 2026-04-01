@@ -8,6 +8,7 @@ local M = {
 vim.schedule(function()
   vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
   vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+
   --- Window types each have respective filetype
   --- • `msg`: messages when 'cmdheight' == 0.
   --- • `pager`: used for |:messages| and certain messages that should be shown in full
@@ -22,6 +23,22 @@ vim.schedule(function()
       vim.wo.conceallevel = 3
     end,
     desc = 'Start tree-sitter for message windows',
+  })
+
+  vim.diagnostic.config({
+    float = { source = true },
+    underline = false,
+    virtual_text = false,
+    severity_sort = true,
+    signs = { text = M.icons.diagnostics },
+    status = {
+      format = M.status.render_counts(M.icons.diagnostics, {
+        'DiagnosticSignError',
+        'DiagnosticSignWarn',
+        'DiagnosticSignInfo',
+        'DiagnosticSignHint',
+      }),
+    },
   })
 end)
 

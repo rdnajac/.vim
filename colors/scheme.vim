@@ -8,14 +8,14 @@ hi link qfWarning           DiagnosticWarn
 hi link qfNote              DiagnosticHint
 hi link qfInfo              DiagnosticInfo
 
-if has('nvim')
-  " colorscheme tokyonight_generated
-  let s:colors_dir = expand('<script>:p:h')
-  execute 'source' s:colors_dir..'/tokyonight_generated.lua'
-  hi link vimMap @keyword
-  doautocmd <nomodeline> ColorScheme
-  finish
-endif
+" if has('nvim')
+  "   " colorscheme tokyonight_generated
+  "   let s:colors_dir = expand('<script>:p:h')
+  "   execute 'source' s:colors_dir..'/tokyonight_generated.lua'
+  "   hi link vimMap @keyword
+  "   doautocmd <nomodeline> ColorScheme
+  "   finish
+" endif
 
 hi clear
 if exists('syntax_on')
