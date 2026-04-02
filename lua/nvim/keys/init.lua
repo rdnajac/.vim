@@ -86,7 +86,7 @@ vim.schedule(function()
     })
     Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
     Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
-    Snacks.keymap.set({ 'n' }, 'ym', function() nv.yankmod() end, { ft = 'lua' })
+    Snacks.keymap.set({ 'n' }, 'ym', function() nv.util.yankmod() end, { ft = 'lua' })
     Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
     for key, v in pairs(require('nvim.keys.toggles')) do
       M.new_snacks_toggle(key, v)

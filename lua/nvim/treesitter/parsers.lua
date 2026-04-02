@@ -46,7 +46,7 @@ local parsers = {
   regex = false,
   rnoweb = false,
   toml = true,
-  typescript = true,
+  -- typescript = true,
   vim = true,
   -- xml = false,
   yaml = true,
@@ -59,11 +59,14 @@ local M = {
 
   ---@return string[] parsers nvim-treesitter should install
   to_install = function()
-    return vim
+    local parsers = vim
       .iter(parsers)
       :filter(function(k, _) return not vim.tbl_contains(defaults, k) end)
       :map(function(k, _) return k end)
       :totable()
+    -- extend with defaults to also install their queries
+    vim.list_extend(parsers, defaults)
+    return parsers
   end,
 
   ---@return string[] parsers to start on FileType event

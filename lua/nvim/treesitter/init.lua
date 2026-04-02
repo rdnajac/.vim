@@ -69,6 +69,8 @@ vim.api.nvim_create_autocmd('FileType', {
   desc = 'Use treesitter folding for select filetypes',
 })
 
+-- FIXME: invalid key: 21
+-- too many args
 M.install_parsers = function() vim.cmd.TSInstall(M.parsers.to_install()) end
 
 M.status = function()
