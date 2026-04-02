@@ -6,25 +6,19 @@ vim.g.render_markdown_config = {
   -- checkbox = { enabled = false },
   completions = { lsp = { enabled = true } },
   code = {
-    -- TODO: fix the highlights and show ` or spaces for inline code markers
     -- inline_left = ' ',
     -- inline_right = ' ',
     -- inline_padding= 1,
-    enabled = false,
     ---@diagnostic disable-next-line: assign-type-mismatch
-    highlight = false,
-    highlight_border = false,
-    -- highlight_inline = 'Chromatophore',
-    -- render_modes = { 'n', 'c', 't', 'i' },
-    sign = false,
-    conceal_delimiters = false,
-    language = true,
+    -- highlight = false,
+    -- highlight_border = 'Chromatophore',
+    --   -- highlight_inline = 'Chromatophore',
+    --   sign = false,
+    --   conceal_delimiters = false,
     position = 'left',
-    language_icon = true,
-    language_name = false,
-    language_info = false,
-    width = 'block',
-    min_width = 0,
+    --   language_info = false,
+    --   width = 'block',
+    --   min_width = 0,
     border = 'thin',
     style = 'normal',
   },
@@ -42,7 +36,7 @@ vim.g.render_markdown_config = {
 }
 
 vim.schedule(function()
-  Snacks.toggle({
+  Snacks.toggle.new({
     name = 'Render Markdown',
     get = function() return require('render-markdown.state').enabled end,
     set = function(state) require('render-markdown').set(state) end,

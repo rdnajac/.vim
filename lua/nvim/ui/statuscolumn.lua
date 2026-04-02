@@ -40,4 +40,5 @@ Snacks.statuscolumn.get = function()
   return string.format('%%=%s%s', ret, sep)
 end
 
-return opts
+-- pass opts to snacks.setup
+return opts 

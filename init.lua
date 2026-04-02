@@ -2,9 +2,7 @@
 T1 = vim.uv.hrtime()
 vim.loader.enable()
 
-require('vim._core.ui2').enable({
-  msg = { target = 'msg' },
-})
+require('vim._core.ui2').enable({ msg = { target = 'msg' } })
 
 vim.cmd([[ source ~/.vim/vimrc | colorscheme tokyonight ]])
 
@@ -18,14 +16,14 @@ require('snacks').setup({
       { icon = ' ', desc = 'Health',  key = 'H', action = ':checkhealth' },
       { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
       { icon = ' ', desc = 'Mason',   key = 'M', action = ':Mason' },
-      { icon = ' ', desc = 'Update',  key = 'U', action = vim.pack.update },
+      { icon = ' ', desc = 'Update',  key = 'U', action = ':lua vim.pack.update()' },
       { icon = ' ', desc = 'News',    key = 'N', action = function() Snacks.zen({win = {file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}}) end },
       },
     },
     sections = {
       { section = 'header' },
       { section = 'keys' },
-      { section = 'terminal', cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]] },
+      { section = 'terminal', padding = 1, cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]] },
       { section = 'startup' },
     },
   },
