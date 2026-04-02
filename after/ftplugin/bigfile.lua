@@ -4,7 +4,7 @@ if vim.fn.exists(':NoMatchParen') == 2 then
   vim.cmd.NoMatchParen()
 end
 -- vim.cmd.setlocal('foldmethod=manual', 'statuscolumn=', 'conceallevel=0')
-vim.cmd([[ setlocal foldmethod& statuscolum& conceallevel& ]])
+vim.cmd([[ setlocal foldmethod& statuscolumn& conceallevel& ]])
 
 vim.schedule(function()
   vim.notify(('This is a beeeg file (%s)!'):format(nv.fs.filesize(), vim.log.levels.WARN))

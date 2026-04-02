@@ -8,9 +8,9 @@ local M = {
       'tree-sitter-cli',
     }
 
+      -- TODO: find other tools in lsp dir
     local function other_tools()
       local ret = {}
-      -- TODO: find other tools in lsp dir
       ret[#ret + 1] = 'stylua'
       return ret
     end
@@ -19,25 +19,27 @@ local M = {
   end,
 }
 
--- string manipulation
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
 M.camelCase = function(s)
   return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)
 end
 
--- shared
-M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
-M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
--- TODO: is_visual_mode
+--- Run a Vim command and return the output as a list of lines
+---@param cmd string Vim command to execute
+---@return string[] output
+M.exec = function(cmd)
+  local res = vim.api.nvim_exec2(cmd, { output = true })
+  return vim.split(res.output, '\n', { trimempty = true })
+end
 
--- api wrappers
+--- Get all lines from a buffer as a list of strings
+---@param bufnr integer? buffer number, defaults to current buffer
+---@return string[] lines
 M.get_buf_lines = function(bufnr)
   bufnr = bufnr or api.nvim_get_current_buf()
   local nlines = api.nvim_buf_line_count(bufnr)
   return api.nvim_buf_get_lines(bufnr, 0, nlines, false)
 end
-
-M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
 
 ---@param opts? vim.treesitter.get_node.Opts
 M.is_comment = function(opts)
@@ -53,19 +55,10 @@ M.is_comment = function(opts)
   return not not type:match('comment')
 end
 
-M.exec = function(cmd)
-  local res = vim.api.nvim_exec2(cmd, { output = true })
-  return vim.split(res.output, '\n', { trimempty = true })
-end
-
--- local ns = vim.api.nvim_create_namespace('hl_on_paste')
--- vim.paste = (function(overridden)
---   return function(lines, phase)
---     local ret = overridden(lines, phase)
---     vim.hl.range(0, ns, 'Visual', "'[", "']", { timeout = 300 })
---     return ret
---   end
--- end)(vim.paste)
+M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
+M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
+M.is_visual = function() return fn.mode():match('[vV\22]') ~= nil end
+M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
 
 M.yank = function(text)
   fn.setreg('*', text)
@@ -128,5 +121,15 @@ function M.run(cmd, err_on_fail, errmsg, stdin)
   end
   return rv.stdout
 end
+
+-- TODO:
+-- local ns = vim.api.nvim_create_namespace('hl_on_paste')
+-- vim.paste = (function(overridden)
+--   return function(lines, phase)
+--     local ret = overridden(lines, phase)
+--     vim.hl.range(0, ns, 'Visual', "'[", "']", { timeout = 300 })
+--     return ret
+--   end
+-- end)(vim.paste)
 
 return M

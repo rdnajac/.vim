@@ -1,6 +1,7 @@
 ---@type snacks.picker.explorer.Config
 local M = {
   ignored = true,
+  jump = { close = true },
   -- override default config function
   config = function(opts)
     local ret = require('snacks.picker.source.explorer').setup(opts)
@@ -12,11 +13,10 @@ local M = {
   win = {
     list = {
       keys = {
+        ['/'] = 'picker_grep',
         ['-'] = 'explorer_up',
         ['<Left>'] = 'explorer_up',
         ['<Right>'] = 'confirm',
-        -- ['<CR>'] = { 'jump', 'close' },
-        ['/'] = 'picker_grep',
       },
     },
   },

@@ -49,4 +49,4 @@ _G.p = Snacks.debug.profile
 _G.nv = require('nvim')
 
 T2 = vim.uv.hrtime()
--- vim: fdl=2
+-- vim: fdl=1
