@@ -70,7 +70,9 @@ vim.schedule(function()
       desc = 'Undotree',
     },
   }
+
   M.map(keys)
+
   if Snacks then
     M.map({
       { { 'x' }, '/', Snacks.picker.grep_word },
@@ -91,20 +93,6 @@ vim.schedule(function()
     end
   end
 
-  -- override the default config loading to improve performance
-  package.preload['dial.config'] = function() return require('nvim.keys.dial') end
-  -- load after startup
-  Plug({
-    {
-      'monaqa/dial.nvim',
-      keys = {
-        { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
-        { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
-        { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
-        { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
-      },
-    },
-  })
 end)
 
 M.register = function(spec)

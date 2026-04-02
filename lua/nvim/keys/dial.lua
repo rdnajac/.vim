@@ -193,4 +193,21 @@ local function dial(increment, g)
   -- vim.api.nvim_feedkeys(keys, 'n', false)
 end
 
+local spec = {
+  'monaqa/dial.nvim',
+  init = function()
+    -- override the default config loading to improve performance
+    package.preload['dial.config'] = function() return M end
+  end,
+  enabled = false,
+  keys = {
+    { { 'n', 'x' }, '<C-a>', '<Plug>(dial-increment)' },
+    { { 'n', 'x' }, 'g<C-a>', '<Plug>(dial-g-increment)' },
+    { { 'n', 'x' }, '<C-x>', '<Plug>(dial-decrement)' },
+    { { 'n', 'x' }, 'g<C-x>', '<Plug>(dial-g-decrement)' },
+  },
+}
+
+Plug({ spec })
+
 return M

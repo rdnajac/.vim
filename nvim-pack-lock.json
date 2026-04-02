@@ -5,7 +5,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "1eebbba1baa56946e7c031111d88a72f945381f5",
+      "rev": "69b469147fd879ac30d815ecd2477b1ee9b6e2c7",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
-      "rev": "adf4b6b0420b7be6c717ef0ac7993183d6c201b1",
+      "rev": "b0c45cefe2c8f7b55fc46f34e563bc428ef99636",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "nvim-treesitter-textobjects": {
@@ -115,6 +115,10 @@
     "vim-scriptease": {
       "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
       "src": "https://github.com/tpope/vim-scriptease.git"
+    },
+    "vim-speeddating": {
+      "rev": "c17eb01ebf5aaf766c53bab1f6592710e5ffb796",
+      "src": "https://github.com/tpope/vim-speeddating.git"
     },
     "vim-surround": {
       "rev": "3d188ed2113431cf8dac77be61b842acb64433d9",
