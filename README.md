@@ -50,8 +50,15 @@ $$
 
 ### vint
 
-needs latest [vimlparser](https://github.com/vim-jp/vim-vimlparser)
+vint from mason needs latest [vimlparser](https://github.com/vim-jp/vim-vimlparser)
+
 https://raw.githubusercontent.com/Vimjas/vint/94d2cb3fd9526a89911b7c1e083a1fd78bace729/vint/_bundles/__init__.py
+
+local build works?
+
+clone the repo
+navigate to the directory
+install with `pipx install -e .`
 
 ## Resources and references
 

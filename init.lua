@@ -4,7 +4,7 @@ vim.loader.enable()
 
 require('vim._core.ui2').enable({ msg = { target = 'msg' } })
 
-vim.cmd([[   
+vim.cmd([[ 
 colorscheme tokyonight 
 source ~/.vim/vimrc
 ]])
