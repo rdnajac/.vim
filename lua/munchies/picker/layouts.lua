@@ -1,5 +1,22 @@
----@type snacks.layout.Config
-return {
+local M = {}
+
+-- pop-up for selecting text in insert mode
+M.insert = {
+  layout = {
+    reverse = true,
+    relative = 'cursor',
+    row = 1,
+    width = 0.3,
+    min_width = 48,
+    height = 0.3,
+    border = 'none',
+    box = 'vertical',
+    { win = 'input', height = 1, border = 'rounded', wo = { cursorline = false } },
+    { win = 'list', border = 'rounded' },
+  },
+}
+
+M.mylayout = {
   preset = 'ivy',
   reverse = true,
   ---@type snacks.layout.Box[]
@@ -33,3 +50,5 @@ return {
     },
   },
 }
+
+return M
