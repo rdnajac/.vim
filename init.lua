@@ -4,7 +4,10 @@ vim.loader.enable()
 
 require('vim._core.ui2').enable({ msg = { target = 'msg' } })
 
-vim.cmd([[ source ~/.vim/vimrc | colorscheme tokyonight ]])
+vim.cmd([[   
+colorscheme tokyonight 
+source ~/.vim/vimrc
+]])
 
 require('snacks').setup({
   -- stylua: ignore

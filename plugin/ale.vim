@@ -1,8 +1,9 @@
 scriptencoding utf-8
 
-let g:ale_virtualtext_cursor = 0
-let g:ale_lint_on_text_changed = 'never'
+" set omnifunc=ale#completion#OmniFunc
+
 let g:ale_echo_cursor = 'never'
+let g:ale_virtualtext_cursor = 0
 
 let g:ale_fixers = {
       \ '*'	  : ['remove_trailing_lines', 'trim_whitespace'],
@@ -12,9 +13,9 @@ let g:ale_fixers = {
 
 let g:ale_linters_explicit = 1
 let g:ale_linters = {
-      \ 'lua' : ['lua_language_server'],
       \ 'vim' : ['vint'],
       \ }
+let g:ale_lint_on_text_changed = 'never'
 
 if has('nvim')
   let g:ale_disable_lsp = 1

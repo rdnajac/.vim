@@ -15,8 +15,8 @@ let s:dirs = {
 if exists('*stdpath')
   let s:dirs.C = stdpath('cache')
   let s:dirs.c = stdpath('config')
-  let s:dirs.d = stdpath('cache')
-  let s:dirs.s = stdpath('cache')
+  let s:dirs.d = stdpath('data')
+  let s:dirs.s = stdpath('state')
 else
   let s:dirs.C = empty($XDG_CACHE_HOME)  ? expand('~/.cache') : expand('$XDG_CONFIG_HOME') .. '/vim'
   let s:dirs.c = empty($XDG_CONFIG_HOME) ? expand('~/.config') : expand('$XDG_CONFIG_HOME')  .. '/vim'

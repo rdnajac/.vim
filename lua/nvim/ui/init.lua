@@ -25,21 +25,6 @@ vim.schedule(function()
     desc = 'Start tree-sitter for message windows',
   })
 
-  vim.diagnostic.config({
-    float = { source = true },
-    underline = false,
-    virtual_text = false,
-    severity_sort = true,
-    signs = { text = M.icons.diagnostics },
-    status = {
-      format = M.status.render_counts(M.icons.diagnostics, {
-        'DiagnosticSignError',
-        'DiagnosticSignWarn',
-        'DiagnosticSignInfo',
-        'DiagnosticSignHint',
-      }),
-    },
-  })
 end)
 
 M.redraw = function(t)

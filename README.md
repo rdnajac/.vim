@@ -48,19 +48,10 @@ $$
 
 ## Bugs
 
-### luals doesn't work on first buffer loaded
+### vint
 
-`https://github.com/folke/lazydev.nvim/issues/136#issuecomment-3773651709`
-
-MasonInstall lua-kanguage-server@3.16.4
-
-### SIGSEGV on startup
-
-Crash when `packadd` is called during `:runtime` or `:source` execution
-
-https://github.com/neovim/neovim/issues/38119
-
-roll back to `cf874cee330db7996e879891b7be0ffa3bd6a535`
+needs latest [vimlparser](https://github.com/vim-jp/vim-vimlparser)
+https://raw.githubusercontent.com/Vimjas/vint/94d2cb3fd9526a89911b7c1e083a1fd78bace729/vint/_bundles/__init__.py
 
 ## Resources and references
 
