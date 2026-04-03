@@ -78,11 +78,12 @@ vim.schedule(function()
       { { 'x' }, '/', Snacks.picker.grep_word },
       { { 'n' }, ',,', Snacks.picker.buffers },
       { { 'n' }, ',.', Snacks.scratch.open },
-      { { 'i' }, '<C-i>', Snacks.picker.icons },
+      { { 'i' }, '<C-x><C-i>', Snacks.picker.icons },
+      { { 'n', 't' }, '<C-Bslash>', Snacks.terminal.toggle },
+      { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
+      { { 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end },
       { 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
       { 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
-      { ']]', function() Snacks.words.jump(vim.v.count1) end, mode = { 'n', 't' } },
-      { '[[', function() Snacks.words.jump(-vim.v.count1) end, mode = { 'n', 't' } },
     })
     Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
     Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
@@ -92,7 +93,6 @@ vim.schedule(function()
       M.new_snacks_toggle(key, v)
     end
   end
-
 end)
 
 M.register = function(spec)

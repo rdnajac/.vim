@@ -1,29 +1,29 @@
-local api, fn, lsp = vim.api, vim.fn, vim.lsp
-
--- NOTE: blink automatically adds some capabilities
--- `$PACKDIR/blink.cmp/lua/blink/cmp/sources/lib/init.lua`
---- `:h vim.lsp.protocol.make_client_capabilities()` for defaults
+--- see `:h vim.lsp.protocol.make_client_capabilities()` for defaults
+--- NOTE: blink.cmp will automatically add additional capabilities
+--- `$PACKDIR/blink.cmp/lua/blink/cmp/sources/lib/init.lua`
 
 local M = {}
 
----@param buf? number
-M.attached = function(buf) return lsp.get_clients({ bufnr = buf or api.nvim_get_current_buf() }) end
-
 ---@return string status icons of all attached clients
-M.status = function() return vim.iter(M.attached()):map(require('nvim.lsp.status')):join(' ') end
+M.status = function(bufnr)
+  return vim
+    .iter(vim.lsp.get_clients({ bufnr = vim._resolve_bufnr(bufnr) }))
+    :map(require('nvim.lsp.status'))
+    :join(' ')
+end
 
 vim.schedule(function()
-  local lsp_config_dir = fn.stdpath('config') .. '/after/lsp'
+  local lsp_config_dir = vim.fn.stdpath('config') .. '/after/lsp'
   M.servers = vim
-    .iter(fn.globpath(lsp_config_dir, '*', false, true))
+    .iter(vim.fn.globpath(lsp_config_dir, '*', false, true))
     :map(function(path) return vim.fn.fnamemodify(path, ':t:r') end)
     :totable()
 
+  -- enable servers found in the after directory
+  vim.lsp.enable(M.servers)
+
   -- folke/lazydev.nvim
   Plug(require('nvim.lsp.lazydev'))
-
-  -- enable servers found in the after directory
-  lsp.enable(M.servers)
 
   vim.cmd([[
     nnoremap glc <Cmd>lua Snacks.picker.lsp_config()<CR>
@@ -40,7 +40,7 @@ vim.schedule(function()
   ]])
 end)
 
-api.nvim_create_autocmd('LspProgress', {
+vim.api.nvim_create_autocmd('LspProgress', {
   callback = function(ev)
     local id, params = ev.data.client_id, ev.data.params
     local value = params.value
@@ -51,7 +51,7 @@ api.nvim_create_autocmd('LspProgress', {
       value.title -- append the original title
     )
 
-    api.nvim_echo({ { value.message or '100% done' } }, false, {
+    vim.api.nvim_echo({ { value.message or '100% done' } }, false, {
       id = 'lsp.' .. params.token,
       kind = 'progress',
       source = 'nv.lsp',
