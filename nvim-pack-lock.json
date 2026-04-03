@@ -5,7 +5,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "69b469147fd879ac30d815ecd2477b1ee9b6e2c7",
+      "rev": "ba9601b77e721d53d66e1486a30a05c6311cf535",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -29,7 +29,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "3923662bf3d6ca49a9503f8d7196ea0450983e6a",
+      "rev": "402ee6c6ec8ea44b22330446c8fb4e615fd3953e",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -37,11 +37,11 @@
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
-      "rev": "b3eda2318d1892eefee516af02a232588e0fa1a9",
+      "rev": "9d22ecef2d019a72748f23cec9db32c7f7b222d2",
       "src": "https://github.com/chrisgrieser/nvim-scissors.git"
     },
     "nvim-treesitter": {
-      "rev": "c82bf96f0a773d85304feeb695e1e23b2207ac35",
+      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter.git"
     },
     "nvim-treesitter-context": {
@@ -107,6 +107,10 @@
     "vim-repeat": {
       "rev": "65846025c15494983dafe5e3b46c8f88ab2e9635",
       "src": "https://github.com/tpope/vim-repeat.git"
+    },
+    "vim-rhubarb": {
+      "rev": "5496d7c94581c4c9ad7430357449bb57fc59f501",
+      "src": "https://github.com/tpope/vim-rhubarb.git"
     },
     "vim-rsi": {
       "rev": "45540637ead22f011e8215f1c90142e49d946a54",
