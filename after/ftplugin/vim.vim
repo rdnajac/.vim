@@ -9,8 +9,8 @@ nnoremap <buffer><expr> O    getline('.') =~# "^\\s*Plug '" ? "OPlug ''\<Left>" 
 nnoremap <buffer> <leader>ch <Cmd>call edit#ch()<CR>
 nnoremap <buffer> gch        <Cmd>call edit#ch()<CR>
 
-" TODO: Info
+" TODO: use Info instead of echom
+xnoremap <buffer> <CR> :\|echom printf(' %s', getline('.'))<CR>
 nnoremap <buffer> <M-CR> <Cmd>so % \| echom 'Sourced ' .. expand('%:p')<CR>
-xnoremap <buffer> <CR> :\|echom getline('.')<CR>
 
 ia <buffer> enc scriptencoding utf-8

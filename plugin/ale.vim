@@ -10,6 +10,7 @@ let g:ale_fixers = {
       \ }
 " \ 'sh'	  : ['shfmt','shellharden'],
 
+let g:ale_linters_explicit = 1
 let g:ale_linters = {
       \ 'lua' : ['lua_language_server'],
       \ 'vim' : ['vint'],

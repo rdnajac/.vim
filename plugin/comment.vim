@@ -5,6 +5,10 @@ nmap yc ygc
 " comment out a line and paste it below
 nmap gy "xyygcc"xp
 
+" start a comment above or below the current line
+nmap coO O0<Esc>gccA<BS>
+nmap coo o0<Esc>gccA<BS>
+
 function! s:toggle_comment() abort
   " vint: -ProhibitCommandRelyOnUser
   normal gcc
@@ -23,7 +27,6 @@ endfunction
 nnoremap <leader>fn <Cmd>call <SID>title()<CR>
 
 let s:comments = {
-      \ 'o': '',
       \ 'b': 'BUG: ',
       \ 'f': 'FIXME: ',
       \ 'h': 'HACK: ',
@@ -34,17 +37,15 @@ let s:comments = {
       \ 'i': 'stylua: ignore',
       \ }
 
-
 function comment#syntax_match(...) abort
   let pos = a:0 ? a:1 : getpos('.')
   let synid = synID(pos[1], pos[2], 1)
-  let name  = synIDattr(synid, 'name')
-  Info name
+  let name = synIDattr(synid, 'name')
   return !empty(name) && name =~# 'Comment'
 endfunction
 
 function! s:comment(above, tag) abort
-  execute 'normal! ' .. (a:above ? 'O' : 'o') .. a:tag
+  execute 'normal!' .. (a:above ? 'O' : 'o') .. a:tag
   if !comment#syntax_match(getpos('.'))
     call s:toggle_comment()
   endif
@@ -53,17 +54,9 @@ function! s:comment(above, tag) abort
   endif
 endfunction
 
-function! comment#above(tag) abort
-  call s:comment(1, a:tag)
-endfunction
-
-function! comment#below(tag) abort
-  call s:comment(0, a:tag)
-endfunction
-
 " map `co` and `cO` to insert comments with specific tags
 for [key, val] in items(s:comments)
-  execute printf('nnoremap co%s <Cmd>call comment#below("%s")<CR>', key, val)
-  execute printf('nnoremap cO%s <Cmd>call comment#above("%s")<CR>', key, val)
-  execute printf('nnoremap co%s <Cmd>call comment#above("%s")<CR>', toupper(key), val)
+  execute printf('nnoremap cO%s <Cmd>call <SID>comment(0, "%s")<CR>', key, val)
+  execute printf('nnoremap co%s <Cmd>call <SID>comment(1, "%s")<CR>', key, val)
+  execute printf('nnoremap co%s <Cmd>call <SID>comment(1, "%s")<CR>', toupper(key), val)
 endfor

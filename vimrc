@@ -202,7 +202,8 @@ nnoremap ~ `
 nnoremap <Space> :
 nnoremap : ,
 nnoremap  ciw
-nnoremap  <Cmd>lua Snacks.explorer.open({cwd = vim.fs.dirname(vim.api.nvim_buf_get_name(0))})<CR>
+nnoremap - <Cmd>lua Snacks.explorer.open({cwd = vim.fn.fnamemodify('%', ':p:h')})<CR>
+nnoremap  <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
 nnoremap  <Cmd>lua Snacks.picker()<CR>
 xnoremap  :sort<CR>
 

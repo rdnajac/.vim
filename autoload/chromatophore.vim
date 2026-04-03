@@ -2,19 +2,30 @@ if !exists('g:chromatophores')
   let g:chromatophores = [ 'String' ]
 endif
 
+if has('nvim')
+  function! s:add(group) abort
+    call add(g:chromatophores, a:group)
+  endfunction
+  call s:add('WinBar')
+  call s:add('helpSectionDelim')
+  call s:add('manOptionDesc')
+  call s:add('@markup.raw.markdown_inline')
+  call s:add('MiniIconsGreen')
+  call s:add('SnacksDashboardDesc')
+  call s:add('SnacksDashboardHeader')
+  call s:add('SnacksDashboardIcon')
+  call s:add('SnacksDashboardKey')
+  call s:add('SnacksDashboardNormal')
+  call s:add('SnacksDashboardSpecial')
+  call s:add('SnacksDashboardTerminal')
+  call s:add('SnacksIndentScope')
+endif
+
+
 function! s:hl_set(name, fg, bg, ...) abort
   let attr = a:0 ? a:1 : ''
-  let cmd = 'highlight ' . a:name . ' guifg=' . a:fg . ' guibg=' . a:bg
-  if !empty(attr)
-    let cmd .= ' gui=' . attr
-  endif
-  execute cmd
-endfunction
-
-function! s:hl_link(target, groups) abort
-  for group in a:groups
-    execute printf('highlight! link %s %s', group, a:target)
-  endfor
+  execute printf('highlight %s guifg=%s guibg=%s%s',
+	\ a:name, a:fg, a:bg, empty(attr) ? '' : ' gui='..attr)
 endfunction
 
 function! chromatophore#setup() abort
@@ -36,7 +47,9 @@ function! chromatophore#setup() abort
   call s:hl_set('Chromatophore_bc', grey,       eigengrau)
   call s:hl_set('Chromatophore_cN', eigengrau, 'NONE')
   call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
-  call s:hl_link('Chromatophore', g:chromatophores)
+  for group in g:chromatophores
+    exe $'highlight! link {group} Chromatophore'
+  endfor
 endfunction
 
 let s:mode_color_map = {
@@ -88,3 +101,11 @@ function! chromatophore#metachrosis() abort
   endfor
   execute 'highlight Chromatophore_a guibg=' . l:color
 endfunction
+
+augroup chromatophore
+  autocmd!
+  autocmd ColorScheme * call chromatophore#setup()
+  autocmd ModeChanged * call chromatophore#metachrosis()
+  " HACK:
+  au FileType snacks_dashboard lua vim.schedule(function() vim.cmd('doautocmd ColorScheme') end)
+augroup END

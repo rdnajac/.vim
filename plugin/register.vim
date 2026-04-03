@@ -58,7 +58,6 @@ augroup vimrc_yank
   autocmd TextYankPost * ++once call s:fallback()
   if has('nvim')
     autocmd TextYankPost * silent! lua vim.hl.on_yank()
-    " autocmd TextYankPost * silent! lua vim.hl.on_yank {higroup='Visual', timeout=300}
     autocmd UIEnter * call s:set_clipboard()
   endif
 augroup END
