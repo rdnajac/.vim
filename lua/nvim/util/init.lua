@@ -8,7 +8,7 @@ local M = {
       'tree-sitter-cli',
     }
 
-      -- TODO: find other tools in lsp dir
+    -- TODO: find other tools in lsp dir
     local function other_tools()
       local ret = {}
       ret[#ret + 1] = 'stylua'

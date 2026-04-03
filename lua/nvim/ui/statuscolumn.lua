@@ -41,4 +41,4 @@ Snacks.statuscolumn.get = function()
 end
 
 -- pass opts to snacks.setup
-return opts 
+return opts

@@ -110,7 +110,6 @@ M.git = function()
   })
 end
 
-
 local parts = {
   [[%<%f %h%w%m%r ]], -- path, help, preview, modified, readonly
   [[%{% v:lua.require('vim._core.util').term_exitcode() %}]],

@@ -12,4 +12,4 @@ return vim
     end)
   end)
   :fold({}, rawset)
-  -- :fold(require('nvim.util'), rawset)
+-- :fold(require('nvim.util'), rawset)

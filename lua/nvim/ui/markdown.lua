@@ -36,9 +36,11 @@ vim.g.render_markdown_config = {
 }
 
 vim.schedule(function()
-  Snacks.toggle.new({
-    name = 'Render Markdown',
-    get = function() return require('render-markdown.state').enabled end,
-    set = function(state) require('render-markdown').set(state) end,
-  }):map('<leader>um')
+  Snacks.toggle
+    .new({
+      name = 'Render Markdown',
+      get = function() return require('render-markdown.state').enabled end,
+      set = function(state) require('render-markdown').set(state) end,
+    })
+    :map('<leader>um')
 end)

@@ -24,7 +24,6 @@ vim.schedule(function()
     end,
     desc = 'Start tree-sitter for message windows',
   })
-
 end)
 
 M.redraw = function(t)
