@@ -1,27 +1,16 @@
--- ~/.local/share/nvim/site/pack/core/opt/mini.nvim/lua/mini/icons.lua:682
 local copilot = ''
-
+-- `$PACKDIR/mini.nvim/lua/mini/icons.lua:682`
 local M = {
-  blink = {
-    buffer = '',
-    cmdline = '',
-    copilot = copilot,
-    lsp = '',
-    omni = '',
-    path = '',
-    snippets = '',
-    -- nonstandard providers
-    dadbod = '',
-    env = '',
-    lazydev = '󰒲',
-  },
-  -- TODO: add support for highlight groups
-  copilot = {
-    Error = { '', 'DiagnosticError' },
-    Inactive = { '', 'MsgArea' },
-    Warning = { '', 'DiagnosticWarn' },
-    Normal = { copilot, 'DiagnosticHint' },
-  },
+  buffer = '',
+  cmdline = '',
+  lsp = '',
+  omni = '',
+  path = '',
+  snippets = '',
+  dadbod = '',
+  env = '',
+  lazydev = '󰒲',
+  copilot = copilot,
   diff = { add = '▎', change = '▎', delete = '' },
   git = {
     commit = '󰜘 ',
@@ -33,6 +22,16 @@ local M = {
     renamed = '',
     unmerged = ' ',
     untracked = '?',
+  },
+  -- copilot_status = { 
+  --   Error = { '', 'DiagnosticError' },
+  --   Inactive = { '', 'MsgArea' },
+  --   Warning = { '', 'DiagnosticWarn' },
+  -- },
+  lsp_status = {
+    active = '󰖩',
+    busy = '󱛇',
+    stopped = '󰖪',
   },
 }
 
@@ -48,6 +47,7 @@ M.diagnostics = {
   Info = '',
   Hint = '',
 }
+
 local hl_map = {
   [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
   [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
@@ -69,13 +69,6 @@ local hl_map = {
 --   [2] = 'WARN',
 --   [3] = 'INFO',
 -- }
-
-M.status = {
-  active = '󰖩',
-  busy = '󱛇',
-  stopped = '󰖪',
-  inactive = '',
-}
 
 M.mason = {
   emojis = { package_installed = '✅', package_pending = '➡️', package_uninstalled = '❌' },

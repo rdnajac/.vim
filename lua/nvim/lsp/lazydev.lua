@@ -71,7 +71,7 @@ return {
       { path = 'mini.nvim', words = { 'Mini.*' } },
       { path = 'plug', words = { 'Plug' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },
-      { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
+      { path = 'lspconfig/types', words = { 'lspconfig' } },
     },
   },
 }

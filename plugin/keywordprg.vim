@@ -15,7 +15,7 @@ function! s:mykeywordprg(...) abort
 endfunction
 
 function! s:setup(...) abort
-  let b:manpage = a:0 ? a:1 : &ft
+  let b:manpage = a:0 ? a:1 : &filetype
   setlocal keywordprg=:MyMan
   setlocal iskeyword+=-
 endfunction

@@ -1,8 +1,3 @@
--- FIXME: finish this...
--- local id = require('nvim.lsp.myserver').client_id
--- vim.g.myserver_id = id
--- vim.lsp.buf_attach_client(0, id)
-
 vim.wo.foldmethod = 'expr'
 vim.wo.foldtext = 'v:lua.nv.ui.foldtext()'
 
@@ -47,21 +42,14 @@ end
 local aug = vim.api.nvim_create_augroup('lua', {})
 
 if Snacks then
+  local old_bg = Snacks.util.color('LspReferenceText', 'bg')
   -- TODO: only disable highlighting inside of `vim.cmd([[...]])`
   vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     group = aug,
-    callback = function()
-      vim.b.old_hl = Snacks.util.color('LspReferenceText', 'bg')
-      Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } })
-    end,
+    callback = function() Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } }) end,
   })
   vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
     group = aug,
-    callback = function()
-      if vim.b.old_hl then
-        Snacks.util.set_hl({ LspReferenceText = { bg = vim.b.old_hl } })
-        vim.b.old_hl = nil
-      end
-    end,
+    callback = function() Snacks.util.set_hl({ LspReferenceText = { bg = old_bg } }) end,
   })
 end

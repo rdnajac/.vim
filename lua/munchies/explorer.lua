@@ -20,10 +20,7 @@ local M = {
       },
     },
   },
-}
-
--- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
-local floating_preview_config = {
+  -- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
   -- on picker show
   on_show = function(picker)
     local rel = picker.layout.root
@@ -78,13 +75,11 @@ local floating_preview_config = {
   on_close = function(picker) picker.preview.win:close() end,
   layout = {
     preset = 'sidebar',
-    -- preview = false,
+    preview = false,
   },
   actions = {
     toggle_preview = function(picker) picker.preview.win:toggle() end,
   },
 }
-
-vim.tbl_extend('force', M, floating_preview_config)
 
 return M

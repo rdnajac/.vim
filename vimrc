@@ -127,7 +127,7 @@ else
   " aunmenu PopUp | autocmd! nvim.popupmenu
 
   " restart neovim and restore state with Session
-  nnoremap <M-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
+  nnoremap <D-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
 endif
 " }}}1
 
@@ -382,4 +382,5 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
+
 " vim: fdm=marker fdl=1

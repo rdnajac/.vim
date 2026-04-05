@@ -4,14 +4,6 @@
 
 local M = {}
 
----@return string status icons of all attached clients
-M.status = function(bufnr)
-  return vim
-    .iter(vim.lsp.get_clients({ bufnr = vim._resolve_bufnr(bufnr) }))
-    :map(require('nvim.lsp.status'))
-    :join(' ')
-end
-
 vim.schedule(function()
   local lsp_config_dir = vim.fn.stdpath('config') .. '/after/lsp'
   M.servers = vim
@@ -40,7 +32,8 @@ vim.schedule(function()
   ]])
 end)
 
-vim.api.nvim_create_autocmd('LspProgress', {
+vim.api.nvim_create_autocmd('LspProgress', 
+{
   callback = function(ev)
     local id, params = ev.data.client_id, ev.data.params
     local value = params.value
@@ -63,6 +56,26 @@ vim.api.nvim_create_autocmd('LspProgress', {
 
     vim.cmd.redrawstatus()
   end,
-})
+}
+)
+
+---@param bufnr? integer
+---@return string
+M.status = function(bufnr)
+  return vim
+    .iter(vim.lsp.get_clients({ bufnr = vim._resolve_bufnr(bufnr) }))
+    ---@param client vim.lsp.Client
+    :map(function(client)
+      -- TODO: busy status
+      local icons = require('nvim.ui.icons')
+      if client.name ~= 'copilot' then
+        return icons.copilot .. ' '
+      end
+      local status = client:is_stopped() and 'stopped' or 'active'
+      return icons.lsp_status[status] .. ' '
+    end)
+    :join(' ')
+end
+
 
 return M

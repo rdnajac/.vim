@@ -42,7 +42,7 @@ local spec = {
               text = function(ctx)
                 local provider = ctx.source_name:lower()
                 local icon = provider == 'lsp' and MiniIcons.get('lsp', ctx.kind)
-                  or require('nvim.ui.icons').blink[provider]
+                  or require('nvim.ui.icons')[provider]
                 return (icon or '') .. ctx.icon_gap
               end,
               ---@param ctx blink.cmp.DrawItemContext
@@ -70,5 +70,19 @@ local spec = {
     sources = require('blink.sources'),
   },
 }
+
+local providers = function(mode)
+  local ok, lib = pcall(require, 'blink.cmp.sources.lib')
+  if not ok or not lib then
+    return {}
+  end
+  mode = mode or vim.api.nvim_get_mode().mode
+  local cmp_mode = ({ c = 'cmdline', t = 'terminal' })[mode:sub(1, 1)] or 'default'
+  return lib.get_enabled_providers(cmp_mode)
+end
+
+local status = function()
+  return vim.iter(providers()):map(function(k, _) return nv.icons[k] .. ' ' end):join(' ')
+end
 
 return spec

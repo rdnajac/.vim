@@ -4,8 +4,8 @@ vim.loader.enable()
 
 require('vim._core.ui2').enable({ msg = { target = 'msg' } })
 
-vim.cmd([[ 
-colorscheme tokyonight 
+vim.cmd([[
+colorscheme tokyonight
 source ~/.vim/vimrc
 ]])
 
@@ -39,7 +39,6 @@ require('snacks').setup({
   picker = {
     layouts = require('munchies.picker.layouts'),
     sources = {
-      buffers = { layout = 'mylayout' },
       -- icons = { layout = 'insert' },
       help = { layout = 'mylayout' },
       explorer = require('munchies.explorer'),

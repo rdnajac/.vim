@@ -8,6 +8,10 @@ nmap gy "xyygcc"xp
 " start a comment above or below the current line
 nmap coO O0<Esc>gccA<BS>
 nmap coo o0<Esc>gccA<BS>
+" nmap <Plug>CommentAbove O<Esc>gccA<BS>
+" nmap <Plug>CommentBelow o<Esc>gccA<BS>
+" nmap coo <Plug>CommentBelow
+" nmap coO <Plug>CommentAbove
 
 function! s:toggle_comment() abort
   " vint: -ProhibitCommandRelyOnUser
@@ -16,11 +20,7 @@ function! s:toggle_comment() abort
 endfunction
 
 function! s:title() abort
-  let fname = fnamemodify(expand('%'), ':p')
-  let fname = substitute(fname, git#root(), '', '')
-  let fname = substitute(fname, '^\/*', '', '')
-  " return fname
-  execute append(0, fname)
+  execute append(0, substitute(fnamemodify(expand('%'), ':p'), git#root()..'/', '', ''))
   call s:toggle_comment()
 endfunction
 
@@ -44,19 +44,18 @@ function comment#syntax_match(...) abort
   return !empty(name) && name =~# 'Comment'
 endfunction
 
-function! s:comment(above, tag) abort
+function! comment#insert(above, tag) abort
   execute 'normal!' .. (a:above ? 'O' : 'o') .. a:tag
-  if !comment#syntax_match(getpos('.'))
-    call s:toggle_comment()
-  endif
-  if a:tag =~ ':\s'
-    startinsert!
-  endif
+  " TODO: check if format opts does not contain o instead
+  " if !comment#syntax_match(getpos('.'))
+  call s:toggle_comment()
+  " endif
+  normal! A
 endfunction
 
 " map `co` and `cO` to insert comments with specific tags
 for [key, val] in items(s:comments)
-  execute printf('nnoremap cO%s <Cmd>call <SID>comment(0, "%s")<CR>', key, val)
-  execute printf('nnoremap co%s <Cmd>call <SID>comment(1, "%s")<CR>', key, val)
-  execute printf('nnoremap co%s <Cmd>call <SID>comment(1, "%s")<CR>', toupper(key), val)
+  execute printf('nnoremap cO%s <Cmd>call comment#insert(0, "%s")<CR>', key, val)
+  execute printf('nnoremap co%s <Cmd>call comment#insert(1, "%s")<CR>', key, val)
+  execute printf('nnoremap co%s <Cmd>call comment#insert(1, "%s")<CR>', toupper(key), val)
 endfor

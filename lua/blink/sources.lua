@@ -36,10 +36,9 @@ local sources = {
       },
     },
     snippets = {
-      score_offset = 99,
+      -- score_offset = 99,
       opts = { friendly_snippets = false },
       -- https://cmp.saghen.dev/recipes.html#hide-snippets-after-trigger-character
-      -- FIXME: last line of a comment isn't a ts comment
       -- TODO: no snippets in middle of word
       should_show_items = function(ctx)
         if require('nvim.util').is_comment() then
