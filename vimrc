@@ -165,7 +165,6 @@ augroup vimrc
   " catch when vim doesn't terminate properly
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
 augroup END
-
 " }}}1
 
 " Section: commands/config {{{1
@@ -231,24 +230,26 @@ nnoremap zJ <Plug>(unimpaired-move-down)kJ
 " nnoremap do     do]c
 
 " `<leader>` {{{2
+nnoremap <leader>k     <Cmd>normal! K<CR>
 nnoremap <leader>-     <Cmd>sbp<CR>
 nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
-nnoremap <leader>k <Cmd>normal! K<CR>
 
 " debug
 nnoremap <leader>da <Cmd>ALEInfo<CR>
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
 nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
+if has('nvim')
+  nnoremap <leader>di <Cmd>Inspect<CR>
+  nnoremap <leader>dI <Cmd>Inspect!<CR>
+  nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
+endif
 
 " file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
-" TODO: use Rename if nvim or if snacks unavailable
-nnoremap <leader>fC <Cmd>lua Snacks.rename.rename_file()<CR>
-nnoremap <leader>fR :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
+nnoremap <leader>fT :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
 nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
-nnoremap <leader>fT <Cmd>call edit#ftplugin('.lua')<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 " navigation {{{2
@@ -332,7 +333,6 @@ nnoremap yos :set spell!<BAR>set spell?<CR>
 nnoremap yow :set wrap!<BAR>set wrap?<CR>
 nnoremap yo~ :set autochdir!<BAR>set autochdir?<CR>
 " }}}
-
 " }}}1
 
 " Section: pack {{{1

@@ -102,8 +102,8 @@ return {
   win = {
     input = {
       keys = {
-        ['`'] = { 'toggle', mode = { 'i', 'n' } },
-        ['~'] = { 'zoxide', mode = { 'i', 'n' } },
+        -- ['`'] = { 'toggle', mode = { 'i', 'n' } },
+        -- ['~'] = { 'zoxide', mode = { 'i', 'n' } },
         ['<M-a>'] = { 'sidekick_send', mode = { 'n', 'i' } },
         ['<M-c>'] = { 'clear', mode = { 'i', 'n' } },
         ['<M-d>'] = { 'inspect_opts', mode = { 'i', 'n' } },

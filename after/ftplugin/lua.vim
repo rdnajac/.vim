@@ -11,6 +11,8 @@ inoremap <buffer> {<Space> {}<Left>
 inoremap <buffer> {<CR> {<CR>}<Esc>O
 inoremap <buffer> [[ [[]]<Left><Left>
 
+nnoremap <buffer> yu <Cmd>call debug#print#lua()<CR>
+
 " `tpope/vim-surround`
 " NOTE: must use double quotes and the ascii values (e.g. i = 105)
 let b:surround_85 = "function() \r end"

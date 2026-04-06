@@ -37,6 +37,19 @@ local M = {
   end,
 }
 
+M.register = function(spec)
+  local keys, toggles = spec.keys, spec.toggles
+  if keys then
+    M.map(vim.is_callable(keys) and keys() or keys)
+  end
+  if toggles then
+    for key, v in pairs(toggles) do
+      M.new_snacks_toggle(key, v)
+    end
+  end
+end
+
+
 vim.schedule(function()
   local function edit_luamod(name)
     -- name = name:gsub('%.', '/')
@@ -54,10 +67,9 @@ vim.schedule(function()
     { 'glt', function() return edit_luamod('nvim/treesitter') end },
     { 'glu', function() return edit_luamod('nvim/ui') end },
     { 'glv', function() return edit_luamod('nvim/util') end },
-    { 'yu', function() require('nvim.util.debug').print() end, desc = 'Print Value' },
-    { '<leader>ui', '<Cmd>Inspect<CR>' },
-    { '<leader>uI', '<Cmd>Inspect!<CR>' },
-    { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
+  })
+
+  M.map({
     -- FIXME: add xmap to increment selection
     { '<C-Space>', 'vin', { desc = 'Select Treesitter Node', remap = true } },
     {
@@ -92,7 +104,7 @@ vim.schedule(function()
     })
     Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
     Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
-    Snacks.keymap.set({ 'n' }, 'ym', function() nv.util.yankmod() end, { ft = 'lua' })
+
     Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
     for key, v in pairs(require('nvim.keys.toggles')) do
       M.new_snacks_toggle(key, v)
@@ -100,26 +112,21 @@ vim.schedule(function()
   end
 
   local descriptions = {
+    ['['] = 'prev',
+    [']'] = 'next',
+    ['g'] = 'goto',
+    ['z'] = 'fold',
     [vim.g.mapleader] = '<leader>',
     [vim.g.maplocalleader] = '<localleader>',
+    ['co'] = 'comment',
+    ['cO'] = 'comment above',
   }
+
   if package.loaded['which-key'] then
     for k, v in pairs(descriptions) do
       require('which-key').add({ k, desc = v, icon = { icon = '' } })
     end
   end
 end)
-
-M.register = function(spec)
-  local keys, toggles = spec.keys, spec.toggles
-  if keys then
-    M.map(vim.is_callable(keys) and keys() or keys)
-  end
-  if toggles then
-    for key, v in pairs(toggles) do
-      M.new_snacks_toggle(key, v)
-    end
-  end
-end
 
 return M

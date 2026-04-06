@@ -4,13 +4,12 @@
 " Uses Snacks.nvim if available, falls back to Fugitive, then manual search.
 " [buffer] can be a buffer number or buffer name. Defaults to current buffer.
 function! git#root(...) abort
-  if has('nvim') && luaeval("package.loaded['snacks'] ~= nil")
+  if has('nvim') && luaeval('_G.Snacks ~= nil')
     try
-      return a:0 ? luaeval('require("snacks.git").get_root(_A)', a:1) : v:lua.Snacks.git.get_root()
+      return a:0 ? luaeval('_G.Snacks.git.get_root(_A)', a:1) : v:lua.Snacks.git.get_root()
     catch
     endtry
   endif
-
   if exists('*FugitiveGitDir')
     let gitdir = FugitiveGitDir(a:000)
   else

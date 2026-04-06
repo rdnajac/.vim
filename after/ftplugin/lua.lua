@@ -5,6 +5,7 @@ if vim.g.loaded_endwise == 1 then
   vim.bo.syntax = 'ON' -- use legacy syntax
 end
 
+vim.keymap.set('n', 'ym', nv.util.yankmod, { buf = 0, desc = 'yank module' })
 vim.keymap.set('n', 'yM', function()
   local line = vim.fn.getline('.')
   -- find M.member or M['member']

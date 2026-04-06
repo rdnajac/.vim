@@ -40,6 +40,7 @@ return {
           desc = 'Window Hydra Mode (which-key)',
         },
       },
+      { 'gr', group = 'LSP', icon = { icon = '' } },
       -- hide certain, unhelpful mapping hints
       {
         hidden = true,
@@ -49,3 +50,27 @@ return {
     })
   end,
 }
+
+-- local groups = {
+--   { '<leader>b', group = 'buffers' },
+--   { '<leader>c', group = 'code' },
+--   { '<leader>d', group = 'debug' },
+--   { '<leader>dp', group = 'profiler' },
+--   { '<leader>f', group = 'file/find' },
+--   { '<leader>g', group = 'git' },
+--   { '<leader>s', group = 'search' },
+--   { '<leader>u', group = 'ui' },
+--   { '<localleader>l', group = 'vimtex' },
+--   { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
+-- }
+--
+-- -- TODO: move to dedicated cd plugin
+-- -- local descriptions = {
+-- --   cdc = [[stdpath('config')]],
+-- --   cdC = [[stdpath('cache')]],
+-- --   cdd = [[stdpath('data')]],
+-- --   cds = [[stdpath('state')]],
+-- --   gx = 'Open with system app',
+-- --   ZQ = ':q!',
+-- --   ZZ = ':x',
+-- -- }

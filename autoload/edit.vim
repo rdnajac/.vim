@@ -58,7 +58,6 @@ function! s:edit(file, ...) abort
 endfunction
 
 function! s:filetype(dir, ext) abort
-  let ext = a:0 == 0 ? '.vim' : a:1
   call s:edit(join([g:vimrc#dir, a:dir, &filetype .. a:ext], '/'))
 endfunction
 
