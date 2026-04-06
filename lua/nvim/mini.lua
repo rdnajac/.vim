@@ -165,11 +165,11 @@ vim
     surround = {
       mappings = {
         add = '',
-        delete = 'ds',
+        delete = 'dS',
         find = '',
         find_left = '',
         highlight = '',
-        replace = 'cs',
+        replace = 'cS',
         suffix_last = '',
         suffix_next = '',
       },
