@@ -85,9 +85,10 @@ end
 
 local aug = vim.api.nvim_create_augroup('audebug', {})
 
---- @param event vim.api.keyset.events|vim.api.keyset.events[]
---- @param pattern? string|string[]
---- @param cb? fun(ev:vim.api.keyset.create_autocmd.callback_args)
+--- Prints the event param passed to the callback
+---@param event vim.api.keyset.events|vim.api.keyset.events[]
+---@param pattern? string|string[]
+---@param cb? fun(ev:vim.api.keyset.create_autocmd.callback_args)
 M.audebug = function(event, pattern, cb)
   return vim.api.nvim_create_autocmd(event, {
     group = aug,

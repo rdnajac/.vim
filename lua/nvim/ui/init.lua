@@ -35,7 +35,7 @@ end
 ---@return string
 M.foldtext = function()
   local start = vim.fn.getline(vim.v.foldstart)
-  if not vim.list_contains({ '{', '(', 'then', 'do' }, vim.trim(start):sub(-1)) then
+  if not vim.list_contains({ '{', '(', '[', 'then', 'do' }, vim.trim(start):sub(-1)) then
     return start -- return if no special handling
   end
   if vim.trim(start) == '{' then -- only '{' on the line

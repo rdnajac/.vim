@@ -7,16 +7,16 @@ local capabilities = {
   executeCommandProvider = { commands = { 'delete', 'rename' } },
   hoverProvider = true,
 }
---- @type table<string, function>
+---@type table<string, function>
 local methods = {}
 
---- @param callback function
+---@param callback function
 function methods.initialize(_, callback) return callback(nil, { capabilities = capabilities }) end
 
---- @param callback function
+---@param callback function
 function methods.shutdown(_, callback) return callback(nil, nil) end
 
---- @return { path: string?, lnum: integer }
+---@return { path: string?, lnum: integer }
 local get_file_at_lnum = function(bufnr, lnum)
   local lines = vim.api.nvim_buf_get_lines(bufnr, lnum - 1, lnum, false)
   local path = nil
@@ -26,23 +26,16 @@ local get_file_at_lnum = function(bufnr, lnum)
   return { path = path, lnum = lnum }
 end
 
---- @alias dirvish.lsp.Position { line: integer, character: integer }
---- @alias dirvish.lsp.Range { start: dirvish.lsp.Position, end: dirvish.lsp.Position }
---- @alias dirvish.lsp.CodeActionContext { diagnostics: table, only: table?, triggerKind: integer? }
---- @alias dirvish.lsp.Symbol { name: string, kind: number, range: dirvish.lsp.Range, selectionRange: dirvish.lsp.Range }
+---@alias dirvish.lsp.Position { line: integer, character: integer }
+---@alias dirvish.lsp.Range { start: dirvish.lsp.Position, end: dirvish.lsp.Position }
+---@alias dirvish.lsp.CodeActionContext { diagnostics: table, only: table?, triggerKind: integer? }
+---@alias dirvish.lsp.Symbol { name: string, kind: number, range: dirvish.lsp.Range, selectionRange: dirvish.lsp.Range }
 
---- @param params { textDocument: { uri: string } }
---- @param callback function
+---@param params { textDocument: { uri: string } }
+---@param callback function
 methods['textDocument/documentSymbol'] = function(params, callback)
   local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
-  local files
-  -- if vim.fn.argc() == 0 then
-  files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  -- else
-  -- files = vim.fn.argv()
-  -- files = type(files) == 'table' and files or { files }
-  -- end
-
+  local files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
   local symbols = vim
     .iter(files)
     :enumerate() -- yields index, value
@@ -59,12 +52,11 @@ methods['textDocument/documentSymbol'] = function(params, callback)
       return { name = name, kind = kind, range = range, selectionRange = range }
     end)
     :totable()
-
   callback(nil, symbols)
 end
 
---- @param params { textDocument: { uri: string }, range: dirvish.lsp.Range, context: dirvish.lsp.CodeActionContext }
---- @param callback function
+---@param params { textDocument: { uri: string }, range: dirvish.lsp.Range, context: dirvish.lsp.CodeActionContext }
+---@param callback function
 methods['textDocument/codeAction'] = function(params, callback)
   local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
   local empty_kind = vim.lsp.protocol.CodeActionKind.Empty
@@ -121,8 +113,8 @@ local commands = {
   end,
 }
 
---- @param params { command: string, arguments: table }
---- @param callback function
+---@param params { command: string, arguments: table }
+---@param callback function
 methods['workspace/executeCommand'] = vim.schedule_wrap(function(params, callback)
   local path = unpack(params.arguments)
   local ok, err = pcall(commands[params.command], path)
@@ -132,8 +124,8 @@ methods['workspace/executeCommand'] = vim.schedule_wrap(function(params, callbac
   callback(nil, {})
 end)
 
---- @param params { textDocument: { uri: string }, position: dirvish.lsp.Position }
---- @param callback function
+---@param params { textDocument: { uri: string }, position: dirvish.lsp.Position }
+---@param callback function
 methods['textDocument/hover'] = function(params, callback)
   local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
   if not bufnr then
@@ -148,7 +140,7 @@ methods['textDocument/hover'] = function(params, callback)
 
   local cmd = { 'ls', '-ldhG', path }
 
-  --- @param sys_out vim.SystemCompleted
+  ---@param sys_out vim.SystemCompleted
   local on_exit = function(sys_out)
     if sys_out.code ~= 0 then
       return

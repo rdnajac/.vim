@@ -20,9 +20,9 @@ local M = setmetatable({}, {
 local groups = { 'Ok', 'More', 'Warning', 'Error' }
 
 --- Override for vim.notify that provides additional highlighting
---- @param msg string
---- @param level? vim.log.levels|nil
---- @param opts? table
+---@param msg string
+---@param level? vim.log.levels|nil
+---@param opts? table
 M.notify = function(msg, level, opts)
   vim.api.nvim_echo(
     { { msg, groups[level or 1] .. 'Msg' } },

@@ -17,8 +17,8 @@ local methods = {
   shutdown = function(_, callback) return callback(nil, nil) end,
 }
 
---- @param params { textDocument: { uri: string }, range: lsp.Range, context: lsp.CodeActionContext }
---- @param callback function
+---@param params { textDocument: { uri: string }, range: lsp.Range, context: lsp.CodeActionContext }
+---@param callback function
 methods['textDocument/codeAction'] = function(params, callback)
   local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
   local ft = vim.bo[bufnr].filetype

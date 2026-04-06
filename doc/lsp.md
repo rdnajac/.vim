@@ -29,7 +29,7 @@ rlanguageserver
 -- local capabilities = vim.lsp.protocol.make_client_capabilities()
 -- capabilities.textDocument.completion.completionItem = nil -- disables LSP completion
 
---- @type vim.lsp.Config
+---@type vim.lsp.Config
 return {
   -- BUG: renv errors routed to rpc as INVALID_SERVER_MESSAGE
   -- cmd = { 'r-languageserver' }, -- launcher script from mason installation

@@ -15,24 +15,17 @@ local NEOVIM = {
   '╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝',
   --1234567890123456789012345678901234567890
 }
-
 -- assert(header == table.concat(NEOVIM, '\n'))
 
--- use vim list splice to remove the e and o
--- e starts at 11 and ends at +17
 local header = function(cols)
-  if not cols or cols > 56 then
-    return table.concat(NEOVIM, '\n')
-  end
-  return vim
-    .iter(NEOVIM)
-    :map(function(line)
-      local n = vim.fn.strcharpart(line, 0, 10)
-      -- if cols < 20 then
-      return n .. vim.fn.strcharpart(line, 27) -- nvim
-      -- return n .. vim.fn.strcharpart(line, 27, 9) -- nv
-    end)
-    :join('\n')
+  return vim.o.cols > 56 and table.concat(NEOVIM, '\n')
+    or vim
+      .iter(NEOVIM)
+      :map(function(line)
+        local n = vim.fn.strcharpart(line, 0, 10)
+        return n .. vim.fn.strcharpart(line, cols < 20 and 27 or 9) -- nv(im)
+      end)
+      :join('\n')
 end
 
 return header

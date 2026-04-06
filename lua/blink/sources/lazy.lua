@@ -4,7 +4,7 @@ local Buf = require('lazydev.buf')
 local Config = require('lazydev.config')
 local Pkg = require('lazydev.pkg')
 
---- @type blink.cmp.Source
+---@type blink.cmp.Source
 local M = {}
 
 function M.new() return setmetatable({}, { __index = M }) end
