@@ -27,7 +27,7 @@ return {
         },
       },
       show_help = false,
-      -- sort = { 'order', 'alphanum', 'case', 'mod' },
+      sort = { 'order', 'alphanum', 'case', 'mod' },
       spec = {
         {
           '<leader>?',
@@ -39,6 +39,12 @@ return {
           function() wk.show({ keys = '<C-w>', loop = true }) end,
           desc = 'Window Hydra Mode (which-key)',
         },
+      },
+      -- hide certain, unhelpful mapping hints
+      {
+        hidden = true,
+        { 'g~' },
+        -- { 'g#' }, { 'g*' }, { 'gc' }
       },
     })
   end,

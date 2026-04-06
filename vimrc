@@ -208,13 +208,14 @@ let g:maplocalleader = ','
 
 xmap <Space> <leader>
 
+nnoremap <Space> :
+nnoremap : ,
+
 nnoremap ` ~
 nnoremap ~ `
 
-nnoremap <Space> :
-nnoremap : ,
+" when in doubt, pinky out
 nnoremap  ciw
-nnoremap - <Cmd>lua Snacks.explorer.open({cwd = vim.fn.fnamemodify('%', ':p:h')})<CR>
 nnoremap  <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
 nnoremap  <Cmd>lua Snacks.picker()<CR>
 xnoremap  :sort<CR>

@@ -1,5 +1,4 @@
 Plug({
-  require('blink'),
   require('nvim.keys.which'),
   -- require('nvim.keys.screen'),
 })
@@ -39,19 +38,27 @@ local M = {
 }
 
 vim.schedule(function()
-  local keys = {
-    { 'glb', [[<Cmd>call edit#luamod('blink')<CR>]] },
-    { 'glm', [[<Cmd>call edit#luamod('munchies')<CR>]] },
-    { 'glf', [[<Cmd>call edit#luamod('nvim/fs')<CR>]] },
-    { 'glk', [[<Cmd>call edit#luamod('nvim/keys')<CR>]] },
-    { 'gll', [[<Cmd>call edit#luamod('nvim/lsp')<CR>]] },
-    { 'glt', [[<Cmd>call edit#luamod('nvim/treesitter')<CR>]] },
-    { 'glu', [[<Cmd>call edit#luamod('nvim/ui')<CR>]] },
-    { 'glv', [[<Cmd>call edit#luamod('nvim/util')<CR>]] },
+  local function edit_luamod(name)
+    -- name = name:gsub('%.', '/')
+    local file = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', name, 'init.lua')
+    vim.fn['edit#'](vim.uv.fs_stat(file) and file or file:gsub('/init.lua$', '.lua'))
+  end
+
+  M.map({
+    { 'glb', function() return edit_luamod('blink') end },
+    { 'glm', function() return edit_luamod('munchies') end },
+    { 'glM', function() return edit_luamod('nvim/mini') end },
+    { 'glf', function() return edit_luamod('nvim/fs') end },
+    { 'glk', function() return edit_luamod('nvim/keys') end },
+    { 'gll', function() return edit_luamod('nvim/lsp') end },
+    { 'glt', function() return edit_luamod('nvim/treesitter') end },
+    { 'glu', function() return edit_luamod('nvim/ui') end },
+    { 'glv', function() return edit_luamod('nvim/util') end },
     { 'yu', function() require('nvim.util.debug').print() end, desc = 'Print Value' },
     { '<leader>ui', '<Cmd>Inspect<CR>' },
     { '<leader>uI', '<Cmd>Inspect!<CR>' },
     { '<leader>uT', '<Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input("I")<CR>' },
+    -- FIXME: add xmap to increment selection
     { '<C-Space>', 'vin', { desc = 'Select Treesitter Node', remap = true } },
     {
       '<leader>xl',
@@ -69,9 +76,7 @@ vim.schedule(function()
       function() require('undotree').open({ cmd = [[20vnew]] }) end,
       desc = 'Undotree',
     },
-  }
-
-  M.map(keys)
+  })
 
   if Snacks then
     M.map({
@@ -91,6 +96,16 @@ vim.schedule(function()
     Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
     for key, v in pairs(require('nvim.keys.toggles')) do
       M.new_snacks_toggle(key, v)
+    end
+  end
+
+  local descriptions = {
+    [vim.g.mapleader] = '<leader>',
+    [vim.g.maplocalleader] = '<localleader>',
+  }
+  if package.loaded['which-key'] then
+    for k, v in pairs(descriptions) do
+      require('which-key').add({ k, desc = v, icon = { icon = '' } })
     end
   end
 end)

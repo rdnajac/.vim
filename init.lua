@@ -82,4 +82,6 @@ _G.p = Snacks.debug.profile
 
 _G.nv = require('nvim')
 
+Plug(require('blink'))
+
 T2 = vim.uv.hrtime()

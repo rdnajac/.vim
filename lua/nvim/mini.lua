@@ -160,7 +160,10 @@ vim
 
     misc = {},
 
-    splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' } }, -- TODO: respect shiftwidth
+    -- TODO: respect shiftwidth
+    splitjoin = {
+      -- mappings = { toggle = 'g~', split = 'gS', join = 'gJ' }
+    },
 
     surround = {
       mappings = {

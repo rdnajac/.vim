@@ -9,8 +9,6 @@ nnoremap <buffer> coi O-- stylua:ignore
 " autopairs
 inoremap <buffer> {<Space> {}<Left>
 inoremap <buffer> {<CR> {<CR>}<Esc>O
-" inoremap <buffer> {, {<CR>},<C-c>O
-inoremap <buffer> ( ()<Left>
 inoremap <buffer> [[ [[]]<Left><Left>
 
 " `tpope/vim-surround`

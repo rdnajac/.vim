@@ -1,9 +1,9 @@
-function! edit#clipboard() abort
   " create an ephemeral buffer containing the clipboard contents
-  e +setl\ bt=acwrite\ bh=wipe\ nobl\ noswf Clipboard
+  " on write, yank the buffer contents to the clipboard and delete the buffer
+function! edit#clipboard() abort
+  edit +setl\ bt=acwrite\ bh=wipe\ nobl\ noswf Clipboard
   silent execute 'put +|1d _'
-  " on write, copy contents to clipboard
-  au BufWriteCmd <buffer> %yank + | set nomodified
+  au BufWriteCmd <buffer> %yank + | set nomodified'
 endfunction
 
 " TODO: add param to set how we open the file
@@ -55,18 +55,6 @@ function! s:edit(file, ...) abort
   " if has ('nvim') && luaeval('Snacks.util.is_float() == true') | quit | endif
   execute cmd
   normal! zvzz
-endfunction
-
-function! edit#luamod(name) abort
-  if !has('nvim')
-    vim#notify#error('This function is only available in Neovim.')
-    return
-  endif
-  let file = printf('%s/lua/%s.lua', g:vimrc#dir, a:name)
-  if !filereadable(file)
-    let file = printf('%s/lua/%s/init.lua', g:vimrc#dir, a:name)
-  endif
-  call s:edit(file)
 endfunction
 
 function! s:filetype(dir, ext) abort
