@@ -38,6 +38,14 @@ dictionaries from [cspell-dicts](https://github.com/streetsidesoftware/cspell-di
 npx cspell dictionaries
 ```
 
+### spell.vim
+
+```vim
+" see `:h :mkspell` and treesitter's `nospell`
+let &spellfile = g:['vimrc#dir'] . '/.spell/en.utf-8.add'
+autocmd FileType tex,markdown,rmd,quarto setlocal spell
+```
+
 ## Snacks
 
 Snacks.image can render math inline, $z=a+bi$, or in a `$$` block:

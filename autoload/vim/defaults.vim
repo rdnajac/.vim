@@ -110,6 +110,9 @@ function! vim#defaults#() abort
   setglobal includeexpr=
   setglobal path=.,,
 
+  " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
+  setglobal isfname+=@-@ " from `vim-apathy`
+
   let &viminfofile = g:vimrc#dir . '/.viminfo'
   let &verbosefile = g:vimrc#dir . '/.vimlog.txt'
 endfunction

@@ -7,6 +7,8 @@ xmap F Sf
 nmap cq <Cmd>call vim#with#savedView("normal cs\"'")<CR>
 nmap cQ <Cmd>call vim#with#savedView("normal cs'\"")<CR>
 
+nmap dsf dSf
+
 nmap sc sr
 if has('nvim') && luaeval('_G.MiniSurround == nil')
   nmap sa ys

@@ -1,3 +1,11 @@
+function! edit#clipboard() abort
+  " create an ephemeral buffer containing the clipboard contents
+  e +setl\ bt=acwrite\ bh=wipe\ nobl\ noswf Clipboard
+  silent execute 'put +|1d _'
+  " on write, copy contents to clipboard
+  au BufWriteCmd <buffer> %yank + | set nomodified
+endfunction
+
 " TODO: add param to set how we open the file
 " ie edit/split/vsplit like in picker confirms
 function! edit#(...) abort

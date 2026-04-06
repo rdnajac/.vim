@@ -1,8 +1,6 @@
-scriptencoding utf-8
-
-function! s:numlines() abort
-  return v:foldend - v:foldstart + 1
-endfunction
+" nnoremap          zv zMzvzz
+" nnoremap <silent> zj zcjzOzz
+" nnoremap <silent> zk zckzOzz
 
 function! s:markers() abort
   let fdm = &l:foldmarker
@@ -17,7 +15,7 @@ endfunction
 function! fold#text() abort
   let s:foldchar = '.' " TODO: use the fillchar?
   let line = s:foldtext(getline(v:foldstart))
-  let info = printf('|%4s lines|', s:numlines())
+  let info = printf('|%4s lines|', v:foldend - v:foldstart + 1)
   let fill = repeat(s:foldchar, max([0, 64 - strdisplaywidth(line..' '..info)]))
   return printf('%s %s%s', line, fill, info)
 endfunction
@@ -28,7 +26,13 @@ function! fold#test() abort
   echom s:foldtext(line)
 endfunction
 
-finish " TODO: needs testing
+finish 
+" TODO: needs testing
+" better search if auto pausing folds
+
+" set foldopen-=search
+" nnoremap <silent> / zn/
+
 function! fold#pause() abort
   if &foldenable
     let b:fold_was_enabled = 1

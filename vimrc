@@ -2,8 +2,6 @@
 scriptencoding utf-8
 
 " Section: settings {{{1
-setglobal isfname+=@-@ " from `vim-apathy`
-" default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
 
 " general {{{2
 set ignorecase
@@ -61,6 +59,12 @@ set foldlevel=99
 " set foldminlines=3
 set foldopen+=insert,jump
 " set foldmethod=marker
+
+" close folds when moving left at beginning of line
+nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
+
+" save, override, and restore commentstring to get nice folds
+xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s<CR>
 
 " format {{{2
 " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
@@ -138,7 +142,7 @@ augroup vimrc
   au BufLeave vimrc normal! mV
 
   " create parent directories when saving files
-  au BufWritePre * silent! call cmd#mkdir#(expand('<afile>'))
+  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
 
   " restore cursor position upon reopening files
   au BufWinEnter * exe "silent! normal! g`\"zv"
@@ -188,6 +192,14 @@ let g:eunuch_interpreters = {
       \ 'rmd':    'Rscript',
       \ 'zsh':    'zsh',
       \ }
+
+" `https://github.com/neovim/neovim/discussions/38256`
+" Usage: $ nvim +Clipboard # or alias pbedit='nvim +Clipboard'
+command! Clipboard call edit#clipboard()
+
+if !exists(':hardcopy')
+  command! Hardcopy  lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
+endif
 " }}}1
 
 " Section: keymaps {{{1
@@ -291,7 +303,7 @@ nnoremap dg# g*``dgN
 " substitutions {{{2
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file
 " #replace-only-within-selection
-xnoremap s :s/\%V<C-R><C-W>/
+xnoremap s :s/\%V
 " #repeat-last-change-in-all-of-file-global-repeat-similar-to-g
 nnoremap g. :%s//<C-R>./g<ESC>
 

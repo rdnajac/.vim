@@ -1,5 +1,18 @@
 if !exists('g:chromatophores')
   let g:chromatophores = [ 'String' ]
+" let g:chromatophores = [
+"       \ 'String',
+"       \ 'FloatBorder',
+"       \ 'FloatFooter',
+"       \ 'MsgArea',
+"       \ 'MsgSeparator',
+"       \ 'Pmenu',
+"       \ 'PmenuBorder',
+"       \ 'PmenuSbar',
+"       \ 'Title',
+"       \ 'StatusLineNC',
+"       \ 'StatusLineTermNC',
+"       \ ]
 endif
 
 if has('nvim')

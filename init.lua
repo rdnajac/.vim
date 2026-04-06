@@ -4,10 +4,7 @@ vim.loader.enable()
 
 require('vim._core.ui2').enable({ msg = { target = 'msg' } })
 
-vim.cmd([[
-colorscheme tokyonight
-source ~/.vim/vimrc
-]])
+vim.cmd([[ colorscheme tokyonight | source ~/.vim/vimrc ]])
 
 require('snacks').setup({
   -- stylua: ignore
@@ -86,4 +83,3 @@ _G.p = Snacks.debug.profile
 _G.nv = require('nvim')
 
 T2 = vim.uv.hrtime()
--- vim: fdl=1
