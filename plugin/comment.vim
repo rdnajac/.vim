@@ -28,7 +28,7 @@ let s:tags = {
 
 " map `co` and `cO` to insert comments with specific tags
 for [key, val] in items(s:tags)
-  execute $'nmap co{key} o{val}<Esc>gcc<Esc>A'
-  execute $'nmap cO{key} O{val}<Esc>gcc<Esc>A'
-  execute printf('nmap co%s O%s<Esc>gcc<Esc>A', toupper(key), val)
+  execute $'nmap co{key} o{val}:<Space><Esc>gcc<Esc>A'
+  execute $'nmap cO{key} O{val}:<Space><Esc>gcc<Esc>A'
+  execute printf('nmap co%s O%s:<Space><Esc>gcc<Esc>A', toupper(key), val)
 endfor

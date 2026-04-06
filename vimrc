@@ -2,7 +2,7 @@
 scriptencoding utf-8
 
 " Section: settings {{{1
-
+set findfunc=file#find
 " general {{{2
 set ignorecase
 set jumpoptions+=stack
@@ -141,11 +141,11 @@ augroup vimrc
   au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
 
-  " create parent directories when saving files
-  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
-
   " restore cursor position upon reopening files
   au BufWinEnter * exe "silent! normal! g`\"zv"
+
+  " create parent directories when saving files
+  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
 
   " immediately quit the command line window if opened with `q`
   au CmdwinEnter * quit
