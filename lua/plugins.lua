@@ -2,6 +2,22 @@ return {
   -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
   {
+    'folke/flash.nvim',
+    ---@type Flash.Config
+    opts = {},
+    keys = function()
+      local flash = require('flash')
+      -- stylua: ignore
+      return {
+        { { 'n', 'x', 'o' }, '<C-J>',   flash.jump },
+        { { 'n', 'x', 'o' }, '<C-S-J>', flash.treesitter },
+        { { 'o' },           'r',       flash.remote },
+        { { 'o', 'x' },      'R',       flash.treesitter_search },
+        { { 'c' },           '<C-S>',   flash.toggle },
+      }
+    end,
+  },
+  {
     'mason-org/mason.nvim',
     opts = {},
     -- TODO: implement one-time install func to hook into packinstall event
