@@ -2,30 +2,31 @@
 T1 = vim.uv.hrtime()
 vim.loader.enable()
 
-require('vim._core.ui2').enable({ msg = { target = 'msg' } })
+require('vim._core.ui2').enable({
+  msg = { target = 'msg' },
+})
 
-vim.cmd([[ colorscheme tokyonight | source ~/.vim/vimrc ]])
+vim.cmd([[
+colorscheme tokyonight
+source ~/.vim/vimrc
+command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
+]])
 
 require('snacks').setup({
-  -- stylua: ignore
   dashboard = {
-    enabled = vim.fn.argc(-1) == 0,
-    preset = {
-      keys = {
-      { icon = '󰱼 ', desc = 'Files',   key = 'F', action = function() Snacks.picker.smart() end }, { section = 'recent_files', indent = 2 },
-      { icon = ' ', desc = 'Health',  key = 'H', action = ':checkhealth' },
-      { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
-      { icon = ' ', desc = 'Mason',   key = 'M', action = ':Mason' },
-      { icon = ' ', desc = 'Update',  key = 'U', action = ':lua vim.pack.update()' },
-      { icon = ' ', desc = 'News',    key = 'N', action = function() Snacks.zen({win = {file = vim.api.nvim_get_runtime_file('doc/news.txt', false)[1]}}) end },
-      },
-    },
     sections = {
       { section = 'header' },
-      { section = 'keys' },
-      { section = 'terminal', padding = 1, cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]] },
-      { function() return ('NVIM %s'):format(tostring(vim.version())) end },
-      -- { section = 'startup' },
+      {
+        { icon = '󰱼 ', title = 'Files', { section = 'recent_files', indent = 2 } },
+        { icon = ' ', desc = 'Health ', key = 'H', action = ':checkhealth' },
+        { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
+        { icon = ' ', desc = 'Mason  ', key = 'M', action = ':Mason' },
+        { icon = ' ', desc = 'News   ', key = 'N', action = ':News' },
+        { icon = ' ', desc = 'Update ', key = 'U', action = ':lua vim.pack.update()' },
+      },
+      -- stylua: ignore
+      { section = 'terminal', cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]], },
+      function() return { footer = 'NVIM ' .. tostring(vim.version()), padding = 1 } end,
     },
   },
   explorer = { replace_netrw = true, trash = true },
@@ -37,12 +38,9 @@ require('snacks').setup({
   picker = {
     layouts = require('munchies.picker.layouts'),
     sources = {
-      -- icons = { layout = 'insert' },
-      help = { layout = 'mylayout' },
       explorer = require('munchies.explorer'),
       files = require('munchies.picker.config'),
       grep = require('munchies.picker.config'),
-      -- git_status = { layout = 'left' },
       highlights = {
         --- enable mini.hipatterns in the preview buffer
         ---@param picker snacks.Picker
@@ -80,10 +78,6 @@ require('snacks').setup({
 _G.dd = Snacks.debug.inspect
 _G.bt = Snacks.debug.backtrace
 _G.p = Snacks.debug.profile
-
 _G.nv = require('nvim')
-
 Plug(require('plugins'))
 Plug(require('blink'))
-
-T2 = vim.uv.hrtime()

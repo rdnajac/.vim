@@ -239,11 +239,12 @@ function! s:cabbrev(lhs, rhs)
 endfunction
 
 call s:cabbrev('vv', 'verbose')
-call s:cabbrev('vvn', 'verbose nmap')
-call s:cabbrev('vvx', 'verbose xmap')
 call s:cabbrev('vvc', 'verbose cmap')
 call s:cabbrev('vvi', 'verbose imap')
+call s:cabbrev('vvn', 'verbose nmap')
+call s:cabbrev('vvo', 'verbose omap')
 call s:cabbrev('vvt', 'verbose tmap')
+call s:cabbrev('vvx', 'verbose xmap')
 call s:cabbrev('scp', '!scp %')
 call s:cabbrev('m', 'Man')
 call s:cabbrev('f', 'find')
@@ -337,7 +338,6 @@ nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
-nnoremap <Bslash>n <Cmd>call edit#luamod('nvim')<CR>
 nnoremap <leader><Bslash> <Cmd>call edit#readme()<CR>
 nnoremap <Bslash><leader> <Cmd>call edit#readme()<CR>
 
@@ -353,10 +353,12 @@ nnoremap dg# g*``dgN
 
 " substitutions {{{2
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file
-" #replace-only-within-selection
-xnoremap s :s/\%V
 " #repeat-last-change-in-all-of-file-global-repeat-similar-to-g
 nnoremap g. :%s//<C-R>./g<ESC>
+" #replace-only-within-selection
+xnoremap s :s/\%V
+" similarly, apply normal command to each line in selection
+xnoremap G :normal!<Space>
 
 " insert {{{2
 " insert chars at EOL {{{3
