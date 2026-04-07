@@ -24,7 +24,8 @@ require('snacks').setup({
       { section = 'header' },
       { section = 'keys' },
       { section = 'terminal', padding = 1, cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]] },
-      { section = 'startup' },
+      { function() return ('NVIM %s'):format(tostring(vim.version())) end },
+      -- { section = 'startup' },
     },
   },
   explorer = { replace_netrw = true, trash = true },
@@ -82,6 +83,7 @@ _G.p = Snacks.debug.profile
 
 _G.nv = require('nvim')
 
+Plug(require('plugins'))
 Plug(require('blink'))
 
 T2 = vim.uv.hrtime()

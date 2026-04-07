@@ -49,7 +49,6 @@ M.register = function(spec)
   end
 end
 
-
 vim.schedule(function()
   local function edit_luamod(name)
     -- name = name:gsub('%.', '/')
@@ -95,7 +94,7 @@ vim.schedule(function()
       { { 'x' }, '/', Snacks.picker.grep_word },
       { { 'n' }, ',,', Snacks.picker.buffers },
       { { 'n' }, ',.', Snacks.scratch.open },
-      { { 'i' }, '<C-x><C-i>', Snacks.picker.icons },
+      { { 'i' }, '<C-x><C-i>', function() Snacks.picker.icons({ layout = {preset =  'insert' } }) end },
       { { 'n', 't' }, '<C-Bslash>', Snacks.terminal.toggle },
       { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
       { { 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end },

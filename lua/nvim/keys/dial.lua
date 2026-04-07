@@ -180,8 +180,7 @@ local function cmdcr(s) return string.format('<Cmd>%s<CR>', s) end
 local visual_modes = { v = true, V = true, ['\22'] = true }
 local is_visual = function() return visual_modes[vim.fn.mode(true)] end
 
----@diagnostic disable-next-line: unused-function
-local function dial(increment, g)
+function M._dial(increment, g)
   local mode = (g and 'g' or '') .. (is_visual() and 'visual' or 'normal')
   local direction = increment and 'increment' or 'decrement'
   local select = string.format(SELECT, mode, group)
@@ -193,7 +192,7 @@ local function dial(increment, g)
   -- vim.api.nvim_feedkeys(keys, 'n', false)
 end
 
-local spec = {
+M.spec = {
   'monaqa/dial.nvim',
   init = function()
     -- override the default config loading to improve performance
@@ -208,6 +207,6 @@ local spec = {
   },
 }
 
-Plug({ spec })
+-- Plug({ spec })
 
 return M

@@ -5,11 +5,15 @@ return {
     'mason-org/mason.nvim',
     opts = {},
     -- TODO: implement one-time install func to hook into packinstall event
-    once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
+    -- once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
   },
   {
     'MeanderingProgrammer/render-markdown.nvim',
     init = function() require('nvim.ui.markdown') end,
+  },
+  {
+    'folke/flash.nvim',
+    opts = {},
   },
   {
     'folke/sidekick.nvim',

@@ -62,4 +62,35 @@ M['goto'] = function()
   vim.cmd('normal! ' .. lineno .. 'G')
 end
 
+--- handles truncated paths in the debug.traceback like `.../path/to/file:line:`
+---@param cfile? string defaults to `expand('<cfile>')`
+M.better_gf = function()
+  local cfile = vim.fn.expand('<cfile>')
+  if vim.startswith(cfile, '...') then
+    local file
+    for dir, pattern in pairs({
+      PACKDIR = '/core/opt/',
+      VIMRUNTIME = '/nvim/runtime/',
+    }) do
+      local match = cfile:match('.*' .. pattern .. '(.*)')
+      if match and match ~= '' then
+        file = vim.fs.joinpath(vim.env[dir], match)
+      end
+      if file and vim.uv.fs_stat(file) then
+        local line = vim.api.nvim_get_current_line()
+        local line_num = line:match(':(%d+)')
+        -- Close pager window and open file
+        vim.cmd('close')
+        vim.cmd.edit(file)
+        if line_num then
+          vim.cmd('normal! ' .. line_num .. 'G')
+        end
+        return
+      end
+    end
+  end
+  -- Fallback to normal gf
+  vim.cmd('normal! gf')
+end
+
 return M

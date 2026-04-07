@@ -291,6 +291,7 @@ if has('nvim')
   nnoremap <leader>di <Cmd>Inspect<CR>
   nnoremap <leader>dI <Cmd>Inspect!<CR>
   nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
+  nnoremap <leader>dF <Cmd>=vim.filetype.inspect()<CR>
 endif
 
 " file

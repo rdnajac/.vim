@@ -1,3 +1,21 @@
+--- Window types each have respective filetype
+--- • `msg`: messages when 'cmdheight' == 0.
+--- • `pager`: used for |:messages| and certain messages that should be shown in full
+--- • `dialog`: used for prompt messages that expect user input
+local ui_fts = { 'msg', 'pager' }
+-- apply markdown highlighting to message windows
+vim.treesitter.language.register('markdown', ui_fts)
+vim.api.nvim_create_autocmd({ 'FileType' }, {
+  pattern = ui_fts,
+  -- group = 'nv.treesitter',
+  callback = function()
+    vim.treesitter.start(0)
+    vim.wo.conceallevel = 3
+    vim.keymap.set({ 'n' }, 'gf', nv.fs.better_gf, { buffer = true })
+  end,
+  desc = 'Start tree-sitter for message windows',
+})
+
 local M = {
   colorscheme = require('nvim.ui.tokyonight'),
   icons = require('nvim.ui.icons'),
@@ -9,22 +27,6 @@ vim.schedule(function()
   vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
   vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
 end)
-
---- Window types each have respective filetype
---- • `msg`: messages when 'cmdheight' == 0.
---- • `pager`: used for |:messages| and certain messages that should be shown in full
---- • `dialog`: used for prompt messages that expect user input
-local fts = { 'msg', 'pager' }
-vim.treesitter.language.register('markdown', fts)
-vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = fts,
-  -- group = 'nv.treesitter',
-  callback = function()
-    vim.treesitter.start(0)
-    vim.wo.conceallevel = 3
-  end,
-  desc = 'Start tree-sitter for message windows',
-})
 
 function M.spinner()
   local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }

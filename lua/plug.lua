@@ -1,5 +1,3 @@
-_G.setup_count = 0
-
 ---@class Plugin
 ---@field [1] string `owner/repo`
 ---@field src? string derived from [1] if missing
@@ -43,14 +41,13 @@ function Plugin:setup()
   -- map keys and toggles unconditionally, handling inputs in nv.keys
   vim.schedule(function() return require('nvim.keys').register(self) end)
   if self.init then
-    _G.setup_count = _G.setup_count + 1
-    return self.init()
-  end
-  local opts = vim.is_callable(self.opts) and self.opts() or self.opts
-  if type(opts) == 'table' then
-    _G.setup_count = _G.setup_count + 1
-    local modname = (self.name or vim.fs.basename(self[1])):gsub('%.nvim$', '')
-    return require(modname).setup(opts)
+    self.init()
+  else
+    local opts = vim.is_callable(self.opts) and self.opts() or self.opts
+    if type(opts) == 'table' then
+      local modname = self.name:gsub('%.nvim$', '')
+      return require(modname).setup(opts)
+    end
   end
 end
 
@@ -64,19 +61,18 @@ local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
 ---@return vim.pack.Spec
 function Plugin:package()
   local spec = { src = self.src, name = self.name, version = self.version }
-  ---@type plug.Data
-  spec.data = {
+  spec.data = { ---@type plug.Data
     build = self.build,
     init = function()
-      if not self.event then
-        return self:setup()
-      end
-      vim.api.nvim_create_autocmd(self.event, {
-        callback = function() self:setup() end,
-        group = aug,
-        -- nested = true,
-        once = true,
-      })
+      -- _G.setup_count = _G.setup_count + 1
+      return self.event
+          and vim.api.nvim_create_autocmd(self.event, {
+            callback = function() self:setup() end,
+            group = aug,
+            -- nested = true,
+            once = true,
+          })
+        or self:setup()
     end,
   }
   return spec
@@ -130,49 +126,52 @@ vim.api.nvim_create_autocmd({ 'PackChanged' }, {
 vim.schedule(function()
   --- Helper function to get plugin names for command completion.
   ---@param active boolean? filter by active/inactive plugins, or return all if nil
-  ---@return string[] list of plugin names
+  ---@return string[] sorted list of plugin names
   local function spec_names(active)
-    return vim
+    local names = vim
       .iter(vim.pack.get())
       :filter(function(p) return active == nil or p.active == active end)
       :map(function(p) return p.spec.name end)
       :totable()
+    table.sort(names)
+    return names
   end
 
-  vim.api.nvim_create_user_command(
-    'PlugStatus',
-    function() vim.pack.update(nil, { offline = true }) end,
-    {}
-  )
-  vim.api.nvim_create_user_command(
-    'PlugUpdate',
-    function(opts) vim.pack.update(#opts.fargs > 0 and opts.fargs or nil, { force = opts.bang }) end,
-    { nargs = '*', bang = true, complete = function() return spec_names(true) end }
-  )
-  vim.api.nvim_create_user_command(
-    'PlugSpecs',
-    function(opts)
-      vim.print(true, vim.pack.get(#opts.fargs > 0 and opts.fargs or nil, { info = opts.bang }))
-    end,
-    { bang = true, nargs = '*', complete = spec_names }
-  )
-  vim.api.nvim_create_user_command(
-    'PlugClean',
-    function(opts) vim.pack.del(#opts.fargs > 0 and opts.fargs or spec_names(false)) end,
-    { nargs = '*', complete = function(_, _, _) return spec_names(false) end }
-  )
-end)
-
-package.preload['lazy.stats'] = function()
-  local startuptime = ((_G.T2 or vim.uv.hrtime()) - T1) / 1e6
-  return {
-    stats = function()
-      local count = #vim.fn.readdir(vim.env.PACKDIR)
-      -- local loaded = #vim.tbl_filter(function(p) return not p.active end, vim.pack.get())
-      local loaded = _G.setup_count or 0
-      return { count = count, loaded = loaded, startuptime = startuptime }
-    end,
+  local subcmds = {
+    clean = function(args, bang) vim.pack.del(args or spec_names(false)) end,
+    get = function(args, bang) vim.pack.get(args, { info = bang }) end,
+    status = function(args, bang) vim.pack.update(args, { offline = not bang }) end,
+    update = function(args, bang) vim.pack.update(args, { force = bang }) end,
   }
-end
 
-Plug(require('plugins'))
+  vim.api.nvim_create_user_command('Plug', function(opts)
+    local subcmd = opts.fargs[1] or 'status'
+    local args = #opts.fargs > 1 and vim.list_slice(opts.fargs, 2) or nil
+    local fn = subcmds[subcmd]
+    if fn then
+      fn(args, opts.bang)
+    else
+      vim.notify('[Plug] bad subcommand: ' .. subcmd, vim.log.levels.ERROR)
+    end
+  end, {
+    nargs = '*',
+    bang = true,
+    complete = function(ArgLead, CmdLine, CursorPos)
+      local args = vim.split(CmdLine, '%s+', { trimempty = true })
+      local num_args = #args - (vim.endswith(CmdLine, ' ') and 0 or 1)
+
+      -- first arg is subcommand
+      if num_args == 1 then
+        return vim
+          .iter(vim.spairs(subcmds))
+          :map(function(cmd, _) return vim.startswith(cmd, ArgLead) and cmd end)
+          :totable()
+      end
+
+      -- second arg is (filtered) plugin names
+      local subcmd = args[2]
+      local loaded = subcmd == 'clean' and false or subcmd == 'status' and nil or true
+      return subcmds[subcmd] and spec_names(loaded) or {}
+    end,
+  })
+end)

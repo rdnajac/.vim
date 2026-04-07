@@ -4,7 +4,7 @@ let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 
 nnoremap <buffer> co2 O---@
-nnoremap <buffer> coi O-- stylua:ignore
+nnoremap <buffer> coi O-- stylua:<Space>ignore
 
 " autopairs
 inoremap <buffer> {<Space> {}<Left>
