@@ -19,21 +19,21 @@ end
 ---@return table
 M.readjson = function(filename) return vim.json.decode(fn.readblob(filename)) end
 
+local cache_dir = fn.stdpath('cache')
+
 -- TODO: see `$PACKDIR/tokyonight.nvim/lua/tokyonight/util.lua`
 --- Run fn() and cache result, or load from cache if file exists.
 --- Tables are JSON-encoded; strings are split on newlines.
 ---@param path string cache file path (relative to stdpath.cache)
----@param func fun(): string|table function that returns data to cache
+---@param fun fun(): string|table function that returns data to cache
 ---@return string|table
-M.cache = function(path, func)
+M.cache = function(path, fun)
   local fpath = fn.resolve(cache_dir .. '/' .. path)
-
   if fn.filereadable(fpath) == 1 then
     local ok, decoded = pcall(M.readjson, fpath)
     return ok and decoded or fn.readfile(fpath)
   end
-
-  return M.write(fpath, func())
+  return M.write(fpath, fun())
 end
 
 function M.filesize()

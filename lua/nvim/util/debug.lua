@@ -1,9 +1,10 @@
+local uv = vim.uv
 local M = {}
 
 local me = debug.getinfo(1, 'S').source
 
 local now = function()
-  return string.format('%s.%03d', os.date('%T'), math.floor((vim.uv.hrtime() / 1e6) % 1000))
+  return string.format('%s.%03d', os.date('%T'), math.floor((uv.hrtime() / 1e6) % 1000))
 end
 
 M.trace = function()
@@ -54,11 +55,10 @@ end
 ---@param fn fun()
 ---@param opts? {count?: number, flush?: boolean}
 M.profile = function(fn, opts)
-  opts = vim.tbl_extend('force', { count = 100, flush = true }, opts or {})
-  local uv = vim.uv
+  opts = opts or {}
   local start = uv.hrtime()
-  for _ = 1, opts.count, 1 do
-    if opts.flush then
+  for _ = 1, opts.count or 100, 1 do
+    if opts.flush ~= false then
       jit.flush(fn, true)
     end
     fn()
