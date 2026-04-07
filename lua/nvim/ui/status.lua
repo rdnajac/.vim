@@ -134,7 +134,9 @@ M.line = function()
   if file and relpath and vim.bo.buftype == '' then
     b = relpath .. ' ' .. b
   end
-  local c = ' ' .. M.git()
+  local c = ' '
+  -- .. M.git()
+  -- .. string.format(' j:%f - k:%f = %f', vim.g.esc_j_lasttime, vim.g.esc_k_lasttime, vim.g.esc_j_lasttime - vim.g.esc_k_lasttime)
   parts[1] = M.render(a, b, c)
   return table.concat(parts)
 end
