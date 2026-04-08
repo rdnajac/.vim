@@ -1,85 +1,43 @@
+--- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
 ---@type snacks.picker.explorer.Config
-local M = {
-  ignored = true,
-  jump = { close = true },
-  -- override default config function
-  config = function(opts)
-    local ret = require('snacks.picker.source.explorer').setup(opts)
-    if vim.startswith(ret.cwd, vim.g['chezmoi#source_dir_path']) then
-      ret.hidden = true
-    end
-    return ret
-  end,
-  win = {
-    list = {
-      keys = {
-        ['/'] = 'picker_grep',
-        ['-'] = 'explorer_up',
-        ['<Left>'] = 'explorer_up',
-        ['<Right>'] = 'confirm',
-      },
-    },
-  },
-  -- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
-  -- on picker show
+return {
   on_show = function(picker)
-    local rel = picker.layout.root
-    local clamp_width = function(value) return math.max(20, math.min(100, value)) end
+    picker.layout.wins.preview.layout = false
+    local root = picker.layout.root
+    local preview = picker.preview.win
+    preview.opts.relative = 'editor'
 
-    local update = function(win) ---@param win snacks.win
-      local border = win:border_size().left + win:border_size().right
-      win.opts.row = vim.api.nvim_win_get_position(rel.win)[1]
-      win.opts.height = 0.8
-      win.opts.col = vim.api.nvim_win_get_width(rel.win) + 1
-      win.opts.width = clamp_width(vim.o.columns - border - win.opts.col)
-      win:update()
+    local update = function()
+      local border = preview:border_size()
+      preview.opts.row = vim.api.nvim_win_get_position(root.win)[1]
+      preview.opts.col = vim.api.nvim_win_get_width(root.win)
+      preview.opts.height = 0.8
+      preview.opts.width =
+        math.max(20, math.min(100, vim.o.columns - border.left - border.right - preview.opts.col))
+      if preview:valid() then
+        preview:update()
+      end
     end
 
-    local preview_win = Snacks.win.new({
-      relative = 'editor',
-      external = false,
-      focusable = false,
-      border = 'rounded',
-      backdrop = false,
-      show = false,
-      bo = {
-        filetype = 'snacks_float_preview',
-        buftype = 'nofile',
-        buflisted = false,
-        swapfile = false,
-        undofile = false,
-      },
-      on_win = function(win)
-        update(win)
-        picker:show_preview()
-      end,
-    })
+    local orig_on_win = preview.opts.on_win --[[@as function]]
+    preview.opts.on_win = function(win)
+      orig_on_win(win)
+      update()
+    end
 
-    rel:on('WinResized', function() update(preview_win) end)
-    rel:on('WinLeave', function()
+    root:on('WinResized', update)
+    root:on('WinLeave', function()
       vim.schedule(function()
         if not picker:is_focused() then
-          picker.preview.win:close()
+          picker:toggle('preview', { enable = false })
         end
       end)
     end)
 
-    picker.preview.win = preview_win
-    picker.main = preview_win.win
-
     -- auto-show preview when opening nvim on a directory
     if vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1 then
-      preview_win:show()
+      picker:toggle('preview', { enable = true })
     end
   end,
-  on_close = function(picker) picker.preview.win:close() end,
-  layout = {
-    preset = 'sidebar',
-    preview = false,
-  },
-  actions = {
-    toggle_preview = function(picker) picker.preview.win:toggle() end,
-  },
-}
 
-return M
+}

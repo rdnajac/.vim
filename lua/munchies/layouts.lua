@@ -27,26 +27,25 @@ M.mylayout = {
     {
       box = 'horizontal',
       border = 'rounded',
+      title = ' {title} {live} {flags}',
+      title_pos = 'left',
       {
         win = 'list',
-        title = ' {title} {live} {flags}',
-        title_pos = 'left',
-        -- border = borders.toppad,
+        border = 'top',
       },
       {
         win = 'preview',
+        border = 'top',
         title = '{preview:Preview}',
-        title_pos = 'left',
-        -- border = borders.toppad,
+        -- title = '{title}',
+        title_pos = 'right',
         width = 0.6,
         wo = { number = false },
-        -- todo: hide preview window if less than 120 cols
       },
     },
     {
       win = 'input',
       height = 1,
-      -- border = nv.ui.border(left, borders.right),
     },
   },
 }

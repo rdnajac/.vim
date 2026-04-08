@@ -38,11 +38,9 @@ Plug({
     indent = { indent = { only_current = false, only_scope = true } },
     input = { enabled = true },
     -- notifier = require('munchies.notifier'),
-    notifier = { enabled = true },
+    -- notifier = { enabled = true },
     quickfile = { enabled = true },
-    picker = {
-      sources = require('munchies.pickers'),
-    },
+    picker = { sources = require('munchies.pickers') },
     scope = { enabled = true },
     scroll = { enabled = true },
     -- statuscolumn = require('munchies.statuscolumn'),
