@@ -279,9 +279,6 @@ nnoremap zJ <Plug>(unimpaired-move-down)kJ
 " nnoremap do     do]c
 
 " `<leader>` {{{2
-nnoremap <leader>k     <Cmd>normal! K<CR>
-nnoremap <leader>-     <Cmd>sbp<CR>
-nnoremap <leader><Bar> <Cmd>vertical sbp<CR>
 
 " debug
 nnoremap <leader>da <Cmd>ALEInfo<CR>
@@ -358,7 +355,7 @@ nnoremap g. :%s//<C-R>./g<ESC>
 " #replace-only-within-selection
 xnoremap s :s/\%V
 " similarly, apply normal command to each line in selection
-xnoremap G :normal!<Space>
+xnoremap n :normal!<Space>
 
 " insert {{{2
 " insert chars at EOL {{{3
@@ -434,7 +431,6 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
 else
   Plug 'nvim-mini/mini.nvim'
-  Plug 'folke/snacks.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
   Plug 'chrisgrieser/nvim-scissors'

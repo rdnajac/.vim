@@ -2,7 +2,8 @@
 ---@field [1] string `owner/repo`
 ---@field src? string derived from [1] if missing
 ---@field name? string derived from [1] if missing
----@field version? string|vim.VersionRange alias `branch`
+---@field version? string|vim.VersionRange
+---@field branch? string alias for `version`
 ---@field build? string|fun(ev: table):nil Callback after plugin is installed/updated.
 ---@field init? fun():nil
 ---@field opts? table|fun():table passed to the plugin's `setup()`
@@ -19,7 +20,7 @@ local validate = vim.validate
 ---@param v string|table table with required `[1]` field (or just `user/repo`
 ---@return Plugin
 function Plugin.new(v)
-  local self = type(v) == 'table' and v or { v }
+  local self = type(v) == 'table' and v or { v } ---@type Plugin
   validate('[1]', self[1], 'string')
   validate('build', self.build, { 'string', 'function' }, true)
   validate('event', self.event, { 'string', 'table' }, true)
@@ -30,7 +31,7 @@ function Plugin.new(v)
   validate('toggles', self.toggles, 'table', true)
   -- add required fields and defaults
   self.src = self.src or ('https://github.com/%s.git'):format(self[1])
-  self.name = self.name or self[1]:match('[^/]*$')
+  self.name = self.name or (self[1]):match('[^/]*$')
   self.version = self.version or self.branch or nil
   return setmetatable(self, Plugin)
 end
@@ -38,17 +39,16 @@ end
 --- Assumes the plugin has a `setup()` function and calls it with `opts` if provided.
 --- The module name is just the plugin name without a `.nvim` suffix, if present.
 function Plugin:setup()
-  -- map keys and toggles unconditionally, handling inputs in nv.keys
-  vim.schedule(function() return require('nvim.keys').register(self) end)
   if self.init then
     self.init()
   else
     local opts = vim.is_callable(self.opts) and self.opts() or self.opts
     if type(opts) == 'table' then
-      local modname = self.name:gsub('%.nvim$', '')
-      return require(modname).setup(opts)
+      require(self.name:gsub('%.nvim$', '')).setup(opts)
     end
   end
+  -- map keys and toggles unconditionally, handling inputs in nv.keys
+  vim.schedule(function() return require('nvim.keys').register(self) end)
 end
 
 ---@class plug.Data passed as `spec.data` to `vim.pack.add()`
@@ -85,17 +85,6 @@ local _load = function(plug_data)
   vim.cmd.packadd({ spec.name, bang = vim.v.vim_did_enter == 0 })
   local init = vim.tbl_get(spec, 'data', 'init')
   return vim.is_callable(init) and init() or nil
-end
-
---- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
----@param plugs table|table[]  list of plugin specs or single spec table
-_G.Plug = function(plugs)
-  local speclist = vim
-    .iter(vim.islist(plugs) and plugs or { plugs })
-    :filter(function(v) return v.enabled ~= false end)
-    :map(function(v) return Plugin.new(v):package() end)
-    :totable()
-  vim.pack.add(speclist, { load = _load })
 end
 
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
@@ -175,3 +164,14 @@ vim.schedule(function()
     end,
   })
 end)
+
+--- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
+---@param plugs string|Plugin|(string|Plugin)[]  list of plugin specs or single spec (string or table)
+return function(plugs)
+  local speclist = vim
+    .iter(vim.islist(plugs) and plugs or { plugs })
+    :filter(function(v) return v.enabled ~= false end)
+    :map(function(v) return Plugin.new(v):package() end)
+    :totable()
+  vim.pack.add(speclist, { load = _load })
+end

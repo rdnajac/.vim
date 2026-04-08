@@ -5,7 +5,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "b4b7cbb52bab6c716b317433fa9348a070cccee5",
+      "rev": "a327b19a419347084074cce77f6cd074f54705ac",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "chezmoi.vim": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "render-markdown.nvim": {
-      "rev": "4ae2f2e8e8c66d070f33cfb57cb6f867e3baf5d9",
+      "rev": "54d4b5431e9634ee3d8d30784e017239b5b89d41",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {

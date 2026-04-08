@@ -1,8 +1,3 @@
-Plug({
-  require('nvim.keys.which'),
-  -- require('nvim.keys.screen'),
-})
-
 local modes = { 'n', 'v', 'x', 'i', 't', 'o', 'c', 's' }
 local function has_mode(t) return type(t[1]) == 'table' or vim.tbl_contains(modes, t[1]) end
 
@@ -50,6 +45,12 @@ M.register = function(spec)
 end
 
 vim.schedule(function()
+  if Snacks then
+    for key, v in pairs(require('nvim.keys.toggles')) do
+      M.new_snacks_toggle(key, v)
+    end
+  end
+
   local function edit_luamod(name)
     -- name = name:gsub('%.', '/')
     local file = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', name, 'init.lua')
@@ -88,27 +89,6 @@ vim.schedule(function()
       desc = 'Undotree',
     },
   })
-
-  if Snacks then
-    M.map({
-      { { 'x' }, '/', Snacks.picker.grep_word },
-      { { 'n' }, ',,', Snacks.picker.buffers },
-      { { 'n' }, ',.', Snacks.scratch.open },
-      { { 'i' }, '<C-x><C-i>', function() Snacks.picker.icons({ layout = {preset =  'insert' } }) end },
-      { { 'n', 't' }, '<C-Bslash>', Snacks.terminal.toggle },
-      { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
-      { { 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end },
-      { 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
-      { 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
-    })
-    Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
-    Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
-
-    Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
-    for key, v in pairs(require('nvim.keys.toggles')) do
-      M.new_snacks_toggle(key, v)
-    end
-  end
 
   local descriptions = {
     ['['] = 'prev',

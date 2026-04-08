@@ -36,7 +36,7 @@ function! plug#end()
       " passes script-local variable to lua via `_A`
       call luaeval('vim.pack.add(_A)', s:plugs)
       " lua require('plug')
-      execute 'source' expand('<script>:p:h:h')..'/lua/plug.lua'
+      " execute 'source' expand('<script>:p:h:h')..'/lua/plug.lua'
     endif
   else
     call jetpack#end()

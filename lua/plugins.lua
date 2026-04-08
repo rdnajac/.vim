@@ -1,4 +1,7 @@
 return {
+  require('blink'),
+  require('nvim.keys.which'),
+  -- require('nvim.keys.screen'),
   -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
   {
@@ -28,10 +31,6 @@ return {
     init = function() require('nvim.ui.markdown') end,
   },
   {
-    'folke/flash.nvim',
-    opts = {},
-  },
-  {
     'folke/sidekick.nvim',
     opts = function()
       vim.schedule(vim.lsp.inline_completion.enable)
@@ -45,8 +44,6 @@ return {
 	end
       },
       -- { '<leader>a', group = 'ai', mode = { 'n', 'v' } },
-      { '<leader>aa', function() require('sidekick.cli').toggle('copilot') end, desc = 'Sidekick Toggle CLI', },
-      { '<leader>aA', function() require('sidekick.cli').toggle() end, desc = 'Sidekick Toggle CLI', },
       { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session', },
       { '<leader>ap', function() require('sidekick.cli').prompt() end, desc = 'Sidekick Select Prompt', mode = { 'n', 'x' }, },
       { '<leader>at', function()
@@ -54,7 +51,7 @@ return {
           require('sidekick.cli').send({ name = 'copilot', msg = msg })
         end, mode = { 'n', 'x' }, desc = 'Send This (file/selection)',
       },
-      { '<C-.>', mode = { 'n', 't', 'i', 'x' }, function() require('sidekick.cli').toggle('copilot') end, },
+      { '<C-.>', mode = { 'n', 't', 'i', 'x' }, function() require('sidekick.cli').focus('copilot') end, },
      },
     toggles = {
       ['<leader>uN'] = {
@@ -154,3 +151,4 @@ return {
     },
   },
 }
+-- vim: fdm=expr fdl=1

@@ -1,7 +1,8 @@
 ---@module "blink.cmp"
--- `https://main.cmp.saghen.dev`
+--- `https://main.cmp.saghen.dev`
+--- `https://cmp.saghen.dev/configuration/sources.html#community-sources`
 
-local spec = {
+return {
   'Saghen/blink.cmp',
   build = function() vim.cmd([[BlinkCmp build]]) end,
   event = 'UIEnter',
@@ -21,7 +22,7 @@ local spec = {
       },
       menu = {
         -- auto_show = false,
-        auto_show = function(ctx)
+        auto_show = function(_)
           -- don't show in replace mode
           return vim.fn.mode():sub(1, 1) ~= 'R'
         end,
@@ -35,6 +36,7 @@ local spec = {
           columns = {
             { 'source_id' },
             { 'label', 'label_description' },
+            -- { 'kind', 'source_name' },
           },
           components = {
             source_id = {
@@ -64,24 +66,71 @@ local spec = {
         function() return vim.lsp.inline_completion.get() end,
         'fallback',
       },
+      -- overrides default `:h i_CTRL-R`
       ['<C-R>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
+      ['<C-X><C-X>'] = { function(cmp) return cmp.show({ providers = { 'snippets' } }) end },
     },
     signature = { enabled = true, window = { show_documentation = false } },
-    sources = require('blink.sources'),
+    sources = {
+      default = { 'lsp', 'path', 'snippets' },
+      per_filetype = {
+        ['lua'] = { inherit_defaults = true, 'lazydev' },
+        ['sql'] = { inherit_defaults = false, 'dadbod' },
+      },
+      providers = {
+        lsp = {
+          --   score_offset = -1,
+          --   transform_items = function(_, items)
+          --     return vim
+          --       .iter(items)
+          --       :filter(function(item)
+          --         return not vim.tbl_contains({
+          --           -- 'Snippet',
+          --           -- 'Keyword'
+          --         }, vim.lsp.protocol.CompletionItemKind[item.kind])
+          --       end)
+          --       :totable()
+          --   end,
+        },
+        path = {
+          score_offset = 100,
+          opts = {
+            get_cwd = function(_) return vim.fn.getcwd() end,
+            show_hidden_files_by_default = true,
+          },
+        },
+        snippets = {
+          -- score_offset = 99,
+          opts = { friendly_snippets = false },
+          -- https://cmp.saghen.dev/recipes.html#hide-snippets-after-trigger-character
+          -- TODO: no snippets in middle of word
+          should_show_items = function(ctx)
+            if require('nvim.util').is_comment() then
+              return false
+            else
+              return ctx.trigger.initial_kind ~= 'trigger_character'
+            end
+          end,
+        },
+        -- define custom providers below
+        ['dadbod'] = {
+          name = 'dadbod',
+          module = 'vim_dadbod_completion.blink',
+        },
+        ['env'] = {
+          name = 'env',
+          module = 'blink.sources.env',
+        },
+        ['lazydev'] = {
+          name = 'LazyDev',
+          module = 'blink.sources.lazy',
+          score_offset = 100,
+        },
+        ['registers'] = {
+          name = 'registers',
+          module = 'blink.sources.registers',
+        },
+      },
+    },
   },
 }
-
-local providers = function(mode)
-  local ok, lib = pcall(require, 'blink.cmp.sources.lib')
-  return ok
-      and lib.get_enabled_providers(
-        ({ c = 'cmdline', t = 'term' })[vim.api.nvim_get_mode().mode:sub(1, 1)] or 'default'
-      )
-    or {}
-end
-
-local status = function()
-  return vim.iter(providers()):map(function(k, _) return nv.icons[k] .. ' ' end):join(' ')
-end
-
-return spec

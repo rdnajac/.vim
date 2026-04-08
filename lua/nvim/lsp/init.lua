@@ -14,7 +14,7 @@ vim.schedule(function()
   -- enable servers found in the after directory
   vim.lsp.enable(M.servers)
 
-  -- folke/lazydev.nvim
+  -- use `folke/lazydev.nvim` to setup lua_ls for nvim
   Plug(require('nvim.lsp.lazydev'))
 
   vim.cmd([[
@@ -32,8 +32,7 @@ vim.schedule(function()
   ]])
 end)
 
-vim.api.nvim_create_autocmd('LspProgress', 
-{
+vim.api.nvim_create_autocmd('LspProgress', {
   callback = function(ev)
     local id, params = ev.data.client_id, ev.data.params
     local value = params.value
@@ -56,8 +55,7 @@ vim.api.nvim_create_autocmd('LspProgress',
 
     vim.cmd.redrawstatus()
   end,
-}
-)
+})
 
 ---@param bufnr? integer
 ---@return string
@@ -76,6 +74,5 @@ M.status = function(bufnr)
     end)
     :join(' ')
 end
-
 
 return M

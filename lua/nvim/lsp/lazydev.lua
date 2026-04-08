@@ -1,14 +1,5 @@
 package.preload['lazydev.config'] = function()
-  --- The main function exposed in lazydev topmod
-  ---@param buf? integer
-  ---@return string? the workspace root if found
-  local function find_workspace(buf)
-    local fname = vim.api.nvim_buf_get_name(buf or 0)
-    local Workspace = require('lazydev.workspace')
-    local ws = Workspace.find({ path = fname })
-    return ws and ws:root_dir() or nil
-  end
-
+  -- the new `lazydev.config` module bypasses the usual `setup`
   local M = {
     debug = false,
     lua_root = true,
@@ -44,7 +35,19 @@ package.preload['lazydev.config'] = function()
   end
 
   vim.schedule(function()
+    -- registers autocmds for attaching to buffers
     require('lazydev.buf').setup()
+
+    --- The main function exposed in lazydev topmod as
+    --- `require('lazydev').find_workspace()`
+    ---@param buf? integer
+    ---@return string? the workspace root if found
+    local function find_workspace(buf)
+      local fname = vim.api.nvim_buf_get_name(buf or 0)
+      local Workspace = require('lazydev.workspace')
+      local ws = Workspace.find({ path = fname })
+      return ws and ws:root_dir() or nil
+    end
 
     -- require('lazydev.integrations.lspconfig').setup()
     vim.lsp.config('lua_ls', {
@@ -62,16 +65,16 @@ package.preload['lazydev.config'] = function()
   return M
 end
 
+---@type Plugin
 return {
   'folke/lazydev.nvim',
   opts = {
     library = {
       vim.env.VIMRUNTIME,
-      { path = 'nvim', words = { 'nv' } },
+      -- { path = 'nvim', words = { 'nv' } },
       { path = 'mini.nvim', words = { 'Mini.*' } },
-      { path = 'plug', words = { 'Plug' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },
-      { path = 'lspconfig/types', words = { 'lspconfig' } },
+      { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
     },
   },
 }

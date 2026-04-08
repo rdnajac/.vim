@@ -1,4 +1,5 @@
 package.preload['ale.diagnostics'] = function() return require('nvim.diagnostics.ale') end
+
 vim.schedule(function()
   local icons = nv.ui.icons.diagnostics
   vim.diagnostic.config({

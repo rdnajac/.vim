@@ -46,13 +46,6 @@ local M = {
   },
 }
 
--- loaded lazily when not opening a file
-if vim.fn.argc(-1) == 0 then
-  Plug(M.specs)
-else
-  vim.schedule(function() Plug(M.specs) end)
-end
-
 local aug = vim.api.nvim_create_augroup('nv.treesitter', {})
 
 vim.api.nvim_create_autocmd('FileType', {
