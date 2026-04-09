@@ -10,13 +10,12 @@ return {
     opts = {},
     keys = function()
       local flash = require('flash')
-      -- stylua: ignore
       return {
-        { { 'n', 'x', 'o' }, '<C-J>',   flash.jump },
-        { { 'n', 'x', 'o' }, '<C-S-J>', flash.treesitter },
-        { { 'o' },           'r',       flash.remote },
-        { { 'o', 'x' },      'R',       flash.treesitter_search },
-        { { 'c' },           '<C-S>',   flash.toggle },
+        { { 'n', 'x', 'o' }, '<C-J>', flash.jump },
+        { { 'x', 'o' }, '<C-F>', flash.treesitter },
+        { { 'c' }, '<C-F>', flash.toggle },
+        { { 'o' }, 'r', flash.remote },
+        { { 'x', 'o' }, 'R', flash.treesitter_search },
       }
     end,
   },

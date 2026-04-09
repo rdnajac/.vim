@@ -15,6 +15,7 @@
 --*yox*	'cursorline' 'cursorcolumn' (x as in crosshairs)
 
 ---@type table<string, string|snacks.toggle.Opts>
+-- TODO: change to 'yo'
 return {
   ['<leader>ac'] = 'autochdir',
   ['<leader>dpp'] = 'profiler',

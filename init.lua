@@ -57,11 +57,11 @@ Plug({
       { { 'x' }, '/', Snacks.picker.grep_word },
       { { 'n' }, ',,', Snacks.picker.buffers },
       { { 'n' }, ',.', Snacks.scratch.open },
-      { { 'n', 't' }, '<C-Bslash>', Snacks.terminal.toggle },
+      { { 'n', 't' }, '<C-Bslash>', Snacks.terminal.focus },
       { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
       { { 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end },
-      { 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
-      { 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
+      { { 'n' }, 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
+      { { 'n' }, 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
       -- stylua: ignore
       { { 'i' }, '<C-x><C-i>', function() Snacks.picker.icons({ layout = require('munchies.layouts').insert }) end, },
     }

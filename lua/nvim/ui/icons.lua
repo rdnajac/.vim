@@ -23,7 +23,7 @@ local M = {
     unmerged = ' ',
     untracked = '?',
   },
-  -- copilot_status = { 
+  -- copilot_status = {
   --   Error = { '', 'DiagnosticError' },
   --   Inactive = { '', 'MsgArea' },
   --   Warning = { '', 'DiagnosticWarn' },

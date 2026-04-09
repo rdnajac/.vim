@@ -39,5 +39,4 @@ return {
       picker:toggle('preview', { enable = true })
     end
   end,
-
 }

@@ -47,7 +47,7 @@ vim.api.nvim_create_autocmd('LspProgress', {
       title = title,
       status = is_end and 'success' or 'running',
       percent = value.percentage,
-      verbose = false,
+      -- verbose = true,
     })
 
     vim.cmd.redrawstatus()
