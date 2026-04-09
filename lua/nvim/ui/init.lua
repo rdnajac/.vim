@@ -8,10 +8,10 @@ vim.treesitter.language.register('markdown', ui_fts)
 vim.api.nvim_create_autocmd({ 'FileType' }, {
   pattern = ui_fts,
   -- group = 'nv.treesitter',
-  callback = function()
+  callback = function(ev)
     vim.treesitter.start(0)
     vim.wo.conceallevel = 3
-    vim.keymap.set({ 'n' }, 'gf', nv.fs.better_gf, { buffer = true })
+    vim.keymap.set({ 'n' }, 'gf', nv.fs.better_gf, { buf = ev.buf })
   end,
   desc = 'Start tree-sitter for message windows',
 })

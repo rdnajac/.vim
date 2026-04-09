@@ -49,10 +49,10 @@ return function(items, opts, on_choice)
     local cur_row = vim.api.nvim_win_get_cursor(0)[1]
     vim.api.nvim_buf_delete(bufnr, {})
     on_choice(items[cur_row], cur_row)
-  end, { buffer = bufnr })
+  end, { buf = bufnr })
 
   vim.api.nvim_create_autocmd('WinClosed', {
-    buffer = bufnr,
+    buf = bufnr,
     callback = function()
       vim.api.nvim_buf_delete(bufnr, {})
       on_choice(nil)

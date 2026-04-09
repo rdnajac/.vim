@@ -5,26 +5,26 @@ local ns = vim.api.nvim_create_namespace('git-status')
 ---@field index string Single character status code for index
 ---@field working_tree string Single character status code for working tree
 
-local function get_path(buffer)
-  local ft = vim.bo[buffer].filetype
+local function get_path(bufnr)
+  local ft = vim.bo[bufnr].filetype
   if ft == 'dirvish' then
-    return vim.b[buffer].dirvish._dir
+    return vim.b[bufnr].dirvish._dir
   elseif ft == 'oil' then
-    return require('oil').get_current_dir(buffer)
+    return require('oil').get_current_dir(bufnr)
   elseif ft == 'netrw' then
-    return vim.b[buffer].netrw_curdir
+    return vim.b[bufnr].netrw_curdir
   end
 end
 
-local function get_line_name(buffer, n)
-  local ft = vim.bo[buffer].filetype
+local function get_line_name(bufnr, n)
+  local ft = vim.bo[bufnr].filetype
   if ft == 'dirvish' then
-    local dir = vim.b[buffer].dirvish._dir
+    local dir = vim.b[bufnr].dirvish._dir
     local fname = vim.fn.getline(n):gsub('/$', '')
     local rel = fname:gsub('^' .. vim.pesc(dir), ''):gsub('^/', '')
     return rel
   elseif ft == 'oil' then
-    local entry = require('oil').get_entry_on_line(buffer, n)
+    local entry = require('oil').get_entry_on_line(bufnr, n)
     return entry and entry.name ~= '..' and entry.name
   elseif ft == 'netrw' then
     local line = vim.fn.getline(n)
@@ -83,17 +83,17 @@ local function parse_git_status(git_status_stdout, git_ls_tree_stdout, cwd)
   return status
 end
 
----@param buffer integer Buffer number
+---@param bufnr integer Buffer number
 ---@param callback fun(status?: table<string, GitStatusCodes>) Callback with status map or nil on error
-local function load_git_status(buffer, callback)
-  local path = get_path(buffer)
+local function load_git_status(bufnr, callback)
+  local path = get_path(bufnr)
   if not path or vim.fn.FugitiveGitDir(path) == '' then
     return callback()
   end
 
   vim.schedule(function()
-    local git_status = git(git.cmd('status', false), buffer)
-    local git_tracked = git(git.cmd('tracked_cwd', false), buffer)
+    local git_status = git(git.cmd('status', false), bufnr)
+    local git_tracked = git(git.cmd('tracked_cwd', false), bufnr)
     if vim.tbl_isempty(git_status) and vim.tbl_isempty(git_tracked) then
       return callback()
     end
@@ -101,10 +101,10 @@ local function load_git_status(buffer, callback)
   end)
 end
 
----@param buffer integer Buffer number
+---@param bufnr integer Buffer number
 ---@param status? table<string, GitStatusCodes> Map of filename to status codes
-local function add_status_extmarks(buffer, status)
-  vim.api.nvim_buf_clear_namespace(buffer, ns, 0, -1)
+local function add_status_extmarks(bufnr, status)
+  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
   if not status then
     return
   end
@@ -115,8 +115,8 @@ local function add_status_extmarks(buffer, status)
     return icon, 'SnacksPickerGitStatus' .. (k or '')
   end
 
-  for n = 1, vim.api.nvim_buf_line_count(buffer) do
-    local name = get_line_name(buffer, n)
+  for n = 1, vim.api.nvim_buf_line_count(bufnr) do
+    local name = get_line_name(bufnr, n)
     if not name then
       -- skip this line
     else
@@ -135,7 +135,7 @@ local function add_status_extmarks(buffer, status)
         end
 
         if #virt > 0 then
-          vim.api.nvim_buf_set_extmark(buffer, ns, n - 1, 0, {
+          vim.api.nvim_buf_set_extmark(bufnr, ns, n - 1, 0, {
             virt_text = virt,
             virt_text_pos = 'eol',
             priority = 1000,
@@ -148,24 +148,24 @@ local function add_status_extmarks(buffer, status)
 end
 
 local setup = function(ev)
-  local buffer = ev and ev.buf or vim.api.nvim_get_current_buf()
-  if vim.b[buffer].git_status_started then
+  local bufnr = ev and ev.buf or vim.api.nvim_get_current_buf()
+  if vim.b[bufnr].git_status_started then
     return
   end
-  vim.b[buffer].git_status_started = true
+  vim.b[bufnr].git_status_started = true
 
   local current_status, last_dir
 
   local refresh = Snacks.util.debounce(function()
-    local current_dir = get_path(buffer)
+    local current_dir = get_path(bufnr)
     if current_dir and current_dir ~= last_dir then
       last_dir = current_dir
-      load_git_status(buffer, function(status)
+      load_git_status(bufnr, function(status)
         current_status = status
-        add_status_extmarks(buffer, status)
+        add_status_extmarks(bufnr, status)
       end)
     elseif current_status then
-      add_status_extmarks(buffer, current_status)
+      add_status_extmarks(bufnr, current_status)
     end
   end, { ms = 50 })
 
@@ -174,7 +174,7 @@ local setup = function(ev)
   vim.api.nvim_create_autocmd(
     { 'BufReadPost', 'BufWritePost', 'WinEnter', 'DirChanged', 'CursorMoved' },
     {
-      buffer = buffer,
+      buf = bufnr,
       group = aug,
       callback = refresh,
     }

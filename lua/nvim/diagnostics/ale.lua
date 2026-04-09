@@ -5,14 +5,14 @@ local severity_map = {
 }
 
 return {
-  ---Send diagnostics to the Neovim diagnostics API
-  ---@param buffer number The buffer number to retreive the variable for.
+  --- Send diagnostics to the Neovim diagnostics API
+  ---@param buf number The buffer number to retreive the variable for.
   ---@param loclist table The loclist array to report as diagnostics.
   ---@return nil
-  send = function(buffer, loclist)
+  send = function(buf, loclist)
     local diagnostics = vim
       .iter(loclist)
-      :filter(function(location) return location.bufnr == buffer end)
+      :filter(function(location) return location.bufnr == buf end)
       :map(
         function(location)
           return {
@@ -29,6 +29,6 @@ return {
       )
       :totable()
     local ns = vim.api.nvim_create_namespace('ale')
-    vim.diagnostic.set(ns, buffer, diagnostics, {})
+    vim.diagnostic.set(ns, buf, diagnostics, {})
   end,
 }
