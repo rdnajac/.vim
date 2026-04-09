@@ -21,13 +21,11 @@ endif
 " - `dgh` deletes hunk range under cursor
 " - `[H` / `[h` / `]h` / `]H` navigate hungs
 
-if has('nvim') && luaeval('_G.Snacks ~= nil')
-  nnoremap <leader>gb <Cmd>lua Snacks.picker.git_branches()<CR>
-  nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
-  nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
-  nnoremap <leader>gg <Cmd>lua Snacks.lazygit()<CR>
-  nnoremap <leader>gL <Cmd>lua Snacks.picker.git_log_line()<CR>
-  nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
-  nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
-  nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
-endif
+nnoremap <leader>gb <Cmd>lua Snacks.picker.git_branches()<CR>
+nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
+nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
+nnoremap <leader>gg <Cmd>lua Snacks.lazygit()<CR>
+nnoremap <leader>gL <Cmd>lua Snacks.picker.git_log_line()<CR>
+nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
+nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
+nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>

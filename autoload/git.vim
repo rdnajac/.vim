@@ -4,7 +4,7 @@
 " Uses Snacks.nvim if available, falls back to Fugitive, then manual search.
 " [buffer] can be a buffer number or buffer name. Defaults to current buffer.
 function! git#root(...) abort
-  if has('nvim') && luaeval('_G.Snacks ~= nil')
+  if nvim#has_global('Snacks')
     try
       return a:0 ? luaeval('_G.Snacks.git.get_root(_A)', a:1) : v:lua.Snacks.git.get_root()
     catch

@@ -62,9 +62,6 @@ endfunction
 " let g:ooze_channel = input('Select ooze channel: ', get(g:, 'ooze_channel', ''))
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
-if !has('nvim') || luaeval('Snacks == nil')
-endif
-
 augroup vimrc_term
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
