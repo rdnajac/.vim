@@ -3,6 +3,7 @@ T1 = vim.uv.hrtime()
 vim.loader.enable()
 
 require('vim._core.ui2').enable({
+  -- TODO: targets
   msg = { target = 'msg' },
 })
 

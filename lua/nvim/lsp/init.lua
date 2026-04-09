@@ -14,9 +14,6 @@ vim.schedule(function()
   -- enable servers found in the after directory
   vim.lsp.enable(M.servers)
 
-  -- use `folke/lazydev.nvim` to setup lua_ls for nvim
-  Plug(require('nvim.lsp.lazydev'))
-
   vim.cmd([[
     nnoremap glc <Cmd>lua Snacks.picker.lsp_config()<CR>
     nnoremap gls <Cmd>lua Snacks.picker.lsp_symbols()<CR>
