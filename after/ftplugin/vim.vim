@@ -14,4 +14,6 @@ nnoremap <buffer> gch        <Cmd>call edit#ch()<CR>
 xnoremap <buffer> <CR> :<C-U><C-R><C-L>\|echo "##  \n```vim\n"..getline('.').."\n```"<CR>
 nnoremap <buffer> <M-CR> <Cmd>so % \| echom 'Sourced ' .. expand('%:p')<CR>
 
+nnoremap <buffer> yu viWyo<Esc>p0iechom<Space><Esc>
+
 ia <buffer> enc scriptencoding utf-8

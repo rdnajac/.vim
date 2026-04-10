@@ -1,14 +1,6 @@
 " let g:vimrc#dir = split(&runtimepath, ',')[0]
 let g:vimrc#dir = fnamemodify($MYVIMRC, ':h')
 
-function! s:on_enter(fn) abort
-  if v:vim_did_enter
-    call call(a:fn, [])
-  else
-    execute printf('%s()', string(a:fn))
-  endif
-endfunction
-
 function! vimrc#setmarks() abort
   for num in range(1, line('$'))
     if getline(num) =~? '^"\s*Section:\s*\zs.'
@@ -18,10 +10,14 @@ function! vimrc#setmarks() abort
   endfor
 endfunction
 
+function! vimrc#insert_unique(bufvar, ...) abort
+  let orig = getbufvar('', a:bufvar)
+  let val = list#join(list#uniq(call('list#split', a:000 + [orig])))
+  call setbufvar('', a:bufvar, val)
+  return val
+endfunction
+
 " like `apathy#Prepend()` but only for path
 function! vimrc#apathy(...) abort
-  let orig = getbufvar('', '&path')
-  let val = list#join(list#uniq(call('list#split', a:000 + [orig])))
-  call setbufvar('', '&path', val)
-  return val
+  return(vimrc#insert_unique('path', a:000))
 endfunction
