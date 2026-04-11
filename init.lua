@@ -15,22 +15,25 @@ command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
 
 _G.Plug = require('plug')
 
+local shortcuts = {
+  { icon = '󰱼 ', title = 'Files', { section = 'recent_files', indent = 2 } },
+  { icon = ' ', desc = 'Health ', key = 'H', action = ':checkhealth' },
+  { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
+  { icon = ' ', desc = 'Mason  ', key = 'M', action = ':Mason' },
+  { icon = ' ', desc = 'News   ', key = 'N', action = ':News' },
+  { icon = ' ', desc = 'Update ', key = 'U', action = ':lua vim.pack.update()' },
+}
+
 Plug({
   'folke/snacks.nvim',
   opts = {
     dashboard = {
+      preset = { keys = shortcuts },
       sections = {
         { section = 'header' },
-        {
-          { icon = '󰱼 ', title = 'Files', { section = 'recent_files', indent = 2 } },
-          { icon = ' ', desc = 'Health ', key = 'H', action = ':checkhealth' },
-          { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
-          { icon = ' ', desc = 'Mason  ', key = 'M', action = ':Mason' },
-          { icon = ' ', desc = 'News   ', key = 'N', action = ':News' },
-          { icon = ' ', desc = 'Update ', key = 'U', action = ':lua vim.pack.update()' },
-        },
-      -- stylua: ignore
-      { section = 'terminal', cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]], },
+        { section = 'keys' },
+        -- stylua: ignore
+        { section = 'terminal', cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]] },
         function() return { footer = 'NVIM ' .. tostring(vim.version()), padding = 1 } end,
       },
     },
@@ -41,7 +44,7 @@ Plug({
     -- notifier = require('munchies.notifier'),
     -- notifier = { enabled = true },
     quickfile = { enabled = true },
-    picker = { sources = require('munchies.pickers') },
+    picker = require('munchies.picker').config ,
     scope = { enabled = true },
     scroll = { enabled = true },
     -- statuscolumn = require('munchies.statuscolumn'),
@@ -55,7 +58,6 @@ Plug({
     Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
     return {
       { { 'x' }, '/', Snacks.picker.grep_word },
-      { { 'n' }, ',,', Snacks.picker.buffers },
       { { 'n' }, ',.', Snacks.scratch.open },
       { { 'n', 't' }, '<C-Bslash>', Snacks.terminal.focus },
       { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
@@ -68,10 +70,9 @@ Plug({
   end,
 })
 
-_G.dd = Snacks.debug.inspect
-_G.bt = Snacks.debug.backtrace
-_G.p = Snacks.debug.profile
+vim.cmd([[ nmap ,, <CMD>lua Snacks.picker.buffers()<CR> ]])
 
+_G.P = vim.print
 _G.nv = require('nvim')
 
 Plug(require('plugins'))

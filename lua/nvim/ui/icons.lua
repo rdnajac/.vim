@@ -1,6 +1,12 @@
 local copilot = ''
 -- `$PACKDIR/mini.nvim/lua/mini/icons.lua:682`
 local M = {
+  pickers = {
+    buffers = '',
+    explorer = '󰙅',
+    files = '',
+    grep = '󰱽',
+  },
   buffer = '',
   cmdline = '',
   lsp = '',

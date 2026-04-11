@@ -368,10 +368,13 @@ inoremap \sec Section:
 iabbrev n- –
 iabbrev m- —
 
-" insert mode undo breakpoints {{{3
+" undo breakpoints
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
+
+" textobjects {{{2
+call textobjects#buffer()
 
 " toggles {{{2
 " TODO: play nicely with Snacks.toggle and vim-uninpaired

@@ -1,10 +1,10 @@
 --- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
 ---@type snacks.picker.explorer.Config
 return {
-  on_show = function(picker)
-    picker.layout.wins.preview.layout = false
-    local root = picker.layout.root
-    local preview = picker.preview.win
+  floating_preview = function(self)
+    self.layout.wins.preview.layout = false
+    local root = self.layout.root
+    local preview = self.preview.win
     preview.opts.relative = 'editor'
 
     local update = function()
@@ -28,15 +28,10 @@ return {
     root:on('WinResized', update)
     root:on('WinLeave', function()
       vim.schedule(function()
-        if not picker:is_focused() then
-          picker:toggle('preview', { enable = false })
+        if not self:is_focused() then
+          self:toggle('preview', { enable = false })
         end
       end)
     end)
-
-    -- auto-show preview when opening nvim on a directory
-    if vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1 then
-      picker:toggle('preview', { enable = true })
-    end
   end,
 }

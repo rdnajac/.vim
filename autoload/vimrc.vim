@@ -1,5 +1,6 @@
 " let g:vimrc#dir = split(&runtimepath, ',')[0]
 let g:vimrc#dir = fnamemodify($MYVIMRC, ':h')
+let $VIMDIR = g:vimrc#dir
 
 function! vimrc#setmarks() abort
   for num in range(1, line('$'))

@@ -17,7 +17,10 @@
 ---@type table<string, string|snacks.toggle.Opts>
 -- TODO: change to 'yo'
 return {
-  ['<leader>ac'] = 'autochdir',
+  ['yo~'] = 'autochdir',
+  ['yow'] = 'wrap',
+  ['yos'] = 'spell',
+  ['yoz'] = 'zoom',
   ['<leader>dpp'] = 'profiler',
   ['<leader>dph'] = 'profiler_highlights',
   ['<leader>ua'] = 'animate',
@@ -29,10 +32,7 @@ return {
   ['<leader>uS'] = 'scroll',
   ['<leader>ut'] = 'treesitter',
   ['<leader>uW'] = 'words',
-  ['<leader>uZ'] = 'zoom',
-  ['<leader>us'] = 'spell',
   ['<leader>uL'] = 'relativenumber',
-  ['<leader>uw'] = 'wrap',
   ['<leader>uv'] = {
     name = 'Virtual Text',
     get = function() return vim.diagnostic.config().virtual_text ~= false end,

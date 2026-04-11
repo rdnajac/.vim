@@ -1,18 +1,29 @@
-# Personal (n)vim config
+# My (n)vim config
 
-repo works with vim when placed in `~/..vim/`
+## PATHS
+
+### $MYVIMDIR
+
+repo works with vim when placed in `~/.vim/`
 and with neovim when placed in `~/.config/nvim/`
 
-## External Directories
+### `$VIMRUNTIME`
 
-### neovim $VIMRUNTIME
+@~/neovim/share/nvim/runtime/E5108: Lua: /Users/rdn/.config/nvim/lua/munchies/pickers.lua:92: attempt to call method 'refresh' (a nil value)
+stack traceback:
+	/Users/rdn/.config/nvim/lua/munchies/pickers.lua:92: in function </Users/rdn/.config/nvim/lua/munchies/pickers.lua:85>
 
-Also look for docs here:
 
-`~/neovim/share/nvim/runtime/`
+- `~/neovim/share/nvim/runtime/` - remember this!
+- `~/neovim/share/nvim/runtime/doc/` - read these!
+- `~/neovim/share/nvim/runtime/lua/vim` - code here!
 
-### neovim `vim.pack` plugins
+### $PACKDIR
 
-`vim.pack` plugins live here:
+- `~/.local/share/nvim/site/pack/core/opt/` - neovim's `vim.pack` module
+-  `$MYVIMDIR/pack/` - my managed plugins
+-  `$MYVIMDIR/pack/jetpack` - jetpack plugins ($PACKDIR if vim)
 
-`~/.local/share/nvim/site/pack/core/opt/`
+## RULES
+
+- always consult the local documentation first
