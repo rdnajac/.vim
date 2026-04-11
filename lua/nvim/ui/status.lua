@@ -141,19 +141,5 @@ M.line = function()
   return table.concat(parts)
 end
 
-local providers = function(mode)
-  -- hide the module from lazydev
-  local libmod = 'blink.cmp.sources.lib'
-  local ok, lib = pcall(require, libmod)
-  return ok
-      and lib.get_enabled_providers(
-        ({ c = 'cmdline', t = 'term' })[vim.api.nvim_get_mode().mode:sub(1, 1)] or 'default'
-      )
-    or {}
-end
-
-M.blink = function()
-  return vim.iter(providers()):map(function(k, _) return nv.ui.icons[k] .. ' ' end):join(' ')
-end
 
 return M

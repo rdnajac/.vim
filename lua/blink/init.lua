@@ -134,3 +134,10 @@ return {
     },
   },
 }
+
+-- local status = function()
+--   return vim.iter(
+--       require('blink.cmp.sources.lib').get_enabled_providers(
+--         ({ c = 'cmdline', t = 'term' })[vim.fn.mode():sub(1, 1)] or 'default'
+--       )):map(function(k, _) return nv.ui.icons[k] .. ' ' end):join(' ')
+-- end

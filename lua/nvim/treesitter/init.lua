@@ -46,15 +46,20 @@ local M = {
   },
 }
 
-local aug = vim.api.nvim_create_augroup('nv.treesitter', {})
+-- lazy load treesitter plugins when not opening a file
+if vim.fn.argc(-1) == 0 then
+  after()
+else
+  vim.schedule(function() Plug(M.specs) end)
+end
 
+local aug = vim.api.nvim_create_augroup('nv.treesitter', {})
 vim.api.nvim_create_autocmd('FileType', {
   pattern = M.parsers.to_autostart(),
   group = aug,
   callback = function(ev) vim.treesitter.start(ev.buf) end,
   desc = 'Automatically start tree-sitter',
 })
-
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { 'markdown', 'r', 'rmd', 'quarto' },
   group = aug,
@@ -67,20 +72,14 @@ vim.api.nvim_create_autocmd('FileType', {
 M.install_parsers = function() vim.cmd.TSInstall(M.parsers.to_install()) end
 
 M.status = function()
-  local ret = {}
-  local highlighter = require('vim.treesitter.highlighter')
-  local hl = highlighter.active[vim.api.nvim_get_current_buf()]
+  local hl = vim.treesitter.highlighter or require('vim.treesitter.highlighter')
+  local active = hl.active[vim.api.nvim_get_current_buf()]
   ---@diagnostic disable-next-line: invisible
-  local queries = hl and hl._queries
-  if type(queries) == 'table' then
-    ret = vim.tbl_map(function(query)
-      if query == vim.bo.filetype then
-        return ' '
-      end
-      return require('nvim.ui.icons').filetype[query]
-    end, vim.tbl_keys(queries))
-  end
-  return table.concat(ret, ' ')
+  local queries = active and active._queries or {}
+  return vim
+    .iter(hl._queries)
+    :map(function(lang) return lang == vim.bo.filetype and '' or nv.ui.icons.filetype[lang] end)
+    :join('  ')
 end
 
 return M
