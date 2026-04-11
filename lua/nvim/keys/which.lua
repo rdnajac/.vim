@@ -29,16 +29,8 @@ return {
       show_help = false,
       sort = { 'order', 'alphanum', 'case', 'mod' },
       spec = {
-        {
-          '<leader>?',
-          function() wk.show({ global = false }) end,
-          desc = 'Buffer Keymaps (which-key)',
-        },
-        {
-          '<C-w><Space>',
-          function() wk.show({ keys = '<C-w>', loop = true }) end,
-          desc = 'Window Hydra Mode (which-key)',
-        },
+        { '<leader>?', function() wk.show({ global = false }) end, desc = 'which-key?' },
+        { '<C-w><Space>', function() wk.show({ keys = '<C-w>', loop = true }) end },
       },
       { 'gr', group = 'LSP', icon = { icon = '' } },
       -- hide certain, unhelpful mapping hints

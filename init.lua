@@ -1,6 +1,7 @@
 --- init.lua
 T1 = vim.uv.hrtime()
 vim.loader.enable()
+_G.P = vim.print
 
 require('vim._core.ui2').enable({
   -- TODO: targets
@@ -42,9 +43,8 @@ Plug({
     indent = { indent = { only_current = false, only_scope = true } },
     input = { enabled = true },
     -- notifier = require('munchies.notifier'),
-    -- notifier = { enabled = true },
     quickfile = { enabled = true },
-    picker = require('munchies.picker').config ,
+    picker = require('munchies.picker').config,
     scope = { enabled = true },
     scroll = { enabled = true },
     -- statuscolumn = require('munchies.statuscolumn'),
@@ -59,25 +59,33 @@ Plug({
     return {
       { { 'x' }, '/', Snacks.picker.grep_word },
       { { 'n' }, ',.', Snacks.scratch.open },
-      { { 'n', 't' }, '<C-Bslash>', Snacks.terminal.focus },
+      { { 'n' }, ',,', Snacks.picker.buffers },
       { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
       { { 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end },
       { { 'n' }, 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
       { { 'n' }, 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
-      -- stylua: ignore
-      { { 'i' }, '<C-x><C-i>', function() Snacks.picker.icons({ layout = require('munchies.layouts').insert }) end, },
+    -- stylua: ignore
+    { { 'i' }, '<C-x><C-i>', function() Snacks.picker.icons({ layout = require('munchies.layouts').insert }) end }
+,
     }
   end,
 })
 
-vim.cmd([[ nmap ,, <CMD>lua Snacks.picker.buffers()<CR> ]])
+--- `require`s as all modules under `nvim/` directory
+_G.nv = vim
+  .iter(vim.fn.readdir(vim.fn.stdpath('config') .. '/lua/nvim'))
+  :map(function(filename)
+    local modname = vim.fn.fnamemodify(filename, ':r')
+    local ok, mod = xpcall(require, debug.traceback, 'nvim.' .. modname)
+    if not ok then
+      Snacks.notify.error(('Error `require()`ing: %s:\n%s'):format(modname, mod))
+    end
+    return modname, mod
+  end)
+  :fold({}, rawset)
 
-_G.P = vim.print
-_G.nv = require('nvim')
-
-Plug(require('plugins'))
-
--- set up mini modules after nvim plugins, but before `plugin/*`
+Plug(nv.plugins)
+-- Plug(nv.mini)
 nv.mini.init()
 
 -- lazy load treesitter plugins when not opening a file
@@ -87,3 +95,4 @@ if vim.fn.argc(-1) == 0 then
 else
   vim.schedule(after)
 end
+-- vim: fdm=expr fdl=2 foldminlines=2

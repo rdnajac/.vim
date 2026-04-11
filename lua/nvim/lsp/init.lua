@@ -39,17 +39,15 @@ vim.api.nvim_create_autocmd('LspProgress', {
       is_end and '' or Snacks.util.spinner(),
       value.title -- append the original title
     )
-
-    vim.api.nvim_echo({ { value.message or '100% done' } }, false, {
-      id = 'lsp.' .. params.token,
-      kind = 'progress',
-      source = 'nv.lsp',
-      title = title,
-      status = is_end and 'success' or 'running',
-      percent = value.percentage,
-      -- verbose = true,
-    })
-
+    -- vim.api.nvim_echo({ { value.message or '100% done' } }, false, {
+    --   id = 'lsp.' .. params.token,
+    --   kind = 'progress',
+    --   source = 'nv.lsp',
+    --   title = title,
+    --   status = is_end and 'success' or 'running',
+    --   percent = value.percentage,
+    --   -- verbose = true,
+    -- })
     vim.cmd.redrawstatus()
   end,
 })

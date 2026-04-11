@@ -374,7 +374,11 @@ inoremap . .<C-g>u
 inoremap ; ;<C-g>u
 
 " textobjects {{{2
-call textobjects#buffer()
+" buffer pseudo-text object
+xnoremap ag GoggV
+onoremap ag :<C-u>normal vag<CR>
+xnoremap ig :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
+onoremap ig :<C-u>normal vig<CR>
 
 " toggles {{{2
 " TODO: play nicely with Snacks.toggle and vim-uninpaired
@@ -413,7 +417,6 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-scriptease'
 " Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-tbone'
@@ -423,6 +426,7 @@ Plug 'tpope/vim-unimpaired'
 " Plug 'dstein64/vim-startuptime'
 " Plug 'vuciv/golf'
 if !has('nvim')
+  Plug 'tpope/vim-scriptease'
   " Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'

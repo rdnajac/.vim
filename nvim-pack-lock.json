@@ -1,7 +1,7 @@
 {
   "plugins": {
     "ale": {
-      "rev": "ba8b9cbab95131e284c5be926642f803b2be0058",
+      "rev": "6ba798d2e773905feb609bf530e681acbdaea22c",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
@@ -33,7 +33,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "c588db330592fa477a70d2fee6ba20a57194bdc3",
+      "rev": "cb5bc0b2b35a6d513e3298d285db81453e791f4f",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -47,10 +47,6 @@
     "nvim-treesitter-context": {
       "rev": "b0c45cefe2c8f7b55fc46f34e563bc428ef99636",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
-    },
-    "nvim-treesitter-textobjects": {
-      "rev": "851e865342e5a4cb1ae23d31caf6e991e1c99f1e",
-      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git"
     },
     "render-markdown.nvim": {
       "rev": "54d4b5431e9634ee3d8d30784e017239b5b89d41",
@@ -115,10 +111,6 @@
     "vim-rsi": {
       "rev": "45540637ead22f011e8215f1c90142e49d946a54",
       "src": "https://github.com/tpope/vim-rsi.git"
-    },
-    "vim-scriptease": {
-      "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
-      "src": "https://github.com/tpope/vim-scriptease.git"
     },
     "vim-speeddating": {
       "rev": "c17eb01ebf5aaf766c53bab1f6592710e5ffb796",

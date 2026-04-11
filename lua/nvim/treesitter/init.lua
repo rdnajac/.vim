@@ -15,7 +15,7 @@ local M = {
     },
     {
       'nvim-treesitter/nvim-treesitter-textobjects',
-      -- enabled = false,
+      enabled = false,
       opts = {
         move = { set_jumps = true },
         select = {

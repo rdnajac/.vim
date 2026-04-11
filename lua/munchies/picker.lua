@@ -10,7 +10,7 @@ local M = {}
 ---@return string
 local function title(opts)
   local picker = opts.source
-  local icon = nv.ui.icons.pickers[picker] or ''
+  local icon = vim.tbl_get(nv, 'ui', 'icons', 'pickers', picker) or ''
   local name = picker and picker:sub(1, 1):upper() .. picker:sub(2)
   local dir = opts.dirs and #opts.dirs .. ' paths'
     or vim.fn.pathshorten(vim.fn.fnamemodify(opts.cwd or vim.fn.getcwd(), ':~'), 2)
