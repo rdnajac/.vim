@@ -112,6 +112,10 @@
       "rev": "45540637ead22f011e8215f1c90142e49d946a54",
       "src": "https://github.com/tpope/vim-rsi.git"
     },
+    "vim-scriptease": {
+      "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
+      "src": "https://github.com/tpope/vim-scriptease.git"
+    },
     "vim-speeddating": {
       "rev": "c17eb01ebf5aaf766c53bab1f6592710e5ffb796",
       "src": "https://github.com/tpope/vim-speeddating.git"

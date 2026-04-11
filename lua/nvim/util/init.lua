@@ -59,6 +59,10 @@ M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
 M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
 M.is_visual = function() return fn.mode():match('[vV\22]') ~= nil end
 M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
+M.inside_code_fences = function()
+  local ok, node = pcall(vim.treesitter.get_node)
+  return (ok and node) and node:type():match('code') ~= nil or false
+end
 
 M.yank = function(text)
   fn.setreg('*', text)

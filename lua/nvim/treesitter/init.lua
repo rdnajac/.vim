@@ -48,7 +48,7 @@ local M = {
 
 -- lazy load treesitter plugins when not opening a file
 if vim.fn.argc(-1) == 0 then
-  after()
+  Plug(M.specs)
 else
   vim.schedule(function() Plug(M.specs) end)
 end
@@ -77,7 +77,7 @@ M.status = function()
   ---@diagnostic disable-next-line: invisible
   local queries = active and active._queries or {}
   return vim
-    .iter(hl._queries)
+    .iter(queries)
     :map(function(lang) return lang == vim.bo.filetype and '' or nv.ui.icons.filetype[lang] end)
     :join('  ')
 end

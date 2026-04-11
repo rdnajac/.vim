@@ -1,12 +1,3 @@
-" Buffer pseudo-text objects
-function! textobjects#buffer() abort
-  " XXX: this is flaky
-  xnoremap ig :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
-  onoremap ig :<C-u>normal vig<CR>
-  xnoremap ag GoggV
-  onoremap ag :<C-u>normal vag<CR>
-endfunction
-
 ""
 " i_ i. i: i, i; i| i/ i\ i* i+ i- i#
 " a_ a. a: a, a; a| a/ a\ a* a+ a- a#
@@ -119,42 +110,46 @@ function! textobjects#blanklines() abort
   onoremap a<Space> :<C-u>normal va<Space><CR>
 endfunction
 
-" `https://stackoverflow.com/questions/75587279/quick-way-to-select-inside-a-fenced-code-block-in-markdown-using-vim`
-function! textobject#codeblock() " {{{
+let s:fence = '^```'
+function! s:is_fence() abort
+  let lnum = line('.')
+  let line = getline(lnum)
+  if line !~? s:fence
+    return 0
+  endif
+  return getline(lnum, '$')->filter({ _, l -> l =~ '^```' })->len() % 2 == 0 ? 1 : -1
+endfunction
+function! s:is_between_fences() abort
+  if empty(&syntax) && has('nvim')
+    return v:lua.nv.util.inside_code_fences()
+  endif
+  return synID(line('.'), col('.'), 0)->synIDattr('name') =~? 'markdownCodeBlock'
+endfunction
 
-  function! IsFence()
-    return getline('.') =~ '^```'
-  endfunction
-
-  function! IsOpeningFence()
-    return IsFence() && getline(line('.'),'$')->filter({ _, val -> val =~ '^```'})->len() % 2 == 0
-  endfunction
-
-  function! IsClosingFence()
-    return IsFence() && !IsOpeningFence()
-  endfunction
-
-  function! IsBetweenFences()
-    return synID(line("."), col("."), 0)->synIDattr('name') =~? 'markdownCodeBlock'
-  endfunction
-
-  " Info 'Selecting code block'
-  if IsOpeningFence() || IsBetweenFences()
-    call search('^```', 'W')
-    normal -
-    call search('^```', 'Wbs')
-    normal +
-    normal V''
-  elseif IsClosingFence()
-    call search('^```', 'Wbs')
-    normal +
-    normal V''k
-  " else
-    " return
+" search: `W`: don't wrap, `b`: backwards, `s`: set `'` mark
+function! textobjects#codeblock(inner) abort " {{{
+  let fence_kind = s:is_fence()
+  if fence_kind < 0 " cursor on closing fence
+    call search(s:fence, 'Wbs')
+    if a:inner
+      normal! +
+    endif
+    normal! V''
+    if a:inner
+      normal! -
+    endif
+  elseif fence_kind > 0 || s:is_between_fences()
+    call search(s:fence, 'W')
+    if a:inner
+      normal! -
+    endif
+    call search(s:fence, 'Wbs')
+    if a:inner
+      normal! +
+    endif
+    normal! V''
   endif
 endfunction
 " }}}
 
-" FIXME: or use MiniAi
-" xnoremap <buffer> <silent> ij :<C-u>call markdown#select_code_block()<CR>
-" onoremap <buffer> <silent> ij :<C-u>call markdown#select_code_block()<CR>
+" vim: vdm=marker

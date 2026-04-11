@@ -13,9 +13,11 @@ setlocal textwidth=80
 setlocal formatoptions+=o
 setlocal commentstring=>\ %s
 
-" FIXME: 
 " set up text objects for code block
-call textobjects#codeblock()
+xnoremap <buffer> ac :<C-u>call textobjects#codeblock(0)<CR>
+onoremap <buffer> ac :<C-u>normal vac<CR>
+xnoremap <buffer> ic :<C-u>call textobjects#codeblock(1)<CR>
+onoremap <buffer> ic :<C-u>normal vic<CR>
 
 " Insert an octothorpe at the beginning of the line that already has text
 nnoremap <buffer> <localleader>h ^i#<Space><Esc>

@@ -88,11 +88,4 @@ Plug(nv.plugins)
 -- Plug(nv.mini)
 nv.mini.init()
 
--- lazy load treesitter plugins when not opening a file
-local after = function() Plug(nv.treesitter.specs) end
-if vim.fn.argc(-1) == 0 then
-  after()
-else
-  vim.schedule(after)
-end
 -- vim: fdm=expr fdl=2 foldminlines=2

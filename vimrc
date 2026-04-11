@@ -9,7 +9,9 @@ set jumpoptions+=stack
 set mouse=a
 set report=0
 set scrolloff=8
-set sessionoptions-=blank sessionoptions-=terminal
+set sessionoptions-=blank
+set sessionoptions-=folds
+set sessionoptions-=terminal
 set shortmess+=aA "c
 set shortmess-=o
 set showmatch
@@ -425,8 +427,8 @@ Plug 'tpope/vim-unimpaired'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'dstein64/vim-startuptime'
 " Plug 'vuciv/golf'
+Plug 'tpope/vim-scriptease'
 if !has('nvim')
-  Plug 'tpope/vim-scriptease'
   " Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
