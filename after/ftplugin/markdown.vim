@@ -14,9 +14,9 @@ setlocal formatoptions+=o
 setlocal commentstring=>\ %s
 
 " set up text objects for code block
-xnoremap <buffer> ac :<C-u>call textobjects#codeblock(0)<CR>
+xnoremap <buffer> ac :<C-u>call textobjects#codeblock#outer()<CR>
 onoremap <buffer> ac :<C-u>normal vac<CR>
-xnoremap <buffer> ic :<C-u>call textobjects#codeblock(1)<CR>
+xnoremap <buffer> ic :<C-u>call textobjects#codeblock#inner()<CR>
 onoremap <buffer> ic :<C-u>normal vic<CR>
 
 " Insert an octothorpe at the beginning of the line that already has text
