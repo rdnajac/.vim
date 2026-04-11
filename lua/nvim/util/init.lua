@@ -48,7 +48,6 @@ M.is_comment = function(opts)
   local cursor = api.nvim_win_get_cursor(0)
   -- subtract one to account for 0-based row indexing in get_node
   opts.pos = opts.pos or { cursor[1] - 1, cursor[2] }
-
   local ok, node = pcall(vim.treesitter.get_node, opts)
   -- opts.pos is 0-indexed; synID expects 1-based row and col
   local type = (ok and node and node:type()) or M.synname(cursor[1], cursor[2] + 1)
@@ -62,25 +61,6 @@ M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name'
 M.inside_code_fences = function()
   local ok, node = pcall(vim.treesitter.get_node)
   return (ok and node) and node:type():match('code') ~= nil or false
-end
-
-M.yank = function(text)
-  fn.setreg('*', text)
-  print('[yanked] ' .. text)
-end
-
---- Convert a file path to a module name by trimming the lua root
----@param path string
----@return string
-M.modname = function(path) return fn.fnamemodify(path, ':r:s?^.*/lua/??:s?/init$??') end
-
--- TODO: get member from viW
----@param member? string
-M.yankmod = function(member)
-  local modname = M.modname(api.nvim_buf_get_name(0))
-  local require = string.format([[require('%s')]], modname)
-  local line = table.concat({ require, member }, '.')
-  M.yank(line)
 end
 
 -- https://github.com/neovim/neovim/discussions/38271#discussion-9630986

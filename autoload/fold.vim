@@ -20,6 +20,23 @@ function! fold#text() abort
   return printf('%s %s%s', line, fill, info)
 endfunction
 
+function! fold#text_lua() abort
+  let start = getline(v:foldstart)
+  let trimmed = trim(start)
+  " if trimmed ~=# '<\{([
+  " check if trimemed wnds with '{', '(', '[', 'then', 'do'
+  if trimmed =~# '\v^(<\{|\(|\[|then|do)$'
+    return start
+  endif
+  if l:trimmed ==# '{'
+    let l:second_line = getline(v:foldstart + 1)
+    let l:quoted_str = matchstr(l:second_line, '^\s*\zs\(["''].\{-}["''],\?\)\ze\s*$')
+    let l:start .= ' ' . l:quoted_str
+  endif
+  return printf('%s...%s', l:start, trim(getline(v:foldend)))
+endfunction
+
+
 
 function! fold#test() abort
   let line = '" Section: settings {{{1'

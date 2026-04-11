@@ -1,20 +1,29 @@
-vim.wo.foldmethod = 'expr'
-vim.wo.foldtext = 'v:lua.nv.ui.foldtext()'
+-- vim.wo.foldmethod = 'expr'
+-- vim.wo.foldtext = 'v:lua.nv.ui.foldtext()'
 
 if vim.g.loaded_endwise == 1 then
   vim.bo.syntax = 'ON' -- use legacy syntax
 end
 
-vim.keymap.set('n', 'ym', nv.util.yankmod, { buf = 0, desc = 'yank module' })
+--- Yank the module name of the current file, optionally with a member.
+---@param member? string
+local yankmod = function(member)
+  local modname = vim.fn.fnamemodify(vim.fn.expand('%'), ':r:s?^.*/lua/??:s?/init$??')
+  local line = string.format([[require('%s')%s]], modname, member and '.' .. member or '')
+  vim.fn.setreg('*', line)
+  print('[yanked] ' .. line)
+end
+
 vim.keymap.set('n', 'yM', function()
   local line = vim.fn.getline('.')
   -- find M.member or M['member']
-  local member = line:match('M%.(%w+)') or line:match("M%['(%w+)'%]")
-  local is_func = line:match('function')
-  if member and is_func then
-    member = member .. '()'
+  local member = line:match('M%.(%w+)') -- or line:match("M%['(%w+)'%]")
+  if not member then
+    print('No member found on line')
+    return
   end
-  nv.util.yankmod(member)
+  member = line:match('function') and member .. '()' or member
+  yankmod(member)
 end, { buf = 0, desc = 'yank module member' })
 
 vim.b.minisurround_config = {
@@ -33,24 +42,19 @@ if _G.MiniSplitjoin then
   local add_comma_curly = gen_hook.add_trailing_separator(curly)
   local del_comma_curly = gen_hook.del_trailing_separator(curly)
   local pad_curly = gen_hook.pad_brackets(curly)
-
   vim.b.minisplitjoin_config = {
     split = { hooks_post = { add_comma_curly } },
     join = { hooks_post = { del_comma_curly, pad_curly } },
   }
 end
 
-local aug = vim.api.nvim_create_augroup('lua', {})
-
 if Snacks then
   local old_bg = Snacks.util.color('LspReferenceText', 'bg')
   -- TODO: only disable highlighting inside of `vim.cmd([[...]])`
   vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
-    group = aug,
     callback = function() Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } }) end,
   })
   vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
-    group = aug,
     callback = function() Snacks.util.set_hl({ LspReferenceText = { bg = old_bg } }) end,
   })
 end

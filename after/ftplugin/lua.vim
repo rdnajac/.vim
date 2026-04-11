@@ -1,3 +1,4 @@
+setlocal foldmethod=expr foldtext=fold#text_lua()
 " let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
 let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 
@@ -12,6 +13,14 @@ inoremap <buffer> {<CR> {<CR>}<Esc>O
 inoremap <buffer> [[ [[]]<Left><Left>
 
 nnoremap <buffer> yu <Cmd>call debug#print#lua()<CR>
+nnoremap <buffer> ym <Cmd>call <SID>yankmod()<CR>
+
+function! s:yankmod() abort
+  let modname = fnamemodify(expand('%'), ':r:s?^.*/lua/??:s?/init$??')
+  let line = printf("require('%s')", modname)
+  call setreg('*', line)
+  echo '[yanked] ' . line
+endfunction
 
 " `tpope/vim-surround`
 " NOTE: must use double quotes and the ascii values (e.g. i = 105)

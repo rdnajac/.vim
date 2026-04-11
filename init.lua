@@ -8,6 +8,18 @@ require('vim._core.ui2').enable({
   msg = { target = 'msg' },
 })
 
+local ui_fts = { 'msg', 'pager' }
+vim.treesitter.language.register('markdown', ui_fts)
+vim.api.nvim_create_autocmd({ 'FileType' }, {
+  pattern = ui_fts,
+  callback = function(ev)
+    vim.treesitter.start(0)
+    vim.wo.conceallevel = 3
+    vim.keymap.set({ 'n' }, 'gf', require('nvim.fs').better_gf, { buf = ev.buf })
+  end,
+  desc = 'Apply markdown tree-sitter highlighting for message windows',
+})
+
 vim.cmd([[
 colorscheme tokyonight
 source ~/.vim/vimrc
@@ -87,5 +99,3 @@ _G.nv = vim
 Plug(nv.plugins)
 -- Plug(nv.mini)
 nv.mini.init()
-
--- vim: fdm=expr fdl=2 foldminlines=2

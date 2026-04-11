@@ -64,32 +64,28 @@ end
 
 --- handles truncated paths in the debug.traceback like `.../path/to/file:line:`
 ---@param cfile? string defaults to `expand('<cfile>')`
-M.better_gf = function()
-  local cfile = vim.fn.expand('<cfile>')
+M.better_gf = function(cfile)
+  cfile = cfile or vim.fn.expand('<cfile>')
   if vim.startswith(cfile, '...') then
-    local file
-    for dir, pattern in pairs({
-      PACKDIR = '/core/opt/',
-      VIMRUNTIME = '/nvim/runtime/',
-    }) do
+    -- HACK: the errors are probably from one of these two dirs
+    local maybe = { PACKDIR = '/core/opt/', VIMRUNTIME = '/nvim/runtime/' }
+    for dir, pattern in pairs(maybe) do
       local match = cfile:match('.*' .. pattern .. '(.*)')
       if match and match ~= '' then
-        file = vim.fs.joinpath(vim.env[dir], match)
-      end
-      if file and vim.uv.fs_stat(file) then
-        local line = vim.api.nvim_get_current_line()
-        local line_num = line:match(':(%d+)')
-        -- Close pager window and open file
-        vim.cmd('close')
-        vim.cmd.edit(file)
-        if line_num then
-          vim.cmd('normal! ' .. line_num .. 'G')
+        local file = vim.fs.joinpath(vim.env[dir], match)
+        if file and vim.uv.fs_stat(file) then
+          local line = vim.api.nvim_get_current_line()
+          local line_num = line:match(cfile .. ':(%d+)')
+          vim.cmd('close')
+          vim.cmd.edit(file)
+          if line_num then
+            vim.cmd('normal! ' .. line_num .. 'G')
+          end
+          return
         end
-        return
       end
     end
   end
-  -- Fallback to normal gf
   vim.cmd('normal! gf')
 end
 

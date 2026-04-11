@@ -150,4 +150,3 @@ return {
     },
   },
 }
--- vim: fdm=expr fdl=1
