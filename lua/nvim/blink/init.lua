@@ -119,16 +119,16 @@ return {
         },
         ['env'] = {
           name = 'env',
-          module = 'blink.sources.env',
+          module = 'nvim.blink.env',
         },
         ['lazydev'] = {
           name = 'LazyDev',
-          module = 'blink.sources.lazy',
+          module = 'nvim.blink.lazy',
           score_offset = 100,
         },
         ['registers'] = {
           name = 'registers',
-          module = 'blink.sources.registers',
+          module = 'nvim.blink.registers',
         },
       },
     },

@@ -1,0 +1,30 @@
+--  `:h ui-messages`
+---@type table<string, nil|'cmd'|'msg'|'pager'>
+local targets = {
+  [''] = nil,
+  ['empty'] = nil,
+  ['bufwrite'] = nil,
+  ['confirm'] = nil,
+  ['emsg'] = nil,
+  ['echo'] = nil,
+  ['echomsg'] = nil,
+  ['echoerr'] = nil,
+  ['completion'] = nil,
+  ['list_cmd'] = nil,
+  ['lua_error'] = nil,
+  ['lua_print'] = nil,
+  ['progress'] = nil,
+  ['rpc_error'] = nil,
+  ['quickfix'] = nil,
+  ['search_cmd'] = nil,
+  ['search_count'] = nil,
+  ['shell_cmd'] = nil,
+  ['shell_err'] = nil,
+  ['shell_out'] = nil,
+  ['shell_ret'] = nil,
+  ['undo'] = nil,
+  ['verbose'] = nil,
+  ['wildlist'] = nil,
+  ['wmsg'] = nil,
+}
+return { targets = targets }

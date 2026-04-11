@@ -1,5 +1,5 @@
 return {
-  require('blink'),
+  nv.blink,
   require('nvim.keys.which'),
   -- require('nvim.keys.screen'),
   -- { 'stevearc/conform.nvim', opts = {} },

@@ -18,7 +18,7 @@ function! s:setup(...) abort
   setlocal iskeyword+=-
 endfunction
 
-augroup vimrc_keywordprg
+augroup vimrc.keywordprg
   autocmd!
   " au BufRead,BufNewFile *alacritty.*ml call s:setup('5 alacritty')
   au FileType ghostty,kitty,tmux call s:setup()

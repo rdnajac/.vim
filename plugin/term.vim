@@ -62,7 +62,7 @@ endfunction
 " let g:ooze_channel = input('Select ooze channel: ', get(g:, 'ooze_channel', ''))
 tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 
-augroup vimrc_term
+augroup vimrc.term
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
   autocmd TermOpen * let g:last_term_channel = &channel

@@ -4,8 +4,11 @@ vim.loader.enable()
 _G.P = vim.print
 
 require('vim._core.ui2').enable({
-  -- TODO: targets
-  msg = { target = 'msg' },
+  msg = {
+    target = 'msg',
+    -- TODO:
+    -- targets = require('nvim.ui.2').targets,
+  },
 })
 
 local ui_fts = { 'msg', 'pager' }
@@ -96,6 +99,6 @@ _G.nv = vim
   end)
   :fold({}, rawset)
 
-Plug(nv.plugins)
--- Plug(nv.mini)
+Plug(require('plugins'))
+
 nv.mini.init()

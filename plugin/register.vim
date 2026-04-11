@@ -1,3 +1,4 @@
+" TODO: move to vimrc
 " yank/delete everything
 nnoremap yY <Cmd>%y<CR>
 nnoremap dD <Cmd>%d<CR>
@@ -22,6 +23,7 @@ cnoremap <M-y> <Cmd>let @*=getcmdline()<CR>
 nnoremap cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
 nnoremap cM :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
 
+" TODO: move to yank?
 function s:set_clipboard() abort
   if !has('nvim')
     set clipboard=unnamed
@@ -51,7 +53,7 @@ function! s:yankring() abort
   endif
 endfunction
 
-augroup vimrc_yank
+augroup vimrc.yank
   autocmd!
   autocmd TextYankPost * call s:yankring()
   " Setup unnamedplus clipboard on first yank if the system clipboard is not not already setup

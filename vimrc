@@ -31,7 +31,7 @@ set linebreak
 set shiftround
 set shiftwidth=2 softtabstop=2 " WARN: don't change tabstop!
 
-augroup vimrc_indent
+augroup vimrc.indent
   autocmd!
   " autocmd FileType markdown,tex    setl sw=2 sts=2
   autocmd FileType cpp,cuda,python setl sw=4 sts=4
@@ -74,7 +74,7 @@ xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s
 " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
 set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
 
-augroup vimrc_format
+augroup vimrc.format
   autocmd!
   autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
 augroup END
@@ -88,7 +88,7 @@ set signcolumn=number
 set termguicolors
 " set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
 
-augroup vimrc_ui
+augroup vimrc.ui
   set number
 
   " no cursorline in insert mode
@@ -157,13 +157,13 @@ augroup vimrc
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
 
   " close certain buffers with `q`
-  au FileType help,qf,nvim-pack nnoremap <buffer> q :lclose<CR><C-W>q
+  au FileType help,qf,nvim-pack nnoremap <buffer> q <Cmd>wincmd c<CR>
 
   " don't list certain buffer types (skips C-^)
   au FileType man,netrw,snacks_explorer setlocal nobuflisted
 
   " automatically resize splits when the window is resized
-  au VimResized * let g:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' g:tabpagenr
+  au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
 
   " catch when vim doesn't terminate properly
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
@@ -300,6 +300,10 @@ nnoremap <leader>fT :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
 nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
+
+nnoremap <leader>m <Cmd>messages<CR>
+nnoremap <leader>p g<
+
 
 " navigation {{{2
 nnoremap <BS> :bprevious<CR>
