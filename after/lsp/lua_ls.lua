@@ -1,4 +1,5 @@
 package.preload['lazydev.config'] = function()
+  -- Snacks.debug.bt()
   -- the new `lazydev.config` module bypasses the usual `setup`
   local M = {
     debug = false,
@@ -50,32 +51,23 @@ package.preload['lazydev.config'] = function()
 end
 
 Plug({
-  'folke/lazydev.nvim',
-  opts = {
-    library = {
-      vim.env.VIMRUNTIME,
-      -- { path = 'nvim', words = { 'nv' } },
-      { path = 'mini.nvim', words = { 'Mini.*' } },
-      { path = 'snacks.nvim', words = { 'Snacks' } },
-      { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
+  {
+    'folke/lazydev.nvim',
+    opts = {
+      library = {
+        vim.env.VIMRUNTIME,
+        -- { path = 'nvim', words = { 'nv' } },
+        { path = 'mini.nvim', words = { 'Mini.*' } },
+        { path = 'snacks.nvim', words = { 'Snacks' } },
+        { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
+      },
     },
   },
 })
 
---- The main function exposed in lazydev topmod as
---- `require('lazydev').find_workspace()`
----@param buf? integer
----@return string? the workspace root if found
-local function find_workspace(buf)
-  local fname = vim.api.nvim_buf_get_name(buf or 0)
-  local Workspace = require('lazydev.workspace')
-  local ws = Workspace.find({ path = fname })
-  return ws and ws:root_dir() or nil
-end
-
 ---@type vim.lsp.Config
 return {
-  root_dir = function(bufnr, on_dir) on_dir(find_workspace(bufnr)) end,
+  root_dir = function(bufnr, on_dir) on_dir(require('lazydev').find_workspace(bufnr)) end,
   ---@type lspconfig.settings.lua_ls
   settings = {
     Lua = {

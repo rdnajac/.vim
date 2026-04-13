@@ -1,30 +1,6 @@
--- vim.wo.foldmethod = 'expr'
--- vim.wo.foldtext = 'v:lua.nv.ui.foldtext()'
-
 if vim.g.loaded_endwise == 1 then
   vim.bo.syntax = 'ON' -- use legacy syntax
 end
-
---- Yank the module name of the current file, optionally with a member.
----@param member? string
-local yankmod = function(member)
-  local modname = vim.fn.fnamemodify(vim.fn.expand('%'), ':r:s?^.*/lua/??:s?/init$??')
-  local line = string.format([[require('%s')%s]], modname, member and '.' .. member or '')
-  vim.fn.setreg('*', line)
-  print('[yanked] ' .. line)
-end
-
-vim.keymap.set('n', 'yM', function()
-  local line = vim.fn.getline('.')
-  -- find M.member or M['member']
-  local member = line:match('M%.(%w+)') -- or line:match("M%['(%w+)'%]")
-  if not member then
-    print('No member found on line')
-    return
-  end
-  member = line:match('function') and member .. '()' or member
-  yankmod(member)
-end, { buf = 0, desc = 'yank module member' })
 
 vim.b.minisurround_config = {
   custom_surroundings = {

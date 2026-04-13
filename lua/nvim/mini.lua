@@ -129,22 +129,43 @@ local miniopts = {
     -- mappings = { toggle = 'g~', split = 'gS', join = 'gJ' }
   },
 
-  surround = {
-    mappings = {
-      add = '',
-      delete = 'dS',
-      find = '',
-      find_left = '',
-      highlight = '',
-      replace = 'cS',
-      suffix_last = '',
-      suffix_next = '',
-    },
-    -- search_method = 'cover_or_next',
-    custom_surroundings = {
-      B = { output = { left = '{', right = '}' } },
-    },
-  },
+  surround = function()
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+      pattern = { 'markdown', 'rmd', 'quarto' },
+      -- group = aug,
+      callback = function()
+        vim.b.minisurround_config = {
+          L = {
+            input = { '%[().-()%]%(.-%)' },
+            output = function()
+              return {
+                left = '[',
+                right = string.format('](%s)', MiniSurround.user_input('Link: ')),
+              }
+            end,
+          },
+        }
+      end,
+      desc = 'MiniSurround Markdown Link',
+    })
+
+    return {
+      mappings = {
+        add = '',
+        delete = 'dS',
+        find = '',
+        find_left = '',
+        highlight = '',
+        replace = 'cS',
+        suffix_last = '',
+        suffix_next = '',
+      },
+      -- search_method = 'cover_or_next',
+      custom_surroundings = {
+        B = { output = { left = '{', right = '}' } },
+      },
+    }
+  end,
 }
 
 return {

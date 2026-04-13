@@ -14,12 +14,13 @@ inoremap <buffer> [[ [[]]<Left><Left>
 
 nnoremap <buffer> yu <Cmd>call debug#print#lua()<CR>
 nnoremap <buffer> ym <Cmd>call <SID>yankmod()<CR>
+nnoremap <buffer> yM <Cmd>call <SID>yankmod('.'..expand('<cword>')..'()')<CR>
 
-function! s:yankmod() abort
-  let modname = fnamemodify(expand('%'), ':r:s?^.*/lua/??:s?/init$??')
-  let line = printf("require('%s')", modname)
-  call setreg('*', line)
-  echo '[yanked] ' . line
+function! s:yankmod(...) abort
+  let modname = expand('%:r:s?^.*/lua/??:s?/init$??')
+  let l = printf("require('%s')%s", modname, a:0 ? a:1 : '')
+  call setreg('*', l)
+  echo '[yanked] '..l
 endfunction
 
 " `tpope/vim-surround`
