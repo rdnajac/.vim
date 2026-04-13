@@ -3,29 +3,14 @@ T1 = vim.uv.hrtime()
 vim.loader.enable()
 _G.P = vim.print
 
-require('vim._core.ui2').enable({
-  msg = {
-    target = 'msg',
-    -- TODO:
-    -- targets = require('nvim.ui.2').targets,
-  },
-})
-
-local ui_fts = { 'msg', 'pager' }
-vim.treesitter.language.register('markdown', ui_fts)
-vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = ui_fts,
-  callback = function(ev)
-    vim.treesitter.start(0)
-    vim.wo.conceallevel = 3
-    vim.keymap.set({ 'n' }, 'gf', require('nvim.fs').better_gf, { buf = ev.buf })
-  end,
-  desc = 'Apply markdown tree-sitter highlighting for message windows',
-})
+require('nvim.ui.2')
 
 vim.cmd([[
 colorscheme tokyonight
 source ~/.vim/vimrc
+" treesitter-incremental-selection
+nmap <C-Space> van
+xmap <C-Space> an
 command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
 ]])
 
@@ -68,13 +53,11 @@ Plug({
     words = { enabled = true },
   },
   keys = function()
-    Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {}, desc = 'LSP Hover' })
-    Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
-    Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
     return {
       { { 'x' }, '/', Snacks.picker.grep_word },
       { { 'n' }, ',.', Snacks.scratch.open },
       { { 'n' }, ',,', Snacks.picker.buffers },
+      { { 'n', 't' }, '<C-Bslash> ', Snacks.terminal.focus },
       { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
       { { 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end },
       { { 'n' }, 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },

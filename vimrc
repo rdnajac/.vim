@@ -120,7 +120,7 @@ else
   set backupext=.bak
   set backupdir=~/.local/state/nvim/backup//
   set backupskip+=~/.cache/*
-  set cmdheight=0
+  " set cmdheight=0
   set jumpoptions+=view
   set mousescroll=hor:0
   set startofline " default in vim
@@ -385,6 +385,12 @@ xnoremap ag GoggV
 onoremap ag :<C-u>normal vag<CR>
 xnoremap ig :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
 onoremap ig :<C-u>normal vig<CR>
+
+" inner/outer function
+xnoremap if :<C-u>normal! Bvf(<CR>
+onoremap if :<C-u>normal vif<CR>
+xnoremap af :<C-u>normal! Bvf)<CR>
+onoremap af :<C-u>normal vaf<CR>
 
 " toggles {{{2
 " TODO: play nicely with Snacks.toggle and vim-uninpaired

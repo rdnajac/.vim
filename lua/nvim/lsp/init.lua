@@ -39,35 +39,18 @@ vim.api.nvim_create_autocmd('LspProgress', {
       is_end and '' or Snacks.util.spinner(),
       value.title -- append the original title
     )
-    -- vim.api.nvim_echo({ { value.message or '100% done' } }, false, {
-    --   id = 'lsp.' .. params.token,
-    --   kind = 'progress',
-    --   source = 'nv.lsp',
-    --   title = title,
-    --   status = is_end and 'success' or 'running',
-    --   percent = value.percentage,
-    --   -- verbose = true,
-    -- })
+    vim.api.nvim_echo({ { value.message or '100% done' } }, false, {
+      id = 'lsp.' .. params.token,
+      kind = 'progress',
+      source = 'nv.lsp',
+      title = title,
+      status = is_end and 'success' or 'running',
+      percent = value.percentage,
+      -- verbose = true,
+    })
     vim.cmd.redrawstatus()
   end,
 })
 
----@param bufnr? integer
----@return string
-M.status = function(bufnr)
-  return vim
-    .iter(vim.lsp.get_clients({ bufnr = vim._resolve_bufnr(bufnr) }))
-    ---@param client vim.lsp.Client
-    :map(function(client)
-      -- TODO: busy status
-      local icons = require('nvim.ui.icons')
-      if client.name ~= 'copilot' then
-        return icons.copilot .. ' '
-      end
-      local status = client:is_stopped() and 'stopped' or 'active'
-      return icons.lsp_status[status] .. ' '
-    end)
-    :join(' ')
-end
 
 return M
