@@ -141,5 +141,33 @@ M.line = function()
   return table.concat(parts)
 end
 
+---@param bufnr? integer
+---@return string
+M.lsp = function(bufnr)
+  return vim
+    .iter(vim.lsp.get_clients({ bufnr = vim._resolve_bufnr(bufnr) }))
+    ---@param client vim.lsp.Client
+    :map(function(client)
+      -- TODO: busy status
+      local icons = require('nvim.ui.icons')
+      if client.name ~= 'copilot' then
+        return icons.copilot
+      end
+      local status = client:is_stopped() and 'stopped' or 'active'
+      return icons.lsp_status[status]
+    end)
+    :join(' ') .. ' '
+end
+
+M.treesitter = function()
+  local hl = vim.treesitter.highlighter or require('vim.treesitter.highlighter')
+  local active = hl.active[vim.api.nvim_get_current_buf()]
+  ---@diagnostic disable-next-line: invisible
+  local queries = active and active._queries or {}
+  return vim
+    .iter(queries)
+    :map(function(lang) return lang == vim.bo.filetype and '' or nv.ui.icons.filetype[lang] end)
+    :join(' ') .. ' '
+end
 
 return M

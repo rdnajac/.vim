@@ -71,15 +71,4 @@ vim.api.nvim_create_autocmd('FileType', {
 -- too many args
 M.install_parsers = function() vim.cmd.TSInstall(M.parsers.to_install()) end
 
-M.status = function()
-  local hl = vim.treesitter.highlighter or require('vim.treesitter.highlighter')
-  local active = hl.active[vim.api.nvim_get_current_buf()]
-  ---@diagnostic disable-next-line: invisible
-  local queries = active and active._queries or {}
-  return vim
-    .iter(queries)
-    :map(function(lang) return lang == vim.bo.filetype and '' or nv.ui.icons.filetype[lang] end)
-    :join('  ')
-end
-
 return M
