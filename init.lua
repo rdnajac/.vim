@@ -8,13 +8,22 @@ require('nvim.ui.2')
 vim.cmd([[
 colorscheme tokyonight
 source ~/.vim/vimrc
+command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
+" restart neovim and restore state with Session
+nnoremap <D-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
 " treesitter-incremental-selection
 nmap <C-Space> van
 xmap <C-Space> an
-command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
-]])
 
-_G.Plug = require('plug')
+" snacks
+xnoremap /  <Cmd>lua Snacks.picker.grep_word()<CR>
+nnoremap ,. <Cmd>lua Snacks.scratch.open()<CR>
+
+" delete around indent
+nmap dI dai
+nmap vI vai
+inoremap <C-x><C-i> <Cmd>lua Snacks.picker.icons({ layout = require('munchies.layouts').insert })<CR>
+]])
 
 local shortcuts = {
   { icon = '󰱼 ', title = 'Files', { section = 'recent_files', indent = 2 } },
@@ -25,51 +34,35 @@ local shortcuts = {
   { icon = ' ', desc = 'Update ', key = 'U', action = ':lua vim.pack.update()' },
 }
 
-Plug({
-  'folke/snacks.nvim',
-  opts = {
-    dashboard = {
-      preset = { keys = shortcuts },
-      sections = {
-        { section = 'header' },
-        { section = 'keys' },
+assert(require('snacks'))
+Snacks.setup({
+  dashboard = {
+    preset = { keys = shortcuts },
+    sections = {
+      { section = 'header' },
+      { section = 'keys' },
         -- stylua: ignore
         { section = 'terminal', cmd = [[cowsay "The computing scientist's main challenge is not to get confused by the complexities of his own making"  | sed "s/^/        /" ]] },
-        function() return { footer = 'NVIM ' .. tostring(vim.version()), padding = 1 } end,
-      },
+      function() return { footer = 'NVIM ' .. tostring(vim.version()), padding = 1 } end,
     },
-    explorer = { replace_netrw = true, trash = true },
-    image = { enabled = true },
-    indent = { indent = { only_current = false, only_scope = true } },
-    input = { enabled = true },
-    -- notifier = require('munchies.notifier'),
-    quickfile = { enabled = true },
-    picker = require('munchies.picker').config,
-    scope = { enabled = true },
-    scroll = { enabled = true },
-    -- statuscolumn = require('munchies.statuscolumn'),
-    styles = { lazygit = { height = 0, width = 0 } },
-    toggle = { which_key = false },
-    words = { enabled = true },
   },
-  keys = function()
-    return {
-      { { 'x' }, '/', Snacks.picker.grep_word },
-      { { 'n' }, ',.', Snacks.scratch.open },
-      { { 'n' }, ',,', Snacks.picker.buffers },
-      { { 'n', 't' }, '<C-Bslash> ', Snacks.terminal.focus },
-      { { 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end },
-      { { 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end },
-      { { 'n' }, 'dI', 'dai', { desc = 'Delete (Snacks) Indent', remap = true } },
-      { { 'n' }, 'vI', 'vai', { desc = 'Select (Snacks) Indent', remap = true } },
-    -- stylua: ignore
-    { { 'i' }, '<C-x><C-i>', function() Snacks.picker.icons({ layout = require('munchies.layouts').insert }) end }
-,
-    }
-  end,
+  explorer = { replace_netrw = true, trash = true },
+  image = { enabled = true },
+  indent = { indent = { only_current = false, only_scope = true } },
+  input = { enabled = true },
+  -- notifier = require('munchies.notifier'),
+  quickfile = { enabled = true },
+  picker = require('munchies.picker'),
+  scope = { enabled = true },
+  scroll = { enabled = true },
+  -- statuscolumn = require('munchies.statuscolumn'),
+  styles = { lazygit = { height = 0, width = 0 } },
+  toggle = { which_key = false },
+  words = { enabled = true },
 })
 
---- `require`s as all modules under `nvim/` directory
+_G.Plug = require('plug')
+_G.dd = require('snacks.debug')
 _G.nv = vim
   .iter(vim.fn.readdir(vim.fn.stdpath('config') .. '/lua/nvim'))
   :map(function(filename)
@@ -85,3 +78,4 @@ _G.nv = vim
 Plug(require('plugins'))
 
 nv.mini.init()
+-- vim:fdl=1

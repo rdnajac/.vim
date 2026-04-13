@@ -1,45 +1,47 @@
---Toggle	Option
---*yob*	'background' (dark is off, light is on)
---*yoc*	'cursorline'
---*yod*	'diff' (actually |:diffthis| / |:diffoff|)
---*yoh*	'hlsearch'
---*yoi*	'ignorecase'
---*yol*	'list'
---*yon*	'number'
---*yor*	'relativenumber'
---*yos*	'spell'
---*yot*	'colorcolumn' ("+1" or last used value)
---*you*	'cursorcolumn'
---*yov*	'virtualedit'
---*yow*	'wrap'
---*yox*	'cursorline' 'cursorcolumn' (x as in crosshairs)
-
 ---@type table<string, string|snacks.toggle.Opts>
--- TODO: change to 'yo'
 return {
   ['yo~'] = 'autochdir',
-  ['yow'] = 'wrap',
+  ['yoa'] = 'animate',
+  ['yoA'] = {
+    name = 'Inline Completion',
+    get = function() return vim.lsp.inline_completion.is_enabled() end,
+    set = function(state) vim.lsp.inline_completion.enable(state) end,
+  },
+  --*yob*	'background' (dark is off, light is on)
+  --*yoc*	'cursorline'
+  --*yod*	'diff' (actually |:diffthis| / |:diffoff|)
+  ['yoD'] = 'diagnostics',
+  --*yoh*	'hlsearch'
+  ['yoH'] = 'inlay_hints',
+  --*yoi*	'ignorecase'
+  ['yoI'] = 'indent',
+  --*yol*	'list'
+  --*yon*	'number'
+  --*yor*	'relativenumber'
+  --*yos*	'spell'
   ['yos'] = 'spell',
+  ['<yoS'] = 'scroll',
+  --*yot*	'colorcolumn' ("+1" or last used value)
+  ['yoT'] = 'treesitter',
+  --*you*	'cursorcolumn'
+  --*yov*	'virtualedit'
+  --*yow*	'wrap'
+  ['yow'] = 'wrap',
+  ['yoW'] = 'words',
+  --*yox*	'cursorline' 'cursorcolumn' (x as in crosshairs)
   ['yoz'] = 'zoom',
   ['<leader>dpp'] = 'profiler',
   ['<leader>dph'] = 'profiler_highlights',
-  ['<leader>ua'] = 'animate',
-  ['<leader>ud'] = 'diagnostics',
-  ['<leader>uD'] = 'dim',
-  ['<leader>ug'] = 'indent',
-  ['<leader>uh'] = 'inlay_hints',
+  ['<leader>ud'] = 'dim',
   ['<leader>ul'] = 'line_number',
-  ['<leader>uS'] = 'scroll',
-  ['<leader>ut'] = 'treesitter',
-  ['<leader>uW'] = 'words',
   ['<leader>uL'] = 'relativenumber',
   ['<leader>uv'] = {
     name = 'Virtual Text',
     get = function() return vim.diagnostic.config().virtual_text ~= false end,
     set = function(state) vim.diagnostic.config({ virtual_text = state }) end,
   },
-  ['<leader>ub'] = {
-    name = 'Translucency',
+  ['yoB'] = {
+    name = 'Background Translucency',
     get = function() return Snacks.util.is_transparent() end,
     set = function(state)
       local bg = Snacks.util.color('Normal', 'bg') or '#24283B'
@@ -59,7 +61,7 @@ return {
       end
     end,
   },
-  ['<leader>u\\'] = {
+  ['yot'] = {
     name = 'ColorColumn',
     get = function()
       ---@diagnostic disable-next-line: undefined-field
@@ -73,10 +75,5 @@ return {
       local col = tostring(tw ~= 0 and tw or 81)
       vim.opt_local.colorcolumn = state and col or ''
     end,
-  },
-  ['<leader>ai'] = {
-    name = 'Inline Completion',
-    get = function() return vim.lsp.inline_completion.is_enabled() end,
-    set = function(state) vim.lsp.inline_completion.enable(state) end,
   },
 }

@@ -18,7 +18,11 @@
 
 ### g
 
-- `gb` `gc` gl `gs` `gy`
+- `gb` - open github page from user/repo
+- `gc` - commenting
+- `gl` - Go Look/LSP
+- `gs` - substutite
+- `gy` - yank and comment line
 
 ### v
 

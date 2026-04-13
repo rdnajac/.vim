@@ -1,0 +1,18 @@
+return {
+  ['['] = 'prev',
+  [']'] = 'next',
+  ['g'] = 'goto',
+  ['z'] = 'fold',
+  [vim.g.mapleader] = '<leader>',
+  [vim.g.maplocalleader] = '<localleader>',
+  co = 'comment',
+  cO = 'comment above',
+  cdc = [[stdpath('config')]],
+  cdC = [[stdpath('cache')]],
+  cdd = [[stdpath('data')]],
+  cds = [[stdpath('state')]],
+  gx = 'Open with system app',
+  ZQ = ':q!',
+  ZR = ':restart?',
+  ZZ = ':x',
+}

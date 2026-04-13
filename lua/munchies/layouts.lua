@@ -43,10 +43,7 @@ M.mylayout = {
         wo = { number = false },
       },
     },
-    {
-      win = 'input',
-      height = 1,
-    },
+    { win = 'input', height = 1 },
   },
 }
 

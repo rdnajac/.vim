@@ -1,23 +1,21 @@
 ---@module "snacks"
 
-local M = {}
-
 ---@class picker : snacks.picker.Config
 ---@field ft string|table<string> filetype or list of filetypes to filter by
 ---@field dirs string[]? list of directories to search
 
----@param opts picker
+---@param self picker
 ---@return string
-local function title(opts)
-  local picker = opts.source
+local function title(self)
+  local picker = self.source
   local icon = vim.tbl_get(nv, 'ui', 'icons', 'pickers', picker) or ''
   local name = picker and picker:sub(1, 1):upper() .. picker:sub(2)
-  local dir = opts.dirs and #opts.dirs .. ' paths'
-    or vim.fn.pathshorten(vim.fn.fnamemodify(opts.cwd or vim.fn.getcwd(), ':~'), 2)
+  local dir = self.dirs and #self.dirs .. ' paths'
+    or vim.fn.pathshorten(vim.fn.fnamemodify(self.cwd or vim.fn.getcwd(), ':~'), 2)
   local extra = ''
   -- add filetype icons if filtering by filetype
-  if opts.ft then
-    local ftlist = type(opts.ft) == 'table' and opts.ft or { opts.ft }
+  if self.ft then
+    local ftlist = type(self.ft) == 'table' and self.ft or { self.ft }
     extra = extra
       .. vim.iter(ftlist):map(function(ft) return nv.ui.icons.filetype[ft] or '?' end):join('  ')
   end
@@ -26,7 +24,7 @@ end
 
 ---@type table<string, fun(snacks.picker.Config):nil>
 local actions = {
-  set_title = function(self) self.title = title(self.opts or self) end,
+  set_title = function(self) self.title = title(self) end,
   -- clear = require('munchies.filter').clear,
   -- filter = require('munchies.filter').filter,
   toggle = function(self)
@@ -57,52 +55,62 @@ local actions = {
   -- change picker directory using zoxide and resume
   zoxide = function(self)
     local resume = require('snacks.picker.resume')
-    resume.add(self)
+    self.on_close = function()
+      resume.add(self)
+      Snacks.picker.zoxide({
+        confirm = function(z, item)
+          resume.state[self.opts.source].opts.cwd = item.file
+          z:close()
+        end,
+        layout = 'ivy',
+        on_close = function() resume.resume() end,
+      })
+    end
     self:close()
-    Snacks.picker.zoxide({
-      confirm = function(z, item)
-        resume.state[self.opts.source].opts.cwd = item.file
-        z:close()
-      end,
-      layout = 'ivy',
-      on_close = function() resume.resume() end,
-    })
   end,
   inspect_self = function(self) Snacks.debug.inspect(self) end,
   inspect_opts = function(self) Snacks.debug.inspect(self.opts) end,
 }
 
+---@param self snacks.picker.Config
+local config = function(self)
+  if self.source == 'explorer' then
+    --- unhide directories under `/chezmoi/`
+    ---@cast self snacks.picker.explorer.Config
+    self = require('snacks.picker.source.explorer').setup(self)
+    self.hidden = self.cwd and self.cwd:match('%/chezmoi') or false
+  elseif vim.tbl_contains({ 'files', 'grep', 'buffers' }, self.source) then
+    -- pass layout directly to picker config instead of setting it up
+    self.layout = require('munchies.layouts').mylayout
+    self.cwd = self.cwd or Snacks.git.get_root()
+  end
+  -- hide the preview window if the screen is too narrow
+  -- self.layout.auto_hide = vim.o.columns < 100 and { 'preview' } or opts.layout.auto_hide
+  actions.set_title(self)
+  return self
+end
+
 ---@class snacks.picker.Config
-M.config = {
+return {
   actions = actions,
-  ---@param opts snacks.picker.Config
-  config = function(opts)
-    if opts.source == 'explorer' then
-      ---@cast opts snacks.picker.explorer.Config
-      opts = require('snacks.picker.source.explorer').setup(opts)
-      opts.hidden = opts.cwd and opts.cwd:match('%/chezmoi') or false
-      -- add keymaps for navigating the explorer picker
-      opts.win.list.keys['/'] = 'picker_grep'
-      opts.win.list.keys['-'] = 'explorer_up'
-      opts.win.list.keys['<Left>'] = 'explorer_up'
-      opts.win.list.keys['<Right>'] = 'confirm'
-    else
-      -- pass layout directly to picker config instead of setting it up
-      opts.layout = require('munchies.layouts').mylayout
-      -- if opts.source == 'files' or opts.source == 'grep' then
-      opts.cwd = opts.cwd or Snacks.git.get_root()
-    end
-    -- hide the preview window if the screen is too narrow
-    -- opts.layout.auto_hide = vim.o.columns < 100 and { 'preview' } or opts.layout.auto_hide
-    actions.set_title(opts)
-    return opts
-  end,
+  config = config,
+  db = { sqlite3_path = nil }, -- TODO:
   sources = {
     explorer = {
       ignored = true, -- always show git ignored files
       jump = { close = true }, -- close buffer after selecting a file
       on_show = require('munchies.explorer').floating_preview,
-      win = { preview = { border = 'rounded', focusable = false } },
+      win = {
+        preview = { border = 'rounded', focusable = false },
+        list = {
+          keys = {
+            ['/'] = 'picker_grep',
+            ['-'] = 'explorer_up',
+            ['<Left>'] = 'explorer_up',
+            ['<Right>'] = 'confirm',
+          },
+        },
+      },
     },
     highlights = {
       --- enable mini.hipatterns in the preview buffer
@@ -128,7 +136,6 @@ M.config = {
       end,
     },
   },
-  db = { sqlite3_path = nil },
   prompt = ' ',
   sort = { fields = { 'score:desc', '#text', 'idx' } },
   ---@class snacks.picker.previewers.Config
@@ -136,29 +143,9 @@ M.config = {
     diff = {
       style = 'fancy', ---@type "fancy"|"syntax"|"terminal"
       cmd = { 'delta' },
-      ---@type vim.wo?|{} window options for the fancy diff preview window
-      wo = {
-        breakindent = true,
-        wrap = true,
-        linebreak = true,
-        showbreak = '',
-      },
+      -- wo = {},
     },
     git = { args = {} },
-    file = {
-      max_size = 1024 * 1024,
-      max_line_length = 500,
-      ft = nil, ---@type string? filetype for highlighting. Use `nil` for auto detect
-    },
-    man_pager = nil, ---@type string? MANPAGER env to use for `man` preview
-  },
-  ---@class snacks.picker.jump.Config
-  jump = {
-    jumplist = true,
-    tagstack = false,
-    reuse_win = false,
-    close = true,
-    match = false,
   },
   toggles = {
     follow = 'f',
@@ -282,6 +269,9 @@ M.config = {
       },
     },
     preview = {
+      on_win = function(win)
+	dd.backtrace()
+      end,
       keys = {
         ['<Esc>'] = 'cancel',
         ['q'] = 'cancel',
@@ -300,5 +290,4 @@ M.config = {
     extmarks = false,
   },
 }
-
-return M
+-- vim:fdl=1

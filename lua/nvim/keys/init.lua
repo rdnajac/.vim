@@ -46,9 +46,12 @@ end
 
 vim.schedule(function()
   if Snacks then
+    Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {} })
+    Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
     for key, v in pairs(require('nvim.keys.toggles')) do
       M.new_snacks_toggle(key, v)
     end
+    Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
   end
 
   local function edit_luamod(name)
@@ -57,37 +60,28 @@ vim.schedule(function()
     vim.fn['edit#'](vim.uv.fs_stat(file) and file or file:gsub('/init.lua$', '.lua'))
   end
 
-  M.map({
-    { 'glb', function() return edit_luamod('blink') end },
-    { 'glm', function() return edit_luamod('munchies') end },
-    { 'glM', function() return edit_luamod('nvim/mini') end },
-    { 'glf', function() return edit_luamod('nvim/fs') end },
-    { 'glk', function() return edit_luamod('nvim/keys') end },
-    { 'gll', function() return edit_luamod('nvim/lsp') end },
-    { 'glt', function() return edit_luamod('nvim/treesitter') end },
-    { 'glu', function() return edit_luamod('nvim/ui') end },
-    { 'glv', function() return edit_luamod('nvim/util') end },
-  })
+  vim
+    .iter({
+      b = 'nvim/blink',
+      M = 'nvim/mini',
+      f = 'nvim/fs',
+      k = 'nvim/keys',
+      l = 'nvim/lsp',
+      t = 'nvim/treesitter',
+      u = 'nvim/ui',
+      v = 'nvim/util',
+    })
+    :each(function(k, v)
+      vim.keymap.set({ 'n' }, 'gl' .. k, function() edit_luamod(v) end, { desc = 'Edit ' .. v })
+    end)
 
+  -- stylua: ignore
   M.map({
-    -- FIXME: add xmap to increment selection
-    { '<C-Space>', 'vin', { desc = 'Select Treesitter Node', remap = true } },
-    {
-      '<leader>xl',
-      function() vim.cmd[vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and 'lclose' or 'lopen']() end,
-      desc = 'Location List',
-    },
-    {
-      '<leader>xq',
-      function() vim.cmd[vim.fn.getqflist({ winid = 0 }).winid ~= 0 and 'cclose' or 'copen']() end,
-      desc = 'Quickfix List',
-    },
-    { '<leader>xd', vim.diagnostic.setqflist, desc = 'Quickfix List' },
-    {
-      '<leader>U',
-      function() require('undotree').open({ cmd = [[20vnew]] }) end,
-      desc = 'Undotree',
-    },
+    { {'n'}, 'glm', function() edit_luamod('munchies') end, { desc = 'Edit munchies' } },
+    { '<leader>xl', function() vim.cmd[vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and 'lclose' or 'lopen']() end, desc = 'Location List' },
+    { '<leader>xq', function() vim.cmd[vim.fn.getqflist({ winid = 0 }).winid ~= 0 and 'cclose' or 'copen']() end, desc = 'Quickfix List' },
+    { '<leader>xd', vim.diagnostic.setqflist, desc = 'Quickfix Diagnostics' },
+    { '<leader>U', function() require('undotree').open({ cmd = [[20vnew]] }) end, desc = 'Undotree' },
   })
 
   local descriptions = {

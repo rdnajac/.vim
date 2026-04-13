@@ -80,7 +80,7 @@ augroup vimrc.format
 augroup END
 
 " ui {{{2
-let &laststatus = has('nvim') ? 3 : 2
+let &l:laststatus = has('nvim') ? 3 : 2
 set tabline=%!vimline#tabline#()
 set cursorline
 set number
@@ -96,8 +96,8 @@ augroup vimrc.ui
   au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
 
   " hide the statusline while in command mode
-  au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
-  au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
+  " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
+" au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
   " relative numbers in visual mode only if number is already set
   au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
@@ -129,12 +129,8 @@ else
   set pumborder=rounded
   set pumheight=10
   set winborder=rounded
-
   " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
-
-  " restart neovim and restore state with Session
-  nnoremap <D-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
 endif
 " }}}1
 
@@ -233,23 +229,24 @@ cnoreabbrev <expr> %% expand('%:p:h')
 function! s:singlequote(str)
   return "'"..substitute(copy(a:str), "'", "''", 'g').."'"
 endfunction
-
+" maybe check getcmdline() =~# "%s"
 function! s:cabbrev(lhs, rhs)
-  " execute printf( 'cnoreabbrev <expr> %s (getcmdtype() ==# ":" && getcmdline() =~# "%s") ? "%s" : "%s"',
-  execute printf('cabbrev <expr> %s (getcmdtype() == ":" && getcmdpos() <= %d) ? %s : %s',
+  execute printf(
+	\ 'cabbrev <expr> %s (getcmdtype() == ":" && getcmdpos() <= %d) ? %s : %s',
 	\ a:lhs, 1+len(a:lhs), s:singlequote(a:rhs), s:singlequote(a:lhs))
 endfunction
 
-call s:cabbrev('vv', 'verbose')
+call s:cabbrev('vv',  'verbose')
 call s:cabbrev('vvc', 'verbose cmap')
 call s:cabbrev('vvi', 'verbose imap')
 call s:cabbrev('vvn', 'verbose nmap')
 call s:cabbrev('vvo', 'verbose omap')
 call s:cabbrev('vvt', 'verbose tmap')
 call s:cabbrev('vvx', 'verbose xmap')
-call s:cabbrev('scp', '!scp %')
-call s:cabbrev('m', 'Man')
 call s:cabbrev('f', 'find')
+if has('nvim')
+  call s:cabbrev('man', 'Man')
+endif
 " }}}1
 
 " Section: keymaps {{{1
@@ -282,7 +279,7 @@ nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 " `<leader>` {{{2
 
-" debug
+" debug/diagnostic
 nnoremap <leader>da <Cmd>ALEInfo<CR>
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
@@ -292,6 +289,8 @@ if has('nvim')
   nnoremap <leader>dI <Cmd>Inspect!<CR>
   nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
   nnoremap <leader>dF <Cmd>=vim.filetype.inspect()<CR>
+  nnoremap <leader>dq <Cmd>lua vim.diagnostic.setloclist()<CR>
+  nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
 endif
 
 " file
@@ -303,7 +302,6 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
 nnoremap <leader>m <Cmd>messages<CR>
 nnoremap <leader>p g<
-
 
 " navigation {{{2
 nnoremap <BS> :bprevious<CR>
@@ -449,6 +447,7 @@ if !has('nvim')
   Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
+  Plug 'folke/snacks.nvim'
   Plug 'nvim-mini/mini.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
