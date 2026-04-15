@@ -60,6 +60,10 @@
       "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
+    "splitjoin.vim": {
+      "rev": "8c4c87e72d20d8d5eee8b29c320eb61767578841",
+      "src": "https://github.com/AndrewRadev/splitjoin.vim.git"
+    },
     "tokyonight.nvim": {
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim.git"

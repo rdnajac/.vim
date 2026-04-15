@@ -1,5 +1,7 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 
+-- TODO: implement one-time install func to hook into packinstall event
+-- once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
 local M = {
   tools = function()
     local tools = {

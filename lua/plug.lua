@@ -8,7 +8,7 @@
 ---@field init? fun():nil
 ---@field opts? table|fun():table passed to the plugin's `setup()`
 ---@field keys? table|fun():table flexible keymap definitions
----@field toggles? table<string, string|table> Snacks.nvim toggles to register.
+---@field toggle? table<string, string|table> Snacks.nvim toggles to register.
 ---@field event? string|string[] event on which to call `init()`
 ---@field lazy? boolean whether to defer `packadd()` on startup -- TODO:
 local Plugin = {}
@@ -28,7 +28,7 @@ function Plugin.new(v)
   validate('lazy', self.lazy, 'boolean', true)
   validate('opts', self.opts, { 'table', 'function' }, true)
   validate('keys', self.keys, { 'table', 'function' }, true)
-  validate('toggles', self.toggles, 'table', true)
+  validate('toggle', self.toggle, 'table', true)
   -- add required fields and defaults
   self.src = self.src or ('https://github.com/%s.git'):format(self[1])
   self.name = self.name or (self[1]):match('[^/]*$')
@@ -36,19 +36,28 @@ function Plugin.new(v)
   return setmetatable(self, Plugin)
 end
 
+-- gets a value that may be the result of a function or a static value
+local function resolve(v) return vim.is_callable(v) and v() or v end
+
 --- Assumes the plugin has a `setup()` function and calls it with `opts` if provided.
 --- The module name is just the plugin name without a `.nvim` suffix, if present.
 function Plugin:setup()
   if self.init then
     self.init()
   else
-    local opts = vim.is_callable(self.opts) and self.opts() or self.opts
+    local opts = resolve(self.opts)
     if type(opts) == 'table' then
       require(self.name:gsub('%.nvim$', '')).setup(opts)
     end
   end
-  -- map keys and toggles unconditionally, handling inputs in nv.keys
-  vim.schedule(function() return require('nvim.keys').register(self) end)
+  -- assuming keys are a list of { mode, lhs, rhs, opts? } or a function returning such a list
+  local keys = resolve(self.keys)
+  if vim.islist(keys) then
+    vim.iter(keys):map(unpack):each(vim.keymap.set)
+  end
+  if self.toggle and Snacks then
+    vim.iter(self.toggle):each(function(k, v) Snacks.toggle.new(v):map(k) end)
+  end
 end
 
 ---@class plug.Data passed as `spec.data` to `vim.pack.add()`

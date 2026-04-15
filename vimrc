@@ -252,21 +252,18 @@ endif
 " Section: keymaps {{{1
 let g:mapleader = '\'
 let g:maplocalleader = ','
-
 xmap <Space> <leader>
-
 nnoremap <Space> :
 nnoremap : ,
-
 nnoremap ` ~
 nnoremap ~ `
 
 " when in doubt, pinky out
-nnoremap  ciw
-nnoremap  <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
-nnoremap  <Cmd>lua Snacks.picker()<CR>
-xnoremap  :sort<CR>
-
+nnoremap <C-c> ciw
+nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
+" change to the same format:
+nnoremap <C-p> <Cmd>lua Snacks.picker()<CR>
+xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
 
@@ -389,14 +386,6 @@ xnoremap if :<C-u>normal! Bvf(<CR>
 onoremap if :<C-u>normal vif<CR>
 xnoremap af :<C-u>normal! Bvf)<CR>
 onoremap af :<C-u>normal vaf<CR>
-
-" toggles {{{2
-" TODO: play nicely with Snacks.toggle and vim-uninpaired
-nnoremap yon :set number!<BAR>redraw!<BAR>set number?<CR>
-nnoremap yol :set list!<BAR>set list?<CR>
-nnoremap yos :set spell!<BAR>set spell?<CR>
-nnoremap yow :set wrap!<BAR>set wrap?<CR>
-nnoremap yo~ :set autochdir!<BAR>set autochdir?<CR>
 " }}}
 " }}}1
 
@@ -436,6 +425,7 @@ Plug 'tpope/vim-unimpaired'
 " Plug 'dstein64/vim-startuptime'
 " Plug 'vuciv/golf'
 Plug 'tpope/vim-scriptease'
+Plug 'AndrewRadev/splitjoin.vim'
 if !has('nvim')
   " Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
@@ -444,7 +434,6 @@ if !has('nvim')
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
-  Plug 'AndrewRadev/splitjoin.vim'
   Plug 'Konfekt/FastFold'
 else
   Plug 'folke/snacks.nvim'

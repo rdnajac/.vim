@@ -46,5 +46,8 @@ return {
         { hidden = true, { 'g~' }, { 'gc' } },
       },
     })
+    for k, v in pairs(require('nvim.keys.descriptions')) do
+      wk.add({ k, desc = v, icon = { icon = '' } })
+    end
   end,
 }

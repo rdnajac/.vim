@@ -29,6 +29,12 @@ vim.schedule(function()
   ]])
 end)
 
+---@return string
+local Spinner = function()
+  local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
+  return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
+end
+
 vim.api.nvim_create_autocmd('LspProgress', {
   callback = function(ev)
     local id, params = ev.data.client_id, ev.data.params
@@ -36,7 +42,7 @@ vim.api.nvim_create_autocmd('LspProgress', {
     local is_end = value.kind == 'end'
     local title = ([[[%s] %s %s]]):format(
       vim.lsp.get_client_by_id(id).name or 'LSP',
-      is_end and '' or Snacks.util.spinner(),
+      is_end and '' or Spinner(),
       value.title -- append the original title
     )
     vim.api.nvim_echo({ { value.message or '100% done' } }, false, {
@@ -51,6 +57,5 @@ vim.api.nvim_create_autocmd('LspProgress', {
     vim.cmd.redrawstatus()
   end,
 })
-
 
 return M

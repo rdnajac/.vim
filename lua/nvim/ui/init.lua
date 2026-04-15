@@ -2,10 +2,6 @@ local M = {
   colorscheme = require('nvim.ui.tokyonight'),
   icons = require('nvim.ui.icons'),
   status = require('nvim.ui.status'),
-  spinner = function() ---@return string
-    local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
-    return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
-  end,
 }
 
 vim.schedule(function()

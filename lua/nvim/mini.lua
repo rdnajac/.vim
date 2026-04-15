@@ -9,7 +9,7 @@ local miniopts = {
   },
 
   align = function()
-    vim.cmd([[ xmap ga gA ]]) -- preserve normal ga
+    vim.cmd('xmap ga gA') -- preserve normal `ga` for `vim-characterize`
     return { mappings = { start = 'gA', start_with_preview = 'g|' } }
   end,
 
@@ -25,8 +25,8 @@ local miniopts = {
           { mode = { 'n', 'x' }, keys = '~' },
         },
         registers = {
-          { mode = { 'n', 'x' }, keys = '"' },
           { mode = { 'i', 'c' }, keys = '<C-r>' },
+          { mode = { 'n', 'x' }, keys = '"' },
         },
         square_brackets = {
           { mode = 'n', keys = '[' },
@@ -124,10 +124,7 @@ local miniopts = {
 
   misc = {},
 
-  -- TODO: respect shiftwidth
-  splitjoin = {
-    -- mappings = { toggle = 'g~', split = 'gS', join = 'gJ' }
-  },
+  -- splitjoin = { mappings = { toggle = 'g~', split = 'gS', join = 'gJ' }, },
 
   surround = function()
     vim.api.nvim_create_autocmd({ 'FileType' }, {
@@ -171,10 +168,9 @@ local miniopts = {
 return {
   'nvim-mini/mini.nvim',
   init = function()
-    vim.iter(miniopts):each(
-      function(modname, opts)
-        require('mini.' .. modname).setup(vim.is_callable(opts) and opts() or opts)
-      end
-    )
+    vim
+      .iter(miniopts)
+      :map(function(k, v) return 'mini.' .. k, vim.is_callable(v) and v() or v end)
+      :each(function(modname, opts) require(modname).setup(opts) end)
   end,
 }

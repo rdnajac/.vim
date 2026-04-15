@@ -2,16 +2,6 @@ if vim.g.loaded_endwise == 1 then
   vim.bo.syntax = 'ON' -- use legacy syntax
 end
 
-vim.b.minisurround_config = {
-  custom_surroundings = {
-    U = { output = { left = 'function()\n', right = '\nend' } },
-    u = { output = { left = 'function() ', right = ' end' } },
-    i = { output = { left = '-- stylua: ignore start\n', right = '\n-- stylua: ignore end' } },
-    S = { output = { left = 'vim.schedule(function()\n  ', right = '\nend)' } },
-    s = { input = { '%[%[().-()%]%]' }, output = { left = '[[', right = ']]' } },
-  },
-}
-
 if _G.MiniSplitjoin then
   local gen_hook = MiniSplitjoin.gen_hook
   local curly = { brackets = { '%b{}' } }
@@ -24,13 +14,24 @@ if _G.MiniSplitjoin then
   }
 end
 
-if Snacks then
-  local old_bg = Snacks.util.color('LspReferenceText', 'bg')
-  -- TODO: only disable highlighting inside of `vim.cmd([[...]])`
-  vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
-    callback = function() Snacks.util.set_hl({ LspReferenceText = { link = 'NONE' } }) end,
-  })
-  vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
-    callback = function() Snacks.util.set_hl({ LspReferenceText = { bg = old_bg } }) end,
-  })
+if vim.g.old_bg == nil then
+  vim.g.old_bg = Snacks and Snacks.util.color('LspReferenceText', 'bg')
+    or ('#%06x'):format(
+      vim.api.nvim_get_hl(0, { name = 'LspReferenceText', link = false, create = false }).bg
+    )
 end
+
+local lsp_ref_bg = function(bg)
+  if not Snacks then
+    return ('hi! LspReferenceText guibg=%s'):format(bg)
+  end
+  return ([[lua Snacks.util.set_hl({ LspReferenceText = { bg = '%s' } })]]):format(bg)
+end
+
+--- create a buffer-local autocommand
+---@param event string|string[]
+---@param cmd string
+local au = function(event, cmd) vim.api.nvim_create_autocmd(event, { command = cmd, buf = 0 }) end
+
+au({ 'CursorHold', 'CursorHoldI' }, lsp_ref_bg(vim.g.old_bg))
+au({ 'CursorMoved', 'CursorMovedI' }, lsp_ref_bg('NONE'))

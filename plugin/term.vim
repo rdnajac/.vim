@@ -1,11 +1,13 @@
 let s:newline = "\n"
 
-" FIXME: make this compatible with vim
 function! s:scroll() abort
-  call nvim_win_set_cursor(bufwinid(g:ooze_buffer), [nvim_buf_line_count(g:ooze_buffer), 0])
+  let winid = bufwinid(g:ooze_buffer)
+  if winid > 0
+    call win_execute(winid, 'call cursor(getpos("$")[1], 1)')
+  endif
 endfunction
 
-function! s:linefeed(skip_comments) abort
+function! s:linefeed() abort
   let i = line('.')
   while i < line('$')
     let curline = substitute(getline(i + 1), '^\s*', '', '')
@@ -43,7 +45,7 @@ function! s:send(text) abort
 endfunction
 
 function! s:line() abort
-  if &ft ==# 'qf\|pager'
+  if &ft =~# '^\%(qf\|pager\)$'
     return -1
   endif
   echomsg 'Ooze: sending line: '
@@ -65,6 +67,6 @@ tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 augroup vimrc.term
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
-  autocmd TermOpen * let g:last_term_channel = &channel
-  autocmd TermOpen * let g:last_term_buffer = bufnr('%')
+  autocmd TermOpen * let g:last_term_ch = &channel
+  autocmd TermOpen * let g:last_term_buf = bufnr('%')
 augroup END

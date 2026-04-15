@@ -1,6 +1,9 @@
-return {
-  nv.blink,
+local M = {
+  { 'mason-org/mason.nvim', opts = {} },
+  require('nvim.blink'),
+  require('nvim.ui.markdown').spec,
   require('nvim.keys.which'),
+  require('nvim.mini'),
   -- require('nvim.keys.screen'),
   -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
@@ -10,49 +13,32 @@ return {
     opts = {},
     keys = function()
       local flash = require('flash')
+      -- stylua: ignore
       return {
-        { { 'n', 'x', 'o' }, '<C-J>', flash.jump },
-        { { 'x', 'o' }, '<C-F>', flash.treesitter },
-        { { 'c' }, '<C-F>', flash.toggle },
-        { { 'o' }, 'r', flash.remote },
-        { { 'x', 'o' }, 'R', flash.treesitter_search },
+        { { 'o', 'x', 'n' }, '<C-J>', flash.jump,  {} },
+        { { 'o', 'x', 'n' }, '<C-F>', flash.treesitter, {} },
+        { { 'o', 'x' }, 'R',     flash.treesitter_search, {} },
+        { { 'o' },      'r',     flash.remote,     {} },
+        { { 'c' },      '<C-F>', flash.toggle,     {} },
       }
     end,
   },
   {
-    'mason-org/mason.nvim',
-    opts = {},
-    -- TODO: implement one-time install func to hook into packinstall event
-    -- once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
-  },
-  {
-    'MeanderingProgrammer/render-markdown.nvim',
-    init = function() require('nvim.ui.markdown') end,
-  },
-  {
+    --
     'folke/sidekick.nvim',
     opts = function()
       vim.schedule(vim.lsp.inline_completion.enable)
+      vim.cmd([[
+        nnoremap <expr> <Tab> v:lua.require'sidekick'.nes_jump_or_apply() ? '' : '<Tab>'
+        nnoremap <leader>ap <Cmd>lua require('sidekick.cli').prompt({ name = 'copilot' })<CR>
+        nnoremap <leader>at <Cmd>lua require('sidekick.cli').send({ name = 'copilot', msg = '{file}' })<CR>
+        xnoremap <leader>at <Cmd>lua require('sidekick.cli').send({ name = 'copilot', msg = '{this}' })<CR>
+      ]])
+      -- stylua: ignore
+      vim.keymap.set({'n','t','i','x'}, '<C-.>', function() require('sidekick.cli').focus('copilot') end, {})
       return {}
     end,
-    -- stylua: ignore
-    keys = {
-      { mode = 'n', expr = true, '<Tab>',
-        function() return
-	  require('sidekick').nes_jump_or_apply() and '' or '<Tab>'
-	end
-      },
-      -- { '<leader>a', group = 'ai', mode = { 'n', 'v' } },
-      { '<leader>ad', function() require('sidekick.cli').close() end, desc = 'Detach a CLI Session', },
-      { '<leader>ap', function() require('sidekick.cli').prompt() end, desc = 'Sidekick Select Prompt', mode = { 'n', 'x' }, },
-      { '<leader>at', function()
-          local msg = vim.fn.mode():sub(1, 1) == 'n' and '{file}' or '{this}'
-          require('sidekick.cli').send({ name = 'copilot', msg = msg })
-        end, mode = { 'n', 'x' }, desc = 'Send This (file/selection)',
-      },
-      { '<C-.>', mode = { 'n', 't', 'i', 'x' }, function() require('sidekick.cli').focus('copilot') end, },
-     },
-    toggles = {
+    toggle = {
       ['<leader>uN'] = {
         name = 'Sidekick NES',
         get = function() return require('sidekick.nes').enabled end,
@@ -141,7 +127,7 @@ return {
         jump_prev_row = { '<S-Enter>', mode = { 'n', 'v' } },
       },
     },
-    toggles = {
+    toggle = {
       ['<leader>cv'] = {
         name = 'csvView',
         get = function() require('csvview').is_enabled(0) end,
@@ -150,3 +136,9 @@ return {
     },
   },
 }
+
+if _G.Plug then
+  Plug(M)
+end
+
+return M

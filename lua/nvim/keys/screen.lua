@@ -67,7 +67,7 @@ return {
       filepath = vim.fn.stdpath('data') .. '/screenkey.log',
     },
   },
-  toggles = {
+  toggle = {
     ['<leader>uk'] = {
       name = 'Screenkey floating window',
       get = function() return require('screenkey').is_active() end,

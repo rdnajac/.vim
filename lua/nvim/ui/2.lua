@@ -3,38 +3,39 @@ local ui2 = require('vim._core.ui2')
 
 --- `:h ui-messages`
 ---@type table<string, nil|'cmd'|'msg'|'pager'>
-local targets = {
-  [''] = nil,
-  ['empty'] = nil,
-  ['bufwrite'] = nil,
-  ['confirm'] = nil,
-  ['emsg'] = nil,
-  ['echo'] = nil,
-  ['echomsg'] = nil,
-  ['echoerr'] = nil,
-  ['completion'] = nil,
-  ['list_cmd'] = nil,
-  ['lua_error'] = nil,
-  ['lua_print'] = nil,
-  ['progress'] = nil,
-  ['rpc_error'] = nil,
-  ['quickfix'] = nil,
-  ['search_cmd'] = nil,
-  ['search_count'] = nil,
-  ['shell_cmd'] = nil,
-  ['shell_err'] = nil,
-  ['shell_out'] = nil,
-  ['shell_ret'] = nil,
-  ['undo'] = nil,
-  ['verbose'] = nil,
-  ['wildlist'] = nil,
-  ['wmsg'] = nil,
-}
+-- local targets = vim
+-- .iter({
+--   [''] = nil,
+--   ['empty'] = nil,
+--   ['bufwrite'] = nil,
+--   ['confirm'] = nil,
+--   ['emsg'] = nil,
+--   ['echo'] = nil,
+--   ['echomsg'] = nil,
+--   ['echoerr'] = nil,
+--   ['completion'] = nil,
+--   ['list_cmd'] = nil,
+--   ['lua_error'] = nil,
+--   ['lua_print'] = nil,
+--   ['progress'] = nil,
+--   ['rpc_error'] = nil,
+--   ['quickfix'] = nil,
+--   ['search_cmd'] = nil,
+--   ['search_count'] = nil,
+--   ['shell_cmd'] = nil,
+--   ['shell_err'] = nil,
+--   ['shell_out'] = nil,
+--   ['shell_ret'] = nil,
+--   ['undo'] = nil,
+--   ['verbose'] = nil,
+--   ['wildlist'] = nil,
+--   ['wmsg'] = nil,
+-- })
 
 ui2.enable({
   msg = {
     target = 'msg',
-    -- targets = targets,
+    targets = { list_cmd = 'cmd' },
   },
 })
 
@@ -80,3 +81,11 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
   end,
   desc = 'Apply markdown tree-sitter highlighting for message windows',
 })
+
+vim.schedule(
+  function()
+    vim.cmd([[
+    silent! delcommand Messages " prefer ui2 pager over scriptease
+    ]])
+  end
+)

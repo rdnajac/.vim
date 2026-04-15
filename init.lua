@@ -10,7 +10,13 @@ colorscheme tokyonight
 source ~/.vim/vimrc
 command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
 " restart neovim and restore state with Session
-nnoremap <D-r> <Cmd>exe 'mks!' stdpath('state')..'/Session.vim' \| exe 'conf restart sil so' v:this_session<CR>
+function s:restart() abort
+  execute 'mks!' stdpath('state')..'/Session.vim'
+  execute 'conf restart sil so' v:this_session
+endfunction
+nnoremap ZR <Cmd>call <SID>restart()<CR>
+command! Restart call s:restart()
+nnoremap <D-r> <Cmd>Restart<CR>
 " treesitter-incremental-selection
 nmap <C-Space> van
 xmap <C-Space> an
@@ -18,11 +24,15 @@ xmap <C-Space> an
 " snacks
 xnoremap /  <Cmd>lua Snacks.picker.grep_word()<CR>
 nnoremap ,. <Cmd>lua Snacks.scratch.open()<CR>
+nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
 
 " delete around indent
 nmap dI dai
 nmap vI vai
 inoremap <C-x><C-i> <Cmd>lua Snacks.picker.icons({ layout = require('munchies.layouts').insert })<CR>
+
+" -- { '<leader>xl', function() vim.cmd[vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and 'lclose' or 'lopen']() end, desc = 'Location List' },
+" -- { '<leader>xq', function() vim.cmd[vim.fn.getqflist({ winid = 0 }).winid ~= 0 and 'cclose' or 'copen']() end, desc = 'Quickfix List' },
 ]])
 
 local shortcuts = {
@@ -57,7 +67,7 @@ Snacks.setup({
   scroll = { enabled = true },
   -- statuscolumn = require('munchies.statuscolumn'),
   styles = { lazygit = { height = 0, width = 0 } },
-  toggle = { which_key = false },
+  -- toggle = { which_key = false },
   words = { enabled = true },
 })
 
@@ -65,17 +75,8 @@ _G.Plug = require('plug')
 _G.dd = require('snacks.debug')
 _G.nv = vim
   .iter(vim.fn.readdir(vim.fn.stdpath('config') .. '/lua/nvim'))
-  :map(function(filename)
-    local modname = vim.fn.fnamemodify(filename, ':r')
-    local ok, mod = xpcall(require, debug.traceback, 'nvim.' .. modname)
-    if not ok then
-      Snacks.notify.error(('Error `require()`ing: %s:\n%s'):format(modname, mod))
-    end
-    return modname, mod
-  end)
-  :fold({}, rawset)
-
-Plug(require('plugins'))
-
-nv.mini.init()
+  :map(function(fname) return vim.fn.fnamemodify(fname, ':r') end)
+  :map(function(mname) return mname, require('nvim.' .. mname) end)
+  :fold({}, rawset) -- inits an empty table and maps `nv[nvim.k] = v`
+-- local _, mod = xpcall(require, debug.traceback, 'nvim.' .. modname)
 -- vim:fdl=1

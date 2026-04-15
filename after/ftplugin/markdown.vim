@@ -33,3 +33,5 @@ inoremap <buffer> `$  ```console<CR><CR>```<Up>
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
 xnoremap <leader>k :call fn#hyperlink#()<CR>
+
+let b:surround_96 = "```\n\r\n```"

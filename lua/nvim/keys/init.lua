@@ -1,105 +1,32 @@
-local modes = { 'n', 'v', 'x', 'i', 't', 'o', 'c', 's' }
-local function has_mode(t) return type(t[1]) == 'table' or vim.tbl_contains(modes, t[1]) end
+local M = {}
 
--- TODO: if table has `ft` or `lsp` keys, use `Snacks.keymap.set()`
---- Converts a variety of table formats into `vim.keymap.set` opts
----@param t table
----@return string|table mode, string lhs,string|fun() rhs, table opts
-local function normalize(t)
-  -- stylua: ignore
-  ---@diagnostic disable-next-line: redundant-return-value
-  if has_mode(t) then return unpack(t) end
-  local lhs, rhs, opts = t[1], t[2], t[3]
-  opts = type(opts) == 'table' and opts or {}
-  for k, v in pairs(t) do
-    if type(k) == 'string' and k ~= 'mode' then
-      opts[k] = v
-    end
+M.toggles = require('munchies.toggles')
+vim.iter(M.toggles):each(function(k, v)
+  local toggle
+  if type(v) == 'function' then
+    toggle = v()
+  elseif type(v) == 'table' then
+    toggle = Snacks.toggle.new(v)
+  elseif type(v) == 'string' then
+    toggle = Snacks.toggle.option(v)
+  else
+    error(('Invalid toggle type: %s for key: %s'):format(type(v), k))
   end
-  return t.mode or 'n', lhs, rhs, opts
-end
-
-local M = {
-  map = function(t) vim.iter(vim.islist(t) and t or { t }):map(normalize):each(vim.keymap.set) end,
-  ---@param key string normal mode keys mapped by snacks.toggle.Class method
-  ---@param v string|table the preset toggle name or the table of opts
-  new_snacks_toggle = function(key, v)
-    local Toggle = Snacks.toggle
-    if type(v) == 'table' then
-      return Toggle.new(v):map(key)
-    end -- XXX: bad strings like `meta|option` break this
-    return Toggle[v] and Toggle[v]():map(key) or Toggle.option(v):map(key)
-  end,
-}
-
-M.register = function(spec)
-  local keys, toggles = spec.keys, spec.toggles
-  if keys then
-    M.map(vim.is_callable(keys) and keys() or keys)
+  if not toggle then
+    Snacks.notify.error(('Invalid toggle: %s'):format(k))
   end
-  if toggles then
-    for key, v in pairs(toggles) do
-      M.new_snacks_toggle(key, v)
-    end
-  end
-end
-
-vim.schedule(function()
-  if Snacks then
-    Snacks.keymap.set('n', 'K', vim.lsp.buf.hover, { lsp = {} })
-    Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
-    for key, v in pairs(require('nvim.keys.toggles')) do
-      M.new_snacks_toggle(key, v)
-    end
-    Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
-  end
-
-  local function edit_luamod(name)
-    -- name = name:gsub('%.', '/')
-    local file = vim.fs.joinpath(vim.fn.stdpath('config'), 'lua', name, 'init.lua')
-    vim.fn['edit#'](vim.uv.fs_stat(file) and file or file:gsub('/init.lua$', '.lua'))
-  end
-
-  vim
-    .iter({
-      b = 'nvim/blink',
-      M = 'nvim/mini',
-      f = 'nvim/fs',
-      k = 'nvim/keys',
-      l = 'nvim/lsp',
-      t = 'nvim/treesitter',
-      u = 'nvim/ui',
-      v = 'nvim/util',
-    })
-    :each(function(k, v)
-      vim.keymap.set({ 'n' }, 'gl' .. k, function() edit_luamod(v) end, { desc = 'Edit ' .. v })
-    end)
-
-  -- stylua: ignore
-  M.map({
-    { {'n'}, 'glm', function() edit_luamod('munchies') end, { desc = 'Edit munchies' } },
-    { '<leader>xl', function() vim.cmd[vim.fn.getloclist(0, { winid = 0 }).winid ~= 0 and 'lclose' or 'lopen']() end, desc = 'Location List' },
-    { '<leader>xq', function() vim.cmd[vim.fn.getqflist({ winid = 0 }).winid ~= 0 and 'cclose' or 'copen']() end, desc = 'Quickfix List' },
-    { '<leader>xd', vim.diagnostic.setqflist, desc = 'Quickfix Diagnostics' },
-    { '<leader>U', function() require('undotree').open({ cmd = [[20vnew]] }) end, desc = 'Undotree' },
-  })
-
-  local descriptions = {
-    ['['] = 'prev',
-    [']'] = 'next',
-    ['g'] = 'goto',
-    ['z'] = 'fold',
-    [vim.g.mapleader] = '<leader>',
-    [vim.g.maplocalleader] = '<localleader>',
-    ['co'] = 'comment',
-    ['cO'] = 'comment above',
-  }
-
-  if package.loaded['which-key'] then
-    for k, v in pairs(descriptions) do
-      require('which-key').add({ k, desc = v, icon = { icon = '' } })
-    end
-  end
+  toggle:map(k)
 end)
+
+Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
+Snacks.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, { lsp = {} })
+Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
+vim
+  .iter({
+    ['<C-Bslash> '] = Snacks.terminal.focus,
+    [']]'] = function() Snacks.words.jump(vim.v.count1) end,
+    ['[['] = function() Snacks.words.jump(-vim.v.count1) end,
+  })
+  :each(function(lhs, rhs) vim.keymap.set({ 'n', 't' }, lhs, rhs) end)
 
 return M
