@@ -32,9 +32,9 @@ return {
   ['yor'] = 'relativenumber',
   --*yos*	'spell'
   ['yos'] = 'spell',
-  ['<yoS'] = Snacks.toggle.scroll,
+  ['yoS'] = Snacks.toggle.scroll,
   --*yot*	'colorcolumn' ("+1" or last used value)
-  ['yot'] = {
+  ['yoT'] = {
     name = 'ColorColumn',
     get = function()
       ---@diagnostic disable-next-line: undefined-field
@@ -49,7 +49,7 @@ return {
       vim.opt_local.colorcolumn = state and col or ''
     end,
   },
-  ['yoT'] = Snacks.toggle.treesitter,
+  ['yot'] = Snacks.toggle.treesitter,
   --*you*	'cursorcolumn'
   --*yov*	'virtualedit'
   --*yow*	'wrap'

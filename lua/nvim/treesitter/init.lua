@@ -1,10 +1,20 @@
-local M = {}
-
-M.parsers = require('nvim.treesitter.parsers')
+local M = {
+  parsers = require('nvim.treesitter.parsers'),
+  -- get_installed_parsers = function() return require('nvim-treesitter').get_installed('parsers') end,
+}
 
 local aug = vim.api.nvim_create_augroup('nv.treesitter', {})
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = M.parsers.to_autostart(),
+  pattern = vim
+    .iter(M.parsers)
+    :filter(function(_, v) return v ~= false end)
+    :map(function(k, v)
+      if type(v) == 'table' then
+        vim.treesitter.language.register(k, v)
+      end
+      return k
+    end)
+    :totable(),
   group = aug,
   callback = function(ev) vim.treesitter.start(ev.buf) end,
   desc = 'Automatically start tree-sitter',

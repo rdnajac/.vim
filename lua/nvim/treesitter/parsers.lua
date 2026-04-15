@@ -1,9 +1,11 @@
--- Parser directories
--- - `parser/`: contains the parsers (`.so` files)
--- - `parser-info/`: contains the download information
--- - `query/`: installed queries for the syntax highlighting
--- default tree-sitter parsers bundled with neovim:
-local defaults = { 'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+--- Default tree-sitter parsers bundled with neovim:
+--- `c`, `lua`, `query`, `vim`, `vimdoc`,
+--- `markdown`, and `markdown_inline`
+---
+--- Parser directories
+--- - `parser/`: contains the parsers (`.so` files)
+--- - `parser-info/`: contains the download information
+--- - `query/`: installed queries for the syntax highlighting
 
 ---@alias ParserConfig boolean|string|string[]
 --- - `false`: install, but do not autostart
@@ -11,7 +13,7 @@ local defaults = { 'c', 'lua', 'markdown', 'markdown_inline', 'query', 'vim', 'v
 --- - `string|string[]`: install parser, autostart with given filetype(s)
 
 ---@type table<string, ParserConfig>
-local parsers = {
+return {
   -- asm = false,
   bash = { 'sh', 'bash' },
   -- bibtex = false,
@@ -36,13 +38,14 @@ local parsers = {
   latex = false, -- Snacks.image, no autostart
   just = true,
   -- llvm = false,
-  lua = true,
+  -- installing via treesitter lets us use additional queries
+  lua = false, -- don't autostart since ftplugin/lua.lua already does
   make = true,
-  markdown = true,
+  markdown = { 'markdown', 'rmd', 'quarto' },
   -- ocaml = false,
   printf = true,
   python = true,
-  r = { 'r', 'rmd', 'quarto' },
+  r = true,
   regex = false,
   rnoweb = false,
   toml = true,
@@ -52,31 +55,3 @@ local parsers = {
   yaml = true,
   zsh = true,
 }
-
-local M = {
-  ---@return string[] parsers installed by nvim-treesitter
-  installed = function() return require('nvim-treesitter').get_installed('parsers') end,
-
-  ---@return string[] parsers nvim-treesitter should install
-  to_install = function()
-    local parsers = vim
-      .iter(parsers)
-      :filter(function(k, _) return not vim.tbl_contains(defaults, k) end)
-      :map(function(k, _) return k end)
-      :totable()
-    -- extend with defaults to also install their queries
-    vim.list_extend(parsers, defaults)
-    return parsers
-  end,
-
-  ---@return string[] parsers to start on FileType event
-  to_autostart = function()
-    return vim
-      .iter(parsers)
-      :filter(function(_, v) return v ~= false end)
-      :map(function(k, _) return k end)
-      :totable()
-  end,
-}
-
-return M
