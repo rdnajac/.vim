@@ -36,8 +36,6 @@ function! fold#text_lua() abort
   return printf('%s...%s', l:start, trim(getline(v:foldend)))
 endfunction
 
-
-
 function! fold#test() abort
   let line = '" Section: settings {{{1'
   echom s:foldtext(line)

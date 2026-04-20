@@ -1,139 +1,25 @@
 " $MYVIMRC
 scriptencoding utf-8
 
-" Section: settings {{{1
-set findfunc=file#find
-" general {{{2
-set ignorecase
-set jumpoptions+=stack
-set mouse=a
-set report=0
-set scrolloff=8
-set shortmess+=aA "c
-set shortmess-=o
-set showmatch
-set smartcase
-set splitbelow splitright splitkeep=screen
-set switchbuf+=vsplit " NOTE: minimax wants `usetab`
-set timeoutlen=420
-set updatetime=999
-set virtualedit=block
-set whichwrap+=<,>,[,],h,l
-set wildignore+=*.o,*.out,*.a,*.so
-
-" indent {{{2
-set breakindent
-set breakindentopt=list:1 " TODO: from minimax; keep?
-set linebreak
-set shiftround
-set shiftwidth=2 softtabstop=2 " WARN: don't change tabstop!
-
-augroup vimrc.indent
-  autocmd!
-  " autocmd FileType markdown,tex    setl sw=2 sts=2
-  autocmd FileType cpp,cuda,python setl sw=4 sts=4
-  autocmd FileType c,sh,zsh        setl sw=8 sts=8
-augroup END
-
-" chars {{{ 2
-set fillchars= " reset
-" set fillchars+=diff:╱
-" set fillchars+=eob:,
-" set fillchars+=stl:\ ,
-set fillchars+=fold:\ ,
-set fillchars+=foldclose:▸,
-set fillchars+=foldopen:▾,
-" set fillchars+=foldsep:\ ,
-
-set list
-set listchars= " reset
-set listchars+=trail:¿,
-set listchars+=tab:→\ ",
-set listchars+=extends:…,
-set listchars+=precedes:…,
-set listchars+=nbsp:+
-
-" fold {{{ 2
-set foldlevel=99
-" set foldlevelstart=1
-" set foldminlines=3
-set foldopen+=insert,jump
-" set foldmethod=marker
-
-" close folds when moving left at beginning of line
-nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
-
-" save, override, and restore commentstring to get nice folds
-xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s<CR>
-
-" format {{{2
-" one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
-" default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
-set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
-
-augroup vimrc.format
-  autocmd!
-  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
-augroup END
-
-" ui {{{2
-let &l:laststatus = has('nvim') ? 3 : 2
-set tabline=%!vimline#tabline#()
-set cursorline
-set number
-set signcolumn=number
-set termguicolors
-" set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
-
-augroup vimrc.ui
-  set number
-
-  " no cursorline in insert mode
-  au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
-  au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
-
-  " hide the statusline while in command mode
-  " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
-" au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
-
-  " relative numbers in visual mode only if number is already set
-  au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-augroup END
-" }}}1
-
-" Section: neovim {{{1
-command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
-" set undo if on nvim, or if on a machine not running nvim
-let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
-
-if !has('nvim')
-  call vim#defaults#()
-  call vim#sensible#()
-  color scheme
-else
-  " set autocomplete
-  set backup
-  set backupext=.bak
-  set backupdir=~/.local/state/nvim/backup//
-  set backupskip+=~/.cache/*
-  " set cmdheight=0
-  set jumpoptions+=view
-  set mousescroll=hor:0
-  set startofline " default in vim
-  set smoothscroll
-  set pumblend=0
-  set pumborder=rounded
-  set pumheight=10
-  set winborder=rounded
-  " uncomment to disable the default popup menu
-  " aunmenu PopUp | autocmd! nvim.popupmenu
-endif
-" }}}1
-
-" Section: autocmds {{{1
 augroup vimrc
+  set findfunc=file#find
+  set ignorecase
+  set jumpoptions+=stack
+  set mouse=a
+  set report=0
+  set scrolloff=8
+  set shortmess+=aA "c
+  set shortmess-=o
+  set showmatch
+  set smartcase
+  set splitbelow splitright splitkeep=screen
+  set switchbuf+=vsplit " NOTE: minimax wants `usetab`
+  set timeoutlen=420
+  set updatetime=999
+  set virtualedit=block
+  set whichwrap+=<,>,[,],h,l
+  set wildignore+=*.o,*.out,*.a,*.so
+
   au!
   au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
@@ -162,7 +48,114 @@ augroup vimrc
   " catch when vim doesn't terminate properly
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
 augroup END
-" }}}1
+
+augroup vimrc.indent
+  set breakindent
+  set breakindentopt=list:1 " TODO: from minimax; keep?
+  set linebreak
+  set shiftround
+  set shiftwidth=2 softtabstop=2 " WARN: don't change tabstop!
+  autocmd!
+  " autocmd FileType markdown,tex    setl sw=2 sts=2
+  autocmd FileType cpp,cuda,python setl sw=4 sts=4
+  autocmd FileType c,sh,zsh        setl sw=8 sts=8
+augroup END
+
+augroup vimrc.ui
+  set number
+  let &l:laststatus = has('nvim') ? 3 : 2
+  set tabline=%!vimline#tabline#()
+  set cursorline
+  set number
+  set signcolumn=number
+  set termguicolors
+  " set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
+  set fillchars= " reset
+  " set fillchars+=diff:╱
+  " set fillchars+=eob:,
+  " set fillchars+=stl:\ ,
+  set listchars= " reset
+  set listchars+=trail:¿,
+  set listchars+=tab:→\ ",
+  set listchars+=extends:…,
+  set listchars+=precedes:…,
+  set listchars+=nbsp:+
+  set list
+
+  autocmd!
+  " no cursorline in insert mode
+  au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
+  au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
+
+  " hide the statusline while in command mode
+  " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
+" au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
+
+  " relative numbers in visual mode only if number is already set
+  au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+augroup END
+
+augroup vimrc.fold
+  " fillchars already reset, so append here
+  set fillchars+=fold:\ ,
+  set fillchars+=foldclose:▸,
+  set fillchars+=foldopen:▾,
+  " set fillchars+=foldsep:\ ,
+
+  set foldlevel=99
+  " set foldlevelstart=1
+  " set foldminlines=3
+  set foldopen+=insert,jump
+  " set foldmethod=marker
+
+  " close folds when moving left at beginning of line
+  nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
+
+  " save, override, and restore commentstring to get nice folds
+  xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s<CR>
+
+  autocmd!
+  " autocmd FileType vim,lua setlocal
+augroup END
+
+augroup vimrc.format
+  " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
+  " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
+  set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
+  autocmd!
+  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
+augroup END
+
+
+" Section: neovim {{{1
+" set undo if on nvim, or if on a machine not running nvim
+let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+
+if !has('nvim')
+  call vim#defaults#()
+  call vim#sensible#()
+  color scheme
+else
+  command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
+  " set autocomplete
+  set backup
+  set backupext=.bak
+  set backupdir=~/.local/state/nvim/backup//
+  set backupskip+=~/.cache/*
+  " set cmdheight=0
+  set jumpoptions+=view
+  set mousescroll=hor:0
+  set startofline " default in vim
+  set smoothscroll
+  set pumblend=0
+  set pumborder=rounded
+  set pumheight=10
+  set winborder=rounded
+  " uncomment to disable the default popup menu
+  " aunmenu PopUp | autocmd! nvim.popupmenu
+endif
 
 " Section: commands/config {{{1
 
@@ -255,8 +248,7 @@ nnoremap ~ `
 " when in doubt, pinky out
 nnoremap <C-c> ciw
 nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
-" change to the same format:
-nnoremap <C-p> <Cmd>lua Snacks.picker()<CR>
+nnoremap <C-f> <Cmd>lua Snacks.picker()<CR>
 xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
@@ -419,6 +411,7 @@ Plug 'tpope/vim-unimpaired'
 " Plug 'vuciv/golf'
 Plug 'tpope/vim-scriptease'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'romainl/vim-qf.git'
 if !has('nvim')
   " Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
@@ -430,11 +423,12 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
 else
   Plug 'folke/snacks.nvim'
+  Plug 'mason-org/mason.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
-  Plug 'chrisgrieser/nvim-scissors'
   " Plug 'j-hui/fidget.nvim'
   " Plug 'saxon1964/neovim-tips'
+  Plug 'chrisgrieser/nvim-scissors'
 endif
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
@@ -442,4 +436,4 @@ Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
 
-" vim: fdm=marker fdl=1
+" vim: fdm=indent fdl=1
