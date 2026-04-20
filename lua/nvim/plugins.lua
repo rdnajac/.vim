@@ -1,28 +1,28 @@
 local M = {
   { 'mason-org/mason.nvim', opts = {} },
   require('nvim.blink'),
-  require('nvim.ui.markdown').spec,
   require('nvim.keys.which'),
   require('nvim.mini'),
+  require('nvim.ui.markdown').spec,
   -- require('nvim.keys.screen'),
   -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
-  {
-    'folke/flash.nvim',
-    ---@type Flash.Config
-    opts = {},
-    keys = function()
-      local flash = require('flash')
-      -- stylua: ignore
-      return {
-        { { 'o', 'x', 'n' }, '<C-J>', flash.jump,  {} },
-        { { 'o', 'x', 'n' }, '<C-F>', flash.treesitter, {} },
-        { { 'o', 'x' }, 'R',     flash.treesitter_search, {} },
-        { { 'o' },      'r',     flash.remote,     {} },
-        { { 'c' },      '<C-F>', flash.toggle,     {} },
-      }
-    end,
-  },
+  -- {
+  --   'folke/flash.nvim',
+  --   ---@type Flash.Config
+  --   opts = {},
+  --   keys = function()
+  --     local flash = require('flash')
+  --     -- stylua: ignore
+  --     return {
+  --       { { 'o', 'x', 'n' }, '<C-J>', flash.jump,  {} },
+  --       { { 'o', 'x', 'n' }, '<C-F>', flash.treesitter, {} },
+  --       { { 'o', 'x' }, 'R',     flash.treesitter_search, {} },
+  --       { { 'o' },      'r',     flash.remote,     {} },
+  --       { { 'c' },      '<C-F>', flash.toggle,     {} },
+  --     }
+  --   end,
+  -- },
   {
     --
     'folke/sidekick.nvim',
@@ -48,9 +48,9 @@ local M = {
   },
   {
     'R-nvim/R.nvim',
-    enabled = false,
+    enabled = true,
     init = function()
-      local debug_r = function()
+      Snacks.keymap.set('n', 'yu', function()
         local word = vim.fn.expand('<cword>')
         local row, col = unpack(vim.api.nvim_win_get_cursor(0))
         -- copy the <cword> to a new line below the current line
@@ -63,34 +63,7 @@ local M = {
         vim.api.nvim_buf_set_lines(0, row, row + 1, true, {})
         -- move cursor back to original position
         vim.api.nvim_win_set_cursor(0, { row, col })
-      end
-      vim.keymap.set('n', '<leader>ur', debug_r, { desc = 'Debug R' })
-
-      Snacks.util.set_hl({
-        Inactive = { fg = '#aaaaaa' },
-        Starting = { fg = '#757755' },
-        ServerReady = { fg = '#117711' },
-        TCPStart = { fg = '#ff8833' },
-        TCPReady = { fg = '#3388ff' },
-        RStarting = { fg = '#ff8833' },
-        Ready = { fg = '#3388ff' },
-      }, { prefix = 'RStatus', default = true })
-
-      local rstt = {
-        { '-', 'RStatusInactive' }, -- 1: ftplugin/* sourced, but nclientserver not started yet.
-        { 'S', 'RStatusStarting' }, -- 2: nclientserver started, but not ready yet.
-        { 'S', 'RStatusServerReady' }, -- 3: nclientserver is ready.
-        { 'S', 'RStatusTCPStart' }, -- 4: nclientserver started the TCP server
-        { 'S', 'RStatusTCPReady' }, -- 5: TCP server is ready
-        { 'R', 'RStatusRStarting' }, -- 6: R started, but nvimcom was not loaded yet.
-        { '󰟔 ', 'RStatusReady' }, -- 7: nvimcom is loaded.
-      }
-
-      _G.Rstatus = {
-        function() return rstt[vim.g.R_Nvim_status][1] end,
-        color = function() return rstt[vim.g.R_Nvim_status][2] end,
-        cond = function() return vim.tbl_contains({ 'r', 'rmd', 'quarto' }, vim.bo.filetype) end,
-      }
+      end, { desc = 'Debug/Print (R)', ft = { 'r', 'rmd', 'quarto' } })
 
       require('r').setup({
         R_args = { '--quiet', '--no-save' },
@@ -103,9 +76,6 @@ local M = {
         },
       })
     end,
-    keys = {
-      -- nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
-    },
   },
   {
     'hat0uma/csvview.nvim',

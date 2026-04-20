@@ -5,7 +5,6 @@
 return {
   'Saghen/blink.cmp',
   build = function() vim.cmd([[BlinkCmp build]]) end,
-  event = 'UIEnter',
   ---@type blink.cmp.Config
   opts = {
     cmdline = { enabled = false },

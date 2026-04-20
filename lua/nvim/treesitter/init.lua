@@ -2,6 +2,12 @@ local M = {
   parsers = require('nvim.treesitter.parsers'),
   -- get_installed_parsers = function() return require('nvim-treesitter').get_installed('parsers') end,
 }
+vim.cmd([[
+" treesitter-incremental-selection
+nmap <C-Space> van
+xmap <C-Space> an
+xmap <C-BS> in
+]])
 
 local aug = vim.api.nvim_create_augroup('nv.treesitter', {})
 vim.api.nvim_create_autocmd('FileType', {

@@ -1,6 +1,6 @@
-setlocal foldmethod=expr foldtext=fold#text_lua()
-" let &l:formatprg = 'stylua --search-parent-directories --stdin-filepath=% -'
-let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
+setlocal foldmethod=expr
+setlocal foldtext=fold#text_lua()
+" setlocal foldtext=v:vim.lsp.foldtext()
 
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 

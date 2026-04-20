@@ -14,8 +14,8 @@
 
 ---@type table<string, ParserConfig>
 return {
-  -- asm = false,
-  bash = { 'sh', 'bash' },
+  -- bash = { 'sh', 'bash' },
+  bash = true,
   -- bibtex = false,
   -- csv = false,
   -- cmake = false,
@@ -40,8 +40,8 @@ return {
   -- llvm = false,
   -- installing via treesitter lets us use additional queries
   lua = false, -- don't autostart since ftplugin/lua.lua already does
+  markdown = true, -- `R.nvim` will register `rmd` and `quarto` fts
   make = true,
-  markdown = { 'markdown', 'rmd', 'quarto' },
   -- ocaml = false,
   printf = true,
   python = true,

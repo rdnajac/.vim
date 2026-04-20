@@ -48,6 +48,10 @@ autocmd FileType tex,markdown,rmd,quarto setlocal spell
 
 ## Snacks
 
+```lua
+print(vim.tbl_keys(Snacks))
+````
+
 Snacks.image can render math inline, $z=a+bi$, or in a `$$` block:
 
 $$

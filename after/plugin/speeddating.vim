@@ -1,3 +1,7 @@
+if !exists('g:speeddating_handlers')
+  finish
+endif
+
 function! s:dial(words, string, offset, increment) abort
   let idx = index(a:words, a:string)
   return idx < 0 ? ['', -1] : [a:words[max([0, min([len(a:words) - 1, idx + a:increment])])], -1]

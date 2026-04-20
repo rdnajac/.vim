@@ -1,6 +1,5 @@
 setlocal define=\\<\\%(\\i\\+\\s*()\\)\\@=
 setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
-" call vimrc#apathy('path', split($PATH, has('win32') ? ';' : ':'))
 call vimrc#apathy('path', split($PATH,':'))
 
 if executable('shfmt')

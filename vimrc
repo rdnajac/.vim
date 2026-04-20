@@ -9,9 +9,6 @@ set jumpoptions+=stack
 set mouse=a
 set report=0
 set scrolloff=8
-set sessionoptions-=blank
-set sessionoptions-=folds
-set sessionoptions-=terminal
 set shortmess+=aA "c
 set shortmess-=o
 set showmatch
@@ -107,6 +104,7 @@ augroup END
 " }}}1
 
 " Section: neovim {{{1
+command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
 " set undo if on nvim, or if on a machine not running nvim
 let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
 
@@ -167,14 +165,17 @@ augroup END
 " }}}1
 
 " Section: commands/config {{{1
-for level in keys(g:vim#notify#levels)
-  exe printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
-	\ toupper(strpart(level, 0, 1))..strpart(level, 1), level)
-endfor
 
-command! M messages
 command! -nargs=* Diff call cmd#diff#(<f-args>)
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
+
+" `https://github.com/neovim/neovim/discussions/38256`
+" Usage: $ nvim +Clipboard # or alias pbedit='nvim +Clipboard'
+command! Clipboard call edit#clipboard()
+
+if !exists(':hardcopy')
+  command! Hardcopy  lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
+endif
 
 let g:vimtex_format_enabled = 1
 let g:vimtex_mappings_disable = {'n': ['K']}
@@ -190,14 +191,6 @@ let g:eunuch_interpreters = {
       \ 'rmd':    'Rscript',
       \ 'zsh':    'zsh',
       \ }
-
-" `https://github.com/neovim/neovim/discussions/38256`
-" Usage: $ nvim +Clipboard # or alias pbedit='nvim +Clipboard'
-command! Clipboard call edit#clipboard()
-
-if !exists(':hardcopy')
-  command! Hardcopy  lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
-endif
 
 " set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
 " set completeopt+=preinsert
@@ -246,6 +239,7 @@ call s:cabbrev('vvx', 'verbose xmap')
 call s:cabbrev('f', 'find')
 if has('nvim')
   call s:cabbrev('man', 'Man')
+  call s:cabbrev('S', 'lua Snacks.picker.')
 endif
 " }}}1
 
@@ -288,6 +282,7 @@ if has('nvim')
   nnoremap <leader>dF <Cmd>=vim.filetype.inspect()<CR>
   nnoremap <leader>dq <Cmd>lua vim.diagnostic.setloclist()<CR>
   nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
+  nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
 endif
 
 " file
@@ -305,14 +300,12 @@ nnoremap <BS> :bprevious<CR>
 nnoremap <C-BS> g;
 nnoremap <C-q> <Cmd>wincmd c<CR>
 nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
-nnoremap <C-w><C-v> <Cmd>vertical +sbprevious<CR>
+nnoremap <C-w><C-v> :<C-u>vsplit #<CR>
 " NOTE: S-Tab not detected in all terminals...
 " nnoremap <S-Tab>   <Cmd>wincmd w<CR>
 " just like tmux!
 " nnoremap <C-w>-     <C-w>s
 " nnoremap <C-w><Bar> <C-w>v
-nnoremap <leader>bD <Cmd>lua Snacks.bufdelete.other()<CR>
-nnoremap <leader>bd <Cmd>lua Snacks.bufdelete()<CR>
 
 " window navigation with Shift + h/j/k/l
 for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
@@ -437,7 +430,6 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
 else
   Plug 'folke/snacks.nvim'
-  Plug 'nvim-mini/mini.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
   Plug 'chrisgrieser/nvim-scissors'

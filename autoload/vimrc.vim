@@ -11,14 +11,10 @@ function! vimrc#setmarks() abort
   endfor
 endfunction
 
-function! vimrc#insert_unique(bufvar, ...) abort
-  let orig = getbufvar('', a:bufvar)
-  let val = list#join(list#uniq(call('list#split', a:000 + [orig])))
-  call setbufvar('', a:bufvar, val)
-  return val
-endfunction
-
-" like `apathy#Prepend()` but only for path
 function! vimrc#apathy(...) abort
-  return(vimrc#insert_unique('path', a:000))
+  let orig = getbufvar('', '&path')
+  let new = list#join(list#uniq(call('list#split', a:000 + [orig])))
+  " let new = list#prepend(orig, a:000)
+  call setbufvar('', '&path', new)
+  return new
 endfunction

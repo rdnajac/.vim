@@ -87,11 +87,11 @@ end
 
 --- run a system command and return stdout using `vim.system`
 ---@param cmd string[] command and args
----@param err_on_fail? boolean whether to error if command fails
----@param errmsg string? error message to use if err_on_fail is true
+---@param err_exit? boolean whether to error if command fails
+---@param errmsg string? error message to use if err_exit is true
 ---@param stdin string? optional stdin to pass to command
 ---@return string? stdout on success
-function M.run(cmd, err_on_fail, errmsg, stdin)
+function M.run(cmd, err_exit, errmsg, stdin)
   local rv = vim.system(cmd, { stdin = stdin, text = true }):wait()
   if rv.code ~= 0 then
     if rv.stdout and #rv.stdout > 0 then
@@ -100,8 +100,11 @@ function M.run(cmd, err_on_fail, errmsg, stdin)
     if rv.stderr and #rv.stderr > 0 then
       print(rv.stderr)
     end
-    if err_on_fail then
-      error(errmsg or ('Command failed: %s'):format(table.concat(cmd, ' ')))
+    local msg = errmsg or ('Command failed: %s'):format(table.concat(cmd, ' '))
+    if err_exit then
+      error(msg)
+    else
+      vim.notify(msg, vim.log.levels.ERROR)
     end
     return nil
   end
@@ -117,5 +120,7 @@ end
 --     return ret
 --   end
 -- end)(vim.paste)
+
+-- local _, mod = xpcall(require, debug.traceback, 'nvim.' .. modname)
 
 return M

@@ -12,6 +12,7 @@ return {
   cdd = [[stdpath('data')]],
   cds = [[stdpath('state')]],
   gx = 'Open with system app',
+  yo = 'Toggle',
   ZQ = ':q!',
   ZR = ':restart?',
   ZZ = ':x',

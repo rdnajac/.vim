@@ -8,27 +8,21 @@
 ---@field init? fun():nil
 ---@field opts? table|fun():table passed to the plugin's `setup()`
 ---@field keys? table|fun():table flexible keymap definitions
----@field toggle? table<string, string|table> Snacks.nvim toggles to register.
----@field event? string|string[] event on which to call `init()`
----@field lazy? boolean whether to defer `packadd()` on startup -- TODO:
+---@field toggle? table<string, table> Snacks.nvim toggles to register.
 local Plugin = {}
 Plugin.__index = Plugin
-
-local validate = vim.validate
 
 --- Create a new Plugin instance from a specification table.
 ---@param v string|table table with required `[1]` field (or just `user/repo`
 ---@return Plugin
 function Plugin.new(v)
   local self = type(v) == 'table' and v or { v } ---@type Plugin
-  validate('[1]', self[1], 'string')
-  validate('build', self.build, { 'string', 'function' }, true)
-  validate('event', self.event, { 'string', 'table' }, true)
-  validate('init', self.init, 'function', true)
-  validate('lazy', self.lazy, 'boolean', true)
-  validate('opts', self.opts, { 'table', 'function' }, true)
-  validate('keys', self.keys, { 'table', 'function' }, true)
-  validate('toggle', self.toggle, 'table', true)
+  vim.validate('[1]', self[1], 'string')
+  vim.validate('build', self.build, { 'string', 'function' }, true)
+  vim.validate('init', self.init, 'function', true)
+  vim.validate('opts', self.opts, { 'table', 'function' }, true)
+  vim.validate('keys', self.keys, { 'table', 'function' }, true)
+  vim.validate('toggle', self.toggle, 'table', true)
   -- add required fields and defaults
   self.src = self.src or ('https://github.com/%s.git'):format(self[1])
   self.name = self.name or (self[1]):match('[^/]*$')
@@ -64,8 +58,6 @@ end
 ---@field build? string|fun():nil Callback after plugin is installed/updated.
 ---@field init? fun():nil called inside of the `load()` function, after `packadd()`.
 
-local aug = vim.api.nvim_create_augroup('2lazy4lazy', {})
-
 --- Convert the plugin to a format compatible with `vim.pack.add()`.
 ---@return vim.pack.Spec
 function Plugin:package()
@@ -74,14 +66,7 @@ function Plugin:package()
     build = self.build,
     init = function()
       -- _G.setup_count = _G.setup_count + 1
-      return self.event
-          and vim.api.nvim_create_autocmd(self.event, {
-            callback = function() self:setup() end,
-            group = aug,
-            -- nested = true,
-            once = true,
-          })
-        or self:setup()
+      self:setup()
     end,
   }
   return spec
@@ -99,11 +84,11 @@ end
 vim.api.nvim_create_autocmd({ 'PackChanged' }, {
   desc = 'build plugins',
   callback = function(ev)
-    local kind = ev.data.kind ---@type "install"|"update"|"delete"
-    local spec = ev.data.spec ---@type vim.pack.Spec
-    local name = spec.name
-    local build = vim.tbl_get(spec, 'data', 'build')
-    if kind == 'delete' or not build then
+    ---@cast ev {data:vim.event.packchanged.data}
+    local data = ev.data
+    local name = data.spec.name
+    local build = vim.tbl_get(data.spec, 'data', 'build')
+    if data.kind == 'delete' or not build then
       return
     end
     if not ev.data.active then
@@ -127,10 +112,10 @@ vim.schedule(function()
   ---@return string[] sorted list of plugin names
   local function spec_names(active)
     local names = vim
-      .iter(vim.pack.get())
-      :filter(function(p) return active == nil or p.active == active end)
-      :map(function(p) return p.spec.name end)
-      :totable()
+    .iter(vim.pack.get())
+    :filter(function(p) return active == nil or p.active == active end)
+    :map(function(p) return p.spec.name end)
+    :totable()
     table.sort(names)
     return names
   end
@@ -152,35 +137,35 @@ vim.schedule(function()
       vim.notify('[Plug] bad subcommand: ' .. subcmd, vim.log.levels.ERROR)
     end
   end, {
-    nargs = '*',
-    bang = true,
-    complete = function(ArgLead, CmdLine, CursorPos)
-      local args = vim.split(CmdLine, '%s+', { trimempty = true })
-      local num_args = #args - (vim.endswith(CmdLine, ' ') and 0 or 1)
+  nargs = '*',
+  bang = true,
+  complete = function(ArgLead, CmdLine, CursorPos)
+    local args = vim.split(CmdLine, '%s+', { trimempty = true })
+    local num_args = #args - (vim.endswith(CmdLine, ' ') and 0 or 1)
 
-      -- first arg is subcommand
-      if num_args == 1 then
-        return vim
-          .iter(vim.spairs(subcmds))
-          :map(function(cmd, _) return vim.startswith(cmd, ArgLead) and cmd end)
-          :totable()
-      end
+    -- first arg is subcommand
+    if num_args == 1 then
+      return vim
+      .iter(vim.spairs(subcmds))
+      :map(function(cmd, _) return vim.startswith(cmd, ArgLead) and cmd end)
+      :totable()
+    end
 
-      -- second arg is (filtered) plugin names
-      local subcmd = args[2]
-      local loaded = subcmd == 'clean' and false or subcmd == 'status' and nil or true
-      return subcmds[subcmd] and spec_names(loaded) or {}
-    end,
-  })
+    -- second arg is (filtered) plugin names
+    local subcmd = args[2]
+    local loaded = subcmd == 'clean' and false or subcmd == 'status' and nil or true
+    return subcmds[subcmd] and spec_names(loaded) or {}
+  end,
+})
 end)
 
 --- Wraps instantiation, initialization, and conversion, skipping disabled plugins.
 ---@param plugs string|Plugin|(string|Plugin)[]  list of plugin specs or single spec (string or table)
 return function(plugs)
   local speclist = vim
-    .iter(vim.islist(plugs) and plugs or { plugs })
-    :filter(function(v) return v.enabled ~= false end)
-    :map(function(v) return Plugin.new(v):package() end)
-    :totable()
+  .iter(vim.islist(plugs) and plugs or { plugs })
+  :filter(function(v) return v.enabled ~= false end)
+  :map(function(v) return Plugin.new(v):package() end)
+  :totable()
   vim.pack.add(speclist, { load = _load })
 end

@@ -1,6 +1,7 @@
 " small library to extend v:t_list
 " based on list functions from `tpope/vim-apathy`
-" TODO: add doc
+" TODO: implemet a set data struct using this as a base
+" also see in help docs: Functions for Dictionaries
 
 function! list#uniq(list) abort
   let i = 0
@@ -46,3 +47,8 @@ function! list#split(...) abort
   return val
 endfunction
 
+
+" insert a unique element inta a list and return it
+function! list#prepend(list, ...) abort
+  return list#join(list#uniq(call('list#split', a:000 + [a:list])))
+endfunction
