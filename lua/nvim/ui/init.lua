@@ -4,11 +4,6 @@ local M = {
   status = require('nvim.ui.status'),
 }
 
-vim.schedule(function()
-  vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
-  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-end)
-
 M.winbar = function()
   if vim.bo.filetype == 'snacks_dashboard' then
     return ''
@@ -21,5 +16,36 @@ M.winbar = function()
   local c = M.status.treesitter
   return M.status.render(a(), b(), ' ' .. c()) .. '%#WinBar# '
 end
+
+vim.schedule(function()
+  vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
+  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+  ---@type render.md.UserConfig
+  vim.g.render_markdown_config = {
+    file_types = { 'markdown', 'rmd', 'quarto' },
+    latex = { enabled = false },
+    bullet = {
+      enabled = false,
+      right_pad = 1,
+    },
+    -- checkbox = { enabled = false },
+    completions = { lsp = { enabled = false } },
+    html = {
+      comment = { conceal = false },
+      enabled = false,
+    },
+  }
+  Plug({
+    'MeanderingProgrammer/render-markdown.nvim',
+    toggle = {
+      ['yom'] = {
+        name = 'Render Markdown',
+        get = function() return require('render-markdown.state').enabled end,
+        set = function(state) return require('render-markdown').set(state) end,
+      },
+    },
+  })
+
+end)
 
 return M
