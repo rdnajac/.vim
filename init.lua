@@ -5,7 +5,7 @@ _G.pp = vim.print
 
 require('nvim.ui.2')
 
-vim.cmd([[ colorscheme tokyonight | source ~/.vim/vimrc ]])
+vim.cmd([[colorscheme tokyonight|source ~/.vim/vimrc]])
 
 require('snacks').setup({
   dashboard = {

@@ -8,6 +8,10 @@ if !has('nvim')
   let g:plug#home = expand('~/.vim/pack/jetpack')
 else
   let g:plug#home = stdpath('data') .. '/site/pack/core/opt'
+  augroup plug.nvim
+    autocmd!
+    " autocmd PackChanged * call luaeval("require('plug.build')({ data = _A })", deepcopy(v:event))
+  augroup END
 endif
 
 let $PACKDIR = g:plug#home
@@ -35,8 +39,8 @@ function! plug#end()
       " lua vim.pack.add(vim.g.plugs)
       " passes script-local variable to lua via `_A`
       call luaeval('vim.pack.add(_A)', s:plugs)
-      " lua require('plug')
       " execute 'source' expand('<script>:p:h:h')..'/lua/plug.lua'
+      lua require('plug')
     endif
   else
     call jetpack#end()
