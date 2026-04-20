@@ -1,30 +1,11 @@
 local M = {
-  { 'mason-org/mason.nvim', opts = {} },
   require('nvim.blink'),
   require('nvim.keys.which'),
   require('nvim.mini'),
   require('nvim.ui.markdown').spec,
-  -- require('nvim.keys.screen'),
   -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
-  -- {
-  --   'folke/flash.nvim',
-  --   ---@type Flash.Config
-  --   opts = {},
-  --   keys = function()
-  --     local flash = require('flash')
-  --     -- stylua: ignore
-  --     return {
-  --       { { 'o', 'x', 'n' }, '<C-J>', flash.jump,  {} },
-  --       { { 'o', 'x', 'n' }, '<C-F>', flash.treesitter, {} },
-  --       { { 'o', 'x' }, 'R',     flash.treesitter_search, {} },
-  --       { { 'o' },      'r',     flash.remote,     {} },
-  --       { { 'c' },      '<C-F>', flash.toggle,     {} },
-  --     }
-  --   end,
-  -- },
   {
-    --
     'folke/sidekick.nvim',
     opts = function()
       vim.schedule(vim.lsp.inline_completion.enable)
@@ -46,6 +27,22 @@ local M = {
       },
     },
   },
+  -- {
+  --   'folke/flash.nvim',
+  --   ---@type Flash.Config
+  --   opts = {},
+  --   keys = function()
+  --     local flash = require('flash')
+  --     -- stylua: ignore
+  --     return {
+  --       { { 'o', 'x', 'n' }, '<C-J>', flash.jump,  {} },
+  --       { { 'o', 'x', 'n' }, '<C-F>', flash.treesitter, {} },
+  --       { { 'o', 'x' }, 'R',     flash.treesitter_search, {} },
+  --       { { 'o' },      'r',     flash.remote,     {} },
+  --       { { 'c' },      '<C-F>', flash.toggle,     {} },
+  --     }
+  --   end,
+  -- },
   {
     'R-nvim/R.nvim',
     enabled = true,

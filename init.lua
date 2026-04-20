@@ -44,3 +44,5 @@ _G.nv = vim
   :map(function(fname) return vim.fn.fnamemodify(fname, ':r') end)
   :map(function(mname) return mname, require('nvim.' .. mname) end)
   :fold({}, rawset) -- inits an empty table and maps `nv[nvim.k] = v`
+
+require('mason').setup()

@@ -411,7 +411,7 @@ Plug 'tpope/vim-unimpaired'
 " Plug 'vuciv/golf'
 Plug 'tpope/vim-scriptease'
 Plug 'AndrewRadev/splitjoin.vim'
-Plug 'romainl/vim-qf.git'
+" Plug 'romainl/vim-qf.git'
 if !has('nvim')
   " Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'

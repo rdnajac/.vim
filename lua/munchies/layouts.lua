@@ -1,6 +1,5 @@
 local M = {}
 
-
 -- pop-up for selecting text in insert mode
 -- layout = require(
 M.insert = {
@@ -21,8 +20,6 @@ M.insert = {
   },
 }
 
-
-
 M.mylayout = {
   preset = 'ivy',
   reverse = true,
@@ -37,17 +34,17 @@ M.mylayout = {
       title = ' {title} {live} {flags}',
       title_pos = 'left',
       {
-	win = 'list',
-	border = 'top',
+        win = 'list',
+        border = 'top',
       },
       {
-	win = 'preview',
-	border = 'top',
-	title = '{preview:Preview}',
-	-- title = '{title}',
-	title_pos = 'right',
-	width = 0.6,
-	wo = { number = false },
+        win = 'preview',
+        border = 'top',
+        title = '{preview:Preview}',
+        -- title = '{title}',
+        title_pos = 'right',
+        width = 0.6,
+        wo = { number = false },
       },
     },
     { win = 'input', height = 1 },
