@@ -253,7 +253,8 @@ xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
 
-nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
+" nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
+nnoremap zq <Cmd>ALEFix<CR>
 nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 " TODO: diff?

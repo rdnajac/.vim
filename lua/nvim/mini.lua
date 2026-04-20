@@ -51,37 +51,27 @@ local miniopts = {
   -- extra = {},
   -- files = { options = { use_as_default_explorer = false } },
   icons = function()
-    -- HACK: Override to use wildcard matching for directories
-    local override = {
-      directory = {
-        ['vim%-.*'] = { '', 'Green' },
-        ['lazy.*%.nvim'] = { '󰒲', 'Blue' },
-        ['%.chezmoi.*'] = { '', 'Red' },
-      },
-      file = {
-        ['%.chezmoi.*[^.]'] = { '', 'Yellow' },
-      },
-    }
-
+    -- HACK: Override get to do wildcard matching
     vim.schedule(function()
       local original_get = _G.MiniIcons.get
+      local override = require('nvim.ui.icons').mini_patterns
 
-      -- TODO: if vim.endswith(name, '.tmpl') then only change the color
       ---@diagnostic disable-next-line: duplicate-set-field
       MiniIcons.get = function(category, name)
-        name = name:gsub('dot_', '.'):gsub('%.tmpl$', '')
-        local patterns = override[category]
-        if patterns then
-          local entry = vim.fs.basename(name)
-          for pattern, rv in pairs(override[category]) do
-            -- add anchors to pattern for exact match
-            if entry:match('^' .. pattern .. '$') then
-              return rv[1], 'MiniIcons' .. rv[2]
-            end
-          end
-        else
+        local hl
+        if vim.endswith(name, '.tmpl') then
+          name = name:gsub('%.tmpl$', '')
+          hl = 'MiniIconsGrey'
         end
-        return original_get(category, name)
+        local basename = vim.fs.basename(name:gsub('dot_', '.'))
+        for pattern, spec in pairs(override[category] or {}) do
+          -- add anchors to pattern for exact match
+          if basename:match('^' .. pattern .. '$') then
+            return spec[1], hl or ('MiniIcons' .. spec[2])
+          end
+        end
+        local icon, orig_hl, is_default = original_get(category, name:gsub('dot_', '.'))
+        return icon, hl or orig_hl, is_default
       end
     end)
 

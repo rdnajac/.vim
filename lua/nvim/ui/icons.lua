@@ -64,9 +64,12 @@ M.sep = {
 
 M.mini = {
   directory = {
-    ghostty = { '󰊠', 'Green' },
     LazyVim = { '󰒲', 'Blue' },
+    ghostty = { '󰊠', 'Green' },
+    vimtex = { '', 'Yellow' },
     ['R.nvim'] = { '󰟔', 'Cyan' },
+    ['sidekick.nvim'] = { '', 'Purple' },
+    ['snacks.nvim'] = { '󱥰', 'Orange' },
   },
   extension = {
     fastq = { '󰚄', 'Purple' },
@@ -124,6 +127,19 @@ M.mini = {
     unknown = ' ',
     value = ' ',
     variable = '󰀫 ',
+  },
+}
+
+M.mini_patterns = 
+{
+  directory = {
+    ['vim%-.*'] = { '', 'Green' },
+    ['lazy.*%.nvim'] = { '󰒲', 'Blue' },
+    ['%.chezmoi.*'] = { '', 'Red' },
+    ['mini%..*'] = { '󰚝', 'Red' },
+  },
+  file = {
+    ['%.chezmoi.*[^.]'] = { '', 'Yellow' },
   },
 }
 

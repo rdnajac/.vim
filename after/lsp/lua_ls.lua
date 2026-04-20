@@ -26,7 +26,8 @@ package.preload['lazydev.config'] = function()
     end
 
     for _, lib in ipairs(M.libs) do
-      for _, field in ipairs({ 'words', 'mods', 'files' }) do
+      -- for _, field in ipairs({ 'words', 'mods', 'files' }) do
+      for _, field in ipairs({ 'words' }) do
         for _, item in ipairs(lib[field]) do
           M[field][item] = M[field][item] or {}
           table.insert(M[field][item], lib.path)
@@ -36,15 +37,14 @@ package.preload['lazydev.config'] = function()
   end
 
   vim.schedule(function()
-    -- registers autocmds for attaching to buffers
-    require('lazydev.buf').setup()
-
     local cmd = require('lazydev.cmd')
     vim.api.nvim_create_user_command('LazyDev', cmd.execute, {
       nargs = '*',
       complete = cmd.complete,
       desc = 'lazydev.nvim',
     })
+    -- registers autocmds for attaching to buffers
+    require('lazydev.buf').setup()
   end)
 
   return M
