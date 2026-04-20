@@ -20,10 +20,6 @@
       "rev": "7022e18a0fbae9aecf99a3ba02b2a541edc2b8a1",
       "src": "https://github.com/hat0uma/csvview.nvim.git"
     },
-    "flash.nvim": {
-      "rev": "fcea7ff883235d9024dc41e638f164a450c14ca2",
-      "src": "https://github.com/folke/flash.nvim.git"
-    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim.git"
@@ -32,9 +28,33 @@
       "rev": "b03fb0f20bc1d43daf558cda981a2be22e73ac42",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
-    "mini.nvim": {
-      "rev": "d76247d6e3ffa222784be5b156770e37c665f67e",
-      "src": "https://github.com/nvim-mini/mini.nvim.git"
+    "mini.ai": {
+      "rev": "43eb2074843950a3a25aae56a5f41362ec043bfa",
+      "src": "https://github.com/nvim-mini/mini.ai.git"
+    },
+    "mini.align": {
+      "rev": "6f3c69cd57134ad8fbf1e85dcdc90cb37a8c75c8",
+      "src": "https://github.com/nvim-mini/mini.align.git"
+    },
+    "mini.clue": {
+      "rev": "43bd6cf1c3ccdea46d403c32dbc4629fa6afa09d",
+      "src": "https://github.com/nvim-mini/mini.clue.git"
+    },
+    "mini.hipatterns": {
+      "rev": "9eff319bbe66adfaf781a0d0e174baa08ba94909",
+      "src": "https://github.com/nvim-mini/mini.hipatterns.git"
+    },
+    "mini.icons": {
+      "rev": "bac6317300e205335df425296570d84322730067",
+      "src": "https://github.com/nvim-mini/mini.icons.git"
+    },
+    "mini.misc": {
+      "rev": "c72c90e083bcf24bfb2827d63b4752e414023f3e",
+      "src": "https://github.com/nvim-mini/mini.misc.git"
+    },
+    "mini.surround": {
+      "rev": "2715e04bea3ec9244f15b421dc5b18c0fe326210",
+      "src": "https://github.com/nvim-mini/mini.surround.git"
     },
     "nvim-lspconfig": {
       "rev": "e05fb8c3bd61d909dacff24f77f23beb644daf54",
@@ -107,10 +127,6 @@
     "vim-fugitive": {
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://github.com/tpope/vim-fugitive.git"
-    },
-    "vim-mermaid": {
-      "rev": "480aaa070eb6d588c1c15e89871e91d4b75088a9",
-      "src": "https://github.com/chazmcgarvey/vim-mermaid.git"
     },
     "vim-repeat": {
       "rev": "65846025c15494983dafe5e3b46c8f88ab2e9635",

@@ -54,13 +54,11 @@ Plug({
   {
     'folke/lazydev.nvim',
     opts = {
-      library = {
+      library = vim.list_extend({
         vim.env.VIMRUNTIME,
-        -- { path = 'nvim', words = { 'nv' } },
-        { path = 'mini.nvim', words = { 'Mini.*' } },
         { path = 'snacks.nvim', words = { 'Snacks' } },
         { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
-      },
+      }, nv.mini.lazydev or {}),
     },
   },
 })

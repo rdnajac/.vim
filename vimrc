@@ -425,6 +425,7 @@ else
   Plug 'folke/snacks.nvim'
   Plug 'mason-org/mason.nvim'
   Plug 'neovim/nvim-lspconfig'
+  " Plug 'nvim-mini/mini.nvim'
   " Plug 'b0o/SchemaStore.nvim'
   " Plug 'j-hui/fidget.nvim'
   " Plug 'saxon1964/neovim-tips'

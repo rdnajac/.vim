@@ -4,6 +4,28 @@ local severity_map = {
   I = vim.diagnostic.severity.INFO,
 }
 
+local severity = vim.diagnostic.severity
+
+-- TODO: use table invert fn
+local icons = {
+  [severity.ERROR] = '',
+  [severity.WARN] = '',
+  [severity.INFO] = '',
+  [severity.HINT] = '',
+  Error = '',
+  Warn = '',
+  Info = '',
+  Hint = '',
+}
+
+local hl_map = {
+  [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+  [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+  [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+  [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+
+}
+
 package.preload['ale.diagnostics'] = function()
   return {
     --- Send diagnostics to the Neovim diagnostics API
@@ -36,7 +58,6 @@ package.preload['ale.diagnostics'] = function()
 end
 
 vim.schedule(function()
-  local icons = nv.ui.icons.diagnostics
   vim.diagnostic.config({
     float = { source = true },
     underline = false,
@@ -44,7 +65,7 @@ vim.schedule(function()
     severity_sort = true,
     signs = { text = icons },
     status = {
-      format = nv.ui.status.render_counts(icons, {
+      format = require('nvim.ui.status').render_counts(icons, {
         'DiagnosticSignError',
         'DiagnosticSignWarn',
         'DiagnosticSignInfo',

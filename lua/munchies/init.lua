@@ -9,6 +9,21 @@ inoremap <C-x><C-i> <Cmd>lua Snacks.picker.icons({ layout = require('munchies').
 inoremap <C-x><C-z> <Cmd>lua Snacks.picker.registers({ layout = require('munchies').insert })<CR>
 ]])
 
+vim.schedule(function()
+  Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
+  Snacks.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, { lsp = {} })
+  Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
+
+  -- normal and terminal mode keymaps
+  vim
+    .iter({
+      ['<C-Bslash> '] = function() Snacks.terminal.focus() end,
+      [']]'] = function() Snacks.words.jump(vim.v.count1) end,
+      ['[['] = function() Snacks.words.jump(-vim.v.count1) end,
+    })
+    :each(function(lhs, rhs) vim.keymap.set({ 'n', 't' }, lhs, rhs) end)
+end)
+
 local function title(self)
   local picker = self.source
   local icon = vim.tbl_get(nv, 'ui', 'icons', 'pickers', picker) or ''
