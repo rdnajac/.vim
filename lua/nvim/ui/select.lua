@@ -4,14 +4,14 @@
 --- local orig_select = vim.ui.select
 --- vim.ui.select = require('nvim.ui.select')
 ---
----@generic t
----@param items t[] arbitrary items
----@param opts {}
----@param on_choice fun(item: t|nil, idx: integer|nil)
+--- @generic T
+--- @param items T[]
+--- @param opts {}
+--- @param on_choice fun(item: T|nil, idx: integer|nil)
 ---               called once the user made a choice.
 ---               `idx` is the 1-based index of `item` within `items`.
 ---               `nil` if the user aborted the dialog.
-return function(items, opts, on_choice)
+local select = function(items, opts, on_choice)
   if #items == 0 then
     on_choice(nil)
     return
@@ -23,7 +23,7 @@ return function(items, opts, on_choice)
   local format_item = opts.format_item or tostring
   local title = opts.prompt or 'Select one of:'
   for _, item in ipairs(items) do
-    local line = format_item(item)
+    local line = tostring(format_item(item)):gsub('\n', ' g< ')
     table.insert(lines, line)
     max_length = math.max(max_length, #line)
   end
@@ -59,3 +59,18 @@ return function(items, opts, on_choice)
     end,
   })
 end
+
+-- example to select from the registers 0-9
+local example = function()
+  local fn = vim.fn
+  local registers = vim.iter(fn.range(0, 9)):map(fn.getreg):totable()
+  select(registers, { prompt = 'Select a register:' }, function(choice, idx)
+    local msg = choice and string.format('You selected register "%d: %s', idx - 1, choice)
+      or 'Selection aborted'
+    vim.notify(msg)
+  end)
+end
+
+example()
+
+return select

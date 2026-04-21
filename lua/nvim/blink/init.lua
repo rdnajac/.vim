@@ -2,7 +2,7 @@
 --- `https://main.cmp.saghen.dev`
 --- `https://cmp.saghen.dev/configuration/sources.html#community-sources`
 
-return {
+local M = {
   'Saghen/blink.cmp',
   build = function() vim.cmd([[BlinkCmp build]]) end,
   ---@type blink.cmp.Config
@@ -57,6 +57,21 @@ return {
         },
       },
     },
+    fuzzy = {
+      sorts = {
+        function(a, b)
+          if a.source_id ~= 'registers' or b.source_id ~= 'registers' then
+            return
+          end
+          if a.sortText == nil or b.sortText == nil or a.sortText == b.sortText then
+            return
+          end
+          return a.sortText < b.sortText
+        end,
+        'score',
+        'sort_text',
+      },
+    },
     keymap = {
       ['<Tab>'] = {
         function(cmp) return cmp.snippet_active() and cmp.accept() or cmp.select_and_accept() end,
@@ -65,9 +80,19 @@ return {
         function() return vim.lsp.inline_completion.get() end,
         'fallback',
       },
+
       -- overrides default `:h i_CTRL-R`
       ['<C-R>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
-      ['<C-X><C-X>'] = { function(cmp) return cmp.show({ providers = { 'snippets' } }) end },
+      ['<C-x><C-x>'] = { function(cmp) return cmp.show({ providers = { 'snippets' } }) end },
+      ['<A-1>'] = { function(cmp) cmp.accept({ index = 1 }) end },
+      ['<A-2>'] = { function(cmp) cmp.accept({ index = 2 }) end },
+      ['<A-3>'] = { function(cmp) cmp.accept({ index = 3 }) end },
+      ['<A-4>'] = { function(cmp) cmp.accept({ index = 4 }) end },
+      ['<A-5>'] = { function(cmp) cmp.accept({ index = 5 }) end },
+      ['<A-6>'] = { function(cmp) cmp.accept({ index = 6 }) end },
+      ['<A-7>'] = { function(cmp) cmp.accept({ index = 7 }) end },
+      ['<A-8>'] = { function(cmp) cmp.accept({ index = 8 }) end },
+      ['<A-9>'] = { function(cmp) cmp.accept({ index = 9 }) end },
     },
     signature = { enabled = true, window = { show_documentation = false } },
     sources = {
@@ -140,3 +165,7 @@ return {
 --         ({ c = 'cmdline', t = 'term' })[vim.fn.mode():sub(1, 1)] or 'default'
 --       )):map(function(k, _) return nv.ui.icons[k] .. ' ' end):join(' ')
 -- end
+
+Plug({ M })
+
+return M

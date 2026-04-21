@@ -1,9 +1,5 @@
 ---@module 'blink.cmp'
 
-local Buf = require('lazydev.buf')
-local Config = require('lazydev.config')
-local Pkg = require('lazydev.pkg')
-
 ---@type blink.cmp.Source
 local M = {}
 
@@ -11,11 +7,12 @@ function M.new() return setmetatable({}, { __index = M }) end
 
 function M:get_trigger_characters() return { '"', "'", '.', '/' } end
 
-function M:enabled() return Buf.attached[vim.api.nvim_get_current_buf()] ~= nil end
+function M:enabled() return require('lazydev.buf').attached[vim.api.nvim_get_current_buf()] ~= nil end
 
 ---@param ctx blink.cmp.Context
 ---@param callback fun(...: any)
 function M:get_completions(ctx, callback)
+  local Pkg = require('lazydev.pkg')
   local before = string.sub(ctx.line, 1, ctx.cursor[2])
 
   local transformed_callback = function(items)
@@ -72,7 +69,7 @@ function M:get_completions(ctx, callback)
 
   if not req:find('.', 1, true) then
     Pkg.topmods(add)
-    for _, lib in ipairs(Config.libs) do
+    for _, lib in ipairs(require('lazydev.config').libs) do
       for _, mod in ipairs(lib.mods) do
         add(mod, lib.path)
       end
