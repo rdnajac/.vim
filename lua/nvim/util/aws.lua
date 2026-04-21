@@ -1,7 +1,43 @@
-local cache = require('nvim.fs.cache')
-local util = require('nvim.util')
+local cache = nv.fs.cache
 
-vim.env.AWS_DEFAULT_OUTPUT = 'json'
+---@param args string[] s3api subcommand and arguments
+---@param opts? table?
+---@return table? decoded JSON response (nil if no output)
+local function s3api(args, opts)
+  local rv = vim
+    .system(
+      vim.list_extend({ 'aws', 's3api' }, args),
+      vim.tbl_deep_extend('force', {
+        text = true,
+        env = { AWS_DEFAULT_OUTPUT = 'json' },
+      }, opts or {})
+    )
+    :wait()
+  if rv.code == 0 then
+    return vim.json.decode(rv.stdout)
+  end
+  if rv.stdout and #rv.stdout > 0 then
+    print(rv.stdout)
+  end
+  if rv.stderr and #rv.stderr > 0 then
+    print(rv.stderr)
+  end
+end
+
+---@class S3Result
+---@field Contents table[] array of objects (if any)
+---@field RequestCharged any
+
+---@class S3Object
+---@field ETag string
+---@field Key string object key
+---@field LastModified string ISO date
+---@field Size integer size in bytes
+---@field StorageClass string
+
+local M = {}
+
+function M.ls(bucket) return s3api({ 'list-objects-v2', '--bucket', bucket }) end
 
 ---@param bucket_or_uri string s3 uri (s3://bucket/prefix) or bucket name
 ---@param prefix? string required if first arg is bucket name
@@ -16,39 +52,6 @@ local function parse_s3(bucket_or_uri, prefix)
     error('Invalid s3 uri: ' .. bucket_or_uri)
   end
   return b, p
-end
-
----@param args string[] s3api subcommand and arguments
----@return table? decoded JSON response (nil if no output)
-local function s3api(args)
-  local out = util.run(vim.list_extend({ 'aws', 's3api' }, args), true)
-  if out and out ~= '' then
-    return vim.json.decode(out --[[@as string]])
-  end
-end
-
----@class S3Result
----@field Contents table[] array of objects (if any)
----@field RequestCharged any
-
----@class S3ObjectEntry
----@field ETag string
----@field Key string object key
----@field LastModified string ISO date
----@field Size integer size in bytes
----@field StorageClass string
-
-local M = {}
-
----@param bucket_or_uri string s3 uri or bucket name
----@param prefix? string prefix (required if first arg is bucket)
----@return S3ObjectEntry[] list of objects in the bucket/prefix
-function M.ls(bucket_or_uri, prefix)
-  local bucket, pfx = parse_s3(bucket_or_uri, prefix)
-  local args = { 'list-objects-v2', '--bucket', bucket, '--prefix', pfx }
-  local cachepath = 's3/' .. vim.uri_encode(table.concat(args, '/'), 'rfc2396') .. '.json'
-  local result = cache(cachepath, function() return s3api(args) end) --[[@as table]]
-  return result.Contents
 end
 
 ---@param bucket_or_uri string s3 uri or bucket name

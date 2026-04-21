@@ -1,6 +1,8 @@
 --- Default tree-sitter parsers bundled with neovim:
 --- `c`, `lua`, `query`, `vim`, `vimdoc`,
 --- `markdown`, and `markdown_inline`
+
+--installing via treesitter lets us use additional queries
 ---
 --- Parser directories
 --- - `parser/`: contains the parsers (`.so` files)
@@ -29,18 +31,17 @@ return {
   -- git_config = false,
   -- gitcommit = false,
   -- git_rebase = false,
-  -- gitattributes = false,
+-- gitattributes = false,
   -- gitignore = false,
   -- groovy = false,
   html = true,
   javascript = true,
   json = true,
-  latex = false, -- Snacks.image, no autostart
+  latex = false, -- required for `Snacks.image`, do not autostart
   just = true,
   -- llvm = false,
-  -- installing via treesitter lets us use additional queries
-  lua = false, -- don't autostart since ftplugin/lua.lua already does
-  markdown = true, -- `R.nvim` will register `rmd` and `quarto` fts
+  lua = false, -- `$VIMRUNTIME/ftplugin/lua.lua` already starts treesitter
+  markdown = true, -- `R.nvim` plugin will register `rmd` and `quarto` fts
   make = true,
   -- ocaml = false,
   printf = true,

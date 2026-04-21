@@ -66,15 +66,16 @@ end
 --- Convert the plugin to a format compatible with `vim.pack.add()`.
 ---@return vim.pack.Spec
 function Plugin:package()
-  local spec = { src = self.src, name = self.name, version = self.version }
-  spec.data = { ---@type plug.Data
-    build = self.build,
-    init = function()
-      -- _G.setup_count = _G.setup_count + 1
-      self:setup()
-    end,
+  return {
+    src = self.src,
+    name = self.name,
+    version = self.version,
+    ---@type plug.Data
+    data = {
+      build = self.build,
+      init = function() self:setup() end,
+    },
   }
-  return spec
 end
 
 --- Wraps instantiation, initialization, and conversion, skipping disabled plugins.

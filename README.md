@@ -42,7 +42,7 @@ npx cspell dictionaries
 
 ```vim
 " see `:h :mkspell` and treesitter's `nospell`
-let &spellfile = g:['vimrc#dir'] . '/.spell/en.utf-8.add'
+let &spellfile ~/.vim/.spell/en.utf-8.add'
 autocmd FileType tex,markdown,rmd,quarto setlocal spell
 ```
 

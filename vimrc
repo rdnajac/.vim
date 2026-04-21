@@ -289,6 +289,8 @@ nnoremap <leader>m <Cmd>messages<CR>
 nnoremap <leader>p g<
 
 " navigation {{{2
+nnoremap H ^
+nnoremap L $
 nnoremap <BS> :bprevious<CR>
 nnoremap <C-BS> g;
 nnoremap <C-q> <Cmd>wincmd c<CR>

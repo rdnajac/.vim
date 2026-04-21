@@ -1,5 +1,5 @@
 local M = {}
 
-Plug({ require('nvim.keys.which') })
+M.which = require('nvim.keys.which')
 
 return M

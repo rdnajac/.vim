@@ -7,7 +7,7 @@ end
 vim.cmd([[ setlocal foldmethod& statuscolumn& conceallevel& ]])
 
 vim.schedule(function()
-  vim.notify(('This is a beeeg file (%s)!'):format(nv.fs.filesize(), vim.log.levels.WARN))
+  vim.notify(('This is a beeeg file (%s)!'):format(nv.util.filesize(), vim.log.levels.WARN))
   if vim.api.nvim_buf_is_valid(0) then
     local ft = vim.filetype.match({ buf = 0 }) or ''
     -- for json files, keep the filetype as json
