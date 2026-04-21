@@ -3,10 +3,10 @@
 ---@return string[] sorted list of plugin names
 local function spec_names(active)
   local names = vim
-  .iter(vim.pack.get())
-  :filter(function(p) return active == nil or p.active == active end)
-  :map(function(p) return p.spec.name end)
-  :totable()
+    .iter(vim.pack.get())
+    :filter(function(p) return active == nil or p.active == active end)
+    :map(function(p) return p.spec.name end)
+    :totable()
   table.sort(names)
   return names
 end
@@ -28,23 +28,23 @@ vim.api.nvim_create_user_command('Plug', function(opts)
     vim.notify('[Plug] bad subcommand: ' .. subcmd, vim.log.levels.ERROR)
   end
 end, {
-nargs = '*',
-bang = true,
-complete = function(ArgLead, CmdLine, CursorPos)
-  local args = vim.split(CmdLine, '%s+', { trimempty = true })
-  local num_args = #args - (vim.endswith(CmdLine, ' ') and 0 or 1)
+  nargs = '*',
+  bang = true,
+  complete = function(ArgLead, CmdLine, CursorPos)
+    local args = vim.split(CmdLine, '%s+', { trimempty = true })
+    local num_args = #args - (vim.endswith(CmdLine, ' ') and 0 or 1)
 
-  -- first arg is subcommand
-  if num_args == 1 then
-    return vim
-    .iter(vim.spairs(subcmds))
-    :map(function(cmd, _) return vim.startswith(cmd, ArgLead) and cmd end)
-    :totable()
-  end
+    -- first arg is subcommand
+    if num_args == 1 then
+      return vim
+        .iter(vim.spairs(subcmds))
+        :map(function(cmd, _) return vim.startswith(cmd, ArgLead) and cmd end)
+        :totable()
+    end
 
-  -- second arg is (filtered) plugin names
-  local subcmd = args[2]
-  local loaded = subcmd == 'clean' and false or subcmd == 'status' and nil or true
-  return subcmds[subcmd] and spec_names(loaded) or {}
-end,
+    -- second arg is (filtered) plugin names
+    local subcmd = args[2]
+    local loaded = subcmd == 'clean' and false or subcmd == 'status' and nil or true
+    return subcmds[subcmd] and spec_names(loaded) or {}
+  end,
 })

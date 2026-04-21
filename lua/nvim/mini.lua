@@ -13,8 +13,11 @@ local miniopts = {
   end,
   clue = function()
     local miniclue = require('mini.clue')
+
+    -- TODO: move to which-key
     local clues = { miniclue.gen_clues.builtin_completion() }
     local triggers = { { mode = 'i', keys = '<C-x>' } }
+
     if not package.loaded['which-key'] then
       for clue, trigger_list in pairs({
         g = { { mode = { 'n', 'x' }, keys = 'g' } },

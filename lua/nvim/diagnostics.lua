@@ -23,7 +23,6 @@ local hl_map = {
   [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
   [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
   [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
-
 }
 
 package.preload['ale.diagnostics'] = function()
@@ -57,20 +56,22 @@ package.preload['ale.diagnostics'] = function()
   }
 end
 
-vim.schedule(function()
-  vim.diagnostic.config({
-    float = { source = true },
-    underline = false,
-    virtual_text = false,
-    severity_sort = true,
-    signs = { text = icons },
-    status = {
-      format = require('nvim.ui.status').render_counts(icons, {
-        'DiagnosticSignError',
-        'DiagnosticSignWarn',
-        'DiagnosticSignInfo',
-        'DiagnosticSignHint',
-      }),
-    },
-  })
-end)
+vim.schedule(
+  function()
+    vim.diagnostic.config({
+      float = { source = true },
+      underline = false,
+      virtual_text = false,
+      severity_sort = true,
+      signs = { text = icons },
+      status = {
+        format = require('nvim.ui.status').render_counts(icons, {
+          'DiagnosticSignError',
+          'DiagnosticSignWarn',
+          'DiagnosticSignInfo',
+          'DiagnosticSignHint',
+        }),
+      },
+    })
+  end
+)

@@ -1,6 +1,4 @@
 local M = {
-  require('nvim.blink'),
-  require('nvim.ui.markdown').spec,
   -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
   {

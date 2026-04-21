@@ -130,8 +130,7 @@ M.mini = {
   },
 }
 
-M.mini_patterns = 
-{
+M.mini_patterns = {
   directory = {
     ['vim%-.*'] = { '', 'Green' },
     ['lazy.*%.nvim'] = { '󰒲', 'Blue' },

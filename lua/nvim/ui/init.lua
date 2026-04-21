@@ -45,7 +45,6 @@ vim.schedule(function()
       },
     },
   })
-
 end)
 
 return M
