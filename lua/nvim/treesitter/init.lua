@@ -79,4 +79,12 @@ local M = {
     },
   },
 }
+
+-- lazy load treesitter plugins when not opening a file
+if vim.fn.argc(-1) == 0 then
+  Plug(M.specs)
+else
+  vim.schedule(function() Plug(M.specs) end)
+end
+
 return M

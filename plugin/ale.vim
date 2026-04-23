@@ -1,7 +1,6 @@
 scriptencoding utf-8
 
 " set omnifunc=ale#completion#OmniFunc
-nnoremap ZF <Cmd>echom 'formatting...'<Bar>ALEFix<CR>
 let g:ale_fixers = {
       \ '*'	  : ['remove_trailing_lines', 'trim_whitespace'],
       \ 'python'  : ['ruff'],

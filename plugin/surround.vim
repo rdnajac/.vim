@@ -9,12 +9,7 @@ nmap cQ <Cmd>call vim#with#savedView("normal cs'\"")<CR>
 
 nmap dsf dSf
 
-nmap sc sr
-if nvim#has_global('MiniSurround')
-  nmap sa ys
-  nmap sd ds
-  nmap sr cs
-else
+if !nvim#has_global('MiniSurround')
   nmap ys sa
   nmap ds sd
   nmap cs sr

@@ -38,11 +38,11 @@ package.preload['lazydev.config'] = function()
 
   vim.schedule(function()
     local cmd = require('lazydev.cmd')
-    vim.api.nvim_create_user_command('LazyDev', cmd.execute, {
-      nargs = '*',
-      complete = cmd.complete,
-      desc = 'lazydev.nvim',
-    })
+    vim.api.nvim_create_user_command(
+      'LazyDev',
+      cmd.execute,
+      { nargs = '*', complete = cmd.complete, desc = 'lazydev.nvim' }
+    )
     -- registers autocmds for attaching to buffers
     require('lazydev.buf').setup()
   end)

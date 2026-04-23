@@ -1,5 +1,5 @@
 ---@type table<string, string|table|fun()>
-return {
+local M = {
   -- nnoremap yo~ :<C-u>set acd!<BAR>set acd?<CR>
   ['yo~'] = 'autochdir',
   ['yoa'] = Snacks.toggle.animate,
@@ -67,3 +67,13 @@ return {
     set = function(state) vim.diagnostic.config({ virtual_text = state }) end,
   },
 }
+
+-- if package.loaded['render-markdown'] then
+--   M['yom'] = {
+--     name = 'Render Markdown',
+--     get = function() return require('render-markdown').get end,
+--     set = function(state) return require('render-markdown').set(state) end,
+--   }
+-- end
+
+return M

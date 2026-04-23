@@ -17,16 +17,22 @@ vim.schedule(function()
   -- normal and terminal mode keymaps
   vim
     .iter({
-      ['<C-Bslash> '] = function() Snacks.terminal.focus() end,
+      ['<C-Bslash>'] = function() Snacks.terminal.focus() end,
       [']]'] = function() Snacks.words.jump(vim.v.count1) end,
       ['[['] = function() Snacks.words.jump(-vim.v.count1) end,
     })
     :each(function(lhs, rhs) vim.keymap.set({ 'n', 't' }, lhs, rhs) end)
 end)
 
+  local icons= {
+    buffers = '',
+    explorer = '󰙅',
+    files = '',
+    grep = '󰱽',
+  }
 local function title(self)
   local picker = self.source
-  local icon = vim.tbl_get(nv, 'ui', 'icons', 'pickers', picker) or ''
+  local icon = icons[picker] or ''
   local name = picker and picker:sub(1, 1):upper() .. picker:sub(2)
   local dir = self.dirs and #self.dirs .. ' paths'
     or vim.fn.pathshorten(vim.fn.fnamemodify(self.cwd or vim.fn.getcwd(), ':~'), 2)

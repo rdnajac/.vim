@@ -69,22 +69,19 @@ function! edit#snippets() abort
   call s:filetype('snippets', '.json')
 endfunction
 
+" TODO: can simplify
 " edit the corresponding autoload or plugin file
 function! edit#ch() abort
   let file = expand('%:p')
-  if file !~# '\.vim$' | return | endif
-
-  let base = fnamemodify(file, ':t')
+  if file !~# '\.vim$' || file !~# 'autoload\|plugin'
+    return
+  endif
   let dir = fnamemodify(file, ':h')
   let tag = fnamemodify(dir, ':t')
-
-  if index(['autoload', 'plugin'], tag) < 0 | return | endif
-
-  let alt_dir = fnamemodify(dir, ':h') . '/' . (tag ==# 'autoload' ? 'plugin' : 'autoload')
-  let alt_file = alt_dir . '/' . base
-
+  let alt_dir = fnamemodify(file, ':h:h') . '/' . (tag ==# 'autoload' ? 'plugin' : 'autoload')
+  let alt_file = alt_dir . '/' . fnamemodify(file, ':t') 
   " call s:edit(alt_file)
-  execute 'edit ' . alt_file
+  execute 'edit' alt_file
 endfunction
 
 function! s:find_nearest_readme() abort

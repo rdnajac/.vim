@@ -3,21 +3,12 @@ T1 = vim.uv.hrtime()
 vim.loader.enable()
 _G.pp = vim.print
 
-require('nvim.ui.2')
-
 vim.cmd([[colorscheme tokyonight]])
 vim.cmd([[source ~/.vim/vimrc]])
 
 require('snacks')
-
 _G.dd = Snacks.debug
 _G.bt = dd.backtrace
-_G.nv = vim
-  .iter(vim.fn.readdir(vim.fn.stdpath('config') .. '/lua/nvim'))
-  :map(function(fname) return vim.fn.fnamemodify(fname, ':r') end)
-  :map(function(mname) return mname, require('nvim.' .. mname) end)
-  :fold({}, rawset) -- inits an empty table and maps `nv[nvim.k] = v`
-
 Snacks.setup({
   dashboard = {
     sections = {
@@ -50,8 +41,7 @@ Snacks.setup({
 })
 
 Plug({
-  nv.blink,
-  nv.keys.which,
+  require('nvim.keys.which'),
   -- { 'stevearc/conform.nvim', opts = {} },
   -- { 'stevearc/quicker.nvim', opts = {} },
   {
@@ -61,43 +51,26 @@ Plug({
     keys = { { '-', '<Cmd>Oil<CR>' } },
   },
   {
-    'folke/sidekick.nvim',
-    opts = function()
-      vim.schedule(vim.lsp.inline_completion.enable)
-      vim.cmd([[
-        nnoremap <expr> <Tab> v:lua.require'sidekick'.nes_jump_or_apply() ? '' : '<Tab>'
-        nnoremap <leader>ap <Cmd>lua require('sidekick.cli').prompt({ name = 'copilot' })<CR>
-        nnoremap <leader>at <Cmd>lua require('sidekick.cli').send({ name = 'copilot', msg = '{file}' })<CR>
-        xnoremap <leader>at <Cmd>lua require('sidekick.cli').send({ name = 'copilot', msg = '{this}' })<CR>
-      ]])
-      -- stylua: ignore
-      vim.keymap.set({'n','t','i','x'}, '<C-.>', function() require('sidekick.cli').focus('copilot') end, {})
-      return {}
-    end,
-    toggle = {
-      ['<leader>uN'] = {
-        name = 'Sidekick NES',
-        get = function() return require('sidekick.nes').enabled end,
-        set = function(state) require('sidekick.nes').enable(state) end,
-      },
-    },
+    'Saghen/blink.cmp',
+    build = 'BlinkCmp build',
+    opts = require('opts.blink'),
   },
-  -- {
-  --   'folke/flash.nvim',
-  --   ---@type Flash.Config
-  --   opts = {},
-  --   keys = function()
-  --     local flash = require('flash')
-  --     -- stylua: ignore
-  --     return {
-  --       { { 'o', 'x', 'n' }, '<C-J>', flash.jump,  {} },
-  --       { { 'o', 'x', 'n' }, '<C-F>', flash.treesitter, {} },
-  --       { { 'o', 'x' }, 'R',     flash.treesitter_search, {} },
-  --       { { 'o' },      'r',     flash.remote,     {} },
-  --       { { 'c' },      '<C-F>', flash.toggle,     {} },
-  --     }
-  --   end,
-  -- },
+  {
+    'folke/flash.nvim',
+    ---@type Flash.Config
+    opts = {},
+    keys = function()
+      local flash = require('flash')
+      return {
+        { { 'n' }, 'F', flash.jump, {} },
+        { { 'o', 'x', 'n' }, '<C-J>', flash.jump, {} },
+        { { 'o', 'x' }, '<C-F>', flash.treesitter, {} },
+        { { 'o', 'x' }, 'R', flash.treesitter_search, {} },
+        { { 'o' }, 'r', flash.remote, {} },
+        { { 'c' }, '<C-F>', flash.toggle, {} },
+      }
+    end,
+  },
   {
     'R-nvim/R.nvim',
     enabled = true,
@@ -159,11 +132,5 @@ Plug({
   },
 })
 
--- lazy load treesitter plugins when not opening a file
-if vim.fn.argc(-1) == 0 then
-  Plug(nv.treesitter.specs)
-else
-  vim.schedule(function() Plug(nv.treesitter.specs) end)
-end
-
 require('mason').setup()
+_G.nv = require('nvim')

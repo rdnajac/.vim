@@ -1,20 +1,13 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
 
----@class status.component
----@field [1] string|fun(table?):string
----@field color? string|table
----@field cond? fun():boolean
-
 local M = {}
 
--- FIXME:
----@param str string
 ---@param group string
----@param inhereit boolean?
-local function highlight(str, group, inhereit)
-  -- if inhereit then use %#HLname# else use %$HLname$.
-  local hl = inhereit and '%#' .. group .. '#' or '%$' .. group .. '$'
-  return hl .. str
+---@param str string
+---@param inherit boolean?
+local function highlight(group, str, inherit)
+  local fmt = inherit and '%%#%s#%s' or '%%$%s$%s'
+  return fmt:format(group, str)
 end
 
 local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', sec, str) end

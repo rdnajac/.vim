@@ -148,7 +148,7 @@ else
   set jumpoptions+=view
   set mousescroll=hor:0
   set startofline " default in vim
-  set smoothscroll
+  " set smoothscroll
   set pumblend=0
   set pumborder=rounded
   set pumheight=10
@@ -222,23 +222,25 @@ function! s:cabbrev(lhs, rhs)
 	\ a:lhs, 1+len(a:lhs), s:singlequote(a:rhs), s:singlequote(a:lhs))
 endfunction
 
-call s:cabbrev('vv',  'verbose')
-call s:cabbrev('vvc', 'verbose cmap')
-call s:cabbrev('vvi', 'verbose imap')
-call s:cabbrev('vvn', 'verbose nmap')
-call s:cabbrev('vvo', 'verbose omap')
-call s:cabbrev('vvt', 'verbose tmap')
-call s:cabbrev('vvx', 'verbose xmap')
 call s:cabbrev('f', 'find')
+call s:cabbrev('dd',  'echom')
+call s:cabbrev('vv',  'verbose')
+call s:cabbrev('vc', 'verbose cmap')
+call s:cabbrev('vi', 'verbose imap')
+call s:cabbrev('vn', 'verbose nmap')
+call s:cabbrev('vo', 'verbose omap')
+call s:cabbrev('vt', 'verbose tmap')
+call s:cabbrev('vx', 'verbose xmap')
 if has('nvim')
   call s:cabbrev('man', 'Man')
-  call s:cabbrev('S', 'lua Snacks.picker.')
+  call s:cabbrev('S', 'lua Snacks.picker')
+" cnoreabbrev S lua Snacks.picker.
 endif
 " }}}1
 
 " Section: keymaps {{{1
-let g:mapleader = '\'
-let g:maplocalleader = ','
+let g:mapleader = ','
+let g:maplocalleader = '/'
 xmap <Space> <leader>
 nnoremap <Space> :
 nnoremap : ,
@@ -253,12 +255,13 @@ xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
 
-" nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
-nnoremap zq <Cmd>ALEFix<CR>
+nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
+nnoremap ZF <Cmd>echom 'formatting...'<Bar>ALEFix<CR>
+nnoremap ZW <Cmd>echom 'formatting and saving...'<Bar>ALEFix<Bar>write!<CR>
 nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 " TODO: diff?
-" nnoremap dp     dp]c
+" nnoremap dp     dp']c
 " nnoremap do     do]c
 
 " `<leader>` {{{2
@@ -324,8 +327,7 @@ nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
-nnoremap <leader><Bslash> <Cmd>call edit#readme()<CR>
-nnoremap <Bslash><leader> <Cmd>call edit#readme()<CR>
+nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
 
 " change/delete current word {{{2
 nnoremap c*   *``cgn
@@ -388,6 +390,7 @@ else
   packadd! editorconfig
   packadd! hlyank
 endif
+packadd! vim-symbiosis
 
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
@@ -404,6 +407,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-scriptease'
 " Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-tbone'
@@ -412,7 +416,6 @@ Plug 'tpope/vim-unimpaired'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'dstein64/vim-startuptime'
 " Plug 'vuciv/golf'
-Plug 'tpope/vim-scriptease'
 Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'romainl/vim-qf.git'
 if !has('nvim')
@@ -433,11 +436,11 @@ else
   " Plug 'j-hui/fidget.nvim'
   " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
 endif
+Plug 'iamcco/markdown-preview.nvim'
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
-
-" vim: fdm=indent fdl=1

@@ -7,7 +7,13 @@ function M.new() return setmetatable({}, { __index = M }) end
 
 function M:get_trigger_characters() return { '"', "'", '.', '/' } end
 
-function M:enabled() return require('lazydev.buf').attached[vim.api.nvim_get_current_buf()] ~= nil end
+function M:enabled()
+  local ok, lazybuf = pcall(require, 'lazydev.buf')
+  if not (ok and lazybuf) then
+    return false
+  end
+  return lazybuf.attached[vim.api.nvim_get_current_buf()] ~= nil
+end
 
 ---@param ctx blink.cmp.Context
 ---@param callback fun(...: any)

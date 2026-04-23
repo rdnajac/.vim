@@ -1,4 +1,3 @@
--- nv.tbl_add_inverse_lookup
 -- vim.tbl_add_reverse_lookup(M.kinds)
 -- shared method is deprecated because it is not type safe
 -- https://github.com/neovim/neovim/pull/24564

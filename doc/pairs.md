@@ -1,10 +1,8 @@
-# keymaps
-
-## key pairs in normal mode
+# key pairs in normal mode
 
 [source](https://gist.github.com/romainl/1f93db9dc976ba851bbb)
 
-### c/d/y
+## c/d/y
 
 - cd cm co cp cq cr cs cu cx cy cz
 - dc    dm    dq dr ds du dx dy dz
@@ -16,7 +14,7 @@
 | d   | ✅     | **dd** | ✅  |
 | m 
 
-### g
+## g
 
 - `gb` - open github page from user/repo
 - `gc` - commenting
@@ -24,11 +22,11 @@
 - `gs` - substutite
 - `gy` - yank and comment line
 
-### v
+## v
 
 - vm vo vq `vv` vz
 
-### z/Z
+## z/Z
 
 - zq is free
 - **ZQ** = `:q!`

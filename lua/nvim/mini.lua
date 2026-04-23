@@ -172,13 +172,15 @@ local miniopts = {
       desc = 'MiniSurround Markdown Link',
     })
     return {
+      -- from `LazyVim`
       mappings = {
-        add = '',
-        delete = 'dS',
-        find = '',
-        find_left = '',
-        highlight = '',
-        replace = 'cS',
+        add = 'gsa',
+        delete = 'gsd',
+        find = 'gsf',
+        find_left = 'gsF',
+        highlight = 'gsh',
+        replace = 'gsc', -- change
+        -- update_n_lines = 'gsn',
         suffix_last = '',
         suffix_next = '',
       },
@@ -193,7 +195,9 @@ local miniopts = {
 local M = {}
 
 local has_mini_lib = vim.uv.fs_stat(vim.env.PACKDIR .. '/mini.nvim')
+
 M.lazydev = has_mini_lib and { { path = 'mini.nvim', words = { 'Mini.*' } } } or {}
+
 vim.iter(miniopts):each(function(k, v)
   local minimod = 'mini.' .. k
   if not has_mini_lib then

@@ -35,3 +35,9 @@ inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 xnoremap <leader>k :call fn#hyperlink#()<CR>
 
 let b:surround_96 = "```\n\r\n```"
+
+" move to the beginning of the line before dialing the header level
+if exists('g:speeddating_handlers')
+  nmap <buffer><expr> <C-a> (getline('.') =~# '^#' ? '<Home>' : '')..'<Plug>SpeedDatingUp'
+  nmap <buffer><expr> <C-x> (getline('.') =~# '^#' ? '<Home>' : '')..'<Plug>SpeedDatingDown'
+endif

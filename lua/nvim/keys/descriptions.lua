@@ -14,6 +14,6 @@ return {
   gx = 'Open with system app',
   yo = 'Toggle',
   ZQ = ':q!',
-  ZR = ':restart?',
+  ZR = ':restart',
   ZZ = ':x',
 }

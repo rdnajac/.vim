@@ -3,9 +3,9 @@ nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
 let s:dirs = {
       \ '~': $HOME,
-      \ 'G': $HOME.'/GitHub/',
+      \ 'G': $HOME..'/GitHub/',
       \ 'V': $VIMRUNTIME,
-      \ 'v': g:vimrc#dir,
+      \ 'v': $VIMRUNTIME..'/lua/vim',
       \ 'p': g:plug#home,
       \ 'B': &backupdir,
       \ '.': '~/.local/share/chezmoi/',

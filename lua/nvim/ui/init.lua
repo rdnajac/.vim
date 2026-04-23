@@ -1,3 +1,10 @@
+require('nvim.ui.2')
+
+vim.schedule(function()
+  vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
+  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
+end)
+
 local M = {
   icons = require('nvim.ui.icons'),
   status = require('nvim.ui.status'),
@@ -16,34 +23,20 @@ M.winbar = function()
   return M.status.render(a(), b(), ' ' .. c()) .. '%#WinBar# '
 end
 
-vim.schedule(function()
-  vim.o.statusline = [[%{%v:lua.nv.ui.status.line()%}]]
-  vim.o.winbar = [[%{%v:lua.nv.ui.winbar()%}]]
-  ---@type render.md.UserConfig
-  vim.g.render_markdown_config = {
-    file_types = { 'markdown', 'rmd', 'quarto' },
-    latex = { enabled = false },
-    bullet = {
-      enabled = false,
-      right_pad = 1,
-    },
-    -- checkbox = { enabled = false },
-    completions = { lsp = { enabled = false } },
-    html = {
-      comment = { conceal = false },
-      enabled = false,
-    },
-  }
-  Plug({
-    'MeanderingProgrammer/render-markdown.nvim',
-    toggle = {
-      ['yom'] = {
-        name = 'Render Markdown',
-        get = function() return require('render-markdown.state').enabled end,
-        set = function(state) return require('render-markdown').set(state) end,
-      },
-    },
-  })
-end)
+---@type render.md.UserConfig
+vim.g.render_markdown_config = {
+  file_types = { 'markdown', 'rmd', 'quarto' },
+  latex = { enabled = false },
+  bullet = {
+    enabled = false,
+    right_pad = 1,
+  },
+  -- checkbox = { enabled = false },
+  completions = { lsp = { enabled = false } },
+  html = {
+    comment = { conceal = false },
+    enabled = false,
+  },
+}
 
 return M
