@@ -1,35 +1,5 @@
-vim.cmd([[
-nnoremap ZB <Cmd>lua Snacks.bufdelete()<CR>
-nnoremap Zb <Cmd>lua Snacks.bufdelete.other()<CR>
-nnoremap ,. <Cmd>lua Snacks.scratch.open()<CR>
-nnoremap ,, <Cmd>lua Snacks.picker.buffers()<CR>
-nnoremap ,/ <Cmd>lua Snacks.picker.grep()<CR>
-xnoremap /  <Cmd>lua Snacks.picker.grep_word()<CR>
-inoremap <C-x><C-i> <Cmd>lua Snacks.picker.icons({ layout = require('munchies').insert })<CR>
-inoremap <C-x><C-z> <Cmd>lua Snacks.picker.registers({ layout = require('munchies').insert })<CR>
-]])
+local icons = { buffers = '', explorer = '󰙅', files = '', grep = '󰱽' }
 
-vim.schedule(function()
-  Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
-  Snacks.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, { lsp = {} })
-  Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
-
-  -- normal and terminal mode keymaps
-  vim
-    .iter({
-      ['<C-Bslash>'] = function() Snacks.terminal.focus() end,
-      [']]'] = function() Snacks.words.jump(vim.v.count1) end,
-      ['[['] = function() Snacks.words.jump(-vim.v.count1) end,
-    })
-    :each(function(lhs, rhs) vim.keymap.set({ 'n', 't' }, lhs, rhs) end)
-end)
-
-  local icons= {
-    buffers = '',
-    explorer = '󰙅',
-    files = '',
-    grep = '󰱽',
-  }
 local function title(self)
   local picker = self.source
   local icon = icons[picker] or ''
@@ -96,26 +66,59 @@ local actions = {
   inspect_opts = function(self) Snacks.debug.inspect(self.opts) end,
 }
 
-vim.schedule(function()
-  Snacks.config.style('lazygit', { height = 0, width = 0 })
-  Snacks.keymap.set({ 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'markdown' })
-  vim.iter(require('munchies.toggles')):each(function(k, v)
-    local toggle
-    if type(v) == 'function' then
-      toggle = v()
-    elseif type(v) == 'table' then
-      toggle = Snacks.toggle.new(v)
-    elseif type(v) == 'string' then
-      toggle = Snacks.toggle.option(v)
-    end
-    if not toggle then
-      error(('Invalid toggle for key: %s'):format(k))
-    end
-    toggle:map(k)
-  end)
-end)
+local layouts = {
+  -- pop-up for selecting text in insert mode
+  -- layout = require(
+  insert = {
+    hidden = { 'preview' },
+    layout = {
+      reverse = true,
+      backdrop = false,
+      relative = 'cursor',
+      row = 1,
+      width = 0.3,
+      min_width = 48,
+      height = 0.3,
+      border = 'none',
+      box = 'vertical',
+      { win = 'input', height = 1, border = 'rounded', wo = { cursorline = false } },
+      { win = 'list', border = 'rounded' },
+      { win = 'preview', border = 'rounded', title = '{preview:Preview}' },
+    },
+  },
 
-local layouts = require('munchies.layouts')
+  mylayout = {
+    preset = 'ivy',
+    reverse = true,
+    ---@type snacks.layout.Box[]
+    layout = {
+      box = 'vertical',
+      row = vim.o.lines - math.floor(0.4 * vim.o.lines),
+      height = 0.4,
+      {
+        box = 'horizontal',
+        border = 'rounded',
+        title = ' {title} {live} {flags}',
+        title_pos = 'left',
+        {
+          win = 'list',
+          border = 'top',
+        },
+        {
+          win = 'preview',
+          border = 'top',
+          title = '{preview:Preview}',
+          -- title = '{title}',
+          title_pos = 'right',
+          width = 0.6,
+          wo = { number = false },
+        },
+      },
+      { win = 'input', height = 1 },
+    },
+  },
+}
+
 return {
   insert = layouts.insert,
   mylayout = layouts.mylayout,
@@ -144,7 +147,42 @@ return {
       explorer = {
         ignored = true, -- always show git ignored files
         jump = { close = true }, -- close buffer after selecting a file
-        on_show = require('munchies.explorer').floating_preview,
+        --- https://github.com/folke/snacks.nvim/discussions/1306#discussioncomment-12248922
+        on_show = function(self)
+          self.layout.wins.preview.layout = false
+          local root = self.layout.root
+          local preview = self.preview.win
+          preview.opts.relative = 'editor'
+
+          local update = function()
+            local border = preview:border_size()
+            preview.opts.row = vim.api.nvim_win_get_position(root.win)[1]
+            preview.opts.col = vim.api.nvim_win_get_width(root.win)
+            preview.opts.height = 0.8
+            preview.opts.width = math.max(
+              20,
+              math.min(100, vim.o.columns - border.left - border.right - preview.opts.col)
+            )
+            if preview:valid() then
+              preview:update()
+            end
+          end
+
+          local orig_on_win = preview.opts.on_win --[[@as function]]
+          preview.opts.on_win = function(win)
+            orig_on_win(win)
+            update()
+          end
+
+          root:on('WinResized', update)
+          root:on('WinLeave', function()
+            vim.schedule(function()
+              if not self:is_focused() then
+                self:toggle('preview', { enable = false })
+              end
+            end)
+          end)
+        end,
         win = {
           preview = { border = 'rounded', focusable = false },
           list = {

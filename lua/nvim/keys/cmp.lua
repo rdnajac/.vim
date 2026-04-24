@@ -3,9 +3,6 @@ vim.o.complete = '.,w,b,kspell' -- use fewer sources
 vim.o.completeopt = 'menuone,noselect,fuzzy,nosort' -- set custom behavior
 vim.o.completetimeout = 100 -- limit sources delay
 
--- not needed with automatic loading
-vim.lsp.enable('copilot')
-
 vim.keymap.set('i', '<Tab>', function()
   if not vim.lsp.inline_completion.get() then
     return '<Tab>'

@@ -1,5 +1,4 @@
 local M = {}
-
 local header = [[
 ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗
 ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║
@@ -29,6 +28,26 @@ M.header = function(cols)
       end)
       :join('\n')
 end
+
+M.opts = {
+  sections = {
+    { section = 'header' },
+    { icon = '󰱼 ', title = 'Files', { section = 'recent_files', indent = 2 } },
+    { icon = ' ', desc = 'Health ', key = 'H', action = ':checkhealth' },
+    { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
+    { icon = ' ', desc = 'Mason  ', key = 'M', action = ':Mason' },
+    { icon = ' ', desc = 'News   ', key = 'N', action = ':News' },
+    { icon = ' ', desc = 'Update ', key = 'U', action = ':lua vim.pack.update()' },
+    {
+      section = 'terminal',
+      cmd = ('cowsay "%s"|sed "s/^/        /"'):format(
+        "The computing scientist's main challenge is not to get confused by the complexities of his own making"
+      ),
+      padding = 1,
+    },
+    { footer = tostring(vim.version()) },
+  },
+}
 
 --- default `Snacks.dashboard` errors because it unconditionally requires `lazy.nvim`
 function M.preload_lazy_stats()

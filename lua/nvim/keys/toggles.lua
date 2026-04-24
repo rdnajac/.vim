@@ -68,12 +68,4 @@ local M = {
   },
 }
 
--- if package.loaded['render-markdown'] then
---   M['yom'] = {
---     name = 'Render Markdown',
---     get = function() return require('render-markdown').get end,
---     set = function(state) return require('render-markdown').set(state) end,
---   }
--- end
-
 return M

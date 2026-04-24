@@ -1,8 +1,4 @@
-vim.cmd([[
-  command! Notifications lua Snacks.picker.notifications()
-]])
----@module "snacks"
-
+--- adds milliseconds to the timestamp and adds a border below the title
 ---@type snacks.notifier.render
 local style = function(buf, n, ctx)
   -- set up a buffer starting with two empty lines followed by the message
@@ -31,14 +27,3 @@ local style = function(buf, n, ctx)
     priority = 10,
   })
 end
-
----@type snacks.notifier.Config
-return {
-  -- keep?: fun(notif: snacks.notifier.Notif):boolean,
-  -- margin = { top = 0, right = 1, bottom = 0 },
-  style = style,
-  -- timeout = 3000,
-  -- top_down = false, -- default: true
-  -- height = { min = 1, max = 0.6 },
-  width = { min = 40, max = 0.6 },
-}

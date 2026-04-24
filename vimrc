@@ -148,7 +148,7 @@ else
   set jumpoptions+=view
   set mousescroll=hor:0
   set startofline " default in vim
-  " set smoothscroll
+  set smoothscroll
   set pumblend=0
   set pumborder=rounded
   set pumheight=10
@@ -428,7 +428,6 @@ if !has('nvim')
   Plug 'AndrewRadev/dsf.vim'
   Plug 'Konfekt/FastFold'
 else
-  Plug 'folke/snacks.nvim'
   Plug 'mason-org/mason.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'nvim-mini/mini.nvim'
@@ -436,7 +435,6 @@ else
   " Plug 'j-hui/fidget.nvim'
   " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
-  Plug 'MeanderingProgrammer/render-markdown.nvim'
 endif
 Plug 'iamcco/markdown-preview.nvim'
 Plug 'tpope/vim-dadbod'
