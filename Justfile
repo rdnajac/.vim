@@ -4,12 +4,14 @@ default:
 fmt:
   stylua -v .
 
-update:
-  cd ~/GitHub/neovim/ && make update
+upgrade-neovim:
+  cd ~/GitHub/neovim/ && rm -rf build/ && git pull && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=~/.local/ && make install
 
-upgrade:
+update-plugins:
   nvim -c 'lua vim.pack.update()'
-  # nvim --headless -c 'lua vim.pack.update(nil, {force=true})' -c 'q'
+
+update-plugins-force:
+  nvim --headless -c 'lua vim.pack.update(nil, {force=true})' -c 'q'
 
 profile *args:
   nvim -c 'set rtp+=/Users/rdn/.local/share/nvim/site/pack/core/opt/snacks.nvim' \
@@ -18,5 +20,3 @@ profile *args:
 act:
   act -P ubuntu-latest=ghcr.io/catthehacker/ubuntu:full-latest --container-architecture linux/amd64
 
-install-neovim:
-  ./bin/scripts/install-neovim.sh

@@ -1,6 +1,8 @@
-lua vim.schedule(function() require('symbiosis') end)
+" sy
+lua vim.schedule(require('symbiote').symbiosis)
 
-nnoremap <expr> <Tab> v:lua.require'sidekick'.nes_jump_or_apply() ? '' : '<Tab>'
+" -- nnoremap <expr> <Tab> v:lua.require'sidekick'.nes_jump_or_apply() ? '' : '<Tab>'
+
 if exists('g:force_copilot')
   nnoremap <leader>ap <Cmd>lua require('sidekick.cli').prompt({ name = 'copilot' })<CR>
   inoremap <leader>at <Cmd>lua require('sidekick.cli').send({ name = 'copilot', msg = '{file}' })<CR>

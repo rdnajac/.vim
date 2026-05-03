@@ -1,4 +1,10 @@
+" add this file to the runtimepath to override other versions of `plug.vim`
+" also see:
+" - `https://junegunn.github.io/vim-plug/`
+" - `https://github.com/tani/vim-jetpack`
+
 if !has('nvim')
+  " use vim-jetpack if on vim
   let s:jetpath = '~/.vim/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim'
   if !filereadable(expand(s:jetpath))
     execute printf('!curl -fLo %s --create-dirs %s', s:jetpath,
@@ -7,6 +13,7 @@ if !has('nvim')
   endif
   let g:plug#home = expand('~/.vim/pack/jetpack')
 else
+  " see `:h vim.pack-directory`
   let g:plug#home = stdpath('data') .. '/site/pack/core/opt'
   augroup plug.nvim
     autocmd!
@@ -14,6 +21,7 @@ else
   augroup END
 endif
 
+" export the ENV variable
 let $PACKDIR = g:plug#home
 
 function! plug#begin(...)

@@ -1,25 +1,4 @@
-local api, fn, fs = vim.api, vim.fn, vim.fs
-
--- TODO: implement one-time install func to hook into packinstall event
--- once = function() vim.cmd.MasonInstall(nv.util.tools()) end,
-local M = {
-  tools = function()
-    local tools = {
-      'actionlint', -- code action linter
-      'mmdc', -- mermaid diagrams
-      'tree-sitter-cli',
-    }
-
-    -- TODO: find other tools in lsp dir
-    local function other_tools()
-      local ret = {}
-      ret[#ret + 1] = 'stylua'
-      return ret
-    end
-
-    return vim.list_extend(tools, other_tools())
-  end,
-}
+local api, fn, fs, M = vim.api, vim.fn, vim.fs, {}
 
 M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
 M.camelCase = function(s)

@@ -6,23 +6,6 @@ vim.api.nvim_create_autocmd('PackChanged', {
 -- gets a value that may be the result of a function or a static value
 local function resolve(v) return vim.is_callable(v) and v() or v end
 
----@class plug.Spec
----@field [1] string `owner/repo`
----@field src? string derived from [1] if missing
----@field name? string derived from [1] if missing
----@field mod? string require name, derived from `name` if missing
----@field version? string|vim.VersionRange
----@field branch? string alias for `version`
----@field build? string|fun(ev: table):nil Callback after plugin is installed/updated.
----@field init? fun():nil
----@field opts? table|fun():table passed to the plugin's `setup()`
----@field keys? table|fun():table flexible keymap definitions
----@field toggle? table<string, table> Snacks.nvim toggles to register.
----@field enabled? boolean|fun():boolean whether the plugin should be loaded
-
----@class plug.Data passed as `spec.data` to `vim.pack.add()`
----@field build? string|fun():nil Callback after plugin is installed/updated.
-
 local Plugin = {}
 Plugin.__index = Plugin
 
@@ -94,7 +77,7 @@ end
 
 --- Wraps plugin packaging and setup, skipping disabled plugins.
 ---@param plugs string|plug.Spec|(string|plug.Spec)[]
-_G.Plug = function(plugs)
+local plug = function(plugs)
   vim.pack.add(vim.iter(vim.islist(plugs) and plugs or { plugs }):map(Plugin.new):totable(), {
     ---@param ev {spec: vim.pack.Spec, path: string}
     load = function(ev) ev.spec:load() end,

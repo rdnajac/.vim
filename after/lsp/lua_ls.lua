@@ -36,6 +36,7 @@ package.preload['lazydev.config'] = function()
     end
   end
 
+  -- TODO: just print the workspace if lua
   vim.schedule(function()
     local cmd = require('lazydev.cmd')
     vim.api.nvim_create_user_command(

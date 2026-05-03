@@ -16,7 +16,10 @@ local NEOVIM = {
   '╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝',
   --1234567890123456789012345678901234567890
 }
--- assert(header == table.concat(NEOVIM, '\n'))
+
+M.test_header = function()
+  assert(header == table.concat(NEOVIM, '\n'))
+end
 
 M.header = function(cols)
   return vim.o.cols > 56 and table.concat(NEOVIM, '\n')
@@ -52,12 +55,13 @@ M.opts = {
 --- default `Snacks.dashboard` errors because it unconditionally requires `lazy.nvim`
 function M.preload_lazy_stats()
   package.preload['lazy.stats'] = function()
-    local startuptime = ((_G.T2 or vim.uv.hrtime()) - T1) / 1e6
+    -- FIXME:
+    -- local startuptime = (vim.uv.hrtime()) - vim.v.starttime) / 1e6
+    local startuptime = (os.time() - (vim.v.starttime / 1e9))
     return {
       stats = function()
         local count = #vim.fn.readdir(vim.env.PACKDIR)
-        -- local loaded = #vim.tbl_filter(function(p) return not p.active end, vim.pack.get())
-        local loaded = _G.setup_count or 0
+        local loaded = #vim.tbl_filter(function(p) return not p.active end, vim.pack.get())
         return { count = count, loaded = loaded, startuptime = startuptime }
       end,
     }

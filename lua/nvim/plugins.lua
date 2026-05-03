@@ -1,17 +1,4 @@
 return {
-  -- { 'stevearc/conform.nvim', opts = {} },
-  -- { 'stevearc/quicker.nvim', opts = {} },
-  {
-    'stevearc/oil.nvim',
-    enabled = false,
-    opts = {},
-    keys = { { '-', '<Cmd>Oil<CR>' } },
-  },
-  {
-    'Saghen/blink.cmp',
-    build = 'BlinkCmp build',
-    opts = require('opts.blink'),
-  },
   {
     'folke/flash.nvim',
     ---@type Flash.Config
@@ -42,7 +29,7 @@ return {
             vim.keymap.set('n', 'yu', function()
               local row, col = unpack(vim.api.nvim_win_get_cursor(0))
               -- copy the <cword> to a new line below the current line
-              vim.api.nvim_buf_set_lines(0, row, row, true, {  vim.fn.expand('<cword>') })
+              vim.api.nvim_buf_set_lines(0, row, row, true, { vim.fn.expand('<cword>') })
               -- move cursor to the new line
               vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
               -- execute <Plug>RInsertLineOutput from normal mode

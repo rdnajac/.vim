@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "8b7418f6cee74150803dbe9ae1d5f74a09c8f0ca",
+      "rev": "989437bbc3d804f9b9fbd7b8d8f712ab3139ffaa",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
@@ -9,8 +9,12 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "90d14caca4ae557665ab105080c27d5f289a2e30",
+      "rev": "1617522ae80ca2436813da8afe2fc4b1280e975d",
       "src": "https://github.com/Saghen/blink.cmp.git"
+    },
+    "blink.lib": {
+      "rev": "dda2666685a5ac3598166577d2e34f1fff6b1637",
+      "src": "https://github.com/Saghen/blink.lib.git"
     },
     "chezmoi.vim": {
       "rev": "73b30df35c6b645ebd2e6a440eea8463ef3c3f47",
@@ -37,7 +41,7 @@
       "src": "https://github.com/iamcco/markdown-preview.nvim.git"
     },
     "mason.nvim": {
-      "rev": "b03fb0f20bc1d43daf558cda981a2be22e73ac42",
+      "rev": "cb8445f8ce85d957416c106b780efd51c6298f89",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.ai": {
@@ -65,7 +69,7 @@
       "src": "https://github.com/nvim-mini/mini.surround.git"
     },
     "nvim-lspconfig": {
-      "rev": "e146efacbafed3789ac568abcc5a981c5decaa58",
+      "rev": "f7e89f3d19fb436e1fbeff3bf4291eef35da94e3",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -81,11 +85,11 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "d67113f11384c0dad96fced2f7b91f1fc811e97f",
+      "rev": "3f3eea97b80839f629c951ca660ffd125bfa5b34",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {
-      "rev": "17447a05f9385e5f8372b61530f6f9329cb82421",
+      "rev": "208e1c5b8170c01fd1d07df0139322a76479b235",
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {

@@ -2,6 +2,8 @@ setlocal define=\\<\\%(\\i\\+\\s*()\\)\\@=
 setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
 call vimrc#apathy('path', split($PATH,':'))
 
+setlocal formatoptions-=o
+
 if executable('shfmt')
   if !exists('g:shellharden')
     let g:shellharden = 1

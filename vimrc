@@ -1,7 +1,6 @@
-" $MYVIMRC
 scriptencoding utf-8
-
-augroup vimrc
+" TODO: find and remove the multi-byte character in this file
+augroup vimrc " {{{
   set findfunc=file#find
   set ignorecase
   set jumpoptions+=stack
@@ -21,7 +20,7 @@ augroup vimrc
   set wildignore+=*.o,*.out,*.a,*.so
 
   au!
-  au BufReadPost vimrc call vimrc#setmarks()
+  " au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
 
   " restore cursor position upon reopening files
@@ -47,9 +46,9 @@ augroup vimrc
 
   " catch when vim doesn't terminate properly
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
-augroup END
+augroup END " }}}
 
-augroup vimrc.indent
+augroup vimrc.indent " {{{
   set breakindent
   set breakindentopt=list:1 " TODO: from minimax; keep?
   set linebreak
@@ -59,9 +58,9 @@ augroup vimrc.indent
   " autocmd FileType markdown,tex    setl sw=2 sts=2
   autocmd FileType cpp,cuda,python setl sw=4 sts=4
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
-augroup END
+augroup END " }}}
 
-augroup vimrc.ui
+augroup vimrc.ui  " {{{
   set number
   let &l:laststatus = has('nvim') ? 3 : 2
   set tabline=%!vimline#tabline#()
@@ -95,9 +94,9 @@ augroup vimrc.ui
   au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-augroup END
+augroup END " }}}
 
-augroup vimrc.fold
+augroup vimrc.fold " {{{
   " fillchars already reset, so append here
   set fillchars+=fold:\ ,
   set fillchars+=foldclose:▸,
@@ -118,16 +117,15 @@ augroup vimrc.fold
 
   autocmd!
   " autocmd FileType vim,lua setlocal
-augroup END
+augroup END " }}}
 
-augroup vimrc.format
+augroup vimrc.format " {{{
   " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
   " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
   set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
   autocmd!
   autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
-augroup END
-
+augroup END " }}}
 
 " Section: neovim {{{1
 " set undo if on nvim, or if on a machine not running nvim
@@ -330,14 +328,10 @@ nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
 
 " change/delete current word {{{2
-nnoremap c*   *``cgn
-nnoremap c#   *``cgN
-nnoremap cg* g*``cgn
-nnoremap cg# g*``cgN
-nnoremap d*   *``dgn
-nnoremap d#   *``dgN
-nnoremap dg* g*``dgn
-nnoremap dg# g*``dgN
+nnoremap c*  *``cgn
+nnoremap c#  *``cgN
+nnoremap d*  *``dgn
+nnoremap d#  *``dgN
 
 " substitutions {{{2
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file
@@ -379,7 +373,6 @@ onoremap af :<C-u>normal vaf<CR>
 " }}}
 " }}}1
 
-" Section: pack {{{1
 packadd! cfilter
 if has('nvim')
   packadd! nvim.difftool
@@ -390,7 +383,9 @@ else
   packadd! editorconfig
   packadd! hlyank
 endif
-packadd! vim-symbiosis
+
+packadd! vim-symbiote
+let g:force_copilot = 1
 
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
@@ -428,7 +423,6 @@ if !has('nvim')
   Plug 'AndrewRadev/dsf.vim'
   Plug 'Konfekt/FastFold'
 else
-  Plug 'mason-org/mason.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'nvim-mini/mini.nvim'
   " Plug 'b0o/SchemaStore.nvim'
@@ -442,3 +436,5 @@ Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
 " }}}1
+
+" vim: foldmethod=marker foldlevel=0
