@@ -22,7 +22,8 @@ function M.render(a, b, c)
   return table.concat({
     a and chroma(a, 'a') or '',
     b and chroma(sep .. ' ', 'ab') .. chroma(b, 'b') .. chroma(sep, 'bc') or chroma(sep, 'c'),
-    c and chroma(c, 'c') .. chroma(sep, 'cN') or '',
+    -- c and chroma(c, 'c') .. chroma(sep, 'cN') or '',
+    c and chroma(c, 'c') .. chroma('', 'cN') or '',
   })
 end
 

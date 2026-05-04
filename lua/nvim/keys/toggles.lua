@@ -14,11 +14,6 @@ local M = {
     end,
   },
   --*yoc*	'cursorline'
-  ['yoC'] = {
-    name = 'Inline Completion',
-    get = function() return vim.lsp.inline_completion.is_enabled() end,
-    set = function(state) vim.lsp.inline_completion.enable(state) end,
-  },
   --*yod*	'diff' (actually |:diffthis| / |:diffoff|)
   ['yoD'] = Snacks.toggle.diagnostics,
   --*yoh*	'hlsearch'

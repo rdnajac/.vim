@@ -142,7 +142,7 @@ else
   set backupext=.bak
   set backupdir=~/.local/state/nvim/backup//
   set backupskip+=~/.cache/*
-  " set cmdheight=0
+  set cmdheight=0
   set jumpoptions+=view
   set mousescroll=hor:0
   set startofline " default in vim
@@ -153,6 +153,8 @@ else
   set winborder=rounded
   " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
+  set statusline=%{%v:lua.require'nvim.ui.status'.line()%}
+  set     winbar=%{%v:lua.require'nvim.ui'.winbar()%}
 endif
 
 " Section: commands/config {{{1
@@ -232,7 +234,7 @@ call s:cabbrev('vx', 'verbose xmap')
 if has('nvim')
   call s:cabbrev('man', 'Man')
   call s:cabbrev('S', 'lua Snacks.picker')
-" cnoreabbrev S lua Snacks.picker.
+  " cnoreabbrev S lua Snacks.picker.
 endif
 " }}}1
 
@@ -373,15 +375,16 @@ onoremap af :<C-u>normal vaf<CR>
 " }}}
 " }}}1
 
+" Section: plugins {{{1
 packadd! cfilter
-if has('nvim')
-  packadd! nvim.difftool
-  packadd! nvim.tohtml
-  packadd! nvim.undotree
-else
+if !has('nvim')
   packadd! comment
   packadd! editorconfig
   packadd! hlyank
+else
+  packadd! nvim.difftool
+  packadd! nvim.tohtml
+  packadd! nvim.undotree
 endif
 
 packadd! vim-symbiote
@@ -423,6 +426,7 @@ if !has('nvim')
   Plug 'AndrewRadev/dsf.vim'
   Plug 'Konfekt/FastFold'
 else
+  Plug 'folke/snacks.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'nvim-mini/mini.nvim'
   " Plug 'b0o/SchemaStore.nvim'

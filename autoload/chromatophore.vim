@@ -34,11 +34,9 @@ if has('nvim')
   " call s:add('SnacksIndentScope')
 endif
 
-
-function! s:hl_set(name, fg, bg, ...) abort
-  let attr = a:0 ? a:1 : ''
+function! s:hi(name, fg, bg, ...) abort
   execute printf('highlight %s guifg=%s guibg=%s%s',
-	\ a:name, a:fg, a:bg, empty(attr) ? '' : ' gui='..attr)
+	\ a:name, a:fg, a:bg, a:0 ? ' gui='..a:1 : '')
 endfunction
 
 function! chromatophore#setup() abort
@@ -49,17 +47,19 @@ function! chromatophore#setup() abort
 
   highlight! Black guifg=black
   " highlight! Chromatophore_a guifg=
-  call s:hl_set('Chromatophore',    mode_color, 'NONE')
-  call s:hl_set('ChromatophoreB',   mode_color, 'NONE', 'bold')
-  " call s:hl_set('Chromatophore_a',  mode_color, eigengrau,'bold,reverse')
-  call s:hl_set('Chromatophore_a',  black,  mode_color, 'bold')
-  call s:hl_set('Chromatophore_b',  mode_color, grey,       'bold')
-  call s:hl_set('Chromatophore_c',  mode_color, eigengrau)
-  call s:hl_set('Chromatophore_z',  mode_color, eigengrau, 'bold')
-  call s:hl_set('Chromatophore_ab', mode_color, grey)
-  call s:hl_set('Chromatophore_bc', grey,       eigengrau)
-  call s:hl_set('Chromatophore_cN', eigengrau, 'NONE')
-  call s:hl_set('Chromatophore_ac', mode_color, eigengrau)
+  call s:hi('Chromatophore',    mode_color, 'NONE')
+  call s:hi('ChromatophoreB',   mode_color, 'NONE', 'bold')
+  " call s:hi('Chromatophore_a',  mode_color, eigengrau,'bold,reverse')
+  call s:hi('Chromatophore_a',  black,  mode_color, 'bold')
+  call s:hi('Chromatophore_b',  mode_color, grey,       'bold')
+  " call s:hi('Chromatophore_c',  mode_color, eigengrau)
+  call s:hi('Chromatophore_c',  mode_color, 'NONE')
+  call s:hi('Chromatophore_z',  mode_color, eigengrau, 'bold')
+  call s:hi('Chromatophore_ab', mode_color, grey)
+  call s:hi('Chromatophore_bc', grey,       eigengrau)
+  call s:hi('Chromatophore_bc', grey,      'NONE')
+  call s:hi('Chromatophore_cN', eigengrau, 'NONE')
+  call s:hi('Chromatophore_ac', mode_color, eigengrau)
   for group in g:chromatophores
     exe $'highlight! link {group} Chromatophore'
   endfor

@@ -73,14 +73,6 @@ M.fuzzy = {
 }
 
 M.keymap = {
-  ['<Tab>'] = {
-    function(cmp) return cmp.snippet_active() and cmp.accept() or cmp.select_and_accept() end,
-    'snippet_forward',
-    function() return package.loaded['sidekick'] and require('sidekick').nes_jump_or_apply() end,
-    function() return vim.lsp.inline_completion.get() end,
-    'fallback',
-  },
-
   -- overrides default `:h i_CTRL-R`
   -- ['<C-R>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
   ['<C-x><C-r>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
