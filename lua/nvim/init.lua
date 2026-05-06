@@ -9,7 +9,6 @@ local M = {}
 M.ui = require('nvim.ui')
 M.keys = require('nvim.keys')
 M.mini = require('nvim.mini')
-M.diagnostics = require('nvim.diagnostics')
 M.lsp = require('nvim.lsp')
 M.treesitter = require('nvim.treesitter')
 

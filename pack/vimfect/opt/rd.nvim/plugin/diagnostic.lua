@@ -1,10 +1,9 @@
-local severity_map = {
-  E = vim.diagnostic.severity.ERROR,
-  W = vim.diagnostic.severity.WARN,
-  I = vim.diagnostic.severity.INFO,
-}
-
 local severity = vim.diagnostic.severity
+local severity_map = {
+  E = severity.ERROR,
+  W = severity.WARN,
+  I = severity.INFO,
+}
 
 -- TODO: use table invert fn
 local icons = {
@@ -12,10 +11,10 @@ local icons = {
   [severity.WARN] = '',
   [severity.INFO] = '',
   [severity.HINT] = '',
-  Error = '',
-  Warn = '',
-  Info = '',
-  Hint = '',
+  -- Error = '',
+  -- Warn = '',
+  -- Info = '',
+  -- Hint = '',
 }
 
 local hl_map = {
@@ -25,7 +24,20 @@ local hl_map = {
   [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
 }
 
-package.preload['ale.diagnostics'] = function()
+local M = {}
+
+---@type  vim.diagnostic.Opts
+M.opts = {
+  float = { source = true },
+  underline = false,
+  virtual_text = false,
+  severity_sort = true,
+  signs = { text = icons },
+}
+
+vim.diagnostic.config(M.opts)
+
+M.ale = function()
   return {
     --- Send diagnostics to the Neovim diagnostics API
     ---@param buf number The buffer number to retreive the variable for.
@@ -56,22 +68,6 @@ package.preload['ale.diagnostics'] = function()
   }
 end
 
-vim.schedule(
-  function()
-    vim.diagnostic.config({
-      float = { source = true },
-      underline = false,
-      virtual_text = false,
-      severity_sort = true,
-      signs = { text = icons },
-      status = {
-        format = require('nvim.ui.status').render_counts(icons, {
-          'DiagnosticSignError',
-          'DiagnosticSignWarn',
-          'DiagnosticSignInfo',
-          'DiagnosticSignHint',
-        }),
-      },
-    })
-  end
-)
+package.preload['ale.diagnostics'] = M.ale
+
+return M

@@ -136,7 +136,6 @@ if !has('nvim')
   call vim#sensible#()
   color scheme
 else
-  command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
   " set autocomplete
   set backup
   set backupext=.bak
@@ -155,6 +154,7 @@ else
   " aunmenu PopUp | autocmd! nvim.popupmenu
   set statusline=%{%v:lua.require'nvim.ui.status'.line()%}
   set     winbar=%{%v:lua.require'nvim.ui'.winbar()%}
+  command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
 endif
 
 " Section: commands/config {{{1
@@ -387,6 +387,8 @@ else
   packadd! nvim.undotree
 endif
 
+packadd! munchies.nvim
+packadd! rd.nvim
 packadd! vim-symbiote
 let g:force_copilot = 1
 

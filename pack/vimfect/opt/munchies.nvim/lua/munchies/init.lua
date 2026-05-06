@@ -119,8 +119,6 @@ local layouts = {
   },
 }
 
-vim.schedule(function() Snacks.config.style('lazygit', { height = 0, width = 0 }) end)
-
 return {
   insert = layouts.insert,
   mylayout = layouts.mylayout,
