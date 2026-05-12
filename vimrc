@@ -174,17 +174,6 @@ let g:vimtex_format_enabled = 1
 let g:vimtex_mappings_disable = {'n': ['K']}
 let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
 
-let g:eunuch_interpreters = {
-      \ '.':      '/bin/sh',
-      \ 'sh':     'bash',
-      \ 'bash':   'bash',
-      \ 'lua':    'nvim -l',
-      \ 'python': 'python3',
-      \ 'r':      'Rscript',
-      \ 'rmd':    'Rscript',
-      \ 'zsh':    'zsh',
-      \ }
-
 " set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
 " set completeopt+=preinsert
 " More info here: |cmdline-completion|; default: `wildmode=full`
