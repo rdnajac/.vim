@@ -1,7 +1,7 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "fc42c220764268cfa28a2a17a776bb5f4eb94f46",
+      "rev": "2d0cd152800ced779caaba4684a42efae81203b5",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
@@ -9,7 +9,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "d3874d2a13aa19b095bdd10d37a82a8f0aa7cad3",
+      "rev": "2ef3db111181c5eef22a462aa0122349a6027f28",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -41,35 +41,35 @@
       "src": "https://github.com/iamcco/markdown-preview.nvim.git"
     },
     "mason.nvim": {
-      "rev": "cb8445f8ce85d957416c106b780efd51c6298f89",
+      "rev": "e54f5bf5f12c560da31c17eee5b3e1bd369f3ff9",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.ai": {
-      "rev": "7e10ce8468c0fce4f527ae2c0e5c484f7667f73d",
+      "rev": "a783ce6e1a5b3bc90519f20b51f4a5f6702734af",
       "src": "https://github.com/nvim-mini/mini.ai.git"
     },
     "mini.align": {
-      "rev": "6f3c69cd57134ad8fbf1e85dcdc90cb37a8c75c8",
+      "rev": "c701192658ddac4e3b20956a964c2b03157b5e51",
       "src": "https://github.com/nvim-mini/mini.align.git"
     },
     "mini.clue": {
-      "rev": "43bd6cf1c3ccdea46d403c32dbc4629fa6afa09d",
+      "rev": "f6978fb031023ee0b0aeb2abdb44abb87577bf38",
       "src": "https://github.com/nvim-mini/mini.clue.git"
     },
     "mini.hipatterns": {
-      "rev": "9eff319bbe66adfaf781a0d0e174baa08ba94909",
+      "rev": "35b632f6c138d720f29de87476361af44bed2198",
       "src": "https://github.com/nvim-mini/mini.hipatterns.git"
     },
     "mini.icons": {
-      "rev": "bac6317300e205335df425296570d84322730067",
+      "rev": "9c7b1b90b15bdd69c52f6e31889dbc9987c30ec4",
       "src": "https://github.com/nvim-mini/mini.icons.git"
     },
     "mini.surround": {
-      "rev": "2715e04bea3ec9244f15b421dc5b18c0fe326210",
+      "rev": "990ce30f724d08e79670107de6b915a3f1bb9a9b",
       "src": "https://github.com/nvim-mini/mini.surround.git"
     },
     "nvim-lspconfig": {
-      "rev": "31026a13eefb20681124706a79fc1df6bf11ab27",
+      "rev": "36bb266b006b570889f092d57dffad635741c122",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -85,7 +85,7 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "3f3eea97b80839f629c951ca660ffd125bfa5b34",
+      "rev": "629eb9533ec989d9d5c6cab8f3ad5372422c24e0",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "sidekick.nvim": {

@@ -1,9 +1,6 @@
 --- init.lua
-vim.cmd([[source ~/.vim/vimrc]])
-vim.cmd([[colorscheme tokyonight]])
-
-_G.dd = function(...) Snacks.debug.inspect(...) end
-_G.bt = function() Snacks.debug.backtrace() end
+vim.cmd([[so ~/.vim/vimrc]])
+vim.cmd([[colo tokyonight]])
 
 require('snacks').setup({
   -- bigfile = { enabled = true },
@@ -20,6 +17,6 @@ require('snacks').setup({
   words = { enabled = true },
 })
 
+_G.dd = Snacks.debug.inspect
+_G.bt = Snacks.debug.backtrace
 _G.nv = require('nvim')
-
-require('vim._core.ui2').enable({ msg = { target = 'msg' } })
