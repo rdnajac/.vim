@@ -1,11 +1,9 @@
-vim.g.transparent = true
-
 local M = {
   'folke/tokyonight.nvim',
-  opts = require('nvim.ui.tokyonight.opts'),
+  opts = require('nvim.tokyonight.opts'),
 }
 
-M.opts.plugins = require('nvim.ui.tokyonight.plugins')
+M.opts.plugins = require('nvim.tokyonight.plugins')
 
 --- Calls `require('tokyonight').setup`, merging passed opts with the defaults
 --- and storing the result on `require('tokyonight.config').options`
@@ -16,6 +14,7 @@ M.config_setup = function() require('tokyonight.config').setup(M.opts) end
 
 --- The actual setup function (called by `require.('tokyonight').load`)
 --- opts are merged with defaults, but not stored
+---
 ---@return ColorScheme, tokyonight.Highlights, tokyonight.Config
 M.theme_setup = function() return require('tokyonight.theme').setup(M.opts) end
 

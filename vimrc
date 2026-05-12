@@ -142,7 +142,7 @@ else
   set backupext=.bak
   set backupdir=~/.local/state/nvim/backup//
   set backupskip+=~/.cache/*
-  set cmdheight=0
+  " set cmdheight=0
   set jumpoptions+=view
   set mousescroll=hor:0
   set startofline " default in vim
@@ -153,8 +153,8 @@ else
   set winborder=rounded
   " uncomment to disable the default popup menu
   " aunmenu PopUp | autocmd! nvim.popupmenu
-  set statusline=%{%v:lua.require'nvim.ui.status'.line()%}
-  set     winbar=%{%v:lua.require'nvim.ui'.winbar()%}
+  set statusline=%{%v:lua.require'nvim'.statusline()%}
+  set     winbar=%{%v:lua.require'nvim'.winbar()%}
   command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
 endif
 

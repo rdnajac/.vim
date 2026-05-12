@@ -29,3 +29,6 @@ nnoremap <buffer> <localleader>rq :<C-U>RSend quarto::quarto_preview(file="<C-R>
 
 " hi clear RCodeBlock
 " hi clear RCodeComment
+if has('nvim')
+  lua require('nvim.r')
+endif

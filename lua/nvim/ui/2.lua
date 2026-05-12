@@ -20,6 +20,7 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
 local kinds = {
   [''] = nil,
   ['empty'] = nil,
+  ['bufwrite'] = 'cmd',
   ['confirm'] = nil,
   ['emsg'] = nil,
   ['echo'] = nil,
