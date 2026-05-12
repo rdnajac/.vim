@@ -9,7 +9,7 @@ nmap cQ <Cmd>call vim#with#savedView("normal cs'\"")<CR>
 
 nmap dsf dSf
 
-if !nvim#has_global('MiniSurround')
+if !n#vim_has_global('MiniSurround')
   nmap ys sa
   nmap ds sd
   nmap cs sr

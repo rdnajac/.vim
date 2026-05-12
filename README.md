@@ -58,6 +58,23 @@ $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
 $$
 
+## netrw
+
+`h: netrw` provides 'ssh hints':
+
+- <http://thomer.com/howtos/netrw_ssh.html>
+- <http://usevim.com/2012/03/16/editing-remote-files/>
+
+If the second is offline, here is the archive:
+
+- <https://web.archive.org/web/20120319233142/https://www.usevim.com/2012/03/16/editing-remote-files/>
+
+Also read:
+
+- `:h netrw-netrc`
+- `:h netrw-ssh-hack`
+- `:h netrw_ssh_cmd`
+
 ## Bugs
 
 ### vint

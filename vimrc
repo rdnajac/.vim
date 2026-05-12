@@ -61,6 +61,7 @@ augroup vimrc.indent " {{{
 augroup END " }}}
 
 augroup vimrc.ui  " {{{
+  " set title
   set number
   let &l:laststatus = has('nvim') ? 3 : 2
   set tabline=%!vimline#tabline#()
