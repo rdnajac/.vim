@@ -47,33 +47,29 @@ local kinds = {
 
 -- require('vim._core.ui2').enable({ msg = { targets = 'msg' } })
 ui2.enable({ msg = { targets = vim.tbl_extend('error', { default = 'msg' }, kinds) } })
-
-local msg = ui2.msg
-local last_msg_kind
-
-local orig_msg_show = msg.msg_show
-msg.msg_show = function(kind, ...)
-  last_msg_kind = kind
-  return orig_msg_show(kind, ...)
-end
-
-local orig_set_pos = msg.set_pos
-msg.set_pos = function(tgt)
-  orig_set_pos(tgt)
-  if tgt and tgt ~= 'msg' then
-    return
-  end
-
-  local win = ui2.wins.msg
-  if not vim.api.nvim_win_is_valid(win) then
-    return
-  end
-
-  local cfg = vim.api.nvim_win_get_config(win)
-  if cfg.hide then
-    return
-  end
-  cfg.title = { { (' %s '):format(last_msg_kind), 'FloatTitle' } }
-  cfg.title_pos = 'left'
-  vim.api.nvim_win_set_config(win, cfg)
-end
+--
+-- local msg = ui2.msg
+-- local last_msg_kind
+-- local orig_msg_show = msg.msg_show
+-- msg.msg_show = function(kind, ...)
+--   last_msg_kind = kind
+--   return orig_msg_show(kind, ...)
+-- end
+-- local orig_set_pos = msg.set_pos
+-- msg.set_pos = function(tgt)
+--   orig_set_pos(tgt)
+--   if tgt and tgt ~= 'msg' then
+--     return
+--   end
+--   local win = ui2.wins.msg
+--   if not vim.api.nvim_win_is_valid(win) then
+--     return
+--   end
+--   local cfg = vim.api.nvim_win_get_config(win)
+--   if cfg.hide then
+--     return
+--   end
+--   cfg.title = { { (' %s '):format(last_msg_kind), 'FloatTitle' } }
+--   cfg.title_pos = 'left'
+--   vim.api.nvim_win_set_config(win, cfg)
+-- end

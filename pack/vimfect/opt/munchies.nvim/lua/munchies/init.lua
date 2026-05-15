@@ -137,9 +137,11 @@ return {
         self.layout = require('munchies').mylayout
         self.cwd = self.cwd or Snacks.git.get_root()
       end
+      if not vim.tbl_contains({ 'select' }, self.source) then
+        actions.set_title(self)
+      end
       -- hide the preview window if the screen is too narrow
       -- self.layout.auto_hide = vim.o.columns < 100 and { 'preview' } or opts.layout.auto_hide
-      actions.set_title(self)
       return self
     end,
     db = { sqlite3_path = nil }, -- TODO:

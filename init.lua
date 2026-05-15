@@ -1,12 +1,13 @@
 --- init.lua
+vim.loader.enable()
 vim.cmd([[so ~/.vim/vimrc]])
-vim.cmd([[colo tokyonight]])
 
 require('snacks').setup({
   -- bigfile = { enabled = true },
   -- dashboard = { enabled = true },
   explorer = { enabled = true },
   image = { enabled = true },
+  -- TODO: native intent guides
   indent = { enabled = true },
   input = { enabled = true },
   quickfile = { enabled = true },
@@ -17,6 +18,7 @@ require('snacks').setup({
   words = { enabled = true },
 })
 
-_G.dd = Snacks.debug.inspect
-_G.bt = Snacks.debug.backtrace
+_G.dd = Snacks and Snacks.debug.inspect or vim.print
+_G.bt = Snacks and Snacks.debug.backtrace or require('nvim.util.debug').trace
+
 _G.nv = require('nvim')

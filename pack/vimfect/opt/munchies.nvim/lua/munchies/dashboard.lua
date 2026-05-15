@@ -39,7 +39,7 @@ M.opts = {
     { icon = ' ', desc = 'Health ', key = 'H', action = ':checkhealth' },
     { icon = '󰒲 ', desc = 'LazyGit', key = 'G', action = ':lua Snacks.lazygit()' },
     { icon = ' ', desc = 'Mason  ', key = 'M', action = ':Mason' },
-    { icon = ' ', desc = 'News   ', key = 'N', action = ':News' },
+    { icon = ' ', desc = 'News   ', key = 'N', action = ':help news' },
     { icon = ' ', desc = 'Update ', key = 'U', action = ':lua vim.pack.update()' },
     {
       section = 'terminal',

@@ -1,5 +1,30 @@
-scriptencoding utf-8
-" TODO: find and remove the multi-byte character in this file
+color scheme
+if !has('nvim')
+  call vim#defaults#()
+  call vim#sensible#()
+else
+  " set autocomplete
+  set backup
+  set backupext=.bak
+  set backupdir=~/.local/state/nvim/backup//
+  set backupskip+=~/.cache/*
+  " set cmdheight=0
+  set jumpoptions+=view
+  set mousescroll=hor:0
+  set startofline " default in vim
+  set smoothscroll
+  set pumblend=0
+  set pumborder=rounded
+  set pumheight=10
+  set winborder=rounded
+  " uncomment to disable the default popup menu
+  " aunmenu PopUp | autocmd! nvim.popupmenu
+  set statusline=%{%v:lua.require'nvim'.statusline()%}
+  set     winbar=%{%v:lua.require'nvim'.winbar()%}
+endif
+
+let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+
 augroup vimrc " {{{
   set findfunc=file#find
   set ignorecase
@@ -47,7 +72,6 @@ augroup vimrc " {{{
   " catch when vim doesn't terminate properly
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
 augroup END " }}}
-
 augroup vimrc.indent " {{{
   set breakindent
   set breakindentopt=list:1 " TODO: from minimax; keep?
@@ -59,28 +83,16 @@ augroup vimrc.indent " {{{
   autocmd FileType cpp,cuda,python setl sw=4 sts=4
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
 augroup END " }}}
-
 augroup vimrc.ui  " {{{
-  " set title
-  set number
+  set cursorline
+  " set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
+  set list
+  " set number
+  set signcolumn=number
+  " set termguicolors
   let &l:laststatus = has('nvim') ? 3 : 2
   set tabline=%!vimline#tabline#()
-  set cursorline
-  set number
-  set signcolumn=number
-  set termguicolors
-  " set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
-  set fillchars= " reset
-  " set fillchars+=diff:╱
-  " set fillchars+=eob:,
-  " set fillchars+=stl:\ ,
-  set listchars= " reset
-  set listchars+=trail:¿,
-  set listchars+=tab:→\ ",
-  set listchars+=extends:…,
-  set listchars+=precedes:…,
-  set listchars+=nbsp:+
-  set list
+  set title
 
   autocmd!
   " no cursorline in insert mode
@@ -96,14 +108,7 @@ augroup vimrc.ui  " {{{
   au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 augroup END " }}}
-
 augroup vimrc.fold " {{{
-  " fillchars already reset, so append here
-  set fillchars+=fold:\ ,
-  set fillchars+=foldclose:▸,
-  set fillchars+=foldopen:▾,
-  " set fillchars+=foldsep:\ ,
-
   set foldlevel=99
   " set foldlevelstart=1
   " set foldminlines=3
@@ -119,7 +124,6 @@ augroup vimrc.fold " {{{
   autocmd!
   " autocmd FileType vim,lua setlocal
 augroup END " }}}
-
 augroup vimrc.format " {{{
   " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
   " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
@@ -128,37 +132,7 @@ augroup vimrc.format " {{{
   autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
 augroup END " }}}
 
-" Section: neovim {{{1
-" set undo if on nvim, or if on a machine not running nvim
-let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
-
-if !has('nvim')
-  call vim#defaults#()
-  call vim#sensible#()
-  color scheme
-else
-  " set autocomplete
-  set backup
-  set backupext=.bak
-  set backupdir=~/.local/state/nvim/backup//
-  set backupskip+=~/.cache/*
-  " set cmdheight=0
-  set jumpoptions+=view
-  set mousescroll=hor:0
-  set startofline " default in vim
-  set smoothscroll
-  set pumblend=0
-  set pumborder=rounded
-  set pumheight=10
-  set winborder=rounded
-  " uncomment to disable the default popup menu
-  " aunmenu PopUp | autocmd! nvim.popupmenu
-  set statusline=%{%v:lua.require'nvim'.statusline()%}
-  set     winbar=%{%v:lua.require'nvim'.winbar()%}
-  command! News exe 'e' nvim_get_runtime_file('doc/news.txt', v:false)[0]
-endif
-
-" Section: commands/config {{{1
+" Section: commands {{{1
 
 command! -nargs=* Diff call cmd#diff#(<f-args>)
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
@@ -229,6 +203,7 @@ endif
 " }}}1
 
 " Section: keymaps {{{1
+nmap gcap gcip
 let g:mapleader = ','
 let g:maplocalleader = '/'
 xmap <Space> <leader>
@@ -340,11 +315,6 @@ xnoremap n :normal!<Space>
 " nnoremap <Bslash>; mzA;<Esc>;`z
 " nnoremap <Bslash>. mzA.<Esc>;`z
 
-" insert special chars
-inoremap \sec Section:
-iabbrev n- –
-iabbrev m- —
-
 " undo breakpoints
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
@@ -379,8 +349,6 @@ endif
 
 packadd! munchies.nvim
 packadd! rd.nvim
-packadd! vim-symbiote
-let g:force_copilot = 1
 
 call plug#begin()
 Plug 'alker0/chezmoi.vim'

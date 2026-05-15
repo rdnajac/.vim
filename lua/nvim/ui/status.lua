@@ -13,6 +13,10 @@ end
 local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', sec, str) end
 -- local function chroma(str, sec) return highlight(str, 'Chromatophore_' .. sec) end
 
+
+-- TODO: write blend function
+-- TODO: link highlight groups
+
 --- Combines three sections of a statusline/winbar/tabline with appropriate highlighting and separators.
 ---@param a string?
 ---@param b string?

@@ -1,3 +1,5 @@
+vim.g.transparent = true
+
 local M = {
   'folke/tokyonight.nvim',
   opts = require('nvim.tokyonight.opts'),

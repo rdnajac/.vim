@@ -1,6 +1,9 @@
 package.preload['lazydev.config'] = function()
-  -- Snacks.debug.bt()
-  -- the new `lazydev.config` module bypasses the usual `setup`
+  vim.cmd([[command! LazyDev lua require('lazydev.cmd').commands.debug() ]])
+  -- registers autocmds for attaching to buffers
+  vim.schedule(function() require('lazydev.buf').setup() end)
+
+  ---@type lazydev.Config.mod
   local M = {
     debug = false,
     lua_root = true,
@@ -13,9 +16,7 @@ package.preload['lazydev.config'] = function()
 
   ---@param opts? lazydev.Config
   function M.setup(opts)
-    opts = opts or {}
-
-    for _, lib in pairs(opts.library) do
+    for _, lib in pairs(opts and opts.library or {}) do
       lib = type(lib) == 'string' and { path = lib } or lib
       table.insert(M.libs, {
         path = lib.path,
@@ -24,7 +25,6 @@ package.preload['lazydev.config'] = function()
         files = lib.files or {},
       })
     end
-
     for _, lib in ipairs(M.libs) do
       -- for _, field in ipairs({ 'words', 'mods', 'files' }) do
       for _, field in ipairs({ 'words' }) do
@@ -35,18 +35,6 @@ package.preload['lazydev.config'] = function()
       end
     end
   end
-
-  -- TODO: just print the workspace if lua
-  vim.schedule(function()
-    local cmd = require('lazydev.cmd')
-    vim.api.nvim_create_user_command(
-      'LazyDev',
-      cmd.execute,
-      { nargs = '*', complete = cmd.complete, desc = 'lazydev.nvim' }
-    )
-    -- registers autocmds for attaching to buffers
-    require('lazydev.buf').setup()
-  end)
 
   return M
 end

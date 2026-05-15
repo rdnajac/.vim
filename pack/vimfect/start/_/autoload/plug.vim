@@ -1,38 +1,18 @@
-" add this file to the runtimepath to override other versions of `plug.vim`
-" also see:
-" - `https://junegunn.github.io/vim-plug/`
-" - `https://github.com/tani/vim-jetpack`
-
-if !has('nvim')
-  " use vim-jetpack if on vim
-  let s:jetpath = '~/.vim/pack/jetpack/opt/vim-jetpack/plugin/jetpack.vim'
-  if !filereadable(expand(s:jetpath))
-    execute printf('!curl -fLo %s --create-dirs %s', s:jetpath,
-	  \ 'https://raw.githubusercontent.com/tani/vim-jetpack/master/plugin/jetpack.vim')
-    packadd vim-jetpack
-  endif
-  let g:plug#home = expand('~/.vim/pack/jetpack')
-else
-  " see `:h vim.pack-directory`
-  let g:plug#home = stdpath('data') .. '/site/pack/core/opt'
-  augroup plug.nvim
-    autocmd!
-    " autocmd PackChanged * call luaeval("require('plug.build')({ data = _A })", deepcopy(v:event))
-  augroup END
-endif
+" see `:h vim.pack-directory`
+let g:plug#home = stdpath('data') .. '/site/pack/core/opt'
 
 " export the ENV variable
 let $PACKDIR = g:plug#home
 
+augroup plug.nvim
+  autocmd!
+  " autocmd PackChanged * call luaeval("require('plug.build')({ data = _A })", deepcopy(v:event))
+augroup END
+
+" `https://junegunn.github.io/vim-plug/`
 function! plug#begin(...)
-  if !exists('g:loaded_jetpack')
-    let g:plugs = []
-    command! -nargs=1 Plug call plug#(<args>)
-  else
-    call jetpack#begin()
-    call jetpack#add('tani/vim-jetpack')
-    command! -nargs=+ -bar Plug call jetpack#add(<args>)
-  endif
+  let g:plugs = []
+  command! -nargs=1 Plug call plug#(<args>)
 endfunction
 
 function! plug#(user_repo)
@@ -41,23 +21,6 @@ endfunction
 
 function! plug#end()
   delcommand Plug
-  if !exists('g:loaded_jetpack')
-    if has('nvim')
-      lua vim.loader.enable()
-      " relies on the magic `vim.g` accessor
-      lua vim.pack.add(vim.g.plugs)
-      " passes script-local variable to lua via `_A`
-      " call luaeval('vim.pack.add(_A)', s:plugs)
-      " execute 'source' expand('<script>:p:h:h')..'/lua/plug.lua'
-      lua require('plug')
-    endif
-  else
-    call jetpack#end()
-    for name in jetpack#names()
-      if !jetpack#tap(name)
-	call jetpack#sync()
-	break
-      endif
-    endfor
-  endif
+  lua vim.pack.add(vim.g.plugs)
+  lua require('plug')
 endfunction
