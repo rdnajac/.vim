@@ -1,7 +1,7 @@
 {
   "plugins": {
     "ale": {
-      "rev": "916c8764ce9d395f788eae9adf207a4bfe8a038e",
+      "rev": "2a3af30fb6a725ec7215435369b310b1d2dc4c09",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "chezmoi.vim": {
@@ -45,7 +45,7 @@
       "src": "https://github.com/nvim-mini/mini.surround.git"
     },
     "nvim-lspconfig": {
-      "rev": "8f7e64066e2641d5e7d494962a9c7051e3d38dd5",
+      "rev": "3de240997fc3208eb29df5e5c17ba4665961bd84",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -75,10 +75,6 @@
     "splitjoin.vim": {
       "rev": "8c4c87e72d20d8d5eee8b29c320eb61767578841",
       "src": "https://github.com/AndrewRadev/splitjoin.vim.git"
-    },
-    "tokyonight.nvim": {
-      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
-      "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-abolish": {
       "rev": "dcbfe065297d31823561ba787f51056c147aa682",

@@ -1,25 +1,30 @@
-Snacks.util.set_hl({
-  Inactive = { fg = '#aaaaaa' },
-  Starting = { fg = '#757755' },
-  ServerReady = { fg = '#117711' },
-  TCPStart = { fg = '#ff8833' },
-  TCPReady = { fg = '#3388ff' },
-  RStarting = { fg = '#ff8833' },
-  Ready = { fg = '#3388ff' },
-}, { prefix = 'RStatus', default = true })
+Plug({ 'R-nvim/R.nvim' })
 
-local rstt = {
-  { '-', 'RStatusInactive' }, -- 1: ftplugin/* sourced, but nclientserver not started yet.
-  { 'S', 'RStatusStarting' }, -- 2: nclientserver started, but not ready yet.
-  { 'S', 'RStatusServerReady' }, -- 3: nclientserver is ready.
-  { 'S', 'RStatusTCPStart' }, -- 4: nclientserver started the TCP server
-  { 'S', 'RStatusTCPReady' }, -- 5: TCP server is ready
-  { 'R', 'RStatusRStarting' }, -- 6: R started, but nvimcom was not loaded yet.
-  { '󰟔 ', 'RStatusReady' }, -- 7: nvimcom is loaded.
+---@type RConfigUserOpts
+local opts = {
+  R_args = { '--quiet', '--no-save' },
+  -- user_maps_only = true,
+  -- quarto_chunk_hl = { highlight = false },
+  Rout_more_colors = true,
+  hook = {
+    on_filetype = function()
+      vim.keymap.set('n', 'yu', function()
+        local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+        -- copy the <cword> to a new line below the current line
+        vim.api.nvim_buf_set_lines(0, row, row, true, { vim.fn.expand('<cword>') })
+        -- move cursor to the new line
+        vim.api.nvim_win_set_cursor(0, { row + 1, 0 })
+        -- execute <Plug>RInsertLineOutput from normal mode
+        vim.api.nvim_feedkeys(vim.keycode('<Plug>RInsertLineOutput'), 'n', false)
+        -- delete the line with the word
+        vim.api.nvim_buf_set_lines(0, row, row + 1, true, {})
+        -- move cursor back to original position
+        vim.api.nvim_win_set_cursor(0, { row, col })
+      end, { desc = 'Debug/Print (R)', buf = 0 })
+    end,
+    after_R_start = function() vim.notify('R started!') end,
+    after_ob_open = function() vim.notify('Object Browser opened!') end,
+  },
 }
 
-_G.Rstatus = {
-  function() return rstt[vim.g.R_Nvim_status][1] end,
-  color = function() return rstt[vim.g.R_Nvim_status][2] end,
-  cond = function() return vim.tbl_contains({ 'r', 'rmd', 'quarto' }, vim.bo.filetype) end,
-}
+require('r').setup(opts)

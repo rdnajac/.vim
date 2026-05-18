@@ -345,10 +345,9 @@ else
   packadd! nvim.difftool
   packadd! nvim.tohtml
   packadd! nvim.undotree
+  packadd! munchies.nvim
+  " packadd! rd.nvim
 endif
-
-packadd! munchies.nvim
-packadd! rd.nvim
 
 call plug#begin()
 Plug 'alker0/chezmoi.vim'
@@ -387,6 +386,7 @@ if !has('nvim')
   Plug 'Konfekt/FastFold'
 else
   Plug 'folke/snacks.nvim'
+  " Plug 'folke/tokyonight.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'nvim-mini/mini.nvim'
   " Plug 'b0o/SchemaStore.nvim'

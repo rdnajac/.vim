@@ -23,4 +23,6 @@ function! plug#end()
   delcommand Plug
   lua vim.pack.add(vim.g.plugs)
   lua require('plug')
+  command! PlugStatus :packupdate ++offline
+  command! PlugClean  :packdel    ++all 
 endfunction

@@ -11,6 +11,7 @@ M.keys = require('nvim.keys')
 M.mini = require('nvim.mini')
 M.lsp = require('nvim.lsp')
 M.treesitter = require('nvim.treesitter')
+M.diagnostic = require('nvim.diagnostic')
 
 local status = M.ui.status
 M.statusline = status.line
