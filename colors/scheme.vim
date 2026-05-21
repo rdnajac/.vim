@@ -9,8 +9,7 @@ hi link qfNote              DiagnosticHint
 hi link qfInfo              DiagnosticInfo
 
 if has('nvim')
-  " lua vim.pack.add({ 'https://github.com/folke/tokyonight.nvim.git' })
-  " lua vim.schedule(require('nvim.tokyonight').init)
+  lua vim.schedule(require('nvim.tokyonight').init)
   finish
 endif
 

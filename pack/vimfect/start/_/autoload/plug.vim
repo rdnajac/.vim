@@ -1,5 +1,9 @@
 " see `:h vim.pack-directory`
-let g:plug#home = stdpath('data') .. '/site/pack/core/opt'
+if exists('*stdpath')
+  let g:plug#home = stdpath('data') .. '/site/pack/core/opt'
+else
+  let g:plug#home = expand('~/.vim/pack/_/opt')
+endif
 
 " export the ENV variable
 let $PACKDIR = g:plug#home
@@ -12,17 +16,18 @@ augroup END
 " `https://junegunn.github.io/vim-plug/`
 function! plug#begin(...)
   let g:plugs = []
-  command! -nargs=1 Plug call plug#(<args>)
+  command! -nargs=1 Plug call add(g:plugs, <args>)
 endfunction
 
-function! plug#(user_repo)
-  call add(g:plugs, 'https://github.com/'..a:user_repo..'.git')
-endfunction
+" function! plug#(user_repo)
+  " call add(g:plugs, 'https://github.com/'..a:user_repo..'.git')
+" endfunction
 
 function! plug#end()
   delcommand Plug
-  lua vim.pack.add(vim.g.plugs)
-  lua require('plug')
-  command! PlugStatus :packupdate ++offline
-  command! PlugClean  :packdel    ++all 
+  if has('nvim')
+    lua require('plug')(vim.g.plugs)
+    command! PlugStatus :packupdate ++offline
+    command! PlugClean  :packdel    ++all 
+  endif
 endfunction

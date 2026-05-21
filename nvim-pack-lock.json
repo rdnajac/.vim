@@ -1,5 +1,9 @@
 {
   "plugins": {
+    "R.nvim": {
+      "rev": "f3b661df80dd47690a6272ab0e4b9096b731cb08",
+      "src": "https://github.com/R-nvim/R.nvim.git"
+    },
     "ale": {
       "rev": "2a3af30fb6a725ec7215435369b310b1d2dc4c09",
       "src": "https://github.com/dense-analysis/ale.git"
@@ -17,35 +21,15 @@
       "src": "https://github.com/iamcco/markdown-preview.nvim.git"
     },
     "mason.nvim": {
-      "rev": "8e921c2b68571e978db5d4d3fef9c9a7f8755473",
+      "rev": "cbf8d285e1462dd24acf3507817be2bbcb035919",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
-    "mini.ai": {
-      "rev": "a783ce6e1a5b3bc90519f20b51f4a5f6702734af",
-      "src": "https://github.com/nvim-mini/mini.ai.git"
-    },
-    "mini.align": {
-      "rev": "c701192658ddac4e3b20956a964c2b03157b5e51",
-      "src": "https://github.com/nvim-mini/mini.align.git"
-    },
-    "mini.clue": {
-      "rev": "f6978fb031023ee0b0aeb2abdb44abb87577bf38",
-      "src": "https://github.com/nvim-mini/mini.clue.git"
-    },
-    "mini.hipatterns": {
-      "rev": "35b632f6c138d720f29de87476361af44bed2198",
-      "src": "https://github.com/nvim-mini/mini.hipatterns.git"
-    },
-    "mini.icons": {
-      "rev": "9c7b1b90b15bdd69c52f6e31889dbc9987c30ec4",
-      "src": "https://github.com/nvim-mini/mini.icons.git"
-    },
-    "mini.surround": {
-      "rev": "990ce30f724d08e79670107de6b915a3f1bb9a9b",
-      "src": "https://github.com/nvim-mini/mini.surround.git"
+    "mini.nvim": {
+      "rev": "6791615e48801cbf5b2baefadcea77a7760de3f4",
+      "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "3de240997fc3208eb29df5e5c17ba4665961bd84",
+      "rev": "dfbada1a311c4bf3369f8d5421369c9b6e8b888f",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -69,12 +53,16 @@
       "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
-      "rev": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e",
+      "rev": "0770753c88228f7f15449c6a5b242e3f7cd0d71c",
       "src": "https://github.com/folke/snacks.nvim.git"
     },
     "splitjoin.vim": {
       "rev": "8c4c87e72d20d8d5eee8b29c320eb61767578841",
       "src": "https://github.com/AndrewRadev/splitjoin.vim.git"
+    },
+    "tokyonight.nvim": {
+      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
+      "src": "https://github.com/folke/tokyonight.nvim.git"
     },
     "vim-abolish": {
       "rev": "dcbfe065297d31823561ba787f51056c147aa682",

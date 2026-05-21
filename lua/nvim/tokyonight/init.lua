@@ -1,9 +1,8 @@
 vim.g.transparent = true
 
-local M = {
-  'folke/tokyonight.nvim',
-  opts = require('nvim.tokyonight.opts'),
-}
+local M = { 'folke/tokyonight.nvim', opts = require('nvim.tokyonight.opts') }
+-- vim.pack.add({ 'https://github.com/folke/tokyonight.nvim.git' })
+vim.pack.add({ ('https://github.com/%s.git'):format(M[1]) })
 
 M.opts.plugins = require('nvim.tokyonight.plugins')
 

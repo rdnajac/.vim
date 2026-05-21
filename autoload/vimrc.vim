@@ -2,6 +2,12 @@
 let g:vimrc#dir = fnamemodify($MYVIMRC, ':h')
 let $VIMDIR = g:vimrc#dir
 
+function! vimrc#init() abort
+  call vim#defaults#()
+  call vim#sensible#()
+endfunction
+
+
 function! vimrc#setmarks() abort
   for num in range(1, line('$'))
     if getline(num) =~? '^"\s*Section:\s*\zs.'

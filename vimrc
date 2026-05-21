@@ -1,7 +1,5 @@
-color scheme
 if !has('nvim')
-  call vim#defaults#()
-  call vim#sensible#()
+  call vimrc#init()
 else
   " set autocomplete
   set backup
@@ -22,7 +20,6 @@ else
   set statusline=%{%v:lua.require'nvim'.statusline()%}
   set     winbar=%{%v:lua.require'nvim'.winbar()%}
 endif
-
 let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
 
 augroup vimrc " {{{
@@ -85,9 +82,8 @@ augroup vimrc.indent " {{{
 augroup END " }}}
 augroup vimrc.ui  " {{{
   set cursorline
-  " set cursorlineopt = 'screenline,number' TODO: from minimax; keep?
   set list
-  " set number
+  set number
   set signcolumn=number
   " set termguicolors
   let &l:laststatus = has('nvim') ? 3 : 2
@@ -187,8 +183,8 @@ function! s:cabbrev(lhs, rhs)
 endfunction
 
 call s:cabbrev('f', 'find')
-call s:cabbrev('dd',  'echom')
-call s:cabbrev('vv',  'verbose')
+call s:cabbrev('dd', 'echom')
+call s:cabbrev('vv', 'verbose')
 call s:cabbrev('vc', 'verbose cmap')
 call s:cabbrev('vi', 'verbose imap')
 call s:cabbrev('vn', 'verbose nmap')
@@ -350,6 +346,7 @@ else
 endif
 
 call plug#begin()
+color scheme
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
 Plug 'lervag/vimtex'
@@ -388,7 +385,7 @@ else
   Plug 'folke/snacks.nvim'
   " Plug 'folke/tokyonight.nvim'
   Plug 'neovim/nvim-lspconfig'
-  " Plug 'nvim-mini/mini.nvim'
+  Plug 'nvim-mini/mini.nvim'
   " Plug 'b0o/SchemaStore.nvim'
   " Plug 'j-hui/fidget.nvim'
   " Plug 'saxon1964/neovim-tips'

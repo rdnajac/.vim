@@ -99,3 +99,5 @@ _G.Plug = function(plugs)
     end,
   })
 end
+
+return Plug

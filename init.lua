@@ -1,6 +1,7 @@
 --- init.lua
 vim.loader.enable()
 vim.cmd([[so ~/.vim/vimrc]])
-_G.dd = Snacks and Snacks.debug.inspect or vim.print
-_G.bt = Snacks and Snacks.debug.backtrace or require('nvim.util.debug').trace
+require('snacks')
+_G.dd = Snacks.debug.inspect
+_G.bt = Snacks.debug.backtrace
 _G.nv = require('nvim')
