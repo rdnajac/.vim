@@ -67,6 +67,8 @@ tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
 augroup vimrc.term
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
-  autocmd TermOpen * let g:last_term_ch = &channel
-  autocmd TermOpen * let g:last_term_buf = bufnr('%')
+  if has('nvim') " TODO: move to .lua
+    autocmd TermOpen * let g:last_term_ch = &channel
+    autocmd TermOpen * let g:last_term_buf = bufnr('%')
+  endif
 augroup END

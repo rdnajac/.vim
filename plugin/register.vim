@@ -1,4 +1,3 @@
-" TODO: move to vimrc
 " yank/delete everything
 nnoremap yY <Cmd>%y<CR>
 nnoremap dD <Cmd>%d<CR>
@@ -19,18 +18,16 @@ nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
 nnoremap yP <Cmd>let @*=printf('%s:%d', expand('%:p:~'), line('.'))<CR>
 cnoremap <M-y> <Cmd>let @*=getcmdline()<CR>
 
-" 'change macro'
+" change macro
 nnoremap cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
 nnoremap cM :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
 
-" TODO: move to yank?
 function s:set_clipboard() abort
   if !has('nvim')
     set clipboard=unnamed
-  else
-    if !exists('$SSH_TTY') " don't set clipboard over ssh
-      set clipboard=unnamedplus
-    endif
+  elseif !exists('$SSH_TTY')
+    " don't set clipboard over ssh
+    set clipboard=unnamedplus
   endif
 endfunction
 

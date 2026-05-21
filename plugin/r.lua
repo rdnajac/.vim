@@ -8,6 +8,7 @@ local opts = {
   Rout_more_colors = true,
   hook = {
     on_filetype = function()
+      -- TODO: rewrite using vim.pos updates
       vim.keymap.set('n', 'yu', function()
         local row, col = unpack(vim.api.nvim_win_get_cursor(0))
         -- copy the <cword> to a new line below the current line
