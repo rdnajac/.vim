@@ -196,6 +196,12 @@ local M = {}
 
 local has_mini_lib = vim.uv.fs_stat(vim.env.PACKDIR .. '/mini.nvim')
 
+if 
+  has_mini_lib then
+
+  vim.cmd.packadd('mini.nvim')
+end
+
 M.lazydev = has_mini_lib and { { path = 'mini.nvim', words = { 'Mini.*' } } } or {}
 
 vim.iter(miniopts):each(function(k, v)

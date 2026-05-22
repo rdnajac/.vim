@@ -4,9 +4,6 @@ default:
 fmt:
   stylua -v .
 
-upgrade-neovim:
-  cd ~/GitHub/neovim/ && rm -rf build/ && git pull && make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=~/.local/ && make install
-
 update-plugins:
   nvim -c 'lua vim.pack.update()'
 

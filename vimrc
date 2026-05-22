@@ -1,6 +1,7 @@
 if !has('nvim')
   call vimrc#init()
 else
+  " echom $NVIM
   " set autocomplete
   set backup
   set backupext=.bak
@@ -346,56 +347,51 @@ else
 endif
 
 call plug#begin()
-color scheme
 Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
+Plug 'dstein64/vim-startuptime'
 Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
-" Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
+Plug 'tpope/vim-dadbod'
+Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 " Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/vim-vinegar'
+Plug 'justinmk/vim-dirvish'
 " Plug 'bullets-vim/bullets.vim'
-" Plug 'dstein64/vim-startuptime'
+" Plug 'romainl/vim-qf.git'
 " Plug 'vuciv/golf'
 Plug 'AndrewRadev/splitjoin.vim'
-" Plug 'romainl/vim-qf.git'
 if !has('nvim')
-  " Plug 'andymass/vim-matchup'
-  Plug 'github/copilot.vim'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'justinmk/vim-dirvish'
-  Plug 'wellle/targets.vim'
-  Plug 'wellle/tmux-complete.vim'
   Plug 'AndrewRadev/dsf.vim'
   Plug 'Konfekt/FastFold'
+  " Plug 'andymass/vim-matchup'
+  Plug 'junegunn/vim-easy-align'
+  Plug 'wellle/targets.vim'
+  Plug 'wellle/tmux-complete.vim'
 else
-  Plug 'folke/snacks.nvim'
-  " Plug 'folke/tokyonight.nvim'
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'nvim-mini/mini.nvim'
-  " Plug 'b0o/SchemaStore.nvim'
-  " Plug 'j-hui/fidget.nvim'
-  " Plug 'saxon1964/neovim-tips'
   Plug 'chrisgrieser/nvim-scissors'
+  Plug 'folke/snacks.nvim'
+  Plug 'folke/tokyonight.nvim'
+  Plug 'nvim-mini/mini.nvim'
+  Plug 'neovim/nvim-lspconfig'
+  " Plug 'b0o/SchemaStore.nvim'
 endif
+Plug 'github/copilot.vim'
 Plug 'iamcco/markdown-preview.nvim'
-Plug 'tpope/vim-dadbod'
-Plug 'kristijanhusak/vim-dadbod-ui'
-Plug 'kristijanhusak/vim-dadbod-completion'
 call plug#end()
-" }}}1
-
+color scheme
 " vim: foldmethod=marker foldlevel=0
+" }}}1

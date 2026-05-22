@@ -13,12 +13,11 @@ M.lsp = require('nvim.lsp')
 M.treesitter = require('nvim.treesitter')
 M.diagnostic = require('nvim.diagnostic')
 
+Plug(M.keys)
+
 local status = M.ui.status
 M.statusline = status.line
 M.winbar = function()
-  if vim.bo.filetype == 'snacks_dashboard' then
-    return ''
-  end
   if vim.api.nvim_get_current_win() ~= tonumber(vim.g.actual_curwin) then
     return status.buffer()
   end

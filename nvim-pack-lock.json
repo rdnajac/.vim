@@ -12,6 +12,10 @@
       "rev": "73b30df35c6b645ebd2e6a440eea8463ef3c3f47",
       "src": "https://github.com/alker0/chezmoi.vim.git"
     },
+    "copilot.vim": {
+      "rev": "a12fd5672110c8aa7e3c8419e28c96943ca179be",
+      "src": "https://github.com/github/copilot.vim.git"
+    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim.git"
@@ -88,6 +92,14 @@
       "rev": "07e92e22114cc5b1ba4938d99897d85b58e20475",
       "src": "https://github.com/kristijanhusak/vim-dadbod-ui.git"
     },
+    "vim-dirvish": {
+      "rev": "9525f46ccbf2dd585523fe3e3b72151554df3a42",
+      "src": "https://github.com/justinmk/vim-dirvish.git"
+    },
+    "vim-dispatch": {
+      "rev": "a2ff28abdb2d89725192db5b8562977d392a4d3f",
+      "src": "https://github.com/tpope/vim-dispatch.git"
+    },
     "vim-endwise": {
       "rev": "4994afb0cdf956d9a665a14b9c834869e602c396",
       "src": "https://github.com/tpope/vim-endwise.git"
@@ -119,6 +131,10 @@
     "vim-speeddating": {
       "rev": "c17eb01ebf5aaf766c53bab1f6592710e5ffb796",
       "src": "https://github.com/tpope/vim-speeddating.git"
+    },
+    "vim-startuptime": {
+      "rev": "f10474b400c197787a0434548d842a2db583c333",
+      "src": "https://github.com/dstein64/vim-startuptime.git"
     },
     "vim-surround": {
       "rev": "3d188ed2113431cf8dac77be61b842acb64433d9",
