@@ -1,24 +1,9 @@
-""
-" i_ i. i: i, i; i| i/ i\ i* i+ i- i#
-" a_ a. a: a, a; a| a/ a\ a* a+ a- a#
-" can take a count: 2i: 3a/
-function! textobjects#simple() abort
-  for char in [ '_', '.', ':', ',', ';', '<bar>', '/', '<bslash>', '*', '+', '-', '#' ]
-    execute "xnoremap i" . char . " :<C-u>execute 'normal! ' . v:count1 . 'T" . char . "v' . (v:count1 + (v:count1 - 1)) . 't" . char . "'<CR>"
-    execute "onoremap i" . char . " :normal vi" . char . "<CR>"
-    execute "xnoremap a" . char . " :<C-u>execute 'normal! ' . v:count1 . 'F" . char . "v' . (v:count1 + (v:count1 - 1)) . 'f" . char . "'<CR>"
-    execute "onoremap a" . char . " :normal va" . char . "<CR>"
-  endfor
-endfunction
+" inner/outer function
+" xnoremap if :<C-u>normal! Bvf(<CR>
+" onoremap if :<C-u>normal vif<CR>
+" xnoremap af :<C-u>normal! Bvf)<CR>
+" onoremap af :<C-u>normal vaf<CR>
 
-function! textobjects#line() abort
-  xnoremap il g_o^
-  onoremap il :<C-u>normal vil<CR>
-  xnoremap al $o0
-  onoremap al :<C-u>normal val<CR>
-endfunction
-
-" integer and float
 function! textobjects#number() abort
   function! VisualNumber()
     call search('\d\([^0-9\.]\|$\)', 'cW')

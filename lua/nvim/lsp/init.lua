@@ -4,15 +4,11 @@
 
 local M = {}
 
-vim.schedule(function()
-  local lsp_config_dir = vim.fn.stdpath('config') .. '/after/lsp'
-  M.servers = vim
-    .iter(vim.fn.globpath(lsp_config_dir, '*', false, true))
+  M.servers = function() return vim
+    .iter(vim.fn.globpath(vim.fn.stdpath('config') .. '/after/lsp', '*', false, true))
     :map(function(path) return vim.fn.fnamemodify(path, ':t:r') end)
     :totable()
-
-  -- enable servers found in the after directory
-  vim.lsp.enable(M.servers)
+  end
 
   vim.cmd([[
     nnoremap glc <Cmd>lua Snacks.picker.lsp_config()<CR>
@@ -27,7 +23,6 @@ vim.schedule(function()
     nnoremap glT <Cmd>lua Snacks.picker.lsp_type_definitions()<CR>
     nnoremap glW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
   ]])
-end)
 
 ---@return string
 local Spinner = function()

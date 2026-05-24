@@ -21,8 +21,6 @@ local tab = function()
   return '<Tab>' -- fallback
 end
 
-vim.keymap.set({ 'n', 'i' }, '<Tab>', tab, { expr = true, desc = 'vim-symbiote <Tab> completion' })
-
 if Snacks then
   Snacks.toggle
     .new({

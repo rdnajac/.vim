@@ -1,7 +1,6 @@
 if !has('nvim')
   call vimrc#init()
 else
-  " echom $NVIM
   " set autocomplete
   set backup
   set backupext=.bak
@@ -16,32 +15,30 @@ else
   set pumborder=rounded
   set pumheight=10
   set winborder=rounded
-  " uncomment to disable the default popup menu
-  " aunmenu PopUp | autocmd! nvim.popupmenu
-  set statusline=%{%v:lua.require'nvim'.statusline()%}
-  set     winbar=%{%v:lua.require'nvim'.winbar()%}
+  " set statusline=%{%v:lua.require'nvim'.statusline()%}
+  set statusline=%{%v:lua.nv.statusline()%}
+  set     winbar=%{%v:lua.nv.winbar()%}
 endif
 let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+set findfunc=file#find
+set ignorecase
+set jumpoptions+=stack
+set mouse=a
+set report=0
+set scrolloff=8
+set shortmess+=aA "c
+set shortmess-=o
+set showmatch
+set smartcase
+set splitbelow splitright splitkeep=screen
+set switchbuf+=vsplit " NOTE: minimax wants `usetab`
+set timeoutlen=420
+set updatetime=999
+set virtualedit=block
+set whichwrap+=<,>,[,],h,l
+set wildignore+=*.o,*.out,*.a,*.so
 
 augroup vimrc " {{{
-  set findfunc=file#find
-  set ignorecase
-  set jumpoptions+=stack
-  set mouse=a
-  set report=0
-  set scrolloff=8
-  set shortmess+=aA "c
-  set shortmess-=o
-  set showmatch
-  set smartcase
-  set splitbelow splitright splitkeep=screen
-  set switchbuf+=vsplit " NOTE: minimax wants `usetab`
-  set timeoutlen=420
-  set updatetime=999
-  set virtualedit=block
-  set whichwrap+=<,>,[,],h,l
-  set wildignore+=*.o,*.out,*.a,*.so
-
   au!
   " au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
@@ -69,6 +66,29 @@ augroup vimrc " {{{
 
   " catch when vim doesn't terminate properly
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
+augroup END " }}}
+augroup vimrc.fold " {{{
+  set foldlevel=99
+  " set foldlevelstart=1
+  " set foldminlines=3
+  set foldopen+=insert,jump
+  " set foldmethod=marker
+
+  " close folds when moving left at beginning of line
+  nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
+
+  " save, override, and restore commentstring to get nice folds
+  xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s<CR>
+
+  autocmd!
+  " autocmd FileType vim,lua setlocal
+augroup END " }}}
+augroup vimrc.format " {{{
+  " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
+  " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
+  set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
+  autocmd!
+  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
 augroup END " }}}
 augroup vimrc.indent " {{{
   set breakindent
@@ -104,29 +124,6 @@ augroup vimrc.ui  " {{{
   au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-augroup END " }}}
-augroup vimrc.fold " {{{
-  set foldlevel=99
-  " set foldlevelstart=1
-  " set foldminlines=3
-  set foldopen+=insert,jump
-  " set foldmethod=marker
-
-  " close folds when moving left at beginning of line
-  nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
-
-  " save, override, and restore commentstring to get nice folds
-  xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s<CR>
-
-  autocmd!
-  " autocmd FileType vim,lua setlocal
-augroup END " }}}
-augroup vimrc.format " {{{
-  " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
-  " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
-  set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
-  autocmd!
-  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
 augroup END " }}}
 
 " Section: commands {{{1
@@ -195,20 +192,12 @@ call s:cabbrev('vx', 'verbose xmap')
 if has('nvim')
   call s:cabbrev('man', 'Man')
   call s:cabbrev('S', 'lua Snacks.picker')
-  " cnoreabbrev S lua Snacks.picker.
 endif
 " }}}1
 
 " Section: keymaps {{{1
-nmap gcap gcip
-let g:mapleader = ','
-let g:maplocalleader = '/'
-xmap <Space> <leader>
-nnoremap <Space> :
-nnoremap : ,
 nnoremap ` ~
 nnoremap ~ `
-
 " when in doubt, pinky out
 nnoremap <C-c> ciw
 nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
@@ -223,10 +212,15 @@ nnoremap ZW <Cmd>echom 'formatting and saving...'<Bar>ALEFix<Bar>write!<CR>
 nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 " TODO: diff?
-" nnoremap dp     dp']c
-" nnoremap do     do]c
+" nnoremap dp dp']c
+" nnoremap do do]c
 
 " `<leader>` {{{2
+let g:mapleader = ','
+let g:maplocalleader = '/'
+nnoremap <Space> :
+nnoremap : ,
+xmap <Space> <leader>
 
 " debug/diagnostic
 nnoremap <leader>da <Cmd>ALEInfo<CR>
@@ -242,7 +236,6 @@ if has('nvim')
   nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
   nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
 endif
-
 " file
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fT :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
@@ -261,25 +254,22 @@ nnoremap <C-BS> g;
 nnoremap <C-q> <Cmd>wincmd c<CR>
 nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
 nnoremap <C-w><C-v> :<C-u>vsplit #<CR>
-" NOTE: S-Tab not detected in all terminals...
-" nnoremap <S-Tab>   <Cmd>wincmd w<CR>
-" just like tmux!
 " nnoremap <C-w>-     <C-w>s
 " nnoremap <C-w><Bar> <C-w>v
-
-" window navigation with Shift + h/j/k/l
+" nnoremap <S-Tab>    <Cmd>wincmd w<CR>
+" NOTE: S-Tab not detected in all terminals...
+" window navigation with Shift + h/j/k/l {{{3
 for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
   exe $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
   exe $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
 endfor
-
+" }}}3
 " searching and centering {{{3
 " make `n` and `N` behave the same way for `?` and `/` searches
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
 " NOTE: 'Nn'[v:searchforward] == (v:searchforward ? 'n' : 'N')
 nnoremap <expr> n (v:searchforward ? 'n' : 'N')..'zv'
 nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zv'
-
 " tabpages {{{3
 nnoremap ]<Tab> <Cmd>tabnext<CR>
 nnoremap [<Tab> <Cmd>tabprevious<CR>
@@ -290,14 +280,14 @@ nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-
-" change/delete current word {{{2
+" }}}3
+" editing {{{2
+" change/delete current word
 nnoremap c*  *``cgn
 nnoremap c#  *``cgN
 nnoremap d*  *``dgn
 nnoremap d#  *``dgN
 
-" substitutions {{{2
 " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file
 " #repeat-last-change-in-all-of-file-global-repeat-similar-to-g
 nnoremap g. :%s//<C-R>./g<ESC>
@@ -306,8 +296,7 @@ xnoremap s :s/\%V
 " similarly, apply normal command to each line in selection
 xnoremap n :normal!<Space>
 
-" insert {{{2
-" insert chars at EOL {{{3
+" insert chars at EOL
 " nnoremap <Bslash>, mzA,<Esc>;`z
 " nnoremap <Bslash>; mzA;<Esc>;`z
 " nnoremap <Bslash>. mzA.<Esc>;`z
@@ -316,20 +305,8 @@ xnoremap n :normal!<Space>
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
-
-" textobjects {{{2
-" buffer pseudo-text object
-xnoremap ag GoggV
-onoremap ag :<C-u>normal vag<CR>
-xnoremap ig :<C-u>let z = @/\|1;/^./kz<CR>G??<CR>:let @/ = z<CR>V'z
-onoremap ig :<C-u>normal vig<CR>
-
-" inner/outer function
-xnoremap if :<C-u>normal! Bvf(<CR>
-onoremap if :<C-u>normal vif<CR>
-xnoremap af :<C-u>normal! Bvf)<CR>
-onoremap af :<C-u>normal vaf<CR>
-" }}}
+" }}}2
+nmap gcap gcip
 " }}}1
 
 " Section: plugins {{{1
@@ -385,6 +362,7 @@ else
   Plug 'chrisgrieser/nvim-scissors'
   Plug 'folke/snacks.nvim'
   Plug 'folke/tokyonight.nvim'
+  Plug 'folke/which-key.nvim'
   Plug 'nvim-mini/mini.nvim'
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'

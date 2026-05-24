@@ -1,9 +1,6 @@
 local M = { 'folke/tokyonight.nvim' }
 
-vim.g.transparent = true
-
 M.opts = require('nvim.tokyonight.opts')
-
 M.opts.plugins = require('nvim.tokyonight.plugins')
 
 --- Calls `require('tokyonight').setup`, merging passed opts with the defaults

@@ -189,4 +189,6 @@ M.better_gf = function(cfile)
   vim.cmd('normal! gf')
 end
 
+M.on = require('vim._core.util').nvim_on
+
 return M

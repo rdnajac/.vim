@@ -4,13 +4,13 @@ local ui_fts = { 'msg', 'pager' }
 
 vim.treesitter.language.register('markdown', ui_fts)
 
+-- TODO: nvim_on
 vim.api.nvim_create_autocmd({ 'FileType' }, {
   pattern = ui_fts,
   callback = function(ev)
     vim.treesitter.start(0)
     vim.wo.conceallevel = 3
     vim.keymap.set({ 'n' }, 'gf', require('nvim.util').better_gf, { buf = ev.buf })
-    -- vim.wo.winbar = 'winbar'
   end,
   desc = 'Apply markdown tree-sitter highlighting for message windows',
 })

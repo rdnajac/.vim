@@ -44,6 +44,16 @@ xnoremap <silent><expr> @ mode() ==# 'V' ? ':normal! @'.getcharstr().'<CR>'     
 
 " - |[<Space>| |]<Space>|
 
+" textobjects
+" inner/around line
+xnoremap il ^og_
+onoremap il :<C-u>norm vil<CR>
+
+" entire buffer
+xnoremap al ggVG
+onoremap al :<C-u>norm val<CR>
+
+
 " - `autoindent` is enabled
 " - `autoread` is enabled (works in all UIs, including terminal)
 " - `background` defaults to "dark" (unless set automatically by the terminal/UI)
