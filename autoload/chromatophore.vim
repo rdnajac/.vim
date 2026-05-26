@@ -114,3 +114,8 @@ function! chromatophore#metachrosis() abort
   endfor
   execute 'highlight Chromatophore_a guibg=' . l:color
 endfunction
+
+augroup chromatophore
+  autocmd!
+  autocmd ColorScheme,ModeChanged,VimEnter * call chromatophore#setup()
+augroup END

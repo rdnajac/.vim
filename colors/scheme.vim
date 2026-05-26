@@ -2,6 +2,8 @@
 " Description:  vim colorscheme inspired by tokyonight
 " Author:       rdnajac
 
+call chromatophore#setup()
+
 " https://github.com/neovim/neovim/discussions/37599#discussioncomment-15659444
 hi link qfError             DiagnosticError
 hi link qfWarning           DiagnosticWarn
