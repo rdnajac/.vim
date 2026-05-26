@@ -1,8 +1,6 @@
 .netrwhist
 .viminfo
 .vimlog.txt
-Session.vim
-gen
-pack/jetpack
 plugged
 tags
+pack/chezmoi
