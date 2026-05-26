@@ -17,9 +17,7 @@ local NEOVIM = {
   --1234567890123456789012345678901234567890
 }
 
-M.test_header = function()
-  assert(header == table.concat(NEOVIM, '\n'))
-end
+M.test_header = function() assert(header == table.concat(NEOVIM, '\n')) end
 
 M.header = function(cols)
   return vim.o.cols > 56 and table.concat(NEOVIM, '\n')

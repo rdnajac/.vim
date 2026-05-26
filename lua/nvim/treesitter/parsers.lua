@@ -31,7 +31,7 @@ return {
   -- git_config = false,
   -- gitcommit = false,
   -- git_rebase = false,
--- gitattributes = false,
+  -- gitattributes = false,
   -- gitignore = false,
   -- groovy = false,
   html = true,

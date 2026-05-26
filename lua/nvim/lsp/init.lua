@@ -4,13 +4,14 @@
 
 local M = {}
 
-  M.servers = function() return vim
+M.servers = function()
+  return vim
     .iter(vim.fn.globpath(vim.fn.stdpath('config') .. '/after/lsp', '*', false, true))
     :map(function(path) return vim.fn.fnamemodify(path, ':t:r') end)
     :totable()
-  end
+end
 
-  vim.cmd([[
+vim.cmd([[
     nnoremap glc <Cmd>lua Snacks.picker.lsp_config()<CR>
     nnoremap gls <Cmd>lua Snacks.picker.lsp_symbols()<CR>
     nnoremap glS <Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>
