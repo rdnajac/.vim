@@ -1,44 +1,46 @@
-if !has('nvim')
-  call vimrc#init()
-else
-  " set autocomplete
-  set backup
-  set backupext=.bak
-  set backupdir=~/.local/state/nvim/backup//
-  set backupskip+=~/.cache/*
-  " set cmdheight=0
-  set jumpoptions+=view
-  set mousescroll=hor:0
-  set startofline " default in vim
-  set smoothscroll
-  set pumblend=0
-  set pumborder=rounded
-  set pumheight=10
-  set winborder=rounded
-  " set statusline=%{%v:lua.require'nvim'.statusline()%}
-  set statusline=%{%v:lua.nv.statusline()%}
-  set     winbar=%{%v:lua.nv.winbar()%}
-endif
-let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
-set findfunc=file#find
-set ignorecase
-set jumpoptions+=stack
-set mouse=a
-set report=0
-set scrolloff=8
-set shortmess+=aA "c
-set shortmess-=o
-set showmatch
-set smartcase
-set splitbelow splitright splitkeep=screen
-set switchbuf+=vsplit " NOTE: minimax wants `usetab`
-set timeoutlen=420
-set updatetime=999
-set virtualedit=block
-set whichwrap+=<,>,[,],h,l
-set wildignore+=*.o,*.out,*.a,*.so
-
 augroup vimrc " {{{
+  if !has('nvim')
+    call vimrc#init()
+  else
+    " set autocomplete
+    set backup
+    set backupext=.bak
+    set backupdir=~/.local/state/nvim/backup//
+    set backupskip+=~/.cache/*
+    " set cmdheight=0
+    set jumpoptions+=view
+    set mousescroll=hor:0
+    set startofline " default in vim
+    set smoothscroll
+    set pumblend=0
+    set pumborder=rounded
+    set pumheight=10
+    set winborder=rounded
+    " set statusline=%{%v:lua.require'nvim'.statusline()%}
+    set statusline=%{%v:lua.nv.statusline()%}
+    set     winbar=%{%v:lua.nv.winbar()%}
+  endif
+
+  let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+
+  set findfunc=file#find
+  set ignorecase
+  set jumpoptions+=stack
+  set mouse=a
+  set report=0
+  set scrolloff=8
+  set shortmess+=aA "c
+  set shortmess-=o
+  set showmatch
+  set smartcase
+  set splitbelow splitright splitkeep=screen
+  set switchbuf+=vsplit " NOTE: minimax wants `usetab`
+  set timeoutlen=420
+  set updatetime=999
+  set virtualedit=block
+  set whichwrap+=<,>,[,],h,l
+  set wildignore+=*.o,*.out,*.a,*.so
+
   au!
   " au BufReadPost vimrc call vimrc#setmarks()
   au BufLeave vimrc normal! mV
@@ -101,6 +103,64 @@ augroup vimrc.indent " {{{
   autocmd FileType cpp,cuda,python setl sw=4 sts=4
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
 augroup END " }}}
+augroup vimrc.keywordprg " {{{
+  " preserve the original K mapping
+  " NOTE: overridden in some filetypes below
+  nnoremap <leader>k <Cmd>normal! K<CR>
+
+  command! -nargs=* MyMan call s:mykeywordprg(<f-args>)
+  function! s:mykeywordprg(...) abort
+    if !empty(b:manpage)
+      let keyword = a:0 ? a:1 : expand('<cword>')
+      " Info keyword
+      execute 'Man' b:manpage
+      call search(keyword)
+    endif
+  endfunction
+
+  function! s:setup(...) abort
+    let b:manpage = a:0 ? a:1 : &filetype
+    setlocal keywordprg=:MyMan
+    setlocal iskeyword+=-
+  endfunction
+  autocmd!
+  " au BufRead,BufNewFile *alacritty.*ml call s:setup('5 alacritty')
+  au FileType ghostty,kitty,tmux call s:setup()
+  au FileType sshconfig call s:setup('ssh')
+  au FileType gitconfig,gitconfig.chezmoitmpl call s:setup('git-config(1)')
+  au FileType lua setlocal keywordprg=:help iskeyword+=-
+  au FileType sh  setlocal keywordprg=:Man  iskeyword-=_
+  au FileType tex nnoremap <silent><buffer> <leader>K <Plug>(vimtex-doc-package)
+  au FileType vim nnoremap <silent><buffer> <leader>K <Plug>ScripteaseHelp
+augroup END " }}}
+augroup vimrc.sesh " {{{
+set sessionoptions-=blank
+set sessionoptions-=folds
+set sessionoptions-=terminal
+
+if has('nvim')
+  " au SessionLoadPre
+  " au SessionLoadPost
+  " au SessionWritePost
+
+  function s:restart() abort
+    execute 'mksession!' stdpath('state')..'/Session.vim'
+    execute 'confirm restart silent source' v:this_session
+  endfunction
+
+  command! Restart call s:restart()
+  nnoremap <D-r> <Cmd>Restart<CR>
+endif
+augroup END " }}}
+augroup vimrc.term " {{{
+tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+  autocmd BufEnter term://*:R\ * startinsert
+  autocmd BufEnter term://*/copilot startinsert
+  if has('nvim') " TODO: move to .lua
+    autocmd TermOpen * let g:last_term_ch = &channel
+    autocmd TermOpen * let g:last_term_buf = bufnr('%')
+  endif
+augroup END " }}}
 augroup vimrc.ui  " {{{
   set cursorline
   set list
@@ -124,6 +184,68 @@ augroup vimrc.ui  " {{{
   au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
   au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+augroup END " }}}
+augroup vimrc.yank " {{{
+  " yank/delete everything
+  nnoremap yY <Cmd>%y<CR>
+  nnoremap dD <Cmd>%d<CR>
+
+  " delete/paste without yanking
+  nnoremap dy "_dd
+  vnoremap p "_dP
+  vnoremap <leader>c "_c
+  vnoremap <leader>d "_d
+
+  " `clipboard=autoselect` is not implemented yet
+  " https://github.com/neovim/neovim/issues/2325.
+  " vnoremap <LeftRelease>   "*ygv
+  " vnoremap <2-LeftRelease> "*ygv
+
+  " yank path current file path, with and without line number
+  nnoremap yp <Cmd>let @*=expand('%:p:~')<CR>
+  nnoremap yP <Cmd>let @*=printf('%s:%d', expand('%:p:~'), line('.'))<CR>
+  cnoremap <M-y> <Cmd>let @*=getcmdline()<CR>
+
+  " change macro
+  nnoremap cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
+  nnoremap cM :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
+
+  function s:set_clipboard() abort
+    if !has('nvim')
+      set clipboard=unnamed
+    elseif !exists('$SSH_TTY')
+      " don't set clipboard over ssh
+      set clipboard=unnamedplus
+    endif
+  endfunction
+
+  function s:fallback() abort
+    if empty(&clipboard)
+      " map default yank to system clipboard
+      nnoremap <expr> y v:register == '"' ? '"+y' : 'y'
+      vnoremap <expr> y v:register == '"' ? '"+y' : 'y'
+      " copy the last yanked text to the system clipboard
+      silent let @+ = getreg('"')
+    endif
+  endfunction
+
+  function! s:yankring() abort
+    if v:event.operator ==# 'y'
+      " call map(range(9, 1, -1), {_, i -> setreg(string(i), getreg(string(i-1)))})
+      for i in range(9, 1, -1)
+	call setreg(string(i), getreg(string(i - 1)))
+      endfor
+    endif
+  endfunction
+
+  autocmd!
+  autocmd TextYankPost * call s:yankring()
+  " Setup unnamedplus clipboard on first yank if the system clipboard is not not already setup
+  autocmd TextYankPost * ++once call s:fallback()
+  if has('nvim')
+    autocmd TextYankPost * silent! lua vim.hl.on_yank()
+    autocmd UIEnter * call s:set_clipboard()
+  endif
 augroup END " }}}
 
 " Section: commands {{{1
@@ -371,5 +493,5 @@ Plug 'github/copilot.vim'
 Plug 'iamcco/markdown-preview.nvim'
 call plug#end()
 color scheme
-" vim: foldmethod=marker foldlevel=0
 " }}}1
+" vim: foldmethod=marker foldlevel=0

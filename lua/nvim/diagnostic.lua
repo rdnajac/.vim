@@ -62,7 +62,4 @@ M.ale_send = function(buf, loclist)
   vim.diagnostic.set(ns, buf, diagnostics, {})
 end
 
--- HACK: override the default `ale.diagnostics` module to use `ale_send` from above
-package.preload['ale.diagnostics'] = function() return { send = M.ale_send } end
-
 return M

@@ -18,6 +18,8 @@ let g:ale_linters = {
 
 if has('nvim')
   let g:ale_disable_lsp = 1
+  " HACK: override the default `ale.diagnostics` module to use `ale_send` from above
+  lua package.preload['ale.diagnostics'] = function() return { send = nv.diagnostic.ale_send } end
 else
   hi clear ALEErrorSign
   hi clear ALEWarningSign
