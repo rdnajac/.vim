@@ -10,15 +10,14 @@ augroup vimrc " {{{
     " set cmdheight=0
     set jumpoptions+=view
     set mousescroll=hor:0
-    set startofline " default in vim
-    set smoothscroll
     set pumblend=0
     set pumborder=rounded
     set pumheight=10
+    set smoothscroll
+    set startofline " default in vim
+    set stl=%{%v:lua.nv.status()%}
+    set wbr=%{%v:lua.nv.winbar()%}
     set winborder=rounded
-    " set statusline=%{%v:lua.require'nvim'.statusline()%}
-    set statusline=%{%v:lua.nv.statusline()%}
-    set     winbar=%{%v:lua.nv.winbar()%}
   endif
 
   let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile

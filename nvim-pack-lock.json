@@ -8,6 +8,14 @@
       "rev": "2a3af30fb6a725ec7215435369b310b1d2dc4c09",
       "src": "https://github.com/dense-analysis/ale.git"
     },
+    "blink.cmp": {
+      "rev": "0593548ee0b0978abf303d30f449234e07f951d1",
+      "src": "https://github.com/Saghen/blink.cmp.git"
+    },
+    "blink.lib": {
+      "rev": "f29d8bac6549bc1e7d699c83f680823d7def98bd",
+      "src": "https://github.com/Saghen/blink.lib.git"
+    },
     "chezmoi.vim": {
       "rev": "73b30df35c6b645ebd2e6a440eea8463ef3c3f47",
       "src": "https://github.com/alker0/chezmoi.vim.git"

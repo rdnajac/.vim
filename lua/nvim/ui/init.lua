@@ -29,5 +29,4 @@ Plug({
 return {
   ['2'] = require('nvim.ui.2'),
   icons = require('nvim.ui.icons'),
-  status = require('nvim.ui.status'),
 }

@@ -13,7 +13,6 @@ end
 local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', sec, str) end
 -- local function chroma(str, sec) return highlight(str, 'Chromatophore_' .. sec) end
 
-
 -- TODO: write blend function
 -- TODO: link highlight groups
 
@@ -167,5 +166,9 @@ M.treesitter = function()
     :map(function(lang) return lang == vim.bo.filetype and '' or nv.ui.icons.filetype[lang] end)
     :join(' ') .. ' '
 end
+
+setmetatable(M, {
+  __call = M.line,
+})
 
 return M
