@@ -1,0 +1,1 @@
+Plug(require('blink.spec'))

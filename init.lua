@@ -15,15 +15,11 @@ _G.nv = vim
 
 vim.schedule(function()
   vim.diagnostic.config(nv.diagnostic.opts)
-  -- enable servers found in the after directory
+  -- enable servers found in `after/`
   vim.lsp.enable(nv.lsp.servers())
 end)
 
-Plug({
-  { 'Saghen/blink.lib' },
-  {
-    'Saghen/blink.cmp',
-    build = function() require('blink.cmp').build():wait(6e4) end,
-    opts = require('blink.opts'),
-  },
-})
+require('blink')
+require('mini')
+
+vim.t.exrc = true

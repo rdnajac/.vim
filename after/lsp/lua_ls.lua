@@ -40,15 +40,14 @@ package.preload['lazydev.config'] = function()
 end
 
 Plug({
-  {
-    'folke/lazydev.nvim',
-    opts = {
-      library = vim.list_extend({
-        vim.env.VIMRUNTIME,
-        { path = 'snacks.nvim', words = { 'Snacks' } },
-        { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
-      }, nv.mini.lazydev or {}),
-    },
+  'folke/lazydev.nvim',
+  opts = {
+    library = vim.list_extend({
+      vim.env.VIMRUNTIME,
+      { path = 'snacks.nvim', words = { 'Snacks' } },
+      { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
+      -- FIXME: flaky...
+    }, require('mini').lazydev or {}),
   },
 })
 
