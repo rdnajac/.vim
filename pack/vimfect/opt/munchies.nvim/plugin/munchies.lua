@@ -17,8 +17,8 @@ require('snacks').setup({
   words = { enabled = true },
 })
 
--- vim.schedule(function() Snacks.config.style('lazygit', { height = 0, width = 0 }) end)
--- vim.cmd([[ hi! SnacksDashboardFile guifg=#2AC3DE gui=bold ]])
+-- Snacks.config.style('lazygit', { height = 0, width = 0 })
+-- vim.cmd('hi! SnacksDashboardFile guifg=#2AC3DE gui=bold')
 
 vim.cmd([[
 nnoremap ZB <Cmd>lua Snacks.bufdelete()<CR>
@@ -29,6 +29,18 @@ nnoremap ,/ <Cmd>lua Snacks.picker.grep()<CR>
 xnoremap /  <Cmd>lua Snacks.picker.grep_word()<CR>
 inoremap <C-x><C-i> <Cmd>lua Snacks.picker.icons({ layout = require('munchies').insert })<CR>
 inoremap <C-x><C-z> <Cmd>lua Snacks.picker.registers({ layout = require('munchies').insert })<CR>
+
+nnoremap glc <Cmd>lua Snacks.picker.lsp_config()<CR>
+nnoremap gls <Cmd>lua Snacks.picker.lsp_symbols()<CR>
+nnoremap glS <Cmd>lua Snacks.picker.lsp_workspace_symbols()<CR>
+nnoremap gli <Cmd>lua Snacks.picker.lsp_incoming_calls()<CR>
+nnoremap glo <Cmd>lua Snacks.picker.lsp_outgoing_calls()<CR>
+nnoremap gld <Cmd>lua Snacks.picker.lsp_definitions()<CR>
+nnoremap glD <Cmd>lua Snacks.picker.lsp_declarations()<CR>
+nnoremap glR <Cmd>lua Snacks.picker.lsp_references()<CR>
+nnoremap glI <Cmd>lua Snacks.picker.lsp_implementations()<CR>
+nnoremap glT <Cmd>lua Snacks.picker.lsp_type_definitions()<CR>
+nnoremap glW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 ]])
 
 vim.schedule(function()

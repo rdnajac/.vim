@@ -16,10 +16,6 @@
       "rev": "f29d8bac6549bc1e7d699c83f680823d7def98bd",
       "src": "https://github.com/Saghen/blink.lib.git"
     },
-    "chezmoi.vim": {
-      "rev": "73b30df35c6b645ebd2e6a440eea8463ef3c3f47",
-      "src": "https://github.com/alker0/chezmoi.vim.git"
-    },
     "copilot.vim": {
       "rev": "a12fd5672110c8aa7e3c8419e28c96943ca179be",
       "src": "https://github.com/github/copilot.vim.git"
@@ -92,14 +88,6 @@
       "rev": "6d1d41da4873a445c5605f2005ad2c68c99d8770",
       "src": "https://github.com/tpope/vim-dadbod.git"
     },
-    "vim-dadbod-completion": {
-      "rev": "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6",
-      "src": "https://github.com/kristijanhusak/vim-dadbod-completion.git"
-    },
-    "vim-dadbod-ui": {
-      "rev": "07e92e22114cc5b1ba4938d99897d85b58e20475",
-      "src": "https://github.com/kristijanhusak/vim-dadbod-ui.git"
-    },
     "vim-dirvish": {
       "rev": "9525f46ccbf2dd585523fe3e3b72151554df3a42",
       "src": "https://github.com/justinmk/vim-dirvish.git"
@@ -157,7 +145,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "182ad387e3f3107699483606c9a2b6648f8437b2",
+      "rev": "7c22c2de6adeecfff0708e7f8c86711ce6627ca6",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

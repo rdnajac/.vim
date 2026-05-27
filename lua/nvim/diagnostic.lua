@@ -62,4 +62,6 @@ M.ale_send = function(buf, loclist)
   vim.diagnostic.set(ns, buf, diagnostics, {})
 end
 
+vim.diagnostic.config(M.opts)
+
 return M

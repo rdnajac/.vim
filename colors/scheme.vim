@@ -11,7 +11,7 @@ hi link qfNote              DiagnosticHint
 hi link qfInfo              DiagnosticInfo
 
 if has('nvim')
-  lua vim.schedule(require('nvim.tokyonight').init)
+  lua require('nvim.tokyonight').init()
   finish
 endif
 

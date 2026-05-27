@@ -103,18 +103,13 @@ augroup vimrc.dirs " {{{
   autocmd!
   if has('nvim')
     " autocmd TermRequest * call term#print_request()
-    autocmd TermRequest * call term#handleOSC7()
-
-    " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
-    " Shells can emit the `OSC 7` sequence to announce when the current directory (CWD) changed.
-    " If your terminal doesn't already do this for you, you can configure your shell to emit it.
-    "
     " To configure bash to emit OSC 7:
     " print_osc7() { printf '\033]7;file://%s\033\\' "$PWD"; }
     " PROMPT_COMMAND='print_osc7'
-
-    " ~/.local/share/chezmoi/dot_config/zsh/dot_zshrc:65
-    " printf "\033]7;file://./foo/bar\033\\"
+    autocmd TermRequest * call term#handleOSC7()
+    " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
+    " Shells can emit the `OSC 7` sequence to announce when the current directory (CWD) changed.
+    " If your terminal doesn't already do this for you, you can configure your shell to emit it.
   endif
 augroup END " }}}
 augroup vimrc.fold " {{{
@@ -132,6 +127,10 @@ augroup vimrc.fold " {{{
 
   autocmd!
   " autocmd FileType vim,lua setlocal
+  if has('nvim')
+    " use treesitter folding by default for some filetypes
+    autocmd FileType markdown,r,rmd,quarto setl fdm=expr fde=v:lua.vim.treesitter.foldexpr()
+  endif
 augroup END " }}}
 augroup vimrc.format " {{{
   " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
@@ -182,26 +181,26 @@ augroup vimrc.keywordprg " {{{
   au FileType vim nnoremap <silent><buffer> <leader>K <Plug>ScripteaseHelp
 augroup END " }}}
 augroup vimrc.sesh " {{{
-set sessionoptions-=blank
-set sessionoptions-=folds
-set sessionoptions-=terminal
+  set sessionoptions-=blank
+  set sessionoptions-=folds
+  set sessionoptions-=terminal
 
-if has('nvim')
-  " au SessionLoadPre
-  " au SessionLoadPost
-  " au SessionWritePost
+  if has('nvim')
+    " au SessionLoadPre
+    " au SessionLoadPost
+    " au SessionWritePost
 
-  function s:restart() abort
-    execute 'mksession!' stdpath('state')..'/Session.vim'
-    execute 'confirm restart silent source' v:this_session
-  endfunction
+    function s:restart() abort
+      execute 'mksession!' stdpath('state')..'/Session.vim'
+      execute 'confirm restart silent source' v:this_session
+    endfunction
 
-  command! Restart call s:restart()
-  nnoremap <D-r> <Cmd>Restart<CR>
-endif
+    command! Restart call s:restart()
+    nnoremap <D-r> <Cmd>Restart<CR>
+  endif
 augroup END " }}}
 augroup vimrc.term " {{{
-tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+  tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
   autocmd BufEnter term://*:R\ * startinsert
   autocmd BufEnter term://*/copilot startinsert
   if has('nvim') " TODO: move to .lua
@@ -370,7 +369,8 @@ nnoremap ` ~
 nnoremap ~ `
 " when in doubt, pinky out
 nnoremap <C-c> ciw
-nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
+" nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
+nnoremap <C-e> <Cmd>lua Snacks.explorer.reveal()<CR>
 nnoremap <C-f> <Cmd>lua Snacks.picker()<CR>
 xnoremap <C-s> :sort<CR>
 xnoremap < <gv
@@ -494,7 +494,6 @@ else
 endif
 
 call plug#begin()
-Plug 'alker0/chezmoi.vim'
 Plug 'dense-analysis/ale'
 Plug 'dstein64/vim-startuptime'
 Plug 'lervag/vimtex'
@@ -540,6 +539,6 @@ endif
 Plug 'github/copilot.vim'
 Plug 'iamcco/markdown-preview.nvim'
 call plug#end()
-color scheme
 " }}}1
+color scheme
 " vim: foldmethod=marker foldlevel=0
