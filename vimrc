@@ -111,6 +111,7 @@ augroup vimrc.dirs
 	\ 'C': g:stdpath#cache,
 	\ 'd': g:stdpath#data,
 	\ 'G': '~/GitHub/',
+	\ 'N': '~/GitHub/neovim/',
 	\ 'p': g:plug#home,
 	\ 'P': $PACKDIR,
 	\ 'v': $VIMRUNTIME..'/lua/vim',
@@ -298,7 +299,7 @@ augroup vimrc.ui
     set winborder=rounded
     " vint: -ProhibitAbbreviationOption
     set stl=%{%v:lua.nv.status()%}
-    " set wbr=%{%v:lua.nv.winbar()%}
+    set wbr=%{%v:lua.nv.winbar()%}
     " vint: +ProhibitAbbreviationOption
   endif
   let &l:cmdheight = has('nvim') ? 0 : 1

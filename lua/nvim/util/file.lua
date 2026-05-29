@@ -1,5 +1,13 @@
 local M = {}
 
+function M.gen(path, lines)
+  lines = vim.list_extend({ '-- This file is generated. Do not edit.' }, lines)
+  vim.fn.mkdir(vim.fs.dirname(path), 'p')
+  vim.fn.writefile(lines, path)
+  vim.notify('File created: ' .. path, vim.log.levels.INFO)
+  return path
+end
+
 function M.size()
   local fn = vim.fn
   local size = fn.getfsize(fn.expand('%:p'))
