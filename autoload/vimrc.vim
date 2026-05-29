@@ -3,17 +3,27 @@ let g:vimrc#dir = fnamemodify($MYVIMRC, ':h')
 let $VIMDIR = g:vimrc#dir
 
 function! vimrc#init() abort
-  call vim#defaults#()
-  call vim#sensible#()
+  if !has('nvim')
+    call vim#defaults#()
+    call vim#sensible#()
+  else
+    let g:loaded_node_provider = 0
+    let g:loaded_perl_provider = 0
+    let g:loaded_python3_provider = 0
+    let g:loaded_ruby_provider = 0
+  endif
+endfunction
+
+function! s:setmark(pattern, idx, line) abort
+  let char = matchstr(a:line, a:pattern . '\zs.')
+  if char !=# ''
+    call setpos("'" . toupper(char), [0, a:idx + 1, 1, 0])
+  endif
+  return 0
 endfunction
 
 function! vimrc#setmarks() abort
-  for num in range(1, line('$'))
-    if getline(num) =~? '^"\s*Section:\s*\zs.'
-      let char = matchstr(getline(num), '^"\s*Section:\s*\zs.')
-      call setpos("'" . toupper(char), [0, num, 1, 0])
-    endif
-  endfor
+  call map(getline(1, '$'), {idx, line -> s:setmark('augroup\ vimrc\.', idx, line)})
 endfunction
 
 function! vimrc#apathy(...) abort

@@ -22,8 +22,10 @@ function! s:stdpath(what) abort
   return eval(env)
 endfunction
 
-" dictionary of a subset of stdpath values to reduce overhead of calling
-" `stdpath()` multiple times in various places; also works in vim,
-" which does not have `stdpath()`, but supports XDG env vars
-let g:stdpath = reduce(keys(s:paths),
-      \ {acc, k -> extend(acc, {k: exists('*stdpath') ? stdpath(k) : s:stdpath(k) . '/vim'})}, {} )
+" subset of stdpath values to reduce overhead of calling `stdpath()`
+" multiple times in various places; also works in vim, which does not
+" have `stdpath()`, but supports XDG env vars
+let g:stdpath#cache = exists('*stdpath') ? stdpath('cache') : s:stdpath('cache') .. '/vim'
+let g:stdpath#config = exists('*stdpath') ? stdpath('config') : s:stdpath('config') .. '/vim'
+let g:stdpath#data = exists('*stdpath') ? stdpath('data') : s:stdpath('data') .. '/vim'
+let g:stdpath#state = exists('*stdpath') ? stdpath('state') : s:stdpath('state') .. '/vim'

@@ -1,20 +1,8 @@
 " set autocomplete
 set exrc
-
-if !has('nvim')
-  call vimrc#init()
-else
-  " settings with new options
-  set jumpoptions+=view
-  " nvim-specific settings
-  set mousescroll=hor:0
-  set smoothscroll
-  " default changed from vim
-  set startofline
-endif
-
 augroup vimrc
   au!
+  call vimrc#init()
   set ignorecase
   set jumpoptions+=stack
   set mouse=a
@@ -30,6 +18,8 @@ augroup vimrc
   set whichwrap+=<,>,[,],h,l
   set wildignore+=*.o,*.out,*.a,*.so
 
+  au BufLeave    vimrc normal! mV
+  au BufReadPost vimrc call vimrc#setmarks()
   " automatically resize splits when the window is resized
   au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
   " catch when vim doesn't terminate properly
@@ -41,8 +31,6 @@ augroup vimrc.buffers
   set splitright
   set splitkeep=screen
   set switchbuf+=vsplit " NOTE: minimax wants `usetab`
-  " au BufReadPost vimrc call vimrc#setmarks()
-  au BufLeave vimrc normal! mV
   " restore cursor position upon reopening files
   au BufWinEnter * exe "silent! normal! g`\"zv"
   " automatically reload files that have been changed outside of Vim
@@ -106,46 +94,38 @@ augroup vimrc.commands
 augroup END
 augroup vimrc.dirs
   au!
-  nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
-  nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
+  set nocdhome " default on neovim on unix, off on Windows or vim
+  let s:cd_maps = {
+	\ 'b': '%:p:h',
+	\ 'g': 'git#root()',
+	\ '-': '-',
+	\ }
+  for [k, v] in items(s:cd_maps)
+    execute $'nnoremap cd{k} <Cmd>cd {v} \| verbose pwd <CR>'
+  endfor
 
   let s:dirs = {
 	\ '~': $HOME,
-	\ 'G': $HOME..'/GitHub/',
-	\ 'V': $VIMRUNTIME,
-	\ 'v': $VIMRUNTIME..'/lua/vim',
-	\ 'p': g:plug#home,
 	\ 'B': &backupdir,
-	\ '.': '~/.local/share/chezmoi/',
+	\ 'c': g:stdpath#config,
+	\ 'C': g:stdpath#cache,
+	\ 'd': g:stdpath#data,
+	\ 'G': '~/GitHub/',
+	\ 'p': g:plug#home,
+	\ 'P': $PACKDIR,
+	\ 'v': $VIMRUNTIME..'/lua/vim',
+	\ 'V': $VIMRUNTIME,
+	\ 's': g:stdpath#state,
+	\ '.': '~/.local/share/chezmoi/'
 	\ }
-
-  " TODO: reuse code from `autoload/vim/stdpath.vim`
-  if exists('*stdpath')
-    let s:dirs.C = stdpath('cache')
-    let s:dirs.c = stdpath('config')
-    let s:dirs.d = stdpath('data')
-    let s:dirs.s = stdpath('state')
-  else
-    let s:dirs.C = empty($XDG_CACHE_HOME)  ? expand('~/.cache') : expand('$XDG_CONFIG_HOME') .. '/vim'
-    let s:dirs.c = empty($XDG_CONFIG_HOME) ? expand('~/.config') : expand('$XDG_CONFIG_HOME')  .. '/vim'
-    let s:dirs.d = empty($XDG_DATA_HOME)   ? expand('~/.local/share') : expand('$XDG_DATA_HOME')  .. '/vim'
-    let s:dirs.s = empty($XDG_STATE_HOME)  ? expand('~/.local/state') : expand('$XDG_STATE_HOME')  .. '/vim'
-  endif
-
-  for [key, value] in items(s:dirs)
-    execute $'nnoremap cd{key} <Cmd>edit {value}<CR>'
+  for [k, v] in items(s:dirs)
+    execute $'nnoremap cd{k} <Cmd>edit {v}<CR>'
   endfor
 
-  set nocdhome " default on neovim on unix, off on Windows or vim
   if has('nvim')
     " autocmd TermRequest * call term#print_request()
-    " To configure bash to emit OSC 7:
-    " print_osc7() { printf '\033]7;file://%s\033\\' "$PWD"; }
-    " PROMPT_COMMAND='print_osc7'
     autocmd TermRequest * call term#handleOSC7()
     " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
-    " Shells can emit the `OSC 7` sequence to announce when the current directory (CWD) changed.
-    " If your terminal doesn't already do this for you, you can configure your shell to emit it.
   endif
 augroup END
 augroup vimrc.files
@@ -184,6 +164,9 @@ augroup vimrc.fold
 augroup END
 augroup vimrc.format
   au!
+  nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
+  nnoremap ZF <Cmd>echom 'formatting...'<Bar>ALEFix<CR>
+  nnoremap ZW <Cmd>echom 'formatting and saving...'<Bar>ALEFix<Bar>write!<CR>
   " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
   " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
   set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
@@ -230,6 +213,18 @@ augroup vimrc.keywordprg
   au FileType tex nnoremap <silent><buffer> <leader>K <Plug>(vimtex-doc-package)
   au FileType vim nnoremap <silent><buffer> K <Plug>ScripteaseHelp
 augroup END
+augroup vimrc.navigation
+  au!
+if has('nvim')
+  " settings with new options
+  set jumpoptions+=view
+  " nvim-specific settings
+  set mousescroll=hor:0
+  set smoothscroll
+  " default changed from vim
+  set startofline
+endif
+augroup END
 augroup vimrc.register
   au!
   " yank/delete everything
@@ -268,39 +263,33 @@ augroup END
 augroup vimrc.sesh
   au!
   " default `blank,buffers,curdir,folds,help,tabpages,winsize,terminal`
-  " set sessionoptions-=blank
-  " set sessionoptions-=terminal
+  set sessionoptions-=blank
   set sessionoptions-=curdir
-  " set sessionoptions-=folds
+  set sessionoptions-=terminal
   if has('nvim')
-    " let s:sesh = stdpath('state')..'/Session.vim'
-    " au SessionLoadPre   * echom '[SessionLoadPre]   this session: '..v:this_session
-    au SessionLoadPost  * lua vim.fs.rm(vim.v.this_session)
+    nnoremap <D-r> <Cmd>exe 'mks!' stdpath('data')..'/Session.vim' \|
+	  \ exe 'confirm restart source' v:this_session<CR>
+    " au SessionLoadPre   * echom '[SessionLoadPre] this session: '..v:this_session
+    " au SessionLoadPost  * silent! lua vim.fs.rm(vim.v.this_session)
     au SessionWritePost * echom '[SessionWritePost] this session: '..v:this_session
-    " nnoremap <D-r> <Cmd>execute 'mksession!' | execute 'confirm restart source' v:this_session \<CR>
-    nnoremap <D-r> <Cmd>execute 'mksession!' \| exe printf('confirm restart source %s', v:this_session)<CR>
   endif
 augroup END
 augroup vimrc.term
   au!
   tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-  autocmd BufEnter term://*:R\ * startinsert
-  autocmd BufEnter term://*/copilot startinsert
-  if has('nvim') " TODO: move to .lua
+  if has('nvim')
     autocmd TermOpen * let g:last_term_ch = &channel
     autocmd TermOpen * let g:last_term_buf = bufnr('%')
   endif
 augroup END
 augroup vimrc.ui
   au!
-  let &l:cmdheight = has('nvim') ? 0 : 1
-  let &l:laststatus = has('nvim') ? 3 : 2
   set cursorline
   set list
   set number
   set signcolumn=number
-  " set termguicolors
   set tabline=%!vimline#tabline#()
+  " set termguicolors
   set title
   if has('nvim')
     set pumheight=10
@@ -312,48 +301,45 @@ augroup vimrc.ui
     " set wbr=%{%v:lua.nv.winbar()%}
     " vint: +ProhibitAbbreviationOption
   endif
+  let &l:cmdheight = has('nvim') ? 0 : 1
+  let &l:laststatus = has('nvim') ? 3 : 2
 
   " no cursorline in insert mode
   au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
   au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
 
+  " relative numbers in visual mode only if number is already set
+  au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+  au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+
   " hide the statusline while in command mode
   " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
 " au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
-
-" relative numbers in visual mode only if number is already set
-au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
 augroup END
 
 " Section: keymaps {{{1
-nnoremap ` ~
-nnoremap ~ `
-" when in doubt, pinky out
-nnoremap <C-c> ciw
-" nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
-nnoremap <C-e> <Cmd>lua Snacks.explorer.reveal()<CR>
-nnoremap <C-f> <Cmd>lua Snacks.picker()<CR>
-xnoremap <C-s> :sort<CR>
-xnoremap < <gv
-xnoremap > >gv
-
-nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
-nnoremap ZF <Cmd>echom 'formatting...'<Bar>ALEFix<CR>
-nnoremap ZW <Cmd>echom 'formatting and saving...'<Bar>ALEFix<Bar>write!<CR>
-nnoremap zJ <Plug>(unimpaired-move-down)kJ
-
-" TODO: diff?
-" nnoremap dp dp']c
-" nnoremap do do]c
-
-" `<leader>` {{{2
 let g:mapleader = ','
 let g:maplocalleader = '/'
 nnoremap <Space> :
 nnoremap : ,
 xmap <Space> <leader>
+" prefer `'` for marks
+nnoremap ` ~
+nnoremap ~ `
+" when in doubt, pinky out
+nnoremap <C-c> ciw
+nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
+nnoremap - <Cmd>lua Snacks.explorer.reveal()<CR>
+nnoremap <C-f> <Cmd>lua Snacks.picker()<CR>
+xnoremap <C-s> :sort<CR>
+xnoremap < <gv
+xnoremap > >gv
+nnoremap zJ <Plug>(unimpaired-move-down)kJ
+
+" TODO: diff?
+" nnoremap dp dp']c
+" nnoremap do do]c
 
 " debug/diagnostic
 nnoremap <leader>da <Cmd>ALEInfo<CR>
@@ -429,6 +415,7 @@ xnoremap s :s/\%V
 " similarly, apply normal command to each line in selection
 xnoremap n :normal!<Space>
 
+" TODO: function and user getchar
 " insert chars at EOL
 " nnoremap <Bslash>, mzA,<Esc>;`z
 " nnoremap <Bslash>; mzA;<Esc>;`z
@@ -449,11 +436,13 @@ if !has('nvim')
   packadd! editorconfig
   packadd! hlyank
 else
+  " bundled
   packadd! nvim.difftool
   packadd! nvim.tohtml
   packadd! nvim.undotree
   packadd! rd.nvim
 endif
+packadd! vim-symbiote
 
 call plug#begin()
 Plug 'dense-analysis/ale'
@@ -503,4 +492,4 @@ Plug 'iamcco/markdown-preview.nvim'
 call plug#end()
 " }}}1
 color scheme
-" vim: foldmethod=marker foldlevel=0 foldmarker=au!,END
+" vim: foldmethod=marker foldlevel=0 foldmarker=augroup\ vimrc,END

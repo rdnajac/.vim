@@ -75,7 +75,7 @@ end
 M.client_id = assert(vim.lsp.start({
   cmd = create_client,
   name = 'myserver',
-  root_dir = vim.g.stdpath.config,
+  root_dir = vim.g['stdpath#config'],
 }, { attach = false }))
 
 return M

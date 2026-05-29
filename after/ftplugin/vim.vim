@@ -1,4 +1,5 @@
 scriptencoding utf-8
+ia <buffer> enc scriptencoding utf-8
 setlocal iskeyword-=#          " makes autoloaded functions easier to `ciw`
 setlocal commentstring=\"\ %s  " bette foldmarkers with `zf`
 
@@ -16,4 +17,3 @@ nnoremap <buffer> <M-CR> <Cmd>so % \| echom 'Sourced ' .. expand('%:p')<CR>
 
 nnoremap <buffer> yu viWyo<Esc>p0iechom<Space><Esc>
 
-ia <buffer> enc scriptencoding utf-8

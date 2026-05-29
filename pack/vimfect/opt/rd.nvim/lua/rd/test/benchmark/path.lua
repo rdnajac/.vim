@@ -1,8 +1,8 @@
 local benchmark = require('test.benchmark')
 
-local dir = vim.fs.joinpath(vim.g.stdpath.config, 'lua', 'nvim', 'plugins')
+local dir = vim.fs.joinpath(vim.g['stdpath#config'], 'lua', 'nvim', 'plugins')
 local files = vim.fn.globpath(dir, '[^i]*.lua', false, true)
-local base = vim.fs.joinpath(vim.g.stdpath.config, 'lua')
+local base = vim.fs.joinpath(vim.g['stdpath#config'], 'lua')
 
 benchmark.run({
   match = function()

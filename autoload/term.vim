@@ -1,3 +1,8 @@
+" Shells can emit the `OSC 7` sequence to announce when the current directory (CWD) changed.
+" If your terminal doesn't already do this for you, you can configure your shell to emit it.
+" print_osc7() { printf '\033]7;file://%s\033\\' "$PWD"; }
+" PROMPT_COMMAND='print_osc7'
+
 " OSC 7 format: ESC ] 7 ; file://host/path ESC \
 let s:OSC7 = '\e]7;file://'
 

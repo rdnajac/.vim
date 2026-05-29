@@ -9,16 +9,12 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "0593548ee0b0978abf303d30f449234e07f951d1",
+      "rev": "56507d063ff412baf49a359e7f57d8473a8b6547",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
-      "rev": "f29d8bac6549bc1e7d699c83f680823d7def98bd",
+      "rev": "41bc1199dd1f5f0687efbd522061b22002c2d4c5",
       "src": "https://github.com/Saghen/blink.lib.git"
-    },
-    "copilot.vim": {
-      "rev": "a12fd5672110c8aa7e3c8419e28c96943ca179be",
-      "src": "https://github.com/github/copilot.vim.git"
     },
     "fzf": {
       "rev": "a50619388d76832a18b4fc0db9d61f8dd5e3b518",
@@ -41,7 +37,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "15abccbe23525ee0502d2efe620c77db00bfb93c",
+      "rev": "9d0b9b7188d5c24b5a87f0d8b383ec8bda7a0de4",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -95,10 +91,6 @@
     "vim-dadbod": {
       "rev": "6d1d41da4873a445c5605f2005ad2c68c99d8770",
       "src": "https://github.com/tpope/vim-dadbod.git"
-    },
-    "vim-dirvish": {
-      "rev": "9525f46ccbf2dd585523fe3e3b72151554df3a42",
-      "src": "https://github.com/justinmk/vim-dirvish.git"
     },
     "vim-dispatch": {
       "rev": "a2ff28abdb2d89725192db5b8562977d392a4d3f",

@@ -73,7 +73,8 @@ M.fuzzy = {
 }
 
 M.keymap = {
-  preset = 'none',
+  -- preset = 'none',
+  preset = 'enter',
   -- overrides default `:h i_CTRL-R`
   -- ['<C-R>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
   ['<C-x><C-r>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
@@ -93,7 +94,7 @@ M.sources = {
   default = { 'lsp', 'path', 'snippets' },
   per_filetype = {
     ['lua'] = { inherit_defaults = true, 'lazydev' },
-    ['sql'] = { inherit_defaults = false, 'dadbod' },
+    -- ['sql'] = { inherit_defaults = false, 'dadbod' },
   },
   providers = {
     lsp = {
@@ -131,10 +132,10 @@ M.sources = {
       end,
     },
     -- define custom providers below
-    ['dadbod'] = {
-      name = 'dadbod',
-      module = 'vim_dadbod_completion.blink',
-    },
+    -- ['dadbod'] = {
+    --   name = 'dadbod',
+    --   module = 'vim_dadbod_completion.blink',
+    -- },
     ['env'] = {
       name = 'env',
       module = 'blink.env',
