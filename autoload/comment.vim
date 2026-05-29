@@ -1,4 +1,4 @@
-function! comment#toggle() abort
+function! s:toggle_comment() abort
   " vint: -ProhibitCommandRelyOnUser
   normal gcc
   " vint: +ProhibitCommandRelyOnUser

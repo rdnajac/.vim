@@ -1,28 +1,20 @@
-augroup vimrc " {{{
-  if !has('nvim')
-    call vimrc#init()
-  else
-    " set autocomplete
-    set backup
-    set backupext=.bak
-    set backupdir=~/.local/state/nvim/backup//
-    set backupskip+=~/.cache/*
-    " set cmdheight=0
-    set jumpoptions+=view
-    set mousescroll=hor:0
-    set pumblend=0
-    set pumborder=rounded
-    set pumheight=10
-    set smoothscroll
-    set startofline " default in vim
-    set stl=%{%v:lua.nv.status()%}
-    set wbr=%{%v:lua.nv.winbar()%}
-    set winborder=rounded
-  endif
+" set autocomplete
+set exrc
 
-  let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+if !has('nvim')
+  call vimrc#init()
+else
+  " settings with new options
+  set jumpoptions+=view
+  " nvim-specific settings
+  set mousescroll=hor:0
+  set smoothscroll
+  " default changed from vim
+  set startofline
+endif
 
-  set findfunc=file#find
+augroup vimrc
+  au!
   set ignorecase
   set jumpoptions+=stack
   set mouse=a
@@ -32,43 +24,88 @@ augroup vimrc " {{{
   set shortmess-=o
   set showmatch
   set smartcase
-  set splitbelow splitright splitkeep=screen
-  set switchbuf+=vsplit " NOTE: minimax wants `usetab`
   set timeoutlen=420
   set updatetime=999
   set virtualedit=block
   set whichwrap+=<,>,[,],h,l
   set wildignore+=*.o,*.out,*.a,*.so
 
-  au!
-  " au BufReadPost vimrc call vimrc#setmarks()
-  au BufLeave vimrc normal! mV
-
-  " restore cursor position upon reopening files
-  au BufWinEnter * exe "silent! normal! g`\"zv"
-
-  " create parent directories when saving files
-  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
-
-  " immediately quit the command line window if opened with `q`
-  au CmdwinEnter * quit
-
-  " automatically reload files that have been changed outside of Vim
-  au FocusGained * if &buftype !=# 'nofile' | checktime | endif
-
-  " close certain buffers with `q`
-  au FileType help,qf,nvim-pack nnoremap <buffer> q <Cmd>wincmd c<CR>
-
-  " don't list certain buffer types (skips C-^)
-  au FileType man,netrw,snacks_explorer setlocal nobuflisted
-
   " automatically resize splits when the window is resized
   au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
-
   " catch when vim doesn't terminate properly
   au VimLeave * if v:dying | echo "\nAAAAaaaarrrggghhhh!!!\nExit value is "..v:exiting | endif
-augroup END " }}}
-augroup vimrc.dirs " {{{
+augroup END
+augroup vimrc.buffers
+  au!
+  set splitbelow
+  set splitright
+  set splitkeep=screen
+  set switchbuf+=vsplit " NOTE: minimax wants `usetab`
+  " au BufReadPost vimrc call vimrc#setmarks()
+  au BufLeave vimrc normal! mV
+  " restore cursor position upon reopening files
+  au BufWinEnter * exe "silent! normal! g`\"zv"
+  " automatically reload files that have been changed outside of Vim
+  au FocusGained * if &buftype !=# 'nofile' | checktime | endif
+  " close certain buffers with `q`
+  au FileType help,qf,nvim-pack nnoremap <buffer> q <Cmd>wincmd c<CR>
+  " don't list certain buffer types (skips `<C-^>`)
+  au FileType man,netrw,snacks_explorer setlocal nobuflisted
+augroup END
+augroup vimrc.commands
+  au!
+  command! -nargs=* Diff call cmd#diff#(<f-args>)
+  command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
+  " `https://github.com/neovim/neovim/discussions/38256`
+  " Usage: $`nvim +Clipboard` or `alias pbedit='nvim +Clipboard'`
+  command! Clipboard call cmd#clipboard#()
+
+  if !exists(':hardcopy')
+    " TODO: use `jobstart` to avoid the Snacks dependency
+    command! Hardcopy  lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
+  endif
+
+  " set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
+  " set completeopt+=preinsert
+  " More info here: |cmdline-completion|; default: `wildmode=full`
+  " set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
+  set wildmode=longest:full,full " Same as above, but cycle through the first patch ('preinsert'?)
+  " set wildmode=longest,list    " First press: longest common substring, Second press: list all matches
+  " set wildmode=noselect:full   " Show 'wildmenu' without selecting, then cycle full matches
+  " set wildmode=noselect:lastused,full " Same as above, but buffer matches are sorted by time last used
+
+  " NOTE: After navigating command-line history, the first call to
+  " wildtrigger() is a no-op; a second call is needed to start expansion.
+  " This is to support history navigation in command-line autocompletion.
+  " autocmd CmdlineChanged [:\/\?] call wildtrigger()
+
+  " navigate completion menu with arrow keys
+  cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
+  cnoremap <expr> <Up>   wildmenumode() ? "\<C-p>" : "\<Up>"
+
+  nnoremap ?? :verbose set ?<Left>
+  cnoreabbrev ?? verbose set ?<Left>
+  cnoreabbrev !! !./%
+  cnoreabbrev <expr> %% expand('%:p:h')
+
+  call cmd#abbrev('f', 'find')
+  call cmd#abbrev('dd', 'echom')
+  call cmd#abbrev('vv', 'verbose')
+  call cmd#abbrev('vc', 'verbose cmap')
+  call cmd#abbrev('vi', 'verbose imap')
+  call cmd#abbrev('vn', 'verbose nmap')
+  call cmd#abbrev('vo', 'verbose omap')
+  call cmd#abbrev('vt', 'verbose tmap')
+  call cmd#abbrev('vx', 'verbose xmap')
+  if has('nvim')
+    call cmd#abbrev('man', 'Man')
+    call cmd#abbrev('S', 'lua Snacks.picker')
+  endif
+  " immediately quit the command line window if opened
+  autocmd CmdwinEnter * quit
+augroup END
+augroup vimrc.dirs
+  au!
   nnoremap cdb <Cmd>cd %:p:h<Bar>pwd<CR>
   nnoremap cdp <Cmd>cd %:p:h:h<Bar>pwd<CR>
 
@@ -100,7 +137,6 @@ augroup vimrc.dirs " {{{
   endfor
 
   set nocdhome " default on neovim on unix, off on Windows or vim
-  autocmd!
   if has('nvim')
     " autocmd TermRequest * call term#print_request()
     " To configure bash to emit OSC 7:
@@ -111,8 +147,23 @@ augroup vimrc.dirs " {{{
     " Shells can emit the `OSC 7` sequence to announce when the current directory (CWD) changed.
     " If your terminal doesn't already do this for you, you can configure your shell to emit it.
   endif
-augroup END " }}}
-augroup vimrc.fold " {{{
+augroup END
+augroup vimrc.files
+  au!
+  " create parent directories when saving files
+  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
+
+  set findfunc=file#find
+  if has('nvim')
+    set backup
+    set backupext=.bak
+    set backupdir=~/.local/state/nvim/backup//
+    set backupskip+=~/.cache/*
+  endif
+  let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+augroup END
+augroup vimrc.fold
+  au!
   set foldlevel=99
   " set foldlevelstart=1
   " set foldminlines=3
@@ -125,32 +176,32 @@ augroup vimrc.fold " {{{
   " save, override, and restore commentstring to get nice folds
   xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s<CR>
 
-  autocmd!
   " autocmd FileType vim,lua setlocal
   if has('nvim')
     " use treesitter folding by default for some filetypes
     autocmd FileType markdown,r,rmd,quarto setl fdm=expr fde=v:lua.vim.treesitter.foldexpr()
   endif
-augroup END " }}}
-augroup vimrc.format " {{{
+augroup END
+augroup vimrc.format
+  au!
   " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
   " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
   set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
-  autocmd!
   autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
-augroup END " }}}
-augroup vimrc.indent " {{{
+augroup END
+augroup vimrc.indent
+  au!
   set breakindent
   set breakindentopt=list:1 " TODO: from minimax; keep?
   set linebreak
   set shiftround
   set shiftwidth=2 softtabstop=2 " WARN: don't change tabstop!
-  autocmd!
   " autocmd FileType markdown,tex    setl sw=2 sts=2
   autocmd FileType cpp,cuda,python setl sw=4 sts=4
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
-augroup END " }}}
-augroup vimrc.keywordprg " {{{
+augroup END
+augroup vimrc.keywordprg
+  au!
   " preserve the original K mapping
   " NOTE: overridden in some filetypes below
   nnoremap <leader>k <Cmd>normal! K<CR>
@@ -170,7 +221,6 @@ augroup vimrc.keywordprg " {{{
     setlocal keywordprg=:MyMan
     setlocal iskeyword+=-
   endfunction
-  autocmd!
   " au BufRead,BufNewFile *alacritty.*ml call s:setup('5 alacritty')
   au FileType ghostty,kitty,tmux call s:setup()
   au FileType sshconfig call s:setup('ssh')
@@ -178,61 +228,10 @@ augroup vimrc.keywordprg " {{{
   au FileType lua setlocal keywordprg=:help iskeyword+=-
   au FileType sh  setlocal keywordprg=:Man  iskeyword-=_
   au FileType tex nnoremap <silent><buffer> <leader>K <Plug>(vimtex-doc-package)
-  au FileType vim nnoremap <silent><buffer> <leader>K <Plug>ScripteaseHelp
-augroup END " }}}
-augroup vimrc.sesh " {{{
-  set sessionoptions-=blank
-  set sessionoptions-=folds
-  set sessionoptions-=terminal
-
-  if has('nvim')
-    " au SessionLoadPre
-    " au SessionLoadPost
-    " au SessionWritePost
-
-    function s:restart() abort
-      execute 'mksession!' stdpath('state')..'/Session.vim'
-      execute 'confirm restart silent source' v:this_session
-    endfunction
-
-    command! Restart call s:restart()
-    nnoremap <D-r> <Cmd>Restart<CR>
-  endif
-augroup END " }}}
-augroup vimrc.term " {{{
-  tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-  autocmd BufEnter term://*:R\ * startinsert
-  autocmd BufEnter term://*/copilot startinsert
-  if has('nvim') " TODO: move to .lua
-    autocmd TermOpen * let g:last_term_ch = &channel
-    autocmd TermOpen * let g:last_term_buf = bufnr('%')
-  endif
-augroup END " }}}
-augroup vimrc.ui  " {{{
-  set cursorline
-  set list
-  set number
-  set signcolumn=number
-  " set termguicolors
-  let &l:laststatus = has('nvim') ? 3 : 2
-  set tabline=%!vimline#tabline#()
-  set title
-
-  autocmd!
-  " no cursorline in insert mode
-  au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
-  au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
-
-  " hide the statusline while in command mode
-  " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
-" au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
-
-  " relative numbers in visual mode only if number is already set
-  au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-  au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
-augroup END " }}}
-augroup vimrc.yank " {{{
+  au FileType vim nnoremap <silent><buffer> K <Plug>ScripteaseHelp
+augroup END
+augroup vimrc.register
+  au!
   " yank/delete everything
   nnoremap yY <Cmd>%y<CR>
   nnoremap dD <Cmd>%d<CR>
@@ -257,112 +256,76 @@ augroup vimrc.yank " {{{
   nnoremap cm :<C-u><C-r><C-r>="let @q = " . string(getreg('q'))<CR>
   nnoremap cM :<C-u><C-r><C-r>="let @". v:register ." = ". string(getreg(v:register))<CR><Left>
 
-  function s:set_clipboard() abort
-    if !has('nvim')
-      set clipboard=unnamed
-    elseif !exists('$SSH_TTY')
-      " don't set clipboard over ssh
-      set clipboard=unnamedplus
-    endif
-  endfunction
-
-  function s:fallback() abort
-    if empty(&clipboard)
-      " map default yank to system clipboard
-      nnoremap <expr> y v:register == '"' ? '"+y' : 'y'
-      vnoremap <expr> y v:register == '"' ? '"+y' : 'y'
-      " copy the last yanked text to the system clipboard
-      silent let @+ = getreg('"')
-    endif
-  endfunction
-
-  function! s:yankring() abort
-    if v:event.operator ==# 'y'
-      " call map(range(9, 1, -1), {_, i -> setreg(string(i), getreg(string(i-1)))})
-      for i in range(9, 1, -1)
-	call setreg(string(i), getreg(string(i - 1)))
-      endfor
-    endif
-  endfunction
-
-  autocmd!
-  autocmd TextYankPost * call s:yankring()
-  " Setup unnamedplus clipboard on first yank if the system clipboard is not not already setup
-  autocmd TextYankPost * ++once call s:fallback()
+  " set clipboard on first yank if not already setup
+  autocmd TextYankPost * ++once call register#clipboard_fallback()
+  autocmd TextYankPost * call register#yankring()
   if has('nvim')
-    autocmd TextYankPost * silent! lua vim.hl.on_yank()
-    autocmd UIEnter * call s:set_clipboard()
+    autocmd TextPutPost  * silent! lua vim.hl.hl_op()
+    autocmd TextYankPost * silent! lua vim.hl.hl_op()
+    autocmd UIEnter * call register#set_clipboard()
   endif
-augroup END " }}}
+augroup END
+augroup vimrc.sesh
+  au!
+  " default `blank,buffers,curdir,folds,help,tabpages,winsize,terminal`
+  " set sessionoptions-=blank
+  " set sessionoptions-=terminal
+  set sessionoptions-=curdir
+  " set sessionoptions-=folds
+  if has('nvim')
+    " let s:sesh = stdpath('state')..'/Session.vim'
+    " au SessionLoadPre   * echom '[SessionLoadPre]   this session: '..v:this_session
+    au SessionLoadPost  * lua vim.fs.rm(vim.v.this_session)
+    au SessionWritePost * echom '[SessionWritePost] this session: '..v:this_session
+    " nnoremap <D-r> <Cmd>execute 'mksession!' | execute 'confirm restart source' v:this_session \<CR>
+    nnoremap <D-r> <Cmd>execute 'mksession!' \| exe printf('confirm restart source %s', v:this_session)<CR>
+  endif
+augroup END
+augroup vimrc.term
+  au!
+  tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+  autocmd BufEnter term://*:R\ * startinsert
+  autocmd BufEnter term://*/copilot startinsert
+  if has('nvim') " TODO: move to .lua
+    autocmd TermOpen * let g:last_term_ch = &channel
+    autocmd TermOpen * let g:last_term_buf = bufnr('%')
+  endif
+augroup END
+augroup vimrc.ui
+  au!
+  let &l:cmdheight = has('nvim') ? 0 : 1
+  let &l:laststatus = has('nvim') ? 3 : 2
+  set cursorline
+  set list
+  set number
+  set signcolumn=number
+  " set termguicolors
+  set tabline=%!vimline#tabline#()
+  set title
+  if has('nvim')
+    set pumheight=10
+    set pumblend=0
+    set pumborder=rounded
+    set winborder=rounded
+    " vint: -ProhibitAbbreviationOption
+    set stl=%{%v:lua.nv.status()%}
+    " set wbr=%{%v:lua.nv.winbar()%}
+    " vint: +ProhibitAbbreviationOption
+  endif
 
-" Section: commands {{{1
+  " no cursorline in insert mode
+  au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
+  au InsertEnter,WinLeave * if &cul | let w:had_cul = 1 | setl nocul | endif
 
-command! -nargs=* Diff call cmd#diff#(<f-args>)
-command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
+  " hide the statusline while in command mode
+  " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
+" au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 
-" `https://github.com/neovim/neovim/discussions/38256`
-" Usage: $ nvim +Clipboard # or alias pbedit='nvim +Clipboard'
-command! Clipboard call edit#clipboard()
-
-if !exists(':hardcopy')
-  command! Hardcopy  lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
-endif
-
-let g:vimtex_format_enabled = 1
-let g:vimtex_mappings_disable = {'n': ['K']}
-let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
-
-" set completeopt=menu,preview,longest " see `:h |cmdline-completion|.`
-" set completeopt+=preinsert
-" More info here: |cmdline-completion|; default: `wildmode=full`
-" set wildmode=longest,full    " 1 First press: longest common substring, Second press: full match
-set wildmode=longest:full,full " Same as above, but cycle through the first patch ('preinsert'?)
-" set wildmode=longest,list    " First press: longest common substring, Second press: list all matches
-" set wildmode=noselect:full   " Show 'wildmenu' without selecting, then cycle full matches
-" set wildmode=noselect:lastused,full " Same as above, but buffer matches are sorted by time last used
-
-" NOTE: After navigating command-line history, the first call to
-" wildtrigger() is a no-op; a second call is needed to start expansion.
-" This is to support history navigation in command-line autocompletion.
-" autocmd CmdlineChanged [:\/\?] call wildtrigger()
-
-" navigate completion menu with arrow keys
-cnoremap <expr> <Down> wildmenumode() ? "\<C-n>" : "\<Down>"
-cnoremap <expr> <Up>   wildmenumode() ? "\<C-p>" : "\<Up>"
-
-" autocomplete
-" imap / /<C-x><C-f><C-n>
-" imap <expr> <Tab> pumvisible() ? <C-y> : <Tab>
-
-nnoremap ?? :verbose set ?<Left>
-cnoreabbrev ?? verbose set ?<Left>
-cnoreabbrev !! !./%
-cnoreabbrev <expr> %% expand('%:p:h')
-
-function! s:singlequote(str)
-  return "'"..substitute(copy(a:str), "'", "''", 'g').."'"
-endfunction
-" maybe check getcmdline() =~# "%s"
-function! s:cabbrev(lhs, rhs)
-  execute printf(
-	\ 'cabbrev <expr> %s (getcmdtype() == ":" && getcmdpos() <= %d) ? %s : %s',
-	\ a:lhs, 1+len(a:lhs), s:singlequote(a:rhs), s:singlequote(a:lhs))
-endfunction
-
-call s:cabbrev('f', 'find')
-call s:cabbrev('dd', 'echom')
-call s:cabbrev('vv', 'verbose')
-call s:cabbrev('vc', 'verbose cmap')
-call s:cabbrev('vi', 'verbose imap')
-call s:cabbrev('vn', 'verbose nmap')
-call s:cabbrev('vo', 'verbose omap')
-call s:cabbrev('vt', 'verbose tmap')
-call s:cabbrev('vx', 'verbose xmap')
-if has('nvim')
-  call s:cabbrev('man', 'Man')
-  call s:cabbrev('S', 'lua Snacks.picker')
-endif
-" }}}1
+" relative numbers in visual mode only if number is already set
+au ModeChanged [vV\x16]*:* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+au ModeChanged *:[vV\x16]* if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+au WinEnter,WinLeave *     if &nu| let &l:rnu = mode() =~# '^[vV\x16]' | endif
+augroup END
 
 " Section: keymaps {{{1
 nnoremap ` ~
@@ -489,8 +452,7 @@ else
   packadd! nvim.difftool
   packadd! nvim.tohtml
   packadd! nvim.undotree
-  packadd! munchies.nvim
-  " packadd! rd.nvim
+  packadd! rd.nvim
 endif
 
 call plug#begin()
@@ -515,7 +477,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 " Plug 'tpope/vim-vinegar'
-Plug 'justinmk/vim-dirvish'
+" Plug 'justinmk/vim-dirvish'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'romainl/vim-qf.git'
 " Plug 'vuciv/golf'
@@ -524,6 +486,7 @@ if !has('nvim')
   Plug 'AndrewRadev/dsf.vim'
   Plug 'Konfekt/FastFold'
   " Plug 'andymass/vim-matchup'
+  Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
@@ -536,9 +499,8 @@ else
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
 endif
-Plug 'github/copilot.vim'
 Plug 'iamcco/markdown-preview.nvim'
 call plug#end()
 " }}}1
 color scheme
-" vim: foldmethod=marker foldlevel=0
+" vim: foldmethod=marker foldlevel=0 foldmarker=au!,END

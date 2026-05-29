@@ -73,6 +73,7 @@ M.fuzzy = {
 }
 
 M.keymap = {
+  preset = 'none',
   -- overrides default `:h i_CTRL-R`
   -- ['<C-R>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
   ['<C-x><C-r>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },

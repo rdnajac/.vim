@@ -26,7 +26,8 @@ Plug({
   },
 })
 
+require('vim._core.ui2').enable({ msg = { targets = 'msg' } })
 return {
-  ['2'] = require('nvim.ui.2'),
+  -- ['2'] = require('nvim.ui.2'),
   icons = require('nvim.ui.icons'),
 }

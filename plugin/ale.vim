@@ -30,3 +30,8 @@ else
 endif
 
 " au BufRead,BufNewFile */.github/*/*.y{,a}ml let b:ale_linters = {'yaml': ['actionlint']}
+
+" TODO: find me a home
+let g:vimtex_format_enabled = 1
+let g:vimtex_mappings_disable = {'n': ['K']}
+let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'

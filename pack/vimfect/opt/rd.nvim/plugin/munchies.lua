@@ -45,7 +45,7 @@ nnoremap glW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 
 vim.schedule(function()
   Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
-  Snacks.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, { lsp = {} })
+  -- Snacks.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, { lsp = {} })
   Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'lua' })
   Snacks.keymap.set({ 'x' }, '<M-CR>', Snacks.debug.run, { ft = 'markdown' })
   -- normal and terminal mode keymaps

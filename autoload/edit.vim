@@ -1,64 +1,88 @@
-  " create an ephemeral buffer containing the clipboard contents
-  " on write, yank the buffer contents to the clipboard and delete the buffer
-function! edit#clipboard() abort
-  edit +setl\ bt=acwrite\ bh=wipe\ nobl\ noswf Clipboard
-  silent execute 'put +|1d _'
-  au BufWriteCmd <buffer> %yank + | set nomodified'
-endfunction
-
 " TODO: add param to set how we open the file
 " ie edit/split/vsplit like in picker confirms
-function! edit#(...) abort
-  call call('s:edit', a:000)
+function! s:apply_extra(extra) abort
+  if a:extra =~# '\v(^|\s)\+\S'
+    execute matchstr(a:extra, '\v\+\S+')
+    normal! zvzz
+  endif
 endfunction
 
-function! s:edit(file, ...) abort
-  let file = fnamemodify(a:file, ':p')
+function! s:build_cmd(layout, extra, file) abort
+  let cmd = (!empty(a:layout) ? a:layout..' | ' : '')..'drop '
+  let cmd .= (!empty(a:extra) ? a:extra..' ' : '')..fnameescape(a:file)
+  return cmd
+endfunction
+
+function! s:find_bufwin(buf) abort
+  let wins = win_findbuf(a:buf)
+  if !empty(wins)
+    return [wins[0], 0]
+  endif
+  let winid = bufwinid(a:buf)
+  if winid != -1
+    return [winid, 0]
+  endif
+  for w in range(1, winnr('$'))
+    if winbufnr(w) == a:buf
+      return [win_getid(w), w]
+    endif
+  endfor
+  return [0, 0]
+endfunction
+
+function! edit#(file, ...) abort
+  let file = a:file
   let extra = a:0 >= 1 ? a:1 : ''
 
   if !filereadable(file)
-    let maybe_dir = fnamemodify(a:file, ':r')
+    let maybe_dir = fnamemodify(file, ':r')
     if isdirectory(maybe_dir)
-      let file = maybe_dir . '/'
+      let file = maybe_dir..'/'
     endif
   endif
 
   " Jump to buffer if already open in current tab
-  for w in range(1, winnr('$'))
-    if bufexists(winbufnr(w)) && fnamemodify(bufname(winbufnr(w)), ':p') ==# file
-      execute w . 'wincmd w'
-      if extra =~# '\v(^|\s)\+\S'
-	execute matchstr(extra, '\v\+\S+')
-	normal! zvzz
-      endif
+  let buf = bufnr(file)
+  if buf > 0
+    let [winid, wnr] = s:find_bufwin(buf)
+    if winid > 0
+      call win_gotoid(winid)
+      call s:apply_extra(extra)
+      return
+    elseif wnr > 0
+      execute wnr..'wincmd w'
+      call s:apply_extra(extra)
       return
     endif
-  endfor
+  endif
 
   " if the file is not open, open it in a window
   " if there is only one window, determine the layout based on window size
   " TODO: let layout be an optional arguent that we solve for if it doesn exist
   let layout = ''
   if winnr('$') > 1
-    execute (winnr() % winnr('$') + 1) . 'wincmd w'
+    let cur = win_getid()
+    for info in getwininfo()
+      if info.winid !=# cur
+        call win_gotoid(info.winid)
+        break
+      endif
+    endfor
   else
     if bufname('%') !=# ''
       let layout = &columns > 80 ? 'vsplit' : &columns > 20 ? 'split' : ''
     endif
   endif
 
-  " prepend the command with the layout if it is not empty
-  let cmd = (!empty(layout) ? layout . ' | ' : '') . 'drop '
-  " insert the extra command if it is not empty
-  let cmd .= (!empty(extra) ? extra . ' ' : '') . file
+  let cmd = s:build_cmd(layout, extra, file)
   " If we're focused on a floating window, close it first
   " if !empty(nvim_win_get_config(0).relative) | quit | endif
   execute cmd
-  normal! zvzz
+  call s:apply_extra(extra)
 endfunction
 
 function! s:filetype(dir, ext) abort
-  call s:edit(join([g:vimrc#dir, a:dir, &filetype .. a:ext], '/'))
+  call edit#(join([g:vimrc#dir, a:dir, &filetype .. a:ext], '/'))
 endfunction
 
 function! edit#ftplugin(...) abort
@@ -72,23 +96,21 @@ endfunction
 " TODO: can simplify
 " edit the corresponding autoload or plugin file
 function! edit#ch() abort
-  let file = expand('%:p')
-  if file !~# '\.vim$' || file !~# 'autoload\|plugin'
+  if expand('%:p') !~# '\.vim$' || expand('%:p') !~# 'autoload\|plugin'
     return
   endif
-  let dir = fnamemodify(file, ':h')
-  let tag = fnamemodify(dir, ':t')
-  let alt_dir = fnamemodify(file, ':h:h') . '/' . (tag ==# 'autoload' ? 'plugin' : 'autoload')
-  let alt_file = alt_dir . '/' . fnamemodify(file, ':t') 
-  " call s:edit(alt_file)
+  let tag = expand('%:p:h:t')
+  let alt_dir = expand('%:p:h:h')..'/'..(tag ==# 'autoload' ? 'plugin' : 'autoload')
+  let alt_file = alt_dir..'/'..expand('%:t')
+  " call edit#(alt_file)
   execute 'edit' alt_file
 endfunction
 
 function! s:find_nearest_readme() abort
-  let dir = fnamemodify(expand('%:p'), ':p:h')
-  let home = fnamemodify('~', ':p')
+  let dir = expand('%:p:h')
+  let home = expand('~')
   while dir !=# '/' && dir !=# home
-    let readme = dir . '/README.md'
+    let readme = dir..'/README.md'
     if filereadable(readme)
       return readme
     endif
@@ -99,8 +121,6 @@ endfunction
 
 function! edit#readme() abort
   let readme = s:find_nearest_readme()
-  if empty(readme)
-    let readme = fnamemodify(expand('%:p'), ':h') . '/README.md'
-  endif
-  call s:edit(readme)
+  let readme = !empty(readme) ? readme : expand('%:p:h')..'/README.md'
+  call edit#(readme)
 endfunction

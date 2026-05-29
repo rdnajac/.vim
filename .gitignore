@@ -1,6 +1,7 @@
 .netrwhist
 .viminfo
 .vimlog.txt
+Session.vim
 plugged
 tags
 pack/chezmoi

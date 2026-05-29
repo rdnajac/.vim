@@ -1,3 +1,4 @@
+-- TODO: see `$PACKDIR/tokyonight.nvim/lua/tokyonight/util.lua`
 local M = { 'folke/tokyonight.nvim' }
 
 M.opts = require('nvim.tokyonight.opts')

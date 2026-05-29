@@ -5,7 +5,7 @@
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
-      "rev": "2a3af30fb6a725ec7215435369b310b1d2dc4c09",
+      "rev": "399c0ffd64affec81331c9046d454fd5d4be6c78",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
@@ -20,6 +20,14 @@
       "rev": "a12fd5672110c8aa7e3c8419e28c96943ca179be",
       "src": "https://github.com/github/copilot.vim.git"
     },
+    "fzf": {
+      "rev": "a50619388d76832a18b4fc0db9d61f8dd5e3b518",
+      "src": "https://github.com/junegunn/fzf.git"
+    },
+    "fzf.vim": {
+      "rev": "e5b53de3d3b402d2ef9f74da91c2bb808d0afb34",
+      "src": "https://github.com/junegunn/fzf.vim.git"
+    },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
       "src": "https://github.com/folke/lazydev.nvim.git"
@@ -33,11 +41,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "44657837c7338e52727facc85c1d95bec1f6bd7c",
+      "rev": "15abccbe23525ee0502d2efe620c77db00bfb93c",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "a4ed4e761c400849e8c9f8bda33e5083f890268c",
+      "rev": "9573948c38bfabeec353ae7dd7d3ffec4c506a6b",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -145,7 +153,7 @@
       "src": "https://github.com/tpope/vim-unimpaired.git"
     },
     "vimtex": {
-      "rev": "7c22c2de6adeecfff0708e7f8c86711ce6627ca6",
+      "rev": "24e229914182ff301496a3e2c4214b28c4928d3f",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

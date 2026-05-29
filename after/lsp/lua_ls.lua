@@ -47,7 +47,7 @@ Plug({
       { path = 'snacks.nvim', words = { 'Snacks' } },
       { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
       -- FIXME: flaky...
-    }, require('mini').lazydev or {}),
+    }, require('nvim.mini').lazydev or {}),
   },
 })
 

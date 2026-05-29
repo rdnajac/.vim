@@ -1,10 +1,21 @@
 vim.lsp.config('copilot', { root_dir = vim.fn.expand('~/GitHub') })
 vim.lsp.enable('copilot')
-vim.lsp.inline_completion.enable()
 
-Plug('folke/sidekick.nvim')
+Plug({
+  {
+    'folke/sidekick.nvim',
+    opts = {},
+  },
+  { 'Saghen/blink.lib' },
+  {
+    'Saghen/blink.cmp',
+    build = function() require('blink.cmp').build():wait(6e4) end,
+    opts = require('blink.opts'),
+  },
+})
 
-local tab = function()
+-- map <Tab> to accept completions
+vim.keymap.set('n', '<Tab>', function()
   if vim.fn.pumvisible() ~= 0 then
     return '<C-y>'
   end
@@ -19,36 +30,21 @@ local tab = function()
     return
   end
   return '<Tab>' -- fallback
-end
+end, { expr = true, silent = true })
 
-if Snacks then
-  Snacks.toggle
-    .new({
-      name = 'Inline Completion',
-      get = function() return vim.lsp.inline_completion.is_enabled() end,
-      set = function(state) vim.lsp.inline_completion.enable(state) end,
-    })
-    :map('<leader>ai')
-  Snacks.toggle
-    .new({
-      name = 'Sidekick NES',
-      get = function() return require('sidekick.nes').enabled end,
-      set = function(state) require('sidekick.nes').enable(state) end,
-    })
-    :map('<leader>an')
-end
+-- create Snacks.toggles
+local inline_completion = vim.lsp.inline_completion
+Snacks.toggle({
+  name = 'Inline Completion',
+  get = function() return inline_completion.is_enabled() end,
+  set = function(state) inline_completion.enable(state) end,
+}):map('<leader>ai')
+-- inline_completion.enable()
 
-vim.cmd([[
-let g:force_copilot = 1
-if exists('g:force_copilot')
-  nnoremap <leader>ap <Cmd>lua require('sidekick.cli').prompt({ name = 'copilot' })<CR>
-  nnoremap <leader>at <Cmd>lua require('sidekick.cli').send({ name = 'copilot', msg = '{file}' })<CR>
-  xnoremap <leader>at <Cmd>lua require('sidekick.cli').send({ name = 'copilot', msg = '{this}' })<CR>
-  lua vim.keymap.set({'n','t','i','x'}, '<C-.>', function() require('sidekick.cli').focus('copilot') end, {})
-else
-  nnoremap <leader>ap <Cmd>lua require('sidekick.cli').prompt()<CR>
-  nnoremap <leader>at <Cmd>lua require('sidekick.cli').send({msg='{file}'})<CR>
-  xnoremap <leader>at <Cmd>lua require('sidekick.cli').send({msg='{this}'})<CR>
-  lua vim.keymap.set({'n','t','i','x'}, '<C-.>', function() require('sidekick.cli').focus() end, {})
-endif
-]])
+local nes = require('sidekick.nes')
+Snacks.toggle({
+  name = 'Sidekick NES',
+  get = function() return nes.enabled end,
+  set = function(state) nes.enable(state) end,
+}):map('<leader>an')
+-- nes.enable()

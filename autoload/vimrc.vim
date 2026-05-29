@@ -7,7 +7,6 @@ function! vimrc#init() abort
   call vim#sensible#()
 endfunction
 
-
 function! vimrc#setmarks() abort
   for num in range(1, line('$'))
     if getline(num) =~? '^"\s*Section:\s*\zs.'
