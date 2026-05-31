@@ -14,23 +14,30 @@ vim.keymap.set(
   { expr = true, silent = true }
 )
 
+local inline_completion = vim.lsp.inline_completion
+inline_completion.enable()
+
+vim.keymap.set('i', '<C-J>', function()
+  if not inline_completion.get() then
+    return '<C-J>'
+  end
+end, { expr = true, desc = 'Accept the current inline completion' })
+
 -- create Snacks.toggles
 if not Snacks then
   return
 end
 
-local inline_completion = vim.lsp.inline_completion
 Snacks.toggle({
   name = 'Inline Completion',
   get = function() return inline_completion.is_enabled() end,
   set = function(state) inline_completion.enable(state) end,
 }):map('<leader>ai')
--- inline_completion.enable()
 
 local nes = require('sidekick.nes')
+-- nes.enable(false)
 Snacks.toggle({
   name = 'Sidekick NES',
   get = function() return nes.enabled end,
   set = function(state) nes.enable(state) end,
 }):map('<leader>an')
--- nes.enable()

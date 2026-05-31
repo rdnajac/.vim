@@ -101,6 +101,10 @@ install with `pipx install -e .`
 
 - [Neovim](https://neovim.io/)
 
+## Easter Eggs 
+
+$VIMRUNTIME/scripts/emoji_list.lua
+
 ---
 
 > Any sufficiently complicated set of Vim plugins contains an ad hoc, informally-

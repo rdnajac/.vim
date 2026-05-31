@@ -58,6 +58,7 @@ M.sep = {
 
 M.mini = {
   directory = {
+    health = { '󱃪', 'Red' },
     LazyVim = { '󰒲', 'Blue' },
     ghostty = { '󰊠', 'Green' },
     vimtex = { '', 'Yellow' },
@@ -72,6 +73,7 @@ M.mini = {
   file = {
     ['.keep'] = { '󰊢 ', 'Grey' },
     ['devcontainer.json'] = { '', 'Azure' },
+    ['health.lua'] = { '', 'Red' },
   },
   filetype = {
     ghostty = { '👻', 'Green' },

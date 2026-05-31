@@ -320,6 +320,7 @@ augroup vimrc.ui
 augroup END
 
 " Section: keymaps {{{1
+call jk#setup_mappings()
 let g:mapleader = ','
 let g:maplocalleader = '/'
 nnoremap <Space> :

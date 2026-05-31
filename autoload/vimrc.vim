@@ -6,6 +6,14 @@ function! vimrc#init() abort
   if !has('nvim')
     call vim#defaults#()
     call vim#sensible#()
+    " handle wrapped lines better by preferring `gj` and `gk`
+    let s:keys = [ 'j', 'k' , '<Down>', '<Up>']
+    for [i, key] in items(s:keys)
+      let dir = s:keys[i % 2] " limit dir to only j/k
+      execute printf("nnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
+      execute printf("xnoremap <expr> %s v:count ? '%s' : 'g%s'", key, dir, dir)
+    endfor
+    unlet s:keys
   else
     let g:loaded_node_provider = 0
     let g:loaded_perl_provider = 0

@@ -1,10 +1,10 @@
-" let g:copilot_no_tab_map = v:true
-" imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
-
 if !has('nvim')
+  let g:copilot_no_tab_map = v:true
+  imap <silent><script><expr> <C-J> copilot#Accept("\<CR>")
   finish
 endif
 
+" imap <silent><script><expr> <C-J> luaeval('vim.lsp.inline_completion.get()') ? '' : '<Tab>'
 nmap <silent> <Tab> <Plug>(symbiote-tab)
 
 let g:force_copilot = 1
