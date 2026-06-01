@@ -8,7 +8,7 @@ endfunction
 
 function! s:is_between_fences() abort
   if empty(&syntax) && has('nvim')
-    return v:lua.nv.util.inside_code_fences()
+    return v:lua.nv.inside_code_fences()
   endif
   return synID(line('.'), col('.'), 0)->synIDattr('name') =~? 'markdownCodeBlock'
 endfunction

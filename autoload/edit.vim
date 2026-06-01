@@ -81,6 +81,21 @@ function! edit#(file, ...) abort
   call s:apply_extra(extra)
 endfunction
 
+function! edit#goto(...) abort
+  let cfile = a:0 > 0 && !empty(a:1) ? a:1 : expand('<cfile>')
+  let lnum = a:0 > 1 && !empty(a:2) ? a:2 : ''
+  if empty(lnum)
+    let line = getline('.')
+    let lnum = matchstr(line, ':\zs\d\+')
+  endif
+  let lnum = str2nr(lnum)
+  let args = [cfile]
+  if lnum > 0
+    call add(args, '+'..lnum)
+  endif
+  call call('edit#', args)
+endfunction
+
 function! s:filetype(dir, ext) abort
   call edit#(join([g:vimrc#dir, a:dir, &filetype .. a:ext], '/'))
 endfunction

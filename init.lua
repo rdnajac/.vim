@@ -6,13 +6,11 @@ vim.cmd([[source ~/.vim/vimrc]])
 require('snacks')
 _G.bt = Snacks.debug.backtrace
 _G.dd = Snacks.debug.inspect
-_G.nv = {
-  keys = require('nvim.keys'),
-  mini = require('nvim.mini'),
-  status = require('nvim.status'),
-  ui = require('nvim.ui'),
-  util = require('nvim.util'),
-}
+_G.nv = require('nvim')
+nv.keys = require('nvim.keys')
+nv.mini = require('nvim.mini')
+nv.status = require('nvim.status')
+nv.ui = require('nvim.ui')
 
 local status = nv.status
 nv.winbar = function()

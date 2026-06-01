@@ -1,4 +1,4 @@
-local git = require('nvim.util.git')
+local git = nv.git
 local ns = vim.api.nvim_create_namespace('git-status')
 
 ---@class GitStatusCodes

@@ -44,53 +44,22 @@ M.inside_code_fences = function()
   return (ok and node) and node:type():match('code') ~= nil or false
 end
 
--- https://github.com/neovim/neovim/discussions/38271#discussion-9630986
-M.get_visual = function()
-  local vis_mode = fn.mode():match('[Vv\22]')
-  if not vis_mode then
-    return
-  end
-  local line_regs = fn.getregionpos(fn.getpos('v'), fn.getpos('.'), {
-    type = vis_mode,
-    eol = true,
-    exclusive = false,
-  })
-  local sel_text = {}
-  for _, reg in ipairs(line_regs) do
-    local r1, c1, r2, c2 = reg[1][2], reg[1][3], reg[2][2], reg[2][3]
-    local buf_text = vim.api.nvim_buf_get_text(0, r1 - 1, c1 - 1, r2 - 1, c2, {})
-    vim.list_extend(sel_text, buf_text)
-  end
-  return sel_text, line_regs
-end
-
-M['goto'] = function()
-  local line = vim.api.nvim_get_current_line()
-  local lineno = line:match(':(%d+)') or 0
-  local cfile = fn.expand('<cfile>')
-  fn['edit#'](cfile)
-  vim.cmd('normal! ' .. lineno .. 'G')
-end
-
 --- handles truncated paths in the debug.traceback like `.../path/to/file:line:`
 ---@param cfile? string defaults to `expand('<cfile>')`
 M.better_gf = function(cfile)
   cfile = cfile or vim.fn.expand('<cfile>')
   if vim.startswith(cfile, '...') then
     -- HACK: the errors are probably from one of these two dirs
-    local maybe = { PACKDIR = '/core/opt/', VIMRUNTIME = '/nvim/runtime/' }
-    for dir, pattern in pairs(maybe) do
+    for dir, pattern in pairs({
+      PACKDIR = '/core/opt/',
+      VIMRUNTIME = '/nvim/runtime/',
+    }) do
       local match = cfile:match('.*' .. pattern .. '(.*)')
       if match and match ~= '' then
         local file = vim.fs.joinpath(vim.env[dir], match)
         if file and vim.uv.fs_stat(file) then
-          local line = vim.api.nvim_get_current_line()
-          local line_num = line:match(cfile .. ':(%d+)')
           vim.cmd('close')
-          vim.cmd.edit(file)
-          if line_num then
-            vim.cmd('normal! ' .. line_num .. 'G')
-          end
+          fn['edit#goto'](file)
           return
         end
       end
@@ -100,5 +69,32 @@ M.better_gf = function(cfile)
 end
 
 M.on = require('vim._core.util').nvim_on
+
+
+function M.gen(path, lines)
+  lines = vim.list_extend({ '-- This file is generated. Do not edit.' }, lines)
+  vim.fn.mkdir(vim.fs.dirname(path), 'p')
+  vim.fn.writefile(lines, path)
+  vim.notify('File created: ' .. path, vim.log.levels.INFO)
+  return path
+end
+
+function M.size()
+  local size = fn.getfsize(fn.expand('%:p'))
+  if size == -1 then
+    error('file not found')
+  elseif size == -2 then
+    error('fsize too big')
+  end
+  local prefixes = { '', 'K', 'M', 'G' }
+  local i = 1
+  while size > 1024 and i < #prefixes do
+    size = size / 1024
+    i = i + 1
+  end
+
+  local fmt = (i == 1 and '%d bytes' or '%.2f %sib')
+  return string.format(fmt, size, prefixes[i])
+end
 
 return M

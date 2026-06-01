@@ -3,6 +3,9 @@
 error('this file should not be required directly')
 
 nv = nv or {}
+nv.git = require('nvim.git')
+nv.git.extmarks = require('nvim.git.extmarks')
+nv.git.meta = require('nvim.git.meta')
 nv.keys = require('nvim.keys')
 nv.keys.brackets = require('nvim.keys.brackets')
 nv.keys.cmp = require('nvim.keys.cmp')
@@ -32,8 +35,3 @@ nv.ui["2"] = require('nvim.ui.2')
 nv.ui.icons = require('nvim.ui.icons')
 nv.ui.notify = require('nvim.ui.notify')
 nv.ui.select = require('nvim.ui.select')
-nv.util = require('nvim.util')
-nv.util.file = require('nvim.util.file')
-nv.util.git = require('nvim.util.git')
-nv.util.git.extmarks = require('nvim.util.git.extmarks')
-nv.util.git.meta = require('nvim.util.git.meta')

@@ -118,7 +118,7 @@ return {
       group = function(buf_id, match, data)
         local pos = { data.line - 1, data.from_col - 1 }
         local opts = { bufnr = buf_id, pos = pos }
-        if not require('nvim.util').is_comment(opts) then
+        if not nv.is_comment(opts) then
           return nil
         end
 
