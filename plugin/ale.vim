@@ -16,17 +16,14 @@ let g:ale_linters = {
       \ 'vim' : ['vint'],
       \ }
 
-if has('nvim')
-  let g:ale_disable_lsp = 1
-  " HACK: override the default `ale.diagnostics` module to use `ale_send` from above
-  lua package.preload['ale.diagnostics'] = function() return { send = nv.diagnostic.ale_send } end
-else
+if !has('nvim')
   hi clear ALEErrorSign
   hi clear ALEWarningSign
   let g:ale_sign_error   = '🔥'
   let g:ale_sign_warning = '💩'
-  let g:ale_floating_window_border =
-	\ ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
+  let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
+else
+  let g:ale_disable_lsp = 1
 endif
 
 " au BufRead,BufNewFile */.github/*/*.y{,a}ml let b:ale_linters = {'yaml': ['actionlint']}

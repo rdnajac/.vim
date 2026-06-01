@@ -4,8 +4,12 @@ local severity_map = {
   W = severity.WARN,
   I = severity.INFO,
 }
-
--- local icons = { '', '', '', '' }
+-- local hl_map = {
+--   [severity.ERROR] = 'DiagnosticSignError',
+--   [severity.WARN] = 'DiagnosticSignWarn',
+--   [severity.INFO] = 'DiagnosticSignInfo',
+--   [severity.HINT] = 'DiagnosticSignHint',
+-- }
 local icons = {
   [severity.ERROR] = '',
   [severity.WARN] = '',
@@ -16,30 +20,21 @@ local icons = {
   -- Info = '',
   -- Hint = '',
 }
+-- local icons = { '', '', '', '' }
 
-local hl_map = {
-  [severity.ERROR] = 'DiagnosticSignError',
-  [severity.WARN] = 'DiagnosticSignWarn',
-  [severity.INFO] = 'DiagnosticSignInfo',
-  [severity.HINT] = 'DiagnosticSignHint',
-}
-
-local M = {}
-
----@type vim.diagnostic.Opts
-M.opts = {
+vim.diagnostic.config({
   float = { source = true },
   underline = false,
   virtual_text = false,
   severity_sort = true,
   signs = { text = icons },
-}
+})
 
 --- Send diagnostics to the Neovim diagnostics API
 ---@param buf number The buffer number to retreive the variable for.
 ---@param loclist table The loclist array to report as diagnostics.
 ---@return nil
-M.ale_send = function(buf, loclist)
+local ale_send = function(buf, loclist)
   local diagnostics = vim
     .iter(loclist)
     :filter(function(location) return location.bufnr == buf end)
@@ -62,6 +57,5 @@ M.ale_send = function(buf, loclist)
   vim.diagnostic.set(ns, buf, diagnostics, {})
 end
 
-vim.diagnostic.config(M.opts)
-
-return M
+-- HACK: override the default `ale.diagnostics` lua module
+package.preload['ale.diagnostics'] = function() return { send = ale_send } end

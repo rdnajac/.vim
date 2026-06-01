@@ -4,9 +4,7 @@
 local fs = vim.fs
 local file = require('nvim.util.file')
 
-local function normalize_path(path)
-  return path:gsub('^%./', '')
-end
+local function normalize_path(path) return path:gsub('^%./', '') end
 
 local function read_existing_languages(path)
   local ok, decoded = pcall(function()

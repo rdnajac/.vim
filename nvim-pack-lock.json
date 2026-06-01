@@ -5,23 +5,23 @@
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "ale": {
-      "rev": "399c0ffd64affec81331c9046d454fd5d4be6c78",
+      "rev": "36d541facbcaa3c947bd19ce85a7b854f9257598",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "2d1ba63342a7fe826ca11328bebabba350222cb9",
+      "rev": "7c0fae7fb37c4ee43927df88f4f1b7eb8e33a520",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
-      "rev": "2cb62890cee636fe46722d03b7b2331e54fb3755",
+      "rev": "c09dd66e9ad97e1a7777f3fa5f0504ca2e877231",
       "src": "https://github.com/Saghen/blink.lib.git"
     },
     "fzf": {
-      "rev": "a50619388d76832a18b4fc0db9d61f8dd5e3b518",
+      "rev": "7d647c70c286720c225ebb8ab75896e5dbee6af6",
       "src": "https://github.com/junegunn/fzf.git"
     },
     "fzf.vim": {
-      "rev": "e5b53de3d3b402d2ef9f74da91c2bb808d0afb34",
+      "rev": "7fd26e36098091b45c59120bc8d0cfacc15cc6c8",
       "src": "https://github.com/junegunn/fzf.vim.git"
     },
     "lazydev.nvim": {
@@ -37,7 +37,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "9d0b9b7188d5c24b5a87f0d8b383ec8bda7a0de4",
+      "rev": "232ceeb14f7f7e849056309b85cb2fed712db46f",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
@@ -129,7 +129,7 @@
       "src": "https://github.com/tpope/vim-speeddating.git"
     },
     "vim-startuptime": {
-      "rev": "f10474b400c197787a0434548d842a2db583c333",
+      "rev": "5f33e50f1e2e2a80370c9094e4c303ea54cd2aea",
       "src": "https://github.com/dstein64/vim-startuptime.git"
     },
     "vim-surround": {

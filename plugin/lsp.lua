@@ -2,14 +2,12 @@
 --- NOTE: blink.cmp will automatically add additional capabilities
 --- `$PACKDIR/blink.cmp/lua/blink/cmp/sources/lib/init.lua`
 
-local M = {
-  servers = function()
-    return vim
-      .iter(vim.fn.globpath(vim.fn.stdpath('config') .. '/after/lsp', '*', false, true))
-      :map(function(path) return vim.fn.fnamemodify(path, ':t:r') end)
-      :totable()
-  end,
-}
+local servers = function()
+  return vim
+    .iter(vim.fn.globpath(vim.fn.stdpath('config') .. '/after/lsp', '*', false, true))
+    :map(function(path) return vim.fn.fnamemodify(path, ':t:r') end)
+    :totable()
+end
 
 vim.schedule(function()
   local progress_callback = require('nvim.lsp.progress').callback
@@ -20,7 +18,5 @@ vim.schedule(function()
     end,
   })
   -- enable servers found in `after/`
-  vim.lsp.enable(M.servers())
+  vim.lsp.enable(servers())
 end)
-
-return M

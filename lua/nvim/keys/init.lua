@@ -1,6 +1,7 @@
---- which-key.nvim
---- `$PACKDIR/opt/which-key.nvim/lua/which-key/icons.lua`
+vim.keymap.set({ 'n', 'x' }, { 'j', '<Down>' }, [[v:count ? 'j' : 'gj']], { expr = true })
+vim.keymap.set({ 'n', 'x' }, { 'k', '<Up>' }, [[v:count ? 'k' : 'gk']], { expr = true })
 
+--- `$PACKDIR/opt/which-key.nvim/lua/which-key/icons.lua`
 -- HACK: override default registers to only show a subset
 -- local registers = [[*+"-:.%/#=_0123456789]]
 -- package.preload['which-key.plugins.registers'] = function()
