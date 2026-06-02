@@ -169,13 +169,6 @@ M.treesitter = function()
     :join(' ') .. ' '
 end
 
--- export 
-nv.winbar = function()
-  return vim.api.nvim_get_current_win() ~= tonumber(vim.g.actual_curwin) and M.buffer()
-    or M.render(M.buffer(), M.lsp(), ' ' .. M.treesitter()) .. '%#WinBar# '
-end
-
-setmetatable(M, {
+return setmetatable(M, {
   __call = M.line,
 })
-return M

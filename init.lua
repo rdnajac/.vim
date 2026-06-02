@@ -8,6 +8,7 @@ _G.dd = require('snacks.debug')
 _G.bt = dd.backtrace
 
 _G.nv = require('nvim')
-
 nv.status = require('nvim.status')
+nv.winbar = require('nvim.winbar')
+
 nv.ui = { icons = require('nvim.ui.icons') }
