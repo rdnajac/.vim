@@ -1,19 +1,13 @@
 --- init.lua
 vim.loader.enable()
+require('vim._core.ui2').enable({ msg = { targets = 'msg' } })
 
 vim.cmd([[source ~/.vim/vimrc]])
 
-require('snacks')
-_G.bt = Snacks.debug.backtrace
-_G.dd = Snacks.debug.inspect
-_G.nv = require('nvim')
-nv.keys = require('nvim.keys')
-nv.mini = require('nvim.mini')
-nv.status = require('nvim.status')
-nv.ui = require('nvim.ui')
+_G.dd = require('snacks.debug')
+_G.bt = dd.backtrace
 
-local status = nv.status
-nv.winbar = function()
-  return vim.api.nvim_get_current_win() ~= tonumber(vim.g.actual_curwin) and status.buffer()
-    or status.render(status.buffer(), status.lsp(), ' ' .. status.treesitter()) .. '%#WinBar# '
-end
+_G.nv = require('nvim')
+
+nv.status = require('nvim.status')
+nv.ui = { icons = require('nvim.ui.icons') }

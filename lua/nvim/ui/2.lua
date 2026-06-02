@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd({ 'FileType' }, {
   callback = function(ev)
     vim.treesitter.start(0)
     vim.wo.conceallevel = 3
-    vim.keymap.set({ 'n' }, 'gf', require('nvim.util').better_gf, { buf = ev.buf })
+    vim.keymap.set({ 'n' }, 'gf', nv.better_gf, { buf = ev.buf })
   end,
   desc = 'Apply markdown tree-sitter highlighting for message windows',
 })

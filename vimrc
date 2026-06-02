@@ -449,7 +449,6 @@ packadd! vim-symbiote
 call plug#begin()
 Plug 'dense-analysis/ale'
 Plug 'dstein64/vim-startuptime'
-Plug 'lervag/vimtex'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
@@ -490,7 +489,16 @@ else
   Plug 'neovim/nvim-lspconfig'
   " Plug 'b0o/SchemaStore.nvim'
 endif
+
+Plug 'lervag/vimtex'
+let g:vimtex_format_enabled = 1
+let g:vimtex_mappings_disable = {'n': ['K']}
+let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
+
 Plug 'iamcco/markdown-preview.nvim'
+Plug 'MeanderingProgrammer/render-markdown.nvim'
+" call mkdp#install()
+
 call plug#end()
 " }}}1
 color scheme

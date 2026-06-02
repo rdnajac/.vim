@@ -11,7 +11,8 @@ local function title(self)
   if self.ft then
     local ftlist = type(self.ft) == 'table' and self.ft or { self.ft }
     extra = extra
-      .. vim.iter(ftlist):map(function(ft) return nv.ui.icons.filetype[ft] or '?' end):join('  ')
+      .. vim.iter(ftlist):map(function(ft) return 
+	MiniIcons.get('filetype', ft) or '?' end):join('  ')
   end
   return string.format('%s %s [%s] %s', icon, name, dir, extra)
 end

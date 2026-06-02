@@ -163,12 +163,19 @@ M.treesitter = function()
   local queries = active and active._queries or {}
   return vim
     .iter(queries)
-    :map(function(lang) return lang == vim.bo.filetype and '' or nv.ui.icons.filetype[lang] end)
+    :map(
+      function(lang) return lang == vim.bo.filetype and '' or MiniIcons.get('filetype', lang) end
+    )
     :join(' ') .. ' '
+end
+
+-- export 
+nv.winbar = function()
+  return vim.api.nvim_get_current_win() ~= tonumber(vim.g.actual_curwin) and M.buffer()
+    or M.render(M.buffer(), M.lsp(), ' ' .. M.treesitter()) .. '%#WinBar# '
 end
 
 setmetatable(M, {
   __call = M.line,
 })
-
 return M

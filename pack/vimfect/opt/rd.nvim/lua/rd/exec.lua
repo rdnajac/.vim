@@ -8,7 +8,7 @@ local M = {}
 ---@return highlightClass[]
 function M.highlight()
   return vim
-    .iter(require('nvim.util').exec('highlight'))
+    .iter(nv.exec('highlight'))
     :map(function(line)
       local group, def = line:match('^(%S+)%s*xxx%s(.*)$')
       if group and def then

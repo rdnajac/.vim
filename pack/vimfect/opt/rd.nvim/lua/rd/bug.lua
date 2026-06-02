@@ -42,7 +42,7 @@ M.dd = function(...)
   local t = now()
   local len = select('#', ...) ---@type number
   local obj = { ... } ---@type unknown[]
-  local trace = require('nvim.util.debug').trace()
+  local trace = M.trace()
   local content = len == 1 and obj[1] or len > 0 and obj or ''
   -- local function p() notify(trace .. content) end
   local function p() vim.print(t, trace, content) end

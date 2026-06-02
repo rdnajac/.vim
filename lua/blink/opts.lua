@@ -124,7 +124,7 @@ M.sources = {
       -- https://cmp.saghen.dev/recipes.html#hide-snippets-after-trigger-character
       -- TODO: no snippets in middle of word
       should_show_items = function(ctx)
-        if require('nvim.util').is_comment() then
+        if nv.is_comment() then
           return false
         else
           return ctx.trigger.initial_kind ~= 'trigger_character'

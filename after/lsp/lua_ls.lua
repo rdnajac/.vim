@@ -1,5 +1,5 @@
 package.preload['lazydev.config'] = function()
-  vim.cmd([[command! LazyDev lua require('lazydev.cmd').commands.debug() ]])
+  vim.cmd([[command! LazyDev lua require('lazydev.cmd').commands.debug()]])
   -- registers autocmds for attaching to buffers
   vim.schedule(function() require('lazydev.buf').setup() end)
 
@@ -39,17 +39,15 @@ package.preload['lazydev.config'] = function()
   return M
 end
 
-Plug({
-  'folke/lazydev.nvim',
-  opts = {
-    library = vim.list_extend({
-      vim.env.VIMRUNTIME,
-      { path = 'snacks.nvim', words = { 'Snacks' } },
-      { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
-      -- FIXME: flaky...
-    }, require('nvim.mini').lazydev or {}),
-  },
-})
+local library = vim.list_extend({
+  vim.env.VIMRUNTIME,
+  { path = 'snacks.nvim', words = { 'Snacks' } },
+  { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
+  -- TODO: global opts metatable using vim.defaulttable
+  -- TODO: make nv.opts.lazydev.library global...
+}, nv.mini.lazydev or {})
+
+Plug({ 'folke/lazydev.nvim', opts = { library = library } })
 
 ---@type vim.lsp.Config
 return {

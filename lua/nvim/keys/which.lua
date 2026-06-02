@@ -1,0 +1,8 @@
+--- `$PACKDIR/opt/which-key.nvim/lua/which-key/icons.lua`
+-- HACK: override default registers to only show a subset
+-- local registers = [[*+"-:.%/#=_0123456789]]
+-- package.preload['which-key.plugins.registers'] = function()
+--   local mod = dofile(vim.env.PACKDIR .. '/which-key.nvim/lua/which-key/plugins/registers.lua')
+--   mod.registers = registers
+--   return mod
+-- end

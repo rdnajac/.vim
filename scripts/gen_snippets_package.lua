@@ -2,7 +2,7 @@
 --- generate snippets/package.json
 
 local fs = vim.fs
-local file = require('nvim.util.file')
+local gen = require('nvim').gen
 
 local function normalize_path(path) return path:gsub('^%./', '') end
 
@@ -90,7 +90,7 @@ local function main()
   local stringified = vim.json.encode(payload, { indent = '  ' })
   local lines = vim.split(stringified, '\n', { plain = true })
 
-  file.gen(package_file, lines)
+  gen(package_file, lines)
 end
 
 main()

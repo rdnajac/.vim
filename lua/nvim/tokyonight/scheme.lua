@@ -91,7 +91,6 @@ M.extra_vim = function(...) return require('tokyonight.extra.vim').generate(...)
 
 local hi = {}
 
---- Write executed highlights from nvim.util.exec to file
 --- Converts highlight definitions and links to Vim highlight commands
 --- Output file: `tokyonight_highlight.vim`
 function M.exec()
@@ -123,9 +122,7 @@ function M.exec()
     --   elseif hl.def then
     --     local parts = vim
     --       .iter(pairs(hl.def))
-    --       :map(function(k, v)
-    --         return ('%s=%s'):format(k, v)
-    --       end)
+    --       :map(function(k, v) return ('%s=%s'):format(k, v) end)
     --       :totable()
     --     return ('hi %s %s'):format(hl.group, table.concat(parts, ' '))
     --   end

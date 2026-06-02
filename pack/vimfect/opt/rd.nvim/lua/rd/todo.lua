@@ -33,7 +33,7 @@ M.minimap = { Fixme = 'Error', Hack = 'Warn', Todo = 'Info', Note = 'Hint' }
 M.icon = function(keyword)
   local v = M.minimap[M.lookup[keyword]]
   if v then
-    return { nv.ui.icons.diagnostics[v], 'Diagnostic' .. v }
+    return { nv.icons.diagnostics[v], 'Diagnostic' .. v }
   end
 end
 
