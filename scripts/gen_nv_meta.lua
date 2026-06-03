@@ -2,7 +2,7 @@
 --- generate lua/nvim/meta.lua
 
 local fs = vim.fs
-local gen = require('nvim').gen
+local gen = require('nvim.util').gen
 
 local function main()
   local lua_root = fs.joinpath(vim.fn.stdpath('config'), 'lua')

@@ -1,5 +1,5 @@
----@type render.md.UserConfig
-vim.g.render_markdown_config = {
+local render = require('render-markdown')
+render.setup({
   file_types = { 'markdown', 'rmd', 'quarto' },
   latex = { enabled = false },
   bullet = {
@@ -12,13 +12,10 @@ vim.g.render_markdown_config = {
     comment = { conceal = false },
     enabled = false,
   },
-}
+})
 
-if not Snacks then return end
-
-local render =  require('render-markdown')
-Snacks.toggle({
-  name = 'Render Markdown',
-  get = render.get
-  set = render.state
-}):map('yom')
+vim.schedule(
+  function()
+    Snacks.toggle({ name = 'Render Markdown', get = render.get, set = render.state }):map('yom')
+  end
+)

@@ -1,9 +1,5 @@
-local api, fn, fs, M = vim.api, vim.fn, vim.fs, {}
-
-M.capitalize = function(s) return s:sub(1, 1):upper() .. s:sub(2):lower() end
-M.camelCase = function(s)
-  return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)
-end
+local M = { opts = vim.defaulttable() }
+local api, fn, fs = vim.api, vim.fn, vim.fs
 
 --- Run a Vim command and return the output as a list of lines
 ---@param cmd string Vim command to execute
@@ -68,8 +64,6 @@ M.better_gf = function(cfile)
   vim.cmd('normal! gf')
 end
 
-M.on = require('vim._core.util').nvim_on
-
 function M.gen(path, lines)
   lines = vim.list_extend({ '-- This file is generated. Do not edit.' }, lines)
   vim.fn.mkdir(vim.fs.dirname(path), 'p')
@@ -79,8 +73,10 @@ function M.gen(path, lines)
 end
 
 -- TODO: munchies
-function M.filesize()
-  return Snacks.debug.size(fn.getfsize(fn.expand('%:p')))
-end
+function M.filesize() return Snacks.debug.size(fn.getfsize(fn.expand('%:p'))) end
+-- M.capitalize = function(s) return s:sub(1):upper() .. s:sub(2):lower() end
+-- M.camelCase = function(s) return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper) end
+
+M.on = require('vim._core.util').nvim_on
 
 return M

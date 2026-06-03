@@ -55,28 +55,7 @@ return {
   -- files = { options = { use_as_default_explorer = false } },
   icons = function()
     -- HACK: Override get to do wildcard matching
-    vim.schedule(function()
-      local original_get = _G.MiniIcons.get
-      local override = require('nvim.ui.icons').mini_patterns
-
-      ---@diagnostic disable-next-line: duplicate-set-field
-      MiniIcons.get = function(category, name)
-        local hl
-        if vim.endswith(name, '.tmpl') then
-          name = name:gsub('%.tmpl$', '')
-          hl = 'MiniIconsGrey'
-        end
-        local basename = vim.fs.basename(name:gsub('dot_', '.'))
-        for pattern, spec in pairs(override[category] or {}) do
-          -- add anchors to pattern for exact match
-          if basename:match('^' .. pattern .. '$') then
-            return spec[1], hl or ('MiniIcons' .. spec[2])
-          end
-        end
-        local icon, orig_hl, is_default = original_get(category, name:gsub('dot_', '.'))
-        return icon, hl or orig_hl, is_default
-      end
-    end)
+    vim.schedule(nv.ui.icons.mini_override)
 
     local function minify(v)
       local glyph = type(v) == 'table' and v[1] or v
@@ -118,7 +97,7 @@ return {
       group = function(buf_id, match, data)
         local pos = { data.line - 1, data.from_col - 1 }
         local opts = { bufnr = buf_id, pos = pos }
-        if not nv.is_comment(opts) then
+        if not require('nvim.util').is_comment(opts) then
           return nil
         end
 

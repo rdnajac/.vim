@@ -292,18 +292,6 @@ augroup vimrc.ui
   set tabline=%!vimline#tabline#()
   " set termguicolors
   set title
-  if has('nvim')
-    set pumheight=10
-    set pumblend=0
-    set pumborder=rounded
-    set winborder=rounded
-    " vint: -ProhibitAbbreviationOption
-    set stl=%{%v:lua.nv.status()%}
-    set wbr=%{%v:lua.nv.winbar()%}
-    " vint: +ProhibitAbbreviationOption
-  endif
-  let &l:cmdheight = has('nvim') ? 0 : 1
-  let &l:laststatus = has('nvim') ? 3 : 2
 
   " no cursorline in insert mode
   au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
@@ -457,6 +445,8 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
+" Plug 'justinmk/vim-ug'
+" Plug 'justinmk/guh.nvim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-rsi'
@@ -481,24 +471,24 @@ if !has('nvim')
   Plug 'wellle/targets.vim'
   Plug 'wellle/tmux-complete.vim'
 else
-  Plug 'chrisgrieser/nvim-scissors'
-  Plug 'folke/snacks.nvim'
+  Plug! 'folke/snacks.nvim'
+  Plug 'folke/lazydev.nvim'
   Plug 'folke/tokyonight.nvim'
   Plug 'folke/which-key.nvim'
   Plug 'nvim-mini/mini.nvim'
   Plug 'neovim/nvim-lspconfig'
-  " Plug 'b0o/SchemaStore.nvim'
+  Plug 'b0o/SchemaStore.nvim'
+  Plug 'chrisgrieser/nvim-scissors'
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
 endif
 
 Plug 'lervag/vimtex'
 let g:vimtex_format_enabled = 1
-let g:vimtex_mappings_disable = {'n': ['K']}
-let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
+" let g:vimtex_mappings_disable = {'n': ['K']}
+" let g:vimtex_quickfix_method = executable('pplatex') ? 'pplatex' : 'latexlog'
 
 Plug 'iamcco/markdown-preview.nvim'
-Plug 'MeanderingProgrammer/render-markdown.nvim'
 " call mkdp#install()
-
 call plug#end()
 " }}}1
 color scheme

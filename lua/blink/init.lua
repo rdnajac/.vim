@@ -1,60 +1,6 @@
+local M = {}
+
 ---@module "blink.cmp"
-
----@type blink.cmp.Config
-local M = {
-  cmdline = { enabled = false },
-  signature = { enabled = true, window = { show_documentation = false } },
-}
-
-M.completion = {
-  -- accept = { auto_brackets = { enabled = false } },
-  documentation = { auto_show = true },
-  ghost_text = { enabled = false },
-  -- keyword = {},
-  -- list = { selection = { preselect = false, auto_insert = true } },
-  trigger = {
-    -- show_on_keyword = true,
-    show_on_accept_on_trigger_character = true,
-    -- show_on_x_blocked_trigger_characters = { '"', '(', '{', '[' },
-  },
-  menu = {
-    -- auto_show = false,
-    auto_show = function(_)
-      -- don't show in replace mode
-      return vim.fn.mode():sub(1, 1) ~= 'R'
-    end,
-    -- auto_show_delay_ms = function(ctx, _)
-    --   return vim.tbl_contains(
-    --     { '.', '/', "'", '@', '$', ':', '"', '`', '[', ']' },
-    --     ctx.trigger.initial_character
-    --   ) and 1 or 1000
-    -- end,
-    draw = {
-      columns = {
-        { 'source_id' },
-        { 'label', 'label_description' },
-        -- { 'kind', 'source_name' },
-      },
-      components = {
-        source_id = {
-          ellipsis = false,
-          text = function(ctx)
-            local provider = ctx.source_name:lower()
-            local icon = provider == 'lsp' and MiniIcons.get('lsp', ctx.kind)
-              or require('nvim.ui.icons')[provider]
-            return (icon or '') .. ctx.icon_gap
-          end,
-          ---@param ctx blink.cmp.DrawItemContext
-          highlight = function(ctx)
-            -- high priority to beat the cursorline
-            return { { group = ctx.kind_hl, priority = 10001 } }
-          end,
-        },
-      },
-      treesitter = { 'lsp' },
-    },
-  },
-}
 
 M.fuzzy = {
   sorts = {
@@ -73,8 +19,8 @@ M.fuzzy = {
 }
 
 M.keymap = {
-  -- preset = 'none',
   preset = 'enter',
+  -- preset = 'none',
   -- overrides default `:h i_CTRL-R`
   -- ['<C-R>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
   ['<C-x><C-r>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
@@ -124,7 +70,7 @@ M.sources = {
       -- https://cmp.saghen.dev/recipes.html#hide-snippets-after-trigger-character
       -- TODO: no snippets in middle of word
       should_show_items = function(ctx)
-        if nv.is_comment() then
+        if require('nvim.util').is_comment() then
           return false
         else
           return ctx.trigger.initial_kind ~= 'trigger_character'

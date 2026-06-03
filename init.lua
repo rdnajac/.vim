@@ -1,14 +1,18 @@
---- init.lua
 vim.loader.enable()
-require('vim._core.ui2').enable({ msg = { targets = 'msg' } })
-
-vim.cmd([[source ~/.vim/vimrc]])
-
-_G.dd = require('snacks.debug')
+vim.cmd.run('vimrc')
+_G.dd = Snacks.debug
 _G.bt = dd.backtrace
+_G.nv = setmetatable({ require('nvim.util') }, {
+  __index = function(t, k)
+    local modname = 'nvim.' .. k
+    local ok, m = xpcall(require, debug.traceback, modname)
+    if ok then
+      t[k] = m
+      return m
+    end
+    error(([[`require('%s')` failed: %s]]):format(modname, m))
+  end,
+})
+nv.opts = vim.defaulttable()
 
-_G.nv = require('nvim')
-nv.status = require('nvim.status')
-nv.winbar = require('nvim.winbar')
-
-nv.ui = { icons = require('nvim.ui.icons') }
+nv.ui.setup()

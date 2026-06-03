@@ -3,10 +3,4 @@ return {
     'folke/sidekick.nvim',
     opts = {},
   },
-  { 'Saghen/blink.lib' },
-  {
-    'Saghen/blink.cmp',
-    build = function() require('blink.cmp').build():wait(6e4) end,
-    opts = require('blink.opts'),
-  },
 }

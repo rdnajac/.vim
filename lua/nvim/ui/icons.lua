@@ -1,5 +1,5 @@
 local copilot = ''
--- `$PACKDIR/mini.nvim/lua/mini/icons.lua:682`
+-- `$PACKDIR/mini.nvim/lua/mini/icons.lua:690`
 local M = {
   buffer = '',
   cmdline = '',
@@ -34,6 +34,7 @@ local M = {
     stopped = '󰖪',
   },
 }
+
 M.mason = {
   emojis = { package_installed = '✅', package_pending = '➡️', package_uninstalled = '❌' },
   nerd = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
@@ -137,6 +138,27 @@ M.mini_patterns = {
     ['%.chezmoi.*[^.]'] = { '', 'Yellow' },
   },
 }
+
+M.mini_override = function()
+  local original_get = _G.MiniIcons.get
+  ---@diagnostic disable-next-line: duplicate-set-field
+  MiniIcons.get = function(category, name)
+    local hl
+    if vim.endswith(name, '.tmpl') then
+      name = name:gsub('%.tmpl$', '')
+      hl = 'MiniIconsGrey'
+    end
+    local basename = vim.fs.basename(name:gsub('dot_', '.'))
+    for pattern, spec in pairs(M.mini_patterns[category] or {}) do
+      -- add anchors to pattern for exact match
+      if basename:match('^' .. pattern .. '$') then
+        return spec[1], hl or ('MiniIcons' .. spec[2])
+      end
+    end
+    local icon, orig_hl, is_default = original_get(category, name:gsub('dot_', '.'))
+    return icon, hl or orig_hl, is_default
+  end
+end
 
 ---@param key "directory"|"extension"|"file"|"filetype"|"os"
 ---@param lookup string?

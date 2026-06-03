@@ -4,12 +4,16 @@
       "rev": "0c15985056bff2f473ceaf04eae31622e21ac25b",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
+    "SchemaStore.nvim": {
+      "rev": "19936230448bfb3dfd4314070e8bc499ceb55928",
+      "src": "https://github.com/b0o/SchemaStore.nvim.git"
+    },
     "ale": {
-      "rev": "36d541facbcaa3c947bd19ce85a7b854f9257598",
+      "rev": "178fe113564d31cba304263765aeb21e7ed23a7e",
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "7c0fae7fb37c4ee43927df88f4f1b7eb8e33a520",
+      "rev": "b943982a29f100a4d17b3d2d09dc06b5a0d0f398",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -17,11 +21,11 @@
       "src": "https://github.com/Saghen/blink.lib.git"
     },
     "fzf": {
-      "rev": "7d647c70c286720c225ebb8ab75896e5dbee6af6",
+      "rev": "838ac7554bdbae2f457f2c4969e1b38f1c28c946",
       "src": "https://github.com/junegunn/fzf.git"
     },
     "fzf.vim": {
-      "rev": "7fd26e36098091b45c59120bc8d0cfacc15cc6c8",
+      "rev": "356608e2ae5d9127e2c964885ea2b21ea7aea9ab",
       "src": "https://github.com/junegunn/fzf.vim.git"
     },
     "lazydev.nvim": {
@@ -37,11 +41,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "232ceeb14f7f7e849056309b85cb2fed712db46f",
+      "rev": "11afe78a10570fe1d0c7ed0b6fc2b5b19098cb45",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "9573948c38bfabeec353ae7dd7d3ffec4c506a6b",
+      "rev": "07dff35e7c95288861200b788ef32d6103f107f0",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
