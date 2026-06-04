@@ -1,3 +1,4 @@
+-- TODO: move this from after/ftplugin to a proper, toplevel ftplugin/ since its a new filetype
 vim.b.completion = false
 vim.b.minihipatterns_disable = true
 if vim.fn.exists(':NoMatchParen') == 2 then

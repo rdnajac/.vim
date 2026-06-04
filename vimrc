@@ -1,5 +1,4 @@
 " set autocomplete
-set exrc
 augroup vimrc
   au!
   call vimrc#init()
@@ -20,6 +19,9 @@ augroup vimrc
 
   au BufLeave    vimrc normal! mV
   au BufReadPost vimrc call vimrc#setmarks()
+
+  " load the colorscheme just before loading the ui
+  au VimEnter * color scheme
   " automatically resize splits when the window is resized
   au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
   " catch when vim doesn't terminate properly
@@ -460,8 +462,8 @@ Plug 'iamcco/markdown-preview.nvim'
 " call mkdp#install()
 
 Plug 'R-nvim/R.nvim'
+" stop registering plugins...
 call plug#end()
 
-color scheme
-" }}}1
-" vim: foldmethod=marker foldlevel=0 foldmarker=augroup\ vimrc,END
+" configure the modeline to create folds on the augroups
+" vim: fdm=marker fdl=0 fmr=augroup\ vimrc,END

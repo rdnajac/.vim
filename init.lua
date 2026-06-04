@@ -1,3 +1,4 @@
+vim.o.exrc = true
 vim.loader.enable()
 vim.cmd.run('vimrc')
 _G.dd = Snacks.debug
