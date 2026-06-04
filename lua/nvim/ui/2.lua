@@ -1,19 +1,4 @@
 --- `:h ui2`
-local ui2 = require('vim._core.ui2')
-local ui_fts = { 'msg', 'pager' }
-
-vim.treesitter.language.register('markdown', ui_fts)
-
--- TODO: nvim_on
-vim.api.nvim_create_autocmd({ 'FileType' }, {
-  pattern = ui_fts,
-  callback = function(ev)
-    vim.treesitter.start(0)
-    vim.wo.conceallevel = 3
-    vim.keymap.set({ 'n' }, 'gf', nv.better_gf, { buf = ev.buf })
-  end,
-  desc = 'Apply markdown tree-sitter highlighting for message windows',
-})
 
 --- see `:h ui-messages` for a complete list
 ---@type table<string, nil|'cmd'|'msg'|'pager'>

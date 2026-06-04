@@ -31,8 +31,6 @@ augroup vimrc.buffers
   set splitright
   set splitkeep=screen
   set switchbuf+=vsplit " NOTE: minimax wants `usetab`
-  " restore cursor position upon reopening files
-  au BufWinEnter * exe "silent! normal! g`\"zv"
   " automatically reload files that have been changed outside of Vim
   au FocusGained * if &buftype !=# 'nofile' | checktime | endif
   " close certain buffers with `q`
@@ -87,6 +85,7 @@ augroup vimrc.commands
   call cmd#abbrev('vx', 'verbose xmap')
   if has('nvim')
     call cmd#abbrev('man', 'Man')
+    call cmd#abbrev('open', 'open')
     call cmd#abbrev('S', 'lua Snacks.picker')
   endif
   " immediately quit the command line window if opened
@@ -183,6 +182,7 @@ augroup vimrc.indent
   " autocmd FileType markdown,tex    setl sw=2 sts=2
   autocmd FileType cpp,cuda,python setl sw=4 sts=4
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
+  autocmd FileType quarto          setl noai
 augroup END
 augroup vimrc.keywordprg
   au!
@@ -216,15 +216,35 @@ augroup vimrc.keywordprg
 augroup END
 augroup vimrc.navigation
   au!
-if has('nvim')
-  " settings with new options
-  set jumpoptions+=view
-  " nvim-specific settings
-  set mousescroll=hor:0
-  set smoothscroll
-  " default changed from vim
-  set startofline
-endif
+  set scrolloff=999
+  if has('nvim')
+    " settings with new options
+    set jumpoptions+=view
+    " nvim-specific settings
+    set mousescroll=hor:0
+    set smoothscroll
+    " default changed from vim
+    set startofline
+  endif
+  nnoremap H ^
+  nnoremap L $
+  nnoremap <BS> :bprevious<CR>
+  nnoremap <C-BS> g;
+  nnoremap <C-q> <Cmd>wincmd c<CR>
+  nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
+  nnoremap <C-w><C-v> :<C-u>vsplit #<CR>
+  " nnoremap <C-w>-     <C-w>s
+  " nnoremap <C-w><Bar> <C-w>v
+  " nnoremap <S-Tab>    <Cmd>wincmd w<CR>
+  " NOTE: S-Tab not detected in all terminals...
+  " window navigation with Shift + h/j/k/l
+  for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
+    exe $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
+    exe $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
+  endfor
+
+  " restore cursor position upon reopening files
+  au BufWinEnter * exe "silent! normal! g`\"zv"
 augroup END
 augroup vimrc.register
   au!
@@ -277,10 +297,11 @@ augroup vimrc.sesh
 augroup END
 augroup vimrc.term
   au!
-  tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+  tnoremap <C-P> <C-\><C-N>p<C-\><C-N>a
+  tnoremap <expr> <C-R> '<C-\><C-N>"'..nr2char(getchar())..'pi'
+  exe
   if has('nvim')
-    autocmd TermOpen * let g:last_term_ch = &channel
-    autocmd TermOpen * let g:last_term_buf = bufnr('%')
+    au TermOpen * let g:last_channel = &channel
   endif
 augroup END
 augroup vimrc.ui
@@ -290,8 +311,8 @@ augroup vimrc.ui
   set number
   set signcolumn=number
   set tabline=%!vimline#tabline#()
-  " set termguicolors
   set title
+  " set termguicolors
 
   " no cursorline in insert mode
   au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
@@ -309,8 +330,8 @@ augroup END
 
 " Section: keymaps {{{1
 call jk#setup_mappings()
-let g:mapleader = ','
-let g:maplocalleader = '/'
+let g:mapleader      = ','
+let g:maplocalleader = '\'
 nnoremap <Space> :
 nnoremap : ,
 xmap <Space> <leader>
@@ -320,32 +341,28 @@ nnoremap ~ `
 " when in doubt, pinky out
 nnoremap <C-c> ciw
 nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
-nnoremap - <Cmd>lua Snacks.explorer.reveal()<CR>
+" reserve - for vim-vinegar
+nnoremap _ <Cmd>lua Snacks.explorer.reveal()<CR>
 nnoremap <C-f> <Cmd>lua Snacks.picker()<CR>
 xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
-nnoremap zJ <Plug>(unimpaired-move-down)kJ
-
 " TODO: diff?
 " nnoremap dp dp']c
 " nnoremap do do]c
+nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
-" debug/diagnostic
 nnoremap <leader>da <Cmd>ALEInfo<CR>
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
 nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
-if has('nvim')
-  nnoremap <leader>di <Cmd>Inspect<CR>
-  nnoremap <leader>dI <Cmd>Inspect!<CR>
-  nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
-  nnoremap <leader>dF <Cmd>=vim.filetype.inspect()<CR>
-  nnoremap <leader>dq <Cmd>lua vim.diagnostic.setloclist()<CR>
-  nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
-  nnoremap <leader>dR <Cmd>=require('r.config').get_config()<CR>
-endif
-" file
+nnoremap <leader>di <Cmd>Inspect<CR>
+nnoremap <leader>dI <Cmd>Inspect!<CR>
+nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
+nnoremap <leader>dF <Cmd>=vim.filetype.inspect()<CR>
+nnoremap <leader>dq <Cmd>lua vim.diagnostic.setloclist()<CR>
+nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
+
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fT :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
@@ -355,24 +372,6 @@ nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 nnoremap <leader>m <Cmd>messages<CR>
 nnoremap <leader>p g<
 
-" navigation {{{2
-nnoremap H ^
-nnoremap L $
-nnoremap <BS> :bprevious<CR>
-nnoremap <C-BS> g;
-nnoremap <C-q> <Cmd>wincmd c<CR>
-nnoremap <C-w><C-s> <Cmd>sbprevious<CR>
-nnoremap <C-w><C-v> :<C-u>vsplit #<CR>
-" nnoremap <C-w>-     <C-w>s
-" nnoremap <C-w><Bar> <C-w>v
-" nnoremap <S-Tab>    <Cmd>wincmd w<CR>
-" NOTE: S-Tab not detected in all terminals...
-" window navigation with Shift + h/j/k/l {{{3
-for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
-  exe $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
-  exe $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
-endfor
-" }}}3
 " searching and centering {{{3
 " make `n` and `N` behave the same way for `?` and `/` searches
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
@@ -426,13 +425,10 @@ if !has('nvim')
   packadd! editorconfig
   packadd! hlyank
 else
-  " bundled
   packadd! nvim.difftool
   packadd! nvim.tohtml
   packadd! nvim.undotree
-  packadd! rd.nvim
 endif
-packadd! vim-symbiote
 
 call plug#begin()
 Plug 'dense-analysis/ale'
@@ -447,16 +443,15 @@ Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
-Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
-" Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
-" Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-vinegar'
 " Plug 'justinmk/vim-dirvish'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'romainl/vim-qf.git'
@@ -489,7 +484,9 @@ let g:vimtex_format_enabled = 1
 
 Plug 'iamcco/markdown-preview.nvim'
 " call mkdp#install()
+
+Plug 'R-nvim/R.nvim'
 call plug#end()
-" }}}1
 color scheme
+" }}}1
 " vim: foldmethod=marker foldlevel=0 foldmarker=augroup\ vimrc,END

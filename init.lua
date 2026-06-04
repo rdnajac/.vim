@@ -13,6 +13,4 @@ _G.nv = setmetatable({ require('nvim.util') }, {
     error(([[`require('%s')` failed: %s]]):format(modname, m))
   end,
 })
-nv.opts = vim.defaulttable()
-
-nv.ui.setup()
+vim.schedule(nv.ui.setup)

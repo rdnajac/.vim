@@ -2,7 +2,7 @@
 ---@meta
 error('this file should not be required directly')
 
-nv = nv or {}
+nv = require('nvim.util')
 nv.git = require('nvim.git')
 nv.git.extmarks = require('nvim.git.extmarks')
 nv.git.meta = require('nvim.git.meta')

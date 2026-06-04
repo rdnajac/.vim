@@ -1,5 +1,6 @@
 local M = { opts = vim.defaulttable() }
 local api, fn, fs = vim.api, vim.fn, vim.fs
+M.opts = vim.defaulttable()
 
 --- Run a Vim command and return the output as a list of lines
 ---@param cmd string Vim command to execute

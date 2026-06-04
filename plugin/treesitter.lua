@@ -21,7 +21,7 @@ require('vim._core.util').nvim_on('FileType', nil, {
 -- incremental-selection (C-Space to init/expand, C-BS to shrink)
 vim.cmd([[nmap <C-Space> van | xmap <C-Space> an | xmap <C-BS> in]])
 
-local specs = {
+Plug({
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
   {
     'nvim-treesitter/nvim-treesitter-context',
@@ -34,11 +34,4 @@ local specs = {
       },
     },
   },
-}
-
--- lazy load treesitter plugins when not opening a file
-if vim.fn.argc(-1) == 0 then
-  Plug(specs)
-else
-  vim.schedule(function() Plug(specs) end)
-end
+})

@@ -36,15 +36,15 @@ package.preload['lazydev.config'] = function()
 end
 
 vim.schedule(function()
-  local opts = {
-    library = vim.list_extend({
+  -- set up the plugin and configure paths
+  require('lazydev.config').setup({
+    library = {
       vim.env.VIMRUNTIME,
+      { path = 'mini.nvim', words = { 'Mini.*' } },
       { path = 'snacks.nvim', words = { 'Snacks' } },
       { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
-    }, nv.opts.mini.lazydev or {}),
-  }
-  -- set up the plugin and configure paths
-  require('lazydev.config').setup(opts)
+    },
+  })
   -- register autocmds for attaching to buffers
   require('lazydev.buf').setup()
   -- override the default command to always work as `LazyDev debug`
