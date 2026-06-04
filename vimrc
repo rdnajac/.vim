@@ -105,20 +105,8 @@ augroup vimrc.dirs
   if has('nvim')
     " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
   endif
-augroup END
-augroup vimrc.files
-  au!
   " create parent directories when saving files
   au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
-
-  set findfunc=file#find
-  if has('nvim')
-    set backup
-    set backupext=.bak
-    set backupdir=~/.local/state/nvim/backup//
-    set backupskip+=~/.cache/*
-  endif
-  let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
 augroup END
 augroup vimrc.fold
   au!
@@ -259,19 +247,25 @@ augroup vimrc.register
     autocmd UIEnter * call register#set_clipboard()
   endif
 augroup END
-augroup vimrc.sesh
+augroup vimrc.sys
   au!
+  set findfunc=file#find
   " default `blank,buffers,curdir,folds,help,tabpages,winsize,terminal`
   set sessionoptions-=blank
   set sessionoptions-=curdir
   set sessionoptions-=terminal
   if has('nvim')
-    nnoremap <D-r> <Cmd>exe 'mks!' stdpath('data')..'/Session.vim' \|
-	  \ exe 'confirm restart source' v:this_session<CR>
+    set backup
+    set backupext=.bak
+    set backupdir=~/.local/state/nvim/backup//
+    set backupskip+=~/.cache/*
+    nnoremap <D-r> <Cmd>exe 'mks!' stdpath('data')..'/Session.vim'<Bar>exe 'sil conf restart so' v:this_session<CR>
     " au SessionLoadPre   * echom '[SessionLoadPre] this session: '..v:this_session
     " au SessionLoadPost  * silent! lua vim.fs.rm(vim.v.this_session)
-    au SessionWritePost * echom '[SessionWritePost] this session: '..v:this_session
+    " au SessionWritePost * echom '[SessionWritePost] this session: '..v:this_session
   endif
+  " undo...
+  let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
 augroup END
 augroup vimrc.term
   au!
@@ -368,9 +362,6 @@ nnoremap <leader><Tab>d <Cmd>tabclose<CR>
 nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
-nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
-nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-
 " editing
 " change/delete current word
 nnoremap c*  *``cgn
@@ -414,10 +405,15 @@ else
 endif
 
 call plug#begin()
+" Plug 'andymass/vim-matchup'
+" Plug 'bullets-vim/bullets.vim'
+" Plug 'christoomey/vim-tmux-navigator'
+" Plug 'dstein64/vim-startuptime'
 Plug 'dense-analysis/ale'
 " Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
+" Plug 'romainl/vim-qf.git'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
@@ -427,7 +423,6 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-scriptease'
 Plug 'tpope/vim-speeddating'
@@ -435,15 +430,11 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
-" Plug 'bullets-vim/bullets.vim'
-" Plug 'dstein64/vim-startuptime'
-" Plug 'romainl/vim-qf.git'
 " Plug 'vuciv/golf'
 Plug 'AndrewRadev/splitjoin.vim'
 if !has('nvim')
   Plug 'AndrewRadev/dsf.vim'
   Plug 'Konfekt/FastFold'
-  " Plug 'andymass/vim-matchup'
   Plug 'github/copilot.vim'
   Plug 'junegunn/vim-easy-align'
   Plug 'wellle/targets.vim'
