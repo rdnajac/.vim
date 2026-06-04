@@ -1,14 +1,12 @@
 " autoload/plug.vim
 " overrides `https://junegunn.github.io/vim-plug/`
-" see `:h vim.pack-directory`
-if exists('*stdpath')
-  let g:plug#home = stdpath('data')..'/site/pack/core/opt'
-else
-  let g:plug#home = expand('~/.vim/pack/_/opt')
+if !has('nvim')
+  finish
 endif
 
-" export the ENV variable
-let $PACKDIR = g:plug#home
+" see `:h vim.pack-directory`
+let g:plug#home = stdpath('data')..'/site/pack/core/opt'
+let $PACKDIR = g:plug#home " export the ENV variable
 
 augroup plug.nvim
   autocmd!
@@ -34,9 +32,7 @@ endfunction
 
 function! plug#end()
   delcommand Plug
-  if has('nvim')
-    lua require('plug')(vim.g.plugs)
-    command! PlugStatus :packupdate ++offline
-    command! PlugClean  :packdel    ++all
-  endif
+  command! PlugStatus :packupdate ++offline
+  command! PlugClean  :packdel    ++all
+  lua require('plug')(vim.g.plugs)
 endfunction

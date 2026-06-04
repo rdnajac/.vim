@@ -102,29 +102,7 @@ augroup vimrc.dirs
   for [k, v] in items(s:cd_maps)
     execute $'nnoremap cd{k} <Cmd>cd {v} \| verbose pwd <CR>'
   endfor
-
-  let s:dirs = {
-	\ '~': $HOME,
-	\ 'B': &backupdir,
-	\ 'c': g:stdpath#config,
-	\ 'C': g:stdpath#cache,
-	\ 'd': g:stdpath#data,
-	\ 'G': '~/GitHub/',
-	\ 'N': '~/GitHub/neovim/',
-	\ 'p': g:plug#home,
-	\ 'P': $PACKDIR,
-	\ 'v': $VIMRUNTIME..'/lua/vim',
-	\ 'V': $VIMRUNTIME,
-	\ 's': g:stdpath#state,
-	\ '.': '~/.local/share/chezmoi/'
-	\ }
-  for [k, v] in items(s:dirs)
-    execute $'nnoremap cd{k} <Cmd>edit {v}<CR>'
-  endfor
-
   if has('nvim')
-    " autocmd TermRequest * call term#print_request()
-    autocmd TermRequest * call term#handleOSC7()
     " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
   endif
 augroup END
@@ -302,6 +280,8 @@ augroup vimrc.term
   exe
   if has('nvim')
     au TermOpen * let g:last_channel = &channel
+    " autocmd TermRequest * call term#print_request()
+    autocmd TermRequest * call term#handleOSC7()
   endif
 augroup END
 augroup vimrc.ui
@@ -344,9 +324,13 @@ nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
 " reserve - for vim-vinegar
 nnoremap _ <Cmd>lua Snacks.explorer.reveal()<CR>
 nnoremap <C-f> <Cmd>lua Snacks.picker()<CR>
-xnoremap <C-s> :sort<CR>
+nnoremap <C-m> <Cmd>message<CR>
+" open the pager (`ui2`)
+nnoremap <C-,> g<
+
 xnoremap < <gv
 xnoremap > >gv
+xnoremap <C-s> :sort<CR>
 " TODO: diff?
 " nnoremap dp dp']c
 " nnoremap do do]c
@@ -369,16 +353,14 @@ nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
 nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
-nnoremap <leader>m <Cmd>messages<CR>
-nnoremap <leader>p g<
-
-" searching and centering {{{3
+" searching and centering
 " make `n` and `N` behave the same way for `?` and `/` searches
 " https://github.com/mhinz/vim-galore?tab=readme-ov-file#saner-behavior-of-n-and-n
 " NOTE: 'Nn'[v:searchforward] == (v:searchforward ? 'n' : 'N')
 nnoremap <expr> n (v:searchforward ? 'n' : 'N')..'zv'
 nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zv'
-" tabpages {{{3
+
+" tabpages 
 nnoremap ]<Tab> <Cmd>tabnext<CR>
 nnoremap [<Tab> <Cmd>tabprevious<CR>
 nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
@@ -388,8 +370,8 @@ nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
 nnoremap <Bslash>0 <Cmd>call edit#readme()<CR>
-" }}}3
-" editing {{{2
+
+" editing
 " change/delete current word
 nnoremap c*  *``cgn
 nnoremap c#  *``cgN
@@ -414,7 +396,8 @@ xnoremap n :normal!<Space>
 inoremap , ,<C-g>u
 inoremap . .<C-g>u
 inoremap ; ;<C-g>u
-" }}}2
+
+" recursive maps
 nmap gcap gcip
 " }}}1
 
@@ -432,7 +415,9 @@ endif
 
 call plug#begin()
 Plug 'dense-analysis/ale'
-Plug 'dstein64/vim-startuptime'
+" Plug 'justinmk/vim-dirvish'
+" Plug 'justinmk/vim-ug'
+" Plug 'justinmk/guh.nvim'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-characterize'
@@ -441,8 +426,6 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-fugitive'
-" Plug 'justinmk/vim-ug'
-" Plug 'justinmk/guh.nvim'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-rsi'
@@ -452,8 +435,8 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-vinegar'
-" Plug 'justinmk/vim-dirvish'
 " Plug 'bullets-vim/bullets.vim'
+" Plug 'dstein64/vim-startuptime'
 " Plug 'romainl/vim-qf.git'
 " Plug 'vuciv/golf'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -487,6 +470,7 @@ Plug 'iamcco/markdown-preview.nvim'
 
 Plug 'R-nvim/R.nvim'
 call plug#end()
+
 color scheme
 " }}}1
 " vim: foldmethod=marker foldlevel=0 foldmarker=augroup\ vimrc,END
