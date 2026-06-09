@@ -33,7 +33,8 @@ for series in ([
       \ ['up', 'down'],
       \ ['left', 'right'],
       \ ['top', 'middle', 'bottom'],
-      \ ['echom', 'execute'],
+      \ ['echom,', 'exe'],
+      \ ['echomsg', 'execute'],
       \ ])
   call s:new_dial(series)
 endfor

@@ -16,11 +16,11 @@
       "  ${0}",
       "endfunction"
     ],
-    "description": "Function definition."
+    "description": "Autoloaded function definition."
   },
 
   "if_exists_equals": {
-    "prefix": "ifeq",
+    "prefix": "ife",
     "body": [
       "if !exists('g:${1}')",
       "  let g:${1} = ${2:1}",
@@ -29,19 +29,9 @@
   },
 
   "ifne": {
-    "prefix": "ifne",
-    "body": ["if !exists('g:${1}')", "  let g:{1} = ", "endif"],
-    "description": "Global variable declaration"
-  },
-
-  "if_has_nvim": {
+    "prefix": "if has",
     "prefix": "ifnv",
-    "body": ["if has('nvim')", "  ${0}", "endif"]
-  },
-
-  "ifnnv": {
-    "prefix": "ifnnv",
-    "body": ["if !has('nvim')", "  ${0}", "endif"]
+    "body": ["if ${2}has('{1:nvim}')", "  ${0}", "endif"]
   },
 
   "command": {

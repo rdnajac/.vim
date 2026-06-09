@@ -1,6 +1,6 @@
 setlocal define=\\<\\%(\\i\\+\\s*()\\)\\@=
 setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
-call vimrc#apathy('path', split($PATH,':'))
+call vim#apathy#('path', split($PATH,':'))
 
 setlocal formatoptions-=o
 

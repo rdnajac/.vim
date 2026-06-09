@@ -26,22 +26,12 @@ M.keymap = {
   ['<C-x><C-r>'] = { function(cmp) return cmp.show({ providers = { 'registers' } }) end },
   ['<C-x><C-x>'] = { function(cmp) return cmp.show({ providers = { 'snippets' } }) end },
   ['<A-1>'] = { function(cmp) cmp.accept({ index = 1 }) end },
-  ['<A-2>'] = { function(cmp) cmp.accept({ index = 2 }) end },
-  ['<A-3>'] = { function(cmp) cmp.accept({ index = 3 }) end },
-  ['<A-4>'] = { function(cmp) cmp.accept({ index = 4 }) end },
-  ['<A-5>'] = { function(cmp) cmp.accept({ index = 5 }) end },
-  ['<A-6>'] = { function(cmp) cmp.accept({ index = 6 }) end },
-  ['<A-7>'] = { function(cmp) cmp.accept({ index = 7 }) end },
-  ['<A-8>'] = { function(cmp) cmp.accept({ index = 8 }) end },
-  ['<A-9>'] = { function(cmp) cmp.accept({ index = 9 }) end },
 }
+for i = 1, 9 do
+  M.keymap['<A-' .. i .. '>'] = { function(cmp) cmp.accept({ index = i }) end }
+end
 
 M.sources = {
-  default = { 'lsp', 'path', 'snippets' },
-  per_filetype = {
-    ['lua'] = { inherit_defaults = true, 'lazydev' },
-    -- ['sql'] = { inherit_defaults = false, 'dadbod' },
-  },
   providers = {
     lsp = {
       --   score_offset = -1,

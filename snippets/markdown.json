@@ -1,26 +1,26 @@
 {
   "Note": {
-    "prefix": ["!note", "n"],
+    "prefix": "!note",
     "body": "> [!NOTE]\n> ",
     "description": "Note"
   },
   "Tip": {
-    "prefix": ["!tip", "t"],
+    "prefix": "!tip",
     "body": "> [!TIP]\n> ",
     "description": "Tip"
   },
   "Important": {
-    "prefix": ["!important", "imp"],
+    "prefix": "!important",
     "body": "> [!IMPORTANT]\n> ",
     "description": "Important"
   },
   "Warning": {
-    "prefix": ["!warning", "w"],
+    "prefix": "!warning",
     "body": "> [!WARNING]\n> ",
     "description": "Warning"
   },
   "Caution": {
-    "prefix": ["!caution", "c"],
+    "prefix": "!caution",
     "body": "> [!CAUTION]\n> ",
     "description": "Caution"
   },
@@ -44,38 +44,4 @@
     "body": ["```${1:language}", "$0", "```"],
     "description": "fenced code block"
   },
-  "subscript": {
-    "prefix": "sub",
-    "body": ["${1}<sub>${0}"],
-    "description": "Create a subscript."
-  },
-  "superscript": {
-    "prefix": "sup",
-    "body": ["${1}<sup>${0}"],
-    "description": "Create a superscript."
-  },
-
-  "h1": {
-    "prefix": "h1",
-    "body": ["# ${0}"],
-  },
-  "h2": {
-    "prefix": "h2",
-    "body": ["## ${0}"],
-  },
-  "h3": {
-    "prefix": "h3",
-    "body": ["### ${0}"],
-  },
-  "h4": {
-    "prefix": "h4",
-    "body": ["#### ${0}"],
-  },
-  "h5": {
-    "prefix": "h5",
-    "body": ["##### ${0}"],
-  },
-  "h6": {
-    "prefix": "h6",
-    "body": ["###### ${0}"],
-  },
+}

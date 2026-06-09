@@ -1,3 +1,28 @@
+  -- stylua: ignore
+local c = {
+  { fg =     '#C0CAF5' },
+  { info =   '#0DB9D7' },
+  { blue =   '#14AFFF' },
+  { cyan =   '#1ABC9C' },
+  { green =  '#39ff14' },
+  { orange = '#FF9E64' },
+  { purple = '#9D7CD8' },
+  { red =    '#F7768E' },
+  { yellow = '#E0AF68' },
+}
+
+Snacks.util.set_hl({
+  Azure = { fg = c.info },
+  Blue = { fg = c.blue },
+  Cyan = { fg = c.teal },
+  Green = { fg = c.green },
+  Grey = { fg = c.fg },
+  Orange = { fg = c.orange },
+  Purple = { fg = c.purple },
+  Red = { fg = c.red },
+  Yellow = { fg = c.yellow },
+}, { 'MiniIcons' })
+
 local copilot = ''
 -- `$PACKDIR/mini.nvim/lua/mini/icons.lua:690`
 local M = {
@@ -33,12 +58,6 @@ local M = {
     busy = '󱛇',
     stopped = '󰖪',
   },
-}
-
-M.mason = {
-  emojis = { package_installed = '✅', package_pending = '➡️', package_uninstalled = '❌' },
-  nerd = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
-  round = { package_installed = ' ', package_pending = ' ', package_uninstalled = ' ' },
 }
 
 -- component and section separators appear as they
@@ -77,6 +96,7 @@ M.mini = {
     ['health.lua'] = { '', 'Red' },
   },
   filetype = {
+    fish = { '', 'Cyan' },
     ghostty = { '👻', 'Green' },
     ['nvim-pack'] = { '', 'Green' },
     printf = { '', 'Orange' },
@@ -136,6 +156,7 @@ M.mini_patterns = {
   },
   file = {
     ['%.chezmoi.*[^.]'] = { '', 'Yellow' },
+    ['fish_.*'] = { '󰈺 ', 'Yellow' },
   },
 }
 

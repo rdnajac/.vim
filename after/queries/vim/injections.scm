@@ -11,6 +11,6 @@
    function: (identifier) @_func
    (#eq? @_func "printf")
    (string_literal) @injection.content)
- ; (#set! injection.language "printf")
- (#set! injection.language "vim")
+ (#set! injection.language "printf")
+ ; (#set! injection.language "vim")
  )

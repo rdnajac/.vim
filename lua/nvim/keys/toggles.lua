@@ -26,25 +26,10 @@ local M = {
   --*yor*	'relativenumber'
   ['yor'] = 'relativenumber',
   --*yos*	'spell'
-  ['yos'] = 'spell',
+  -- ['yos'] = 'spell',
   ['yoS'] = Snacks.toggle.scroll,
-  --*yot*	'colorcolumn' ("+1" or last used value)
-  ['yoT'] = {
-    name = 'ColorColumn',
-    get = function()
-      ---@diagnostic disable-next-line: undefined-field
-      local cc = vim.opt_local.colorcolumn:get()
-      local tw = vim.bo.textwidth
-      local col = tostring(tw ~= 0 and tw or 81)
-      return vim.tbl_contains(cc, col)
-    end,
-    set = function(state)
-      local tw = vim.bo.textwidth
-      local col = tostring(tw ~= 0 and tw or 81)
-      vim.opt_local.colorcolumn = state and col or ''
-    end,
-  },
-  ['yot'] = Snacks.toggle.treesitter,
+  -- *yot*	'colorcolumn' ("+1" or last used value)
+  ['<leader>t'] = Snacks.toggle.treesitter,
   --*you*	'cursorcolumn'
   --*yov*	'virtualedit'
   --*yow*	'wrap'
@@ -61,6 +46,11 @@ local M = {
     get = function() return vim.diagnostic.config().virtual_text ~= false end,
     set = function(state) vim.diagnostic.config({ virtual_text = state }) end,
   },
+  ['<leader>ai'] = {
+    name = 'Inline Completion',
+    get = function() return vim.lsp.inline_completion.is_enabled() end,
+    set = function(state) vim.lsp.inline_completion.enable(state) end,
+  }
 }
 
 return M

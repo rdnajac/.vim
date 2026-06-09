@@ -3,12 +3,14 @@ Plug({
   {
     'Saghen/blink.cmp',
     build = function() require('blink.cmp').build():wait(6e4) end,
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
     opts = {
       cmdline = { enabled = false },
-      keymap = { preset = 'enter' },
+      keymap = { preset = 'super-tab' },
       signature = { enabled = true, window = { show_documentation = false } },
       completion = {
-        -- accept = { auto_brackets = { enabled = false } },
+        accept = { auto_brackets = { enabled = false } },
         documentation = { auto_show = true },
         ghost_text = { enabled = false },
         -- keyword = {},
@@ -52,6 +54,20 @@ Plug({
               },
             },
             treesitter = { 'lsp' },
+          },
+        },
+      },
+      sources = {
+        default = { 'lsp', 'path', 'snippets' },
+        per_filetype = {
+          ['lua'] = { inherit_defaults = true, 'lazydev' },
+          -- ['sql'] = { inherit_defaults = false, 'dadbod' },
+        },
+        providers = {
+          ['lazydev'] = {
+            name = 'LazyDev',
+            module = 'blink.lazy',
+            score_offset = 100,
           },
         },
       },

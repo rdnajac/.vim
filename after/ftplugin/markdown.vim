@@ -8,6 +8,10 @@ if executable('prettier')
   let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
 endif
 
+" set up header abbreviations
+call map(range(1, 6), {i, v ->
+      \ execute(printf('ia <buffer> h%s %s', v, repeat('#', v)))})
+
 setlocal noautoindent
 setlocal textwidth=80
 setlocal formatoptions+=o

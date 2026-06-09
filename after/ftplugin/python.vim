@@ -8,5 +8,5 @@ if !exists('g:python_path')
   let s:out = system(s:cmd)[0:-2]
   let g:python_path = v:shell_error ? [] : split(s:out, "\n", 1)
 endif
-call vimrc#apathy('path', g:python_path)
+call vim#apathy#(g:python_path)
 setlocal suffixesadd =.py,/__init__.py

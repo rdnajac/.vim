@@ -224,6 +224,7 @@ return {
         end,
       },
       resume = { exclude = 'pickers' },
+      zoxide = { confirm = 'jump' },
     },
     prompt = ' ',
     sort = { fields = { 'score:desc', '#text', 'idx' } },
@@ -245,7 +246,6 @@ return {
     },
     win = {
       input = {
-        -- b = { minipairs_disable = true },
         keys = {
           ['?'] = 'toggle_help_input',
           ['/'] = 'toggle_focus',

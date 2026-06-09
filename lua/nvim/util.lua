@@ -1,6 +1,33 @@
-local M = { opts = vim.defaulttable() }
 local api, fn, fs = vim.api, vim.fn, vim.fs
-M.opts = vim.defaulttable()
+local M = {
+  on = require('vim._core.util').nvim_on,
+  opts = vim.defaulttable(),
+}
+
+M.bigfile = function()
+  vim.b.completion = false
+  vim.b.minihipatterns_disable = true
+  if vim.fn.exists(':NoMatchParen') == 2 then
+    vim.cmd.NoMatchParen()
+  end
+  vim.cmd([[setlocal foldmethod& statuscolumn& conceallevel&]])
+  vim.schedule(function()
+    vim.notify(
+      ('This is a beeeg file (%s)!'):format(
+        Snacks.debug.size(fn.getfsize(fn.expand('%:p'))),
+        vim.log.levels.WARN
+      )
+    )
+    if api.nvim_buf_is_valid(0) then
+      local ft = vim.filetype.match({ buf = 0 }) -- or ''
+      -- for json files, keep the filetype as json
+      -- for other files, set the syntax to the detected ft
+      vim.bo[ft == 'json' and 'filetype' or 'syntax'] = ft
+    end
+  end)
+end
+
+M.on('FileType', nil, { pattern = 'bigfile' }, M.bigfile)
 
 --- Run a Vim command and return the output as a list of lines
 ---@param cmd string Vim command to execute
@@ -73,11 +100,7 @@ function M.gen(path, lines)
   return path
 end
 
--- TODO: munchies
-function M.filesize() return Snacks.debug.size(fn.getfsize(fn.expand('%:p'))) end
--- M.capitalize = function(s) return s:sub(1):upper() .. s:sub(2):lower() end
--- M.camelCase = function(s) return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper) end
-
-M.on = require('vim._core.util').nvim_on
+M.capitalize = function(s) return s:gsub('^%l', string.upper) end
+M.camelCase = function(s) return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper) end
 
 return M

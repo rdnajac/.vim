@@ -1,6 +1,3 @@
-vim.keymap.set({ 'n', 'x' }, { 'j', '<Down>' }, [[v:count ? 'j' : 'gj']], { expr = true })
-vim.keymap.set({ 'n', 'x' }, { 'k', '<Up>' }, [[v:count ? 'k' : 'gk']], { expr = true })
-
 --- `$PACKDIR/opt/which-key.nvim/lua/which-key/icons.lua`
 -- HACK: override default registers to only show a subset
 -- local registers = [[*+"-:.%/#=_0123456789]]
@@ -50,6 +47,14 @@ wk.setup({
 vim.schedule(function()
   for k, v in pairs(require('nvim.keys.descriptions')) do
     wk.add({ k, desc = v, icon = { icon = '' } })
+  end
+  if Snacks then
+    -- stylua: ignore
+    vim.iter(require('nvim.keys.toggles')):each(function(k, v)
+      if type(v) == 'table' then Snacks.toggle.new(v):map(k) end
+      if type(v) == 'string' then Snacks.toggle.option(v):map(k) end
+      if type(v) == 'function' then v():map(k) end
+    end)
   end
 end)
 

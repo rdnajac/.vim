@@ -13,19 +13,18 @@ endfunction
 " use backspace to remove the first key press from the buffer, then send the escape sequence
 " TODO: function returning whether or not we should escape; handle actions separately
 function! jk#escape(key)
-  exe 'let g:esc_'..a:key..'_lasttime = '..reltimefloat(reltime())
+  exe printf('let g:esc_%s_lasttime = %f', a:key, reltimefloat(reltime()))
+
   let diff = abs(g:esc_j_lasttime - g:esc_k_lasttime)
   if diff > s:max_delay || diff < 0.001
     return a:key
   endif
-  return s:backspace..s:stopinsert()
+  return s:backspace . s:stopinsert()
   " stopinsert
   " return 'dh'
 endfunction
 
-function! jk#setup_mappings() abort
-  " if has('nvim')
-  " else
+function! jk#setup_escape_mappings() abort
     for mode in ['i', 'v',  't']
       for key in ['j', 'k']
 	execute $'{mode}noremap <expr> {key} jk#escape("{key}")'

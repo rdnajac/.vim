@@ -17,9 +17,5 @@ vim.schedule(function()
       vim.cmd.redrawstatus()
     end,
   })
-  -- enable servers found in `after/`
-  vim.lsp.enable(servers())
-  if Snacks then
-    Snacks.keymap.set({ 'n', 'x' }, 'K', vim.lsp.buf.hover, { desc = 'Hover (LSP)', lsp = {} })
-  end
+  vim.lsp.enable(servers()) -- enable servers found in `after/`
 end)

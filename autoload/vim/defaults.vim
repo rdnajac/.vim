@@ -1,6 +1,5 @@
-" nice stuff nvim gave us
-" see `:h default-mappings`
-" `~/.local/share/nvim/share/nvim/runtime/lua/vim/_defaults.lua:43`
+" nice stuff nvim gives us, ported to vimscript
+" see `:h nvim-defaults` and `:h default-mappings`
 
 " - Y |Y-default|
 nnoremap Y y$
@@ -25,24 +24,14 @@ xnoremap <silent><expr> @ mode() ==# 'V' ? ':normal! @'.getcharstr().'<CR>'     
 " - # |v_#-default|
 " - * |v_star-default|
 
-" - gc |gc-default| |v_gc-default| |o_gc-default|
-" - gcc |gcc-default|
-" - |gO|
-
 " bracket mappings
-" da
-
 " - |[q| |]q| |[Q| |]Q| |[CTRL-Q| |]CTRL-Q|
-
 " - |[l| |]l| |[L| |]L| |[CTRL-L| |]CTRL-L|
-
 " - |[t| |]t| |[T| |]T| |[CTRL-T| |]CTRL-T|
 
 " argument:   |[a| |]a| |[A| |]A|
 " buffer:     |[b| |]b| |[B| |]B|
 " diagnostic: |[d| |]d| |[D| |]D|
-
-" - |[<Space>| |]<Space>|
 
 " textobjects
 " inner/around line
@@ -53,7 +42,6 @@ onoremap il :<C-u>norm vil<CR>
 xnoremap al ggVG
 onoremap al :<C-u>norm val<CR>
 
-
 " - `autoindent` is enabled
 " - `autoread` is enabled (works in all UIs, including terminal)
 " - `background` defaults to "dark" (unless set automatically by the terminal/UI)
@@ -61,14 +49,14 @@ onoremap al :<C-u>norm val<CR>
 " - `belloff` defaults to "all"
 " - `comments` includes "fb:•"
 " - `commentstring` defaults to ""
-" - 'compatible' is always disabled
+" - `compatible` is always disabled
 " - `complete` excludes "i"
 " - `completeopt` defaults to "menu,popup"
 " - `define` defaults to "". The C ftplugin sets it to "^\\s*#\\s*define"
 " - `diffopt` includes "linematch:40"
 " - `directory` defaults to ~/.local/state/nvim/swap// (|xdg|), auto-created
 " - `display` defaults to "lastline"
-" - 'encoding' is UTF-8 (cf. 'fileencoding' for file-content encoding)
+" - `encoding` is UTF-8 (cf. 'fileencoding' for file-content encoding)
 " - `fillchars` defaults (in effect) to "vert:│,fold:·,foldsep:│"
 " - `formatoptions` defaults to "tcqj"
 " - `grepprg` uses the -H and -I flags for regular grep, and defaults to using ripgrep if available
@@ -83,16 +71,16 @@ endif
 " - `hlsearch` is enabled
 " - `include` defaults to "". The C ftplugin sets it to "^\\s*#\\s*include"
 " - `incsearch` is enabled
-" - 'isfname' does not include ":" (on Windows).
+" - `isfname` does not include ":" (on Windows).
 " - `joinspaces` is disabled
 " - `jumpoptions` defaults to "clean"
-" - 'langnoremap' is enabled
-" - 'langremap' is disabled
-" - 'laststatus' defaults to 2 (statusline is always shown)
+" - `langnoremap` is enabled
+" - `langremap` is disabled
+" - `laststatus` defaults to 2 (statusline is always shown)
 " - `listchars` defaults to "tab:> ,trail:-,nbsp:+"
-" - 'maxsearchcount' defaults to 999
-" - 'mouse' defaults to "nvi"
-" - 'mousemodel' defaults to "popup_setpos"
+" - `maxsearchcount` defaults to 999
+" - `mouse` defaults to "nvi"
+" - `mousemodel` defaults to "popup_setpos"
 " - `nrformats` defaults to "bin,hex"
 " - `path` defaults to ".,,". The C ftplugin adds "/usr/include" if it exists.
 " - `sessionoptions` includes "unix,slash", excludes "options"
@@ -101,7 +89,7 @@ endif
 " - `smarttab` is enabled
 " - `startofline` is disabled XXX: verify
 " - `switchbuf` defaults to "uselast XXX: verify
-" - 'tabpagemax' defaults to 50
+" - `tabpagemax` defaults to 50
 " - `tags` defaults to "./tags;,tags"
 " - `termguicolors` is enabled by default if Nvim can detect support from the host terminal
 " - `ttimeout` is enabled
@@ -109,7 +97,7 @@ endif
 " - `ttyfast` is always set
 " - `undodir` defaults to ~/.local/state/nvim/undo// (|xdg|), auto-created
 " - `viewoptions` includes "unix,slash", excludes "options"
-" - 'viminfo' includes "!"
+" - `viminfo` includes "!"
 " - `wildoptions` defaults to "pum,tagfile"
 set wildoptions=pum,tagfile
 

@@ -1,11 +1,11 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "0c15985056bff2f473ceaf04eae31622e21ac25b",
+      "rev": "6ca306191531c3e3d501ee1609c84a5d29059386",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "SchemaStore.nvim": {
-      "rev": "fce1d90e76c59337b6d3778c272c1b972a658269",
+      "rev": "0f3cd0e584b4ed221fc44eee5b0b6ce335f7e263",
       "src": "https://github.com/b0o/SchemaStore.nvim.git"
     },
     "ale": {
@@ -13,7 +13,7 @@
       "src": "https://github.com/dense-analysis/ale.git"
     },
     "blink.cmp": {
-      "rev": "d2c4d170ad51e5116da7b19f2426f3b6e318161d",
+      "rev": "b02ac65634bdb8af2dcc4eb6c807c060e1e15ae6",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -21,7 +21,7 @@
       "src": "https://github.com/Saghen/blink.lib.git"
     },
     "fzf": {
-      "rev": "838ac7554bdbae2f457f2c4969e1b38f1c28c946",
+      "rev": "f5fbfd848ec0a5c9771dd103e921e7064445c9ba",
       "src": "https://github.com/junegunn/fzf.git"
     },
     "fzf.vim": {
@@ -41,11 +41,11 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "cbae4fa396bbf9c802b3d2dc2e9c5362e8fb9468",
+      "rev": "ff8b3580935818ef2f21bdd651f057a2ae071eab",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "229b79051b380377664edc4cbd534930154921a1",
+      "rev": "ed19590a3a9792901553c388d1aadafce012f80d",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -112,10 +112,6 @@
       "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
       "src": "https://github.com/tpope/vim-fugitive.git"
     },
-    "vim-repeat": {
-      "rev": "65846025c15494983dafe5e3b46c8f88ab2e9635",
-      "src": "https://github.com/tpope/vim-repeat.git"
-    },
     "vim-rhubarb": {
       "rev": "5496d7c94581c4c9ad7430357449bb57fc59f501",
       "src": "https://github.com/tpope/vim-rhubarb.git"
@@ -131,10 +127,6 @@
     "vim-speeddating": {
       "rev": "c17eb01ebf5aaf766c53bab1f6592710e5ffb796",
       "src": "https://github.com/tpope/vim-speeddating.git"
-    },
-    "vim-startuptime": {
-      "rev": "5f33e50f1e2e2a80370c9094e4c303ea54cd2aea",
-      "src": "https://github.com/dstein64/vim-startuptime.git"
     },
     "vim-surround": {
       "rev": "3d188ed2113431cf8dac77be61b842acb64433d9",
@@ -155,6 +147,10 @@
     "vimtex": {
       "rev": "24e229914182ff301496a3e2c4214b28c4928d3f",
       "src": "https://github.com/lervag/vimtex.git"
+    },
+    "vint": {
+      "rev": "94d2cb3fd9526a89911b7c1e083a1fd78bace729",
+      "src": "https://github.com/Vimjas/vint.git"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
