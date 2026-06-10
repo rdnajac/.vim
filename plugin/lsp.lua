@@ -9,13 +9,24 @@ local servers = function()
     :totable()
 end
 
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   callback = function(ev)
+--     local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+--     if client:supports_method('textDocument/foldingRange') then
+--       local win = vim.api.nvim_get_current_win()
+--       vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
+--     end
+--   end,
+-- })
+
+vim.api.nvim_create_autocmd('LspProgress', {
+  callback = function(ev)
+    local progress_callback = require('nvim.lsp.progress').callback
+    progress_callback(ev)
+    vim.cmd.redrawstatus()
+  end,
+})
+
 vim.schedule(function()
-  local progress_callback = require('nvim.lsp.progress').callback
-  vim.api.nvim_create_autocmd('LspProgress', {
-    callback = function(ev)
-      progress_callback(ev)
-      vim.cmd.redrawstatus()
-    end,
-  })
-  vim.lsp.enable(servers()) -- enable servers found in `after/`
+  vim.lsp.enable(servers())
 end)

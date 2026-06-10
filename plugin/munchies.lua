@@ -15,9 +15,6 @@ if vim.g.loaded_munchies == nil then
   vim.g.loaded_munchies = 1
 end
 
--- Snacks.config.style('lazygit', { height = 0, width = 0 })
--- vim.cmd('hi! SnacksDashboardFile guifg=#2AC3DE gui=bold')
-
 vim.cmd([[
 nnoremap ZB <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap Zb <Cmd>lua Snacks.bufdelete.other()<CR>
@@ -43,8 +40,8 @@ nnoremap glW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 nnoremap <C-S-F> <Cmd>lua Snacks.picker()<CR>
 ]])
 
-Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end) -- TODO: also see `vim.on_key`
--- Snacks.keymap.set({ 'n' }, 'K', vim.lsp.buf.hover, { lsp = {} })
+ -- TODO: also see `vim.on_key`
+Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
 
 Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', function()
   vim.print(
@@ -65,27 +62,8 @@ vim.keymap.set({ 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) en
 vim.keymap.set({ 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end)
 
 vim.schedule(function()
-  vim
-  .iter({
-    'autocmds',
-    'buffers',
-    'files',
-    'help',
-    'recent',
-    'grep',
-    'zoxide',
-  })
-  :each(
-    function(p)
-      vim.cmd(([[command! %s lua Snacks.picker.%s()]]):format(require('nvim.util').capitalize(p), p))
-      vim.keymap.set(
-	'n',
-	'<C-F>' .. p:sub(1, 1),
-	Snacks.picker[p],
-	{ desc = 'Snacks.picker.' .. p }
-      )
-    end
-  )
-
-  -- stylua: ignore
+  vim.iter({ 'autocmds', 'buffers', 'files', 'help', 'recent', 'grep', 'zoxide' }):each(function(p)
+    vim.cmd(([[command! %s lua Snacks.picker.%s()]]):format(require('nvim.util').capitalize(p), p))
+    vim.keymap.set('n', '<C-F>' .. p:sub(1, 1), Snacks.picker[p], { desc = 'Snacks.picker.' .. p })
+  end)
 end)

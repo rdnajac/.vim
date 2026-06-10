@@ -28,4 +28,3 @@ endfunction
 function! vimrc#setmarks() abort
   call map(getline(1, '$'), {i, line -> vimrc#setmark('augroup\ vimrc\.', i, line)})
 endfunction
-

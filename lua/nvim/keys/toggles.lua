@@ -1,5 +1,6 @@
 ---@type table<string, string|table|fun()>
-local M = {
+return {
+  ['<leader>t'] = Snacks.toggle.treesitter,
   -- nnoremap yo~ :<C-u>set acd!<BAR>set acd?<CR>
   ['yo~'] = 'autochdir',
   ['yoa'] = Snacks.toggle.animate,
@@ -19,6 +20,11 @@ local M = {
   --*yoh*	'hlsearch'
   ['yoH'] = Snacks.toggle.inlay_hints,
   --*yoi*	'ignorecase'
+  ['yoi'] = {
+    name = 'Inline Completion',
+    get = function() return vim.lsp.inline_completion.is_enabled() end,
+    set = function(state) vim.lsp.inline_completion.enable(state) end,
+  },
   ['yoI'] = 'indent',
   --*yol*	'list'
   ['yoL'] = Snacks.toggle.line_number,
@@ -26,12 +32,16 @@ local M = {
   --*yor*	'relativenumber'
   ['yor'] = 'relativenumber',
   --*yos*	'spell'
-  -- ['yos'] = 'spell',
+  ['yos'] = 'spell',
   ['yoS'] = Snacks.toggle.scroll,
   -- *yot*	'colorcolumn' ("+1" or last used value)
-  ['<leader>t'] = Snacks.toggle.treesitter,
   --*you*	'cursorcolumn'
   --*yov*	'virtualedit'
+  ['yoV'] = {
+    name = 'Virtual Text',
+    get = function() return vim.diagnostic.config().virtual_text ~= false end,
+    set = function(state) vim.diagnostic.config({ virtual_text = state }) end,
+  },
   --*yow*	'wrap'
   ['yow'] = 'wrap',
   ['yoW'] = Snacks.toggle.words,
@@ -40,17 +50,5 @@ local M = {
   ['yoZ'] = Snacks.toggle.zoom,
   ['<leader>dpp'] = Snacks.toggle.profiler,
   ['<leader>dph'] = Snacks.toggle.profiler_highlights,
-  ['<leader>ud'] = Snacks.toggle.dim,
-  ['<leader>uv'] = {
-    name = 'Virtual Text',
-    get = function() return vim.diagnostic.config().virtual_text ~= false end,
-    set = function(state) vim.diagnostic.config({ virtual_text = state }) end,
-  },
-  ['<leader>ai'] = {
-    name = 'Inline Completion',
-    get = function() return vim.lsp.inline_completion.is_enabled() end,
-    set = function(state) vim.lsp.inline_completion.enable(state) end,
-  }
+  -- ['<leader>ud'] = Snacks.toggle.dim,
 }
-
-return M

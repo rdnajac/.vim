@@ -16,8 +16,7 @@ function! vim#sensible#() abort
     set viminfo^=!
   endif
 
-  " Disable a legacy behavior that can break plugin maps.
-  set nolangremap
+  set nolangremap " Disable a legacy behavior that can break plugin maps.
 
   " Replace the check for a tags file in the parent directory of the current
   " file with a check in every ancestor directory.
@@ -28,6 +27,7 @@ function! vim#sensible#() abort
   " clear the highlighting of 'hlsearch' (off by default) and call :diffupdate.
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 
+  " |i_CTRL-U-default| and |i_CTRL-W-default| set undo points
   inoremap <C-U> <C-G>u<C-U>
   inoremap <C-W> <C-G>u<C-W>
 

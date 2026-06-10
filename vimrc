@@ -1,4 +1,8 @@
-" set autocomplete
+let g:mapleader      = ','
+let g:maplocalleader = '\'
+nnoremap <Space> :
+nnoremap : ,
+
 augroup vimrc.autocmds
   au!
   set timeoutlen=420
@@ -31,6 +35,8 @@ augroup vimrc.buffers
 augroup END
 augroup vimrc.command/completion
   au!
+  " set autocomplete
+
   " default `completeopt=menu,popup`; also see `:h |ins-completion|`
   " set completeopt=menu,preview,longest
   " set completeopt+=preinsert
@@ -76,11 +82,6 @@ augroup vimrc.dirs
   for [k, v] in items(s:cd_maps)
     execute $'nnoremap cd{k} <Cmd>cd {v} \| verbose pwd <CR>'
   endfor
-  if has('nvim')
-    " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
-  endif
-augroup END
-augroup vimrc.edit
   nnoremap cdB <Cmd>exe 'edit' &backupdir<CR>
   nnoremap cdc <Cmd>exe 'edit' g:stdpath#config<CR>
   nnoremap cdC <Cmd>exe 'edit' g:stdpath#cache<CR>
@@ -89,10 +90,40 @@ augroup vimrc.edit
   nnoremap cdG <Cmd>edit ~/GitHub/<CR>
   nnoremap cdN <Cmd>edit ~/GitHub/neovim/<CR>
   nnoremap cdp <Cmd>edit $PACKDIR<CR>
+  nnoremap cdl <Cmd>edit $PACKDIR/nvim-lspconfig/lua/lspconfig/types/lsp/<CR>
   nnoremap cdv <Cmd>edit $VIMRUNTIME/lua/vim<CR>
   nnoremap cdV <Cmd>edit $VIMRUNTIME<CR>
   nnoremap cd~ <Cmd>edit $HOME<CR>
   nnoremap cd. <Cmd>edit ~/.local/share/chezmoi/<CR>
+  if has('nvim')
+    " autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
+  endif
+augroup END
+augroup vimrc.edit
+  au!
+  set breakindent
+  set breakindentopt=list:1 " TODO: from minimax; keep?
+  set linebreak
+  set shiftround
+  set shiftwidth=2 softtabstop=2 " WARN: don't change tabstop!
+  " autocmd FileType markdown,tex    setl sw=2 sts=2
+  autocmd FileType cpp,cuda,python setl sw=4 sts=4
+  autocmd FileType c,sh,zsh        setl sw=8 sts=8
+  autocmd FileType quarto          setl noai
+
+  " change/delete current word
+  nnoremap c*  *``cgn
+  nnoremap c#  *``cgN
+  nnoremap d*  *``dgn
+  nnoremap d#  *``dgN
+
+  " https://github.com/kaddkaka/vim_examples?tab=readme-ov-file
+  " #repeat-last-change-in-all-of-file-global-repeat-similar-to-g
+  nnoremap g. :%s//<C-R>./g<ESC>
+  " #replace-only-within-selection
+  xnoremap s :s/\%V
+  " similarly, apply normal command to each line in selection
+  xnoremap n :normal!<Space>
 augroup END
 augroup vimrc.fold/format
   au!
@@ -118,8 +149,14 @@ augroup vimrc.fold/format
   " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
   set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
 augroup END
+augroup vimrc.git
+  au!
+  " TODO: diff?
+  " nnoremap dp dp']c
+  " nnoremap do do]c
+augroup END
 augroup vimrc.hjkl
-  call jk#setup_escape_mappings() " TODO: use <C-c>
+  au!
   nnoremap H ^
   nnoremap L $
   " WARN: `h` and `l` not recommended per `:h 'whichwrap'`
@@ -130,32 +167,30 @@ augroup vimrc.hjkl
     lua vim.keymap.set({ 'n', 'x' }, { 'k', '<Up>'   }, [[v:count ? 'k' : 'gk']], { expr = true, remap = true })
   else
     " handle wrapped lines better by preferring `gj` and `gk`
-    let s:keys = [ 'j', 'k' , '<Down>', '<Up>']
-    for [i, key] in items(s:keys)
-      let dir = s:keys[i % 2] " limit dir to only j/k
-      execute printf("nnoremap <expr> %s (v:count ? '' : 'g')..%s", key, dir)
-      execute printf("xnoremap <expr> %s (v:count ? '' : 'g')..%s", key, dir)
+    for [key, dir] in items({ 'j': 'j', 'k': 'k', '<Down>': 'j', '<Up>': 'k' })
+      execute printf('nnoremap <expr> %s (v:count ? "%s" : "g%s")', key, dir, dir)
+      execute printf('xnoremap <expr> %s (v:count ? "%s" : "g%s")', key, dir, dir)
     endfor
-    unlet s:keys
   endif
-  " NOTE: S-Tab not detected in all terminals...
   " window navigation with Shift + h/j/k/l
+  " NOTE: S-Tab not detected in all terminals...
   for [dir, key] in items({'Left':'h', 'Down':'j', 'Up':'k', 'Right':'l'})
     exe $'nnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
     exe $'tnoremap <S-{dir}> <Cmd>wincmd {key}<CR>'
   endfor
+  call jk#setup_escape_mappings() " TODO: use <C-c>
 augroup END
-augroup vimrc.indent
+augroup vimrc.insert
   au!
-  set breakindent
-  set breakindentopt=list:1 " TODO: from minimax; keep?
-  set linebreak
-  set shiftround
-  set shiftwidth=2 softtabstop=2 " WARN: don't change tabstop!
-  " autocmd FileType markdown,tex    setl sw=2 sts=2
-  autocmd FileType cpp,cuda,python setl sw=4 sts=4
-  autocmd FileType c,sh,zsh        setl sw=8 sts=8
-  autocmd FileType quarto          setl noai
+  " undo breakpoints
+  inoremap , ,<C-g>u
+  inoremap . .<C-g>u
+  inoremap ; ;<C-g>u
+  " TODO: function and user getchar
+  " insert chars at EOL
+  " nnoremap <Bslash>, mzA,<Esc>;`z
+  " nnoremap <Bslash>; mzA;<Esc>;`z
+  " nnoremap <Bslash>. mzA.<Esc>;`z
 augroup END
 augroup vimrc.keywordprg
   au!
@@ -170,20 +205,19 @@ augroup vimrc.keywordprg
       let keyword = printf('%s%s', 
 	    \ get(b:, 'manpage_search_prefix', ''),
 	    \ a:0 ? a:1 : expand('<cword>')
-      	    \ )
-      " very magic, beginning of line or after whitespace, allow optional word characters after the keyword
+	    \ )
+      " very magic, beginning of line or after whitespace,
+      " allow optional word characters after the keyword
       call search('\v(^|\s)\zs'/..keyword..'\w*')
     endif
   endfunction
 
   " au BufRead,BufNewFile *alacritty.*ml call s:setup('5 alacritty')
-  au FileType kitty,tmux setlocal iskeyword+=- keywordprg=:MyMan | let b:manpage = &filetype
-  au FileType ghostty setl isk+=- kp=:MyMan | let b:manpage = &ft | let b:manpage_search_prefix = '--'
-  au FileType gitconfig,gitconfig.chezmoitmpl call s:setup('git-config(1)')
-  au FileType sshconfig call s:setup('ssh')
-  au FileType lua setlocal keywordprg=:help iskeyword+=-
-  au FileType sh  setlocal keywordprg=:Man  iskeyword-=_
-  " au FileType tex nnoremap <silent><buffer> <leader>K <Plug>(vimtex-doc-package)
+  au FileType ghostty let b:manpage_search_prefix = '--'
+  au FileType kitty,tmux,ghostty              setl isk+=- kp=:MyMan | let b:manpage = &filetype
+  au FileType gitconfig,gitconfig.chezmoitmpl setl isk+=- kp=:MyMan | let b:manpage = 'git-config(1)'
+  au FileType sshconfig                       setl isk+=- kp=:MyMan | let b:manpage = 'ssh'
+  au FileType tex nnoremap <silent><buffer> K <Plug>(vimtex-doc-package)
   au FileType vim nnoremap <silent><buffer> K <Plug>ScripteaseHelp
 augroup END
 augroup vimrc.navigation
@@ -236,8 +270,8 @@ augroup vimrc.registers
   " delete/paste without yanking
   nnoremap dy "_dd
   vnoremap p "_dP
-  vnoremap <leader>c "_c
-  vnoremap <leader>d "_d
+  vnoremap <BS> "_d
+  vnoremap <C-BS> "_c
 
   " `clipboard=autoselect` is not implemented yet
   " https://github.com/neovim/neovim/issues/2325.
@@ -278,7 +312,7 @@ augroup vimrc.search/spell
   nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zv'
   " TODO: 
   " see `:h :mkspell` and vim.treesitter's `@nospell`
-  let &spellfile ~/.vim/.spell/en.utf-8.add'
+  " let &spellfile = '~/.vim/.spell/en.utf-8.add'
   autocmd FileType tex,markdown,rmd,quarto setlocal spell
 augroup END
 augroup vimrc.term
@@ -315,15 +349,13 @@ augroup vimrc.ui
 " au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 augroup END
 
-let g:mapleader      = ','
-let g:maplocalleader = '\'
-
-nnoremap <Space> :
-nnoremap : ,
-xmap <Space> <leader>
-" prefer `'` for marks
 nnoremap ` ~
 nnoremap ~ `
+
+" cmd/super
+xnoremap <D-c> "+y
+nnoremap <D-r> <Cmd>Restart<CR>
+nnoremap <D-s> <Cmd>write ++p<CR>
 
 " when in doubt, pinky out
 nnoremap <C-c> ciw
@@ -333,34 +365,24 @@ nnoremap _ <Cmd>lua Snacks.explorer.reveal()<CR>
 nnoremap <C-m> <Cmd>message<CR>
 " open the pager (`ui2`)
 nnoremap <C-,> g<
-
-" cmd/super
-xnoremap <D-c> "+y
-
-nnoremap <D-r> <Cmd>Restart<CR>
-nnoremap <D-s> <Cmd>write ++p<CR>
-
+xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
-xnoremap <C-s> :sort<CR>
-" TODO: diff?
-" nnoremap dp dp']c
-" nnoremap do do]c
-nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 nnoremap <leader>da <Cmd>ALEInfo<CR>
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
+nnoremap <leader>dF <Cmd>verb se formatprg? formatexpr? tagfunc? omnifunc?<CR>
 nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
 nnoremap <leader>di <Cmd>Inspect<CR>
 nnoremap <leader>dI <Cmd>Inspect!<CR>
 nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
-nnoremap <leader>dF <Cmd>=vim.filetype.inspect()<CR>
 nnoremap <leader>dq <Cmd>lua vim.diagnostic.setloclist()<CR>
 nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
 
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
 nnoremap <Bslash>\ <Cmd>call edit#readme()<CR>
+
 nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
 nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
 nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
@@ -375,34 +397,7 @@ nnoremap <leader><Tab>d <Cmd>tabclose<CR>
 nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
-" editing
-" change/delete current word
-nnoremap c*  *``cgn
-nnoremap c#  *``cgN
-nnoremap d*  *``dgn
-nnoremap d#  *``dgN
 
-" https://github.com/kaddkaka/vim_examples?tab=readme-ov-file
-" #repeat-last-change-in-all-of-file-global-repeat-similar-to-g
-nnoremap g. :%s//<C-R>./g<ESC>
-" #replace-only-within-selection
-xnoremap s :s/\%V
-" similarly, apply normal command to each line in selection
-xnoremap n :normal!<Space>
-
-" TODO: function and user getchar
-" insert chars at EOL
-" nnoremap <Bslash>, mzA,<Esc>;`z
-" nnoremap <Bslash>; mzA;<Esc>;`z
-" nnoremap <Bslash>. mzA.<Esc>;`z
-
-" undo breakpoints
-inoremap , ,<C-g>u
-inoremap . .<C-g>u
-inoremap ; ;<C-g>u
-
-" recursive maps
-nmap gcap gcip
 " }}}1
 
 " Section: plugins {{{1
@@ -422,7 +417,7 @@ call plug#begin()
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'christoomey/vim-tmux-navigator'
 " Plug 'dstein64/vim-startuptime'
-Plug 'dense-analysis/ale'
+" Plug 'dense-analysis/ale'
 " Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
@@ -489,9 +484,9 @@ if !exists(':hardcopy') " TODO: use `jobstart` to avoid the Snacks dependency
   command! Hardcopy lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
 endif
 
-nnoremap zq <Cmd>call vim#with#savedView('call format#buffer()')<CR>
-nnoremap ZF <Cmd>echom 'formatting...'<Bar>ALEFix<CR>
-nnoremap ZW <Cmd>echom 'formatting and saving...'<Bar>ALEFix<Bar>write!<CR>
+nmap zq mzgqal'z
+nnoremap zF <Cmd>call vim#with#savedView('call format#buffer()')<CR>
+nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
 " configure the modeline to create folds on the augroups
 " vim: fdm=marker fdl=0 fmr=augroup\ vimrc,END

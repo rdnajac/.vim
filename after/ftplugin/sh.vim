@@ -4,28 +4,16 @@ call vim#apathy#('path', split($PATH,':'))
 
 setlocal formatoptions-=o
 
-if executable('shfmt')
-  if !exists('g:shellharden')
-    let g:shellharden = 1
-  endif
-
-  if !exists('g:sh_simple')
-    let g:sh_simple = 1
-  endif
-
-  let s:cmd = 'shfmt -bn -sr'
-  if get(b:, 'sh_simple', get(g:, 'sh_simple', 0))
-    let s:cmd .= ' --simplify'
-  endif
-
-  if executable('shellharden') && get(b:, 'shellharden', get(g:, 'shellharden', 0))
-    let s:cmd = 'shellharden --transform "" | ' . s:cmd
-  endif
-
-  let &l:formatprg = s:cmd
-endif
-
-" let b:ale_sh_shfmt_options = '-bn -sr'
+" let s:shfmt_flags = '-bn -sr'
+" if executable('shfmt')
+"   let s:cmd = join(['shfmt', s:shfmt_flags, '--simplify'], ' ')
+"   if executable('shellharden')
+"     let s:cmd = 'shellharden --transform "" | ' . s:cmd
+"   endif
+"   let &l:formatprg = s:cmd
+" endif
+"
+" let b:ale_sh_shfmt_options = s:shfmt_flags
 " function! ShellHarden(buffer) abort
 "   let command = 'cat ' . a:buffer . " | shellharden --transform ''"
 "   return { 'command': command }

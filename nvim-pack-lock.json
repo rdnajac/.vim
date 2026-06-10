@@ -8,10 +8,6 @@
       "rev": "0f3cd0e584b4ed221fc44eee5b0b6ce335f7e263",
       "src": "https://github.com/b0o/SchemaStore.nvim.git"
     },
-    "ale": {
-      "rev": "178fe113564d31cba304263765aeb21e7ed23a7e",
-      "src": "https://github.com/dense-analysis/ale.git"
-    },
     "blink.cmp": {
       "rev": "b02ac65634bdb8af2dcc4eb6c807c060e1e15ae6",
       "src": "https://github.com/Saghen/blink.cmp.git"
@@ -19,14 +15,6 @@
     "blink.lib": {
       "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
       "src": "https://github.com/Saghen/blink.lib.git"
-    },
-    "fzf": {
-      "rev": "f5fbfd848ec0a5c9771dd103e921e7064445c9ba",
-      "src": "https://github.com/junegunn/fzf.git"
-    },
-    "fzf.vim": {
-      "rev": "356608e2ae5d9127e2c964885ea2b21ea7aea9ab",
-      "src": "https://github.com/junegunn/fzf.vim.git"
     },
     "lazydev.nvim": {
       "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
@@ -63,10 +51,6 @@
     "render-markdown.nvim": {
       "rev": "5adf0895310c1904e5abfaad40a2baad7fe44a07",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
-    },
-    "sidekick.nvim": {
-      "rev": "208e1c5b8170c01fd1d07df0139322a76479b235",
-      "src": "https://github.com/folke/sidekick.nvim.git"
     },
     "snacks.nvim": {
       "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
@@ -147,10 +131,6 @@
     "vimtex": {
       "rev": "24e229914182ff301496a3e2c4214b28c4928d3f",
       "src": "https://github.com/lervag/vimtex.git"
-    },
-    "vint": {
-      "rev": "94d2cb3fd9526a89911b7c1e083a1fd78bace729",
-      "src": "https://github.com/Vimjas/vint.git"
     },
     "which-key.nvim": {
       "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",

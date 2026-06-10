@@ -2,6 +2,9 @@ nmap vv gcc
 nmap dc dgc
 nmap yc ygc
 
+" generally don't want to capture blank lines here
+nmap gcap gcip
+
 " comment out a line and paste it below
 nmap gy "xyygcc"xp
 
