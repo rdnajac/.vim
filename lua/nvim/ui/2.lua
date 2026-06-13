@@ -1,5 +1,3 @@
---- `:h ui2`
-
 --- see `:h ui-messages` for a complete list
 ---@type table<string, nil|'cmd'|'msg'|'pager'>
 local kinds = {
@@ -30,8 +28,14 @@ local kinds = {
   ['wmsg'] = nil,
 }
 
+local opts = { msg = { targets = 'msg' } }
+
+vim.schedule(function()
+  require('vim._core.ui2').enable(opts)
+end)
+
 -- require('vim._core.ui2').enable({ msg = { targets = 'msg' } })
-ui2.enable({ msg = { targets = vim.tbl_extend('error', { default = 'msg' }, kinds) } })
+-- ui2.enable({ msg = { targets = vim.tbl_extend('error', { default = 'msg' }, kinds) } })
 --
 -- local msg = ui2.msg
 -- local last_msg_kind
@@ -58,3 +62,14 @@ ui2.enable({ msg = { targets = vim.tbl_extend('error', { default = 'msg' }, kind
 --   cfg.title_pos = 'left'
 --   vim.api.nvim_win_set_config(win, cfg)
 -- end
+
+local ui_fts = { 'msg', 'pager' }
+
+vim.treesitter.language.register('markdown', ui_fts)
+
+nv.on('FileType', ui_fts, function(ev)
+    vim.treesitter.start(ev.buf)
+    vim.wo.conceallevel = 3
+    vim.keymap.set({ 'n' }, 'gf', require('nvim.util').better_gf, { buf = ev.buf })
+  end
+)

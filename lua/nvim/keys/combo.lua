@@ -1,0 +1,15 @@
+--   -- local keymap = require('mini.keymap')
+--   -- keymap.map_combo({ 'i', 'c', 'x', 's' }, 'jk', '<BS><BS><Esc>')
+--   -- keymap.map_combo('t', 'jk', '<BS><BS><C-\\><C-n>')
+--   local notify_many_keys = function(key)
+--     local lhs = string.rep(key, 5)
+--     local action = function() vim.notify('Too many ' .. key) end
+--     keymap.map_combo({ 'n', 'x' }, lhs, action)
+--   end
+--   for _, key in pairs(vim.split('h j k l <Up> <Down> <Left> <Right>', ' ', { plain = true })) do
+--     notify_many_keys(key)
+--   end
+--   -- fix typos in insert mode with `kk`
+--   local action = '<BS><BS><Esc>[s1z=gi<Right>'
+--   keymap.map_combo('i', 'kk', action)
+

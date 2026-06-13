@@ -37,6 +37,15 @@ nnoremap glI <Cmd>lua Snacks.picker.lsp_implementations()<CR>
 nnoremap glT <Cmd>lua Snacks.picker.lsp_type_definitions()<CR>
 nnoremap glW <Cmd>=vim.lsp.buf.list_workspace_folders()<CR>
 
+nnoremap <leader>gb <Cmd>lua Snacks.picker.git_branches()<CR>
+nnoremap <leader>gd <Cmd>lua Snacks.picker.git_diff()<CR>
+nnoremap <leader>gf <Cmd>lua Snacks.picker.git_log_file()<CR>
+nnoremap <leader>gg <Cmd>lua Snacks.lazygit()<CR>
+nnoremap <leader>gL <Cmd>lua Snacks.picker.git_log_line()<CR>
+nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
+nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
+nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
+
 nnoremap <C-S-F> <Cmd>lua Snacks.picker()<CR>
 ]])
 

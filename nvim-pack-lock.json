@@ -1,15 +1,19 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "6ca306191531c3e3d501ee1609c84a5d29059386",
+      "rev": "2d42670c3f73098411db4f09961fcda288ca271e",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "SchemaStore.nvim": {
-      "rev": "0f3cd0e584b4ed221fc44eee5b0b6ce335f7e263",
+      "rev": "e1a36239e4e36759546852dae5f4737375b388f6",
       "src": "https://github.com/b0o/SchemaStore.nvim.git"
     },
+    "ale": {
+      "rev": "178fe113564d31cba304263765aeb21e7ed23a7e",
+      "src": "https://github.com/dense-analysis/ale.git"
+    },
     "blink.cmp": {
-      "rev": "b02ac65634bdb8af2dcc4eb6c807c060e1e15ae6",
+      "rev": "13e7b50e7ba73ce781459da68d346925adfdb530",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
@@ -25,15 +29,15 @@
       "src": "https://github.com/iamcco/markdown-preview.nvim.git"
     },
     "mason.nvim": {
-      "rev": "16ba83bfc8a25f52bb545134f5bee082b195c460",
+      "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "ff8b3580935818ef2f21bdd651f057a2ae071eab",
+      "rev": "a59a9b7fb0a42cbcf022938ee5f0724320b66f63",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "ed19590a3a9792901553c388d1aadafce012f80d",
+      "rev": "a683e0ddf0cf64c6cd689e18ffb480ade3c162b7",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -64,72 +68,8 @@
       "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
       "src": "https://github.com/folke/tokyonight.nvim.git"
     },
-    "vim-abolish": {
-      "rev": "dcbfe065297d31823561ba787f51056c147aa682",
-      "src": "https://github.com/tpope/vim-abolish.git"
-    },
-    "vim-capslock": {
-      "rev": "2bd1d47d35ac489b150d284141b6dce743a307f5",
-      "src": "https://github.com/tpope/vim-capslock.git"
-    },
-    "vim-characterize": {
-      "rev": "a8bffac6cead6b2869d939ecad06312b187a4c79",
-      "src": "https://github.com/tpope/vim-characterize.git"
-    },
-    "vim-dadbod": {
-      "rev": "6d1d41da4873a445c5605f2005ad2c68c99d8770",
-      "src": "https://github.com/tpope/vim-dadbod.git"
-    },
-    "vim-dispatch": {
-      "rev": "a2ff28abdb2d89725192db5b8562977d392a4d3f",
-      "src": "https://github.com/tpope/vim-dispatch.git"
-    },
-    "vim-endwise": {
-      "rev": "4994afb0cdf956d9a665a14b9c834869e602c396",
-      "src": "https://github.com/tpope/vim-endwise.git"
-    },
-    "vim-eunuch": {
-      "rev": "e86bb794a1c10a2edac130feb0ea590a00d03f1e",
-      "src": "https://github.com/tpope/vim-eunuch.git"
-    },
-    "vim-fugitive": {
-      "rev": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0",
-      "src": "https://github.com/tpope/vim-fugitive.git"
-    },
-    "vim-rhubarb": {
-      "rev": "5496d7c94581c4c9ad7430357449bb57fc59f501",
-      "src": "https://github.com/tpope/vim-rhubarb.git"
-    },
-    "vim-rsi": {
-      "rev": "45540637ead22f011e8215f1c90142e49d946a54",
-      "src": "https://github.com/tpope/vim-rsi.git"
-    },
-    "vim-scriptease": {
-      "rev": "4cc639dd70061bb1489f4d3655861ebd9bc896fa",
-      "src": "https://github.com/tpope/vim-scriptease.git"
-    },
-    "vim-speeddating": {
-      "rev": "c17eb01ebf5aaf766c53bab1f6592710e5ffb796",
-      "src": "https://github.com/tpope/vim-speeddating.git"
-    },
-    "vim-surround": {
-      "rev": "3d188ed2113431cf8dac77be61b842acb64433d9",
-      "src": "https://github.com/tpope/vim-surround.git"
-    },
-    "vim-tbone": {
-      "rev": "79d28199d5edf70337957e13942b5d970755d943",
-      "src": "https://github.com/tpope/vim-tbone.git"
-    },
-    "vim-unimpaired": {
-      "rev": "db65482581a28e4ccf355be297f1864a4e66985c",
-      "src": "https://github.com/tpope/vim-unimpaired.git"
-    },
-    "vim-vinegar": {
-      "rev": "bb1bcddf43cfebe05eb565a84ab069b357d0b3d6",
-      "src": "https://github.com/tpope/vim-vinegar.git"
-    },
     "vimtex": {
-      "rev": "24e229914182ff301496a3e2c4214b28c4928d3f",
+      "rev": "fedb7ffc1bebf254cc74e7419c3a5930b6719065",
       "src": "https://github.com/lervag/vimtex.git"
     },
     "which-key.nvim": {

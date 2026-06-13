@@ -86,7 +86,6 @@ _G.Plug = function(plugs)
     :filter(function(v) return v.enabled ~= false end)
     :map(function(v) return Plugin.new(v):package() end)
     :totable()
-
   vim.pack.add(speclist, {
     ---@param plug_data {spec: vim.pack.Spec, path: string}
     load = function(plug_data)

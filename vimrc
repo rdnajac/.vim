@@ -1,8 +1,10 @@
 let g:mapleader      = ','
 let g:maplocalleader = '\'
+nnoremap <CR> :
 nnoremap <Space> :
 nnoremap : ,
 
+call vimrc#init()
 augroup vimrc.autocmds
   au!
   set timeoutlen=420
@@ -10,7 +12,6 @@ augroup vimrc.autocmds
   set report=0
   set shortmess+=aA "c
   set shortmess-=o
-  call vimrc#init()
   au BufLeave vimrc normal! mV
   au BufWrite vimrc call vimrc#setmarks()
   " load the colorscheme just before loading the ui
@@ -163,13 +164,13 @@ augroup vimrc.hjkl
   set whichwrap+=<,>,[,],h,l
   if has('nvim')
     set startofline " default changed from vim
-    lua vim.keymap.set({ 'n', 'x' }, { 'j', '<Down>' }, [[v:count ? 'j' : 'gj']], { expr = true, remap = true })
-    lua vim.keymap.set({ 'n', 'x' }, { 'k', '<Up>'   }, [[v:count ? 'k' : 'gk']], { expr = true, remap = true })
+    lua vim.keymap.set({ 'n', 'x' }, { 'j', '<Down>' }, [[v:count ? 'gj' : 'j']], { expr = true, remap = false })
+    lua vim.keymap.set({ 'n', 'x' }, { 'k', '<Up>'   }, [[v:count ? 'gk' : 'k']], { expr = true, remap = false })
   else
     " handle wrapped lines better by preferring `gj` and `gk`
     for [key, dir] in items({ 'j': 'j', 'k': 'k', '<Down>': 'j', '<Up>': 'k' })
-      execute printf('nnoremap <expr> %s (v:count ? "%s" : "g%s")', key, dir, dir)
-      execute printf('xnoremap <expr> %s (v:count ? "%s" : "g%s")', key, dir, dir)
+      execute printf('nnoremap <expr> %s (v:count ? "g%s" : "%s")', key, dir, dir)
+      execute printf('xnoremap <expr> %s (v:count ? "g%s" : "%s")', key, dir, dir)
     endfor
   endif
   " window navigation with Shift + h/j/k/l
@@ -334,6 +335,16 @@ augroup vimrc.ui
   set tabline=%!vimline#tabline#()
   set title
   " set termguicolors
+  if has('nvim')
+    set cmdheight=0
+    set laststatus=3
+    set pumheight=10
+    set pumblend=0
+    set pumborder=rounded
+    set winborder=rounded
+    set stl=%{%v:lua.nv.ui.status()%}
+    set wbr=%{%v:lua.nv.ui.winbar()%}
+  endif
 
   " no cursorline in insert mode
   au InsertLeave,WinEnter * if exists('w:had_cul') | setl cul | unlet w:had_cul | endif
@@ -389,104 +400,68 @@ nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
 nnoremap <leader>fT :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
 nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
 
-" tabpages
-nnoremap ]<Tab> <Cmd>tabnext<CR>
-nnoremap [<Tab> <Cmd>tabprevious<CR>
 nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
 nnoremap <leader><Tab>d <Cmd>tabclose<CR>
 nnoremap <leader><Tab>D <Cmd>tabonly<CR>
 nnoremap <leader><Tab>f :<C-U>tabfind<Space>
+nnoremap ]<Tab> <Cmd>tabnext<CR>
+nnoremap [<Tab> <Cmd>tabprevious<CR>
+
+nmap zq mzgqal'z
+nnoremap zJ <Plug>(unimpaired-move-down)kJ
+
+" `https://github.com/neovim/neovim/discussions/38256`
+" Usage: $`nvim +Clipboard` or `alias pbedit='nvim +Clipboard'`
+command! Clipboard call cmd#clipboard#()
+command! -nargs=* Diff call cmd#diff#(<f-args>)
+if !exists(':hardcopy') " TODO: use `jobstart` to avoid the Snacks dependency
+  command! Hardcopy lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
+endif
+command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
 
-" }}}1
-
-" Section: plugins {{{1
 packadd! cfilter
 if !has('nvim')
   packadd! comment
   packadd! editorconfig
   packadd! hlyank
-else
-  packadd! nvim.difftool
-  packadd! nvim.tohtml
-  packadd! nvim.undotree
+  finish
 endif
-
+packadd! nvim.difftool
+packadd! nvim.tohtml
+packadd! nvim.undotree
 call plug#begin()
+Plug 'folke/snacks.nvim'
+Plug 'folke/lazydev.nvim'
+Plug 'folke/tokyonight.nvim'
+Plug 'folke/which-key.nvim'
+Plug 'nvim-mini/mini.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'b0o/SchemaStore.nvim'
+Plug 'chrisgrieser/nvim-scissors'
+Plug 'MeanderingProgrammer/render-markdown.nvim'
+Plug 'R-nvim/R.nvim'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'christoomey/vim-tmux-navigator'
 " Plug 'dstein64/vim-startuptime'
-" Plug 'dense-analysis/ale'
+Plug 'dense-analysis/ale'
+" Plug 'github/copilot.vim'
+" Plug 'junegunn/fzf.vim'
 " Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
 " Plug 'romainl/vim-qf.git'
-Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-capslock'
-Plug 'tpope/vim-characterize'
-Plug 'tpope/vim-dadbod'
-Plug 'tpope/vim-dispatch'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-scriptease'
-Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-vinegar'
 " Plug 'vuciv/golf'
 Plug 'AndrewRadev/splitjoin.vim'
+" Plug 'Konfekt/FastFold'
 " Plug 'Konfekt/vim-formatprgs'
-if !has('nvim')
-  Plug 'AndrewRadev/dsf.vim'
-  Plug 'Konfekt/FastFold'
-  Plug 'github/copilot.vim'
-  Plug 'junegunn/vim-easy-align'
-  Plug 'wellle/targets.vim'
-  Plug 'wellle/tmux-complete.vim'
-else
-  Plug! 'folke/snacks.nvim'
-  Plug 'folke/lazydev.nvim'
-  Plug 'folke/tokyonight.nvim'
-  Plug 'folke/which-key.nvim'
-  Plug 'nvim-mini/mini.nvim'
-  Plug 'neovim/nvim-lspconfig'
-  Plug 'b0o/SchemaStore.nvim'
-  Plug 'chrisgrieser/nvim-scissors'
-  Plug 'MeanderingProgrammer/render-markdown.nvim'
-endif
-" Plug 'Vimjas/vint'
 Plug 'lervag/vimtex'
 let g:vimtex_format_enabled = 1
 " let g:vimtex_mappings_disable = {'n': ['K']}
 " let g:vimtex_quickfix_method = executable('pplatx') ? 'pplatex' : 'latexlog'
-
 Plug 'iamcco/markdown-preview.nvim'
 " call mkdp#install()
-
-Plug 'R-nvim/R.nvim'
-" stop registering plugins...
 call plug#end()
-
-command! -nargs=* Diff call cmd#diff#(<f-args>)
-
-command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
-
-" `https://github.com/neovim/neovim/discussions/38256`
-" Usage: $`nvim +Clipboard` or `alias pbedit='nvim +Clipboard'`
-command! Clipboard call cmd#clipboard#()
-
-if !exists(':hardcopy') " TODO: use `jobstart` to avoid the Snacks dependency
-  command! Hardcopy lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
-endif
-
-nmap zq mzgqal'z
-nnoremap zF <Cmd>call vim#with#savedView('call format#buffer()')<CR>
-nnoremap zJ <Plug>(unimpaired-move-down)kJ
-
 " configure the modeline to create folds on the augroups
 " vim: fdm=marker fdl=0 fmr=augroup\ vimrc,END

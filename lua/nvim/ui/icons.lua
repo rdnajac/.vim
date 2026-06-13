@@ -156,7 +156,7 @@ M.mini_patterns = {
   },
   file = {
     ['%.chezmoi.*[^.]'] = { '', 'Yellow' },
-    ['fish_.*'] = { '󰈺 ', 'Yellow' },
+    ['fish_.*'] = { '󰈺', 'Yellow' },
   },
 }
 

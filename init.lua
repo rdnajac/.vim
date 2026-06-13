@@ -1,6 +1,7 @@
 vim.o.exrc = true
 vim.loader.enable()
 vim.cmd.run('vimrc')
+require('snacks')
 _G.dd = Snacks.debug
 _G.bt = dd.backtrace
 _G.nv = setmetatable({ require('nvim.util') }, {
@@ -14,4 +15,10 @@ _G.nv = setmetatable({ require('nvim.util') }, {
     error(([[`require('%s')` failed: %s]]):format(modname, m))
   end,
 })
-vim.schedule(nv.ui.setup)
+nv.opts = vim.defaulttable()
+nv.ui = {
+  ['2'] = require('nvim.ui.2'),
+  icons = require('nvim.ui.icons'),
+  status = require('nvim.ui.status'),
+  winbar = require('nvim.ui.winbar'),
+}

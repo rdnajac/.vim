@@ -32,7 +32,7 @@ endfunction
 
 function! plug#end()
   delcommand Plug
-  command! PlugStatus :packupdate ++offline
-  command! PlugClean  :packdel    ++all
+  command! PlugStatus :packu ++offline
+  command! PlugClean  :packd ++all
   lua require('plug')(vim.g.plugs)
 endfunction

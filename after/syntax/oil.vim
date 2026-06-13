@@ -1,4 +1,4 @@
-" ~/.vim/after/syntax/oil.vim
+" TODO: rewrite for dirvish? vim.buf?
 if expand('%:p') =~# '/.local/state/nvim/backup/'
   " Show / for slashes
   syn match oilSlash /%/ conceal cchar=/

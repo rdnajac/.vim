@@ -1,7 +1,19 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
+local aug = vim.api.nvim_create_augroup('nv.autocmds', {})
+
 local M = {
-  on = require('vim._core.util').nvim_on,
-  opts = vim.defaulttable(),
+  --- @param events vim.api.keyset.events|vim.api.keyset.events[] Event(s) to watch. See |autocmd-events|.
+  --- @param pattern_or_cb string|string[]|fun()
+  --- @param cb fun()
+  on = function(events, pattern_or_cb, cb)
+    local pattern
+    if type(pattern_or_cb) == 'function' then
+      cb, pattern = pattern_or_cb, '*'
+    else
+      pattern = pattern_or_cb
+    end
+    return require('vim._core.util').nvim_on(events, aug, { pattern = pattern }, cb)
+  end,
 }
 
 M.bigfile = function()
@@ -27,7 +39,7 @@ M.bigfile = function()
   end)
 end
 
-M.on('FileType', nil, { pattern = 'bigfile' }, M.bigfile)
+M.on('FileType','bigfile', M.bigfile)
 
 --- Run a Vim command and return the output as a list of lines
 ---@param cmd string Vim command to execute
@@ -59,14 +71,15 @@ M.is_comment = function(opts)
   return not not type:match('comment')
 end
 
-M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
-M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
-M.is_visual = function() return fn.mode():match('[vV\22]') ~= nil end
-M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
 M.inside_code_fences = function()
   local ok, node = pcall(vim.treesitter.get_node)
   return (ok and node) and node:type():match('code') ~= nil or false
 end
+
+M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
+M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
+M.is_visual = function() return fn.mode():match('[vV\22]') ~= nil end
+M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
 
 --- handles truncated paths in the debug.traceback like `.../path/to/file:line:`
 ---@param cfile? string defaults to `expand('<cfile>')`
@@ -101,6 +114,8 @@ function M.gen(path, lines)
 end
 
 M.capitalize = function(s) return s:gsub('^%l', string.upper) end
-M.camelCase = function(s) return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper) end
+M.camelCase = function(s)
+  return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)
+end
 
 return M
