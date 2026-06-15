@@ -10,11 +10,6 @@ hi link qfWarning           DiagnosticWarn
 hi link qfNote              DiagnosticHint
 hi link qfInfo              DiagnosticInfo
 
-if has('nvim')
-  lua require('nvim.tokyonight').init()
-  finish
-endif
-
 hi clear
 if exists('syntax_on')
   syntax reset

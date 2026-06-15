@@ -32,7 +32,7 @@ nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
 nnoremap <C-S-F> <Cmd>lua Snacks.picker()<CR>
 ]])
 
- -- TODO: also see `vim.on_key`
+-- TODO: also see `vim.on_key`
 Snacks.util.on_key('<Esc>', function() vim.cmd.nohlsearch() end)
 
 Snacks.keymap.set({ 'n', 'x' }, '<M-CR>', function()

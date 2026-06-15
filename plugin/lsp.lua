@@ -27,6 +27,4 @@ vim.api.nvim_create_autocmd('LspProgress', {
   end,
 })
 
-vim.schedule(function()
-  vim.lsp.enable(servers())
-end)
+vim.schedule(function() vim.lsp.enable(servers()) end)

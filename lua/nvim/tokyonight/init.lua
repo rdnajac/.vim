@@ -1,4 +1,4 @@
--- TODO: see `$PACKDIR/tokyonight.nvim/lua/tokyonight/util.lua`
+-- TODO: see `tokyonight/util`
 local M = { 'folke/tokyonight.nvim' }
 
 M.opts = require('nvim.tokyonight.opts')
@@ -6,19 +6,19 @@ M.opts.plugins = require('nvim.tokyonight.plugins')
 
 --- Calls `require('tokyonight').setup`, merging passed opts with the defaults
 --- and storing the result on `require('tokyonight.config').options`
-M.set_options = function() require('tokyonight').setup(M.opts) end
+-- M.set_options = function() require('tokyonight').setup(M.opts) end
 
 --- `require('tokyonight').setup` actually points to this function
-M.config_setup = function() require('tokyonight.config').setup(M.opts) end
-
---- The actual setup function (called by `require.('tokyonight').load`)
---- opts are merged with defaults, but not stored
----
----@return ColorScheme, tokyonight.Highlights, tokyonight.Config
-M.theme_setup = function() return require('tokyonight.theme').setup(M.opts) end
+-- M.config_setup = function() require('tokyonight.config').setup(M.opts) end
 
 --- Generate a list of `vim.api.nvim_set_hl` calls for all groups
+--- same as `require('tokyonight.theme').setup`, the actual setup function
+--- (called by `require.('tokyonight').load`)
+--- opts are merged with defaults, but not stored
+--- returns ColorScheme, tokyonight.Highlights, tokyonight.Config
+---
 ---@param groups tokyonight.Highlights
+---@return string[] list of `vim.api.nvim_set_hl` calls for all groups
 function M.colorscheme(groups)
   return vim
     .iter(groups)
@@ -45,11 +45,13 @@ end
 --- Call setup and store results on this module
 --- and manually tigger `ColorScheme` autocmd
 M.init = function()
-  M.opts = require('tokyonight.config').extend(M.opts) -- TODO: setup?
+  -- M.opts = require('tokyonight.config').extend(M.opts)
   M.colors = require('tokyonight.colors').setup(M.opts)
+  -- M.colors = require('nvim.tokyonight.colors')(M.opts)
   M.groups = require('tokyonight.groups').setup(M.colors, M.opts)
-  M.terminal(M.colors)
+  -- M.groups = require('nvim.tokyonight.groups')(M.colors, M.opts)
   M.colorscheme(M.groups)
+  M.terminal(M.colors)
   -- vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 

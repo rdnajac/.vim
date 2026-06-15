@@ -12,7 +12,7 @@ local original_require = require
 
 setmetatable(package.loaded, {
   __index = function(t, mod)
-    print("[first require] " .. mod)
+    print('[first require] ' .. mod)
     local r = original_require(mod)
     rawset(t, mod, r)
     return r
@@ -20,4 +20,3 @@ setmetatable(package.loaded, {
 })
 
 require = function(mod) return original_require(mod) end
-

@@ -17,6 +17,8 @@ local winbar = function()
     return inactive()
 end
 
-return winbar
+vim.schedule(function()
+  vim.o.winbar = '%{%v:lua.nv.ui.winbar()%}'
+end)
 
-vim.o.winbar = '%{%v:lua.nv.ui.winbar()%}'
+return winbar

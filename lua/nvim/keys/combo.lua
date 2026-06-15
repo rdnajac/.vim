@@ -12,4 +12,3 @@
 --   -- fix typos in insert mode with `kk`
 --   local action = '<BS><BS><Esc>[s1z=gi<Right>'
 --   keymap.map_combo('i', 'kk', action)
-

@@ -28,16 +28,14 @@ function Snackpack.new(v)
   return setmetatable(self, Snackpack)
 end
 
--- gets a value that may be the result of a function or a static value
-local function resolve(v) return vim.is_callable(v) and v() or v end
-
 --- Assumes the plugin has a `setup()` function and calls it with `opts` if provided.
 --- The module name is just the plugin name without a `.nvim` suffix, if present.
 function Snackpack:setup()
   if self.init then
+    dd('Running custom init for %s', self.name)
     self.init()
   else
-    local opts = resolve(self.opts)
+    local opts = vim.is_callable(self.opts) and self.opts() or self.opts
     if type(opts) == 'table' then
       require(self.name:gsub('%.nvim$', '')).setup(opts)
     end

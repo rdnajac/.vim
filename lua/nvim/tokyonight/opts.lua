@@ -33,28 +33,34 @@ local myhighlights = function(c)
 end
 
 ---@type tokyonight.Config
-local opts = {
+return {
+  cache = true, -- default
+  day_brightness = 0.3, -- default
+  dim_inactive = true,
+  light_style = 'day', -- default
+  lualine_bold = false, -- default
   style = 'night',
+  terminal_colors = true, -- default
   transparent = vim.g.transparent == true,
   styles = {
     comments = { italic = true },
     keywords = { italic = false, bold = true },
     variables = { italic = false },
+    functions = {},
     floats = vim.g.transparent == true and 'transparent' or nil,
     sidebars = vim.g.transparent == true and 'transparent' or nil,
   },
-  dim_inactive = true,
-  on_colors = function(colors)
-    for k, v in pairs(mycolors) do
-      colors[k] = v
-    end
-  end,
-  on_highlights = function(hl, colors)
-    for k, v in pairs(myhighlights(colors)) do
-      hl[k] = v
-    end
-  end,
+  on_colors = function(colors) end,
+  on_highlights = function(highlights, colors) end,
+  -- on_colors = function(colors)
+  --   for k, v in pairs(mycolors) do
+  --     colors[k] = v
+  --   end
+  -- end,
+  -- on_highlights = function(hl, colors)
+  --   for k, v in pairs(myhighlights(colors)) do
+  --     hl[k] = v
+  --   end
+  -- end,
   -- plugins = { all = false },
 }
-
-return opts

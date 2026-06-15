@@ -12,7 +12,7 @@ require('snacks').setup({
   picker = require('munchies').picker,
   scope = { enabled = true },
   scroll = { enabled = true },
-  statuscolumn = require('munchies').statuscolumn,
+  -- statuscolumn = require('munchies').statuscolumn,
   words = { enabled = true },
 })
 
@@ -23,3 +23,4 @@ nv.ui = nv.submodule('nvim.ui')
 nv.ui['2'].setup()
 
 vim.cmd.runtime('vimrc')
+nv.on('VimEnter', function() vim.cmd.colorscheme('tokyonight') end)

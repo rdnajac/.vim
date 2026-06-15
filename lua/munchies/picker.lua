@@ -27,15 +27,15 @@ local function title(self)
   local icon = nv.ui.icons._picker_source[picker] or ''
   local name = picker and picker:sub(1, 1):upper() .. picker:sub(2)
   local dir = self.dirs and #self.dirs .. ' paths'
-  or vim.fn.pathshorten(vim.fn.fnamemodify(self.cwd or vim.fn.getcwd(), ':~'), 2)
+    or vim.fn.pathshorten(vim.fn.fnamemodify(self.cwd or vim.fn.getcwd(), ':~'), 2)
   local extra = ''
   if self.ft then -- add filetype icons if filtering by filetype
     local ftlist = type(self.ft) == 'table' and self.ft or { self.ft }
     extra = extra
-    .. vim
-    .iter(ftlist)
-    :map(function(ft) return MiniIcons.get('filetype', ft) or '?' end)
-    :join('  ')
+      .. vim
+        .iter(ftlist)
+        :map(function(ft) return MiniIcons.get('filetype', ft) or '?' end)
+        :join('  ')
   end
   return string.format('%s %s [%s] %s', icon, name, dir, extra)
 end
@@ -90,7 +90,7 @@ M.actions.toggle = function(self)
     'done',
     vim.schedule_wrap(function()
       if ret.closed then
-	return
+        return
       end
       ret.list:view(state.cursor, state.topline)
     end)
@@ -104,8 +104,8 @@ M.actions.zoxide = function(self)
     resume.add(self)
     Snacks.picker.zoxide({
       confirm = function(z, item)
-	resume.state[self.opts.source].opts.cwd = item.file
-	z:close()
+        resume.state[self.opts.source].opts.cwd = item.file
+        z:close()
       end,
       layout = 'ivy',
       on_close = function() resume.resume() end,
@@ -121,8 +121,8 @@ M.sources = {
     --- @param picker snacks.Picker
     on_show = function(picker)
       if MiniHipatterns then
-	MiniHipatterns.enable(picker.preview.win.buf)
-	-- Snacks.util.redraw(picker.preview.win.win)
+        MiniHipatterns.enable(picker.preview.win.buf)
+        -- Snacks.util.redraw(picker.preview.win.win)
       end
     end,
   },
@@ -132,9 +132,9 @@ M.sources = {
     --- @param item snacks.picker.Item
     confirm = function(picker, item)
       if not item.file then
-	local info = vim.fn.getscriptinfo({ sid = item.item.sid })
-	item.file = info and info[1] and info[1].name
-	item.pos = { item.item.lnum, 0 }
+        local info = vim.fn.getscriptinfo({ sid = item.item.sid })
+        item.file = info and info[1] and info[1].name
+        item.pos = { item.item.lnum, 0 }
       end
       picker:action({ 'jump' })
     end,

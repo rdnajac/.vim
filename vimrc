@@ -205,7 +205,7 @@ augroup vimrc.keywordprg
   function! s:mykeywordprg(...) abort
     if !empty(get(b:, 'manpage', ''))
       execute 'Man' b:manpage
-      let keyword = printf('%s%s', 
+      let keyword = printf('%s%s',
 	    \ get(b:, 'manpage_search_prefix', ''),
 	    \ a:0 ? a:1 : expand('<cword>')
 	    \ )
@@ -314,7 +314,7 @@ augroup vimrc.search/spell
   " NOTE: 'Nn'[v:searchforward] == (v:searchforward ? 'n' : 'N')
   nnoremap <expr> n (v:searchforward ? 'n' : 'N')..'zv'
   nnoremap <expr> N (v:searchforward ? 'N' : 'n')..'zv'
-  " TODO: 
+  " TODO:
   " see `:h :mkspell` and vim.treesitter's `@nospell`
   " let &spellfile = '~/.vim/.spell/en.utf-8.add'
   autocmd FileType tex,markdown,rmd,quarto setlocal spell
@@ -361,22 +361,18 @@ augroup vimrc.ui
   " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
   " au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 augroup END
-" cmd/super
-xnoremap <D-c> "+y
-nnoremap <D-r> <Cmd>Restart<CR>
-nnoremap <D-s> <Cmd>write ++p<CR>
 
-" when in doubt, pinky out
+nnoremap _ <Cmd>lua Snacks.explorer.reveal()<CR>
 nnoremap <C-c> ciw
 nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
-" reserve - (hyphen) for vim-vinegar
-nnoremap _ <Cmd>lua Snacks.explorer.reveal()<CR>
-nnoremap <C-m> <Cmd>message<CR>
-" open the pager (`ui2`)
 nnoremap <C-,> g<
 xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
+
+xnoremap <D-c> "+y
+nnoremap <D-r> <Cmd>Restart<CR>
+nnoremap <D-s> <Cmd>write ++p<CR>
 
 nnoremap <leader>da <Cmd>ALEInfo<CR>
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
@@ -422,25 +418,21 @@ packadd! nvim.tohtml
 packadd! nvim.undotree
 
 call plug#begin()
-Plug 'nvim-mini/mini.nvim'
-Plug 'b0o/SchemaStore.nvim'
-Plug 'chrisgrieser/nvim-scissors'
-Plug 'iamcco/markdown-preview.nvim', { 'build': { -> mkdp#install() } }
-Plug 'neovim/nvim-lspconfig'
-Plug 'MeanderingProgrammer/render-markdown.nvim'
-Plug 'R-nvim/R.nvim'
-" Plug 'andymass/vim-matchup'
-" Plug 'bullets-vim/bullets.vim'
+Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'christoomey/vim-tmux-navigator'
 " Plug 'github/copilot.vim'
+" Plug 'Konfekt/FastFold'
+" Plug 'Konfekt/vim-formatprgs'
 Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
+Plug 'nvim-mini/mini.nvim'
+Plug 'neovim/nvim-lspconfig'
+Plug 'chrisgrieser/nvim-scissors'
+Plug 'iamcco/markdown-preview.nvim', { 'build': { -> mkdp#install() } }
+Plug 'MeanderingProgrammer/render-markdown.nvim'
+Plug 'R-nvim/R.nvim'
 " Plug 'romainl/vim-qf.git'
 " Plug 'vuciv/golf'
-Plug 'AndrewRadev/splitjoin.vim'
-" Plug 'Konfekt/FastFold'
-" Plug 'Konfekt/vim-formatprgs'
 call plug#end()
-
-vim.o.exrc = true
+" colorscheme tokyonight

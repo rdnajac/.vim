@@ -6,14 +6,9 @@ return vim
       or (
         vim.startswith(name, 'mini')
         and vim.tbl_contains({
-          -- 'animate', 'clue', 'completion', 'cursorword', 'deps',
           'diff',
-          'files',
-          'hipatterns',
-          'icons',
-          -- 'indentscope', 'jump', 'map', 'notify', 'operators' 'pick', 'starter',
-          'surround',
-          -- 'statusline', 'tabline', 'test', 'trailspace',
+          -- 'hipatterns',
+          -- 'icons',
         }, name:sub(6))
       )
     then

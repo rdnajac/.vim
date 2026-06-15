@@ -5,16 +5,15 @@ vim.g.ale_linters_explicit = 1
 vim.g.ale_virtualtext_cursor = 0
 
 vim.g.ale_fixers = {
-  ['*']        = { 'remove_trailing_lines', 'trim_whitespace' },
-  python       = { 'ruff' },
-  markdown     = { 'rumdl' },
-  lua          = { 'stylua' },
+  ['*'] = { 'remove_trailing_lines', 'trim_whitespace' },
+  python = { 'ruff' },
+  markdown = { 'rumdl' },
+  lua = { 'stylua' },
 }
 
 vim.g.ale_linters = {
   vim = { 'vint' },
 }
-
 
 local severity = vim.diagnostic.severity
 local severity_map = {
