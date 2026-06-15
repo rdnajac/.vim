@@ -1,7 +1,6 @@
 vim.loader.enable()
 
--- local munchies = require('munchies')
-require('snacks').setup(vim.tbl_extend('keep', munchies or {}, {
+require('snacks').setup({
   bigfile = { enabled = false },
   dashboard = { enabled = false },
   explorer = { enabled = true },
@@ -15,15 +14,12 @@ require('snacks').setup(vim.tbl_extend('keep', munchies or {}, {
   scroll = { enabled = true },
   statuscolumn = require('munchies').statuscolumn,
   words = { enabled = true },
-}))
+})
 
 _G.dd = Snacks.debug
 _G.bt = dd.backtrace
-_G.nv = require('nvim.util') -- expose util as global for easy access
-vim.cmd.runtime('vimrc') -- load vimrc for legacy plugins and settings
-
+_G.nv = require('nvim.util')
 nv.ui = nv.submodule('nvim.ui')
-
 nv.ui['2'].setup()
 
-vim.o.exrc = true
+vim.cmd.runtime('vimrc')

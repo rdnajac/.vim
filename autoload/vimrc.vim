@@ -14,6 +14,7 @@ function! vimrc#init() abort
     let g:loaded_perl_provider = 0
     let g:loaded_python3_provider = 0
     let g:loaded_ruby_provider = 0
+    set exrc
   else
     call vim#defaults#()
     call vim#sensible#()

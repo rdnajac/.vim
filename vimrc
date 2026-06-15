@@ -416,6 +416,7 @@ if !has('nvim')
   packadd! hlyank
   finish
 endif
+
 packadd! nvim.difftool
 packadd! nvim.tohtml
 packadd! nvim.undotree
@@ -442,4 +443,4 @@ Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'Konfekt/vim-formatprgs'
 call plug#end()
 
-let g:vimtex_format_enabled = 1
+vim.o.exrc = true

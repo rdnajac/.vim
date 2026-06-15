@@ -1,5 +1,5 @@
+vim.schedule(function()
 local orig = Snacks.statuscolumn.get
-
 Snacks.statuscolumn.get = function()
   local sstc = orig()
   if
@@ -31,6 +31,7 @@ Snacks.statuscolumn.get = function()
   local sep = '▏'
   return string.format('%%=%s%s', ret, sep)
 end
+end)
 
 ---@type snacks.statuscolumn.Config
 return {

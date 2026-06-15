@@ -59,7 +59,8 @@ M.config = function(self)
     self.hidden = self.cwd and self.cwd:match('%/chezmoi') or false
   elseif vim.tbl_contains({ 'files', 'grep', 'buffers' }, self.source) then
     -- pass layout directly to picker config instead of setting it up
-    self.layout = require('munchies').mylayout
+    -- self.layout = require('munchies').mylayout
+    self.layout = 'mylayout'
     self.cwd = self.cwd or Snacks.git.get_root()
   end
   if not vim.tbl_contains({ 'select' }, self.source) then

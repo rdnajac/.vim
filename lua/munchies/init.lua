@@ -1,4 +1,3 @@
-
 local layouts = {
   -- pop-up for selecting text in insert mode
   -- layout = require(
@@ -19,7 +18,6 @@ local layouts = {
       { win = 'preview', border = 'rounded', title = '{preview:Preview}' },
     },
   },
-
   mylayout = {
     preset = 'ivy',
     reverse = true,
@@ -52,8 +50,11 @@ local layouts = {
   },
 }
 
+local picker = require('munchies.picker')
+picker.layouts = layouts
+
 return {
-  insert = layouts.insert,
-  mylayout = layouts.mylayout,
-  picker = require('munchies.picker')
+  picker = picker,
+  -- notifier = require('munchies.notifier'),
+  statuscolumn = require('munchies.statuscolumn'),
 }
