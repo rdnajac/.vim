@@ -1,3 +1,8 @@
+local _, ok = pcall(require, 'schemastore')
+if not ok then
+  return {}
+end
+
 ---@type vim.lsp.Config
 return {
   ---@type lspconfig.settings.yamlls
