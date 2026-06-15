@@ -1,7 +1,4 @@
-setlocal foldmethod=expr
-setlocal foldtext=fold#text_lua()
-" setlocal foldtext=v:vim.lsp.foldtext()
-
+let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 
 nnoremap <buffer> co2 O---@
@@ -31,20 +28,12 @@ let s:surround_defs = {
       \ 'S': ["vim.schedule(function()\n ", "\nend)"],
       \ }
 
-" define the table unconditionallhy here
-let b:minisurround_config = { 'custom_surroundings': {} }
-" it should have the inside custom surrounds and the s defined already
-let b:minisurround_config.custom_surroundings = {
-      \ 's': {
-      \ 'input': ['%[%[().-()%]%]'], 'output': { 'left': '[[', 'right': ']]' },
-      \   },
-      \ }
+" let b:minisurround_config.custom_surroundings =
+      " \ { 's': { 'input': ['%[%[().-()%]%]'], 'output': { 'left': '[[', 'right': ']]' } } }
 
-" TODO: test!!!
 for [key, pair] in items(s:surround_defs)
   " `let b:surround_105 = "-- stylua: ignore start\n\r\n--stylua: ignore end"`
   execute printf('let b:surround_%d = %s', char2nr(key), string(join(pair, "\r")))
-  let b:minisurround_config.custom_surroundings[key] = {
-        \ 'output': { 'left': pair[0], 'right': pair[1] },
-        \ }
+  " let b:minisurround_config.custom_surroundings[key] =
+	" \ { 'output': { 'left': pair[0], 'right': pair[1] } }
 endfor

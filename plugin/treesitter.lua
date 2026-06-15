@@ -1,4 +1,5 @@
 local parsers = require('nvim.treesitter.parsers')
+
 local parsers_to_autostart = vim
   .iter(parsers)
   :filter(function(_, v) return v ~= false end)
@@ -13,10 +14,8 @@ local parsers_to_autostart = vim
     return acc
   end)
 
-require('vim._core.util').nvim_on('FileType', nil, {
-  pattern = parsers_to_autostart,
-  desc = 'Automatically start tree-sitter',
-}, function(ev) vim.treesitter.start(ev.buf) end)
+nv.on('FileType', parsers_to_autostart, function(ev) vim.treesitter.start(ev.buf) end)
+nv.on('FileType', { 'vim', 'lua' }, function(ev) vim.bo[ev.buf].syntax = 'ON' end)
 
 -- incremental-selection (C-Space to init/expand, C-BS to shrink)
 vim.cmd([[nmap <C-Space> van | xmap <C-Space> an | xmap <C-BS> in]])

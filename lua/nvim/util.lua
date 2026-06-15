@@ -4,7 +4,7 @@ local aug = vim.api.nvim_create_augroup('nv.autocmds', {})
 local M = {
   --- @param events vim.api.keyset.events|vim.api.keyset.events[] Event(s) to watch. See |autocmd-events|.
   --- @param pattern_or_cb string|string[]|fun()
-  --- @param cb fun()
+  --- @param cb fun(ev)
   on = function(events, pattern_or_cb, cb)
     local pattern
     if type(pattern_or_cb) == 'function' then

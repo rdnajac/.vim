@@ -1,11 +1,10 @@
-local lsp = vim.lsp
+local cmp = vim.lsp.inline_completion
 
-lsp.inline_completion.enable()
-lsp.enable('copilot')
-lsp.config('copilot', { root_dir = vim.fn.expand('~/GitHub') })
+cmp.enable()
 
+--- 
 vim.keymap.set('i', '<C-J>', function()
-  if not lsp.inline_completion.get() then
+  if not cmp.get() then
     return '<C-J>'
   end
 end, { expr = true, desc = 'Accept the current inline completion' })

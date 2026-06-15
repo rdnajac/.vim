@@ -4,21 +4,7 @@ vim.cmd.run('vimrc')
 require('snacks')
 _G.dd = Snacks.debug
 _G.bt = dd.backtrace
-_G.nv = setmetatable({ require('nvim.util') }, {
-  __index = function(t, k)
-    local modname = 'nvim.' .. k
-    local ok, m = xpcall(require, debug.traceback, modname)
-    if ok then
-      t[k] = m
-      return m
-    end
-    error(([[`require('%s')` failed: %s]]):format(modname, m))
-  end,
-})
-nv.opts = vim.defaulttable()
-nv.ui = {
-  ['2'] = require('nvim.ui.2'),
-  icons = require('nvim.ui.icons'),
-  status = require('nvim.ui.status'),
-  winbar = require('nvim.ui.winbar'),
-}
+_G.nv =  require('nvim.util')
+nv.ui = require('nvim.ui')
+nv.ui['2'].setup()
+-- nv.opts = vim.defaulttable()

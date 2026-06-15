@@ -1,10 +1,3 @@
----@type snacks.statuscolumn.Config
-local opts = {
-  left = { 'mark', 'sign' },
-  right = { 'fold' },
-  folds = { open = true, git_hl = true },
-}
-
 local orig = Snacks.statuscolumn.get
 
 Snacks.statuscolumn.get = function()
@@ -18,12 +11,11 @@ Snacks.statuscolumn.get = function()
   -- remove the click fold
   sstc = sstc:gsub("%%@v:lua%.require'snacks%.statuscolumn'%.click_fold@(.-)%%T", '%1')
   -- dd(sstc)
-  -- if vim.bo.buftype ~= '' and not nv.fn.is_curwin then
   -- split into components
   local left, num, right = sstc:match('^(.-)%%=(%d+)(.*)$')
   local ret
   -- left signs override numbers
-  -- TODO: perfer diagnostics over git?
+  -- TODO: perfer diagnostics over git
   if left and vim.trim(left) ~= '' then
     ret = left .. ' '
   elseif num then
@@ -40,5 +32,9 @@ Snacks.statuscolumn.get = function()
   return string.format('%%=%s%s', ret, sep)
 end
 
--- pass opts to snacks.setup
-return opts
+---@type snacks.statuscolumn.Config
+return {
+  left = { 'mark', 'sign' },
+  right = { 'fold' },
+  folds = { open = true, git_hl = true },
+}

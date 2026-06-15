@@ -1,9 +1,3 @@
-let g:mapleader      = ','
-let g:maplocalleader = '\'
-nnoremap <CR> :
-nnoremap <Space> :
-nnoremap : ,
-
 call vimrc#init()
 augroup vimrc.autocmds
   au!
@@ -128,12 +122,16 @@ augroup vimrc.edit
 augroup END
 augroup vimrc.fold/format
   au!
-  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
+  let g:vimsyn_folding = 'a'
   set foldlevel=99
-  " set foldlevelstart=1
+  set foldlevelstart=0
   " set foldminlines=3
   set foldopen+=insert,jump
-  " set foldmethod=marker
+  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
+  autocmd FileType vim setlocal fdm=syntax
+  " autocmd FileType vim setlocal commentstring=\"\ %s  " bette foldmarkers with `zf`
+  autocmd FileType lua setlocal foldmethod=expr foldtext=fold#text_lua()
+  " setlocal foldtext=v:vim.lsp.foldtext()
 
   " close folds when moving left at beginning of line
   nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
@@ -220,6 +218,7 @@ augroup vimrc.keywordprg
   au FileType sshconfig                       setl isk+=- kp=:MyMan | let b:manpage = 'ssh'
   au FileType tex nnoremap <silent><buffer> K <Plug>(vimtex-doc-package)
   au FileType vim nnoremap <silent><buffer> K <Plug>ScripteaseHelp
+  au FileType vim setlocal iskeyword-=# " makes autoloaded functions easier to `ciw`
 augroup END
 augroup vimrc.navigation
   au!
@@ -342,8 +341,7 @@ augroup vimrc.ui
     set pumblend=0
     set pumborder=rounded
     set winborder=rounded
-    set stl=%{%v:lua.nv.ui.status()%}
-    set wbr=%{%v:lua.nv.ui.winbar()%}
+    " set stl=%{%v:lua.require"nvim.ui.status"()%}
   endif
 
   " no cursorline in insert mode
@@ -359,6 +357,9 @@ augroup vimrc.ui
   " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
 " au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 augroup END
+nnoremap <CR> :
+nnoremap <Space> :
+nnoremap : ,
 
 nnoremap ` ~
 nnoremap ~ `
@@ -419,7 +420,6 @@ if !exists(':hardcopy') " TODO: use `jobstart` to avoid the Snacks dependency
 endif
 command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
-
 packadd! cfilter
 if !has('nvim')
   packadd! comment
@@ -444,11 +444,11 @@ Plug 'R-nvim/R.nvim'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'christoomey/vim-tmux-navigator'
-" Plug 'dstein64/vim-startuptime'
+Plug 'dstein64/vim-startuptime'
 Plug 'dense-analysis/ale'
 " Plug 'github/copilot.vim'
-" Plug 'junegunn/fzf.vim'
-" Plug 'justinmk/vim-dirvish'
+ Plug 'junegunn/fzf.vim'
+ Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
 " Plug 'romainl/vim-qf.git'
@@ -463,5 +463,3 @@ let g:vimtex_format_enabled = 1
 Plug 'iamcco/markdown-preview.nvim'
 " call mkdp#install()
 call plug#end()
-" configure the modeline to create folds on the augroups
-" vim: fdm=marker fdl=0 fmr=augroup\ vimrc,END
