@@ -45,9 +45,8 @@ vim.schedule(function()
       { path = 'nvim-lspconfig/lua/lspconfig/types', words = { 'lspconfig' } },
     },
   })
-  -- register autocmds for attaching to buffers
-  require('lazydev.buf').setup()
-  -- override the default command to always work as `LazyDev debug`
+  require('lazydev.buf').setup() -- creates autocmds
+  -- override the default command so it is always `LazyDev debug`
   vim.cmd([[command! LazyDev lua require('lazydev.cmd').commands.debug()]])
 end)
 
@@ -58,10 +57,8 @@ return {
   settings = {
     Lua = {
       completion = { autoRequire = false },
-      diagnostics = { disable = { 'missing-fields' } },
-      hover = {
-        previewFields = 255,
-      },
+      -- diagnostics = { disable = { 'missing-fields' } },
+      hover = { previewFields = 255 },
     },
   },
 }

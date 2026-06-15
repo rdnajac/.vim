@@ -11,7 +11,7 @@ function! s:sanitize(str) abort
   return s
 endfunction
 
-function! fn#hyperlink#() range abort
+function! hyperlink#() range abort
   let start_pos = getpos("'<")
   let end_pos   = getpos("'>")
 

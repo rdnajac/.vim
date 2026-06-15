@@ -1,4 +1,3 @@
-let &l:formatprg = 'stylua -f ~/.vim/stylua.toml --stdin-filepath=% -'
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 
 nnoremap <buffer> co2 O---@
@@ -9,7 +8,7 @@ inoremap <buffer> {<Space> {}<Left>
 inoremap <buffer> {<CR> {<CR>}<Esc>O
 inoremap <buffer> [[ [[]]<Left><Left>
 
-nnoremap <buffer> yu <Cmd>call debug#print#lua()<CR>
+nnoremap <buffer> yu <Cmd>call append(line('.'), printf('print(%s%s)', substitute(expand('<cWORD>'), ',$', '', ''), getline('.') =~# 'function' ? '()' : ''))<CR>
 nnoremap <buffer> ym <Cmd>call <SID>yankmod()<CR>
 nnoremap <buffer> yM <Cmd>call <SID>yankmod('.'..expand('<cword>')..'()')<CR>
 

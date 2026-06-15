@@ -1,20 +1,3 @@
-if vim.g.loaded_munchies == nil then
-  require('snacks').setup({
-    -- dashboard = { enabled = true },
-    explorer = { enabled = true },
-    image = { enabled = true },
-    indent = { enabled = true }, -- TODO: native intent guides
-    input = { enabled = true },
-    -- quickfile = { enabled = true },
-    picker = require('munchies').picker,
-    scope = { enabled = true },
-    scroll = { enabled = true },
-    statuscolumn = require('munchies').statuscolumn,
-    words = { enabled = true },
-  })
-  vim.g.loaded_munchies = 1
-end
-
 vim.cmd([[
 nnoremap ZB <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap Zb <Cmd>lua Snacks.bufdelete.other()<CR>

@@ -15,10 +15,8 @@ nmap S viWS
 xmap ` S`
 xmap F Sf
 
-
-" nmap dsf dSf
-
-" nmap ys sa
-" nmap ds sd
 " nmap cs sr
+" nmap ds sd
+" nmap dsf dSf
+" nmap ys sa
 " nmap yss ys_

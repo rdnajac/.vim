@@ -5,6 +5,10 @@ let $VIMDIR = g:vimrc#dir
 function! vimrc#init() abort
   let g:mapleader      = ','
   let g:maplocalleader = '\'
+  nnoremap <Space> :
+  nnoremap : ,
+  nnoremap ` ~
+  nnoremap ~ `
   if has('nvim')
     let g:loaded_node_provider = 0
     let g:loaded_perl_provider = 0
@@ -15,6 +19,18 @@ function! vimrc#init() abort
     call vim#sensible#()
   endif
 endfunction
+
+function! vimrc#now() abort
+  let total = reltimefloat(reltime())
+  let totalsec = float2nr(total)
+  let ms = float2nr((total - totalsec) * 1000)
+  return strftime("%H:%M:%S", totalsec) . printf(".%03d", ms)
+endfunction
+"
+" ia <expr> dt strftime('%Y-%m-%d')
+" ia <expr> tm strftime('%H:%M:%S')
+" ia <expr> dtm strftime('%Y-%m-%d %H:%M:%S')
+" ia LR LAST REVISION: <C-R>=strftime('%Y-%m-%d')<CR>
 
 function! vimrc#setmark(pattern, idx, line) abort
   let char = matchstr(a:line, a:pattern . '\zs.')

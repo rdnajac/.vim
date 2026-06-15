@@ -63,6 +63,13 @@ augroup vimrc.command/completion
     call cmd#abbrev('open', 'Open')
   endif
 
+  command! Clipboard call cmd#clipboard()
+  command! -nargs=* Diff call cmd#diff(<f-args>)
+  if !exists(':hardcopy')
+    command! Hardcopy call cmd#hardcopy()
+  endif
+  command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
+
   " immediately quit the command line window if opened
   autocmd CmdwinEnter * quit
 augroup END
@@ -84,7 +91,8 @@ augroup vimrc.dirs
   nnoremap cds <Cmd>exe 'edit' g:stdpath#state<CR>
   nnoremap cdG <Cmd>edit ~/GitHub/<CR>
   nnoremap cdN <Cmd>edit ~/GitHub/neovim/<CR>
-  nnoremap cdp <Cmd>edit $PACKDIR<CR>
+  nnoremap cdp <Cmd>edit ~/.vim/pack/<CR>
+  nnoremap cdP <Cmd>edit $PACKDIR<CR>
   nnoremap cdl <Cmd>edit $PACKDIR/nvim-lspconfig/lua/lspconfig/types/lsp/<CR>
   nnoremap cdv <Cmd>edit $VIMRUNTIME/lua/vim<CR>
   nnoremap cdV <Cmd>edit $VIMRUNTIME<CR>
@@ -124,20 +132,16 @@ augroup vimrc.fold/format
   au!
   let g:vimsyn_folding = 'a'
   set foldlevel=99
-  set foldlevelstart=0
+  " set foldlevelstart=0
   " set foldminlines=3
   set foldopen+=insert,jump
-  autocmd FileType vim,lua setlocal nowrap formatoptions-=o conceallevel=2
-  autocmd FileType vim setlocal fdm=syntax
-  " autocmd FileType vim setlocal commentstring=\"\ %s  " bette foldmarkers with `zf`
-  autocmd FileType lua setlocal foldmethod=expr foldtext=fold#text_lua()
+  autocmd FileType vim setl fdm=syntax commentstring=\"\ %s
+  autocmd FileType vim,lua set nowrap formatoptions-=o conceallevel=2
+  autocmd FileType lua setl fdm=expr foldtext=fold#text_lua()
   " setlocal foldtext=v:vim.lsp.foldtext()
 
   " close folds when moving left at beginning of line
   nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
-
-  " save, override, and restore commentstring to get nice folds
-  xnoremap zf :<C-u>let s=&l:cms \| let &l:cms=' '..s \| '<,'>fold \| let &l:cms=s<CR>
 
   " autocmd FileType vim,lua setlocal
   if has('nvim')
@@ -300,7 +304,7 @@ augroup vimrc.search/spell
   au!
   set findfunc=file#find
   set ignorecase
-  set jumpoptions+=stack
+  " set jumpoptions+=stack
   set showmatch
   set smartcase
   " set suffixes " TODO:
@@ -355,15 +359,8 @@ augroup vimrc.ui
 
   " hide the statusline while in command mode
   " au CmdlineEnter * if &ls != 0 | let g:last_ls = &ls | set ls=0 |endif
-" au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
+  " au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 augroup END
-nnoremap <CR> :
-nnoremap <Space> :
-nnoremap : ,
-
-nnoremap ` ~
-nnoremap ~ `
-
 " cmd/super
 xnoremap <D-c> "+y
 nnoremap <D-r> <Cmd>Restart<CR>
@@ -408,17 +405,9 @@ nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 nnoremap ]<Tab> <Cmd>tabnext<CR>
 nnoremap [<Tab> <Cmd>tabprevious<CR>
 
-nmap zq mzgqal'z
+" nmap zq mzgqal'z
+nmap zq <Cmd>ALEFix<CR>l
 nnoremap zJ <Plug>(unimpaired-move-down)kJ
-
-" `https://github.com/neovim/neovim/discussions/38256`
-" Usage: $`nvim +Clipboard` or `alias pbedit='nvim +Clipboard'`
-command! Clipboard call cmd#clipboard#()
-command! -nargs=* Diff call cmd#diff#(<f-args>)
-if !exists(':hardcopy') " TODO: use `jobstart` to avoid the Snacks dependency
-  command! Hardcopy lua Snacks.terminal.open(([[vim -esNu NONE %s -c 'hardcopy | q!']]):format(vim.api.nvim_buf_get_name(0)))
-endif
-command! -nargs=1 -complete=customlist,cmd#scp#complete Scp call cmd#scp#(<f-args>)
 
 packadd! cfilter
 if !has('nvim')
@@ -430,25 +419,20 @@ endif
 packadd! nvim.difftool
 packadd! nvim.tohtml
 packadd! nvim.undotree
+
 call plug#begin()
-Plug 'folke/snacks.nvim'
-Plug 'folke/lazydev.nvim'
-Plug 'folke/tokyonight.nvim'
-Plug 'folke/which-key.nvim'
 Plug 'nvim-mini/mini.nvim'
-Plug 'neovim/nvim-lspconfig'
 Plug 'b0o/SchemaStore.nvim'
 Plug 'chrisgrieser/nvim-scissors'
+Plug 'iamcco/markdown-preview.nvim', { 'build': { -> mkdp#install() } }
+Plug 'neovim/nvim-lspconfig'
 Plug 'MeanderingProgrammer/render-markdown.nvim'
 Plug 'R-nvim/R.nvim'
 " Plug 'andymass/vim-matchup'
 " Plug 'bullets-vim/bullets.vim'
 " Plug 'christoomey/vim-tmux-navigator'
-Plug 'dstein64/vim-startuptime'
-Plug 'dense-analysis/ale'
 " Plug 'github/copilot.vim'
- Plug 'junegunn/fzf.vim'
- Plug 'justinmk/vim-dirvish'
+Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
 " Plug 'romainl/vim-qf.git'
@@ -456,10 +440,6 @@ Plug 'dense-analysis/ale'
 Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'Konfekt/FastFold'
 " Plug 'Konfekt/vim-formatprgs'
-Plug 'lervag/vimtex'
-let g:vimtex_format_enabled = 1
-" let g:vimtex_mappings_disable = {'n': ['K']}
-" let g:vimtex_quickfix_method = executable('pplatx') ? 'pplatex' : 'latexlog'
-Plug 'iamcco/markdown-preview.nvim'
-" call mkdp#install()
 call plug#end()
+
+let g:vimtex_format_enabled = 1

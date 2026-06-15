@@ -1,4 +1,3 @@
--- lua vim.bo.syntax = 'ON'
 if vim.g.old_bg == nil then
   vim.g.old_bg = Snacks and Snacks.util.color('LspReferenceText', 'bg')
     or ('#%06x'):format(

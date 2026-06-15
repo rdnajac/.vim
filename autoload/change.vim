@@ -1,7 +1,14 @@
-" change the closest quote to the other type (single to double or vice versa)
-"   'string'
-"   "string"
+function! change#all(find, replace) abort
+  " escape any slash or backslash in the arguments
+  function s:esc(str)
+    return escape(a:str, '/\')
+  endfunction
+  " run the substitute in every buffer, then write if changed
+  execute printf('bufdo %%s/\V%s/%s/g | update'),
+	\ s:esc(a:find), s:esc(a:replace)
+endfunction
 
+" change the closest quote to the other type ('single'/"double")
 function! s:toggle(q) abort
   return 'cs' . a:q . (a:q ==# '"' ? "'" : '"')
 endfunction

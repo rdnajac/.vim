@@ -5,28 +5,20 @@
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "SchemaStore.nvim": {
-      "rev": "e1a36239e4e36759546852dae5f4737375b388f6",
+      "rev": "3dca2d2153cfbc9aab937c1be0441e371101b0b8",
       "src": "https://github.com/b0o/SchemaStore.nvim.git"
     },
-    "ale": {
-      "rev": "178fe113564d31cba304263765aeb21e7ed23a7e",
-      "src": "https://github.com/dense-analysis/ale.git"
-    },
     "blink.cmp": {
-      "rev": "13e7b50e7ba73ce781459da68d346925adfdb530",
+      "rev": "91774548bc358c02fcc327d33c9ac0d9830c8c47",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
       "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
       "src": "https://github.com/Saghen/blink.lib.git"
     },
-    "fzf.vim": {
-      "rev": "d2a59a992a2455f609c0fde2ebd84427ea8f919a",
-      "src": "https://github.com/junegunn/fzf.vim.git"
-    },
-    "lazydev.nvim": {
-      "rev": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d",
-      "src": "https://github.com/folke/lazydev.nvim.git"
+    "copilot.vim": {
+      "rev": "a12fd5672110c8aa7e3c8419e28c96943ca179be",
+      "src": "https://github.com/github/copilot.vim.git"
     },
     "markdown-preview.nvim": {
       "rev": "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
@@ -60,33 +52,13 @@
       "rev": "5adf0895310c1904e5abfaad40a2baad7fe44a07",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
-    "snacks.nvim": {
-      "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
-      "src": "https://github.com/folke/snacks.nvim.git"
-    },
     "splitjoin.vim": {
       "rev": "b26971a7fdc7ca645b766459e3ed7949300c404f",
       "src": "https://github.com/AndrewRadev/splitjoin.vim.git"
     },
-    "tokyonight.nvim": {
-      "rev": "cdc07ac78467a233fd62c493de29a17e0cf2b2b6",
-      "src": "https://github.com/folke/tokyonight.nvim.git"
-    },
     "vim-dirvish": {
       "rev": "ad478b4ac86484edc525bfc5379f261204dfbf4c",
       "src": "https://github.com/justinmk/vim-dirvish.git"
-    },
-    "vim-startuptime": {
-      "rev": "5f33e50f1e2e2a80370c9094e4c303ea54cd2aea",
-      "src": "https://github.com/dstein64/vim-startuptime.git"
-    },
-    "vimtex": {
-      "rev": "fedb7ffc1bebf254cc74e7419c3a5930b6719065",
-      "src": "https://github.com/lervag/vimtex.git"
-    },
-    "which-key.nvim": {
-      "rev": "3aab2147e74890957785941f0c1ad87d0a44c15a",
-      "src": "https://github.com/folke/which-key.nvim.git"
     }
   }
 }

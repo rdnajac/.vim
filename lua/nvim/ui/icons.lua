@@ -1,3 +1,5 @@
+-- `$PACKDIR/mini.nvim/lua/mini/icons.lua:690`
+
   -- stylua: ignore
 local c = {
   { fg =     '#C0CAF5' },
@@ -24,8 +26,14 @@ Snacks.util.set_hl({
 }, { 'MiniIcons' })
 
 local copilot = ''
--- `$PACKDIR/mini.nvim/lua/mini/icons.lua:690`
+
 local M = {
+  _picker_source = {
+    buffers = '',
+    explorer = '󰙅',
+    files = '',
+    grep = '󰱽',
+  },
   buffer = '',
   cmdline = '',
   lsp = '',

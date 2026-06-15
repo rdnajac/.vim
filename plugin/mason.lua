@@ -1,6 +1,6 @@
----@module "mason"
-_G.Plug({
+Plug({
   'mason-org/mason.nvim',
+  ---@module "mason"
   ---@type MasonSettings
   opts = {
     ui = {

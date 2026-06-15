@@ -17,11 +17,8 @@ setlocal textwidth=80
 setlocal formatoptions+=o
 setlocal commentstring=>\ %s
 
-" set up text objects for code block
-xnoremap <buffer> ac :<C-u>call textobjects#codeblock#outer()<CR>
-onoremap <buffer> ac :<C-u>normal vac<CR>
-xnoremap <buffer> ic :<C-u>call textobjects#codeblock#inner()<CR>
-onoremap <buffer> ic :<C-u>normal vic<CR>
+" maps `ic` and `ac` to select inner and outer code blocks
+call textobjects#codeblock_map()
 
 " Insert an octothorpe at the beginning of the line that already has text
 nnoremap <buffer> <localleader>h ^i#<Space><Esc>
@@ -36,7 +33,7 @@ inoremap <buffer> `$  ```console<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
-xnoremap <leader>k :call fn#hyperlink#()<CR>
+xnoremap <leader>k :call hyperlink#()<CR>
 
 let b:surround_96 = "```\n\r\n```"
 
