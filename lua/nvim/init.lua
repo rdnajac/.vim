@@ -1,8 +1,11 @@
 local api, cmd, fn, fs = vim.api, vim.cmd, vim.fn, vim.fs
-local aug = api.nvim_create_augroup('nv.autocmds', {})
+local group = api.nvim_create_augroup('nv.autocmds', {})
+
 local M = {
-  -- opts = vim.defaulttable()
+opts = vim.defaulttable() -- store plugin options here
 }
+
+local core_util = require('vim._core.util')
 
 --- returns a special submodule metatable that lazy-loads its own submodules
 ---
@@ -20,6 +23,8 @@ M.submodule = function(prefix)
   })
 end
 
+M.ui = M.submodule('nvim.ui')
+
 --- wrapper around the nvim_create_autocmd wrapper
 ---
 --- @param events vim.api.keyset.events|vim.api.keyset.events[]
@@ -34,35 +39,8 @@ M.on = function(events, pattern_or_cb, cb)
     pattern = pattern_or_cb
   end
   ---@cast cb fun(vim.api.keyset.create_autocmd.callback_args):boolean?
-  return require('vim._core.util').nvim_on(events, aug, { pattern = pattern }, cb)
+  return core_util.nvim_on(events, group, { pattern = pattern }, cb)
 end
-
-local bigfile_ftplugin = function()
-  vim.cmd([[
-    setlocal foldmethod& statuscolumn& conceallevel&
-    let b:completion = v:false
-    let b:minihipatterns_disable  = v:false
-    if exists(':NoMatchParen') == 2
-      NoMatchParen
-    endif
-  ]])
-  vim.schedule(function()
-    vim.notify(
-      ('This is a beeeg file (%s)!'):format(
-        Snacks.debug.size(fn.getfsize(fn.expand('%:p'))),
-        vim.log.levels.WARN
-      )
-    )
-    if api.nvim_buf_is_valid(0) then
-      local ft = vim.filetype.match({ buf = 0 }) -- or ''
-      -- for json files, keep the filetype as json
-      -- for other files, set the syntax to the detected ft
-      vim.bo[ft == 'json' and 'filetype' or 'syntax'] = ft
-    end
-  end)
-end
-
-M.on('FileType', 'bigfile', bigfile_ftplugin)
 
 --- Run a Vim command and return the output as a list of lines
 ---@param vimcommand string Vim command to execute

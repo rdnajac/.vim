@@ -1,5 +1,5 @@
-" TODO: add param to set how we open the file
-" ie edit/split/vsplit like in picker confirms
+" TODO: add param to set how we open the file like for wrapped_edit
+" ~/.local/share/nvim/runtime/lua/vim/_core/util.lua:66
 function! s:apply_extra(extra) abort
   if a:extra =~# '\v(^|\s)\+\S'
     execute matchstr(a:extra, '\v\+\S+')

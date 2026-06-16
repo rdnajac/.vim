@@ -40,3 +40,5 @@ function! vim#reload#() abort
     call vim#notify#warn('Runtime command not available. Install vim-scriptease.')
   endif
 endfunction
+
+" nnoremap <leader>fT :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>

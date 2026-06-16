@@ -1,4 +1,10 @@
-call vimrc#init()
+let $VIMDIR = g:vimrc#dir
+let g:mapleader      = ','
+let g:maplocalleader = '\'
+nnoremap <Space> :
+nnoremap : ,
+nnoremap ` ~
+nnoremap ~ `
 augroup vimrc.autocmds
   au!
   set timeoutlen=420
@@ -9,7 +15,7 @@ augroup vimrc.autocmds
   au BufLeave vimrc normal! mV
   au BufWrite vimrc call vimrc#setmarks()
   " load the colorscheme just before loading the ui
-  au VimEnter * color scheme
+  " au VimEnter * color scheme
   " automatically resize splits when the window is resized
   au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
   " catch when vim doesn't terminate properly
@@ -220,9 +226,8 @@ augroup vimrc.keywordprg
   au FileType kitty,tmux,ghostty              setl isk+=- kp=:MyMan | let b:manpage = &filetype
   au FileType gitconfig,gitconfig.chezmoitmpl setl isk+=- kp=:MyMan | let b:manpage = 'git-config(1)'
   au FileType sshconfig                       setl isk+=- kp=:MyMan | let b:manpage = 'ssh'
-  au FileType tex nnoremap <silent><buffer> K <Plug>(vimtex-doc-package)
-  au FileType vim nnoremap <silent><buffer> K <Plug>ScripteaseHelp
-  au FileType vim setlocal iskeyword-=# " makes autoloaded functions easier to `ciw`
+  au FileType tex nnoremap <silent><buffer> <localleader>k <Plug>(vimtex-doc-package)
+  au FileType vim nnoremap <silent><buffer> <localleader>k <Plug>ScripteaseHelp
 augroup END
 augroup vimrc.navigation
   au!
@@ -374,25 +379,24 @@ xnoremap <D-c> "+y
 nnoremap <D-r> <Cmd>Restart<CR>
 nnoremap <D-s> <Cmd>write ++p<CR>
 
-nnoremap <leader>da <Cmd>ALEInfo<CR>
+nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
+nnoremap <Bslash>\ <Cmd>call edit#readme()<CR>
+
+nnoremap <leader>ai <Cmd>ALEInfo<CR>
+nnoremap <leader>af <Cmd>ALEFix<CR>
+
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
 nnoremap <leader>dF <Cmd>verb se formatprg? formatexpr? tagfunc? omnifunc?<CR>
 nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
-nnoremap <leader>di <Cmd>Inspect<CR>
-nnoremap <leader>dI <Cmd>Inspect!<CR>
 nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
 nnoremap <leader>dq <Cmd>lua vim.diagnostic.setloclist()<CR>
 nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
+nnoremap <leader>i <Cmd>Inspect<CR>
+nnoremap <leader>I <Cmd>Inspect!<CR>
 
-nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
-nnoremap <Bslash>\ <Cmd>call edit#readme()<CR>
-
-nnoremap <leader>fS <Cmd>call edit#snippets()<CR>
-nnoremap <leader>ft <Cmd>call edit#ftplugin()<CR>
-nnoremap <leader>fD <Cmd>Delete!<Bar>bwipeout #<CR>
-nnoremap <leader>fT :set ft=<C-R>=&ft<CR><Bar>Info 'ft reloaded!'<CR>
-nnoremap <leader>fw <Cmd>call format#clean_whitespace()<CR>
+nnoremap <leader>A <Cmd>call edit#ftplugin()<CR>
+nnoremap <leader>S <Cmd>call edit#snippets()<CR>
 
 nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
 nnoremap <leader><Tab>d <Cmd>tabclose<CR>
@@ -402,32 +406,21 @@ nnoremap ]<Tab> <Cmd>tabnext<CR>
 nnoremap [<Tab> <Cmd>tabprevious<CR>
 
 " nmap zq mzgqal'z
-nmap zq <Cmd>ALEFix<CR>l
+nnoremap zq <Cmd>ALEFix<Bar>write<CR>
 nnoremap zJ <Plug>(unimpaired-move-down)kJ
 
-packadd! cfilter
-if !has('nvim')
-  packadd! comment
-  packadd! editorconfig
-  packadd! hlyank
-  finish
-endif
-
-packadd! nvim.difftool
-packadd! nvim.tohtml
-packadd! nvim.undotree
-
 call plug#begin()
+Plug 'neovim/nvim-lspconfig'
+Plug 'nvim-mini/mini.nvim'
+Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'christoomey/vim-tmux-navigator'
 " Plug 'github/copilot.vim'
 " Plug 'Konfekt/FastFold'
 " Plug 'Konfekt/vim-formatprgs'
-Plug 'justinmk/vim-dirvish'
+" Plug 'justinmk/vim-dirvish'
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
-Plug 'nvim-mini/mini.nvim'
-Plug 'neovim/nvim-lspconfig'
 Plug 'chrisgrieser/nvim-scissors'
 Plug 'iamcco/markdown-preview.nvim', { 'build': { -> mkdp#install() } }
 Plug 'MeanderingProgrammer/render-markdown.nvim'
@@ -435,4 +428,3 @@ Plug 'R-nvim/R.nvim'
 " Plug 'romainl/vim-qf.git'
 " Plug 'vuciv/golf'
 call plug#end()
-" colorscheme tokyonight

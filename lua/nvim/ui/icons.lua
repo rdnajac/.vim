@@ -189,6 +189,9 @@ M.mini_override = function()
   end
 end
 
+-- HACK: Override get to do wildcard matching
+vim.schedule(M.mini_override)
+
 ---@param key "directory"|"extension"|"file"|"filetype"|"os"
 ---@param lookup string?
 ---@return string icon, string? hl always return a string, hl group on success

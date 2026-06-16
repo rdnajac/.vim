@@ -22,6 +22,9 @@ function! vim#chars#listchars() abort
   set listchars+=nbsp:+
 endfunction
 
+" indent guides
+" set list listchars=leadtab:\ \ │,tab:\ \ │,leadmultispace:\ \ │
+
 " insert special chars
 iabbrev n- –
 iabbrev m- —

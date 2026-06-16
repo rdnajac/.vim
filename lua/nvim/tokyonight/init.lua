@@ -45,9 +45,7 @@ end
 --- Call setup and store results on this module
 --- and manually tigger `ColorScheme` autocmd
 M.init = function()
-  -- M.opts = require('tokyonight.config').extend(M.opts)
   M.colors = require('tokyonight.colors').setup(M.opts)
-  -- M.colors = require('nvim.tokyonight.colors')(M.opts)
   M.groups = require('tokyonight.groups').setup(M.colors, M.opts)
   -- M.groups = require('nvim.tokyonight.groups')(M.colors, M.opts)
   M.colorscheme(M.groups)

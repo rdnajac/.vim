@@ -39,6 +39,11 @@ for series in ([
   call s:new_dial(series)
 endfor
 
+" TODO: regex or loop over modes for:
+      \ ['.map', '.noremap'],
+" for mode in ([
+" for entry in ([
+
 " let s:md_headers = map(range(1, 6), 'repeat("#", v:val)')
 let s:md_headers = map(range(1, 6), {_, v -> repeat('#', v)})
 

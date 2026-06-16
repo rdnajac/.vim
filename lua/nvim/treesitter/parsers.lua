@@ -19,7 +19,7 @@ return {
   -- bash = { 'sh', 'bash' },
   bash = true,
   -- bibtex = false,
-  -- csv = false,
+  csv = true,
   -- cmake = false,
   -- cpp = false,
   -- cuda = false,
@@ -37,7 +37,7 @@ return {
   html = true,
   javascript = true,
   json = true,
-  latex = false, -- required for `Snacks.image`, do not autostart
+  latex = false, -- required for `Snacks.image`, but do not autostart
   just = true,
   -- llvm = false,
   lua = false, -- `$VIMRUNTIME/ftplugin/lua.lua` already starts treesitter

@@ -1,25 +1,5 @@
 " let g:vimrc#dir = split(&runtimepath, ',')[0]
 let g:vimrc#dir = fnamemodify($MYVIMRC, ':h')
-let $VIMDIR = g:vimrc#dir
-
-function! vimrc#init() abort
-  let g:mapleader      = ','
-  let g:maplocalleader = '\'
-  nnoremap <Space> :
-  nnoremap : ,
-  nnoremap ` ~
-  nnoremap ~ `
-  if has('nvim')
-    let g:loaded_node_provider = 0
-    let g:loaded_perl_provider = 0
-    let g:loaded_python3_provider = 0
-    let g:loaded_ruby_provider = 0
-    set exrc
-  else
-    call vim#defaults#()
-    call vim#sensible#()
-  endif
-endfunction
 
 function! vimrc#now() abort
   let total = reltimefloat(reltime())

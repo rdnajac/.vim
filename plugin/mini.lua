@@ -17,9 +17,6 @@ for k, opts in pairs({
   end,
 
   icons = function()
-    -- HACK: Override get to do wildcard matching
-    vim.schedule(nv.ui.icons.mini_override)
-
     local function minify(v)
       local glyph = type(v) == 'table' and v[1] or v
       local color = type(v) == 'table' and v[2] or 'Green'

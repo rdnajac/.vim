@@ -1,5 +1,4 @@
 local parsers = require('nvim.treesitter.parsers')
-
 local parsers_to_autostart = vim
   .iter(parsers)
   :filter(function(_, v) return v ~= false end)
@@ -21,7 +20,6 @@ nv.on('FileType', { 'vim', 'lua' }, function(ev) vim.bo[ev.buf].syntax = 'ON' en
 vim.cmd([[nmap <C-Space> van | xmap <C-Space> an | xmap <C-BS> in]])
 
 Plug({
-  { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate' },
   {
     'nvim-treesitter/nvim-treesitter-context',
     -- enabled = false,

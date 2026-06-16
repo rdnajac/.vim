@@ -3,9 +3,12 @@ vim.loader.enable()
 require('snacks').setup({
   bigfile = { enabled = false },
   dashboard = { enabled = false },
-  explorer = { enabled = true },
+  explorer = {
+    replace_netrw = true,
+    trash = true,
+  },
   image = { enabled = true },
-  indent = { enabled = true }, -- TODO: native intent guides
+  indent = { enabled = true },
   input = { enabled = true },
   notifier = { enabled = false },
   quickfile = { enabled = false },
@@ -18,9 +21,12 @@ require('snacks').setup({
 
 _G.dd = Snacks.debug
 _G.bt = dd.backtrace
-_G.nv = require('nvim.util')
-nv.ui = nv.submodule('nvim.ui')
-nv.ui['2'].setup()
-
+_G.nv = require('nvim')
 vim.cmd.runtime('vimrc')
-nv.on('VimEnter', function() vim.cmd.colorscheme('tokyonight') end)
+
+nv.on('VimEnter', function()
+  nv.ui['2'].setup()
+  vim.cmd.colorscheme('tokyonight')
+  vim.o.winbar = '%{%v:lua.nv.ui.winbar()%}'
+  -- vim.fn['chromatophore#setup']()
+end)
