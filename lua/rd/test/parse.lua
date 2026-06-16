@@ -1,10 +1,6 @@
+local M = { cmd = {}, abr = {} }
 local index = vim.fn.expand('$VIMRUNTIME/doc/index.txt')
 -- local options = vim.fn.expand('$VIMRUNTIME/doc/options.txt')
-
-local M = {
-  cmd = {},
-  abr = {},
-}
 
 function M.command_abbrevations()
   for line in io.lines(index) do
