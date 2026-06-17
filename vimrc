@@ -1,4 +1,3 @@
-let $VIMDIR = g:vimrc#dir
 let g:mapleader      = ','
 let g:maplocalleader = '\'
 nnoremap <Space> :
@@ -13,9 +12,16 @@ augroup vimrc.autocmds
   set shortmess+=aA "c
   set shortmess-=o
   au BufLeave vimrc normal! mV
-  au BufWrite vimrc call vimrc#setmarks()
+function! s:setmark(pattern, idx, line) abort
+  let char = matchstr(a:line, a:pattern . '\zs.')
+  if !empty (char)
+    call setpos("'" . toupper(char), [0, a:idx + 1, 1, 0])
+  endif
+endfunction
+  " create global marks for each augroup to jump to specific lines in the vimrc from anywhere
+  au BufWrite vimrc call map(getline(1, '$'), {i, line -> s:setmark('augroup\ vimrc\.', i, line)})
   " load the colorscheme just before loading the ui
-  " au VimEnter * color scheme
+  au VimEnter * color scheme
   " automatically resize splits when the window is resized
   au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
   " catch when vim doesn't terminate properly
@@ -144,7 +150,11 @@ augroup vimrc.fold/format
   autocmd FileType vim setl fdm=syntax commentstring=\"\ %s
   autocmd FileType vim,lua set nowrap formatoptions-=o conceallevel=2
   autocmd FileType lua setl fdm=expr foldtext=fold#text_lua()
+  " TODO: 
   " setlocal foldtext=v:vim.lsp.foldtext()
+  if executable('prettier')
+    autocmd FileType markdown let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
+  endif
 
   " close folds when moving left at beginning of line
   nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
@@ -381,9 +391,6 @@ nnoremap <D-s> <Cmd>write ++p<CR>
 
 nnoremap <Bslash>i <Cmd>call edit#($MYVIMRC)<CR>
 nnoremap <Bslash>\ <Cmd>call edit#readme()<CR>
-
-nnoremap <leader>ai <Cmd>ALEInfo<CR>
-nnoremap <leader>af <Cmd>ALEFix<CR>
 
 nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax?<CR>
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>

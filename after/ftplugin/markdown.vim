@@ -4,9 +4,7 @@ if !has('nvim')
   " let g:markdown_folding        = 1
 endif
 
-if executable('prettier')
-  let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
-endif
+xnoremap <D-k> :call hyperlink#()<CR>
 
 " set up header abbreviations
 call map(range(1, 6), {i, v ->
@@ -33,7 +31,6 @@ inoremap <buffer> `$  ```console<CR><CR>```<Up>
 
 inoremap <buffer> <! <!--<Space>--><Left><Left><Left><Left><Space>
 
-xnoremap <leader>k :call hyperlink#()<CR>
 
 let b:surround_96 = "```\n\r\n```"
 

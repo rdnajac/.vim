@@ -1,19 +1,19 @@
 {
   "plugins": {
     "R.nvim": {
-      "rev": "2d42670c3f73098411db4f09961fcda288ca271e",
+      "rev": "aa37fb6e1a260d7ee20977079b3a7753d948d3b0",
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "SchemaStore.nvim": {
-      "rev": "3dca2d2153cfbc9aab937c1be0441e371101b0b8",
+      "rev": "735540a7602bffd1b07deab7d508affb57b78c64",
       "src": "https://github.com/b0o/SchemaStore.nvim.git"
     },
     "blink.cmp": {
-      "rev": "91774548bc358c02fcc327d33c9ac0d9830c8c47",
+      "rev": "39682a9c737920578cf68887c21eaa4ce3845c67",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
-      "rev": "b127d48bf8e9ac9cf41f6e0fbead317503f76558",
+      "rev": "08ac9a9b873d3c7376e408a36c40c4131e2809ce",
       "src": "https://github.com/Saghen/blink.lib.git"
     },
     "markdown-preview.nvim": {
@@ -25,7 +25,7 @@
       "src": "https://github.com/mason-org/mason.nvim.git"
     },
     "mini.nvim": {
-      "rev": "a59a9b7fb0a42cbcf022938ee5f0724320b66f63",
+      "rev": "bf8169f3e518be8de3f88073ace37d91f576cb04",
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {

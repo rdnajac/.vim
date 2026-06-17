@@ -1,6 +1,7 @@
 -- This file is generated. Do not edit.
 ---@meta
 error('this file should not be required directly')
+_G.Plug = require('snackpack').add
 
 nv = require('nvim.util')
 nv.git = require('nvim.git')

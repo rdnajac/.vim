@@ -1,13 +1,16 @@
 ""
 " @public
+"
 " Get the git repository root directory.
 " Uses Snacks.nvim if available, falls back to Fugitive, then manual search.
 " [buffer] can be a buffer number or buffer name. Defaults to current buffer.
 function! git#root(...) abort
-  if n#vim_has_global('Snacks')
+  if has('nvim') "&& !empty(luaeval('_G.Snacks'))
     try
-      return a:0 ? luaeval('_G.Snacks.git.get_root(_A)', a:1) : v:lua.Snacks.git.get_root()
+      " return a:0 ? luaeval('_G.Snacks.git.get_root(_A)', a:1) : v:lua.Snacks.git.get_root()
+      return v:lua.Snacks.git.get_root()
     catch
+      " TODO: ???
     endtry
   endif
   if exists('*FugitiveGitDir')

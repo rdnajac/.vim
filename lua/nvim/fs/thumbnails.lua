@@ -54,7 +54,8 @@ M.render = function(bufnr)
       })
     end
   end
-  nv.ui.redraw() -- avoids flicker
+  -- redraw to avoid flicker
+  vim.api.nvim__redraw({ buf = bufnr, valid = true, flush = false })
 end
 
 M.extmark_leaks = function()

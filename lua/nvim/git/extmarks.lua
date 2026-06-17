@@ -180,11 +180,3 @@ local setup = function(ev)
     }
   )
 end
-
--- local aug = vim.api.nvim_create_augroup('git-extmarks', {})
--- vim.api.nvim_create_autocmd('FileType', {
---   pattern = { 'dirvish', 'oil', 'netrw' },
---   group = aug,
--- })
-
-return { setup = setup }
