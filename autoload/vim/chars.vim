@@ -28,3 +28,9 @@ endfunction
 " insert special chars
 iabbrev n- –
 iabbrev m- —
+
+" insert chars at EOL
+" nnoremap <Bslash>, mzA,<Esc>;`z
+" nnoremap <Bslash>; mzA;<Esc>;`z
+" nnoremap <Bslash>. mzA.<Esc>;`z
+" TODO: function and user getchar

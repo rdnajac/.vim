@@ -5,15 +5,15 @@
       "src": "https://github.com/R-nvim/R.nvim.git"
     },
     "SchemaStore.nvim": {
-      "rev": "735540a7602bffd1b07deab7d508affb57b78c64",
+      "rev": "c73e2b170a4927d1dc1b48e878bba6cf0ed9b07c",
       "src": "https://github.com/b0o/SchemaStore.nvim.git"
     },
     "blink.cmp": {
-      "rev": "39682a9c737920578cf68887c21eaa4ce3845c67",
+      "rev": "26ec6f0a1a8101eb134f8b8568d6099be015fe70",
       "src": "https://github.com/Saghen/blink.cmp.git"
     },
     "blink.lib": {
-      "rev": "08ac9a9b873d3c7376e408a36c40c4131e2809ce",
+      "rev": "bf67998a314236cfba50fe311d60ef03d15d9426",
       "src": "https://github.com/Saghen/blink.lib.git"
     },
     "markdown-preview.nvim": {
@@ -29,7 +29,7 @@
       "src": "https://github.com/nvim-mini/mini.nvim.git"
     },
     "nvim-lspconfig": {
-      "rev": "a683e0ddf0cf64c6cd689e18ffb480ade3c162b7",
+      "rev": "96f363ce07d46c1804532ca2d1eb3a157d11ee29",
       "src": "https://github.com/neovim/nvim-lspconfig.git"
     },
     "nvim-scissors": {
@@ -45,16 +45,12 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context.git"
     },
     "render-markdown.nvim": {
-      "rev": "5adf0895310c1904e5abfaad40a2baad7fe44a07",
+      "rev": "f422cb5c6855f150e2ddcfaf44e7157b98b34f6a",
       "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim.git"
     },
     "splitjoin.vim": {
       "rev": "b26971a7fdc7ca645b766459e3ed7949300c404f",
       "src": "https://github.com/AndrewRadev/splitjoin.vim.git"
-    },
-    "vim-dirvish": {
-      "rev": "ad478b4ac86484edc525bfc5379f261204dfbf4c",
-      "src": "https://github.com/justinmk/vim-dirvish.git"
     }
   }
 }

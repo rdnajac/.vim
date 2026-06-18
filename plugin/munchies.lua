@@ -1,4 +1,8 @@
 vim.cmd([[
+nnoremap _ <Cmd>lua Snacks.explorer.reveal()<CR>
+nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
+nnoremap <C-f> <Cmd>lua Snacks.picker()<CR>
+
 nnoremap ZB <Cmd>lua Snacks.bufdelete()<CR>
 nnoremap Zb <Cmd>lua Snacks.bufdelete.other()<CR>
 nnoremap ,. <Cmd>lua Snacks.scratch.open()<CR>
@@ -28,8 +32,6 @@ nnoremap <leader>gL <Cmd>lua Snacks.picker.git_log_line()<CR>
 nnoremap <leader>gl <Cmd>lua Snacks.picker.git_log()<CR>
 nnoremap <leader>gs <Cmd>lua Snacks.picker.git_status()<CR>
 nnoremap <leader>gS <Cmd>lua Snacks.picker.git_stash()<CR>
-
-nnoremap <C-S-F> <Cmd>lua Snacks.picker()<CR>
 ]])
 
 -- TODO: also see `vim.on_key`
@@ -53,9 +55,9 @@ vim.keymap.set({ 'n', 't' }, '<C-Bslash>', function() Snacks.terminal.focus() en
 vim.keymap.set({ 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) end)
 vim.keymap.set({ 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end)
 
-vim.schedule(function()
-  vim.iter({ 'autocmds', 'buffers', 'files', 'help', 'resume', 'grep', 'zoxide' }):each(function(p)
-    vim.cmd(([[command! %s lua Snacks.picker.%s()]]):format(nv.capitalize(p), p))
-    vim.keymap.set('n', '<C-F>' .. p:sub(1, 1), Snacks.picker[p], { desc = 'Snacks.picker.' .. p })
-  end)
-end)
+-- vim.schedule(function()
+  -- vim.iter({ 'autocmds', 'buffers', 'files', 'help', 'resume', 'grep', 'zoxide' }):each(function(p)
+    -- vim.cmd(([[command! %s lua Snacks.picker.%s()]]):format(p:gsub('^%l', string.upper), p))
+    -- vim.keymap.set('n', '<C-F>' .. p:sub(1, 1), Snacks.picker[p], { desc = 'Snacks.picker.' .. p })
+  -- end)
+-- end)

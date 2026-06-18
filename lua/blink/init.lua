@@ -2,6 +2,42 @@ local M = {}
 
 ---@module "blink.cmp"
 
+M.menu = {
+  -- auto_show = false,
+  auto_show = function(_)
+    return vim.fn.mode():sub(1, 1) ~= 'R' -- replace mode
+  end,
+  -- auto_show_delay_ms = function(ctx, _)
+  --   return vim.tbl_contains(
+  --     { '.', '/', "'", '@', '$', ':', '"', '`', '[', ']' },
+  --     ctx.trigger.initial_character
+  --   ) and 1 or 1000
+  -- end,
+  draw = {
+    columns = {
+      { 'source_id' },
+      { 'label', 'label_description' },
+      -- { 'kind', 'source_name' },
+    },
+    components = {
+      source_id = {
+        ellipsis = false,
+        text = function(ctx)
+          local provider = ctx.source_name:lower()
+          local icon = provider == 'lsp' and MiniIcons.get('lsp', ctx.kind) or nv.ui.icons[provider]
+          return (icon or '') .. ctx.icon_gap
+        end,
+        ---@param ctx blink.cmp.DrawItemContext
+        highlight = function(ctx)
+          -- high priority to beat the cursorline
+          return { { group = ctx.kind_hl, priority = 10001 } }
+        end,
+      },
+    },
+    treesitter = { 'lsp' },
+  },
+}
+
 M.fuzzy = {
   sorts = {
     function(a, b)
@@ -60,11 +96,10 @@ M.sources = {
       -- https://cmp.saghen.dev/recipes.html#hide-snippets-after-trigger-character
       -- TODO: no snippets in middle of word
       should_show_items = function(ctx)
-        if require('nvim.util').is_comment() then
+        if nv.is_comment() then
           return false
-        else
-          return ctx.trigger.initial_kind ~= 'trigger_character'
         end
+        return ctx.trigger.initial_kind ~= 'trigger_character'
       end,
     },
     -- define custom providers below

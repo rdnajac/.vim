@@ -1,60 +1,19 @@
-local api, cmd, fn, fs = vim.api, vim.cmd, vim.fn, vim.fs
-local group = api.nvim_create_augroup('nv.autocmds', {})
+local M = {}
+local api, fn = vim.api, vim.fn
+local nvim_on = require('vim._core.util').nvim_on
+local group = api.nvim_create_augroup('nv.aug', {})
 
-local M = {
-  opts = vim.defaulttable(), -- store plugin options here
-}
-
-local core_util = require('vim._core.util')
-
-M.submodule = function(prefix)
-  return setmetatable({}, {
-    __index = function(t, k)
-      local modname = prefix .. '.' .. k
-      local ok, m = xpcall(require, debug.traceback, modname)
-      if ok then
-        t[k] = m
-        return m
-      end
-      error(([[`require('%s')` failed: %s]]):format(modname, m))
-    end,
-  })
-end
-
-M.ui = M.submodule('nvim.ui')
-
---- wrapper around the nvim_create_autocmd wrapper
----
 --- @param events vim.api.keyset.events|vim.api.keyset.events[]
---- @param pattern_or_cb string|string[]|fun(ev)
---- @param cb? fun(ev) optional when second param is callable
-M.on = function(events, pattern_or_cb, cb)
-  -- local pattern = type(pattern_or_cb) == 'function' and '*' or pattern_or_cb
-  local pattern
-  if type(pattern_or_cb) == 'function' then
-    cb, pattern = pattern_or_cb, '*'
-  else
-    pattern = pattern_or_cb
+--- @param pattern? string|string[]
+--- @param cb fun(vim.api.keyset.create_autocmd.callback_args):boolean?
+M.on = function(events, pattern, cb)
+  local opts = {}
+  opts.pattern = pattern
+  if type(cb) == 'string' then
+    opts.command = cb
+    cb = nil
   end
-  ---@cast cb fun(vim.api.keyset.create_autocmd.callback_args):boolean?
-  return core_util.nvim_on(events, group, { pattern = pattern }, cb)
-end
-
---- Run a Vim command and return the output as a list of lines
----@param vimcommand string Vim command to execute
----@return string[] output
-M.exec = function(vimcommand)
-  local res = vim.api.nvim_exec2(vimcommand, { output = true })
-  return vim.split(res.output, '\n', { trimempty = true })
-end
-
---- Get all lines from a buffer as a list of strings
----@param bufnr integer? buffer number, defaults to current buffer
----@return string[] lines
-M.get_buf_lines = function(bufnr)
-  bufnr = bufnr or api.nvim_get_current_buf()
-  local nlines = api.nvim_buf_line_count(bufnr)
-  return api.nvim_buf_get_lines(bufnr, 0, nlines, false)
+  return nvim_on(events, group, opts, cb)
 end
 
 ---@param opts? vim.treesitter.get_node.Opts
@@ -66,51 +25,54 @@ M.is_comment = function(opts)
   opts.pos = opts.pos or { cursor[1] - 1, cursor[2] }
   local ok, node = pcall(vim.treesitter.get_node, opts)
   -- opts.pos is 0-indexed; synID expects 1-based row and col
-  local type = (ok and node and node:type()) or M.synname(cursor[1], cursor[2] + 1)
+  local type = (ok and node and node:type())
+    or fn.synIDattr(fn.synID(cursor[1], cursor[2] + 1, 1), 'name')
   return not not type:match('comment')
 end
 
-M.inside_code_fences = function()
-  local ok, node = pcall(vim.treesitter.get_node)
-  return (ok and node) and node:type():match('code') ~= nil or false
+--- handles truncated paths in the debug.traceback like `.../path/to/file:line:`
+--- @param cfile? string defaults to `expand('<cfile>')`
+--- @return string? Vim command to execute
+M.goto_file = function(cfile)
+  cfile = cfile or vim.fn.expand('<cfile>')
+  if vim.startswith(cfile, '...') then
+    -- HACK: the errors are probably from one of these two dirs
+    for dir, pattern in pairs({ PACKDIR = '/core/opt/', VIMRUNTIME = '/nvim/runtime/' }) do
+      local match = cfile:match('.*' .. pattern .. '(.*)')
+      if match and match ~= '' then
+        local file = vim.fs.joinpath(vim.env[dir], match)
+        if file and vim.uv.fs_stat(file) then
+          local cmd = ([[wincmd w| call edit#goto('%s')]]):format(cfile)
+          return ('<Cmd>' .. cmd .. '<CR>')
+        end
+      end
+    end
+  end
+  return '<C-w><C-f>'
 end
 
-M.is_nonempty_string = function(v) return type(v) == 'string' and v ~= '' end
-M.is_nonempty_list = function(v) return vim.islist(v) and #v > 0 end
-M.is_visual = function() return fn.mode():match('[vV\22]') ~= nil end
-M.synname = function(row, col) return fn.synIDattr(fn.synID(row, col, 1), 'name') end
-
-function M.gen(path, lines)
-  lines = vim.list_extend({ '-- This file is generated. Do not edit.' }, lines)
-  vim.fn.mkdir(vim.fs.dirname(path), 'p')
-  vim.fn.writefile(lines, path)
-  vim.notify('File created: ' .. path, vim.log.levels.INFO)
-  return path
+M.submodule = function(_M, prefix)
+  return setmetatable(_M or {}, {
+    __index = function(t, k)
+      local modname = prefix .. '.' .. k
+      local ok, m = xpcall(require, debug.traceback, modname)
+      if ok then
+        -- Wrap the loaded module in a submodule proxy so its keys
+        -- also lazy-load from `modname.<k>`
+        if type(m) == 'table' then
+          m = M.submodule(m, modname)
+        end
+        t[k] = m
+        return m
+      end
+      -- Module doesn't exist — return a proxy anyway so deeper
+      -- chains like `nvim.ui.foo` still work even if `nvim.ui`
+      -- has no init file
+      local proxy = M.submodule({}, modname)
+      t[k] = proxy
+      return proxy
+    end,
+  })
 end
 
-M.capitalize = function(s) return s:gsub('^%l', string.upper) end
-M.camelCase = function(s)
-  return s:gsub('_(%a)', function(c) return c:upper() end):gsub('^%l', string.upper)
-end
-
--- -- https://github.com/neovim/neovim/discussions/38271#discussion-9630986
--- M.get_visual = function()
---   local vis_mode = fn.mode():match('[Vv\22]')
---   if not vis_mode then
---     return
---   end
---   local line_regs = fn.getregionpos(fn.getpos('v'), fn.getpos('.'), {
---     type = vis_mode,
---     eol = true,
---     exclusive = false,
---   })
---   local sel_text = {}
---   for _, reg in ipairs(line_regs) do
---     local r1, c1, r2, c2 = reg[1][2], reg[1][3], reg[2][2], reg[2][3]
---     local buf_text = vim.api.nvim_buf_get_text(0, r1 - 1, c1 - 1, r2 - 1, c2, {})
---     vim.list_extend(sel_text, buf_text)
---   end
---   return sel_text, line_regs
--- end
-
-return M
+return M.submodule(M, 'nvim')

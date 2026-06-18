@@ -6,9 +6,16 @@ function! s:is_fence() abort
 	\ len(getline(lnum, '$')->filter({_, l -> l =~ '^```'})) % 2 == 0 ? 1 : -1
 endfunction
 
+" TODO: embed the lua if the eval doesnt work
+" M.inside_code_fences = function()
+"   local ok, node = pcall(
+"   return (ok and node) and vim.treesitter.get_node):type():match('code') ~= nil or false
+" end
+
 function! s:is_between_fences() abort
   if empty(&syntax) && has('nvim')
-    return v:lua.nv.inside_code_fences()
+
+    return luaeval('(function() local ok,n = pcall(vim.treesitter.get_node); return ok and n ~= nil and n:type():match("code") ~= nil end)()')
   endif
   return synID(line('.'), col('.'), 0)->synIDattr('name') =~? 'markdownCodeBlock'
 endfunction

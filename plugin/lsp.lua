@@ -19,12 +19,9 @@ end
 --   end,
 -- })
 
-vim.api.nvim_create_autocmd('LspProgress', {
-  callback = function(ev)
-    local progress_callback = require('nvim.lsp.progress').callback
-    progress_callback(ev)
-    vim.cmd.redrawstatus()
-  end,
-})
+nv.on('LspProgress', '*', function(ev)
+  nv.lsp.progress.callback(ev)
+  vim.cmd.redrawstatus()
+end)
 
 vim.schedule(function() vim.lsp.enable(servers()) end)

@@ -97,7 +97,7 @@ function! edit#goto(...) abort
 endfunction
 
 function! s:filetype(dir, ext) abort
-  call edit#(join([g:vimrc#dir, a:dir, &filetype .. a:ext], '/'))
+  call edit#(join([expand('~/.vim'), a:dir, &filetype .. a:ext], '/'))
 endfunction
 
 function! edit#ftplugin(...) abort

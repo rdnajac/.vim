@@ -48,14 +48,12 @@ vim.schedule(function()
   for k, v in pairs(require('nvim.keys.descriptions')) do
     wk.add({ k, desc = v, icon = { icon = '' } })
   end
-  if Snacks then
-    -- stylua: ignore
-    vim.iter(require('nvim.keys.toggles')):each(function(k, v)
-      if type(v) == 'table' then Snacks.toggle.new(v):map(k) end
-      if type(v) == 'string' then Snacks.toggle.option(v):map(k) end
-      if type(v) == 'function' then v():map(k) end
-    end)
-  end
+  -- stylua: ignore
+  vim.iter(nv.keys.toggles):each(function(k, v)
+    if type(v) == 'table' then Snacks.toggle.new(v):map(k) end
+    if type(v) == 'string' then Snacks.toggle.option(v):map(k) end
+    if type(v) == 'function' then v():map(k) end
+  end)
 end)
 
 return {}

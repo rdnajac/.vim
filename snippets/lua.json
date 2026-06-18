@@ -1,27 +1,24 @@
 {
-  "iter": {
-    "prefix": "iter",
-    "body": "vim.iter($1)\n  :${0}",
-    "description": ""
+  "Buf Valid": {
+    "body": "vim.api.nvim_buf_is_valid(${1:buf})",
+    "prefix": "bufvalid"
   },
-  "finish": {
-    "prefix": "finish",
-    "body": "if ${1:true} then return end\n$0",
-    "description": "early return"
+  "Current Buf": {
+    "body": "local buf = vim.api.nvim_get_current_buf()\n$0",
+    "prefix": "buf"
+  },
+  "Current Win": {
+    "body": "local win = vim.api.nvim_get_current_win()\n$0",
+    "prefix": "win"
   },
   "M": {
     "body": "local M = {}\n\n$0\n\nreturn M",
     "description": "Module skeleton",
     "prefix": "local M"
   },
-  "function": {
-    "body": [
-      "function${1}(${2})",
-      "  $0",
-      "end\n"
-    ],
-    "description": "function",
-    "prefix": "function"
+  "Win Valid": {
+    "body": "vim.api.nvim_win_is_valid(${1:win})",
+    "prefix": "winvalid"
   },
   "augroup": {
     "body": "local aug = vim.api.nvim_create_augroup('$0', {})",
@@ -31,13 +28,13 @@
   "autocmd": {
     "body": [
       "vim.api.nvim_create_autocmd({'${1:FileType}'}, {",
-        "  pattern = '${2:*}',",
-        "  group = aug,",
-        "  callback = function()",
-        "    ${0}",
-        "  end,",
-        "  desc = '${4}',",
-        "})"
+      "  pattern = '${2:*}',",
+      "  group = aug,",
+      "  callback = function()",
+      "    ${0}",
+      "  end,",
+      "  desc = '${4}',",
+      "})"
     ],
     "description": "autocmd",
     "prefix": "au"
@@ -49,10 +46,33 @@
     ],
     "prefix": "elseif"
   },
+  "file exists": {
+    "body": "local fileExists = vim.uv.fs_stat(\"${1:filepath}\") ~= nil",
+    "prefix": "file exists"
+  },
+  "filter": {
+    "body": "vim.tbl_filter(function(${2}) ${0} end, ${1:table})",
+    "description": "vim.tbl_filter",
+    "prefix": "filter"
+  },
+  "finish": {
+    "body": "if ${1:true} then return end\n$0",
+    "description": "early return",
+    "prefix": "finish"
+  },
   "for": {
     "body": " for ${1:_}, ${2:v} in ipairs($3) do\n$0\nend",
     "description": "for loop",
     "prefix": "for"
+  },
+  "function": {
+    "body": [
+      "function${1}(${2})",
+      "  $0",
+      "end\n"
+    ],
+    "description": "function",
+    "prefix": "function"
   },
   "if": {
     "body": [
@@ -61,6 +81,11 @@
       "end"
     ],
     "prefix": "if"
+  },
+  "iter": {
+    "body": "vim.iter($1)\n  :${0}",
+    "description": "",
+    "prefix": "iter"
   },
   "keys": {
     "body": "vim.tbl_keys(${0})",
@@ -72,26 +97,29 @@
     "description": "vim.tbl_map",
     "prefix": "map"
   },
-  "filter": {
-    "body": "vim.tbl_filter(function(${2}) ${0} end, ${1:table})",
-    "description": "vim.tbl_filter",
-    "prefix": "filter"
-  },
   "mfunc": {
     "body": [
       "local M = setmetatable({}, {",
-        "  __call = function(M, ...)",
-        "    return M.${TM_FILENAME_BASE}(...)",
-        "  end,",
-        "})",
-        "",
-        "function M.${TM_FILENAME_BASE}($1)",
-        "  $0",
-        "end\n",
-        "return M"
+      "  __call = function(M, ...)",
+      "    return M.${TM_FILENAME_BASE}(...)",
+      "  end,",
+      "})",
+      "",
+      "function M.${TM_FILENAME_BASE}($1)",
+      "  $0",
+      "end\n",
+      "return M"
     ],
     "description": "Module function skeleton with callable module and function",
     "prefix": "mfunc"
+  },
+  "nonempty list": {
+    "body": "vim.islist(${1:}) and #$1 > 0",
+    "prefix": "nonempty list"
+  },
+  "nonempty string": {
+    "body": "type(${1:}) == 'string' and $1 ~= '' end",
+    "prefix": "nonempty list"
   },
   "pcall": {
     "body": "local ok, ${1:result} = pcall(${0})",
@@ -113,25 +141,5 @@
     "body": "return ${1:M}$0",
     "description": "return",
     "prefix": "return"
-  },
-  "Current Win": {
-    "prefix": "win",
-    "body": "local win = vim.api.nvim_get_current_win()\n$0"
-  },
-  "Current Buf": {
-    "prefix": "buf",
-    "body": "local buf = vim.api.nvim_get_current_buf()\n$0"
-  },
-  "Buf Valid": {
-    "prefix": "bufvalid",
-    "body": "vim.api.nvim_buf_is_valid(${1:buf})"
-  },
-  "Win Valid": {
-    "prefix": "winvalid",
-    "body": "vim.api.nvim_win_is_valid(${1:win})"
-  },
-  "file exists": {
-    "body": "local fileExists = vim.uv.fs_stat(\"${1:filepath}\") ~= nil",
-    "prefix": "file exists"
   }
 }

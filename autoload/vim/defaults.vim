@@ -100,17 +100,3 @@ endif
 " - `viminfo` includes "!"
 " - `wildoptions` defaults to "pum,tagfile"
 set wildoptions=pum,tagfile
-
-function! vim#defaults#() abort
-  " vim sets defaults that are only useful for C/C++
-  setglobal define=
-  setglobal include=
-  setglobal includeexpr=
-  setglobal path=.,,
-
-  " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
-  setglobal isfname+=@-@ " from `vim-apathy`
-
-  let &viminfofile = g:vimrc#dir . '/.viminfo'
-  let &verbosefile = g:vimrc#dir . '/.vimlog.txt'
-endfunction

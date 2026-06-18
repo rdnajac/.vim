@@ -2,7 +2,7 @@
 --- generate snippets/package.json
 
 local fs = vim.fs
-local gen = require('nvim').gen
+local gen = require('nvim.fs').gen_file
 
 local function normalize_path(path) return path:gsub('^%./', '') end
 

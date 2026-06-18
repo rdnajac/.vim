@@ -24,7 +24,7 @@ local M = {
 
 local function title(self)
   local picker = self.source
-  -- local icon = nv.icons._picker_source[picker] or ''
+  local icon = nv.ui.icons._picker_source[picker] or ''
   local name = picker and picker:sub(1, 1):upper() .. picker:sub(2)
   local dir = self.dirs and #self.dirs .. ' paths'
     or vim.fn.pathshorten(vim.fn.fnamemodify(self.cwd or vim.fn.getcwd(), ':~'), 2)

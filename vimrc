@@ -1,27 +1,21 @@
-let g:mapleader      = ','
-let g:maplocalleader = '\'
-nnoremap <Space> :
-nnoremap : ,
-nnoremap ` ~
-nnoremap ~ `
+augroup vimrc._init
+  au!
+  let g:mapleader      = ','
+  let g:maplocalleader = '\'
+
+  nnoremap <Space> :
+  nnoremap : ,
+  nnoremap ` ~
+  nnoremap ~ `
+
+  set ttimeoutlen=69
+  set timeoutlen=420
+  autocmd BufLeave vimrc exe 'normal! mV' | call vimrc#_set_global_marks()
+augroup END
 augroup vimrc.autocmds
   au!
-  set timeoutlen=420
-  set ttimeoutlen=69
-  set report=0
-  set shortmess+=aA "c
-  set shortmess-=o
-  au BufLeave vimrc normal! mV
-function! s:setmark(pattern, idx, line) abort
-  let char = matchstr(a:line, a:pattern . '\zs.')
-  if !empty (char)
-    call setpos("'" . toupper(char), [0, a:idx + 1, 1, 0])
-  endif
-endfunction
-  " create global marks for each augroup to jump to specific lines in the vimrc from anywhere
-  au BufWrite vimrc call map(getline(1, '$'), {i, line -> s:setmark('augroup\ vimrc\.', i, line)})
   " load the colorscheme just before loading the ui
-  au VimEnter * color scheme
+  au VimEnter * exe 'color' !has('nvim') ? 'scheme' : 'tokyonight'
   " automatically resize splits when the window is resized
   au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
   " catch when vim doesn't terminate properly
@@ -126,6 +120,11 @@ augroup vimrc.edit
   autocmd FileType c,sh,zsh        setl sw=8 sts=8
   autocmd FileType quarto          setl noai
 
+  " undo breakpoints
+  inoremap , ,<C-g>u
+  inoremap . .<C-g>u
+  inoremap ; ;<C-g>u
+
   " change/delete current word
   nnoremap c*  *``cgn
   nnoremap c#  *``cgN
@@ -142,7 +141,7 @@ augroup vimrc.edit
 augroup END
 augroup vimrc.fold/format
   au!
-  let g:vimsyn_folding = 'a'
+  let g:vimsyn_folding = 'a' " fold agroups
   set foldlevel=99
   " set foldlevelstart=0
   " set foldminlines=3
@@ -150,11 +149,11 @@ augroup vimrc.fold/format
   autocmd FileType vim setl fdm=syntax commentstring=\"\ %s
   autocmd FileType vim,lua set nowrap formatoptions-=o conceallevel=2
   autocmd FileType lua setl fdm=expr foldtext=fold#text_lua()
-  " TODO: 
-  " setlocal foldtext=v:vim.lsp.foldtext()
-  if executable('prettier')
-    autocmd FileType markdown let &l:formatprg = 'prettier --stdin-filepath ' . expand('%:p')
-  endif
+  " setlocal foldtext=v:vim.lsp.foldtext() TODO:
+
+  " if executable('prettier')
+  autocmd FileType html,markdown let &l:formatprg = 'prettier --stdin-filepath '..expand('%:p')
+  " endif
 
   " close folds when moving left at beginning of line
   nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
@@ -199,19 +198,7 @@ augroup vimrc.hjkl
   endfor
   call jk#setup_escape_mappings() " TODO: use <C-c>
 augroup END
-augroup vimrc.insert
-  au!
-  " undo breakpoints
-  inoremap , ,<C-g>u
-  inoremap . .<C-g>u
-  inoremap ; ;<C-g>u
-  " TODO: function and user getchar
-  " insert chars at EOL
-  " nnoremap <Bslash>, mzA,<Esc>;`z
-  " nnoremap <Bslash>; mzA;<Esc>;`z
-  " nnoremap <Bslash>. mzA.<Esc>;`z
-augroup END
-augroup vimrc.keywordprg
+augroup vimrc.info
   au!
   " preserve the original K mapping
   " NOTE: overridden in some filetypes below
@@ -239,6 +226,12 @@ augroup vimrc.keywordprg
   au FileType tex nnoremap <silent><buffer> <localleader>k <Plug>(vimtex-doc-package)
   au FileType vim nnoremap <silent><buffer> <localleader>k <Plug>ScripteaseHelp
 augroup END
+augroup vimrc.messages
+  " set report=0
+  au!
+  " nvim default: `ltToOCF`
+  set shortmess+=aA "c
+augroup END
 augroup vimrc.navigation
   au!
   set scrolloff=999
@@ -259,11 +252,35 @@ augroup vimrc.navigation
   " restore cursor position upon reopening files
   au BufWinEnter * exe "silent! normal! g`\"zv"
 augroup END
+augroup vimrc.qf
+  au!
+  function! s:qf_signs() abort
+    call sign_define('QFError', { 'text' : '💩'} )
+    call sign_unplace('*')
+    for item in getqflist()
+      call sign_place(0, '', 'QFError', item.bufnr, {'lnum': item.lnum})
+    endfor
+  endfunction
+
+  autocmd QuickFixCmdPost [^l]* cwindow | silent! call s:qf_signs()
+  autocmd QuickFixCmdPost   l*  lwindow | silent! call s:qf_signs()
+augroup END
 augroup vimrc.os
   au!
-  " create parent directories when saving files
-  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
-  if has('nvim')
+  if !has('nvim')
+    " vim sets defaults that are only useful for C/C++
+    setglobal define=
+    setglobal include=
+    setglobal includeexpr=
+    setglobal path=.,,
+
+    " default: `@,48-57,/,.,-,_,+,,,#,$,%,~,=`
+    setglobal isfname+=@-@ " from `vim-apathy`
+
+    " TODO: use stdpath lib...
+    let &viminfofile = expand('~.vim/.viminfo')
+    let &verbosefile = expand('~.vim/.vimlog.txt')
+  else
     set backup
     set backupext=.bak
     set backupdir=~/.local/state/nvim/backup//
@@ -279,6 +296,8 @@ augroup vimrc.os
   endif
   " if the system has both executables, don't set undofile for vim
   let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile
+  " create parent directories when saving files
+  au BufWritePre,FileWritePre * if @% !~# '\(://\)' | call mkdir(expand('<afile>:p:h'), 'p') | endif
 augroup END
 augroup vimrc.registers
   au!
@@ -332,7 +351,7 @@ augroup vimrc.search/spell
   " TODO:
   " see `:h :mkspell` and vim.treesitter's `@nospell`
   " let &spellfile = '~/.vim/.spell/en.utf-8.add'
-  autocmd FileType tex,markdown,rmd,quarto setlocal spell
+  autocmd FileType tex setlocal spell
 augroup END
 augroup vimrc.term
   au!
@@ -354,13 +373,14 @@ augroup vimrc.ui
   set title
   " set termguicolors
   if has('nvim')
-    set cmdheight=0
+    " set cmdheight=0
     set laststatus=3
     set pumheight=10
     set pumblend=0
     set pumborder=rounded
     set winborder=rounded
     " set stl=%{%v:lua.require"nvim.ui.status"()%}
+    " set wbr=%{%v:lua.require"nvim.ui.winbar"()%}
   endif
 
   " no cursorline in insert mode
@@ -377,10 +397,15 @@ augroup vimrc.ui
   " au CmdlineLeave * if exists('g:last_ls') | let &ls = g:last_ls | unlet g:last_ls | endif
 augroup END
 
-nnoremap _ <Cmd>lua Snacks.explorer.reveal()<CR>
+nnoremap daa <Cmd>call daa#delete_argument()<CR>
+" nnoremap zJ <Plug>(unimpaired-move-down)kJ
+nnoremap zJ ddpkJ
+" nmap zq mzgqal'z
+nnoremap zq <Cmd>ALEFix<Bar>write<CR>
+
 nnoremap <C-c> ciw
-nnoremap <C-e> <Cmd>lua Snacks.explorer.open({cwd = Snacks.git.get_root()})<CR>
 nnoremap <C-,> g<
+
 xnoremap <C-s> :sort<CR>
 xnoremap < <gv
 xnoremap > >gv
@@ -396,40 +421,34 @@ nnoremap <leader>db <Cmd>verb se buftype? bufhidden? buflisted? filetype? syntax
 nnoremap <leader>df <Cmd>verb se foldenable? foldmethod? foldexpr? foldlevel? foldlevelstart? foldminlines?<CR>
 nnoremap <leader>dF <Cmd>verb se formatprg? formatexpr? tagfunc? omnifunc?<CR>
 nnoremap <leader>ds <Cmd>verb se shell? shellcmdflag? shellpipe? shellquote? shellredir? shellslash? shellxquote?<CR>
-nnoremap <leader>dT <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
 nnoremap <leader>dq <Cmd>lua vim.diagnostic.setloclist()<CR>
 nnoremap <leader>dQ <Cmd>lua vim.diagnostic.setqflist()<CR>
-nnoremap <leader>i <Cmd>Inspect<CR>
-nnoremap <leader>I <Cmd>Inspect!<CR>
 
 nnoremap <leader>A <Cmd>call edit#ftplugin()<CR>
 nnoremap <leader>S <Cmd>call edit#snippets()<CR>
+nnoremap <leader>i <Cmd>Inspect<CR>
+nnoremap <leader>I <Cmd>Inspect!<CR>
+nnoremap <leader>T <Cmd>lua vim.treesitter.inspect_tree(); vim.api.nvim_input('I')<CR>
 
-nnoremap <leader><Tab><Tab> <Cmd>tabnew<CR>
-nnoremap <leader><Tab>d <Cmd>tabclose<CR>
-nnoremap <leader><Tab>D <Cmd>tabonly<CR>
-nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 nnoremap ]<Tab> <Cmd>tabnext<CR>
 nnoremap [<Tab> <Cmd>tabprevious<CR>
-
-" nmap zq mzgqal'z
-nnoremap zq <Cmd>ALEFix<Bar>write<CR>
-nnoremap zJ <Plug>(unimpaired-move-down)kJ
+nnoremap <leader><Tab>n <Cmd>tabnew<CR>
+nnoremap <leader><Tab>c <Cmd>tabclose<CR>
+nnoremap <leader><Tab>o <Cmd>tabonly<CR>
+nnoremap <leader><Tab>f :<C-U>tabfind<Space>
 
 call plug#begin()
 Plug 'neovim/nvim-lspconfig'
 Plug 'nvim-mini/mini.nvim'
-Plug 'nvim-treesitter/nvim-treesitter'
 Plug 'AndrewRadev/splitjoin.vim'
+Plug 'chrisgrieser/nvim-scissors'
 " Plug 'christoomey/vim-tmux-navigator'
 " Plug 'github/copilot.vim'
-" Plug 'Konfekt/FastFold'
-" Plug 'Konfekt/vim-formatprgs'
-" Plug 'justinmk/vim-dirvish'
+Plug 'iamcco/markdown-preview.nvim', { 'build': { -> mkdp#install() } }
 " Plug 'justinmk/vim-ug'
 " Plug 'justinmk/guh.nvim'
-Plug 'chrisgrieser/nvim-scissors'
-Plug 'iamcco/markdown-preview.nvim', { 'build': { -> mkdp#install() } }
+" Plug 'Konfekt/FastFold'
+" Plug 'Konfekt/vim-formatprgs'
 Plug 'MeanderingProgrammer/render-markdown.nvim'
 Plug 'R-nvim/R.nvim'
 " Plug 'romainl/vim-qf.git'

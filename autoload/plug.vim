@@ -9,11 +9,10 @@ if !has('nvim')
   packadd! comment
   packadd! editorconfig
   packadd! hlyank
-  call vim#defaults#()
   call vim#sensible#()
 else
   let g:plug#home = stdpath('data')..'/site/pack/core/opt'
-  " NOTE: press `gf` on `$PACKDIR` let $PACKDIR = g:plug#home
+  let $PACKDIR = g:plug#home " NOTE: press `gf` on `$PACKDIR`
 
   let g:loaded_node_provider = 0
   let g:loaded_perl_provider = 0
@@ -38,11 +37,8 @@ endfunction
 
 function! plug#end()
   delcommand Plug
-  if !has('nvim')
-    finish
+  if has('nvim')
+    command! PlugStatus :packu ++offline
+    command! PlugClean  :packd ++all
   endif
-  lua _G.Plug = require('snackpack').add
-  lua Plug(vim.g.plugs)
-  command! PlugStatus :packu ++offline
-  command! PlugClean  :packd ++all
 endfunction

@@ -4,6 +4,14 @@
 " xnoremap af :<C-u>normal! Bvf)<CR>
 " onoremap af :<C-u>normal vaf<CR>
 
+" inner argument (just the value)
+" xnoremap ia <Cmd>normal! F,wvf,h<CR>
+" onoremap ia <Cmd>normal! via<CR>
+
+" outer argument (includes the comma and space)
+" xnoremap aa <Cmd>normal! F,vf,<CR>
+" onoremap aa <Cmd>normal! vaa<CR>
+
 " set up text objects mappings for codeblock
 function! textobjects#codeblock_map() abort
   xnoremap <buffer> ac :<C-u>call textobjects#codeblock#outer()<CR>
@@ -20,27 +28,6 @@ function! textobjects#number() abort
   endfunction
   xnoremap in :<C-u>call VisualNumber()<CR>
   onoremap in :<C-u>normal vin<CR>
-endfunction
-
-function! textobjects#brackets() abort
-  xnoremap ir i[
-  onoremap ir :<C-u>execute 'normal v' . v:count1 . 'i['<CR>
-  xnoremap ar a[
-  onoremap ar :<C-u>execute 'normal v' . v:count1 . 'a['<CR>
-endfunction
-
-function! textobjects#blockcomment() abort
-  xnoremap a? [*o]*
-  onoremap a? :<C-u>normal va?V<CR>
-  xnoremap i? [*jo]*k
-  onoremap i? :<C-u>normal vi?V<CR>
-endfunction
-
-function! textobjects#ccoment() abort
-  xnoremap i? [*jo]*k
-  onoremap i? :<C-u>normal vi?V<CR>
-  xnoremap a? [*o]*
-  onoremap a? :<C-u>normal va?V<CR>
 endfunction
 
 function! textobjects#lastchange() abort

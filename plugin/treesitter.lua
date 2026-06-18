@@ -1,34 +1,26 @@
-local parsers = require('nvim.treesitter.parsers')
-local parsers_to_autostart = vim
-  .iter(parsers)
-  :filter(function(_, v) return v ~= false end)
-  :fold({}, function(acc, k, v)
-    acc[#acc + 1] = k
-    if type(v) == 'table' then
-      -- register language `k` the provided filetypes `v`
-      vim.treesitter.language.register(k, v)
-      -- extend the list by all filetypes
-      vim.list.extend(acc, v)
-    end
-    return acc
-  end)
+Plug({
+  { 'nvim-treesitter/nvim-treesitter' },
+  require('nvim.treesitter.context'),
+  -- require('nvim.treesitter.textobjects')
+})
 
-nv.on('FileType', parsers_to_autostart, function(ev) vim.treesitter.start(ev.buf) end)
-nv.on('FileType', { 'vim', 'lua' }, function(ev) vim.bo[ev.buf].syntax = 'ON' end)
+nv.on(
+  'FileType',
+  vim
+    .iter(nv.treesitter.parsers)
+    :filter(function(lang)
+      return not vim.tbl_contains({
+        'latex', -- breaks vimtex
+        'lua', -- started by default
+      }, lang)
+    end)
+    :totable(),
+  function(ev) vim.treesitter.start(ev.buf) end
+)
+
+-- also enable legacy syntax for Lua and Vimscript,
+-- since some plugins still rely on it
+nv.on('FileType', { 'lua', 'vim' }, function(ev) vim.bo[ev.buf].syntax = 'ON' end)
 
 -- incremental-selection (C-Space to init/expand, C-BS to shrink)
 vim.cmd([[nmap <C-Space> van | xmap <C-Space> an | xmap <C-BS> in]])
-
-Plug({
-  {
-    'nvim-treesitter/nvim-treesitter-context',
-    -- enabled = false,
-    toggle = {
-      ['<leader>ux'] = {
-        name = 'Treesitter Context',
-        get = function() return require('treesitter-context').enabled() end,
-        set = function() return require('treesitter-context').toggle() end,
-      },
-    },
-  },
-})

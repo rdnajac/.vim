@@ -24,12 +24,9 @@ nnoremap <leader>af <Cmd>ALEFix<CR>
 " ALEPrevious
 " ALEPreviousWrap
 
-if !has('nvim')
+if has('nvim')
   finish
 endif
-" ALEGoToDefinition
-" ALEHover
-
 " match nvim lsp-defaults
 nnoremap gra <Cmd>ALECodeAction<CR>
 nnoremap gri <Cmd>ALEGoToImplementation<CR>
@@ -37,6 +34,8 @@ nnoremap grn <Cmd>ALERename<CR>
 nnoremap grr <Cmd>ALEFindReferences<CR>
 nnoremap grt <Cmd>ALEGoToTypeDefinition<CR>
 " set omnifunc=ale#completion#OmniFunc
+" ALEGoToDefinition
+" ALEHover
 
 hi clear ALEErrorSign
 hi clear ALEWarningSign
