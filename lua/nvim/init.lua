@@ -3,15 +3,19 @@ local api, fn = vim.api, vim.fn
 local nvim_on = require('vim._core.util').nvim_on
 local group = api.nvim_create_augroup('nv.aug', {})
 
---- @param events vim.api.keyset.events|vim.api.keyset.events[]
---- @param pattern? string|string[]
---- @param cb fun(vim.api.keyset.create_autocmd.callback_args):boolean?
+--- @param events vim.api.keyset.events|vim.api.keyset.events[] Event(s) to watch. See |autocmd-events|.
+--- @param pattern string|string[]
+--- @param cmd_or_fn vim.api.keyset.create_autocmd
+--- @param fn fun(ev: vim.api.keyset.create_autocmd.callback_args): boolean? Event handler.
+--- @return integer # Autocmd id (see |nvim_create_autocmd()|).
+--- @overload fun(events: vim.api.keyset.events|vim.api.keyset.events[], group: string|integer?, fn: fun(ev: vim.api.keyset.create_autocmd.callback_args): boolean?): integer
 M.on = function(events, pattern, cb)
   local opts = {}
   opts.pattern = pattern
   if type(cb) == 'string' then
     opts.command = cb
     cb = nil
+    return nvim_on(events, group, opts)
   end
   return nvim_on(events, group, opts, cb)
 end
@@ -50,6 +54,16 @@ M.goto_file = function(cfile)
   end
   return '<C-w><C-f>'
 end
+
+function M.json_formatexpr()
+  local indent = vim.bo.expandtab and (' '):rep(vim.o.shiftwidth) or '\t'
+  local lines = api.nvim_buf_get_lines(0, vim.v.lnum - 1, vim.v.lnum + vim.v.count - 1, true)
+  local o = vim.json.decode(table.concat(lines, '\n'))
+  local stringified = vim.json.encode(o, { indent = indent, sort_keys = true })
+  lines = vim.split(stringified, '\n')
+  api.nvim_buf_set_lines(0, vim.v.lnum - 1, vim.v.count, true, lines)
+end
+M.on('Filetype', 'json', 'setlocal formatexpr=v:lua.nv.json_formatexpr()')
 
 M.submodule = function(_M, prefix)
   return setmetatable(_M or {}, {

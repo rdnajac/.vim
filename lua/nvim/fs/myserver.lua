@@ -1,5 +1,4 @@
 -- ~/.local/share/nvim/share/nvim/runtime/lua/vim/pack/_lsp.lua
--- ~/.vim/lua/nvim/util/git/fs/server.lua
 local M = {}
 
 local capabilities = {

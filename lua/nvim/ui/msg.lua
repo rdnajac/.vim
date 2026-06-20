@@ -70,11 +70,12 @@ end
 M.opts = { -- require('vim/_core/ui2').cfg
   -- $VIMRUNTIME/lua/vim/_core/ui2.lua:60
   msg = {
+    targets = { default = 'msg' },
     -- cmd = { height = 0.5, },
     -- dialog = { height = 0.5, },
     -- pager = { height = 0.999, },
     -- msg = { height = 0.5, timeout = 4000, },
-    targets = M.targets,
+    -- targets = M.targets,
   },
 }
 

@@ -1,12 +1,14 @@
 -- apply icons to special filesystem buffers like netrw and dirvish
-local aug = vim.api.nvim_create_augroup('fs-icons', {})
-local ns = vim.api.nvim_create_namespace('fs-icons')
+local api = vim.api
+local fs = vim.fs
+local aug = api.nvim_create_augroup('fs-icons', {})
+local ns = api.nvim_create_namespace('fs-icons')
 -- `~/.local/share/nvim/cache/fs-icons.json`
 local cache_path = vim.fn.stdpath('cache') .. '/fs-icons.json'
 local ok, cache = pcall(nv.file.read_json, cache_path)
 _G.icon_cache = ok and cache or {}
 
-vim.api.nvim_create_autocmd('VimLeavePre', {
+api.nvim_create_autocmd('VimLeavePre', {
   group = aug,
   callback = function() nv.file.write_json(cache_path, _G.icon_cache) end,
   desc = 'Save fs icon cache on exit',
@@ -28,7 +30,7 @@ local M = {}
 M.get = function(fname)
   local entry = icon_cache[fname]
   if not entry then
-    local icon, hl = nv.icons[Snacks.util.path_type(fname)](fname)
+    local icon, hl = nv.ui.icons[Snacks.util.path_type(fname)](fname)
     entry = { icon = icon, hl = hl }
     icon_cache[fname] = entry
   end
@@ -36,46 +38,28 @@ M.get = function(fname)
 end
 
 M.render = function(bufnr)
-  bufnr = bufnr or vim.api.nvim_get_current_buf()
-  if not bufnr or not vim.api.nvim_buf_is_valid(bufnr) then
+  bufnr = bufnr or api.nvim_get_current_buf()
+  if not bufnr or not api.nvim_buf_is_valid(bufnr) then
     return
   end
-  vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
-  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, vim.api.nvim_buf_line_count(bufnr), false)
+  if vim.bo.filetype ~= 'directory' then
+    return
+  end
+  api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+  local lines = api.nvim_buf_get_lines(bufnr, 0, api.nvim_buf_line_count(bufnr), false)
 
   for i, line in ipairs(lines) do
-    local fname = to_file(line)
-    if fname then
-      local entry = M.get(fname)
-      vim.api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
-        sign_text = entry.icon,
-        sign_hl_group = entry.hl,
-        priority = 10,
-      })
-    end
+    local fname =
+      fs.normalize(fs.abspath(fs.joinpath(api.nvim_buf_get_name(bufnr), line)))
+    local entry = M.get(fname)
+    api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
+      sign_text = entry.icon,
+      sign_hl_group = entry.hl,
+      priority = 10,
+    })
   end
   -- redraw to avoid flicker
-  vim.api.nvim__redraw({ buf = bufnr, valid = true, flush = false })
-end
-
-M.extmark_leaks = function()
-  local counts = vim
-    .iter(vim.api.nvim_get_namespaces())
-    :map(function(name, ns)
-      return vim.iter(vim.api.nvim_list_bufs()):map(function(buf)
-        local count = #vim.api.nvim_buf_get_extmarks(buf, ns, 0, -1, {})
-        if count > 0 then
-          return { name = name, buf = buf, count = count, ft = vim.bo[buf].ft }
-        end
-      end)
-    end)
-    :flatten()
-    :totable()
-  -- TODO: when `iter:sort()`
-
-  table.sort(counts, function(a, b) return a.count > b.count end)
-
-  return counts
+  api.nvim__redraw({ buf = bufnr, valid = true, flush = false })
 end
 
 return M

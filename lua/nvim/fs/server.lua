@@ -1,4 +1,6 @@
--- ~/.local/share/nvim/share/nvim/runtime/lua/vim/pack/_lsp.lua
+-- $VIMRUNTIME/lua/vim/pack/_lsp.lua
+local fs = vim.fs
+
 local M = {}
 
 local capabilities = {
@@ -16,46 +18,17 @@ function methods.initialize(_, callback) return callback(nil, { capabilities = c
 ---@param callback function
 function methods.shutdown(_, callback) return callback(nil, nil) end
 
----@return { path: string?, lnum: integer }
-local get_file_at_lnum = function(bufnr, lnum)
-  local lines = vim.api.nvim_buf_get_lines(bufnr, lnum - 1, lnum, false)
-  local path = nil
-  if #lines > 0 and vim.trim(lines[1]) ~= '' then
-    path = lines[1]
-  end
-  return { path = path, lnum = lnum }
+---@alias dir.lsp.Position { line: integer, character: integer }
+---@alias dir.lsp.Range { start: dir.lsp.Position, end: dir.lsp.Position }
+---@alias dir.lsp.CodeActionContext { diagnostics: table, only: table?, triggerKind: integer? }
+---@alias dir.lsp.Symbol { name: string, kind: number, range: dir.lsp.Range, selectionRange: dir.lsp.Range }
+
+local get_path = function(lineno)
+  lineno = lineno and tonumber(lineno) or '.'
+  return fs.normalize(fs.abspath(fs.joinpath(vim.api.nvim_buf_get_name(0), vim.fn.getline(lineno))))
 end
 
----@alias dirvish.lsp.Position { line: integer, character: integer }
----@alias dirvish.lsp.Range { start: dirvish.lsp.Position, end: dirvish.lsp.Position }
----@alias dirvish.lsp.CodeActionContext { diagnostics: table, only: table?, triggerKind: integer? }
----@alias dirvish.lsp.Symbol { name: string, kind: number, range: dirvish.lsp.Range, selectionRange: dirvish.lsp.Range }
-
----@param params { textDocument: { uri: string } }
----@param callback function
-methods['textDocument/documentSymbol'] = function(params, callback)
-  local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
-  local files = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-  local symbols = vim
-    .iter(files)
-    :enumerate() -- yields index, value
-    :map(function(i, line) return vim.trim(line), i end)
-    :filter(function(line, _) return line ~= '' end)
-    :map(function(line, i)
-      local name = vim.fs.basename(line)
-      local kind = vim.endswith(name, '/') and vim.lsp.protocol.SymbolKind.Namespace
-        or vim.lsp.protocol.SymbolKind.File
-      local range = {
-        start = { line = i - 1, character = 0 },
-        ['end'] = { line = i - 1, character = 0 },
-      }
-      return { name = name, kind = kind, range = range, selectionRange = range }
-    end)
-    :totable()
-  callback(nil, symbols)
-end
-
----@param params { textDocument: { uri: string }, range: dirvish.lsp.Range, context: dirvish.lsp.CodeActionContext }
+---@param params { textDocument: { uri: string }, range: dir.lsp.Range, context: dir.lsp.CodeActionContext }
 ---@param callback function
 methods['textDocument/codeAction'] = function(params, callback)
   local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
@@ -66,11 +39,11 @@ methods['textDocument/codeAction'] = function(params, callback)
   end
 
   -- unconcealed dirvish lines are already absolute paths
-  local abspath = vim.fn.getline(params.range.start.line + 1)
+  local abspath = get_path(params.range.start.line + 1)
 
   local function new_action(title, command)
     return {
-      title = ('%s `%s`'):format(title, vim.fs.basename(abspath)),
+      title = ('%s `%s`'):format(title, fs.basename(abspath)),
       command = { title = title, command = command, arguments = { abspath } },
     }
   end
@@ -90,7 +63,8 @@ local commands = {
     if res:lower() ~= 'y' then
       return
     end
-    vim.uv['fs_' .. (vim.endswith(path, '/') and 'rmdir' or 'unlink')](path, function(err)
+    local _action = vim.endswith(path, '/') and 'rmdir' or 'unlink'
+    vim.uv['fs_' .. _action](path, function(err)
       if err then
         Snacks.notify.error('Failed to delete: ' .. err)
       else
@@ -132,13 +106,8 @@ methods['textDocument/hover'] = function(params, callback)
     return
   end
 
-  local file_data = get_file_at_lnum(bufnr, params.position.line + 1)
-  local path = file_data.path
-  if not path then
-    return
-  end
-
-  local cmd = { 'ls', '-ldhG', path }
+  -- TODO: id is directory....
+  local cmd = { 'ls', '-ldhG', get_path() }
 
   ---@param sys_out vim.SystemCompleted
   local on_exit = function(sys_out)
@@ -157,6 +126,15 @@ end
 local cmd = function(disp)
   local res, closing, request_id = {}, false, 0
 
+  function res.is_closing() return closing end
+  function res.terminate() closing = true end
+  function res.notify(method, _)
+    if method == 'exit' then
+      disp.on_exit(0, 15)
+    end
+    return false
+  end
+
   function res.request(method, params, callback)
     local method_impl = methods[method]
     if method_impl ~= nil then
@@ -166,23 +144,12 @@ local cmd = function(disp)
     return true, request_id
   end
 
-  function res.notify(method, _)
-    if method == 'exit' then
-      disp.on_exit(0, 15)
-    end
-    return false
-  end
-
-  function res.is_closing() return closing end
-
-  function res.terminate() closing = true end
-
   return res
 end
 
 M.client_id = assert(
   vim.lsp.start(
-    { cmd = cmd, name = 'dirvish', root_dir = vim.env.HOME or vim.uv.cwd() },
+    { cmd = cmd, name = 'nvimdir', root_dir = vim.env.HOME or vim.uv.cwd() },
     { attach = false }
   )
 )

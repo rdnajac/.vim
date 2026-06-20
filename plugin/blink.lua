@@ -13,8 +13,8 @@ local opts = {
     -- keyword = {},
     list = {
       selection = {
-	preselect = false,
-	auto_insert = true,
+        preselect = false,
+        auto_insert = true,
       },
     },
     trigger = {
@@ -38,11 +38,15 @@ local opts = {
   },
 }
 
-Plug({
+local spec = {
   { 'Saghen/blink.lib' }, ---@module "blink.lib"
   {
     'Saghen/blink.cmp',
     build = function() require('blink.cmp').build():wait(6e4) end,
     opts = opts,
   },
-})
+}
+
+if not vim.o.autocomplete then
+  Plug(spec)
+end

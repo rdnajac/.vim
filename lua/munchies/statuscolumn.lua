@@ -2,10 +2,7 @@ vim.schedule(function()
   local orig = Snacks.statuscolumn.get
   Snacks.statuscolumn.get = function()
     local sstc = orig()
-    if
-      vim.bo.buftype == 'terminal'
-      or vim.tbl_contains({ 'dirvish', 'snacks_dashboard' }, vim.bo.filetype)
-    then
+    if vim.bo.buftype ~= '' then
       return sstc
     end
     -- remove the click fold

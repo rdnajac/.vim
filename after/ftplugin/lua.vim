@@ -12,6 +12,9 @@ nnoremap <buffer> yu <Cmd>call append(line('.'), printf('print(%s%s)', substitut
 nnoremap <buffer> ym <Cmd>call <SID>yankmod()<CR>
 nnoremap <buffer> yM <Cmd>call <SID>yankmod('.'..expand('<cword>')..'()')<CR>
 
+nnoremap <buffer> crm :<C-u>s/M\.\(.*\) =/local \1 =<CR>
+nnoremap <buffer> crM :<C-u>s/local \(.*\) =/M\.\1 =<CR>
+
 function! s:yankmod(...) abort
   let modname = expand('%:r:s?^.*/lua/??:s?/init$??')
   let l = printf("require('%s')%s", modname, a:0 ? a:1 : '')
