@@ -14,12 +14,12 @@ end
 
 vim.schedule(enable_servers)
 
-nv.on('LspProgress', '*', function(ev)
+nv.on('LspProgress', {}, function(ev)
   nv.lsp.progress.callback(ev)
   vim.cmd.redrawstatus()
 end)
 
-nv.on('LspAttach', '*', function(ev)
+nv.on('LspAttach', {}, function(ev)
   local client = assert(lsp.get_client_by_id(ev.data.client_id))
   if client:supports_method('textDocument/completion') then
     -- Enable auto-completion. Note: Use CTRL-Y to select an item. |complete_CTRL-Y|

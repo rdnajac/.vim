@@ -1,10 +1,10 @@
 local ui_fts = { 'msg', 'pager' }
-nv.on('FileType', ui_fts, function(ev)
+nv.on('FileType', { pattern = ui_fts }, function(ev)
   vim.cmd([[setl cole=3 winhl=@markup.strikethrough:NONE]])
   vim.keymap.set('n', { 'gf', '<2-RightMouse>' }, nv.goto_file, { buf = ev.buf, expr = true })
   vim.treesitter.start(ev.buf) -- TODO: instead, selectively start the parser at the notify level
 end)
-nv.on('VimEnter', '*', vim.treesitter.language.register('markdown', ui_fts))
+nv.on('VimEnter', {}, vim.treesitter.language.register('markdown', ui_fts))
 
 local M = {}
 

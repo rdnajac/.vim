@@ -1,23 +1,23 @@
 local M = {}
 local api, fn = vim.api, vim.fn
-local nvim_on = require('vim._core.util').nvim_on
-local group = api.nvim_create_augroup('nv.aug', {})
+local core_util = require('vim._core.util')
+local aug = api.nvim_create_augroup('nv.aug', {})
 
---- @param events vim.api.keyset.events|vim.api.keyset.events[] Event(s) to watch. See |autocmd-events|.
---- @param pattern string|string[]
---- @param cmd_or_fn vim.api.keyset.create_autocmd
---- @param fn fun(ev: vim.api.keyset.create_autocmd.callback_args): boolean? Event handler.
---- @return integer # Autocmd id (see |nvim_create_autocmd()|).
---- @overload fun(events: vim.api.keyset.events|vim.api.keyset.events[], group: string|integer?, fn: fun(ev: vim.api.keyset.create_autocmd.callback_args): boolean?): integer
-M.on = function(events, pattern, cb)
-  local opts = {}
-  opts.pattern = pattern
-  if type(cb) == 'string' then
+--- https://github.com/neovim/neovim/discussions/40320--- @param events vim.api.keyset.events|vim.api.keyset.events[]
+--- @param events vim.api.keyset.events|vim.api.keyset.events[]
+--- @param opts vim.api.keyset.create_autocmd
+--- @param cb string|fun(ev: vim.api.keyset.create_autocmd.callback_args): boolean?
+--- @return integer
+M.on = function(events, opts, cb)
+  vim.validate('opts', opts, 'table')
+  vim.validate('cb', cb, { 'function', 'string' })
+  if type(cb) == 'function' then
+    opts.callback = cb
+  else
     opts.command = cb
-    cb = nil
-    return nvim_on(events, group, opts)
   end
-  return nvim_on(events, group, opts, cb)
+  opts.group = opts.group or aug
+  return vim.api.nvim_create_autocmd(events, opts)
 end
 
 ---@param opts? vim.treesitter.get_node.Opts
@@ -63,7 +63,7 @@ function M.json_formatexpr()
   lines = vim.split(stringified, '\n')
   api.nvim_buf_set_lines(0, vim.v.lnum - 1, vim.v.count, true, lines)
 end
-M.on('Filetype', 'json', 'setlocal formatexpr=v:lua.nv.json_formatexpr()')
+M.on('Filetype', {pattern ='json'}, 'setlocal formatexpr=v:lua.nv.json_formatexpr()')
 
 M.submodule = function(_M, prefix)
   return setmetatable(_M or {}, {

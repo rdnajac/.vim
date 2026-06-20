@@ -7,7 +7,7 @@ local load_package = function(plug_data)
     return
   end
   if vim.is_callable(data.init) then
-    data.init()
+    data.init(spec.name)
   end
   if data.toggle then
     for key, toggle in pairs(data.toggle) do
