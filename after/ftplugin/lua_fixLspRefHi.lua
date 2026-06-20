@@ -1,7 +1,9 @@
+local api = vim.api
+
 if vim.g.old_bg == nil then
   vim.g.old_bg = Snacks and Snacks.util.color('LspReferenceText', 'bg')
     or ('#%06x'):format(
-      vim.api.nvim_get_hl(0, { name = 'LspReferenceText', link = false, create = false }).bg
+      api.nvim_get_hl(0, { name = 'LspReferenceText', link = false, create = false }).bg
     )
 end
 
@@ -15,7 +17,12 @@ end
 --- create a buffer-local autocommand
 ---@param event string|string[]
 ---@param cmd string
-local au = function(event, cmd) vim.api.nvim_create_autocmd(event, { command = cmd, buf = 0 }) end
+local au = function(event, cmd) api.nvim_create_autocmd(event, { command = cmd, buf = 0 }) end
 
 au({ 'CursorHold', 'CursorHoldI' }, lsp_ref_bg(vim.g.old_bg))
 au({ 'CursorMoved', 'CursorMovedI' }, lsp_ref_bg('NONE'))
+vim.cmd([[
+" TODO: 
+  " au CursorHold,CursorHoldI * 
+
+]])

@@ -49,8 +49,7 @@ M.render = function(bufnr)
   local lines = api.nvim_buf_get_lines(bufnr, 0, api.nvim_buf_line_count(bufnr), false)
 
   for i, line in ipairs(lines) do
-    local fname =
-      fs.normalize(fs.abspath(fs.joinpath(api.nvim_buf_get_name(bufnr), line)))
+    local fname = fs.normalize(fs.abspath(fs.joinpath(api.nvim_buf_get_name(bufnr), line)))
     local entry = M.get(fname)
     api.nvim_buf_set_extmark(bufnr, ns, i - 1, 0, {
       sign_text = entry.icon,

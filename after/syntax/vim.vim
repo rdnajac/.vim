@@ -5,7 +5,6 @@ scriptencoding utf-8
 " For files that do have filetype-specific syntax rules
 " autocmd Syntax * syntax match NotPrintableAscii "[^\x20-\x7F]" containedin=ALL
 " hi NotPrintableAscii ctermbg=236
-
 highlight Evil guifg=red guibg=orange
 
 augroup syntax
@@ -15,8 +14,9 @@ augroup syntax
   autocmd BufReadPost,BufNewFile *.vim if search('vim9script', 'nw') == 0 | syn match Error /^\s*#.*$/ | endif
 augroup End
 
-" highlight source code inside comments
-syntax region Chromatophore start=/`/ end=/`/ contained containedin=.*Comment
+" highlight source code and helptags inside comments
+syntax region String start=/`/ end=/`/ contained containedin=.*Comment
+syntax region String start=/|/ end=/|/ contained containedin=.*Comment
 " side effect? also highlights vimCommentString
 
 " Recursive syntax highlighting in interpolated strings

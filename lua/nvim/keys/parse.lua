@@ -19,4 +19,3 @@ function M.keys(t)
   end
   return t.mode or 'n', lhs, rhs, opts
 end
-

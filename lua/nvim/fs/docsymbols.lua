@@ -1,4 +1,3 @@
-
 ---@param params { textDocument: { uri: string } }
 ---@param callback function
 methods['textDocument/documentSymbol'] = function(params, callback)

@@ -56,8 +56,8 @@ vim.keymap.set({ 'n', 't' }, ']]', function() Snacks.words.jump(vim.v.count1) en
 vim.keymap.set({ 'n', 't' }, '[[', function() Snacks.words.jump(-vim.v.count1) end)
 
 -- vim.schedule(function()
-  -- vim.iter({ 'autocmds', 'buffers', 'files', 'help', 'resume', 'grep', 'zoxide' }):each(function(p)
-    -- vim.cmd(([[command! %s lua Snacks.picker.%s()]]):format(p:gsub('^%l', string.upper), p))
-    -- vim.keymap.set('n', '<C-F>' .. p:sub(1, 1), Snacks.picker[p], { desc = 'Snacks.picker.' .. p })
-  -- end)
+-- vim.iter({ 'autocmds', 'buffers', 'files', 'help', 'resume', 'grep', 'zoxide' }):each(function(p)
+-- vim.cmd(([[command! %s lua Snacks.picker.%s()]]):format(p:gsub('^%l', string.upper), p))
+-- vim.keymap.set('n', '<C-F>' .. p:sub(1, 1), Snacks.picker[p], { desc = 'Snacks.picker.' .. p })
+-- end)
 -- end)

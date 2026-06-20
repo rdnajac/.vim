@@ -1,21 +1,21 @@
 return {
   -- ["ale"]                     = "ale",
-  ["blink.cmp"]               = "blink",
+  ['blink.cmp'] = 'blink',
   -- ["copilot.lua"]             = "copilot",
   -- ["flash.nvim"]              = "flash",
   -- ["fzf-lua"]                 = "fzf",
-  ["mini.animate"]            = "mini_animate",
-  ["mini.diff"]               = "mini_diff",
+  ['mini.animate'] = 'mini_animate',
+  ['mini.diff'] = 'mini_diff',
   -- ["mini.hipatterns"]         = "mini_hipatterns",
   -- ["mini.icons"]              = "mini_icons",
-  ["nvim-treesitter-context"] = "treesitter-context",
+  ['nvim-treesitter-context'] = 'treesitter-context',
   -- ["octo.nvim"]               = "octo",
-  ["render-markdown.nvim"]    = "render-markdown",
+  ['render-markdown.nvim'] = 'render-markdown',
   -- ["sidekick.nvim"]           = "sidekick",
-  ["snacks.nvim"]             = "snacks",
+  ['snacks.nvim'] = 'snacks',
   -- ["trouble.nvim"]            = "trouble",
   -- ["vimwiki"]                 = "vimwiki",
-  ["which-key.nvim"]          = "which-key",
+  ['which-key.nvim'] = 'which-key',
 }
 -- return vim
 --   .iter(require('tokyonight.groups').plugins)

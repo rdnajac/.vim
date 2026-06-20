@@ -2,8 +2,6 @@ setlocal define=\\<\\%(\\i\\+\\s*()\\)\\@=
 setlocal include=^\\s*\\%(\\.\\\|source\\)\\s
 call vim#apathy#('path', split($PATH,':'))
 
-setlocal formatoptions-=o
-
 " let s:shfmt_flags = '-bn -sr'
 " if executable('shfmt')
 "   let s:cmd = join(['shfmt', s:shfmt_flags, '--simplify'], ' ')

@@ -1,3 +1,4 @@
+exe 'color' !has('nvim') ? 'scheme' : 'tokyonight'
 augroup vimrc._init
   au!
   let g:mapleader      = ','
@@ -15,7 +16,7 @@ augroup END
 augroup vimrc.autocmds
   au!
   " load the colorscheme just before loading the ui
-  au VimEnter * exe 'color' !has('nvim') ? 'scheme' : 'tokyonight'
+  " au VimEnter * exe 'color' !has('nvim') ? 'scheme' : 'tokyonight'
   " automatically resize splits when the window is resized
   au VimResized * let s:tabpagenr = tabpagenr() | tabdo wincmd = | exe 'tabnext' s:tabpagenr
   " catch when vim doesn't terminate properly
@@ -147,13 +148,13 @@ augroup vimrc.fold/format
   " set foldminlines=3
   set foldopen+=insert,jump
   autocmd FileType vim setl fdm=syntax commentstring=\"\ %s
-  autocmd FileType vim,lua set nowrap formatoptions-=o conceallevel=2
+  autocmd FileType vim,lua set nowrap conceallevel=2
   autocmd FileType lua setl fdm=expr foldtext=fold#text_lua()
   " setlocal foldtext=v:vim.lsp.foldtext() TODO:
 
-  " if executable('prettier')
-  autocmd FileType html,markdown let &l:formatprg = 'prettier --stdin-filepath '..expand('%:p')
-  " endif
+  " PERF: if executable(...) is slow
+  au FileType html,markdown let &l:formatprg = 'prettier --stdin-filepath %'
+  au FileType python        let &l:formatprg = 'ruff format -q --stdin-filename % -'
 
   " close folds when moving left at beginning of line
   nnoremap <expr> h virtcol('.') <= indent('.') + 1 ? 'zc' : 'h'
@@ -166,6 +167,7 @@ augroup vimrc.fold/format
   " one or more special characters (digit, -, +, *), possibly followed by `.` or `)`, whitespace
   " default:         `'^\s*\d\+[\]:.)}\t ]\s*'`
   set formatlistpat=^\s*[0-9\-\+\*]\+[\.\)]*\s\+
+  set formatoptions-=o
 augroup END
 augroup vimrc.git
   au!
@@ -230,7 +232,9 @@ augroup vimrc.messages
   " set report=0
   au!
   " nvim default: `ltToOCF`
-  set shortmess+=aA "c
+  set shortmess+=a
+  set shortmess+=A
+  set shortmess+=c
 augroup END
 augroup vimrc.navigation
   au!
@@ -454,3 +458,4 @@ Plug 'R-nvim/R.nvim'
 " Plug 'romainl/vim-qf.git'
 " Plug 'vuciv/golf'
 call plug#end()
+set runtimepath^=~/.vim/pack/vim-munchies

@@ -42,3 +42,14 @@ function! s:c_apathy() abort
     setlocal define&
   endif
 endfunction
+
+function! s:python_apathy() abort
+  if !exists('g:python_path')
+    let s:exe = get(g:, 'python_executable', 'python')
+    let s:cmd = s:exe . ' -c "import sys; print(''\n''.join(sys.path))"'
+    let s:out = system(s:cmd)[0:-2]
+    let g:python_path = v:shell_error ? [] : split(s:out, "\n", 1)
+  endif
+  call vim#apathy#(g:python_path)
+  setlocal suffixesadd =.py,/__init__.py
+endif
