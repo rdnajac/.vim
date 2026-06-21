@@ -1,4 +1,3 @@
-exe 'color' !has('nvim') ? 'scheme' : 'tokyonight'
 augroup vimrc._init
   au!
   let g:mapleader      = ','
@@ -8,13 +7,12 @@ augroup vimrc._init
   nnoremap : ,
   nnoremap ` ~
   nnoremap ~ `
-
-  set ttimeoutlen=69
-  set timeoutlen=420
   autocmd BufLeave vimrc exe 'normal! mV' | call vimrc#_set_global_marks()
 augroup END
 augroup vimrc.autocmds
   au!
+  set timeoutlen=420
+  set ttimeoutlen=69
   " load the colorscheme just before loading the ui
   " au VimEnter * exe 'color' !has('nvim') ? 'scheme' : 'tokyonight'
   " automatically resize splits when the window is resized
@@ -297,6 +295,7 @@ augroup vimrc.os
     " au SessionLoadPost  * silent! lua vim.fs.rm(vim.v.this_session)
     " au SessionWritePost * echom '[SessionWritePost] this session: '..v:this_session
     command! Restart exe 'mks!' stdpath('data')..'/Session.vim'<Bar>exe 'sil conf restart so' v:this_session
+    au VimEnter * if !empty(v:errmsg) | source stdpath('data')..'/Session.vim' | endif
   endif
   " if the system has both executables, don't set undofile for vim
   let &undofile = (has('nvim') || !executable('nvim')) ? 1 : &undofile

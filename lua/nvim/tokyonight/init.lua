@@ -1,6 +1,5 @@
 -- TODO: see `tokyonight/util`
 local M = { 'folke/tokyonight.nvim' }
-
 M.opts = require('nvim.tokyonight.opts')
 M.opts.plugins = require('nvim.tokyonight.plugins')
 
@@ -19,38 +18,35 @@ M.opts.plugins = require('nvim.tokyonight.plugins')
 ---
 ---@param groups tokyonight.Highlights
 ---@return string[] list of `vim.api.nvim_set_hl` calls for all groups
-function M.colorscheme(groups)
+function M.lua_api(groups)
   return vim
     .iter(groups)
-    :map(function(group, hl)
+    :map(function(name, hl)
       hl = type(hl) == 'string' and { link = hl } or hl
-      vim.api.nvim_set_hl(0, group, hl)
       return ('vim.api.nvim_set_hl(0, %q, %s)'):format(
-        group,
+        name,
         vim.inspect(hl, { newline = '', indent = '' })
       )
     end)
     :totable()
 end
 
----@param colors ColorScheme
-function M.terminal(colors)
-  for i, name in ipairs({ 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white' }) do
-    vim.g['terminal_color_' .. (i - 1)] = colors.terminal[name]
-    vim.g['terminal_color_' .. (i + 7)] = colors.terminal[name .. '_bright']
-  end
+function M.colorscheme(groups)
+  vim.iter(groups):each(function(name, hl)
+    hl = type(hl) == 'string' and { link = hl } or hl
+    vim.api.nvim_set_hl(0, name, hl)
+  end)
+  vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
 end
 
--- call this instead of any other setup funcs
---- Call setup and store results on this module
---- and manually tigger `ColorScheme` autocmd
-M.init = function()
-  M.colors = require('tokyonight.colors').setup(M.opts)
-  M.groups = require('tokyonight.groups').setup(M.colors, M.opts)
-  -- M.groups = require('nvim.tokyonight.groups')(M.colors, M.opts)
-  M.colorscheme(M.groups)
-  M.terminal(M.colors)
-  -- vim.cmd.doautocmd({ '<nomodeline>', 'ColorScheme' })
+function M.vimscript(groups) return require('nvim.tokyonight.scheme').gen(groups) end
+
+---@param colors ColorScheme
+function M.terminal(colors)
+  for i, color in ipairs({ 'black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white' }) do
+    vim.g['terminal_color_' .. (i - 1)] = colors.terminal[color]
+    vim.g['terminal_color_' .. (i + 7)] = colors.terminal[color .. '_bright']
+  end
 end
 
 return M

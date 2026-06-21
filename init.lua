@@ -11,7 +11,7 @@ local opts = {
   indent = { enabled = true },
   input = { enabled = true },
   notifier = { enabled = false },
-  -- quickfile = { enabled = false },
+  quickfile = { enabled = true },
   -- picker = { enabled = true },
   picker = require('munchies').picker,
   scope = { enabled = true },
@@ -34,9 +34,11 @@ nv.on('PackChanged', {}, require('snackpack.build'))
 --- @param plugs string|Snackpack|(string|Snackpack)[] list of plugins
 _G.Plug = function(plugs)
   plugs = vim.islist(plugs) and plugs or { plugs }
-  local to_spec = require('snackpack')
-  local speclist = vim.iter(plugs):map(to_spec):totable()
-  vim.pack.add(speclist, { load = require('snackpack.load') })
+  vim.pack.add(vim.iter(plugs):map(require('snackpack').new):totable(), {
+    load = require('snackpack.load'),
+    confirm = true,
+  })
 end
 
 Plug(vim.g.plugs)
+vim.cmd([[ color tokyonight ]])

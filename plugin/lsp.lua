@@ -13,12 +13,8 @@ local enable_servers = function()
 end
 
 vim.schedule(enable_servers)
-
-nv.on('LspProgress', {}, function(ev)
-  nv.lsp.progress.callback(ev)
-  vim.cmd.redrawstatus()
-end)
-
+nv.on('LspProgress', {}, 'redrawstatus')
+nv.on('LspProgress', {}, nv.lsp.progress.callback)
 nv.on('LspAttach', {}, function(ev)
   local client = assert(lsp.get_client_by_id(ev.data.client_id))
   if client:supports_method('textDocument/completion') then
@@ -49,3 +45,18 @@ nv.on('LspAttach', {}, function(ev)
     -- })
   end
 end)
+
+-- local icons = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
+-- local icons = { package_installed = '✅', package_pending = '➡️', package_uninstalled = '❌' },
+local icons = { package_installed = ' ', package_pending = ' ', package_uninstalled = ' ' }
+
+Plug({
+  { 'mason-org/mason.nvim', opts = { ui = { icons } } },
+  { 'b0o/SchemaStore.nvim' },
+})
+
+-- local lines = vim
+--   .iter(require('mason-registry').get_installed_package_names())
+--   :map(function(pkg) return '-- ' .. pkg end)
+--   :totable()
+-- vim.fn.append(vim.fn.line('$'), lines)

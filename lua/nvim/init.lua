@@ -63,7 +63,7 @@ function M.json_formatexpr()
   lines = vim.split(stringified, '\n')
   api.nvim_buf_set_lines(0, vim.v.lnum - 1, vim.v.count, true, lines)
 end
-M.on('Filetype', {pattern ='json'}, 'setlocal formatexpr=v:lua.nv.json_formatexpr()')
+M.on('Filetype', { pattern = 'json' }, 'setlocal formatexpr=v:lua.nv.json_formatexpr()')
 
 M.submodule = function(_M, prefix)
   return setmetatable(_M or {}, {
