@@ -43,8 +43,7 @@ end
 local function parse_git_status(git_status_stdout, git_ls_tree_stdout, cwd)
   local status = {}
   local git_root = vim.fs.dirname(vim.fn.FugitiveGitDir())
-  local rel_path =
-    vim.fs.normalize(cwd):gsub('^' .. vim.pesc(vim.fs.normalize(git_root)) .. '/?', '')
+  local rel_path = vim.fs.normalize(cwd):gsub('^' .. vim.pesc(vim.fs.normalize(git_root)) .. '/?', '')
   local in_subdir = rel_path ~= '' and rel_path ~= cwd
 
   for _, line in ipairs(git_status_stdout) do
@@ -171,12 +170,5 @@ local setup = function(ev)
 
   refresh()
 
-  vim.api.nvim_create_autocmd(
-    { 'BufReadPost', 'BufWritePost', 'WinEnter', 'DirChanged', 'CursorMoved' },
-    {
-      buf = bufnr,
-      group = aug,
-      callback = refresh,
-    }
-  )
+  require('nvim').on({ 'BufReadPost', 'BufWritePost', 'WinEnter', 'DirChanged', 'CursorMoved' }, { buf = bufnr }, refresh)
 end

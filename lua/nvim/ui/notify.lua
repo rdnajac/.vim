@@ -1,13 +1,12 @@
 -- TODO: register notify setup
 local M = setmetatable({}, {
-  __call = function(t, ...) return t.notify(...) end,
+  __call = function(t, ...)
+    return t.notify(...)
+  end,
   __index = function(t, k)
     if k == 'warn' or k == 'info' or k == 'error' then
       local fn = function(msg, opts)
-        return t.notify(
-          msg,
-          vim.tbl_extend('keep', { level = vim.log.levels[k:upper()] }, opts or {})
-        )
+        return t.notify(msg, vim.tbl_extend('keep', { level = vim.log.levels[k:upper()] }, opts or {}))
       end
       rawset(t, k, fn)
       return fn
@@ -24,11 +23,7 @@ local groups = { 'Ok', 'More', 'Warning', 'Error' }
 ---@param level? vim.log.levels|nil
 ---@param opts? table
 M.notify = function(msg, level, opts)
-  vim.api.nvim_echo(
-    { { msg, groups[level or 1] .. 'Msg' } },
-    true,
-    { err = level == vim.log.levels.ERROR }
-  )
+  vim.api.nvim_echo({ { msg, groups[level or 1] .. 'Msg' } }, true, { err = level == vim.log.levels.ERROR })
 end
 
 ---@param msg string|string[]
@@ -36,7 +31,7 @@ end
 function M.snacks_notify(msg, opts)
   opts = opts or {}
   local notify = vim[opts.once and 'notify_once' or 'notify'] --[[@as fun(...)]]
-  notify = vim.in_fast_event() and vim.schedule_wrap(notify) or notify
+  notify = require('nvim').schedule_if_fast(notify)
   msg = type(msg) == 'table' and table.concat(msg, '\n') or msg --[[@as string]]
   msg = vim.trim(msg)
   opts.title = opts.title or 'Snacks'

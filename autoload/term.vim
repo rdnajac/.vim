@@ -3,6 +3,8 @@
 " print_osc7() { printf '\033]7;file://%s\033\\' "$PWD"; }
 " PROMPT_COMMAND='print_osc7'
 
+" autocmd DirChanged * call chansend(v:stderr, printf("\033]7;file://%s\033\\", getcwd()))
+
 " OSC 7 format: ESC ] 7 ; file://host/path ESC \
 let s:OSC7 = '\e]7;file://'
 

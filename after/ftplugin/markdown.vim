@@ -39,3 +39,12 @@ if exists('g:speeddating_handlers')
   nmap <buffer><expr> <C-a> (getline('.') =~# '^#' ? '<Home>' : '')..'<Plug>SpeedDatingUp'
   nmap <buffer><expr> <C-x> (getline('.') =~# '^#' ? '<Home>' : '')..'<Plug>SpeedDatingDown'
 endif
+
+  " TODO: 
+" add abbreviations for admonitions
+" configure with mini.highlight
+  "Note": { "prefix": "!note", "body": "> [!NOTE]\n> ", "description": "Note" },
+  "Tip": { "prefix": "!tip", "body": "> [!TIP]\n> ", "description": "Tip" },
+  "Important": { "prefix": "!important", "body": "> [!IMPORTANT]\n> ", "description": "Important" },
+  "Warning": { "prefix": "!warning", "body": "> [!WARNING]\n> ", "description": "Warning" },
+  "Caution": { "prefix": "!caution", "body": "> [!CAUTION]\n> ", "description": "Caution" },

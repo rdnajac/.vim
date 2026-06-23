@@ -37,7 +37,9 @@ return {
     --   end
     --   return keys
     -- end,
-    colorize = function(keys) return keys end,
+    colorize = function(keys)
+      return keys
+    end,
     separator = '',
     keys = {
       -- ['%'] = '%%',
@@ -70,13 +72,21 @@ return {
   toggle = {
     ['<leader>uk'] = {
       name = 'Screenkey floating window',
-      get = function() return require('screenkey').is_active() end,
-      set = function() return require('screenkey').toggle() end,
+      get = function()
+        return require('screenkey').is_active()
+      end,
+      set = function()
+        return require('screenkey').toggle()
+      end,
     },
     ['<leader>uK'] = {
       name = 'Screenkey statusline component',
-      get = function() return require('screenkey').statusline_component_is_active() end,
-      set = function() return require('screenkey').toggle_statusline_component() end,
+      get = function()
+        return require('screenkey').statusline_component_is_active()
+      end,
+      set = function()
+        return require('screenkey').toggle_statusline_component()
+      end,
     },
   },
 }

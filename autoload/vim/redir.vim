@@ -31,10 +31,7 @@ function! redir#Redir(cmd = '', rng = 0, start = 1, end = 1, bang = '')
     endif
     " if not, assume it is a Vim command
   else
-    redir => output
-    execute cmd
-    redir END
-    let output = split(output, "\n")
+    let output = split(execute(cmd), "\n")
   endif
 
   " open a new window
@@ -44,7 +41,7 @@ function! redir#Redir(cmd = '', rng = 0, start = 1, end = 1, bang = '')
   let w:scratch = 1
 
   " make it a scratch window
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+  call vim#scratch#()
 
   " fill the buffer with the output of the given command
   call setline(1, output)

@@ -7,10 +7,11 @@
 -- Force a tmux refresh whenever we expect the statusline to change
 -- to keep the statusline in sync
 -- This autocmd should only be loaded on the first call to this module
-vim.api.nvim_create_autocmd({ 'ModeChanged', 'DirChanged', 'BufEnter' }, {
+require('nvim').on({ 'ModeChanged', 'DirChanged', 'BufEnter' }, {
   group = vim.api.nvim_create_augroup('Tmuxline', {}),
-  callback = function() vim.system({ 'tmux', 'refresh-client', '-S' }) end,
-})
+}, function()
+  vim.system({ 'tmux', 'refresh-client', '-S' })
+end)
 
 local M = function(line)
   local out = {}

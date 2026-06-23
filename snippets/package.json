@@ -2,82 +2,25 @@
   "name": "my-snippets",
   "contributes": {
     "snippets": [
-      {
-        "language": "bash",
-        "path": "./bash.json"
-      },
-      {
-        "language": "c",
-        "path": "./c.json"
-      },
-      {
-        "language": "cmake",
-        "path": "./cmake.json"
-      },
-      {
-        "language": "cpp",
-        "path": "./cpp.json"
-      },
-      {
-        "language": "dockerfile",
-        "path": "./dockerfile.json"
-      },
-      {
-        "language": "editorconfig",
-        "path": "./editorconfig.json"
-      },
-      {
-        "language": "global",
-        "path": "./global.json"
-      },
-      {
-        "language": "html",
-        "path": "./html.json"
-      },
-      {
-        "language": "json",
-        "path": "./json.json"
-      },
-      {
-        "language": "latex",
-        "path": "./latex.json"
-      },
-      {
-        "language": "lua",
-        "path": "./lua.json"
-      },
-      {
-        "language": "make",
-        "path": "./make.json"
-      },
-      {
-        "language": "markdown",
-        "path": "./markdown.json"
-      },
-      {
-        "language": "python",
-        "path": "./python.json"
-      },
-      {
-        "language": "quarto",
-        "path": "./quarto.json"
-      },
-      {
-        "language": "r",
-        "path": "./r.json"
-      },
-      {
-        "language": "rmd",
-        "path": "./rmd.json"
-      },
-      {
-        "language": "sh",
-        "path": "./sh.json"
-      },
-      {
-        "language": "vim",
-        "path": "./vim.json"
-      }
+      {"language": "bash",         "path": "./my-snippets/bash.json"},
+      {"language": "c",            "path": "./my-snippets/c.json"},
+      {"language": "cmake",        "path": "./my-snippets/cmake.json"},
+      {"language": "cpp",          "path": "./my-snippets/cpp.json"},
+      {"language": "dockerfile",   "path": "./my-snippets/dockerfile.json"},
+      {"language": "editorconfig", "path": "./my-snippets/editorconfig.json"},
+      {"language": "global",       "path": "./my-snippets/global.json"},
+      {"language": "html",         "path": "./my-snippets/html.json"},
+      {"language": "json",         "path": "./my-snippets/json.json"},
+      {"language": "latex",        "path": "./my-snippets/latex.json"},
+      {"language": "lua",          "path": "./my-snippets/lua.json"},
+      {"language": "make",         "path": "./my-snippets/make.json"},
+      {"language": "markdown",     "path": "./my-snippets/markdown.json"},
+      {"language": "python",       "path": "./my-snippets/python.json"},
+      {"language": "quarto",       "path": "./my-snippets/quarto.json"},
+      {"language": "r",            "path": "./my-snippets/r.json"},
+      {"language": "rmd",          "path": "./my-snippets/rmd.json"},
+      {"language": "sh",           "path": "./my-snippets/sh.json"},
+      {"language": "vim",          "path": "./my-snippets/vim.json"}
     ]
   }
 }

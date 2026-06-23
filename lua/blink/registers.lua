@@ -1,7 +1,9 @@
 ---@type blink.cmp.Source
 local M = {}
 
-function M.new() return setmetatable({}, { __index = M }) end
+function M.new()
+  return setmetatable({}, { __index = M })
+end
 
 function M:get_completions(_, callback)
   local items = {}

@@ -8,10 +8,10 @@ M.keywords = {
 }
 
 -- Snacks.util.set_hl({
---   Fixme = 'Chromatophore',
---   Hack = 'Chromatophore',
---   Todo = 'Chromatophore',
---   Note = 'Chromatophore',
+--   Fixme ={ fg = c.black, bg = c.error, bold = true },
+--   Hack = { fg = c.black, bg = c.warning, bold = true
+--   Todo = { fg = c.black, bg = c.hint, bold = true },
+--   Note = { fg = c.black, bg = c.info, bold = true },
 -- }, { prefix = 'MiniHipatterns', default = true })
 
 M.lookup = vim.iter(M.keywords):fold({}, function(acc, k, v)

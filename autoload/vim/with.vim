@@ -1,5 +1,4 @@
 " if using nvim, see `function vim._with(context, f)`
-" `~/.local/neovim/share/nvim/runtime/lua/vim/_core/shared.lua:1515`
 
 ""
 " Execute a command, leaving the cursor on the current line
@@ -28,7 +27,7 @@ endfunction
 ""
 " Execute a command with keeppatterns and optional default flags
 " see `:h keeppatterns`
-function! vim#with#patterns(command) abort
+function! vim#with#patterns(command, ...) abort
   " Optional second arg: default flags for :substitute
-  execute 'keeppatterns' a:command . a:0 ? a:1 : ''
+  execute 'keeppatterns' a:command .. (a:0 ? a:1 : '')
 endfunction

@@ -6,10 +6,14 @@ local types = require('blink.cmp.types')
 local M = {}
 
 ---@return blink.cmp.Source
-function M.new() return setmetatable({}, { __index = M }) end
+function M.new()
+  return setmetatable({}, { __index = M })
+end
 
 ---@return string[]
-function M:get_trigger_characters() return { '$' } end
+function M:get_trigger_characters()
+  return { '$' }
+end
 
 --- uses `iter:fold` with an empty accumulator to refresh the cache
 ---@return blink.cmp.CompletionItem[]
@@ -43,29 +47,25 @@ end
 local environ_cache
 
 --- refresh the cache at most once every 100s
-local refresh_cache = Snacks.util.throttle(
-  function() environ_cache = get_environ() end,
-  { ms = 1e5 }
-)
+local refresh_cache = Snacks.util.throttle(function()
+  environ_cache = get_environ()
+end, { ms = 1e5 })
 
 --- include the trigger character when accepting a completion
 ---@param items blink.cmp.CompletionItem[]
 ---@param ctx blink.cmp.Context
 local function transform(items, ctx)
-  return vim.tbl_map(
-    function(entry)
-      return entry.kind == types.CompletionItemKind.Snippet and entry
-        or vim.tbl_deep_extend('force', entry, {
-          textEdit = {
-            range = {
-              start = { line = ctx.cursor[1] - 1, character = ctx.bounds.start_col - 2 },
-              ['end'] = { line = ctx.cursor[1] - 1, character = ctx.cursor[2] },
-            },
+  return vim.tbl_map(function(entry)
+    return entry.kind == types.CompletionItemKind.Snippet and entry
+      or vim.tbl_deep_extend('force', entry, {
+        textEdit = {
+          range = {
+            start = { line = ctx.cursor[1] - 1, character = ctx.bounds.start_col - 2 },
+            ['end'] = { line = ctx.cursor[1] - 1, character = ctx.cursor[2] },
           },
-        })
-    end,
-    items
-  )
+        },
+      })
+  end, items)
 end
 
 ---@param ctx blink.cmp.Context
@@ -86,7 +86,9 @@ function M:get_completions(ctx, callback)
     end
     return function() end
   end)
-  return function() task:cancel() end
+  return function()
+    task:cancel()
+  end
 end
 
 return M

@@ -13,14 +13,19 @@ function! vim#notify#(level, msg, ...) abort
     " call luaeval('Snacks.notify[_A.level](_A.msg)', {'level': a:level, 'msg': a:msg})
     call luaeval('Snacks.notifier.notify(unpack(_A))', [a:msg, a:level, opts])
   else
-    " execute printf("echohl %s\<NL>echom %s\<NL>echohl None", s:get_hl(a:level) , a:msg)
-    " execute printf('echohl %s | echom %s | echohl None', s:get_hl(a:level) , a:msg)
-    execute $'echohl { s:get_hl(a:level) } | echom { a:msg } | echohl None'
+    execute 'echohl' s:get_hl(a:level)
+    echomsg a:msg
+    echohl None
   endif
 endfunction
 
 for level in keys(g:vim#notify#levels)
   execute join([$'fun! vim#notify#{level}(msg) abort', $'call vim#notify#("{level}", a:msg)', 'endfun'], "\<NL>")
-  " exe printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
-	" \ toupper(strpart(level, 0, 1))..strpart(level, 1), level)
 endfor
+" " :Error/:Warn/:Info wrappers around vim#notify#
+" " the argument is evaluated, so both `:Warn 'msg'` and `:Warn v:termrequest` work
+" for s:level in ['error', 'warn', 'info']
+"   execute printf('command! -nargs=1 -complete=expression %s call vim#notify#%s(eval(<q-args>))',
+"  \ toupper(strpart(s:level, 0, 1))..strpart(s:level, 1), s:level)
+" endfor
+" unlet s:level

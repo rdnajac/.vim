@@ -3,9 +3,13 @@
 ---@type blink.cmp.Source
 local M = {}
 
-function M.new() return setmetatable({}, { __index = M }) end
+function M.new()
+  return setmetatable({}, { __index = M })
+end
 
-function M:get_trigger_characters() return { '"', "'", '.', '/' } end
+function M:get_trigger_characters()
+  return { '"', "'", '.', '/' }
+end
 
 function M:enabled()
   local ok, lazybuf = pcall(require, 'lazydev.buf')

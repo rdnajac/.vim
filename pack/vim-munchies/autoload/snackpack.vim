@@ -419,9 +419,7 @@ function! jetpack#load_cmd(cmd, names, ...) abort
   try
     execute a:cmd args
   catch /.*/
-    echohl ErrorMsg
-    echomsg v:exception
-    echohl None
+    call vim#notify#error(v:exception)
   endtry
 endfunction
 

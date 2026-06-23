@@ -1,0 +1,40 @@
+local setup = function()
+  local orig = Snacks.statuscolumn.get
+  Snacks.statuscolumn.get = function()
+    local sstc = orig()
+    if vim.bo.buftype ~= '' then
+      return sstc
+    end
+    -- remove the click fold
+    sstc = sstc:gsub("%%@v:lua%.require'snacks%.statuscolumn'%.click_fold@(.-)%%T", '%1')
+    -- dd(sstc)
+    -- split into components
+    local left, num, right = sstc:match('^(.-)%%=(%d+)(.*)$')
+    local ret
+    -- left signs override numbers
+    -- TODO: perfer diagnostics over git
+    if left and vim.trim(left) ~= '' then
+      ret = left .. ' '
+    elseif num then
+      local width = tonumber(num) > 999 and 4 or 3
+      ret = string.format('%-' .. width .. 's', num)
+    else
+      ret = string.rep(' ', 3)
+      -- ret = '   '
+    end
+    -- local ret2 = right and vim.trim(right) ~= '' and right or ''
+    -- return string.format([[%s%s]], ret, ret2)
+    -- local sep = '▎'
+    local sep = '▏'
+    return string.format('%%=%s%s', ret, sep)
+  end
+end
+
+vim.schedule(setup)
+
+---@type snacks.statuscolumn.Config
+return {
+  left = { 'mark', 'sign' },
+  right = { 'fold' },
+  folds = { open = true, git_hl = true },
+}

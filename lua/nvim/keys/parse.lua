@@ -1,5 +1,7 @@
 local modes = { 'n', 'v', 'x', 'i', 't', 'o', 'c', 's' }
-local function has_mode(t) return type(t[1]) == 'table' or vim.tbl_contains(modes, t[1]) end
+local function has_mode(t)
+  return type(t[1]) == 'table' or vim.tbl_contains(modes, t[1])
+end
 
 -- TODO: if table has `ft` or `lsp` keys, use `Snacks.keymap.set()`
 --- Converts a variety of table formats into `vim.keymap.set` opts

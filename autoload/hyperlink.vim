@@ -11,25 +11,15 @@ function! s:sanitize(str) abort
   return s
 endfunction
 
+function! s:visual_selection() abort
+  return getregion(getpos("'<"), getpos("'>"), #{ type: visualmode() })
+endfunction
+
 function! hyperlink#() range abort
-  let start_pos = getpos("'<")
-  let end_pos   = getpos("'>")
-
-  let lnum1 = start_pos[1]
-  let col1  = start_pos[2]
-  let lnum2 = end_pos[1]
-  let col2  = end_pos[2]
-
+  let [lnum1, col1] = getpos("'<")[1 : 2]
+  let [lnum2, col2] = getpos("'>")[1 : 2]
   let line = getline(lnum1)
-  if lnum1 == lnum2
-    let selection = strpart(line, col1 - 1, col2 - col1 + 1)
-  else
-    " Multi-line selection: take from start col to end col of last line
-    let lines = getline(lnum1, lnum2)
-    let lines[0] = strpart(lines[0], col1 - 1)
-    let lines[-1] = strpart(lines[-1], 0, col2)
-    let selection = join(lines, "\n")
-  endif
+  let selection = join(s:visual_selection(), "\n")
 
   let is_url = selection =~? '^https\?://'
 

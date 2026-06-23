@@ -1,4 +1,4 @@
-.netrwhist
-.vim*
-pack/*/start
+.*
 tags
+pack/chezmoiexternal/
+pack/tpope/start/

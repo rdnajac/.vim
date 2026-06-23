@@ -1,4 +1,4 @@
-Function! time#now() abort
+function! time#now() abort
   let total = reltimefloat(reltime())
   let totalsec = float2nr(total)
   let ms = float2nr((total - totalsec) * 1000)

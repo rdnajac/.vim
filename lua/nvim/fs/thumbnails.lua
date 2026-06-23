@@ -8,11 +8,9 @@ local cache_path = vim.fn.stdpath('cache') .. '/fs-icons.json'
 local ok, cache = pcall(nv.file.read_json, cache_path)
 _G.icon_cache = ok and cache or {}
 
-api.nvim_create_autocmd('VimLeavePre', {
-  group = aug,
-  callback = function() nv.file.write_json(cache_path, _G.icon_cache) end,
-  desc = 'Save fs icon cache on exit',
-})
+require('nvim').on('VimLeavePre', { group = aug, desc = 'Save fs icon cache on exit' }, function()
+  -- TODO: nv.file.write_json(cache_path, _G.icon_cache)
+end)
 
 ---@param line string
 ---@return string|nil file

@@ -1,4 +1,4 @@
-local _, ok = pcall(require, 'schemastore')
+local ok, schemastore = pcall(require, 'schemastore')
 if not ok then
   return {}
 end
@@ -15,7 +15,7 @@ return {
         -- Avoid TypeError: Cannot read properties of undefined (reading 'length')
         url = '',
       },
-      schemas = require('schemastore').yaml.schemas(),
+      schemas = schemastore.yaml.schemas(),
     },
   },
 }

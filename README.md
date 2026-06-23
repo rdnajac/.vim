@@ -4,17 +4,7 @@ My (n)vim configuration.
 
 ## Startup
 
-`~/.config/nvim` symlinked to `~/.vim`
-
 ### $MYVIMRC
-
-```vim
-let default_VIMRC = has('nvim')) ? '~/.config/nvim/init.lua' : '~/.vimrc'
-```
-
-### vim.loader
-
-`https://github.com/neovim/neovim/discussions/36905`
 
 ## Snacks
 

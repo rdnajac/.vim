@@ -28,11 +28,6 @@ function! s:split(path) abort
   return split(substitute(a:path, '/\+$', '', ''), '/')
 endfunction
 
-" Convert a path to use '~' for the home directory
-function! s:home_tilde(path) abort
-  return fnamemodify(a:path, ':~')
-endfunction
-
 " Return relative path from {base} to {path}
 function! s:relative_path(path, base) abort
   let p = s:split(fnamemodify(a:path, ':p'))
@@ -80,6 +75,6 @@ function! vimline#path#relative_parts(...) abort
   if !empty(root) && (cwd ==# root || cwd[:strlen(root)] ==# root . '/')
     return [s:make_prefix(root, cwd), s:make_suffix(file, cwd)]
   else
-    return [s:home_tilde(cwd), s:make_suffix(file, cwd)]
+    return [fnamemodify(cwd, ':~'), s:make_suffix(file, cwd)]
   endif
 endfunction

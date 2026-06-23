@@ -1,1 +1,2 @@
--- TODO: leader table mappings
+---type table<string:lhs, fun():rhs>
+return {}

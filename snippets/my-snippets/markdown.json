@@ -1,0 +1,17 @@
+{
+  "code block": {
+    "prefix": "```",
+    "body": ["```${1:language}", "$0", "```"],
+    "description": "fenced code block"
+  },
+  "link": {
+    "prefix": "link",
+    "body": ["[${1:text}](${2:url}) ${0}"],
+    "description": "Add links"
+  },
+  "image": {
+    "prefix": "img",
+    "body": ["![${1:alt text}](${2:path}) ${0}"],
+    "description": "Add images"
+  }
+}

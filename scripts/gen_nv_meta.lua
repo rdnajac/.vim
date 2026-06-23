@@ -53,7 +53,9 @@ local function main()
   end)
 
   local module_list = vim.tbl_values(modules)
-  table.sort(module_list, function(a, b) return table.concat(a, '.') < table.concat(b, '.') end)
+  table.sort(module_list, function(a, b)
+    return table.concat(a, '.') < table.concat(b, '.')
+  end)
 
   local lines = {
     '---@meta',
@@ -80,8 +82,7 @@ local function main()
   end
 
   for _, segs in ipairs(module_list) do
-    lines[#lines + 1] =
-      string.format("%s = require('nvim.%s')", lua_path(segs), table.concat(segs, '.'))
+    lines[#lines + 1] = string.format("%s = require('nvim.%s')", lua_path(segs), table.concat(segs, '.'))
   end
   return gen(meta_file, lines)
 end

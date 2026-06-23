@@ -15,7 +15,8 @@
   " `https://github.com/neovim/neovim/discussions/38256`
   " Usage: $`nvim +Clipboard` or `alias pbedit='nvim +Clipboard'`
 function! cmd#clipboard() abort
-  edit +setl\ bt=acwrite\ bh=wipe\ nobl\ noswf Clipboard
+  edit Clipboard
+  call vim#scratch#({'buftype': 'acwrite'})
   silent execute 'put +|1d _'
   autocmd BufWriteCmd <buffer> %yank + | set nomodified'
 endfunction
@@ -66,7 +67,7 @@ function cmd#hardcopy() abort
 endfunction
 
 function! cmd#scp(dest) abort
-  if !executable('scpp')
+  if !executable('scp')
     echoerr 'scp command not found'
     return
   endif

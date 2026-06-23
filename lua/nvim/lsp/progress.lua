@@ -3,12 +3,13 @@ local Spinner = function()
   return spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
 end
 
-local callback = function(ev)
-  local id, params = ev.data.client_id, ev.data.params
+--- @param ev {data: vim.event.lspprogress.data}
+return function(ev)
+  local params = ev.data.params ---@type lsp.ProgressParams
   local value = params.value
   local is_end = value.kind == 'end'
   local title = ([[[%s] %s %s]]):format(
-    vim.lsp.get_client_by_id(id).name or 'LSP',
+    vim.lsp.get_client_by_id(ev.data.client_id).name or 'LSP',
     is_end and '' or Spinner(),
     value.title -- append the original title
   )
@@ -21,8 +22,5 @@ local callback = function(ev)
     percent = value.percentage,
     -- verbose = true,
   })
+  -- vim.cmd.redrawstatus() -- optional
 end
-
-return {
-  callback = callback,
-}

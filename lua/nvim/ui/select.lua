@@ -51,13 +51,10 @@ local select = function(items, opts, on_choice)
     on_choice(items[cur_row], cur_row)
   end, { buf = bufnr })
 
-  vim.api.nvim_create_autocmd('WinClosed', {
-    buf = bufnr,
-    callback = function()
-      vim.api.nvim_buf_delete(bufnr, {})
-      on_choice(nil)
-    end,
-  })
+  require('nvim').on('WinClosed', { buf = bufnr }, function()
+    vim.api.nvim_buf_delete(bufnr, {})
+    on_choice(nil)
+  end)
 end
 
 -- example to select from the registers 0-9
@@ -65,8 +62,7 @@ local example = function()
   local fn = vim.fn
   local registers = vim.iter(fn.range(0, 9)):map(fn.getreg):totable()
   select(registers, { prompt = 'Select a register:' }, function(choice, idx)
-    local msg = choice and string.format('You selected register "%d: %s', idx - 1, choice)
-      or 'Selection aborted'
+    local msg = choice and string.format('You selected register "%d: %s', idx - 1, choice) or 'Selection aborted'
     vim.notify(msg)
   end)
 end

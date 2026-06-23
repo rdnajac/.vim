@@ -1,11 +1,34 @@
 --- `$PACKDIR/opt/which-key.nvim/lua/which-key/icons.lua`
--- HACK: override default registers to only show a subset
--- local registers = [[*+"-:.%/#=_0123456789]]
--- package.preload['which-key.plugins.registers'] = function()
---   local mod = dofile(vim.env.PACKDIR .. '/which-key.nvim/lua/which-key/plugins/registers.lua')
---   mod.registers = registers
---   return mod
--- end
+
+local function without_desc(mod)
+  local expand = mod.expand
+  mod.expand = function(...)
+    local items = expand(...)
+    for _, item in ipairs(items) do
+      item.desc = ''
+    end
+    return items
+  end
+  return mod
+end
+
+local registers = [[*+"-:.%/#=_0123456789]]
+package.preload['which-key.plugins.registers'] = function()
+  local mod = dofile(vim.api.nvim_get_runtime_file('lua/which-key/plugins/registers.lua', true)[1])
+  mod.registers = registers
+  return without_desc(mod)
+end
+
+package.preload['which-key.plugins.marks'] = function()
+  local mod = dofile(vim.api.nvim_get_runtime_file('lua/which-key/plugins/marks.lua', true)[1])
+  local original_expand = mod.expand
+  mod.expand = function()
+    return vim.tbl_filter(function(c)
+      return c.key:match('%u')
+    end, original_expand())
+  end
+  return without_desc(mod)
+end
 
 local wk = require('which-key')
 wk.setup({
@@ -36,8 +59,19 @@ wk.setup({
     --   { '<leader>u', group = 'ui' },
     --   { '<localleader>l', group = 'vimtex' },
     --   { '<localleader>r', group = 'R', icon = { icon = ' ', color = 'blue' } },
-    { '<leader>?', function() wk.show({ global = false }) end, desc = 'which-key?' },
-    { '<C-w><Space>', function() wk.show({ keys = '<C-w>', loop = true }) end },
+    {
+      '<leader>?',
+      function()
+        wk.show({ global = false })
+      end,
+      desc = 'which-key?',
+    },
+    {
+      '<C-w><Space>',
+      function()
+        wk.show({ keys = '<C-w>', loop = true })
+      end,
+    },
     { 'gr', group = 'LSP', icon = { icon = '' } },
     { 'gl', group = 'LSP', icon = { icon = '🍬' } },
     { hidden = true, { 'g~' }, { 'gc' } },
@@ -48,6 +82,13 @@ vim.schedule(function()
   for k, v in pairs(require('nvim.keys.descriptions')) do
     wk.add({ k, desc = v, icon = { icon = '' } })
   end
+
+  -- treesitter
+  -- incremental-selection (C-Space to init/expand, C-BS to shrink)
+  vim.cmd([[nmap <C-Space> van | xmap <C-Space> an | xmap <C-BS> in]])
+  -- TODO:
+  -- Plug(nv.treesitter.textobjects)
+
   -- stylua: ignore
   vim.iter(nv.keys.toggles):each(function(k, v)
     if type(v) == 'table' then Snacks.toggle.new(v):map(k) end

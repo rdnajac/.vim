@@ -40,7 +40,19 @@ local M = {
     busy = '󱛇',
     stopped = '󰖪',
   },
+  log = {
+    error = ' ',
+    warn = ' ',
+    info = ' ',
+    debug = ' ',
+    trace = ' ',
+  },
 }
+
+-- -- mason
+-- local icons = { package_installed = '✓', package_pending = '➜', package_uninstalled = '✗' },
+-- local icons = { package_installed = '✅', package_pending = '➡️', package_uninstalled = '❌' },
+-- local icons = { package_installed = ' ', package_pending = ' ', package_uninstalled = ' ' }
 
 -- component and section separators appear as they
 -- would in lualine, where left/right refer to the
@@ -163,9 +175,6 @@ M.mini_override = function()
   end
 end
 
--- HACK: Override get to do wildcard matching
-vim.schedule(M.mini_override)
-
 ---@param key "directory"|"extension"|"file"|"filetype"|"os"
 ---@param lookup string?
 ---@return string icon, string? hl always return a string, hl group on success
@@ -175,7 +184,9 @@ local function _get_icon(_, key, lookup)
 end
 
 for _, key in ipairs({ 'directory', 'extension', 'file', 'filetype', 'os' }) do
-  local function get_icon(_, lookup) return _get_icon(_, key, lookup) end
+  local function get_icon(_, lookup)
+    return _get_icon(_, key, lookup)
+  end
   M[key] = setmetatable({}, { __index = get_icon, __call = get_icon })
 end
 

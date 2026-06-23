@@ -1,3 +1,6 @@
+setl keywordprg=:help
+setl formatprg=stylua\ --search-parent-directories\ --stdin-filepath\ %\ -
+
 inoremap <buffer> `` vim.cmd([[]])<Left><Left><Left><C-g>u<CR><CR><esc>hi<Space><Space>
 
 nnoremap <buffer> co2 O---@
@@ -39,3 +42,6 @@ for [key, pair] in items(s:surround_defs)
   " let b:minisurround_config.custom_surroundings[key] =
 	" \ { 'output': { 'left': pair[0], 'right': pair[1] } }
 endfor
+
+" TODO: normal mode map to select and run code block, then run it if lua
+nnoremap <buffer> <M-CR> <Cmd>lua Snacks.debug.run()<CR>

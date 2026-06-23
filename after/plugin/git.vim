@@ -20,3 +20,7 @@ endif
 " - `ghgh` / `gHgh` applies/resets hunk range under cursor
 " - `dgh` deletes hunk range under cursor
 " - `[H` / `[h` / `]h` / `]H` navigate hunks
+
+" TODO: diff?
+" nnoremap dp dp']c
+" nnoremap do do]c

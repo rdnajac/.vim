@@ -121,21 +121,11 @@ function! edit#ch() abort
   execute 'edit' alt_file
 endfunction
 
-function! s:find_nearest_readme() abort
-  let dir = expand('%:p:h')
-  let home = expand('~')
-  while dir !=# '/' && dir !=# home
-    let readme = dir..'/README.md'
-    if filereadable(readme)
-      return readme
-    endif
-    let dir = fnamemodify(dir, ':h')
-  endwhile
-  return ''
-endfunction
-
 function! edit#readme() abort
-  let readme = s:find_nearest_readme()
-  let readme = !empty(readme) ? readme : expand('%:p:h')..'/README.md'
+  " search upward for the nearest README, stopping at (and excluding) $HOME
+  let readme = findfile('README.md', expand('%:p:h')..';'..expand('~'))
+  if empty(readme) || fnamemodify(readme, ':p') ==# expand('~/README.md')
+    let readme = expand('%:p:h')..'/README.md'
+  endif
   call edit#(readme)
 endfunction

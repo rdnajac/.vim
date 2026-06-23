@@ -1,5 +1,5 @@
 local api, fn, fs = vim.api, vim.fn, vim.fs
-
+local icons = nv.ui.icons
 local M = {}
 
 ---@param group string
@@ -10,7 +10,9 @@ local function highlight(group, str, inherit)
   return fmt:format(group, str)
 end
 
-local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', sec, str) end
+local function chroma(str, sec)
+  return string.format('%%#Chromatophore_%s#%s', sec, str)
+end
 -- local function chroma(str, sec) return highlight(str, 'Chromatophore_' .. sec) end
 
 -- TODO: write blend function
@@ -21,7 +23,7 @@ local function chroma(str, sec) return string.format('%%#Chromatophore_%s#%s', s
 ---@param b string?
 ---@param c string?
 function M.render(a, b, c)
-  local sep = require('nvim.ui.icons').sep.component.rounded.left
+  local sep = icons.sep.component.rounded.left
   return table.concat({
     a and chroma(a, 'a') or '',
     b and chroma(sep .. ' ', 'ab') .. chroma(b, 'b') .. chroma(sep, 'bc') or chroma(sep, 'c'),
@@ -75,14 +77,18 @@ end
 ---@param icons string[]
 ---@param hl_map? string[]
 ---@return fun(counts: table<number, integer>): string
-M.render_counts = function(icons, hl_map)
+M.render_counts = function(icon_list, hl_map)
   return function(counts)
     return vim
       .iter(ipairs(icons))
-      :map(function(i, _) return i, counts[i] or 0 end)
-      :filter(function(_, count) return count > 0 end)
+      :map(function(i, _)
+        return i, counts[i] or 0
+      end)
+      :filter(function(_, count)
+        return count > 0
+      end)
       :map(function(i, count)
-        local rv = ('%s %d'):format(icons[i], count)
+        local rv = ('%s %d'):format(icon_list[i], count)
         return hl_map and hl_map[i] and ('%%$%s$%s'):format(hl_map[i], rv) or rv
       end)
       :join(' ')
@@ -143,15 +149,12 @@ end
 M.lsp = function(bufnr)
   return vim
     .iter(vim.lsp.get_clients({ bufnr = vim._resolve_bufnr(bufnr) }))
-    ---@param client vim.lsp.Client
-    :map(function(client)
+    :map(function(client) ---@param client vim.lsp.Client
       -- TODO: busy status
-      local icons = require('nvim.ui.icons')
-      if client.name ~= 'copilot' then
+      if client.name == 'copilot' then
         return icons.copilot
       end
-      local status = client:is_stopped() and 'stopped' or 'active'
-      return icons.lsp_status[status]
+      return icons.lsp_status[client:is_stopped() and 'stopped' or 'active']
     end)
     :join(' ') .. ' '
 end
@@ -163,9 +166,9 @@ M.treesitter = function()
   local queries = active and active._queries or {}
   return vim
     .iter(queries)
-    :map(
-      function(lang) return lang == vim.bo.filetype and '' or MiniIcons.get('filetype', lang) end
-    )
+    :map(function(lang)
+      return lang == vim.bo.filetype and '' or MiniIcons.get('filetype', lang)
+    end)
     :join(' ') .. ' '
 end
 

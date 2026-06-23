@@ -6,10 +6,7 @@ vim.filetype.add({
       -- If any file is larger than a certain size, its filetype becomes `bigfile`,
       -- disabling syntax highlighting and features that cause performance issues,
       function(path, bufnr)
-        if
-          path ~= vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr))
-          or vim.bo[bufnr].filetype == 'bigfile'
-        then
+        if path ~= vim.fs.normalize(vim.api.nvim_buf_get_name(bufnr)) or vim.bo[bufnr].filetype == 'bigfile' then
           return
         end
         local size = vim.fn.getfsize(path)
