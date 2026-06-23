@@ -1,30 +1,4 @@
 -- `$PACKDIR/mini.nvim/lua/mini/icons.lua:690`
-
-  -- stylua: ignore
-local c = {
-  { fg =     '#C0CAF5' },
-  { info =   '#0DB9D7' },
-  { blue =   '#14AFFF' },
-  { cyan =   '#1ABC9C' },
-  { green =  '#39ff14' },
-  { orange = '#FF9E64' },
-  { purple = '#9D7CD8' },
-  { red =    '#F7768E' },
-  { yellow = '#E0AF68' },
-}
-
-Snacks.util.set_hl({
-  Azure = { fg = c.info },
-  Blue = { fg = c.blue },
-  Cyan = { fg = c.teal },
-  Green = { fg = c.green },
-  Grey = { fg = c.fg },
-  Orange = { fg = c.orange },
-  Purple = { fg = c.purple },
-  Red = { fg = c.red },
-  Yellow = { fg = c.yellow },
-}, { 'MiniIcons' })
-
 local copilot = ''
 
 local M = {
