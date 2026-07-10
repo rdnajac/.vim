@@ -2,11 +2,13 @@
 
 My (n)vim configuration.
 
-## Startup
+## To-Do
 
-### $MYVIMRC
+replace blink.cmp with native autocompletion
 
-## Snacks
+flesh out mini surround and mini text objects (and treesitter text objects)
+
+## Snacks.image testing
 
 Snacks.image can render math inline, $z=a+bi$, or in a `$$` block:
 
@@ -14,35 +16,19 @@ $$
 Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
 $$
 
-## netrw
-
-from 'ssh hints':
-
-- <http://thomer.com/howtos/netrw_ssh.html>
-- <https://web.archive.org/web/20120319233142/https://www.usevim.com/2012/03/16/editing-remote-files/>
-
-Also read:
-
-- `:h netrw-netrc`
-- `:h netrw-ssh-hack`
-- `:h netrw_ssh_cmd`
-
-## Bugs
-
 ## Resources and references
 
+- [Neovim](https://neovim.io/)
 - [Five Minute Vimscript](http://andrewscala.com/vimscript/)
 - [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
-- Google's Vimscript Style Guide:
 - [Vimscript Style Guide](https://google.github.io/styleguide/vimscriptguide.xml)
 - [Vimscript Full Style Guide](https://google.github.io/styleguide/vimscriptfull.xml)
 - [Idiomatic Vimrc](https://github.com/romainl/idiomatic-vimrcr)
 - [No Plugins](https://github.com/changemewtf/no_plugins)
-- [Neovim](https://neovim.io/)
 
 ## Easter Eggs 
 
-$VIMRUNTIME/scripts/emoji_list.lua
+- $VIMRUNTIME/scripts/emoji_list.lua
 
 ---
 
